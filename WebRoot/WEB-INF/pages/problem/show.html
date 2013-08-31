@@ -1,0 +1,205 @@
+<#include "../common/_layout.html" />
+<@layout>
+
+    <script language="javascript" type="text/javascript">
+    $(document).ready(function(){
+        document.onkeydown=nextpage
+        var prevpage="${baseUrl}problem/show/${prevPid!}"
+        var nextpage="${baseUrl}problem/show/${nextPid!}"
+        function nextpage(event)
+        {
+            event=event?event:(window.event?window.event:null);
+            <#if prevPid!=problem.pid>if(event.keyCode==37)location=prevpage;</#if>
+            <#if nextPid!=problem.pid>if(event.keyCode==39)location=nextpage;</#if>
+        }
+        });
+    </script>
+
+    <ul class="pager">
+        <li class="previous <#if prevPid==problem.pid>disabled</#if>">
+        <a href="problem/show/${prevPid!}">&lt;&lt;Prev</a>
+        </li>
+        <li class="next <#if nextPid==problem.pid>disabled</#if>">
+        <a href="problem/show/${nextPid!}">Next&gt;&gt;</a>
+        </li>
+    </ul>
+
+    <div class="text-center">
+        <h2><#if userResult??><image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>"/></#if><span class="black">${problem.pid!}:</span> <#if problem.status==false><del></#if>${problem.title!}<#if problem.status==false></del></#if><!--<span class="label label-important">SPJ</span>--></h2>
+        <#if adminUser??><a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> <a href="#" class="btn btn-danger">Rejudge</a><br></#if>
+        Time Limit:<span class="blue">${problem.time_limit!}MS</span>  Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
+        Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> Page View:<span class="blue">${problem.view!}</span><br><br>
+        [<a href="problem/submit/${problem.pid!}<#if userID??>?ajax=1</#if>"<#if userID??> data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>] [<a href="problem/status/${problem.pid!}">Status</a>] [<a href="#">Discuss</a>]
+    </div>
+    
+    <#if adminUser??>
+	<div class="modal fade problemModal" id="editModal">
+	<form class="" action="problem/update" id="editPorblemForm" method="post">
+		<div class="modal-header">
+		<button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+		<h3 id="editModalLabel">Edit Problem ${problem.pid!}:<a href="problem/edit/${problem.pid!}" title="Edit in another page" data-toggle="tooltip" data-placement="bottom">${problem.title!}</a></h3>
+		</div>
+		<div class="modal-body">
+			<a href="problem/edit/${problem.pid!}" class="btn btn-primary">Edit</a>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary">Save</button>
+            <button type="reset" class="btn btn-info">Reset</button>
+            <button class="btn" data-dismiss="modal">Cancel</button>
+		</div>
+	</form>
+	</div>
+	</#if>
+	
+    <#if userID??>
+    <div class="modal fade problemModal" id="submitModal">
+        <form class="" id="submitForm" action="solution/save" method="post">
+        <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="submitModalLabel">Submit Problem ${problem.pid!}:<a href="problem/submit/${problem.pid!}" title="Submit in another page" data-toggle="tooltip" data-placement="bottom">${problem.title!}</a></h3>
+        </div>
+        <div class="modal-body">
+            <a href="problem/submit/${problem.pid!}" class="btn btn-primary">Submit</a>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="reset" class="btn btn-info">Reset</button>
+            <button class="btn" data-dismiss="modal">Cancel</button>
+        </div>
+       </form> 
+    </div>
+    </#if>
+    <!--<div class="btn-group pull-right">
+        <a class="btn"><i class="icon-font"></i></a>
+        <a class="btn"><i class="icon-font"></i></a>
+        <a class="btn"><i class="icon-font"></i></a>
+    </div>-->
+
+    <!--<div class="row" data-spy="affix" data-offset-top="200">
+        <div class="span3 bs-docs-sidebar">
+            <ul class="nav nav-list bs-docs-sidenav">
+                <li><a href="problem/show/${problem.pid!}#description"><i class="icon-chevron-right"></i> Description</a></li>
+                <li><a href="problem/show/${problem.pid!}#input"><i class="icon-chevron-right"></i> Input</a></li>
+                <li><a href="problem/show/${problem.pid!}#output"><i class="icon-chevron-right"></i> Output</a></li>
+                <li><a href="problem/show/${problem.pid!}#sample_input"><i class="icon-chevron-right"></i> Sample Input</a></li>
+                <li><a href="problem/show/${problem.pid!}#sample_output"><i class="icon-chevron-right"></i> Sample Output</a></li>
+                <li><a href="problem/show/${problem.pid!}#hint"><i class="icon-chevron-right"></i> Hint</a></li>
+                <li><a href="problem/show/${problem.pid!}#source"><i class="icon-chevron-right"></i> Source</a></li>
+            </ul>
+        </div>
+
+    <div class="span9">-->
+        <section id="description">
+        <div class="page-header">
+            <h4>Description</h4>
+        </div>
+        <div class="content" id="description">
+            <pre>${problem.description!}</pre>
+        </div>
+        </section>
+        
+        <section id="input">
+        <div class="page-header">
+            <h4>Input</h4>
+        </div>
+        <div class="content" id="input">
+            <pre>${problem.input!}</pre>
+        </div>
+        </section>
+
+        <section id="output">
+        <div class="page-header">
+            <h4>Output</h4>
+        </div>
+        <div class="content" id="output">
+            <pre>${problem.output!}</pre>
+        </div>
+        </section>
+
+        <section id="sample_input">
+        <!--<div class="page-header">
+            <h4>Sample Input</h4>
+        </div>-->
+        <div class="tabbable content" id="sample_input"> <!-- Only required for left/right tabs -->
+            <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
+            <li><a href="#tab2" data-toggle="tab">Raw</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                    <pre>${problem.sample_input!}</pre>
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <textarea id="sample_input" class="auto-width" rows="${problem.sample_input_rows!12}" cols="185">${problem.sample_input!}</textarea>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <section id="sample_output">
+        <!--<div class="page-header">
+            <h4>Sample Output</h4>
+        </div>-->
+        <div class="tabbable content" id="sample_output"> <!-- Only required for left/right tabs -->
+            <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
+            <li><a href="#tab4" data-toggle="tab">Raw</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab3">
+                    <pre>${problem.sample_output!}</pre>
+                </div>
+                <div class="tab-pane" id="tab4">
+                    <textarea id="sample_output" class="auto-width" rows="${problem.sample_output_rows!12}" cols="185">${problem.sample_output!}</textarea>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <#if problem.hint?? && problem.hint!="">
+        <section id="hint">
+        <div class="page-header">
+            <h4>Hint</h4>
+        </div>
+        <div class="content" id="hint">
+            <pre>${problem.hint!}</pre>
+        </div>
+        </section>
+        </#if>
+
+        <section id="source">
+        <div class="page-header">
+            <h4>Source</h4>
+        </div>
+        <div class="content" id="source">
+            <pre><a href="problem/search?word=${problem.source!}&scope=source"  data-toggle="tooltip" title="Search other problems">${problem.source!}</a></pre>
+        </div>
+        </section>
+
+		<#if tagList??>
+        <section id="tag">
+        <div class="page-header">
+            <h4>Tag</h4>
+        </div>
+        <div class="content" id="tag">
+            <pre><#list tagList as Tag><a href="problem/search?word=${Tag.tag!}&scope=tag" title="${Tag.name!}" data-toggle="tooltip">${Tag.tag!}</a> </#list></pre>
+        </div>
+        </section>
+        </#if>
+        
+        <#if adminUser??>
+            <form class="form-inline" action="problem/tag">
+            <input type="hidden" name="op" value="add">
+            <input type="hidden" name="pid" value="${problem.pid!}">
+            <input type="text" class="input-small" name="tag" placeholder="Add a tag">
+            <button type="submit" class="btn">Add</button>
+            </form>
+        </#if>
+
+    <div class="text-center">
+        [<a href="problem/submit/${problem.pid!}<#if userID??>?ajax=1</#if>"<#if userID??> data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>] [<a href="problem/status/${problem.pid!}">Status</a>] [<a href="#">Discuss</a>]
+    </div>
+
+    <!--</div>
+</div>-->
+</@layout>

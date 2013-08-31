@@ -1,0 +1,223 @@
+a {
+    color: #1A5CC8;
+    text-decoration: none;
+}
+a:hover {
+    color: orange;
+    text-decoration: underline;
+}
+a.cureent {
+	color: black;
+}
+.navbar-inverse .nav li.dropdown.active > .dropdown-toggle.admin {
+    color: red;
+    font-weight: bold;
+}
+h2 {
+    color: blue;
+}
+.green {
+    color: green;
+}
+.red {
+    color: red;
+}
+.blue {
+    color: blue;
+}
+.gray {
+    color: gray;
+}
+.orange {
+    color: orange;
+}
+.navy {
+    color: navy;
+}
+.black {
+	color: black
+}
+
+body {
+    background-image: url("../images/background.jpg");
+    font-size:15px;
+}
+body > .navbar {
+    font-size: 13px;
+}
+
+.footer {
+    border-top: 1px solid #E5E5E5;
+    margin-top: 70px;
+    padding: 30px 0;
+    text-align: center;
+}
+.footer-links li {
+    display: inline;
+    height: 59px;
+    margin-top: 30px;
+    padding: 10px 0;
+}
+
+#login-box,#signup-box {
+	margin: 65px auto;
+}
+
+.profile dl {
+    margin-bottom: 15px;
+}
+
+.content pre {
+	font-size:15px;
+	background-color:transparent
+}
+
+.problem textarea,.solution textarea, .contest textarea,textarea.auto-width {
+	width: auto;
+	overflow:visible;
+}
+	
+.problem .input-append,.contest .input-append {
+	display: block
+}
+
+.problemModal .modal-body {
+	max-height: 600px;
+	max-width: 900px;
+}
+.problemModal {
+	/* SET THE WIDTH OF THE MODAL 设置Modal的宽度*/
+	width: 900px;
+	/* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
+	margin: -50px 0 0 -450px;
+}
+
+.solution .controls {
+	padding-top: 5px;
+}
+
+table#status td.time,td.memory {
+	text-align: center
+}
+
+#problem-status h4 {
+	text-align: center
+}
+
+#AC {
+	color: #ff0000;
+	font-weight: bold;
+}
+
+#WA {
+	font-weight: bold;
+}
+
+#CE {
+	color: #8bbc21;
+}
+
+#TLE {
+	color: #ff9900;
+}
+
+#MLE {
+	color: #0692ff;
+}
+
+#RE {
+	color: #bb338f;
+}
+
+#OLE {
+	color: #999999;
+}
+
+#PE {
+	color: #ff03fa;
+}
+
+#SE,#Others {
+	color: #492970;
+}
+
+#Wait {
+	color: green;
+}
+
+a.active {
+	color: red;
+}
+
+div#source-code {
+	text-align: center
+}
+
+.Pending {
+	color: green;
+}
+
+.Running {
+	color: red;
+}
+	
+.Finished {
+	color: blue;
+}
+
+span.time {
+	color: #993399;
+}
+
+td.time,td.memory {
+	color: #775599;
+}
+
+table#contest-rank th,table#contest-rank td {
+	text-align: center
+}
+
+table#contest-rank td.ac {
+	background-color:#33FF33;
+}
+
+table#contest-rank td.ac1 {
+	background-color:#99FF99;
+}
+
+table#contest-rank td.wa {
+	background-color:red;
+}
+
+table#contest-rank td.wa0 {
+	background-color:#FFA0A0;
+}
+
+table#contest-rank td.wa1 {
+	background-color:#FF8080;
+}
+
+table#contest-rank td.wa2 {
+	background-color:#FF6060;
+}
+
+table#contest-rank td.wa3 {
+	background-color:#FF4040;
+}
+
+table#contest-rank td.wa4 {
+	background-color:#FF2020;
+}
+
+table#contest-rank td.fb {
+	background-color:#005599;
+	color:#FFF;
+}
+
+table.table-stats {
+    font-size: 15px;
+}
+
+#tagsList {position:relative; width:550px; height:550px; margin: 45px auto; background:#24313d;}
+#tagsList a {position:absolute; top:0px; left:0px; font-family: Microsoft YaHei; color:#fff; font-weight:bold; text-decoration:none; padding: 3px 6px; }
+#tagsList a:hover { color:#FF0000; letter-spacing:2px;}

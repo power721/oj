@@ -1,0 +1,117 @@
+<#include "../common/_layout.html" />
+<@layout>
+<div class="row">
+	<div class="span4 offset3">
+		<form class="form-horizontal" id="editUserForm" action="user/update" method="post">
+			<fieldset>
+				<legend>Basic Information</legend>
+				<input type="hidden" name="user.uid" value="${user.uid!}">
+			 	<div class="control-group <#if emailMsg??>error</#if>">
+					<label class="control-label" for="inputEmail">Email</label>
+					<div class="controls">
+						<input type="email" id="inputEmail" name="user.email" value="${user.email!}" required>
+						<p class="text-error">${emailMsg!}</p>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputNick">Nick</label>
+					<div class="controls">
+						<input type="text" id="inputNick" name="user.nick" value="${user.nick!}" required>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputSchool">School</label>
+					<div class="controls">
+						<input type="text" minlength="3" id="inputSchool" name="user.school" value="${user.school!}">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputLanguage">Language</label>
+					<div class="controls">
+						<select id="inputLanguage" name="user.language">
+						<#if program_languages??>
+						<#list program_languages as language>
+						<option value="${language.id!}" <#if user.language==language.id>selected</#if>>${language.name!}</option>
+						</#list>
+						</#if>
+						</select>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend>Person Information</legend>
+				<div class="control-group">
+					<label class="control-label" for="inputRealName">Real Name</label>
+					<div class="controls">
+						<input type="text" minlength="2" maxlength="20" id="inputRealName" name="user.realname" value="${user.realname!}">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputPhone">Phone</label>
+					<div class="controls">
+						<input type="tel" minlength="7" maxlength="15" id="inputPhone" name="user.phone" value="${user.phone!}">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputQQ">QQ</label>
+					<div class="controls">
+						<input type="number" minlength="5" maxlength="12" id="inputQQ" name="user.qq" value="${user.qq!}">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputBlog">Blog</label>
+					<div class="controls">
+						<input type="url" id="inputBlog" name="user.blog" value="${user.blog!}">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputGender">Gender</label>
+					<div class="controls">
+						<select id="inputGender" name="user.gender">
+						<option value="secret" <#if user.gender=="secret">selected</#if>>secret</option>
+						<option value="male" <#if user.gender=="male">selected</#if>>male</option>
+						<option value="female" <#if user.gender=="female">selected</#if>>female</option>
+						</select>
+					</div>
+				</div>
+				</fieldset>
+				<fieldset>
+				<legend>Security</legend>
+				<div class="control-group <#if passwordMsg??>error</#if>">
+					<label class="control-label" for="inputOldPass">Old Password</label>
+					<div class="controls">
+						<input type="password" minlength="6" maxlength="20" id="inputOldPass" name="oldpass" placeholder="your current password" required>
+						<p class="text-error">${passwordMsg!}</p>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputNewPass">New Password</label>
+					<div class="controls">
+						<input type="password" minlength="6" maxlength="20" id="inputNewPass" name="user.pass">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="inputConfirmPass">Confirm Password</label>
+					<div class="controls">
+						<input type="password" minlength="6" maxlength="20" id="inputConfirmPass" name="repass">
+						<p class="text-error">${confirmMsg!}</p>
+					</div>
+				</div>
+				<fieldset>
+				<div class="control-group">
+					<div class="controls">
+						<button type="submit" class="btn btn-primary">Save</button>
+						<a class="btn btn-warning" href="user/profile/${user.name!}">Cancel</a>
+					</div>
+				</div>
+	    </form>
+	</div>
+</div>
+
+    <script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
+    <script language="javascript" type="text/javascript">   
+		$().ready(function() {
+			$("#editUserForm").validate();
+		});
+	</script>
+</@layout>
