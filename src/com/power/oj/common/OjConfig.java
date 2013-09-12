@@ -81,6 +81,7 @@ public class OjConfig extends JFinalConfig
 	{
 		me.add(new SessionInViewInterceptor());
 		me.add(new GlobalInterceptor());
+		me.add(new BaseURLInterceptor());
 	}
 
 	/**

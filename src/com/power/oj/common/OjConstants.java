@@ -12,7 +12,7 @@ import jodd.util.collection.IntHashMap;
 
 public class OjConstants
 {
-	public static String baseUrl = "/oj";
+	public static String baseUrl = null;
 	public static String siteTitle = "Power OJ";
 	public static final String randomCodeKey = "PowerOJCaptcha";
 	
