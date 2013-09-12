@@ -97,7 +97,7 @@ public class OjConfig extends JFinalConfig
 	 */
 	public void afterJFinalStart()
 	{
-		OjConstants.baseUrl = StringUtil.suffix(getProperty("baseUrl", ""), "/");
+		OjConstants.baseUrl = getProperty("baseUrl");
 		OjConstants.siteTitle = getProperty("siteTitle", "Power OJ");
 		OjConstants.init();
 	}
