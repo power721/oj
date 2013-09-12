@@ -26,8 +26,10 @@ public class BaseURLInterceptor implements Interceptor
 				sb.append(":").append(request.getServerPort());
 			}
 			sb.append(request.getContextPath());
+			sb.append("/");
 	
 			baseUrl = sb.toString();
+			OjConstants.baseUrl = baseUrl;
 		}
 		
 		controller.setAttr("baseUrl", baseUrl);
