@@ -29,6 +29,7 @@ public class BaseURLInterceptor implements Interceptor
 	
 			baseUrl = sb.toString();
 			OjConstants.baseUrl = baseUrl;
+			System.out.println("\nAuto detect baseUrl: " + baseUrl + "\n");
 		}
 		
 		controller.setAttr("baseUrl", baseUrl);

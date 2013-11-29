@@ -1,7 +1,5 @@
 package com.power.oj.common;
 
-import jodd.util.StringUtil;
-
 import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.common.model.LanguageModel;
@@ -97,7 +95,7 @@ public class OjConfig extends JFinalConfig
 	 */
 	public void afterJFinalStart()
 	{
-		OjConstants.baseUrl = getProperty("baseUrl");
+		OjConstants.baseUrl = Tool.formatBaseURL(getProperty("baseUrl"));
 		OjConstants.siteTitle = getProperty("siteTitle", "Power OJ");
 		OjConstants.init();
 	}
