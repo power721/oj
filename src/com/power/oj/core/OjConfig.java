@@ -1,18 +1,17 @@
-package com.power.oj.common;
+package com.power.oj.core;
 
 import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
-import com.power.oj.common.model.LanguageModel;
-import com.power.oj.common.model.VariableModel;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
+import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.VariableModel;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.*;
-
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;

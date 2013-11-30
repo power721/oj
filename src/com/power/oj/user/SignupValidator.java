@@ -5,7 +5,7 @@ import jodd.util.StringUtil;
 import com.jfinal.core.Controller;
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.validate.Validator;
-import com.power.oj.common.OjConstants;
+import com.power.oj.core.OjConstants;
 
 public class SignupValidator extends Validator
 {

@@ -8,10 +8,10 @@ import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
-import com.power.oj.common.OjConstants;
-import com.power.oj.common.ResultType;
-import com.power.oj.common.model.LanguageModel;
 import com.power.oj.contest.ContestModel;
+import com.power.oj.core.OjConstants;
+import com.power.oj.core.ResultType;
+import com.power.oj.core.model.LanguageModel;
 import com.power.oj.user.UserModel;
 
 @SuppressWarnings("serial")

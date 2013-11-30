@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
@@ -11,9 +12,9 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.power.oj.common.OjConstants;
-import com.power.oj.common.ResultType;
-import com.power.oj.common.model.LanguageModel;
+import com.power.oj.core.OjConstants;
+import com.power.oj.core.ResultType;
+import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
 
 @SuppressWarnings("serial")

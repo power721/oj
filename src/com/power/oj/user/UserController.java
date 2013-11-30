@@ -13,8 +13,8 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.admin.AdminInterceptor;
-import com.power.oj.common.OjConstants;
-import com.power.oj.common.OjController;
+import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjController;
 
 public class UserController extends OjController
 {

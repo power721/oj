@@ -1,4 +1,4 @@
-package com.power.oj.common.model;
+package com.power.oj.core.model;
 
 import com.jfinal.plugin.activerecord.Model;
 

@@ -1,12 +1,12 @@
-package com.power.oj.common;
+package com.power.oj.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import com.power.oj.common.model.LanguageModel;
-import com.power.oj.common.model.VariableModel;
+import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.VariableModel;
 
 import jodd.util.collection.IntHashMap;
 

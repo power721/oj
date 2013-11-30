@@ -1,4 +1,4 @@
-package com.power.oj.common;
+package com.power.oj.core;
 
 public class Tool
 {

@@ -15,9 +15,9 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminInterceptor;
-import com.power.oj.common.OjConstants;
-import com.power.oj.common.OjController;
-import com.power.oj.common.ResultType;
+import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjController;
+import com.power.oj.core.ResultType;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.LoginInterceptor;
 

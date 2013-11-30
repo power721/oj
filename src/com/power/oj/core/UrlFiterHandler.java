@@ -1,4 +1,4 @@
-package com.power.oj.common;
+package com.power.oj.core;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

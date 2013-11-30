@@ -1,4 +1,4 @@
-package com.power.oj.common;
+package com.power.oj.core;
 
 import java.util.HashMap;
 import java.util.List;
