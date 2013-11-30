@@ -3,16 +3,12 @@
 
     <script language="javascript" type="text/javascript">
     $(document).ready(function(){
-        document.onkeydown=nextpage
-        document.onkeydown=nextpage
         var prevpage="problem/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
         var nextpage="problem/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
-        function nextpage(event)
-        {
-            event=event?event:(window.event?window.event:null);
-            <#if problemList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
-            <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-        }
+        $(document).keydown(function(event) {
+            <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
+            <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
+        });
         });
     </script>
 
@@ -64,13 +60,13 @@
         <#if problemList??>
         <#list problemList.list as Problem>
         <tr>
-            <td><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>"/></#if></td>
-            <td>${Problem.pid!}</td>
-            <td><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if></a></td>
-            <td><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
-            <td><a href="status/?pid=${Problem.pid!}">${Problem.submit!}</a></td>
-            <td><#if Problem.submit&gt;0>${(Problem.accept/Problem.submit*100)?int}<#else>0</#if>%</td>
-            <td>${Problem.ctime!}</td>
+          <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>"/></#if></td>
+          <td class="pid">${Problem.pid!}</td>
+          <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if></a></td>
+          <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
+          <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submit!}</a></td>
+          <td class="ratio"><#if Problem.submit&gt;0>${(Problem.accept/Problem.submit*100)?int}<#else>0</#if>%</td>
+          <td class="ctime">${Problem.ctime!}</td>
         </tr>
         </#list>
         </#if>
@@ -94,6 +90,21 @@
           striped:true,
           clean:true
         });
+
+        <#if userName??>
+        $('td.pid').each(function(i) {
+          var result = $(this).prev('.result');
+          $.getJSON('problem/userResult?pid=' + $(this).text(), function(data) {
+            if (data.result)
+            {
+              if (data.result.id)
+                result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
+              else
+                result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
+            }
+          });
+        });
+        </#if>
     });
     </script>
 

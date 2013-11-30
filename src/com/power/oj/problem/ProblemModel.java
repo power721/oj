@@ -79,6 +79,18 @@ public class ProblemModel extends Model<ProblemModel>
 
 		return title;
 	}
+	
+	public List<Record> getUserInfo(int pid, int uid)
+	{
+		List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,code_len,language FROM solution WHERE uid=? AND pid=?", uid, pid);
+		return userInfo;
+	}
+	
+	public Record getUserResult(int pid, int uid)
+	{
+		Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+		return record;
+	}
 
 	public List<Record> getTags(int pid)
 	{

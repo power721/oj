@@ -17,46 +17,45 @@
           // Build the chart
           $('#container').highcharts({
               chart: {
-                  plotBackgroundColor: null,
-                  plotBorderWidth: null,
-                  plotShadow: false
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
               },
               title: {
-                  text: '<a href="${baseUrl!}/problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
+                text: '<a href="${baseUrl!}/problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
               },
-  			subtitle: {
-      			text: 'Power OJ'
-  			},
+              subtitle: {
+                text: 'Power OJ'
+              },
               tooltip: {
                  
               },
               plotOptions: {
-                  pie: {
-                      allowPointSelect: true,
-                      cursor: 'pointer',
-                      dataLabels: {
-                          enabled: false
-                      },
-                      showInLegend: true
-                  }
+                pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                    enabled: false
+                  },
+                  showInLegend: true
+                }
               },
               series: [{
-                  type: 'pie',
-                  name: 'Count',
-                  data: [
-                      <#if resultList??>
-                      <#list resultList as Result>
-                      {
-                          name: '${Result.longName!}',
-                          color: $('td#${Result.name!}').css('color'),
-                          y: ${Result.count!}
-                      },
-                      </#list>
-                      </#if>
-                      
-                  ]
-              }]
-          });
+                type: 'pie',
+                name: 'Count',
+                data: [
+                  <#if resultList??>
+                  <#list resultList as Result>
+                  {
+                    name: '${Result.longName!}',
+                    color: $('td#${Result.name!}').css('color'),
+                    y: ${Result.count!}
+                  },
+                  </#list>
+                  </#if>
+                ]
+            }]
+        });
       });
             
     </script>
@@ -163,89 +162,89 @@
 
     <script type="text/javascript">
     $(document).ready(function () {
-    	  
-    	function problemStatus(url) {
-            $.getJSON(url, function(data){
-              var html = '';
-              var i;
-              var solutionList = data.solutionList;
-              var pageNumber = parseInt(solutionList.pageNumber);
-              var pageSize = parseInt(solutionList.pageSize);
-              var totalPage = parseInt(solutionList.totalPage);
-              for(i in solutionList.list) {
-                var solution = data.solutionList.list[i];
-                var language = solution.language;
-                if (data.userID && (data.adminUser || data.userID==solution.uid))
-                  language = '<a href="code/' + solution.sid + '" target="blank" title="show source code">' + solution.language + '</a>';
-                html += '<tr>' +
-                  '<td class="id">' + (parseInt(i)+1+(pageNumber-1)*pageSize) + '</td>' +
-                  '<td class="sid">' + solution.sid + '</td>' +
-                  '<td class="user"><a href="user/profile/' + solution.name + '">' + solution.name + '</a></td>' +
-                  '<td class="time">' + solution.time + 'MS</td>' +
-                  '<td class="memory">' + solution.memory + 'KB</td>' +
-                  '<td class="language">' + language + '</td>' + 
-                  '<td class="code_len">' + solution.code_len + 'B</td>' +
-                  '<td class="ctime">' + solution.ctime + '</td>' +
-                  '</tr>';
-              }
-              
-              $('#problem-status-tbody').html(html);
-              $('span#pages').html(pageNumber + '/' + totalPage + ' Pages');
-              $('span#records').html(solutionList.totalRow + ' Records');
-              $('a.ajax-loader').removeClass('active');
-              $('a.ajax-loader[data=id-'+data.language+']').addClass('active');
-              var prev = '';
-              if (pageNumber > 1)
-              {
-                prev = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber-1) + data.query + '">Prev</a></li>';
-              }
-              var next = '';
-              if (pageNumber < totalPage)
-              {
-                next = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber+1) + data.query + '">Next</a></li>';
-              }
+        
+      function problemStatus(url) {
+          $.getJSON(url, function(data){
+            var html = '';
+            var i;
+            var solutionList = data.solutionList;
+            var pageNumber = parseInt(solutionList.pageNumber);
+            var pageSize = parseInt(solutionList.pageSize);
+            var totalPage = parseInt(solutionList.totalPage);
+            for(i in solutionList.list) {
+              var solution = data.solutionList.list[i];
+              var language = solution.language;
+              if (data.userID && (data.adminUser || data.userID==solution.uid))
+                language = '<a href="code/' + solution.sid + '" target="blank" title="show source code">' + solution.language + '</a>';
+              html += '<tr>' +
+                '<td class="id">' + (parseInt(i)+1+(pageNumber-1)*pageSize) + '</td>' +
+                '<td class="sid">' + solution.sid + '</td>' +
+                '<td class="user"><a href="user/profile/' + solution.name + '">' + solution.name + '</a></td>' +
+                '<td class="time">' + solution.time + 'MS</td>' +
+                '<td class="memory">' + solution.memory + 'KB</td>' +
+                '<td class="language">' + language + '</td>' + 
+                '<td class="code_len">' + solution.code_len + 'B</td>' +
+                '<td class="ctime">' + solution.ctime + '</td>' +
+                '</tr>';
+            }
+            
+            $('#problem-status-tbody').html(html);
+            $('span#pages').html(pageNumber + '/' + totalPage + ' Pages');
+            $('span#records').html(solutionList.totalRow + ' Records');
+            $('a.ajax-loader').removeClass('active');
+            $('a.ajax-loader[data=id-'+data.language+']').addClass('active');
+            var prev = '';
+            if (pageNumber > 1)
+            {
+              prev = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber-1) + data.query + '">Prev</a></li>';
+            }
+            var next = '';
+            if (pageNumber < totalPage)
+            {
+              next = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber+1) + data.query + '">Next</a></li>';
+            }
 
-              html = '<ul><li class="' + (pageNumber==1?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
-              '?p=1' + (pageSize!=20?'&s='+pageSize:'') + data.query + '">&lt;&lt;</a></li>' + prev;
+            html = '<ul><li class="' + (pageNumber==1?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+            '?p=1' + (pageSize!=20?'&s='+pageSize:'') + data.query + '">&lt;&lt;</a></li>' + prev;
 
-              var start = pageNumber-3;
-              var end = pageNumber+3;
+            var start = pageNumber-3;
+            var end = pageNumber+3;
+            if (start < 1)
+            {
+              end = end-start+1;
+              start = 1;
+            }
+            if (end > totalPage)
+            {
+              start=start-(end-totalPage)-1;
               if (start < 1)
-              {
-                end = end-start+1;
                 start = 1;
-              }
-              if (end > totalPage)
-              {
-                start=start-(end-totalPage)-1;
-                if (start < 1)
-                  start = 1;
-                end = totalPage;
-              }
-              if (end < start)
-                end = start;
-                
-              for(i=start; i<=end; ++i)
-              {
-                html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
-                '?p=' + i +(pageSize!=20?('&s='+pageSize):'') + data.query + '">' + i + '</a></li>';
-              }
+              end = totalPage;
+            }
+            if (end < start)
+              end = start;
+              
+            for(i=start; i<=end; ++i)
+            {
+              html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+              '?p=' + i + (pageSize!=20?('&s='+pageSize):'') + data.query + '">' + i + '</a></li>';
+            }
 
-              html += next + '<li class="' + (pageNumber==totalPage?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
-              '?p=' + totalPage +(pageSize!=20?('&s='+pageSize):'') + data.query + '">&gt;&gt;</a></li></ul>';
-              $('div#page').html(html);
-            });
-    	}
-    	
+            html += next + '<li class="' + (pageNumber==totalPage?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+            '?p=' + totalPage + (pageSize!=20?('&s='+pageSize):'') + data.query + '">&gt;&gt;</a></li></ul>';
+            $('div#page').html(html);
+          });
+      }
+      
         $('div.ajax-loader').delegate('a', 'click', function() {
-        	if ($(this).parent().hasClass('disabled'))
-        		return;
-        	
-            var url = '${baseUrl!}/'+$(this).attr("url");
-            if(url.indexOf('?')>0)
-                url = url+'&ajax=1';
+          if ($(this).parent().hasClass('disabled'))
+            return;
+          
+            var url = '${baseUrl!}/' + $(this).attr("url");
+            if (url.indexOf('?') > 0)
+                url = url + '&ajax=1';
             else
-                url = url+'?ajax=1';
+                url = url + '?ajax=1';
             problemStatus(url);
         });
 

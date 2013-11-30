@@ -261,7 +261,7 @@ public class ProblemController extends OjController
 
 		if (ajax)
 		{
-			renderJson();
+			renderJson(new String[]{"pid", "language", "query", "program_languages", "solutionList"});
 			//render("ajax/status.html");
 		}
 		else
@@ -301,6 +301,37 @@ public class ProblemController extends OjController
 		setAttr("pageTitle", new StringBand(2).append("Search problem: ").append(word).toString());
 
 		render("search.html");
+	}
+	
+	public void userInfo()
+	{
+		int pid = getParaToInt("pid");
+		int uid = getAttrForInt("userID");
+		List<Record> userInfo = null;
+		
+		if (uid > 0)
+		{
+			setAttr("language_name", OjConstants.language_name);
+			setAttr("result_type", OjConstants.result_type);
+			userInfo = ProblemModel.dao.getUserInfo(pid, uid);
+			setAttr("userInfo", userInfo);
+		}
+		renderJson(new String[]{"userInfo", "language_name", "result_type"});
+	}
+	
+	public void userResult()
+	{
+		int pid = getParaToInt("pid");
+		int uid = getAttrForInt("userID");
+		Record userResult = null;
+		
+		if (uid > 0)
+		{
+			userResult = ProblemModel.dao.getUserResult(pid, uid);
+			if (userResult != null && userResult.getInt("result") != null)
+				userResult.set("result", OjConstants.result_type.get(userResult.getInt("result")));
+		}
+		renderJson(userResult);
 	}
 
 	public void tag()

@@ -18,6 +18,7 @@ public class OjConstants
 	
 	public static List<LanguageModel> program_languages;
 	public static IntHashMap language_type = new IntHashMap();
+	public static IntHashMap language_name = new IntHashMap();
 	public static List<ResultType> judge_result;
 	public static IntHashMap result_type = new IntHashMap();
 
@@ -41,6 +42,7 @@ public class OjConstants
 		for (LanguageModel Language : program_languages)
 		{
 			language_type.put(Language.getInt("id"), Language);
+			language_name.put(Language.getInt("id"), Language.getStr("name"));
 		}
 
 		judge_result = new ArrayList<ResultType>();
