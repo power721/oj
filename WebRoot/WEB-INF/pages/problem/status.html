@@ -3,67 +3,62 @@
     <script src="assets/Highcharts/js/highcharts.js"></script>
     <script src="assets/Highcharts/js/modules/exporting.js"></script>
     <script type="text/javascript">
-        $(function () {
-            var chart;
+    'use strict';
+      $(document).ready(function () {
+        var chart;
 
-            document.onkeydown=nextpage
-                var prevpage="${baseUrl}problem/status/${prevPid!}"
-                var nextpage="${baseUrl}problem/status/${nextPid!}"
-                function nextpage(event)
-                {
-                    event=event?event:(window.event?window.event:null);
-                    <#if prevPid!=pid>if(event.keyCode==37)location=prevpage;</#if>
-                    <#if nextPid!=pid>if(event.keyCode==39)location=nextpage;</#if>
-                }
-
-            $(document).ready(function () {
-                
-                // Build the chart
-                $('#container').highcharts({
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false
-                    },
-                    title: {
-                        text: '<a href="${baseUrl!'/'}problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
-                    },
-        			subtitle: {
-            			text: 'Power OJ'
-        			},
-                    tooltip: {
-                       
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: false
-                            },
-                            showInLegend: true
-                        }
-                    },
-                    series: [{
-                        type: 'pie',
-                        name: 'Count',
-                        data: [
-                            <#if resultList??>
-                            <#list resultList as Result>
-                            {
-                                name: '${Result.longName!}',
-                                color: $('td#${Result.name!}').css('color'),
-                                y: ${Result.count!}
-                            },
-                            </#list>
-                            </#if>
-                            
-                        ]
-                    }]
-                });
-            });
+          var prevpage="${baseUrl}/problem/status/${prevPid!}"
+          var nextpage="${baseUrl}/problem/status/${nextPid!}"
+          $(document).keydown(function(event) {
+            <#if prevPid!=pid>if(event.keyCode==37)window.location=prevpage;</#if>
+            <#if nextPid!=pid>if(event.keyCode==39)window.location=nextpage;</#if>
+          });
+          
+          // Build the chart
+          $('#container').highcharts({
+              chart: {
+                  plotBackgroundColor: null,
+                  plotBorderWidth: null,
+                  plotShadow: false
+              },
+              title: {
+                  text: '<a href="${baseUrl!}/problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
+              },
+  			subtitle: {
+      			text: 'Power OJ'
+  			},
+              tooltip: {
+                 
+              },
+              plotOptions: {
+                  pie: {
+                      allowPointSelect: true,
+                      cursor: 'pointer',
+                      dataLabels: {
+                          enabled: false
+                      },
+                      showInLegend: true
+                  }
+              },
+              series: [{
+                  type: 'pie',
+                  name: 'Count',
+                  data: [
+                      <#if resultList??>
+                      <#list resultList as Result>
+                      {
+                          name: '${Result.longName!}',
+                          color: $('td#${Result.name!}').css('color'),
+                          y: ${Result.count!}
+                      },
+                      </#list>
+                      </#if>
+                      
+                  ]
+              }]
+          });
+      });
             
-        });
     </script>
 
     <div class="row" id="problem-status">
@@ -95,16 +90,16 @@
         <div class="span8" id="ajax-container">
             <h4>Best solutions of Problem <a href="problem/show/${pid!}" data-toggle="tooltip" title="${problem.title!}">${pid!}</a></h4>
         <div class="pull-left ajax-loader">
-            <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>" class="btn-link btn-info ajax-loader<#if !language?? || language==-1> active</#if>">All</a>
+            <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>" class="btn-link btn-info ajax-loader<#if !language?? || language==-1> active</#if>" data="id--1">All</a>
             <#if program_languages??>
                 <#list program_languages as Language>
-                <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>?language=${Language.id!}" class="btn-link btn-info ajax-loader<#if language?? && language==Language.id> active</#if>" type="a">${Language.name!}</a>
+                <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>?language=${Language.id!}" class="btn-link btn-info ajax-loader<#if language?? && language==Language.id> active</#if>" type="a" data="id-${Language_index}">${Language.name!}</a>
                 </#list>
             </#if>
         </div>
         <div class="pull-right">
-            <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span>
-            <span class="badge badge-info">${solutionList.totalRow} Records</span>
+            <span id="pages" class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span>
+            <span id="records" class="badge badge-info">${solutionList.totalRow} Records</span>
         </div>
         <table id="problem-status" class="table table-hover table-condensed">
             <thead>
@@ -119,7 +114,7 @@
                 <th>Submit Time</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="problem-status-tbody">
             <#if solutionList??>
             <#list solutionList.list as solution>
             <tr>
@@ -140,7 +135,7 @@
             </#if>
             </tbody>
         </table>
-        <div class="pagination pagination-centered ajax-loader">
+        <div id="page" class="pagination pagination-centered ajax-loader">
         <ul>
             <li class="<#if solutionList.pageNumber==1>disabled</#if>"><a class="btn-link" url="problem/status/${pid!}?p=1<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&lt;&lt;</a></li>
             <#if solutionList.pageNumber&gt;1><li><a class="btn-link" url="problem/status/${pid!}?p=${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">Prev</a></li></#if>
@@ -168,6 +163,91 @@
 
     <script type="text/javascript">
     $(document).ready(function () {
+    	  
+    	function problemStatus(url) {
+            $.getJSON(url, function(data){
+              var html = '';
+              var i;
+              var solutionList = data.solutionList;
+              var pageNumber = parseInt(solutionList.pageNumber);
+              var pageSize = parseInt(solutionList.pageSize);
+              var totalPage = parseInt(solutionList.totalPage);
+              for(i in solutionList.list) {
+                var solution = data.solutionList.list[i];
+                var language = solution.language;
+                if (data.userID && (data.adminUser || data.userID==solution.uid))
+                  language = '<a href="code/' + solution.sid + '" target="blank" title="show source code">' + solution.language + '</a>';
+                html += '<tr>' +
+                  '<td class="id">' + (parseInt(i)+1+(pageNumber-1)*pageSize) + '</td>' +
+                  '<td class="sid">' + solution.sid + '</td>' +
+                  '<td class="user"><a href="user/profile/' + solution.name + '">' + solution.name + '</a></td>' +
+                  '<td class="time">' + solution.time + 'MS</td>' +
+                  '<td class="memory">' + solution.memory + 'KB</td>' +
+                  '<td class="language">' + language + '</td>' + 
+                  '<td class="code_len">' + solution.code_len + 'B</td>' +
+                  '<td class="ctime">' + solution.ctime + '</td>' +
+                  '</tr>';
+              }
+              
+              $('#problem-status-tbody').html(html);
+              $('span#pages').html(pageNumber + '/' + totalPage + ' Pages');
+              $('span#records').html(solutionList.totalRow + ' Records');
+              $('a.ajax-loader').removeClass('active');
+              $('a.ajax-loader[data=id-'+data.language+']').addClass('active');
+              var prev = '';
+              if (pageNumber > 1)
+              {
+                prev = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber-1) + data.query + '">Prev</a></li>';
+              }
+              var next = '';
+              if (pageNumber < totalPage)
+              {
+                next = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber+1) + data.query + '">Next</a></li>';
+              }
+
+              html = '<ul><li class="' + (pageNumber==1?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+              '?p=1' + (pageSize!=20?'&s='+pageSize:'') + data.query + '">&lt;&lt;</a></li>' + prev;
+
+              var start = pageNumber-3;
+              var end = pageNumber+3;
+              if (start < 1)
+              {
+                end = end-start+1;
+                start = 1;
+              }
+              if (end > totalPage)
+              {
+                start=start-(end-totalPage)-1;
+                if (start < 1)
+                  start = 1;
+                end = totalPage;
+              }
+              if (end < start)
+                end = start;
+                
+              for(i=start; i<=end; ++i)
+              {
+                html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+                '?p=' + i +(pageSize!=20?('&s='+pageSize):'') + data.query + '">' + i + '</a></li>';
+              }
+
+              html += next + '<li class="' + (pageNumber==totalPage?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+              '?p=' + totalPage +(pageSize!=20?('&s='+pageSize):'') + data.query + '">&gt;&gt;</a></li></ul>';
+              $('div#page').html(html);
+            });
+    	}
+    	
+        $('div.ajax-loader').delegate('a', 'click', function() {
+        	if ($(this).parent().hasClass('disabled'))
+        		return;
+        	
+            var url = '${baseUrl!}/'+$(this).attr("url");
+            if(url.indexOf('?')>0)
+                url = url+'&ajax=1';
+            else
+                url = url+'?ajax=1';
+            problemStatus(url);
+        });
 
         $("table#problem-status").tablecloth({
           theme:"stats",
@@ -177,14 +257,6 @@
           clean:true
         });
 
-        $('div.ajax-loader a').click(function() {
-            var url = '${baseUrl!}/'+$(this).attr("url");
-            if(url.indexOf('?')>0)
-                url = url+'&ajax=1';
-            else
-                url = url+'?ajax=1';
-            $('div#ajax-container').load(url);
-        });
     });
     </script>
 

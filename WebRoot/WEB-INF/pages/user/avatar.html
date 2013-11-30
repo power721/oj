@@ -7,7 +7,7 @@
         window.onload = function () {
             swfu = new SWFUpload({
                 // Backend Settings
-                upload_url: "${baseUrl!}uploadAvatar/",
+                upload_url: "${baseUrl!}/uploadAvatar/",
                 post_params: {"uid": "${userID}", "name": "${userName}"},
 
                 // File Upload Settings
@@ -41,8 +41,8 @@
                 button_cursor: SWFUpload.CURSOR.HAND,
                 
                 // Flash Settings
-                flash_url : "${baseUrl!}assets/swfupload/swfupload.swf",
-                flash9_url : "${baseUrl!}assets/swfupload/swfupload_fp9.swf",
+                flash_url : "${baseUrl!}/assets/swfupload/swfupload.swf",
+                flash9_url : "${baseUrl!}/assets/swfupload/swfupload_fp9.swf",
 
                 custom_settings : {
                     upload_target : "divFileProgressContainer",

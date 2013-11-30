@@ -169,7 +169,12 @@ public class SolutionModel extends Model<SolutionModel>
 		{
 
 			uid = solution.getInt("uid");
-			name = UserModel.dao.findById(uid, "name").get("name");
+			try {
+				name = UserModel.dao.findById(uid, "name").get("name");
+			} catch(NullPointerException e)
+			{
+				name = "";
+			}
 			solution.put("name", name);
 
 			solution.set("language", ((LanguageModel) OjConstants.language_type.get(solution.getInt("language")))

@@ -2,17 +2,14 @@
 <@layout>
 
     <script language="javascript" type="text/javascript">
-    $(document).ready(function(){
-        document.onkeydown=nextpage
-        var prevpage="${baseUrl}problem/show/${prevPid!}"
-        var nextpage="${baseUrl}problem/show/${nextPid!}"
-        function nextpage(event)
-        {
-            event=event?event:(window.event?window.event:null);
-            <#if prevPid!=problem.pid>if(event.keyCode==37)location=prevpage;</#if>
-            <#if nextPid!=problem.pid>if(event.keyCode==39)location=nextpage;</#if>
-        }
-        });
+    $(document).ready(function() {
+    	var prevpage="${baseUrl}/problem/show/${prevPid!}"
+      var nextpage="${baseUrl}/problem/show/${nextPid!}"
+      $(document).keydown(function(event) {
+        <#if prevPid!=problem.pid>if(event.keyCode==37)window.location=prevpage;</#if>
+        <#if nextPid!=problem.pid>if(event.keyCode==39)window.location=nextpage;</#if>
+      });
+    });
     </script>
 
     <ul class="pager">

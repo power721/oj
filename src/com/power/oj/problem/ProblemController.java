@@ -254,13 +254,16 @@ public class ProblemController extends OjController
 
 		setAttr("pageTitle", new StringBand(3).append("Problem ").append(pid).append(" Status").toString());
 		setAttr("program_languages", OjConstants.program_languages);
-		setAttr("solutionList", solutionList);
 		setAttr("language", language);
 		setAttr("query", query.toString());
 		setAttr("pid", pid);
+		setAttr("solutionList", solutionList);
 
 		if (ajax)
-			render("ajax/status.html");
+		{
+			renderJson();
+			//render("ajax/status.html");
+		}
 		else
 			render("status.html");
 	}
