@@ -1,11 +1,21 @@
 package com.power.oj.core;
 
+/**
+ * Utils for common usage.
+ * @author power
+ *
+ */
 public class Tool
 {
-	public static String formatBaseURL(String s)
+	/**
+	 * 
+	 * @param url string of url
+	 * @return string of formatted base url
+	 */
+	public static String formatBaseURL(String url)
 	{
-		while (s.endsWith("/"))
-			s = s.substring(0, s.length()-1);
-		return s;
+		while (url.endsWith("/"))
+			url = url.substring(0, url.length()-1);
+		return url;
 	}
 }

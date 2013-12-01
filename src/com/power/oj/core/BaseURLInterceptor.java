@@ -7,6 +7,11 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.StringKit;
 
+/**
+ * Get the baseUrl and set in controller attribute.
+ * @author power
+ *
+ */
 public class BaseURLInterceptor implements Interceptor
 {
 
@@ -16,7 +21,7 @@ public class BaseURLInterceptor implements Interceptor
 		String baseUrl = OjConstants.baseUrl;
 		Controller controller = ai.getController();
 		
-		if(StringKit.isBlank(baseUrl))
+		if (StringKit.isBlank(baseUrl)) // if the baseUrl not initialized, we detect from the scheme once.
 		{
 			HttpServletRequest request = controller.getRequest();
 	

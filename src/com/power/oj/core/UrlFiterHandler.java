@@ -5,13 +5,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jfinal.handler.Handler;
 
+/**
+ * 
+ * @author power
+ *
+ */
 public class UrlFiterHandler extends Handler
 {
 
-	@Override
 	public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled)
 	{
-		// TODO Auto-generated method stub
 		int index = target.indexOf(".ws");
 		if (index == -1)
 		{

@@ -10,6 +10,11 @@ import com.power.oj.core.model.VariableModel;
 
 import jodd.util.collection.IntHashMap;
 
+/**
+ * Some constant objects.
+ * @author power
+ *
+ */
 public class OjConstants
 {
 	public static String baseUrl = null;
@@ -31,6 +36,10 @@ public class OjConstants
 	public static long startGlobalInterceptorTime;
 	public static long startGlobalHandlerTime;
 
+	/**
+	 * Initialize configuration form DB.
+	 * Initialize the programming language and judge result type.
+	 */
 	public static void init()
 	{
 		for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable"))

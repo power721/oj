@@ -25,14 +25,25 @@ import com.jfinal.upload.UploadFile;
 import com.power.oj.user.LoginInterceptor;
 import com.power.oj.admin.AdminInterceptor;
 
+/**
+ * The controller for some common pages.
+ * @author power
+ * 
+ */
 public class CommonController extends OjController
 {
 
+	/**
+	 * The index page.
+	 */
 	public void index()
 	{
 		render("index.html");
 	}
 
+	/**
+	 * Frequently Asked Questions page.
+	 */
 	public void faq()
 	{
 		render("faq.html");
@@ -237,6 +248,9 @@ public class CommonController extends OjController
 		renderText(imgStr);
 	}
 
+	/**
+	 * Show hot tags of the problem.
+	 */
 	public void tag()
 	{
 		List<Record> tagList = Db.find("SELECT tag FROM tag WHERE status=1 GROUP by tag ORDER BY COUNT(tag) DESC");
@@ -245,17 +259,26 @@ public class CommonController extends OjController
 		render("tag.html");
 	}
 
+	/**
+	 * Generate captcha image.
+	 */
 	public void captcha()
 	{
 		CaptchaRender img = new CaptchaRender(OjConstants.randomCodeKey);
 		render(img);
 	}
 	
+	/**
+	 * Handle 404 error.
+	 */
 	public void _404()
 	{
 		renderText("Page not found!");
 	}
 
+	/**
+	 * Handle 500 error.
+	 */
 	public void _500()
 	{
 		renderText("500 Internal Server Error");
