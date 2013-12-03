@@ -1,4 +1,4 @@
-package com.power.oj.core;
+package com.power.oj.core.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -6,6 +6,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.StringKit;
+import com.power.oj.core.OjConstants;
 
 /**
  * Get the baseUrl and set in controller attribute.

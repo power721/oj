@@ -23,6 +23,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.user.LoginInterceptor;
+import com.power.oj.util.FileKit;
 import com.power.oj.admin.AdminInterceptor;
 
 /**

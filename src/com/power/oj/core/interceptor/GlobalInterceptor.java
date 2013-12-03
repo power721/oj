@@ -1,10 +1,11 @@
-package com.power.oj.core;
+package com.power.oj.core.interceptor;
 
 import jodd.util.StringBand;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
+import com.power.oj.core.OjConstants;
 
 /**
  * Global interceptor<br>

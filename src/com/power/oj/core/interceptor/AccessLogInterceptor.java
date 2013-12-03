@@ -1,4 +1,4 @@
-package com.power.oj.core;
+package com.power.oj.core.interceptor;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

@@ -1,4 +1,4 @@
-package com.power.oj.core;
+package com.power.oj.util;
 
 import java.io.File;
 import java.util.Arrays;

@@ -27,7 +27,6 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminInterceptor;
-import com.power.oj.core.ContestTask;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
