@@ -18,8 +18,8 @@ public class UrlFiterHandler extends Handler
 		int index = target.indexOf(".ws");
 		if (index == -1)
 		{
-			request.setAttribute("baseUrl", OjConstants.baseUrl);
-			request.setAttribute("siteTitle", OjConstants.siteTitle);
+			request.setAttribute("baseUrl", OjConfig.baseUrl);
+			request.setAttribute("siteTitle", OjConfig.siteTitle);
 			nextHandler.handle(target, request, response, isHandled);
 		}
 	}

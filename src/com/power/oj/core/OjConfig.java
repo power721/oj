@@ -1,5 +1,12 @@
 package com.power.oj.core;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
+import jodd.util.collection.IntHashMap;
+
 import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
@@ -30,6 +37,24 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
  */
 public class OjConfig extends JFinalConfig
 {
+	public static String baseUrl = null;
+	public static String siteTitle = "Power OJ";
+	
+	public static List<LanguageModel> program_languages;
+	public static IntHashMap language_type = new IntHashMap();
+	public static IntHashMap language_name = new IntHashMap();
+	public static List<ResultType> judge_result;
+	public static IntHashMap result_type = new IntHashMap();
+
+	public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
+
+	public static int contestPageSize = 20;
+	public static int problemPageSize = 50;
+	public static int userPageSize = 20;
+	
+	public static long startGlobalInterceptorTime;
+	public static long startGlobalHandlerTime;
+
 
 	/**
 	 * 配置常量
@@ -108,11 +133,77 @@ public class OjConfig extends JFinalConfig
 	 */
 	public void afterJFinalStart()
 	{
-		OjConstants.baseUrl = Tool.formatBaseURL(getProperty("baseUrl"));
-		OjConstants.siteTitle = getProperty("siteTitle", "Power OJ");
-		OjConstants.init();
+		baseUrl = Tool.formatBaseURL(getProperty("baseUrl"));
+		siteTitle = getProperty("siteTitle", "Power OJ");
+		init();
 	}
 
+	/**
+	 * Initialize configuration form DB.
+	 * Initialize the programming language and judge result type.
+	 */
+	public static void init()
+	{
+		for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable"))
+		{
+			variable.put(variableModel.getStr("name"), variableModel);
+		}
+
+		program_languages = LanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
+		for (LanguageModel Language : program_languages)
+		{
+			language_type.put(Language.getInt("id"), Language);
+			language_name.put(Language.getInt("id"), Language.getStr("name"));
+		}
+
+		judge_result = new ArrayList<ResultType>();
+		judge_result.add(new ResultType(ResultType.AC, "AC", "Accepted"));
+		judge_result.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
+		judge_result.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
+		judge_result.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
+		judge_result.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
+		judge_result.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
+		judge_result.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
+		judge_result.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
+		judge_result.add(new ResultType(ResultType.SE, "SE", "System Error"));
+		judge_result.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
+		judge_result.add(new ResultType(ResultType.Wait, "Wait", "Waiting"));
+
+		for (Iterator<ResultType> it = judge_result.iterator(); it.hasNext();)
+		{
+			ResultType resultType = it.next();
+			result_type.put(resultType.getId(), resultType);
+		}
+	}
+	
+	/*
+	 * get OJ variable from DB cache
+	 */
+	public static String get(String name)
+	{
+		return variable.get(name).getStr("value");
+	}
+
+	public static int getInt(String name)
+	{
+		return variable.get(name).getInt("int_value");
+	}
+
+	public static boolean getBoolean(String name)
+	{
+		return variable.get(name).getBoolean("boolean_value");
+	}
+
+	public static String getText(String name)
+	{
+		return variable.get(name).getStr("text_value");
+	}
+
+	public static String getType(String name)
+	{
+		return variable.get(name).getStr("type");
+	}
+	
 	/**
 	 * 建议使用 JFinal 手册推荐的方式启动项目 运行此 main
 	 * 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此

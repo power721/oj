@@ -6,7 +6,7 @@ import jodd.util.StringUtil;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.power.oj.contest.ContestModel;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
@@ -50,8 +50,8 @@ public class SolutionController extends OjController
 
 		setAttr("pageTitle", "Status");
 		setAttr("solutionList", SolutionModel.dao.getPage(pageNumber, pageSize, result, language, pid, userName));
-		setAttr("program_languages", OjConstants.program_languages);
-		setAttr("judge_result", OjConstants.judge_result);
+		setAttr("program_languages", OjConfig.program_languages);
+		setAttr("judge_result", OjConfig.judge_result);
 		setAttr("result", result);
 		setAttr("language", language);
 		setAttr("pid", getPara("pid"));
@@ -68,7 +68,7 @@ public class SolutionController extends OjController
 		int sid = getParaToInt(0);
 		boolean isAdmin = getAttr("adminUser") != null;
 		SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=?", sid);
-		ResultType resultType = (ResultType) OjConstants.result_type.get(solutionModel.getInt("result"));
+		ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
 		int uid = solutionModel.getInt("uid");
 		int loginUid = getAttrForInt("userID");
 		if (uid != loginUid && !isAdmin)
@@ -81,7 +81,7 @@ public class SolutionController extends OjController
 		{
 			String error = solutionModel.getStr("error");
 			if (error != null)
-				solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConstants.get("work_path"), "\\",
+				solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\",
 						"\\\\"), ""));
 		}
 		
@@ -103,7 +103,7 @@ public class SolutionController extends OjController
 		setAttr("pageTitle", "Source code");
 		setAttr("problemTitle", problemTitle);
 		setAttr("user", UserModel.dao.findById(uid, "name").get("name"));
-		LanguageModel language = (LanguageModel) OjConstants.language_type.get(solutionModel.getInt("language"));
+		LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
 		setAttr("language", language.get("name"));
 
 		setAttr("resultLongName", resultType.getLongName());

@@ -63,4 +63,13 @@ public class OjController extends Controller
 		setSessionAttr("msg", msg);
 		super.redirect(url, withQueryString);
 	}
+	
+	/**
+	 * The the page title of the view.
+	 * @param title string of the page title.
+	 */
+	public void setTitle(String title)
+	{
+		setAttr(OjConstants.PAGE_TITLE, title);
+	}
 }

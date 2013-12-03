@@ -4,7 +4,7 @@ import jodd.util.StringUtil;
 
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 
 public class UpdateUserValidator extends Validator
 {
@@ -42,7 +42,7 @@ public class UpdateUserValidator extends Validator
 	{
 		// TODO Auto-generated method stub
 		c.keepModel(UserModel.class, "user");
-		c.setAttr("program_languages", OjConstants.program_languages);
+		c.setAttr("program_languages", OjConfig.program_languages);
 		c.setAttr("pageTitle", "Account");
 
 		c.render("edit.html");

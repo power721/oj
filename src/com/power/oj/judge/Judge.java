@@ -15,7 +15,7 @@ import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
@@ -76,11 +76,11 @@ public class Judge extends Thread
 	public boolean Compile(SolutionModel solutionModel) throws IOException
 	{
 		log.info(solutionModel.getInt("sid")+" Start compiling...");
-		String workPath = OjConstants.get("work_path");
+		String workPath = OjConfig.get("work_path");
 		workPath = new StringBand(2).append(FileNameUtil.normalizeNoEndSeparator(workPath)).append("\\").toString();
 		// workPath = FileNameUtil.separatorsToSystem(workPath); //Converts all
 		// separators to the system separator.
-		if (OjConstants.getBoolean("delete_tmp_file"))
+		if (OjConfig.getBoolean("delete_tmp_file"))
 		{
 			File prevWorkDir = new File(new StringBand(2).append(workPath).append(solutionModel.getInt("sid") - 2)
 					.toString());
@@ -96,13 +96,13 @@ public class Judge extends Thread
 		FileUtil.mkdirs(workDir);
 		log.info("workDir: " + workDir.getAbsolutePath());
 
-		LanguageModel language = (LanguageModel) OjConstants.language_type.get(solutionModel.getInt("language"));
+		LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
 		File sourceFile = new File(new StringBand().append(workDir.getAbsolutePath()).append("\\Main.").append(
 				language.getStr("ext")).toString());
 		FileUtil.touch(sourceFile);
 		FileUtil.writeString(sourceFile, solutionModel.getStr("source"));
 
-		String comShellName = OjConstants.get("compile_shell");
+		String comShellName = OjConfig.get("compile_shell");
 		String compileCmdName = getCompileCmd(language.getStr("compile_cmd"), workDir.getAbsolutePath(), "Main",
 				language.getStr("ext"));
 		log.info("compileCmd: " + compileCmdName);
@@ -153,10 +153,10 @@ public class Judge extends Thread
 	public boolean RunProcess(SolutionModel solutionModel) throws IOException, InterruptedException
 	{
 		log.info(solutionModel.getInt("sid")+" RunProcess...");
-		Process runProcess = Runtime.getRuntime().exec(OjConstants.get("run_shell"));
+		Process runProcess = Runtime.getRuntime().exec(OjConfig.get("run_shell"));
 		OutputStream runProcessOutputStream = runProcess.getOutputStream();
-		log.info("runProcess: " + OjConstants.get("run_shell"));
-		File dataDir = new File(new StringBand(3).append(OjConstants.get("data_path")).append("\\").append(
+		log.info("runProcess: " + OjConfig.get("run_shell"));
+		File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(
 				solutionModel.getInt("pid")).toString());
 		if (!dataDir.isDirectory())
 		{
@@ -187,7 +187,7 @@ public class Judge extends Thread
 		}
 		int numOfData = inFiles.size();
 
-		LanguageModel language = (LanguageModel) OjConstants.language_type.get(solutionModel.getInt("language"));
+		LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
 		long timeLimit = problemModel.getInt("time_limit") * language.getInt("time_factor") + numOfData
 				* language.getInt("ext_time");
 		long caseTimeLimit = problemModel.getInt("time_limit") * language.getInt("time_factor")
@@ -201,7 +201,7 @@ public class Judge extends Thread
 		log.info("caseTimeLimit: " + caseTimeLimit);
 		log.info("memoryLimit: " + memoryLimit);
 
-		File workDir = new File(new StringBand(2).append(OjConstants.get("work_path")).append("\\").append(
+		File workDir = new File(new StringBand(2).append(OjConfig.get("work_path")).append("\\").append(
 				solutionModel.getInt("sid")).toString());
 		String mainProgram = new StringBand(4).append(workDir.getAbsolutePath()).append("\\Main.").append(
 				language.getStr("exe")).append("\n").toString();

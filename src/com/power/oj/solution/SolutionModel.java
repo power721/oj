@@ -9,7 +9,7 @@ import jodd.util.StringUtil;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.ContestModel;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.user.UserModel;
@@ -65,10 +65,10 @@ public class SolutionModel extends Model<SolutionModel>
 			}
 			solution.put("name", name);
 
-			solution.set("language", ((LanguageModel) OjConstants.language_type.get(solution.getInt("language")))
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
 					.get("name"));
 
-			ResultType resultType = (ResultType) OjConstants.result_type.get(solution.getInt("result"));
+			ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
 			solution.put("resultName", resultType.getName());
 			solution.put("resultLongName", resultType.getLongName());
 			
@@ -131,10 +131,10 @@ public class SolutionModel extends Model<SolutionModel>
 			solution.put("name", name);
 			solution.put("nick", userModel.get("nick"));
 
-			solution.set("language", ((LanguageModel) OjConstants.language_type.get(solution.getInt("language")))
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
 					.get("name"));
 
-			ResultType resultType = (ResultType) OjConstants.result_type.get(solution.getInt("result"));
+			ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
 			solution.put("resultName", resultType.getName());
 			solution.put("resultLongName", resultType.getLongName());
 			solution.put("alpha", (char)(solution.getInt("num") + 'A'));
@@ -177,7 +177,7 @@ public class SolutionModel extends Model<SolutionModel>
 			}
 			solution.put("name", name);
 
-			solution.set("language", ((LanguageModel) OjConstants.language_type.get(solution.getInt("language")))
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
 					.get("name"));
 		}
 
@@ -216,7 +216,7 @@ public class SolutionModel extends Model<SolutionModel>
 			name = UserModel.dao.findById(uid, "name").get("name");
 			solution.put("name", name);
 
-			solution.set("language", ((LanguageModel) OjConstants.language_type.get(solution.getInt("language")))
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
 					.get("name"));
 		}
 

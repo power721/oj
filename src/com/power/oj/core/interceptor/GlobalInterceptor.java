@@ -5,7 +5,7 @@ import jodd.util.StringBand;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 
 /**
  * Global interceptor<br>
@@ -18,11 +18,11 @@ public class GlobalInterceptor implements Interceptor
 {
 	public void intercept(ActionInvocation ai)
 	{
-		OjConstants.startGlobalInterceptorTime = System.currentTimeMillis();
+		OjConfig.startGlobalInterceptorTime = System.currentTimeMillis();
 		Controller controller = ai.getController();
 
-		//controller.setAttr("baseUrl", OjConstants.baseUrl); // move to UrlFiterHandler
-		//controller.setAttr("siteTitle", OjConstants.siteTitle);
+		//controller.setAttr("baseUrl", OjConfig.baseUrl); // move to UrlFiterHandler
+		//controller.setAttr("siteTitle", OjConfig.siteTitle);
 
 		String actionKey = ai.getActionKey();
 		controller.setAttr("actionKey", actionKey.replace("/", ""));
@@ -34,7 +34,7 @@ public class GlobalInterceptor implements Interceptor
 		ai.invoke();
 		
 		System.out.println(new StringBand(4).append(actionKey).append(" Action Invoking Time: ").
-				append(System.currentTimeMillis()-OjConstants.startGlobalInterceptorTime).append(" milliseconds").toString());
+				append(System.currentTimeMillis()-OjConfig.startGlobalInterceptorTime).append(" milliseconds").toString());
 	}
 
 	/**

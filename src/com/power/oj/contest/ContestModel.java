@@ -12,7 +12,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
@@ -187,11 +187,11 @@ public class ContestModel extends Model<ContestModel>
 	public List<Record> getContestStatistics(int cid)
 	{
 		StringBand sb = new StringBand("SELECT ");
-		for(LanguageModel language : OjConstants.program_languages)
+		for(LanguageModel language : OjConfig.program_languages)
 		{
 			sb.append("COUNT(IF(language=").append(language.getInt("id")).append(",1,NULL)) AS ").append(language.getStr("ext")).append(",");
 		}
-		for(ResultType resultType : OjConstants.judge_result)
+		for(ResultType resultType : OjConfig.judge_result)
 		{
 			if(resultType.getId() > 9)
 				break;

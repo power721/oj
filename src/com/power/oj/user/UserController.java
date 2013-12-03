@@ -13,7 +13,7 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.admin.AdminInterceptor;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 
 public class UserController extends OjController
@@ -172,7 +172,7 @@ public class UserController extends OjController
 		setAttr("pageTitle", "Account");
 		UserModel user = UserModel.dao.findById(getAttr("userID"));
 		setAttr("user", user);
-		setAttr("program_languages", OjConstants.program_languages);
+		setAttr("program_languages", OjConfig.program_languages);
 
 		render("edit.html");
 	}

@@ -27,7 +27,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminInterceptor;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.problem.ProblemModel;
@@ -143,7 +143,7 @@ public class ContestController extends OjController
 				.toString());
 		setAttr("problem", problemModel);
 		setAttr("user", getSessionAttr("user"));
-		setAttr("program_languages", OjConstants.program_languages);
+		setAttr("program_languages", OjConfig.program_languages);
 		setAttr("cid", cid);
 
 		if (ajax)
@@ -225,8 +225,8 @@ public class ContestController extends OjController
 
 		setAttr("pageTitle", "Status");
 		setAttr("solutionList", SolutionModel.dao.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
-		setAttr("program_languages", OjConstants.program_languages);
-		setAttr("judge_result", OjConstants.judge_result);
+		setAttr("program_languages", OjConfig.program_languages);
+		setAttr("judge_result", OjConfig.judge_result);
 		setAttr("result", result);
 		setAttr("language", language);
 		setAttr("id", getPara("id"));
@@ -256,7 +256,7 @@ public class ContestController extends OjController
 					num);
 			for (SolutionModel record : resultList)
 			{
-				ResultType resultType = (ResultType) OjConstants.result_type.get(record.getInt("result"));
+				ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
 				record.put("longName", resultType.getLongName());
 				record.put("name", resultType.getName());
 			}
@@ -275,7 +275,7 @@ public class ContestController extends OjController
 		Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
 		setAttr("pageTitle", new StringBand(5).append("Contest Problem ").append(cid).append("-").append(id).append(" Status").toString());
-		setAttr("program_languages", OjConstants.program_languages);
+		setAttr("program_languages", OjConfig.program_languages);
 		setAttr("solutionList", solutionList);
 		setAttr("language", language);
 		setAttr("query", query.toString());
@@ -297,7 +297,7 @@ public class ContestController extends OjController
 		setAttr("statistics", statistics);
 
 		List<String> resultName = new ArrayList<String>();
-		for (ResultType resultType : OjConstants.judge_result)
+		for (ResultType resultType : OjConfig.judge_result)
 		{
 			if (resultType.getId() > 9)
 				break;
@@ -305,7 +305,7 @@ public class ContestController extends OjController
 		}
 		resultName.add("Others");
 		setAttr("resultName", resultName);
-		setAttr("languageList", OjConstants.program_languages);
+		setAttr("languageList", OjConfig.program_languages);
 
 		render("statistics.html");
 	}

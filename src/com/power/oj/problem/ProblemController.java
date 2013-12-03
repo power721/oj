@@ -15,7 +15,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminInterceptor;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.solution.SolutionModel;
@@ -98,7 +98,7 @@ public class ProblemController extends OjController
 		setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
 		setAttr("tagList", ProblemModel.dao.getTags(pid));
 		setAttr("problem", problemModel);
-		setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConstants.problemPageSize)),
+		setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)),
 				3600 * 24 * 7);
 
 		problemModel.incView();
@@ -113,7 +113,7 @@ public class ProblemController extends OjController
 		ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
 		setAttr("problem", problemModel);
 		setAttr("user", getSessionAttr("user"));
-		setAttr("program_languages", OjConstants.program_languages);
+		setAttr("program_languages", OjConfig.program_languages);
 		boolean ajax = getParaToBoolean("ajax", false);
 		int sid = 0;
 		if (isParaExists("s"))
@@ -180,7 +180,7 @@ public class ProblemController extends OjController
 		problemModel.set("uid", getAttr("userID"));
 		problemModel.saveProblem();
 
-		File dataDir = new File(new StringBand(3).append(OjConstants.get("data_path")).append("\\").append(
+		File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(
 				problemModel.getInt("pid")).toString());
 		if (dataDir.isDirectory())
 		{
@@ -232,7 +232,7 @@ public class ProblemController extends OjController
 					"SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
 			for (SolutionModel record : resultList)
 			{
-				ResultType resultType = (ResultType) OjConstants.result_type.get(record.getInt("result"));
+				ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
 				record.put("longName", resultType.getLongName());
 				record.put("name", resultType.getName());
 			}
@@ -253,7 +253,7 @@ public class ProblemController extends OjController
 		Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
 
 		setAttr("pageTitle", new StringBand(3).append("Problem ").append(pid).append(" Status").toString());
-		setAttr("program_languages", OjConstants.program_languages);
+		setAttr("program_languages", OjConfig.program_languages);
 		setAttr("language", language);
 		setAttr("query", query.toString());
 		setAttr("pid", pid);
@@ -311,8 +311,8 @@ public class ProblemController extends OjController
 		
 		if (uid > 0)
 		{
-			setAttr("language_name", OjConstants.language_name);
-			setAttr("result_type", OjConstants.result_type);
+			setAttr("language_name", OjConfig.language_name);
+			setAttr("result_type", OjConfig.result_type);
 			userInfo = ProblemModel.dao.getUserInfo(pid, uid);
 			setAttr("userInfo", userInfo);
 		}
@@ -329,7 +329,7 @@ public class ProblemController extends OjController
 		{
 			userResult = ProblemModel.dao.getUserResult(pid, uid);
 			if (userResult != null && userResult.getInt("result") != null)
-				userResult.set("result", OjConstants.result_type.get(userResult.getInt("result")));
+				userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
 		}
 		renderJson(userResult);
 	}

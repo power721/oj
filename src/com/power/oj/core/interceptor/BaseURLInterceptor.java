@@ -6,7 +6,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.StringKit;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 
 /**
  * Get the baseUrl and set in controller attribute.
@@ -19,7 +19,7 @@ public class BaseURLInterceptor implements Interceptor
 	@Override
 	public void intercept(ActionInvocation ai)
 	{
-		String baseUrl = OjConstants.baseUrl;
+		String baseUrl = OjConfig.baseUrl;
 		Controller controller = ai.getController();
 		
 		if (StringKit.isBlank(baseUrl)) // if the baseUrl not initialized, we detect from the scheme once.
@@ -34,7 +34,7 @@ public class BaseURLInterceptor implements Interceptor
 			sb.append(request.getContextPath());
 	
 			baseUrl = sb.toString();
-			OjConstants.baseUrl = baseUrl;
+			OjConfig.baseUrl = baseUrl;
 			System.out.println("\nAuto detect baseUrl: " + baseUrl + "\n");
 		}
 		
