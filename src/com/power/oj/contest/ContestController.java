@@ -11,6 +11,7 @@ import jodd.util.StringUtil;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.JsonKit;
@@ -325,7 +326,16 @@ public class ContestController extends OjController
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			long timeStamp = 0;
 
-			JSONArray jsonArray = JSON.parseArray(html);
+			JSONArray jsonArray;
+			try
+			{
+				jsonArray = JSON.parseArray(html);
+			} catch(JSONException e)
+			{
+				html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+				jsonArray = JSON.parseArray(html);
+			}
+			
 			for (int i = 0; i < jsonArray.size(); ++i)
 			{
 				JSONObject data = jsonArray.getJSONObject(i);
@@ -341,7 +351,7 @@ public class ContestController extends OjController
 				String start = "/Date(" + timeStamp + ")/";
 				String end = "/Date(" + (timeStamp + 18000000) + ")/";
 				String link = data.getString("link");
-				String title = data.getString("name");
+				String title = data.getString("oj") + " -- " + data.getString("name");
 
 				contest.setTaskId(data.getString("id"));
 				contest.setOj(data.getString("oj"));
