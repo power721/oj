@@ -1,18 +1,10 @@
 package com.power.oj.contest;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
@@ -33,6 +25,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.util.Tool;
 
 public class ContestController extends OjController
 {
@@ -317,10 +310,10 @@ public class ContestController extends OjController
 		if (json == null)
 		{
 			List<ContestTask> contests = new ArrayList<ContestTask>();
-			String html = getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
+			String html = Tool.getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
 			if (html == null)
 			{
-				html = getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+				html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
 			}
 			if (html == null)
 			{
@@ -353,6 +346,7 @@ public class ContestController extends OjController
 				contest.setTaskId(data.getString("id"));
 				contest.setOj(data.getString("oj"));
 				contest.setTitle(title);
+				contest.setUrl(link);
 				contest.setDescription(link);
 				contest.setStart(start);
 				contest.setEnd(end);
@@ -430,36 +424,4 @@ public class ContestController extends OjController
 		redirect(new StringBand(2).append("/contest/rank/").append(cid).toString(), "The contest rank build success!");
 	}
 
-	public static String getHtmlByUrl(String url)
-	{
-		String html = null;
-
-		HttpClient httpclient = new DefaultHttpClient();
-		try
-		{
-			HttpGet httpget = new HttpGet(url);
-			System.out.println("executing request " + httpget.getURI());
-
-			// Create a response handler
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			html = httpclient.execute(httpget, responseHandler);
-
-		} catch (ClientProtocolException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally
-		{
-			// When HttpClient instance is no longer needed,
-			// shut down the connection manager to ensure
-			// immediate deallocation of all system resources
-			httpclient.getConnectionManager().shutdown();
-		}
-
-		return html;
-	}
 }

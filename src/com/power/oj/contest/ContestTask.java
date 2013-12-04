@@ -2,18 +2,19 @@ package com.power.oj.contest;
 
 public class ContestTask
 {
-	public String taskId;
-	public String oj;
-	public String title;
-	public String start;
-	public String end;
-	public String startTimezone;
-	public String endTimezone;
-	public String description = "";
-	public String recurrenceId;
-	public String recurrenceRule;
-	public String recurrenceException;
-	public boolean isAllDay = false;
+	private String taskId;
+	private String oj;
+	private String title;
+	private String url;
+	private String start;
+	private String end;
+	private String startTimezone;
+	private String endTimezone;
+	private String description = "";
+	private String recurrenceId;
+	private String recurrenceRule;
+	private String recurrenceException;
+	private boolean isAllDay = false;
 	
 	public String getTaskId()
 	{
@@ -38,6 +39,14 @@ public class ContestTask
 	public void setTitle(String title)
 	{
 		this.title = title;
+	}
+	public String getUrl()
+	{
+		return url;
+	}
+	public void setUrl(String url)
+	{
+		this.url = url;
 	}
 	public String getStart()
 	{
