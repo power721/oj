@@ -96,6 +96,7 @@ public class UserController extends OjController
 		removeSessionAttr(OjConstants.USER);
 		removeCookie(OjConstants.TOKEN_NAME);
 		removeCookie(OjConstants.TOKEN_TOKEN);
+
 		getSession().invalidate();
 
 		String uri = getPara(OjConstants.REDIRECT_URI);
