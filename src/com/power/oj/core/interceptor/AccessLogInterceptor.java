@@ -12,6 +12,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
+import com.power.oj.core.OjConstants;
 
 /**
  * Update session table with uri and timestamp.
@@ -48,7 +49,7 @@ public class AccessLogInterceptor implements Interceptor
 
 			try
 			{
-				controller.setAttr("redirectURI", URLEncoder.encode(rsb.toString(), "UTF-8"));
+				controller.setAttr(OjConstants.REDIRECT_URI, URLEncoder.encode(rsb.toString(), "UTF-8"));
 				controller.setAttr("uri", URLEncoder.encode(sb.toString(), "UTF-8"));
 				
 				Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", sb.toString(), session.getId());

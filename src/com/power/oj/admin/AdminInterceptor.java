@@ -3,29 +3,29 @@ package com.power.oj.admin;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
+import com.power.oj.core.OjConstants;
 
 public class AdminInterceptor implements Interceptor
 {
 	public void intercept(ActionInvocation ai)
 	{
 		Controller controller = ai.getController();
-		if (controller.getSessionAttr("adminUser") != null)
+		if (controller.getSessionAttr(OjConstants.ADMIN_USER) != null)
 		{
 			ai.invoke();
 		} else
 		{
-
-			if (controller.getSessionAttr("user") == null)
+			if (controller.getSessionAttr(OjConstants.USER) == null)
 			{
-				controller.setAttr("msgType", "error");
-				controller.setAttr("msgTitle", "Error!");
-				controller.setAttr("msg", "Please login.");
+				controller.setAttr(OjConstants.MSG_TYPE, "error");
+				controller.setAttr(OjConstants.MSG_TITLE, "Error!");
+				controller.setAttr(OjConstants.MSG, "Please login.");
 				controller.render("../user/login.html");
 			} else
 			{
-				controller.setSessionAttr("msgType", "error");
-				controller.setSessionAttr("msgTitle", "Error!");
-				controller.setSessionAttr("msg", "Permission Denied.");
+				controller.setSessionAttr(OjConstants.MSG_TYPE, "error");
+				controller.setSessionAttr(OjConstants.MSG_TITLE, "Error!");
+				controller.setSessionAttr(OjConstants.MSG, "Permission Denied.");
 				controller.redirect("/");
 			}
 		}

@@ -28,6 +28,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.problem.ProblemModel;
@@ -45,7 +46,7 @@ public class ContestController extends OjController
 		int status = getParaToInt("status", -1);
 
 		Page<ContestModel> contestList = ContestModel.dao.getPage(pageNumber, pageSize, type, status);
-		setAttr("pageTitle", "Contest List");
+		setTitle("Contest List");
 		setAttr("contestList", contestList);
 
 		render("index.html");
@@ -55,8 +56,8 @@ public class ContestController extends OjController
 	{
 		int cid = getParaToInt(0);
 		int uid = 0;
-		if (getAttr("userID") != null)
-			uid = getAttrForInt("userID");
+		if (getAttr(OjConstants.USER_ID) != null)
+			uid = getAttrForInt(OjConstants.USER_ID);
 		ContestModel contestModle = ContestModel.dao.getContest(cid);
 		if (contestModle == null)
 		{
@@ -76,7 +77,7 @@ public class ContestController extends OjController
 		else if (end_time < ctime)
 			status = "Finished";
 
-		setAttr("pageTitle", new StringBand(2).append("Contest ").append(cid).toString());
+		setTitle(new StringBand(2).append("Contest ").append(cid).toString());
 		setAttr("cid", cid);
 		setAttr("contest", contestModle);
 		setAttr("contestProblems", contestProblems);
@@ -104,7 +105,7 @@ public class ContestController extends OjController
 		problemModel.put("sample_input_rows", StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1);
 		problemModel.put("sample_output_rows", StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1);
 
-		setAttr("pageTitle", new StringBand(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
+		setTitle(new StringBand(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
 		setAttr("problem", problemModel);
 		setAttr("cid", cid);
 		setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
@@ -139,11 +140,11 @@ public class ContestController extends OjController
 			return;
 		}
 
-		setAttr("pageTitle", new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title"))
+		setTitle(new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title"))
 				.toString());
 		setAttr("problem", problemModel);
-		setAttr("user", getSessionAttr("user"));
-		setAttr("program_languages", OjConfig.program_languages);
+		setAttr(OjConstants.USER, getSessionAttr(OjConstants.USER));
+		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 		setAttr("cid", cid);
 
 		if (ajax)
@@ -164,7 +165,7 @@ public class ContestController extends OjController
 
 		List<Record> contestProblems = Db.find("SELECT * FROM contest_problem WHERE cid=? ORDER BY num", cid);
 		setAttr("Problems", contestProblems);
-		setAttr("pageTitle", new StringBand(2).append("Contest Standing ").append(cid).toString());
+		setTitle(new StringBand(2).append("Contest Standing ").append(cid).toString());
 		setAttr("cid", cid);
 		setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
 
@@ -183,7 +184,7 @@ public class ContestController extends OjController
 	{
 		int cid = getParaToInt(0);
 		ContestModel contestModle = ContestModel.dao.findById(cid);
-		setAttr("pageTitle", new StringBand(3).append("Contest ").append(cid).append(" Status").toString());
+		setTitle(new StringBand(3).append("Contest ").append(cid).append(" Status").toString());
 		setAttr("cid", cid);
 		setAttr("contest", contestModle);
 
@@ -223,10 +224,10 @@ public class ContestController extends OjController
 			query.append("&name=").append(userName);
 		}
 
-		setAttr("pageTitle", "Status");
+		setTitle("Status");
 		setAttr("solutionList", SolutionModel.dao.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
-		setAttr("program_languages", OjConfig.program_languages);
-		setAttr("judge_result", OjConfig.judge_result);
+		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+		setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
 		setAttr("result", result);
 		setAttr("language", language);
 		setAttr("id", getPara("id"));
@@ -274,8 +275,8 @@ public class ContestController extends OjController
 		}
 		Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
-		setAttr("pageTitle", new StringBand(5).append("Contest Problem ").append(cid).append("-").append(id).append(" Status").toString());
-		setAttr("program_languages", OjConfig.program_languages);
+		setTitle(new StringBand(5).append("Contest Problem ").append(cid).append("-").append(id).append(" Status").toString());
+		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 		setAttr("solutionList", solutionList);
 		setAttr("language", language);
 		setAttr("query", query.toString());
@@ -291,7 +292,7 @@ public class ContestController extends OjController
 	public void statistics()
 	{
 		int cid = getParaToInt(0);
-		setAttr("pageTitle", new StringBand(3).append("Contest Statistics ").append(cid).toString());
+		setTitle(new StringBand(3).append("Contest Statistics ").append(cid).toString());
 		setAttr("cid", cid);
 		List<Record> statistics = ContestModel.dao.getContestStatistics(cid);
 		setAttr("statistics", statistics);
@@ -367,7 +368,7 @@ public class ContestController extends OjController
 
 	public void recent()
 	{
-		setAttr("pageTitle", "Recent Contests on Other OJs");
+		setTitle("Recent Contests on Other OJs");
 	}
 
 	@Before(AdminInterceptor.class)
@@ -385,7 +386,7 @@ public class ContestController extends OjController
 	@Before(AdminInterceptor.class)
 	public void add()
 	{
-		setAttr("pageTitle", "Create a contest");
+		setTitle("Create a contest");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		long ctime = System.currentTimeMillis() + 3600000;
 		setAttr("start_time", sdf.format(new Date(ctime)));
@@ -404,7 +405,7 @@ public class ContestController extends OjController
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 		ContestModel contestModel = getModel(ContestModel.class, "contest");
-		contestModel.set("uid", getAttr("userID"));
+		contestModel.set("uid", getAttr(OjConstants.USER_ID));
 		try
 		{
 			contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);

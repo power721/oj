@@ -1,8 +1,8 @@
 package com.power.oj.admin;
 
-import com.jfinal.core.Controller;
+import com.power.oj.core.OjController;
 
-public class AdminController extends Controller
+public class AdminController extends OjController
 {
 
 	public void index()

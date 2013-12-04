@@ -2,6 +2,7 @@ package com.power.oj.contest;
 
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
+import com.power.oj.core.OjConstants;
 
 public class AddContestValidator extends Validator
 {
@@ -11,7 +12,7 @@ public class AddContestValidator extends Validator
 	{
 		// TODO Auto-generated method stub
 		c.keepModel(ContestModel.class, "contest");
-		c.keepPara("pageTitle");
+		c.keepPara(OjConstants.PAGE_TITLE);
 		
 		c.render("add.html");
 	}

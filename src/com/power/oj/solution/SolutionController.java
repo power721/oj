@@ -48,7 +48,7 @@ public class SolutionController extends OjController
 			query.append("&name=").append(userName);
 		}
 
-		setAttr("pageTitle", "Status");
+		setTitle("Status");
 		setAttr("solutionList", SolutionModel.dao.getPage(pageNumber, pageSize, result, language, pid, userName));
 		setAttr("program_languages", OjConfig.program_languages);
 		setAttr("judge_result", OjConfig.judge_result);
@@ -100,7 +100,7 @@ public class SolutionController extends OjController
 			problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getInt("pid"));
 		}
 		
-		setAttr("pageTitle", "Source code");
+		setTitle("Source code");
 		setAttr("problemTitle", problemTitle);
 		setAttr("user", UserModel.dao.findById(uid, "name").get("name"));
 		LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));

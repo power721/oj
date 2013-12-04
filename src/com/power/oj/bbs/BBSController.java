@@ -1,13 +1,13 @@
 package com.power.oj.bbs;
 
-import com.jfinal.core.Controller;
+import com.power.oj.core.OjController;
 
-public class BBSController extends Controller
+public class BBSController extends OjController
 {
 
 	public void index()
 	{
-		setAttr("pageTitle", "Web Board");
+		setTitle("Web Board");
 		render("index.html");
 	}
 }

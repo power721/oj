@@ -17,7 +17,7 @@ public class OjController extends Controller
 	 */
 	public void redirect(String url, String msg)
 	{
-		setSessionAttr("msg", msg);
+		setSessionAttr(OjConstants.MSG, msg);
 		super.redirect(url);
 	}
 
@@ -30,9 +30,9 @@ public class OjController extends Controller
 	 */
 	public void redirect(String url, String msg, String msgType, String msgTitle)
 	{
-		setSessionAttr("msgType", msgType);
-		setSessionAttr("msgTitle", msgTitle);
-		setSessionAttr("msg", msg);
+		setSessionAttr(OjConstants.MSG_TYPE, msgType);
+		setSessionAttr(OjConstants.MSG_TITLE, msgTitle);
+		setSessionAttr(OjConstants.MSG, msg);
 		super.redirect(url);
 	}
 
@@ -44,7 +44,7 @@ public class OjController extends Controller
 	 */
 	public void redirect(String url, boolean withQueryString, String msg)
 	{
-		setSessionAttr("msg", msg);
+		setSessionAttr(OjConstants.MSG, msg);
 		super.redirect(url, withQueryString);
 	}
 
@@ -58,9 +58,9 @@ public class OjController extends Controller
 	 */
 	public void redirect(String url, boolean withQueryString, String msg, String msgType, String msgTitle)
 	{
-		setSessionAttr("msgType", msgType);
-		setSessionAttr("msgTitle", msgTitle);
-		setSessionAttr("msg", msg);
+		setSessionAttr(OjConstants.MSG_TYPE, msgType);
+		setSessionAttr(OjConstants.MSG_TITLE, msgTitle);
+		setSessionAttr(OjConstants.MSG, msg);
 		super.redirect(url, withQueryString);
 	}
 	
@@ -71,5 +71,14 @@ public class OjController extends Controller
 	public void setTitle(String title)
 	{
 		setAttr(OjConstants.PAGE_TITLE, title);
+	}
+	
+	/**
+	 * Set the redirect uri, redirect to this uri after login/logout.
+	 * @param redirectURI string of the uri.
+	 */
+	public void setRedirectURI(String redirectURI)
+	{
+		setAttr(OjConstants.REDIRECT_URI, redirectURI);
 	}
 }
