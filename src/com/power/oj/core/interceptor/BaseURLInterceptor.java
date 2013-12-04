@@ -7,6 +7,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.StringKit;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 
 /**
  * Get the baseUrl and set in controller attribute.
@@ -38,7 +39,7 @@ public class BaseURLInterceptor implements Interceptor
 			System.out.println("\nAuto detect baseUrl: " + baseUrl + "\n");
 		}
 		
-		controller.setAttr("baseUrl", baseUrl);
+		controller.setAttr(OjConstants.BASE_URL, baseUrl);
 
 		ai.invoke();
 	}

@@ -16,6 +16,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.solution.SolutionModel;
@@ -27,7 +28,7 @@ public class ProblemController extends OjController
 	
 	public void index()
 	{
-		setAttr("pageTitle", "Problem List");
+		setTitle("Problem List");
 		int pageNumber = 1;
 		if (isParaExists("p"))
 			pageNumber = getParaToInt("p", 1);
@@ -65,7 +66,7 @@ public class ProblemController extends OjController
 		}
 
 		int pid = getParaToInt(0);
-		boolean isAdmin = getAttr("adminUser") != null;
+		boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
 		ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
 		if (problemModel == null)
 		{
@@ -73,9 +74,9 @@ public class ProblemController extends OjController
 			return;
 		}
 		int uid = 0;
-		if (getAttr("userID") != null)
+		if (getAttr(OjConstants.USER_ID) != null)
 		{
-			uid = getAttrForInt("userID");
+			uid = getAttrForInt(OjConstants.USER_ID);
 			Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1",
 					uid, pid);
 			if (record != null)
@@ -93,7 +94,7 @@ public class ProblemController extends OjController
 		problemModel.put("sample_input_rows", sample_input_rows);
 		problemModel.put("sample_output_rows", sample_output_rows);
 
-		setAttr("pageTitle", new StringBand(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
+		setTitle(new StringBand(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
 		setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
 		setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
 		setAttr("tagList", ProblemModel.dao.getTags(pid));
@@ -109,11 +110,11 @@ public class ProblemController extends OjController
 	public void submit()
 	{
 		int pid = getParaToInt(0);
-		boolean isAdmin = getAttr("adminUser") != null;
+		boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
 		ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
 		setAttr("problem", problemModel);
-		setAttr("user", getSessionAttr("user"));
-		setAttr("program_languages", OjConfig.program_languages);
+		setAttr(OjConstants.USER, getSessionAttr(OjConstants.USER));
+		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 		boolean ajax = getParaToBoolean("ajax", false);
 		int sid = 0;
 		if (isParaExists("s"))
@@ -121,7 +122,7 @@ public class ProblemController extends OjController
 			sid = getParaToInt("s", 0);
 			StringBand sb = new StringBand("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
 			if (!isAdmin)
-				sb.append(" AND uid=").append(getAttrForInt("userID"));
+				sb.append(" AND uid=").append(getAttrForInt(OjConstants.USER_ID));
 			SolutionModel solutionModel = SolutionModel.dao.findFirst(sb.toString(), sid, pid);
 			if (solutionModel != null)
 			{
@@ -147,7 +148,7 @@ public class ProblemController extends OjController
 		int pid = getParaToInt(0);
 		ProblemModel problemModel = ProblemModel.dao.findById(pid);
 		setAttr("problem", problemModel);
-		setAttr("pageTitle", new StringBand(2).append("Edit Problem ").append(pid).toString());
+		setTitle(new StringBand(2).append("Edit Problem ").append(pid).toString());
 		boolean ajax = getParaToBoolean("ajax", false);
 
 		if (ajax)
@@ -169,7 +170,7 @@ public class ProblemController extends OjController
 	@Before(AdminInterceptor.class)
 	public void add()
 	{
-		setAttr("pageTitle", "Add a problem");
+		setTitle("Add a problem");
 		render("add.html");
 	}
 
@@ -177,7 +178,7 @@ public class ProblemController extends OjController
 	public void save()
 	{
 		ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-		problemModel.set("uid", getAttr("userID"));
+		problemModel.set("uid", getAttr(OjConstants.USER_ID));
 		problemModel.saveProblem();
 
 		File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(
@@ -220,7 +221,7 @@ public class ProblemController extends OjController
 
 		if (!ajax)
 		{
-			boolean isAdmin = getAttr("adminUser") != null;
+			boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
 			ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
 			if (problemModel == null)
 			{
@@ -252,8 +253,8 @@ public class ProblemController extends OjController
 		}
 		Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
 
-		setAttr("pageTitle", new StringBand(3).append("Problem ").append(pid).append(" Status").toString());
-		setAttr("program_languages", OjConfig.program_languages);
+		setTitle(new StringBand(3).append("Problem ").append(pid).append(" Status").toString());
+		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 		setAttr("language", language);
 		setAttr("query", query.toString());
 		setAttr("pid", pid);
@@ -281,7 +282,7 @@ public class ProblemController extends OjController
 		}
 		if (pid != 0)
 		{
-			problemModel = ProblemModel.dao.findByPid(pid, getAttr("adminUser") != null);
+			problemModel = ProblemModel.dao.findByPid(pid, getAttr(OjConstants.ADMIN_USER) != null);
 			if (problemModel == null)
 				pid = 0;
 		} else if (isParaBlank("word"))
@@ -298,7 +299,7 @@ public class ProblemController extends OjController
 		setAttr("problemList", ProblemModel.dao.searchProblem(scope, word));
 		setAttr("word", word);
 		setAttr("scope", scope != null ? scope : "all");
-		setAttr("pageTitle", new StringBand(2).append("Search problem: ").append(word).toString());
+		setTitle(new StringBand(2).append("Search problem: ").append(word).toString());
 
 		render("search.html");
 	}
@@ -306,13 +307,13 @@ public class ProblemController extends OjController
 	public void userInfo()
 	{
 		int pid = getParaToInt("pid");
-		int uid = getAttrForInt("userID");
+		int uid = getAttrForInt(OjConstants.USER_ID);
 		List<Record> userInfo = null;
 		
 		if (uid > 0)
 		{
-			setAttr("language_name", OjConfig.language_name);
-			setAttr("result_type", OjConfig.result_type);
+			setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
+			setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
 			userInfo = ProblemModel.dao.getUserInfo(pid, uid);
 			setAttr("userInfo", userInfo);
 		}
@@ -322,7 +323,7 @@ public class ProblemController extends OjController
 	public void userResult()
 	{
 		int pid = getParaToInt("pid");
-		int uid = getAttrForInt("userID");
+		int uid = getAttrForInt(OjConstants.USER_ID);
 		Record userResult = null;
 		
 		if (uid > 0)
@@ -339,7 +340,7 @@ public class ProblemController extends OjController
 		String op = getPara("op");
 		String tag = HtmlEncoder.text(getPara("tag").trim());
 		int pid = getParaToInt("pid");
-		int uid = getAttrForInt("userID");
+		int uid = getAttrForInt(OjConstants.USER_ID);
 		if ("add".equals(op) && StringUtil.isNotBlank(tag))
 			ProblemModel.dao.addTag(pid, uid, tag);
 

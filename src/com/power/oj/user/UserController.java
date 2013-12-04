@@ -14,6 +14,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 
 public class UserController extends OjController
@@ -27,19 +28,19 @@ public class UserController extends OjController
 	@ActionKey("/login")
 	public void login()
 	{
-		String uri = getPara("redirectURI");
+		String uri = getPara(OjConstants.REDIRECT_URI);
 		if (StringUtil.isBlank(uri))
 			uri = "/";
 		if (getRequest().getMethod() == "GET")
-			setAttr("redirectURI", uri);
+			setAttr(OjConstants.REDIRECT_URI, uri);
 
-		if (getSessionAttr("user") != null)// user already login
+		if (getSessionAttr(OjConstants.USER) != null)// user already login
 		{
 			redirect(uri, "You already login.", "error", "Error!");
 			return;
 		}
 
-		setAttr("pageTitle", "Login");
+		setTitle("Login");
 		UserModel userModel = null;
 		String name = null;
 		String password = null;
@@ -53,26 +54,26 @@ public class UserController extends OjController
 			if (userModel != null)
 			{
 				String token = UUID.randomUUID().toString();
-				setCookie("name", name, 3600 * 24 * 7);
+				setCookie(OjConstants.TOKEN_NAME, name, 3600 * 24 * 7);
 				if (getParaToBoolean("rememberPassword"))
-					setCookie("token", token, 3600 * 24 * 7);
+					setCookie(OjConstants.TOKEN_TOKEN, token, 3600 * 24 * 7);
 
 				userModel.updateLogin(token);
-				setSessionAttr("user", userModel);
+				setSessionAttr(OjConstants.USER, userModel);
 
 				int uid = userModel.getInt("uid");
 				if (userModel.isAdmin(uid))
-					setSessionAttr("adminUser", uid);
+					setSessionAttr(OjConstants.ADMIN_USER, uid);
 
 				redirect(uri);
 				return;
 			} else
 			{
-				setAttr("msgType", "error");
-				setAttr("msgTitle", "Error!");
-				setAttr("msg", "Sorry, you entered an invalid username or password.");
+				setAttr(OjConstants.MSG_TYPE, "error");
+				setAttr(OjConstants.MSG_TITLE, "Error!");
+				setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
 				keepPara("name");
-				keepPara("redirectURI");
+				keepPara(OjConstants.REDIRECT_URI);
 			}
 		}
 		boolean ajax = getParaToBoolean("ajax", false);
@@ -86,18 +87,18 @@ public class UserController extends OjController
 	@ActionKey("/logout")
 	public void logout()
 	{
-		UserModel user = getSessionAttr("user");
+		UserModel user = getSessionAttr(OjConstants.USER);
 		if (user != null)
 		{
-			user.set("token", null);
+			user.set(OjConstants.TOKEN_TOKEN, null);
 			user.update();
 		}
-		removeSessionAttr("user");
-		removeCookie("name");
-		removeCookie("token");
+		removeSessionAttr(OjConstants.USER);
+		removeCookie(OjConstants.TOKEN_NAME);
+		removeCookie(OjConstants.TOKEN_TOKEN);
 		getSession().invalidate();
 
-		String uri = getPara("redirectURI");
+		String uri = getPara(OjConstants.REDIRECT_URI);
 		if (StringUtil.isBlank(uri))
 			uri = "/";
 
@@ -110,7 +111,7 @@ public class UserController extends OjController
 		UserModel user = null;
 		if (name == null)
 		{
-			user = getSessionAttr("user");
+			user = getSessionAttr(OjConstants.USER);
 			if (user == null)
 			{
 				redirect("/");
@@ -129,9 +130,9 @@ public class UserController extends OjController
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		setAttr("createTime", sdf.format(new Date(user.getInt("ctime") * 1000L)));
 		setAttr("loginTime", sdf.format(new Date(user.getInt("login") * 1000L)));
-		setAttr("user", user);
+		setAttr(OjConstants.USER, user);
 		setAttr("userRank", UserModel.dao.getUserRank(user.getInt("uid")));
-		setAttr("pageTitle", "User Profile");
+		setTitle("User Profile");
 		render("profile.html");
 	}
 
@@ -144,13 +145,13 @@ public class UserController extends OjController
 	@ActionKey("/signup")
 	public void signup()
 	{
-		if (getSessionAttr("user") != null)// user already login
+		if (getSessionAttr(OjConstants.USER) != null)// user already login
 		{
 			redirect("/");
 			return;
 		}
 
-		setAttr("pageTitle", "Signup");
+		setTitle("Signup");
 		render("signup.html");
 	}
 
@@ -161,7 +162,7 @@ public class UserController extends OjController
 		userModel.saveUser();
 
 		userModel = userModel.findById(userModel.getInt("uid"));
-		setSessionAttr("user", userModel);
+		setSessionAttr(OjConstants.USER, userModel);
 
 		redirect("/user/edit", "Congratulations!You have a new account now.<br>Please update your information.");
 	}
@@ -169,10 +170,10 @@ public class UserController extends OjController
 	@Before(LoginInterceptor.class)
 	public void edit()
 	{
-		setAttr("pageTitle", "Account");
+		setTitle("Account");
 		UserModel user = UserModel.dao.findById(getAttr("userID"));
-		setAttr("user", user);
-		setAttr("program_languages", OjConfig.program_languages);
+		setAttr(OjConstants.USER, user);
+		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 
 		render("edit.html");
 	}
@@ -199,10 +200,10 @@ public class UserController extends OjController
 	{
 		String word = HtmlEncoder.text(getPara("word").trim());
 		String scope = getPara("scope");
-		setAttr("userList", UserModel.dao.searchUser(scope, word));
+		setAttr(OjConstants.USER_LIST, UserModel.dao.searchUser(scope, word));
 		setAttr("word", word);
 		setAttr("scope", scope != null ? scope : "all");
-		setAttr("pageTitle", new StringBand(2).append("Search user: ").append(word).toString());
+		setTitle(new StringBand(2).append("Search user: ").append(word).toString());
 
 		render("search.html");
 	}
@@ -230,11 +231,11 @@ public class UserController extends OjController
 	@Before(AdminInterceptor.class)
 	public void online()
 	{
-		setAttr("pageTitle", "Online Users");
+		setTitle("Online Users");
 		setAttr("loginUserNum", Db.findFirst(
 				"SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0").getLong(
 				"count"));
-		setAttr("userList", UserModel.dao.onlineUser());
+		setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
 
 		render("online.html");
 	}
@@ -249,8 +250,8 @@ public class UserController extends OjController
 				"FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1)
 						* pageSize);
 
-		setAttr("pageTitle", "Ranklist");
-		setAttr("userList", userList);
+		setTitle("Ranklist");
+		setAttr(OjConstants.USER_LIST, userList);
 
 		render("rank.html");
 	}

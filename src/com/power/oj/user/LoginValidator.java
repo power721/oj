@@ -2,6 +2,7 @@ package com.power.oj.user;
 
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
+import com.power.oj.core.OjConstants;
 
 public class LoginValidator extends Validator
 {
@@ -12,7 +13,7 @@ public class LoginValidator extends Validator
 		// TODO Auto-generated method stub
 		if (c.getRequest().getMethod() == "GET")
 			return;
-		if (c.getSessionAttr("user") != null)
+		if (c.getSessionAttr(OjConstants.USER) != null)
 		{
 			c.redirect("/");
 			return;
@@ -26,7 +27,7 @@ public class LoginValidator extends Validator
 	protected void handleError(Controller c)
 	{
 		// TODO Auto-generated method stub
-		c.setAttr("pageTitle", "Login");
+		c.setAttr(OjConstants.PAGE_TITLE, "Login");
 		c.keepPara("name");
 
 		c.render("login.html");

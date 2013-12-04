@@ -133,8 +133,8 @@ public class OjConfig extends JFinalConfig
 	 */
 	public void afterJFinalStart()
 	{
-		baseUrl = Tool.formatBaseURL(getProperty("baseUrl"));
-		siteTitle = getProperty("siteTitle", "Power OJ");
+		baseUrl = Tool.formatBaseURL(getProperty(OjConstants.BASE_URL));
+		siteTitle = getProperty(OjConstants.SITE_TITLE, "Power OJ");
 		init();
 	}
 

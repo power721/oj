@@ -49,7 +49,7 @@ public class SignupValidator extends Validator
 	protected void handleError(Controller c)
 	{
 		c.keepModel(UserModel.class, "user");
-		c.setAttr("pageTitle", "Signup");
+		c.setAttr(OjConstants.PAGE_TITLE, "Signup");
 
 		c.render("signup.html");
 	}

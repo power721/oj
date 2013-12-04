@@ -7,6 +7,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.power.oj.contest.ContestModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
@@ -48,10 +49,10 @@ public class SolutionController extends OjController
 			query.append("&name=").append(userName);
 		}
 
-		setAttr("pageTitle", "Status");
+		setTitle("Status");
 		setAttr("solutionList", SolutionModel.dao.getPage(pageNumber, pageSize, result, language, pid, userName));
-		setAttr("program_languages", OjConfig.program_languages);
-		setAttr("judge_result", OjConfig.judge_result);
+		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+		setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
 		setAttr("result", result);
 		setAttr("language", language);
 		setAttr("pid", getPara("pid"));
@@ -66,11 +67,11 @@ public class SolutionController extends OjController
 	public void show()
 	{
 		int sid = getParaToInt(0);
-		boolean isAdmin = getAttr("adminUser") != null;
+		boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
 		SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=?", sid);
 		ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
 		int uid = solutionModel.getInt("uid");
-		int loginUid = getAttrForInt("userID");
+		int loginUid = getAttrForInt(OjConstants.USER_ID);
 		if (uid != loginUid && !isAdmin)
 		{
 			redirect("/status", "Permission Denied.", "error", "Error!");
@@ -100,9 +101,9 @@ public class SolutionController extends OjController
 			problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getInt("pid"));
 		}
 		
-		setAttr("pageTitle", "Source code");
+		setTitle("Source code");
 		setAttr("problemTitle", problemTitle);
-		setAttr("user", UserModel.dao.findById(uid, "name").get("name"));
+		setAttr(OjConstants.USER, UserModel.dao.findById(uid, "name").get("name"));
 		LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
 		setAttr("language", language.get("name"));
 
@@ -127,7 +128,7 @@ public class SolutionController extends OjController
 	public void save()
 	{
 		SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
-		solutionModel.set("uid", getAttrForInt("userID"));
+		solutionModel.set("uid", getAttrForInt(OjConstants.USER_ID));
 		String url = "/status";
 		if(solutionModel.get("cid") != null)
 		{

@@ -1,8 +1,8 @@
 package com.power.oj.mail;
 
-import com.jfinal.core.Controller;
+import com.power.oj.core.OjController;
 
-public class MailController extends Controller
+public class MailController extends OjController
 {
 
 	public void index()
