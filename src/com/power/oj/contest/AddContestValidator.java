@@ -13,7 +13,7 @@ public class AddContestValidator extends Validator
 		// TODO Auto-generated method stub
 		c.keepModel(ContestModel.class, "contest");
 		c.keepPara(OjConstants.PAGE_TITLE);
-		
+
 		c.render("add.html");
 	}
 
@@ -22,7 +22,7 @@ public class AddContestValidator extends Validator
 	{
 		// TODO Auto-generated method stub
 		int type = c.getParaToInt("contest.type");
-		if(type == 3)
+		if (type == 3)
 		{
 			validateRequired("contest.pass", "passMsg", "You must set a password!");
 		}

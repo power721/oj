@@ -26,7 +26,7 @@ public class ContestModel extends Model<ContestModel>
 	public static final int StrictPrivate = 2;
 	public static final int Password = 3;
 	public static final int Test = 4;
-	
+
 	public static final int Pending = 0;
 	public static final int Running = 1;
 	public static final int Finished = 2;
@@ -90,131 +90,132 @@ public class ContestModel extends Model<ContestModel>
 
 		return ContestList;
 	}
-	
+
 	public ContestModel getContest(int cid)
 	{
-		ContestModel contestModle = findFirst("SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=? LIMIT 1", cid);
+		ContestModel contestModle = findFirst(
+				"SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=? LIMIT 1",
+				cid);
 		return contestModle;
 	}
-	
+
 	public List<Record> getContestProblems(int cid, int uid)
 	{
 		String sql = "SELECT * FROM contest_problem WHERE cid=?";
 		List<Record> contestProblems;
-		if(uid > 0)
+		if (uid > 0)
 		{
 			sql = "SELECT cp.pid,cp.num,cp.accept,cp.submit,title,status FROM contest_problem cp LEFT OUTER JOIN (SELECT pid,MIN(result) AS status FROM solution WHERE uid=? AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
 			contestProblems = Db.find(sql, uid, cid, cid);
-		}
-		else
+		} else
 		{
 			contestProblems = Db.find(sql, cid);
 		}
 
-		for(Record problem : contestProblems)
+		for (Record problem : contestProblems)
 		{
-			problem.set("id", (char)(problem.getInt("num")+'A'));
+			problem.set("id", (char) (problem.getInt("num") + 'A'));
 		}
-		
+
 		return contestProblems;
 	}
-	
+
 	public long getProblemCount(int cid)
 	{
-		Record record = Db.findFirst("SELECT COUNT(pid) AS count FROM contest_problem WHERE cid=?", cid);
-		if(record != null)
+		Record record = Db.findFirst("SELECT COUNT(pid) AS count FROM contest_problem WHERE cid=? LIMIT 1", cid);
+		if (record != null)
 			return record.getLong("count");
 		return 0L;
 	}
-	
+
 	public ProblemModel getProblem(int cid, int num)
 	{
-		Record record = Db.findFirst("SELECT pid,title,accept,submit FROM contest_problem WHERE cid=? AND num=?", cid, num);
-		if(record == null)
+		Record record = Db.findFirst("SELECT pid,title,accept,submit FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
+		if (record == null)
 			return null;
-		
+
 		int pid = record.getInt("pid");
 		ProblemModel problem = ProblemModel.dao.findById(pid);
-		if(problem == null)
+		if (problem == null)
 			return null;
 		String title = record.getStr("title");
-		if(StringUtil.isNotBlank(title))
+		if (StringUtil.isNotBlank(title))
 			problem.set("title", title);
-		
+
 		problem.set("accept", record.get("accept"));
 		problem.set("submit", record.get("submit"));
-		problem.put("id", (char)(num+'A'));
+		problem.put("id", (char) (num + 'A'));
 		problem.put("num", num);
-		
+
 		return problem;
 	}
-	
+
 	public int getPid(int cid, int num)
 	{
 		Record record = Db.findFirst("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
-		if(record == null)
+		if (record == null)
 			return 0;
-		
+
 		return record.getInt("pid");
 	}
 
 	public String getProblemTitle(int cid, int num)
 	{
 		Record record = Db.findFirst("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
-		if(record == null)
+		if (record == null)
 			return null;
-		
+
 		return record.get("title");
 	}
-	
+
 	public int getContestStatus(int cid)
 	{
 		ContestModel contestModle = findFirst("SELECT start_time,end_time FROM contest WHERE cid=? LIMIT 1", cid);
-		if(contestModle == null)
+		if (contestModle == null)
 			return -1;
 		long ctime = System.currentTimeMillis() / 1000;
 		int start_time = contestModle.getInt("start_time");
 		int end_time = contestModle.getInt("end_time");
-		
+
 		if (start_time > ctime)
 			return Pending;
 		else if (end_time < ctime)
 			return Finished;
-		
+
 		return Running;
 	}
-	
+
 	public List<Record> getContestStatistics(int cid)
 	{
 		StringBand sb = new StringBand("SELECT ");
-		for(LanguageModel language : OjConfig.program_languages)
+		for (LanguageModel language : OjConfig.program_languages)
 		{
 			sb.append("COUNT(IF(language=").append(language.getInt("id")).append(",1,NULL)) AS ").append(language.getStr("ext")).append(",");
 		}
-		for(ResultType resultType : OjConfig.judge_result)
+		for (ResultType resultType : OjConfig.judge_result)
 		{
-			if(resultType.getId() > 9)
+			if (resultType.getId() > 9)
 				break;
 			sb.append("COUNT(IF(result=").append(resultType.getId()).append(",1,NULL)) AS ").append(resultType.getName()).append(",");
 		}
 		sb.append("pid,num,COUNT(IF(result>9,1,NULL)) AS Others,COUNT(*) AS total FROM solution WHERE cid=? GROUP BY pid ORDER BY num");
 		List<Record> statistics = Db.find(sb.toString(), cid);
-		for(Record record : statistics)
+		for (Record record : statistics)
 		{
-			record.set("id", (char)(record.getInt("num")+'A'));
+			record.set("id", (char) (record.getInt("num") + 'A'));
 		}
-		
+
 		return statistics;
 	}
-	
+
 	public boolean saveContest()
 	{
 		long ctime = System.currentTimeMillis() / 1000;
 		this.set("ctime", ctime);
-		
+
 		return this.save();
 	}
-	
+
 	public boolean buildRank(int cid)
 	{
 		Db.update("DELETE FROM board WHERE cid=?", cid);
@@ -230,58 +231,55 @@ public class ContestModel extends Model<ContestModel>
 		int penalty = 0;
 		int firstBoold[] = new int[26];
 		int firstBooldTime[] = new int[26];
-		for(int i=0; i<26; ++i)
+		for (int i = 0; i < 26; ++i)
 			firstBooldTime[i] = -1;
 		int accept[] = new int[26];
 		int submit[] = new int[26];
-		for(Record solution : solutions)
+		for (Record solution : solutions)
 		{
 			++submit[num];
 			uid = solution.getInt("uid");
 			num = solution.getInt("num");
 			result = solution.getInt("result");
 			ctime = solution.getInt("ctime");
-			userInfo = (UserInfo)userRank.get(uid);
-			penalty = (ctime - contestStartTime)/60;
-			if(userInfo == null)
+			userInfo = (UserInfo) userRank.get(uid);
+			penalty = (ctime - contestStartTime) / 60;
+			if (userInfo == null)
 			{
 				userInfo = new UserInfo(uid);
-				if(result == ResultType.AC)
+				if (result == ResultType.AC)
 				{
 					++userInfo.accepts;
 					++accept[num];
 					userInfo.acTime[num] = penalty;
 					userInfo.penalty += penalty;
-				}
-				else
+				} else
 				{
 					++userInfo.waTime[num];
 				}
 				userRank.put(uid, userInfo);
-			}
-			else if(userInfo.acTime[num] == 0)
+			} else if (userInfo.acTime[num] == 0)
 			{
-				if(result == ResultType.AC)
-				{	
+				if (result == ResultType.AC)
+				{
 					++userInfo.accepts;
 					++accept[num];
 					userInfo.acTime[num] = penalty;
 					penalty += userInfo.waTime[num] * 20;
 					userInfo.penalty += penalty;
-				}
-				else
+				} else
 				{
 					++userInfo.waTime[num];
 				}
 			}
-			if(result == ResultType.AC && firstBoold[num] == 0)
+			if (result == ResultType.AC && firstBoold[num] == 0)
 			{
 				firstBoold[num] = uid;
 				firstBooldTime[num] = penalty;
 			}
 		}
-		
-		for(Map.Entry<Object, UserInfo> entry : userRank.entrySet())
+
+		for (Map.Entry<Object, UserInfo> entry : userRank.entrySet())
 		{
 			userInfo = entry.getValue();
 			List<Object> paras = new ArrayList<Object>();
@@ -291,41 +289,41 @@ public class ContestModel extends Model<ContestModel>
 			paras.add(userInfo.penalty);
 			StringBand fields = new StringBand();
 			StringBand values = new StringBand();
-			for(int i=0; i<26; ++i)
+			for (int i = 0; i < 26; ++i)
 			{
-				char c = (char)(i+'A');
-				if(userInfo.acTime[i] > 0)
+				char c = (char) (i + 'A');
+				if (userInfo.acTime[i] > 0)
 				{
 					fields.append(",").append(c).append("_time");
 					values.append(",?");
 					paras.add(userInfo.acTime[i]);
 				}
-				
-				if(userInfo.waTime[i] > 0)
+
+				if (userInfo.waTime[i] > 0)
 				{
 					fields.append(",").append(c).append("_WrongSubmits");
 					paras.add(userInfo.waTime[i]);
 					values.append(",?");
 				}
 			}
-			StringBand sb = new StringBand(5).append("INSERT INTO board (cid,uid,accepts,penalty").append(fields.toString())
-							.append(") VALUES (?,?,?,?").append(values.toString()).append(")");
+			StringBand sb = new StringBand(5).append("INSERT INTO board (cid,uid,accepts,penalty").append(fields.toString()).append(") VALUES (?,?,?,?")
+					.append(values.toString()).append(")");
 			Db.update(sb.toString(), paras.toArray());
 		}
-		for(int i=0; i<26; ++i)
+		for (int i = 0; i < 26; ++i)
 		{
-			Db.update("UPDATE contest_problem SET first_blood=?,first_blood_time=?,accept=?,submit=? WHERE cid=? AND num=?", 
-					firstBoold[i], firstBooldTime[i], accept[i], submit[i], cid, i);
+			Db.update("UPDATE contest_problem SET first_blood=?,first_blood_time=?,accept=?,submit=? WHERE cid=? AND num=?", firstBoold[i], firstBooldTime[i],
+					accept[i], submit[i], cid, i);
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean isContestFinished(int cid)
 	{
 		return findFirst("SELECT 1 FROM contest WHERE cid=? AND end_time<UNIX_TIMESTAMP() LIMIT 1", cid) != null;
 	}
-	
+
 	public class UserInfo
 	{
 		public int cid;
@@ -334,11 +332,11 @@ public class ContestModel extends Model<ContestModel>
 		public int penalty = 0;
 		public int acTime[] = new int[26];
 		public int waTime[] = new int[26];
-		
+
 		UserInfo()
 		{
 		}
-		
+
 		UserInfo(int uid)
 		{
 			this.uid = uid;

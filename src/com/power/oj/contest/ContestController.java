@@ -134,8 +134,7 @@ public class ContestController extends OjController
 			return;
 		}
 
-		setTitle(new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title"))
-				.toString());
+		setTitle(new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
 		setAttr("problem", problemModel);
 		setAttr(OjConstants.USER, getSessionAttr(OjConstants.USER));
 		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
@@ -321,7 +320,7 @@ public class ContestController extends OjController
 				renderJson("{\"error\":network error}");
 				return;
 			}
-			//System.out.println(html);
+			// System.out.println(html);
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			long timeStamp = 0;
@@ -330,12 +329,12 @@ public class ContestController extends OjController
 			try
 			{
 				jsonArray = JSON.parseArray(html);
-			} catch(JSONException e)
+			} catch (JSONException e)
 			{
 				html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
 				jsonArray = JSON.parseArray(html);
 			}
-			
+
 			for (int i = 0; i < jsonArray.size(); ++i)
 			{
 				JSONObject data = jsonArray.getJSONObject(i);

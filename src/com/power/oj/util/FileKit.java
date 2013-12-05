@@ -8,19 +8,23 @@ import java.util.Random;
 
 /**
  * Some utils for file handling.
+ * 
  * @author power
  * 
  */
 public class FileKit
 {
 
-	private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png",
-			".jpg", ".jpeg", ".bmp" };
+	private String[] allowFiles =
+	{ ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
 
 	/**
 	 * Get the files in a directory recursively.
-	 * @param realPath the path of the directory
-	 * @param files the list contains the files in realPath
+	 * 
+	 * @param realPath
+	 *            the path of the directory
+	 * @param files
+	 *            the list contains the files in realPath
 	 * @return the list of files
 	 */
 	public static List<File> getFiles(String realPath, List<File> files)
@@ -48,13 +52,15 @@ public class FileKit
 
 	/**
 	 * Get the file suffix from file name.
-	 * @param fileName file name with suffix
+	 * 
+	 * @param fileName
+	 *            file name with suffix
 	 * @return the file suffix with '.'
 	 */
 	public static String getFileType(String fileName)
 	{
-		String[] fileType = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg",
-				".jpeg", ".bmp" };
+		String[] fileType =
+		{ ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
 		Iterator<String> type = Arrays.asList(fileType).iterator();
 		while (type.hasNext())
 		{
@@ -69,8 +75,11 @@ public class FileKit
 
 	/**
 	 * Get the image files in a directory recursively.
-	 * @param realpath the path of the directory
-	 * @param files the list contains the image files in realPath
+	 * 
+	 * @param realpath
+	 *            the path of the directory
+	 * @param files
+	 *            the list contains the image files in realPath
 	 * @return the list of image files
 	 */
 	public static List<File> getImageFiles(String realpath, List<File> files)
@@ -99,12 +108,15 @@ public class FileKit
 
 	/**
 	 * Get the image file suffix from file name.
-	 * @param fileName file name with suffix
+	 * 
+	 * @param fileName
+	 *            file name with suffix
 	 * @return the image file suffix with '.'
 	 */
 	public static String getImageType(String fileName)
 	{
-		String[] fileType = { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
+		String[] fileType =
+		{ ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
 		Iterator<String> type = Arrays.asList(fileType).iterator();
 		while (type.hasNext())
 		{
@@ -119,7 +131,9 @@ public class FileKit
 
 	/**
 	 * Check the file type in allowed types.
-	 * @param fileName file name with suffix
+	 * 
+	 * @param fileName
+	 *            file name with suffix
 	 * @return if file type is allowed
 	 */
 	public boolean checkFileType(String fileName)
@@ -138,6 +152,7 @@ public class FileKit
 
 	/**
 	 * Get the suffix from file name.
+	 * 
 	 * @return string of file suffix
 	 */
 	public static String getFileExt(String fileName)
@@ -147,7 +162,9 @@ public class FileKit
 
 	/**
 	 * Set allowed file types.
-	 * @param allowFiles an array of allowed file types
+	 * 
+	 * @param allowFiles
+	 *            an array of allowed file types
 	 */
 	public void setAllowFiles(String[] allowFiles)
 	{
@@ -156,6 +173,7 @@ public class FileKit
 
 	/**
 	 * Generate new file name base on original one.
+	 * 
 	 * @return the new file name
 	 */
 	public static String getNewName(String fileName)

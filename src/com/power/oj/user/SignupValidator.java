@@ -33,16 +33,15 @@ public class SignupValidator extends Validator
 			addError("nameMsg", "This user name is reserved!");
 		} else
 		{
-			validateRegex("user.name", "[a-zA-Z0-9_]{5,15}", "nameMsg",
-					"Username only contins 5~15 letters, numbers and underscores.");
+			validateRegex("user.name", "[a-zA-Z0-9_]{5,15}", "nameMsg", "Username only contins 5~15 letters, numbers and underscores.");
 		}
-		
+
 		String captcha = c.getPara("captcha").toUpperCase();
-		if(!CaptchaRender.validate(c, captcha, OjConstants.randomCodeKey))
+		if (!CaptchaRender.validate(c, captcha, OjConstants.randomCodeKey))
 		{
 			addError("captchaMsg", "The captcha is incorrect!");
 		}
-		
+
 	}
 
 	@Override
@@ -58,7 +57,8 @@ public class SignupValidator extends Validator
 	{
 		name = name.toLowerCase();
 
-		String reverseNames[] = { "admin", "system", "default", "avatar" };
+		String reverseNames[] =
+		{ "admin", "system", "default", "avatar" };
 		if (StringUtil.equalsOne(name, reverseNames) != -1)
 			return false;
 

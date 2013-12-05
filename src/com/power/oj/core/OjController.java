@@ -7,17 +7,21 @@ import com.jfinal.log.Logger;
 
 /**
  * Base Controller
+ * 
  * @author power
- *
+ * 
  */
 public class OjController extends Controller
 {
 	protected final Logger log = Logger.getLogger(getClass());
-	
+
 	/**
 	 * Redirect to url with succes message。
-	 * @param url string of destination url
-	 * @param msg string of message content
+	 * 
+	 * @param url
+	 *            string of destination url
+	 * @param msg
+	 *            string of message content
 	 */
 	public void redirect(String url, String msg)
 	{
@@ -27,10 +31,15 @@ public class OjController extends Controller
 
 	/**
 	 * Redirect to url with message。
-	 * @param url string of destination url
-	 * @param msg string of message content
-	 * @param msgType string of "success", "info", "warning", "error"
-	 * @param msgTitle string of message title
+	 * 
+	 * @param url
+	 *            string of destination url
+	 * @param msg
+	 *            string of message content
+	 * @param msgType
+	 *            string of "success", "info", "warning", "error"
+	 * @param msgTitle
+	 *            string of message title
 	 */
 	public void redirect(String url, String msg, String msgType, String msgTitle)
 	{
@@ -42,9 +51,13 @@ public class OjController extends Controller
 
 	/**
 	 * Redirect to url with succes message。
-	 * @param url string of destination url
-	 * @param withQueryString whether contains query string
-	 * @param msg string of message content
+	 * 
+	 * @param url
+	 *            string of destination url
+	 * @param withQueryString
+	 *            whether contains query string
+	 * @param msg
+	 *            string of message content
 	 */
 	public void redirect(String url, boolean withQueryString, String msg)
 	{
@@ -54,11 +67,17 @@ public class OjController extends Controller
 
 	/**
 	 * Redirect to url with message。
-	 * @param url string of destination url
-	 * @param withQueryString whether contains query string
-	 * @param msg string of message content
-	 * @param msgType string of "success", "info", "warning", "error"
-	 * @param msgTitle string of message title
+	 * 
+	 * @param url
+	 *            string of destination url
+	 * @param withQueryString
+	 *            whether contains query string
+	 * @param msg
+	 *            string of message content
+	 * @param msgType
+	 *            string of "success", "info", "warning", "error"
+	 * @param msgTitle
+	 *            string of message title
 	 */
 	public void redirect(String url, boolean withQueryString, String msg, String msgType, String msgTitle)
 	{
@@ -67,27 +86,32 @@ public class OjController extends Controller
 		setSessionAttr(OjConstants.MSG, msg);
 		super.redirect(url, withQueryString);
 	}
-	
+
 	/**
 	 * The the page title of the view.
-	 * @param title string of the page title.
+	 * 
+	 * @param title
+	 *            string of the page title.
 	 */
 	public void setTitle(String title)
 	{
 		setAttr(OjConstants.PAGE_TITLE, title);
 	}
-	
+
 	/**
 	 * Set the redirect uri, redirect to this uri after login/logout.
-	 * @param redirectURI string of the uri.
+	 * 
+	 * @param redirectURI
+	 *            string of the uri.
 	 */
 	public void setRedirectURI(String redirectURI)
 	{
 		setAttr(OjConstants.REDIRECT_URI, redirectURI);
 	}
-	
+
 	/**
 	 * Set the cookie in safe way.
+	 * 
 	 * @param name
 	 * @param value
 	 * @param maxAgeInSeconds
@@ -102,9 +126,10 @@ public class OjController extends Controller
 		setCookie(cookie);
 		return this;
 	}
-	
+
 	/**
 	 * Get the Logger object.
+	 * 
 	 * @return log
 	 */
 	public Logger getLog()

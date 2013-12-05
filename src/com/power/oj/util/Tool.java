@@ -23,7 +23,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class Tool
 {
 	public final static Logger log = Logger.getLogger(Tool.class);
-	
+
 	/**
 	 * 
 	 * @param url

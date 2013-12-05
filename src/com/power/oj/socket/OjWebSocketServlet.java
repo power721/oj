@@ -20,9 +20,9 @@ public class OjWebSocketServlet extends WebSocketServlet
 		return new OjMessageInbound();
 	}
 
-    public static synchronized List<OjMessageInbound> getSocketList()
-    {
-        return OjSocketList;
-    }
-    
+	public static synchronized List<OjMessageInbound> getSocketList()
+	{
+		return OjSocketList;
+	}
+
 }

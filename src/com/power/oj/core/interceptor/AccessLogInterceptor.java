@@ -56,10 +56,10 @@ public class AccessLogInterceptor implements Interceptor
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", sb.toString(), session.getId());
 		}
-		
+
 		ai.invoke();
 	}
 

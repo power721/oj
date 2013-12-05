@@ -8,7 +8,7 @@ import com.jfinal.handler.Handler;
 /**
  * 
  * @author power
- *
+ * 
  */
 public class UrlFiterHandler extends Handler
 {

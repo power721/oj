@@ -25,7 +25,7 @@ import com.power.oj.user.LoginInterceptor;
 public class ProblemController extends OjController
 {
 	private static final Logger log = Logger.getLogger(ProblemController.class);
-	
+
 	public void index()
 	{
 		setTitle("Problem List");
@@ -77,20 +77,19 @@ public class ProblemController extends OjController
 		if (getAttr(OjConstants.USER_ID) != null)
 		{
 			uid = getAttrForInt(OjConstants.USER_ID);
-			Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1",
-					uid, pid);
+			Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
 			if (record != null)
 			{
 				setAttr("userResult", record.getInt("result"));
 			}
 		}
-		
+
 		int sample_input_rows = 1;
-		if(StringUtil.isNotBlank(problemModel.getStr("sample_input")))
-			sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n')+1;
+		if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
+			sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
 		int sample_output_rows = 1;
-		if(StringUtil.isNotBlank(problemModel.getStr("sample_output")))
-			sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n')+1;
+		if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
+			sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
 		problemModel.put("sample_input_rows", sample_input_rows);
 		problemModel.put("sample_output_rows", sample_output_rows);
 
@@ -99,8 +98,7 @@ public class ProblemController extends OjController
 		setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
 		setAttr("tagList", ProblemModel.dao.getTags(pid));
 		setAttr("problem", problemModel);
-		setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)),
-				3600 * 24 * 7);
+		setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), 3600 * 24 * 7);
 
 		problemModel.incView();
 		render("show.html");
@@ -123,6 +121,7 @@ public class ProblemController extends OjController
 			StringBand sb = new StringBand("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
 			if (!isAdmin)
 				sb.append(" AND uid=").append(getAttrForInt(OjConstants.USER_ID));
+			sb.append(" LIMIT 1");
 			SolutionModel solutionModel = SolutionModel.dao.findFirst(sb.toString(), sid, pid);
 			if (solutionModel != null)
 			{
@@ -163,8 +162,7 @@ public class ProblemController extends OjController
 		ProblemModel problemModel = getModel(ProblemModel.class, "problem");
 		problemModel.updateProblem();
 
-		redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(),
-				"The changes have been saved.");
+		redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The changes have been saved.");
 	}
 
 	@Before(AdminInterceptor.class)
@@ -181,12 +179,11 @@ public class ProblemController extends OjController
 		problemModel.set("uid", getAttr(OjConstants.USER_ID));
 		problemModel.saveProblem();
 
-		File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(
-				problemModel.getInt("pid")).toString());
+		File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
 		if (dataDir.isDirectory())
 		{
-			redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(),
-					"The data directory already exists.", "warning", "Warning!");
+			redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory already exists.", "warning",
+					"Warning!");
 			return;
 		}
 		try
@@ -210,12 +207,12 @@ public class ProblemController extends OjController
 
 	public void status()
 	{
-		if(!isParaExists(0))
+		if (!isParaExists(0))
 		{
 			forwardAction("/contest/problem_status");
 			return;
 		}
-		
+
 		int pid = getParaToInt(0);
 		boolean ajax = getParaToBoolean("ajax", false);
 
@@ -229,8 +226,7 @@ public class ProblemController extends OjController
 				return;
 			}
 
-			List<SolutionModel> resultList = SolutionModel.dao.find(
-					"SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
+			List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
 			for (SolutionModel record : resultList)
 			{
 				ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
@@ -262,10 +258,10 @@ public class ProblemController extends OjController
 
 		if (ajax)
 		{
-			renderJson(new String[]{"pid", "language", "query", "program_languages", "solutionList"});
-			//render("ajax/status.html");
-		}
-		else
+			renderJson(new String[]
+			{ "pid", "language", "query", "program_languages", "solutionList" });
+			// render("ajax/status.html");
+		} else
 			render("status.html");
 	}
 
@@ -303,13 +299,13 @@ public class ProblemController extends OjController
 
 		render("search.html");
 	}
-	
+
 	public void userInfo()
 	{
 		int pid = getParaToInt("pid");
 		int uid = getAttrForInt(OjConstants.USER_ID);
 		List<Record> userInfo = null;
-		
+
 		if (uid > 0)
 		{
 			setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
@@ -317,15 +313,16 @@ public class ProblemController extends OjController
 			userInfo = ProblemModel.dao.getUserInfo(pid, uid);
 			setAttr("userInfo", userInfo);
 		}
-		renderJson(new String[]{"userInfo", "language_name", "result_type"});
+		renderJson(new String[]
+		{ "userInfo", "language_name", "result_type" });
 	}
-	
+
 	public void userResult()
 	{
 		int pid = getParaToInt("pid");
 		int uid = getAttrForInt(OjConstants.USER_ID);
 		Record userResult = null;
-		
+
 		if (uid > 0)
 		{
 			userResult = ProblemModel.dao.getUserResult(pid, uid);
@@ -344,8 +341,7 @@ public class ProblemController extends OjController
 		if ("add".equals(op) && StringUtil.isNotBlank(tag))
 			ProblemModel.dao.addTag(pid, uid, tag);
 
-		redirect(new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString(),
-				"The changes have been saved.");
+		redirect(new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString(), "The changes have been saved.");
 	}
 
 	@Before(AdminInterceptor.class)
@@ -356,7 +352,6 @@ public class ProblemController extends OjController
 		if (problemModel != null && !problemModel.build())
 			System.out.println("No!");
 
-		redirect(new StringBand(2).append("/problem/show/").append(pid).toString(),
-				"The problem statistics have been updated.");
+		redirect(new StringBand(2).append("/problem/show/").append(pid).toString(), "The problem statistics have been updated.");
 	}
 }

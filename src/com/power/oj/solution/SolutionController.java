@@ -69,7 +69,7 @@ public class SolutionController extends OjController
 	{
 		int sid = getParaToInt(0);
 		boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
-		SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=?", sid);
+		SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=? LIMIT 1", sid);
 		ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
 		int uid = solutionModel.getInt("uid");
 		int loginUid = getAttrForInt(OjConstants.USER_ID);
@@ -83,25 +83,23 @@ public class SolutionController extends OjController
 		{
 			String error = solutionModel.getStr("error");
 			if (error != null)
-				solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\",
-						"\\\\"), ""));
+				solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
 		}
-		
+
 		String problemTitle = "";
 		int cid = solutionModel.getInt("cid");
 		System.out.println(cid);
-		if(cid > 0)
+		if (cid > 0)
 		{
 			int num = solutionModel.getInt("num");
 			problemTitle = ContestModel.dao.getProblemTitle(cid, num);
-			setAttr("alpha", (char)(num + 'A'));
+			setAttr("alpha", (char) (num + 'A'));
 			setAttr("cid", cid);
-		}
-		else
+		} else
 		{
 			problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getInt("pid"));
 		}
-		
+
 		setTitle("Source code");
 		setAttr("problemTitle", problemTitle);
 		setAttr(OjConstants.USER, UserModel.dao.findById(uid, "name").get("name"));
@@ -131,16 +129,16 @@ public class SolutionController extends OjController
 		SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
 		solutionModel.set("uid", getAttrForInt(OjConstants.USER_ID));
 		String url = "/status";
-		if(solutionModel.get("cid") != null)
+		if (solutionModel.get("cid") != null)
 		{
 			int cid = solutionModel.getInt("cid");
-			if(cid > 0)
+			if (cid > 0)
 			{
-				url = "/contest/status/"+cid;
-				ContestRankSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") +  ": " + solutionModel.getInt("uid"));
+				url = "/contest/status/" + cid;
+				ContestRankSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") + ": " + solutionModel.getInt("uid"));
 			}
 		}
-		
+
 		if (solutionModel.addSolution())
 		{
 			ProblemModel problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));

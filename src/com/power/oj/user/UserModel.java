@@ -32,14 +32,14 @@ public class UserModel extends Model<UserModel>
 
 	public UserModel getUserByNameAndEmail(String name, String email)
 	{
-		UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND email=?", name, email);
+		UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND email=? LIMIT 1", name, email);
 		return userModel;
 	}
 
 	public int getUidByName(String name)
 	{
 		int uid = 0;
-		UserModel userModel = findFirst("SELECT uid FROM user WHERE name=?", name);
+		UserModel userModel = findFirst("SELECT uid FROM user WHERE name=? LIMIT 1", name);
 		if (userModel != null)
 			uid = userModel.getInt("uid");
 		return uid;
@@ -49,8 +49,8 @@ public class UserModel extends Model<UserModel>
 	{
 		int userRank = 0;
 		Object object = findFirst(
-				"SELECT rank FROM (SELECT @rank:=@rank+1 AS rank,uid FROM user,(SELECT @rank:=0)r ORDER BY solved desc,submit)t_rank WHERE uid=?",
-				uid).get("rank");
+				"SELECT rank FROM (SELECT @rank:=@rank+1 AS rank,uid FROM user,(SELECT @rank:=0)r ORDER BY solved desc,submit)t_rank WHERE uid=? LIMIT 1", uid)
+				.get("rank");
 		if (object instanceof Double)
 		{
 			double d = (Double) object;
@@ -68,54 +68,48 @@ public class UserModel extends Model<UserModel>
 
 	public UserModel getUserByName(String name)
 	{
-		UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=?", name);
+		UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
 		return userModel;
 	}
 
 	public UserModel autoLogin(String name, String token)
 	{
-		UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND token=?", name, token);
+		UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND token=? LIMIT 1", name, token);
 		return userModel;
 	}
 
 	public boolean isRoot(int uid)
 	{
-		return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND role='root' AND status=1", uid) != null;
+		return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND role='root' AND status=1 LIMIT 1", uid) != null;
 	}
 
 	public boolean isAdmin(int uid)
 	{
-		return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator') AND status=1",
-				uid) != null;
+		return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator') AND status=1 LIMIT 1", uid) != null;
 	}
 
 	public boolean isMember(int uid)
 	{
-		return Db
-				.findFirst(
-						"SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member') AND status=1",
-						uid) != null;
+		return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member') AND status=1 LIMIT 1", uid) != null;
 	}
 
 	public boolean isSourceBrowser(int uid)
 	{
-		return Db
-				.findFirst(
-						"SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member' OR role='source_browser') AND status=1",
-						uid) != null;
+		return Db.findFirst(
+				"SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member' OR role='source_browser') AND status=1 LIMIT 1", uid) != null;
 	}
 
 	public boolean isTitle(int uid)
 	{
 		return Db
 				.findFirst(
-						"SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member' OR role='source_browser' OR role='title') AND status=1",
+						"SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member' OR role='source_browser' OR role='title') AND status=1 LIMIT 1",
 						uid) != null;
 	}
 
 	public String getRole(int uid)
 	{
-		Record record = Db.findFirst("SELECT role FROM role WHERE uid=? AND status=1", uid);
+		Record record = Db.findFirst("SELECT role FROM role WHERE uid=? AND status=1 LIMIT 1", uid);
 		if (record != null)
 			return record.getStr("role");
 		return null;
@@ -132,7 +126,8 @@ public class UserModel extends Model<UserModel>
 			StringBand sb = new StringBand("SELECT uid,name,nick,school,solved,submit FROM user WHERE (");
 			if (StringUtil.isNotBlank(scope))
 			{
-				String scopes[] = { "name", "nick", "school", "email" };
+				String scopes[] =
+				{ "name", "nick", "school", "email" };
 				if (StringUtil.equalsOneIgnoreCase(scope, scopes) == -1)
 					return null;
 				sb.append(scope).append(" LIKE ? ");
@@ -208,7 +203,7 @@ public class UserModel extends Model<UserModel>
 		long submit = 0;
 		long solved = 0;
 
-		Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=?", uid);
+		Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);
 
 		if (record != null)
 		{
@@ -216,14 +211,14 @@ public class UserModel extends Model<UserModel>
 			this.set("submit", submit);
 		}
 
-		record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0", uid);
+		record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
 		if (record != null)
 		{
 			accept = record.getLong("count");
 			this.set("accept", accept);
 		}
 
-		record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0", uid);
+		record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
 		if (record != null)
 		{
 			solved = record.getLong("count");

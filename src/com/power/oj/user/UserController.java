@@ -179,7 +179,8 @@ public class UserController extends OjController
 		render("edit.html");
 	}
 
-	@Before( { LoginInterceptor.class, UpdateUserValidator.class })
+	@Before(
+	{ LoginInterceptor.class, UpdateUserValidator.class })
 	public void update()
 	{
 		UserModel userModel = getModel(UserModel.class, "user");// we must
@@ -188,8 +189,7 @@ public class UserController extends OjController
 		// edit page!!!
 		userModel.updateUser();
 
-		redirect(new StringBand(2).append("/user/profile/").append(getAttr("userName")).toString(),
-				"The changes have been saved.");
+		redirect(new StringBand(2).append("/user/profile/").append(getAttr("userName")).toString(), "The changes have been saved.");
 	}
 
 	public void delete()
@@ -233,9 +233,8 @@ public class UserController extends OjController
 	public void online()
 	{
 		setTitle("Online Users");
-		setAttr("loginUserNum", Db.findFirst(
-				"SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0").getLong(
-				"count"));
+		setAttr("loginUserNum",
+				Db.findFirst("SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0 LIMIT 1").getLong("count"));
 		setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
 
 		render("online.html");
@@ -246,10 +245,8 @@ public class UserController extends OjController
 	{
 		int pageNumber = getParaToInt("p", 1);
 		int pageSize = getParaToInt("s", 20);
-		Page<UserModel> userList = UserModel.dao.paginate(pageNumber, pageSize,
-				"SELECT @rank:=@rank+1 AS rank,uid,name,nick,realname,solved,submit",
-				"FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1)
-						* pageSize);
+		Page<UserModel> userList = UserModel.dao.paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rank,uid,name,nick,realname,solved,submit",
+				"FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1) * pageSize);
 
 		setTitle("Ranklist");
 		setAttr(OjConstants.USER_LIST, userList);
@@ -266,7 +263,6 @@ public class UserController extends OjController
 		if (user != null)
 			user.build();
 
-		redirect(new StringBand(2).append("/user/profile/").append(user.getStr("name")).toString(),
-				"The user statistics have been saved.");
+		redirect(new StringBand(2).append("/user/profile/").append(user.getStr("name")).toString(), "The user statistics have been saved.");
 	}
 }

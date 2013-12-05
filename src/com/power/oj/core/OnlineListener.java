@@ -20,8 +20,9 @@ import com.power.oj.util.Tool;
 
 /**
  * Listen the session event and record user info.
+ * 
  * @author power
- *
+ * 
  */
 public class OnlineListener implements HttpSessionListener, HttpSessionAttributeListener, ServletRequestListener
 {
@@ -36,8 +37,8 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
 	}
 
 	/**
-	 * When session is created(user or robot access),
-	 * save the session ID, client IP, browser and timestamp in DB.
+	 * When session is created(user or robot access), save the session ID,
+	 * client IP, browser and timestamp in DB.
 	 */
 	public void sessionCreated(HttpSessionEvent httpsessionevent)
 	{
@@ -51,26 +52,25 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
 		Record session = new Record().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
 		session.set("last_activity", System.currentTimeMillis() / 1000).set("session_expires", session_expires);
 		Db.save("session", session);
-		
+
 		log.info("sessionCreated: " + id + ", ip: " + ip + ", total sessions: " + map.size());
 	}
 
 	/**
-	 * When session is destroyed,
-	 * delete the session info from DB.
+	 * When session is destroyed, delete the session info from DB.
 	 */
 	public void sessionDestroyed(HttpSessionEvent httpsessionevent)
 	{
 		String id = httpsessionevent.getSession().getId();
 		map.remove(id);
 		Db.update("DELETE FROM session WHERE session_id=? OR session_expires <= UNIX_TIMESTAMP()", id);
-		
+
 		log.info("sessionDestroyed: " + id + ", total sessions: " + map.size());
 	}
 
 	/**
-	 * When session attribute with UserModel is added(user login),
-	 * update session info and user info in DB.
+	 * When session attribute with UserModel is added(user login), update
+	 * session info and user info in DB.
 	 */
 	public void attributeAdded(HttpSessionBindingEvent httpsessionbindingevent)
 	{
@@ -103,7 +103,7 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
 			}
 
 			Db.update("UPDATE session SET uid=?,name=? WHERE session_id=?", uid, name, id);
-			
+
 			log.info("attributeAdded: uid=" + uid + ", name=" + name + ", session=" + id);
 			/*
 			 * String title = s + " login repeatedly"; String content =

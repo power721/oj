@@ -18,12 +18,12 @@ public class ContestRankSocket
 	private static final Set<ContestRankSocket> connections = new CopyOnWriteArraySet<ContestRankSocket>();
 	private Session session;
 	private int cid = 0;
-	
+
 	public ContestRankSocket()
 	{
-		
+
 	}
-	
+
 	@OnOpen
 	public void start(Session session)
 	{
@@ -37,7 +37,7 @@ public class ContestRankSocket
 	public void end()
 	{
 		connections.remove(this);
-		
+
 		log.info("WebSocket client close.");
 	}
 
@@ -45,7 +45,7 @@ public class ContestRankSocket
 	public void incoming(String message)
 	{
 		broadcast(cid, HtmlEncoder.block(message));
-		
+
 		log.info(new StringBand(2).append("Accept Message: ").append(message).toString());
 	}
 
@@ -59,9 +59,9 @@ public class ContestRankSocket
 	{
 		for (ContestRankSocket client : connections)
 		{
-			if (cid!=0 && cid!=client.cid)
+			if (cid != 0 && cid != client.cid)
 				continue;
-			
+
 			try
 			{
 				synchronized (client)

@@ -21,7 +21,7 @@ public class ProblemModel extends Model<ProblemModel>
 		StringBand sb = new StringBand("SELECT pid FROM problem WHERE pid>?");
 		if (!isAdmin)
 			sb.append(" AND status=1");
-		sb.append(" ORDER BY pid");
+		sb.append(" ORDER BY pid LIMIT 1");
 
 		try
 		{
@@ -39,7 +39,7 @@ public class ProblemModel extends Model<ProblemModel>
 		StringBand sb = new StringBand("SELECT pid FROM problem WHERE pid<?");
 		if (!isAdmin)
 			sb.append(" AND status=1");
-		sb.append(" ORDER BY pid DESC");
+		sb.append(" ORDER BY pid DESC LIMIT 1");
 
 		try
 		{
@@ -56,7 +56,7 @@ public class ProblemModel extends Model<ProblemModel>
 		int pid = 0;
 		pid = dao
 				.findFirst(
-						"SELECT t1.pid FROM `problem` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(pid) FROM `problem`)-(SELECT MIN(pid) FROM `problem`))+(SELECT MIN(pid) FROM `problem`)) AS pid) AS t2 WHERE t1.pid >= t2.pid AND status=1 ORDER BY t1.pid")
+						"SELECT t1.pid FROM `problem` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(pid) FROM `problem`)-(SELECT MIN(pid) FROM `problem`))+(SELECT MIN(pid) FROM `problem`)) AS pid) AS t2 WHERE t1.pid >= t2.pid AND status=1 ORDER BY t1.pid LIMIT 1")
 				.getInt("pid");
 		return pid;
 	}
@@ -64,8 +64,7 @@ public class ProblemModel extends Model<ProblemModel>
 	public int getPageNumber(int pid, int pageSize)
 	{
 		long pageNumber = 0;
-		pageNumber = findFirst("SELECT COUNT(*) AS idx FROM problem WHERE pid<? AND status=1 ORDER BY pid", pid)
-				.getLong("idx");
+		pageNumber = findFirst("SELECT COUNT(*) AS idx FROM problem WHERE pid<? AND status=1 ORDER BY pid LIMIT 1", pid).getLong("idx");
 		pageNumber = (pageNumber + pageSize) / pageSize;
 		return (int) pageNumber;
 	}
@@ -79,13 +78,13 @@ public class ProblemModel extends Model<ProblemModel>
 
 		return title;
 	}
-	
+
 	public List<Record> getUserInfo(int pid, int uid)
 	{
 		List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,code_len,language FROM solution WHERE uid=? AND pid=?", uid, pid);
 		return userInfo;
 	}
-	
+
 	public Record getUserResult(int pid, int uid)
 	{
 		Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
@@ -94,10 +93,7 @@ public class ProblemModel extends Model<ProblemModel>
 
 	public List<Record> getTags(int pid)
 	{
-		List<Record> tagList = Db
-				.find(
-						"SELECT tag.tag,user.name FROM tag LEFT JOIN user on user.uid=tag.uid WHERE tag.pid=? AND tag.status=1",
-						pid);
+		List<Record> tagList = Db.find("SELECT tag.tag,user.name FROM tag LEFT JOIN user on user.uid=tag.uid WHERE tag.pid=? AND tag.status=1", pid);
 		if (tagList.isEmpty())
 			return null;
 		return tagList;
@@ -109,7 +105,7 @@ public class ProblemModel extends Model<ProblemModel>
 		if (isAdmin)
 			problemModel = dao.findById(pid);
 		else
-			problemModel = dao.findFirst("SELECT * FROM problem WHERE status=1 AND pid=?", pid);
+			problemModel = dao.findFirst("SELECT * FROM problem WHERE status=1 AND pid=? LIMIT 1", pid);
 
 		return problemModel;
 	}
@@ -122,11 +118,11 @@ public class ProblemModel extends Model<ProblemModel>
 		if (StringUtil.isNotBlank(word))
 		{
 			word = new StringBand(3).append("%").append(word).append("%").toString();
-			StringBand sb = new StringBand(
-					"SELECT pid,title,accept,submit,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime FROM problem WHERE (");
+			StringBand sb = new StringBand("SELECT pid,title,accept,submit,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime FROM problem WHERE (");
 			if (StringUtil.isNotBlank(scope))
 			{
-				String scopes[] = { "title", "source", "content", "tag" };
+				String scopes[] =
+				{ "title", "source", "content", "tag" };
 				if (StringUtil.equalsOneIgnoreCase(scope, scopes) == -1)
 					return null;
 				if ("tag".equalsIgnoreCase(scope))
@@ -181,8 +177,7 @@ public class ProblemModel extends Model<ProblemModel>
 
 	public boolean addTag(int pid, int uid, String tag)
 	{
-		Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime",
-				System.currentTimeMillis() / 1000);
+		Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", System.currentTimeMillis() / 1000);
 		return Db.save("tag", Tag);
 	}
 
@@ -196,7 +191,7 @@ public class ProblemModel extends Model<ProblemModel>
 		long solved = 0;
 		long difficulty = 0;
 
-		Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=?", pid);
+		Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
 
 		if (record != null)
 		{
@@ -204,7 +199,7 @@ public class ProblemModel extends Model<ProblemModel>
 			this.set("submit", submit);
 		}
 
-		record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0", pid);
+		record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
 		if (record != null)
 		{
 			accept = record.getLong("count");
@@ -215,14 +210,14 @@ public class ProblemModel extends Model<ProblemModel>
 			ratio = accept / submit;
 		this.set("ratio", ratio);
 
-		record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=?", pid);
+		record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
 		if (record != null)
 		{
 			submit_user = record.getLong("count");
 			this.set("submit_user", submit_user);
 		}
 
-		record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0", pid);
+		record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
 		if (record != null)
 		{
 			solved = record.getLong("count");

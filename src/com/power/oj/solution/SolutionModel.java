@@ -53,8 +53,7 @@ public class SolutionModel extends Model<SolutionModel>
 		}
 
 		sb.append(" ORDER BY sid DESC");
-		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras
-				.toArray());
+		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
 		for (SolutionModel solution : solutionList.getList())
 		{
@@ -65,16 +64,15 @@ public class SolutionModel extends Model<SolutionModel>
 			}
 			solution.put("name", name);
 
-			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
-					.get("name"));
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
 
 			ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
 			solution.put("resultName", resultType.getName());
 			solution.put("resultLongName", resultType.getLongName());
-			
-			if(solution.get("num") != null && solution.getInt("num") > -1)
+
+			if (solution.get("num") != null && solution.getInt("num") > -1)
 			{
-				solution.put("alpha", (char)(solution.getInt("num")+'A'));
+				solution.put("alpha", (char) (solution.getInt("num") + 'A'));
 			}
 		}
 
@@ -117,9 +115,8 @@ public class SolutionModel extends Model<SolutionModel>
 		}
 
 		sb.append(" ORDER BY sid DESC");
-		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras
-				.toArray());
-		
+		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+
 		for (SolutionModel solution : solutionList.getList())
 		{
 			uid = solution.getInt("uid");
@@ -131,13 +128,12 @@ public class SolutionModel extends Model<SolutionModel>
 			solution.put("name", name);
 			solution.put("nick", userModel.get("nick"));
 
-			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
-					.get("name"));
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
 
 			ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
 			solution.put("resultName", resultType.getName());
 			solution.put("resultLongName", resultType.getLongName());
-			solution.put("alpha", (char)(solution.getInt("num") + 'A'));
+			solution.put("alpha", (char) (solution.getInt("num") + 'A'));
 		}
 
 		return solutionList;
@@ -157,28 +153,27 @@ public class SolutionModel extends Model<SolutionModel>
 			sb.append(" AND language=?");
 			paras.add(language);
 		}
-		
+
 		sb.append(" AND pid=?");
 		paras.add(pid);
 
 		sb.append(" ORDER BY time,memory,code_len,sid");
-		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras
-				.toArray());
+		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
 		for (SolutionModel solution : solutionList.getList())
 		{
 
 			uid = solution.getInt("uid");
-			try {
+			try
+			{
 				name = UserModel.dao.findById(uid, "name").get("name");
-			} catch(NullPointerException e)
+			} catch (NullPointerException e)
 			{
 				name = "";
 			}
 			solution.put("name", name);
 
-			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
-					.get("name"));
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
 		}
 
 		return solutionList;
@@ -198,7 +193,7 @@ public class SolutionModel extends Model<SolutionModel>
 			sb.append(" AND language=?");
 			paras.add(language);
 		}
-		
+
 		sb.append(" AND cid=?");
 		paras.add(cid);
 
@@ -206,8 +201,7 @@ public class SolutionModel extends Model<SolutionModel>
 		paras.add(num);
 
 		sb.append(" ORDER BY time,memory,code_len,sid");
-		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras
-				.toArray());
+		Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
 		for (SolutionModel solution : solutionList.getList())
 		{
@@ -216,8 +210,7 @@ public class SolutionModel extends Model<SolutionModel>
 			name = UserModel.dao.findById(uid, "name").get("name");
 			solution.put("name", name);
 
-			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language")))
-					.get("name"));
+			solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
 		}
 
 		return solutionList;
@@ -226,7 +219,7 @@ public class SolutionModel extends Model<SolutionModel>
 	public boolean addSolution()
 	{
 		long ctime = System.currentTimeMillis() / 1000;
-		if(get("cid") != null)
+		if (get("cid") != null)
 		{
 			int pid = ContestModel.dao.getPid(getInt("cid"), getInt("num"));
 			set("pid", pid);

@@ -28,6 +28,7 @@ import com.power.oj.admin.AdminInterceptor;
 
 /**
  * The controller for some common pages.
+ * 
  * @author power
  * 
  */
@@ -72,8 +73,7 @@ public class CommonController extends OjController
 		System.out.println(getPara("name"));
 		if (userName != null)
 		{
-			String fileName = new StringBand(4).append(PathKit.getWebRootPath()).append("/assets/images/user/").append(
-					uid).append(".png").toString();
+			String fileName = new StringBand(4).append(PathKit.getWebRootPath()).append("/assets/images/user/").append(uid).append(".png").toString();
 			try
 			{
 				FileUtil.moveFile(file.getFile(), new File(fileName));
@@ -99,8 +99,7 @@ public class CommonController extends OjController
 		System.out.println("file: " + file.getFileName());
 		System.out.println(file.getFile().getAbsolutePath());
 
-		String fileName = new StringBand(3).append(PathKit.getWebRootPath()).append("/assets/images/problem/").append(
-				originalName).toString();
+		String fileName = new StringBand(3).append(PathKit.getWebRootPath()).append("/assets/images/problem/").append(originalName).toString();
 		try
 		{
 			FileUtil.moveFile(file.getFile(), new File(fileName));
@@ -111,8 +110,7 @@ public class CommonController extends OjController
 			state = "IO Exception";
 		}
 
-		renderText("{'original':'" + originalName + "','url':'" + file.getFileName() + "','title':'" + title
-				+ "','state':'" + state + "'}");
+		renderText("{'original':'" + originalName + "','url':'" + file.getFileName() + "','title':'" + title + "','state':'" + state + "'}");
 	}
 
 	@Before(AdminInterceptor.class)
@@ -130,8 +128,7 @@ public class CommonController extends OjController
 		String state = "SUCCESS";
 		String base64Data = getPara("content");
 		BASE64Decoder decoder = new BASE64Decoder();
-		File outFile = new File(new StringBand(3).append(PathKit.getWebRootPath()).append("/upload/").append(
-				FileKit.getNewName("test.png")).toString());
+		File outFile = new File(new StringBand(3).append(PathKit.getWebRootPath()).append("/upload/").append(FileKit.getNewName("test.png")).toString());
 		OutputStream ro;
 		try
 		{
@@ -229,8 +226,7 @@ public class CommonController extends OjController
 	@Before(AdminInterceptor.class)
 	public void listImages()
 	{
-		String imagesDir = new StringBand(2).append(PathKit.getWebRootPath()).append("\\assets\\images\\problem\\")
-				.toString();
+		String imagesDir = new StringBand(2).append(PathKit.getWebRootPath()).append("\\assets\\images\\problem\\").toString();
 		String imgStr = "";
 		List<File> files = FileKit.getImageFiles(imagesDir, new ArrayList<File>());
 		System.out.println(imagesDir);
@@ -268,7 +264,7 @@ public class CommonController extends OjController
 		CaptchaRender img = new CaptchaRender(OjConstants.randomCodeKey);
 		render(img);
 	}
-	
+
 	/**
 	 * Handle 404 error.
 	 */
@@ -284,5 +280,5 @@ public class CommonController extends OjController
 	{
 		renderText("500 Internal Server Error");
 	}
-	
+
 }

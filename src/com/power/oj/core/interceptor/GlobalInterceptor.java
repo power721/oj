@@ -10,8 +10,9 @@ import com.power.oj.core.OjConfig;
 /**
  * Global interceptor<br>
  * Print the Action invoking time<br>
+ * 
  * @author power
- *
+ * 
  */
 public class GlobalInterceptor implements Interceptor
 {
@@ -20,8 +21,9 @@ public class GlobalInterceptor implements Interceptor
 		OjConfig.startGlobalInterceptorTime = System.currentTimeMillis();
 		Controller controller = ai.getController();
 
-		//controller.setAttr("baseUrl", OjConfig.baseUrl); // move to UrlFiterHandler
-		//controller.setAttr("siteTitle", OjConfig.siteTitle);
+		// controller.setAttr("baseUrl", OjConfig.baseUrl); // move to
+		// UrlFiterHandler
+		// controller.setAttr("siteTitle", OjConfig.siteTitle);
 
 		String actionKey = ai.getActionKey();
 		controller.setAttr("actionKey", actionKey.replace("/", ""));
@@ -31,8 +33,8 @@ public class GlobalInterceptor implements Interceptor
 		controller.setAttr("methodName", methodName);
 
 		ai.invoke();
-		
-		System.out.println(new StringBand(4).append(actionKey).append(" Action Invoking Time: ").
-				append(System.currentTimeMillis()-OjConfig.startGlobalInterceptorTime).append(" milliseconds").toString());
+
+		System.out.println(new StringBand(4).append(actionKey).append(" Action Invoking Time: ")
+				.append(System.currentTimeMillis() - OjConfig.startGlobalInterceptorTime).append(" milliseconds").toString());
 	}
 }
