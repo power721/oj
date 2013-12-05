@@ -45,11 +45,7 @@
                 Password
             </label>
             <div class="controls">
-                <div class="input-prepend">
-                    <span class="add-on"><i class="icon-lock"></i>
-                    </span>
-                    <input type="password" id="inputPassword" name="contest.pass"
-                        placeholder="Password" required>
+                <div class="input-prepend" id="contest-password">
                 </div>
                 <p class="text-error">${passMsg!}</p>
             </div>
@@ -75,8 +71,10 @@
             var val = $(this).val();
             if(val == 3) {
                 $("div#password").show();
+                $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.pass" placeholder="Password" required>');
             }
             else {
+            	$("div#contest-password").html('');
                 $("div#password").hide();
             }
         });

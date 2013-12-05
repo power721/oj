@@ -15,6 +15,7 @@ import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
+import com.power.oj.contest.ContestRankSocket;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
@@ -276,7 +277,8 @@ public class Judge extends Thread
 				char c = (char)(num+'A');
 				StringBand message = new StringBand().append("UID: ").append(uid).append(" Problem: ").append(c)
 					.append(" result: ").append(result).append("  time: ").append(time).append("  memory: ").append(memory);
-				OjMessageInbound.broadcast(message.toString());
+				//OjMessageInbound.broadcast(message.toString());
+				ContestRankSocket.broadcast(cid, message.toString());
 			}
 			// update DataBase
 			solutionModel.set("result", result).set("time", time).set("memory", memory);

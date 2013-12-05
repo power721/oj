@@ -123,9 +123,9 @@
           return;
         var url = null;
        if (window.location.protocol == 'http:') {
-              url = '${baseUrl}'.replace('http', 'ws') + '/pushNotify.ws';
+              url = '${baseUrl}'.replace('http', 'ws') + '/contest/rank.ws?' + ${cid};
           } else {
-              url = '${baseUrl}'.replace('http', 'wss') + '/pushNotify.ws';
+              url = '${baseUrl}'.replace('http', 'wss') + '/contest/rank.ws?' + ${cid};
           }
       if ('WebSocket' in window) {
         ws = new WebSocket(url);
