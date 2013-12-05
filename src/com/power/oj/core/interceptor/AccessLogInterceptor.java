@@ -51,13 +51,13 @@ public class AccessLogInterceptor implements Interceptor
 			{
 				controller.setAttr(OjConstants.REDIRECT_URI, URLEncoder.encode(rsb.toString(), "UTF-8"));
 				controller.setAttr("uri", URLEncoder.encode(sb.toString(), "UTF-8"));
-				
-				Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", sb.toString(), session.getId());
 			} catch (UnsupportedEncodingException e)
 			{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", sb.toString(), session.getId());
 		}
 		
 		ai.invoke();

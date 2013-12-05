@@ -6,6 +6,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.StringKit;
+import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 
@@ -16,7 +17,8 @@ import com.power.oj.core.OjConstants;
  */
 public class BaseURLInterceptor implements Interceptor
 {
-
+	protected final Logger log = Logger.getLogger(getClass());
+	
 	@Override
 	public void intercept(ActionInvocation ai)
 	{
@@ -36,7 +38,7 @@ public class BaseURLInterceptor implements Interceptor
 	
 			baseUrl = sb.toString();
 			OjConfig.baseUrl = baseUrl;
-			System.out.println("\nAuto detect baseUrl: " + baseUrl + "\n");
+			log.info("Auto detect baseUrl: " + baseUrl);
 		}
 		
 		controller.setAttr(OjConstants.BASE_URL, baseUrl);

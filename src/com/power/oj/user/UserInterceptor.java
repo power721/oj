@@ -5,6 +5,7 @@ import jodd.util.StringUtil;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
+import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
 
 /**
@@ -14,7 +15,8 @@ import com.power.oj.core.OjConstants;
  */
 public class UserInterceptor implements Interceptor
 {
-
+	protected final Logger log = Logger.getLogger(getClass());
+	
 	@Override
 	public void intercept(ActionInvocation ai)
 	{
@@ -35,6 +37,12 @@ public class UserInterceptor implements Interceptor
 					int uid = user.getInt("uid");
 					if (user.isAdmin(uid)) // current user has admin role
 						controller.setSessionAttr(OjConstants.ADMIN_USER, uid);
+					
+					log.info("User " + name + " login automatically.");
+				}
+				else
+				{
+					log.warn("Auto login for user " + name + " failed!");
 				}
 			}
 		}

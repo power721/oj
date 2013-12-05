@@ -3,10 +3,6 @@ package com.power.oj.core;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextAttributeListener;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpServletRequest;
@@ -16,67 +12,66 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.user.UserModel;
+import com.power.oj.util.Tool;
 
-public class OnlineListener implements ServletContextListener, ServletContextAttributeListener, HttpSessionListener,
-		HttpSessionAttributeListener, ServletRequestListener
+/**
+ * Listen the session event and record user info.
+ * @author power
+ *
+ */
+public class OnlineListener implements HttpSessionListener, HttpSessionAttributeListener, ServletRequestListener
 {
-
-	HttpServletRequest request;
+	HttpServletRequest request = null;
+	protected final Logger log = Logger.getLogger(getClass());
 	private static HashMap<String, HttpSession> map = new HashMap<String, HttpSession>();
 
 	public OnlineListener()
 	{
-		request = null;
+		// request = null;
 		// Db.update("DELETE FROM session WHERE session_expires <= UNIX_TIMESTAMP()");
 	}
 
-	public void contextInitialized(ServletContextEvent servletcontextevent)
-	{
-		servletcontextevent.getServletContext();
-	}
-
-	public void contextDestroyed(ServletContextEvent servletcontextevent)
-	{
-	}
-
-	public void attributeAdded(ServletContextAttributeEvent servletcontextattributeevent)
-	{
-	}
-
-	public void attributeRemoved(ServletContextAttributeEvent servletcontextattributeevent)
-	{
-	}
-
-	public void attributeReplaced(ServletContextAttributeEvent servletcontextattributeevent)
-	{
-	}
-
+	/**
+	 * When session is created(user or robot access),
+	 * save the session ID, client IP, browser and timestamp in DB.
+	 */
 	public void sessionCreated(HttpSessionEvent httpsessionevent)
 	{
-		String ip = getRemortIP(request);
+		String ip = Tool.getRemoteAddr(request);
 		String agent = request.getHeader("User-Agent");
 		String id = httpsessionevent.getSession().getId();
-		long session_expires = httpsessionevent.getSession().getCreationTime() / 1000
-				+ httpsessionevent.getSession().getMaxInactiveInterval();
+		long session_expires = httpsessionevent.getSession().getCreationTime() / 1000 + httpsessionevent.getSession().getMaxInactiveInterval();
 
 		map.put(id, httpsessionevent.getSession());
-		System.out.println("sessionCreated: " + map.size());
 
 		Record session = new Record().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
 		session.set("last_activity", System.currentTimeMillis() / 1000).set("session_expires", session_expires);
 		Db.save("session", session);
+		
+		log.info("sessionCreated: " + id + ", ip: " + ip + ", total sessions: " + map.size());
 	}
 
+	/**
+	 * When session is destroyed,
+	 * delete the session info from DB.
+	 */
 	public void sessionDestroyed(HttpSessionEvent httpsessionevent)
 	{
 		String id = httpsessionevent.getSession().getId();
 		map.remove(id);
 		Db.update("DELETE FROM session WHERE session_id=? OR session_expires <= UNIX_TIMESTAMP()", id);
+		
+		log.info("sessionDestroyed: " + id + ", total sessions: " + map.size());
 	}
 
+	/**
+	 * When session attribute with UserModel is added(user login),
+	 * update session info and user info in DB.
+	 */
 	public void attributeAdded(HttpSessionBindingEvent httpsessionbindingevent)
 	{
 		int uid = 0;
@@ -91,10 +86,7 @@ public class OnlineListener implements ServletContextListener, ServletContextAtt
 			uid = userModel.getInt("uid");
 			name = userModel.getStr("name");
 
-			List<Record> sessions = Db
-					.find(
-							"SELECT session_id, ip_address, user_agent, last_activity, session_expires FROM session WHERE uid=?",
-							uid);
+			List<Record> sessions = Db.find("SELECT session_id, ip_address, user_agent, last_activity, session_expires FROM session WHERE uid=?", uid);
 			for (Record sessionRecord : sessions)
 			{
 				String session_id = sessionRecord.getStr("session_id");
@@ -102,15 +94,17 @@ public class OnlineListener implements ServletContextListener, ServletContextAtt
 				if (prevSession != null)
 				{
 					prevSession.invalidate();
-					System.out.println(session_id + ": invalidate");
+					log.warn("Session " + session_id + " invalidate.");
 				} else
 				{
 					Db.deleteById("session", "session_id", session_id);
-					System.out.println(session_id + ": deleted");
+					log.warn("Session " + session_id + " deleted.");
 				}
 			}
 
 			Db.update("UPDATE session SET uid=?,name=? WHERE session_id=?", uid, name, id);
+			
+			log.info("attributeAdded: uid=" + uid + ", name=" + name + ", session=" + id);
 			/*
 			 * String title = s + " login repeatedly"; String content =
 			 * "Old  IP: " + ip_address + "\nNew IP: " + ip + "\n";
@@ -132,21 +126,20 @@ public class OnlineListener implements ServletContextListener, ServletContextAtt
 	{
 	}
 
+	/**
+	 * When Servlet Request is destroyed.
+	 */
 	public void requestDestroyed(ServletRequestEvent event)
 	{
+		request = null;
 	}
 
+	/**
+	 * When Servlet Request is initialized.
+	 */
 	public void requestInitialized(ServletRequestEvent event)
 	{
 		request = (HttpServletRequest) event.getServletRequest();
-	}
-
-	public String getRemortIP(HttpServletRequest request)
-	{
-		if (request.getHeader("x-forwarded-for") == null)
-		{
-			return request.getRemoteAddr();
-		}
-		return request.getHeader("x-forwarded-for");
+		log.debug("requestInitialized.");
 	}
 }

@@ -27,6 +27,7 @@ import com.power.oj.util.Tool;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 
@@ -37,6 +38,8 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
  */
 public class OjConfig extends JFinalConfig
 {
+	protected final Logger log = Logger.getLogger(getClass());
+	
 	public static String baseUrl = null;
 	public static String siteTitle = "Power OJ";
 	
@@ -68,6 +71,8 @@ public class OjConfig extends JFinalConfig
 		me.setBaseViewPath("/WEB-INF/pages");
 		me.setError404View("/WEB-INF/pages/common/404.html");
 		me.setError500View("/WEB-INF/pages/common/500.html");
+		
+		log.debug("configConstant finished.");
 	}
 
 	/**
@@ -83,6 +88,8 @@ public class OjConfig extends JFinalConfig
 		me.add("/problem", ProblemController.class);
 		me.add("/solution", SolutionController.class);
 		me.add("/user", UserController.class);
+		
+		log.debug("configRoute finished.");
 	}
 
 	/**
@@ -105,6 +112,8 @@ public class OjConfig extends JFinalConfig
 		arp.addMapping("program_language", LanguageModel.class);
 		arp.addMapping("variable", VariableModel.class);
 		me.add(arp);
+		
+		log.debug("configPlugin finished.");
 	}
 
 	/**
@@ -118,6 +127,8 @@ public class OjConfig extends JFinalConfig
 		me.add(new MessageInterceptor());
 		me.add(new AccessLogInterceptor());
 		me.add(new UserInterceptor());
+		
+		log.debug("configInterceptor finished.");
 	}
 
 	/**
@@ -126,6 +137,8 @@ public class OjConfig extends JFinalConfig
 	public void configHandler(Handlers me)
 	{
 		me.add(new UrlFiterHandler());
+		
+		log.debug("configHandler finished.");
 	}
 
 	/**
@@ -136,6 +149,8 @@ public class OjConfig extends JFinalConfig
 		baseUrl = Tool.formatBaseURL(getProperty(OjConstants.BASE_URL));
 		siteTitle = getProperty(OjConstants.SITE_TITLE, "Power OJ");
 		init();
+		
+		log.debug("afterJFinalStart finished.");
 	}
 
 	/**

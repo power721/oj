@@ -1,6 +1,9 @@
 package com.power.oj.core;
 
+import javax.servlet.http.Cookie;
+
 import com.jfinal.core.Controller;
+import com.jfinal.log.Logger;
 
 /**
  * Base Controller
@@ -9,7 +12,8 @@ import com.jfinal.core.Controller;
  */
 public class OjController extends Controller
 {
-
+	protected final Logger log = Logger.getLogger(getClass());
+	
 	/**
 	 * Redirect to url with succes message。
 	 * @param url string of destination url
@@ -80,5 +84,31 @@ public class OjController extends Controller
 	public void setRedirectURI(String redirectURI)
 	{
 		setAttr(OjConstants.REDIRECT_URI, redirectURI);
+	}
+	
+	/**
+	 * Set the cookie in safe way.
+	 * @param name
+	 * @param value
+	 * @param maxAgeInSeconds
+	 * @return this OjController.
+	 */
+	public OjController setCookieHttpOnly(String name, String value, int maxAgeInSeconds)
+	{
+		Cookie cookie = new Cookie(name, value);
+		cookie.setMaxAge(maxAgeInSeconds);
+		cookie.setPath("/");
+		cookie.setHttpOnly(true);
+		setCookie(cookie);
+		return this;
+	}
+	
+	/**
+	 * Get the Logger object.
+	 * @return log
+	 */
+	public Logger getLog()
+	{
+		return log;
 	}
 }
