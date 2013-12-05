@@ -3,6 +3,7 @@ package com.power.oj.util;
 import javax.servlet.http.HttpServletRequest;
 
 import com.jfinal.kit.StringKit;
+import com.jfinal.log.Logger;
 
 import java.io.IOException;
 
@@ -21,6 +22,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
  */
 public class Tool
 {
+	public final static Logger log = Logger.getLogger(Tool.class);
+	
 	/**
 	 * 
 	 * @param url
@@ -69,7 +72,7 @@ public class Tool
 		try
 		{
 			HttpGet httpget = new HttpGet(url);
-			System.out.println("executing request " + httpget.getURI());
+			log.info("executing request " + httpget.getURI());
 
 			// Create a response handler
 			ResponseHandler<String> responseHandler = new BasicResponseHandler();
@@ -77,12 +80,10 @@ public class Tool
 
 		} catch (ClientProtocolException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn(e.getLocalizedMessage());
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn(e.getLocalizedMessage());
 		} finally
 		{
 			// When HttpClient instance is no longer needed,
