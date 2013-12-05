@@ -53,6 +53,7 @@
                       fields: {
                           taskId: { from: "taskID", type: "number" },
                           title: { from: "title", defaultValue: "No title", validation: { required: true } },
+                          url: {from: "url"},
                           start: { type: "date", from: "start" },
                           end: { type: "date", from: "end" },
                           startTimezone: { from: "startTimezone" },
