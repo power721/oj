@@ -3,6 +3,8 @@ package com.power.oj.user;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import jodd.util.HtmlEncoder;
 import jodd.util.StringBand;
@@ -36,7 +38,14 @@ public class UserController extends OjController
 
 		if (getSessionAttr(OjConstants.USER) != null)// user already login
 		{
-			redirect(uri, "You already login.", "error", "Error!");
+			try
+			{
+				redirect(URLDecoder.decode(uri, "UTF-8"), "You already login.", "error", "Error!");
+			} catch (UnsupportedEncodingException e)
+			{
+				log.error(e.getLocalizedMessage());
+				redirect("/");
+			}
 			return;
 		}
 
@@ -65,7 +74,14 @@ public class UserController extends OjController
 				if (userModel.isAdmin(uid))
 					setSessionAttr(OjConstants.ADMIN_USER, uid);
 
-				redirect(uri);
+				try
+				{
+					redirect(URLDecoder.decode(uri, "UTF-8"));
+				} catch (UnsupportedEncodingException e)
+				{
+					log.error(e.getLocalizedMessage());
+					redirect("/");
+				}
 				return;
 			} else
 			{

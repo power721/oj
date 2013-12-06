@@ -21,10 +21,6 @@ public class GlobalInterceptor implements Interceptor
 		OjConfig.startGlobalInterceptorTime = System.currentTimeMillis();
 		Controller controller = ai.getController();
 
-		// controller.setAttr("baseUrl", OjConfig.baseUrl); // move to
-		// UrlFiterHandler
-		// controller.setAttr("siteTitle", OjConfig.siteTitle);
-
 		String actionKey = ai.getActionKey();
 		controller.setAttr("actionKey", actionKey.replace("/", ""));
 		String controllerKey = ai.getControllerKey();

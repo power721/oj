@@ -18,7 +18,7 @@ public class UrlFilterHandler extends Handler
 		int index = target.indexOf(".ws");
 		if (index == -1)
 		{
-			request.setAttribute(OjConstants.BASE_URL, OjConfig.baseUrl);
+			//request.setAttribute(OjConstants.BASE_URL, OjConfig.baseUrl);
 			request.setAttribute(OjConstants.SITE_TITLE, OjConfig.siteTitle);
 			nextHandler.handle(target, request, response, isHandled);
 		}
