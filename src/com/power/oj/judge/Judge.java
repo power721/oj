@@ -20,7 +20,6 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.socket.OjMessageInbound;
 import com.power.oj.solution.SolutionModel;
 
 public class Judge extends Thread
