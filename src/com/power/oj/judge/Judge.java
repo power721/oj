@@ -61,12 +61,10 @@ public class Judge extends Thread
 						RunProcess(solutionModel);
 				} catch (Exception e)
 				{
-					// TODO Auto-generated catch block
 					solutionModel.set("result", ResultType.SE).set("system_error", e.getMessage());
 					solutionModel.update();
 
 					threads = threads > 0 ? threads - 1 : 0;
-					e.printStackTrace();
 					log.error(e.getMessage());
 				}
 			}
@@ -134,7 +132,6 @@ public class Judge extends Thread
 		{
 			synchronized (mute)
 			{
-				// TODO Auto-generated catch block
 				// update DataBase
 				solutionModel.set("result", ResultType.CE).set("time", 0).set("memory", 0).set("error", sb.toString());
 				solutionModel.update();
@@ -253,8 +250,6 @@ public class Judge extends Thread
 
 		synchronized (mute)
 		{
-			// TODO Auto-generated catch block
-
 			int cid = solutionModel.getInt("cid");
 			if (cid > 0)
 			{

@@ -10,7 +10,6 @@ public class LoginValidator extends Validator
 	@Override
 	protected void validate(Controller c)
 	{
-		// TODO Auto-generated method stub
 		if (c.getRequest().getMethod() == "GET")
 			return;
 		if (c.getSessionAttr(OjConstants.USER) != null)
@@ -26,7 +25,6 @@ public class LoginValidator extends Validator
 	@Override
 	protected void handleError(Controller c)
 	{
-		// TODO Auto-generated method stub
 		c.setAttr(OjConstants.PAGE_TITLE, "Login");
 		c.keepPara("name");
 

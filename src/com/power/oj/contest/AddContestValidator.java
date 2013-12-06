@@ -10,7 +10,6 @@ public class AddContestValidator extends Validator
 	@Override
 	protected void handleError(Controller c)
 	{
-		// TODO Auto-generated method stub
 		c.keepModel(ContestModel.class, "contest");
 		c.keepPara(OjConstants.PAGE_TITLE);
 
@@ -20,7 +19,6 @@ public class AddContestValidator extends Validator
 	@Override
 	protected void validate(Controller c)
 	{
-		// TODO Auto-generated method stub
 		int type = c.getParaToInt("contest.type");
 		if (type == 3)
 		{

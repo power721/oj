@@ -10,7 +10,6 @@ import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -24,8 +23,7 @@ import com.power.oj.user.LoginInterceptor;
 
 public class ProblemController extends OjController
 {
-	private static final Logger log = Logger.getLogger(ProblemController.class);
-
+	
 	public void index()
 	{
 		setTitle("Problem List");
@@ -191,9 +189,10 @@ public class ProblemController extends OjController
 			FileUtil.mkdirs(dataDir);
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			log.error(e.getMessage());
+			redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory cannot create.", "error",
+					"Error!");
+			return;
 		}
 
 		redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString());

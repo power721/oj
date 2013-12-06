@@ -13,7 +13,6 @@ public class UpdateUserValidator extends Validator
 	@Override
 	protected void validate(Controller c)
 	{
-		// TODO Auto-generated method stub
 		validateEmail("user.email", "emailMsg", "Invalid Email address!");
 
 		int uid = c.getParaToInt("user.uid");
@@ -41,7 +40,6 @@ public class UpdateUserValidator extends Validator
 	@Override
 	protected void handleError(Controller c)
 	{
-		// TODO Auto-generated method stub
 		c.keepModel(UserModel.class, "user");
 		c.setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 		c.setAttr(OjConstants.PAGE_TITLE, "Account");

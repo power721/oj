@@ -344,8 +344,8 @@ public class ContestController extends OjController
 					timeStamp = sdf.parse(data.getString("start_time")).getTime();
 				} catch (ParseException e)
 				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					timeStamp = 0;
+					log.warn(e.getLocalizedMessage());
 				}
 				String start = "/Date(" + timeStamp + ")/";
 				String end = "/Date(" + (timeStamp + 18000000) + ")/";
@@ -417,7 +417,8 @@ public class ContestController extends OjController
 		} catch (ParseException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			log.error(e.getLocalizedMessage());
 		}
 		contestModel.saveContest();
 

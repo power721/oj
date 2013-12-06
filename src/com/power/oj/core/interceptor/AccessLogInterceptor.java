@@ -11,6 +11,7 @@ import jodd.util.StringUtil;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.power.oj.core.OjConstants;
 
@@ -22,7 +23,7 @@ import com.power.oj.core.OjConstants;
  */
 public class AccessLogInterceptor implements Interceptor
 {
-
+	protected final Logger log = Logger.getLogger(getClass());
 	private String skipActions[] =
 	{ "/login", "/logout", "/captcha" };
 
@@ -53,8 +54,7 @@ public class AccessLogInterceptor implements Interceptor
 				controller.setAttr("uri", URLEncoder.encode(sb.toString(), "UTF-8"));
 			} catch (UnsupportedEncodingException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e.getLocalizedMessage());
 			}
 
 			Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", sb.toString(), session.getId());

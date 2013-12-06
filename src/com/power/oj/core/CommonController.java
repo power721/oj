@@ -79,8 +79,7 @@ public class CommonController extends OjController
 				FileUtil.moveFile(file.getFile(), new File(fileName));
 			} catch (IOException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn(e.getMessage());
 			}
 		}
 
@@ -105,8 +104,7 @@ public class CommonController extends OjController
 			FileUtil.moveFile(file.getFile(), new File(fileName));
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn(e.getLocalizedMessage());
 			state = "IO Exception";
 		}
 
@@ -146,8 +144,7 @@ public class CommonController extends OjController
 			ro.close();
 		} catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn(e.getLocalizedMessage());
 			state = "IO Exception";
 		}
 		renderText("{'url':'" + outFile.getName() + "',state:'" + state + "'}");
