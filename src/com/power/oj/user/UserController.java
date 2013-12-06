@@ -3,12 +3,8 @@ package com.power.oj.user;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
 import jodd.util.HtmlEncoder;
 import jodd.util.StringBand;
-import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
@@ -35,24 +31,9 @@ public class UserController extends OjController
 	@ActionKey("/login")
 	public void login()
 	{
-		String uri = getPara(OjConstants.REDIRECT_URI);
-		if (StringUtil.isBlank(uri))
-			uri = "/";
-		if (getRequest().getMethod() == "GET")
-		{
-			setAttr(OjConstants.REDIRECT_URI, uri);
-		}
-
 		if (getSessionAttr(OjConstants.USER) != null)// user already login
 		{
-			try
-			{
-				redirect(URLDecoder.decode(uri, "UTF-8"), "You already login.", "error", "Error!");
-			} catch (UnsupportedEncodingException e)
-			{
-				log.error(e.getLocalizedMessage());
-				redirect("/", "You already login.", "error", "Error!");
-			}
+			redirect(OjConfig.lastURL, "You already login.", "error", "Error!");
 			return;
 		}
 
@@ -80,26 +61,8 @@ public class UserController extends OjController
 				int uid = userModel.getInt("uid");
 				if (userModel.isAdmin(uid))
 					setSessionAttr(OjConstants.ADMIN_USER, uid);
-
-				try
-				{
-					/*
-					 * redirect after login has issue, in this page:
-					 * /oj/problem/search?word=简单&scope=title
-					 * after login, redirect to this url:
-					 * /oj/problem/search?word=    &scope=title
-					 * 
-					 * if not decode, in this page:
-					 * /oj/problem/submit/1146
-					 * after login, redirect to this url:
-					 * /oj%2Fproblem%2Fsubmit%2F1146
-					 */
-					redirect(URLDecoder.decode(uri, "UTF-8"));
-				} catch (UnsupportedEncodingException e)
-				{
-					log.error(e.getLocalizedMessage());
-					redirect("/");
-				}
+				
+				redirect(OjConfig.lastURL);
 				return;
 			} else
 			{
@@ -107,9 +70,9 @@ public class UserController extends OjController
 				setAttr(OjConstants.MSG_TITLE, "Error!");
 				setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
 				keepPara("name");
-				keepPara(OjConstants.REDIRECT_URI);
-			}
+			}// login failed! render login page with error message.
 		}
+		
 		boolean ajax = getParaToBoolean("ajax", false);
 		if (ajax)
 			render("ajax/login.html");
@@ -133,11 +96,7 @@ public class UserController extends OjController
 
 		getSession().invalidate();
 
-		String uri = getPara(OjConstants.REDIRECT_URI);
-		if (StringUtil.isBlank(uri))
-			uri = "/";
-
-		redirect(uri);
+		redirect(OjConfig.lastURL);
 	}
 
 	public void profile()

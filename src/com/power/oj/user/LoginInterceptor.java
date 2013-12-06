@@ -17,7 +17,6 @@ public class LoginInterceptor implements Interceptor
 		} else
 		{
 			controller.keepPara(OjConstants.PAGE_TITLE);
-			controller.keepPara(OjConstants.REDIRECT_URI);
 
 			controller.setAttr(OjConstants.MSG_TYPE, "error");
 			controller.setAttr(OjConstants.MSG_TITLE, "Error!");

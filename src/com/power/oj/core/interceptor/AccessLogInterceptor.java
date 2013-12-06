@@ -13,7 +13,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 
 /**
  * Update session table with uri and timestamp.
@@ -33,7 +33,8 @@ public class AccessLogInterceptor implements Interceptor
 		Controller controller = ai.getController();
 		HttpSession session = controller.getSession(true);
 		String actionKey = ai.getActionKey();
-
+		String url;
+		
 		if (StringUtil.equalsOne(actionKey, skipActions) == -1)
 		{
 			StringBand rsb = new StringBand(actionKey);
@@ -47,10 +48,13 @@ public class AccessLogInterceptor implements Interceptor
 				sb.append("?").append(query);
 				rsb.append("?").append(query);
 			}
-
+			
+			url = rsb.toString();
+			if (url.indexOf("ajax=1") == -1)
+				OjConfig.lastURL = url;
+			
 			try
 			{
-				controller.setAttr(OjConstants.REDIRECT_URI, URLEncoder.encode(rsb.toString(), "UTF-8"));
 				controller.setAttr("uri", URLEncoder.encode(sb.toString(), "UTF-8"));
 			} catch (UnsupportedEncodingException e)
 			{

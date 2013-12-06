@@ -61,6 +61,8 @@ public class OjConfig extends JFinalConfig
 
 	public static long startGlobalInterceptorTime;
 	public static long startGlobalHandlerTime;
+	
+	public static String lastURL = "/";
 
 	/**
 	 * 配置常量

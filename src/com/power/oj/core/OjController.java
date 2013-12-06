@@ -99,17 +99,6 @@ public class OjController extends Controller
 	}
 
 	/**
-	 * Set the redirect uri, redirect to this uri after login/logout.
-	 * 
-	 * @param redirectURI
-	 *            string of the uri.
-	 */
-	public void setRedirectURI(String redirectURI)
-	{
-		setAttr(OjConstants.REDIRECT_URI, redirectURI);
-	}
-
-	/**
 	 * Set the cookie in safe way.
 	 * 
 	 * @param name
