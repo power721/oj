@@ -6,11 +6,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.jfinal.handler.Handler;
 
 /**
- * 
+ * Filter the url which dose not handled by JFinal.
  * @author power
  * 
  */
-public class UrlFiterHandler extends Handler
+public class UrlFilterHandler extends Handler
 {
 
 	public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled)

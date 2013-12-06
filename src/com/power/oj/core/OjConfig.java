@@ -148,9 +148,8 @@ public class OjConfig extends JFinalConfig
 	 */
 	public void configHandler(Handlers me)
 	{
-		me.add(new UrlFiterHandler());
-		DruidStatViewHandler dvh = new DruidStatViewHandler("/druid");
-		me.add(dvh);
+		me.add(new UrlFilterHandler());
+		me.add(new DruidStatViewHandler("/druid"));
 
 		log.debug("configHandler finished.");
 	}
