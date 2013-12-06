@@ -22,7 +22,7 @@ public class AccessLogInterceptor implements Interceptor
 {
 	protected final Logger log = Logger.getLogger(getClass());
 	private String skipActions[] =
-	{ "/login", "/logout", "/captcha" };
+	{ "/login", "/logout", "/captcha", "/contest/password" };
 
 	@Override
 	public void intercept(ActionInvocation ai)

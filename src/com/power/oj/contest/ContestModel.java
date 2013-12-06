@@ -98,7 +98,15 @@ public class ContestModel extends Model<ContestModel>
 				cid);
 		return contestModle;
 	}
-
+	
+	public String getContestTitle(int cid)
+	{
+		ContestModel contestModle = findFirst("SELECT title FROM contest WHERE cid=? LIMIT 1", cid);
+		if (contestModle != null)
+			return contestModle.get("title");
+		return null;
+	}
+	
 	public List<Record> getContestProblems(int cid, int uid)
 	{
 		String sql = "SELECT * FROM contest_problem WHERE cid=?";
@@ -324,6 +332,16 @@ public class ContestModel extends Model<ContestModel>
 		return findFirst("SELECT 1 FROM contest WHERE cid=? AND end_time<UNIX_TIMESTAMP() LIMIT 1", cid) != null;
 	}
 
+	public boolean isContestHasPassword(int cid)
+	{
+		return findFirst("SELECT 1 FROM contest WHERE cid=? AND type=3 LIMIT 1", cid) != null;
+	}
+	
+	public boolean checkContestPassword(int cid, String password)
+	{
+		return findFirst("SELECT 1 FROM contest WHERE cid=? AND pass=? AND type=3 LIMIT 1", cid, password) != null;
+	}
+	
 	public class UserInfo
 	{
 		public int cid;

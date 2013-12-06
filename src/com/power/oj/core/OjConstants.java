@@ -19,7 +19,7 @@ public abstract class OjConstants
 
 	public final static String MSG = "msg";
 	public final static String MSG_TYPE = "msgType";
-	public final static String MSG_TITLE = "msgTilte";
+	public final static String MSG_TITLE = "msgTitle";
 
 	//public final static String REDIRECT_URI = "redirectURI";
 

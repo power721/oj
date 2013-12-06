@@ -46,6 +46,7 @@ public class ContestController extends OjController
 		render("index.html");
 	}
 
+	@Before(ContestPasswordInterceptor.class)
 	public void show()
 	{
 		int cid = getParaToInt(0);
@@ -81,6 +82,7 @@ public class ContestController extends OjController
 		render("show.html");
 	}
 
+	@Before(ContestPasswordInterceptor.class)
 	public void problem()
 	{
 		int cid = getParaToInt(0);
@@ -110,6 +112,7 @@ public class ContestController extends OjController
 		render("problem.html");
 	}
 
+	@Before(ContestPasswordInterceptor.class)
 	public void submit()
 	{
 		int cid = getParaToInt(0);
@@ -146,6 +149,7 @@ public class ContestController extends OjController
 			render("submit.html");
 	}
 
+	@Before(ContestPasswordInterceptor.class)
 	public void rank()
 	{
 		int cid = getParaToInt(0);
@@ -173,6 +177,7 @@ public class ContestController extends OjController
 		render("rank.html");
 	}
 
+	@Before(ContestPasswordInterceptor.class)
 	public void status()
 	{
 		int cid = getParaToInt(0);
@@ -230,6 +235,7 @@ public class ContestController extends OjController
 		render("status.html");
 	}
 
+	@Before(ContestPasswordInterceptor.class)
 	public void problem_status()
 	{
 		int cid = getParaToInt("cid");
@@ -282,6 +288,7 @@ public class ContestController extends OjController
 			render("problem_status.html");
 	}
 
+	@Before(ContestPasswordInterceptor.class)
 	public void statistics()
 	{
 		int cid = getParaToInt(0);
@@ -374,6 +381,25 @@ public class ContestController extends OjController
 		setTitle("Recent Contests on Other OJs");
 	}
 
+	public void password()
+	{
+		int cid = getParaToInt("cid");
+		String password = getPara("password");
+		
+		if (ContestModel.dao.checkContestPassword(cid, password))
+		{
+			String token_name = new StringBand("cid").append(cid).toString();
+			setCookie(token_name, password, -1);
+			redirect(OjConfig.lastURL);
+			return;
+		}
+		
+		keepPara("cid");
+		keepPara("title");
+		
+		redirect(OjConfig.lastURL, "Sorry, you entered an invalid password.", "error", "Error!");
+	}
+	
 	@Before(AdminInterceptor.class)
 	public void edit()
 	{
