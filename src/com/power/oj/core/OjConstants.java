@@ -30,6 +30,7 @@ public abstract class OjConstants
 	public final static String USER_LIST = "userList";
 	public final static String ADMIN_USER = "adminUser";
 
+	public final static int TOKEN_AGE = 3600 * 24 * 7;
 	public final static String TOKEN_NAME = "name";
 	public final static String TOKEN_TOKEN = "token";
 

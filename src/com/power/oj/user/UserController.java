@@ -19,6 +19,11 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 
+/**
+ * 
+ * @author power
+ *
+ */
 public class UserController extends OjController
 {
 	public void index()
@@ -34,7 +39,9 @@ public class UserController extends OjController
 		if (StringUtil.isBlank(uri))
 			uri = "/";
 		if (getRequest().getMethod() == "GET")
+		{
 			setAttr(OjConstants.REDIRECT_URI, uri);
+		}
 
 		if (getSessionAttr(OjConstants.USER) != null)// user already login
 		{
@@ -44,7 +51,7 @@ public class UserController extends OjController
 			} catch (UnsupportedEncodingException e)
 			{
 				log.error(e.getLocalizedMessage());
-				redirect("/");
+				redirect("/", "You already login.", "error", "Error!");
 			}
 			return;
 		}
@@ -54,7 +61,7 @@ public class UserController extends OjController
 		String name = null;
 		String password = null;
 
-		if (getRequest().getMethod() != "GET")
+		if (getRequest().getMethod() == "POST")
 		{
 			name = getPara("name").trim();
 			password = getPara("password");
@@ -63,9 +70,9 @@ public class UserController extends OjController
 			if (userModel != null)
 			{
 				String token = UUID.randomUUID().toString();
-				setCookie(OjConstants.TOKEN_NAME, name, 3600 * 24 * 7);
+				setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
 				if (getParaToBoolean("rememberPassword"))
-					setCookie(OjConstants.TOKEN_TOKEN, token, 3600 * 24 * 7);
+					setCookie(OjConstants.TOKEN_TOKEN, token, OjConstants.TOKEN_AGE);
 
 				userModel.updateLogin(token);
 				setSessionAttr(OjConstants.USER, userModel);
@@ -76,6 +83,17 @@ public class UserController extends OjController
 
 				try
 				{
+					/*
+					 * redirect after login has issue, in this page:
+					 * /oj/problem/search?word=简单&scope=title
+					 * after login, redirect to this url:
+					 * /oj/problem/search?word=    &scope=title
+					 * 
+					 * if not decode, in this page:
+					 * /oj/problem/submit/1146
+					 * after login, redirect to this url:
+					 * /oj%2Fproblem%2Fsubmit%2F1146
+					 */
 					redirect(URLDecoder.decode(uri, "UTF-8"));
 				} catch (UnsupportedEncodingException e)
 				{
