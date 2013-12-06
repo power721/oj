@@ -229,9 +229,15 @@ public class ProblemController extends OjController
 			List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
 			for (SolutionModel record : resultList)
 			{
-				ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
-				record.put("longName", resultType.getLongName());
-				record.put("name", resultType.getName());
+				try
+				{
+					ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
+					record.put("longName", resultType.getLongName());
+					record.put("name", resultType.getName());
+				} catch(NullPointerException e)
+				{
+					log.warn(e.getLocalizedMessage());
+				}
 			}
 			setAttr("resultList", resultList);
 			setAttr("problem", problemModel);

@@ -102,7 +102,13 @@ public class SolutionController extends OjController
 
 		setTitle("Source code");
 		setAttr("problemTitle", problemTitle);
-		setAttr(OjConstants.USER, UserModel.dao.findById(uid, "name").get("name"));
+		try
+		{
+			setAttr(OjConstants.USER, UserModel.dao.findById(uid, "name").get("name"));
+		} catch(NullPointerException e)
+		{
+			log.warn(e.getLocalizedMessage());
+		}
 		LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
 		setAttr("language", language.get("name"));
 
