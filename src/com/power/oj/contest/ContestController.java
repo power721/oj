@@ -316,7 +316,7 @@ public class ContestController extends OjController
 		String json = getSessionAttr("contests.json");
 		if (json == null)
 		{
-			List<ContestTask> contests = new ArrayList<ContestTask>();
+			List<ContestkendoSchedulerTask> contests = new ArrayList<ContestkendoSchedulerTask>();
 			String html = Tool.getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
 			if (html == null)
 			{
@@ -345,7 +345,7 @@ public class ContestController extends OjController
 			for (int i = 0; i < jsonArray.size(); ++i)
 			{
 				JSONObject data = jsonArray.getJSONObject(i);
-				ContestTask contest = new ContestTask();
+				ContestkendoSchedulerTask contest = new ContestkendoSchedulerTask();
 				try
 				{
 					timeStamp = sdf.parse(data.getString("start_time")).getTime();

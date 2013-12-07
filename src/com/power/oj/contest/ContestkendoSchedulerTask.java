@@ -1,6 +1,6 @@
 package com.power.oj.contest;
 
-public class ContestTask
+public class ContestkendoSchedulerTask
 {
 	private String taskId;
 	private String oj;

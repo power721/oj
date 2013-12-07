@@ -6,7 +6,7 @@ import jodd.util.StringUtil;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.power.oj.contest.ContestModel;
-import com.power.oj.contest.ContestRankSocket;
+import com.power.oj.contest.ContestRankWebSocket;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -141,7 +141,7 @@ public class SolutionController extends OjController
 			if (cid > 0)
 			{
 				url = "/contest/status/" + cid;
-				ContestRankSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") + ": " + solutionModel.getInt("uid"));
+				ContestRankWebSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") + ": " + solutionModel.getInt("uid"));
 			}
 		}
 

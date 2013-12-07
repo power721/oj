@@ -12,14 +12,14 @@ import jodd.util.StringBand;
 import com.jfinal.log.Logger;
 
 @ServerEndpoint(value = "/contest/rank.ws")
-public class ContestRankSocket
+public class ContestRankWebSocket
 {
-	private static final Logger log = Logger.getLogger(ContestRankSocket.class);
-	private static final Set<ContestRankSocket> connections = new CopyOnWriteArraySet<ContestRankSocket>();
+	private static final Logger log = Logger.getLogger(ContestRankWebSocket.class);
+	private static final Set<ContestRankWebSocket> connections = new CopyOnWriteArraySet<ContestRankWebSocket>();
 	private Session session;
 	private int cid = 0;
 
-	public ContestRankSocket()
+	public ContestRankWebSocket()
 	{
 
 	}
@@ -57,7 +57,7 @@ public class ContestRankSocket
 
 	public static void broadcast(int cid, String msg)
 	{
-		for (ContestRankSocket client : connections)
+		for (ContestRankWebSocket client : connections)
 		{
 			if (cid != 0 && cid != client.cid)
 				continue;
