@@ -10,6 +10,7 @@ import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
+import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -36,7 +37,7 @@ public class ProblemController extends OjController
 
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
     StringBand sb = new StringBand("FROM problem");
-    if (getAttr("adminUser") == null)
+    if (getAttr(OjConstants.ADMIN_USER) == null)
       sb.append(" WHERE status=1");
     sb.append(" ORDER BY pid");
 
@@ -160,7 +161,8 @@ public class ProblemController extends OjController
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
     problemModel.updateProblem();
 
-    redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The changes have been saved.");
+    String redirectURL = new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    redirect(redirectURL, "The changes have been saved.");
   }
 
   @Before(AdminInterceptor.class)
@@ -177,24 +179,25 @@ public class ProblemController extends OjController
     problemModel.set("uid", getAttr(OjConstants.USER_ID));
     problemModel.saveProblem();
 
+    String redirectURL = new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
     File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
-      redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory already exists.", "warning",
-          "Warning!");
+      redirect(redirectURL, "The data directory already exists.", "warning", "Warning!");
       return;
     }
+
     try
     {
       FileUtil.mkdirs(dataDir);
     } catch (IOException e)
     {
       log.error(e.getMessage());
-      redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory cannot create.", "error", "Error!");
+      redirect(redirectURL, "The data directory cannot create.", "error", "Error!");
       return;
     }
 
-    redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString());
+    redirect(redirectURL);
   }
 
   @Before(AdminInterceptor.class)
@@ -346,7 +349,7 @@ public class ProblemController extends OjController
     renderJson(userResult);
   }
 
-  @Before(LoginInterceptor.class)
+  @Before({POST.class, LoginInterceptor.class})
   public void tag()
   {
     String op = getPara("op");
@@ -356,17 +359,23 @@ public class ProblemController extends OjController
     if ("add".equals(op) && StringUtil.isNotBlank(tag))
       ProblemModel.dao.addTag(pid, uid, tag);
 
-    redirect(new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString(), "The changes have been saved.");
+    String redirectURL = new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString();
+    redirect(redirectURL, "The changes have been saved.");
   }
 
   @Before(AdminInterceptor.class)
   public void build()
   {
     int pid = getParaToInt(0);
+    String redirectURL = new StringBand(2).append("/problem/show/").append(pid).toString();
     ProblemModel problemModel = ProblemModel.dao.findById(pid);
+    
     if (problemModel != null && !problemModel.build())
-      System.out.println("No!");
+    {
+      log.error(new StringBand(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
+      redirect(redirectURL, "Build problem statistics failed!");
+    }
 
-    redirect(new StringBand(2).append("/problem/show/").append(pid).toString(), "The problem statistics have been updated.");
+    redirect(redirectURL, "The problem statistics have been updated.");
   }
 }

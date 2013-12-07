@@ -5,6 +5,7 @@ import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.jfinal.ext.interceptor.POST;
 import com.power.oj.contest.ContestModel;
 import com.power.oj.contest.ContestRankWebSocket;
 import com.power.oj.core.OjConfig;
@@ -129,7 +130,7 @@ public class SolutionController extends OjController
     renderText("TODO");
   }
 
-  @Before(LoginInterceptor.class)
+  @Before({POST.class, LoginInterceptor.class})
   public void save()
   {
     SolutionModel solutionModel = getModel(SolutionModel.class, "solution");

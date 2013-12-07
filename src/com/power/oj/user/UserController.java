@@ -29,7 +29,6 @@ public class UserController extends OjController
     render("index.html");
   }
 
-  // @Before(LoginValidator.class)
   @ActionKey("/login")
   public void login()
   {
@@ -83,13 +82,13 @@ public class UserController extends OjController
       setAttr(OjConstants.MSG_TITLE, "Error!");
       setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
       keepPara("name");
-    }// login failed! render login page with error message.
 
-    boolean ajax = getParaToBoolean("ajax", false);
-    if (ajax)
-      render("ajax/login.html");
-    else
-      render("login.html");
+      boolean ajax = getParaToBoolean("ajax", false);
+      if (ajax)
+        render("ajax/login.html");
+      else
+        render("login.html");
+    }
   }
 
   @Before(LoginInterceptor.class)
@@ -188,13 +187,11 @@ public class UserController extends OjController
   { LoginInterceptor.class, UpdateUserValidator.class })
   public void update()
   {
-    UserModel userModel = getModel(UserModel.class, "user");// we must
-    // specify the
-    // right name in
-    // edit page!!!
+    UserModel userModel = getModel(UserModel.class, "user");
     userModel.updateUser();
 
-    redirect(new StringBand(2).append("/user/profile/").append(getAttr("userName")).toString(), "The changes have been saved.");
+    String redirectURL = new StringBand(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
+    redirect(redirectURL, "The changes have been saved.");
   }
 
   public void delete()
@@ -265,6 +262,7 @@ public class UserController extends OjController
     if (user != null)
       user.build();
 
-    redirect(new StringBand(2).append("/user/profile/").append(user.getStr("name")).toString(), "The user statistics have been saved.");
+    String redirectURL = new StringBand(2).append("/user/profile/").append(user.getStr("name")).toString();
+    redirect(redirectURL, "The user statistics have been saved.");
   }
 }

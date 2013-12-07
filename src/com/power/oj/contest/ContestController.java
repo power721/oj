@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
+import com.jfinal.ext.interceptor.POST;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
@@ -380,6 +381,7 @@ public class ContestController extends OjController
     setTitle("Recent Contests on Other OJs");
   }
 
+  @Before(POST.class)
   public void password()
   {
     int cid = getParaToInt("cid");
@@ -405,7 +407,8 @@ public class ContestController extends OjController
     renderText("TODO");
   }
 
-  @Before(AdminInterceptor.class)
+  @Before(
+  { POST.class, AdminInterceptor.class })
   public void update()
   {
     renderText("TODO");
@@ -425,7 +428,7 @@ public class ContestController extends OjController
   }
 
   @Before(
-  { AdminInterceptor.class, AddContestValidator.class })
+  { POST.class, AdminInterceptor.class, AddContestValidator.class })
   public void save()
   {
     String start_time = getPara("start_time");

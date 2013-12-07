@@ -28,7 +28,6 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
-import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
@@ -136,7 +135,7 @@ public class OjConfig extends JFinalConfig
   public void configInterceptor(Interceptors me)
   {
     me.add(new GlobalInterceptor());
-    me.add(new SessionInViewInterceptor());
+    //me.add(new SessionInViewInterceptor());
     me.add(new BaseURLInterceptor());
     me.add(new MessageInterceptor());
     me.add(new AccessLogInterceptor());
