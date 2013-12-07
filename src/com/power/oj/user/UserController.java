@@ -51,12 +51,15 @@ public class UserController extends OjController
 	@Before(POST.class)
 	public void signin()
 	{
-	  UserModel userModel = null;
-    String name = null;
-    String password = null;
-    name = getPara("name").trim();
-    password = getPara("password");
-    userModel = UserModel.dao.getUserByNameAndPassword(name, password);
+	  if (getSessionAttr(OjConstants.USER) != null)// user already login
+    {
+      redirect(OjConfig.lastURL, "You already login.", "error", "Error!");
+      return;
+    }
+
+    String name = getPara("name").trim();
+    String password = getPara("password");
+    UserModel userModel = UserModel.dao.getUserByNameAndPassword(name, password);
 
     if (userModel != null)
     {

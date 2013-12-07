@@ -72,7 +72,7 @@ public class ProblemController extends OjController
 			return;
 		}
 		int uid = 0;
-		if (getAttr(OjConstants.USER_ID) != null)
+		if (getAttrForInt(OjConstants.USER_ID) != null)
 		{
 			uid = getAttrForInt(OjConstants.USER_ID);
 			Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
@@ -307,6 +307,11 @@ public class ProblemController extends OjController
 
 	public void userInfo()
 	{
+	  if (getAttrForInt(OjConstants.USER_ID) == null)
+    {
+      return;
+    }
+    
 		int pid = getParaToInt("pid");
 		int uid = getAttrForInt(OjConstants.USER_ID);
 		List<Record> userInfo = null;
@@ -324,6 +329,11 @@ public class ProblemController extends OjController
 
 	public void userResult()
 	{
+	  if (getAttrForInt(OjConstants.USER_ID) == null)
+	  {
+	    return;
+	  }
+	  
 		int pid = getParaToInt("pid");
 		int uid = getAttrForInt(OjConstants.USER_ID);
 		Record userResult = null;
@@ -337,6 +347,7 @@ public class ProblemController extends OjController
 		renderJson(userResult);
 	}
 
+	@Before(LoginInterceptor.class)
 	public void tag()
 	{
 		String op = getPara("op");

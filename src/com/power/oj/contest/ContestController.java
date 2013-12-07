@@ -51,7 +51,7 @@ public class ContestController extends OjController
 	{
 		int cid = getParaToInt(0);
 		int uid = 0;
-		if (getAttr(OjConstants.USER_ID) != null)
+		if (getAttrForInt(OjConstants.USER_ID) != null)
 			uid = getAttrForInt(OjConstants.USER_ID);
 		ContestModel contestModle = ContestModel.dao.getContest(cid);
 		if (contestModle == null)
