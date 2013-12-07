@@ -3,11 +3,13 @@ package com.power.oj.user;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+
 import jodd.util.HtmlEncoder;
 import jodd.util.StringBand;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
+import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.admin.AdminInterceptor;
@@ -38,46 +40,53 @@ public class UserController extends OjController
 		}
 
 		setTitle("Login");
-		UserModel userModel = null;
-		String name = null;
-		String password = null;
-
-		if (getRequest().getMethod() == "POST")
-		{
-			name = getPara("name").trim();
-			password = getPara("password");
-			userModel = UserModel.dao.getUserByNameAndPassword(name, password);
-
-			if (userModel != null)
-			{
-				String token = UUID.randomUUID().toString();
-				setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
-				if (getParaToBoolean("rememberPassword"))
-					setCookie(OjConstants.TOKEN_TOKEN, token, OjConstants.TOKEN_AGE);
-
-				userModel.updateLogin(token);
-				setSessionAttr(OjConstants.USER, userModel);
-
-				int uid = userModel.getInt("uid");
-				if (userModel.isAdmin(uid))
-					setSessionAttr(OjConstants.ADMIN_USER, uid);
-				
-				redirect(OjConfig.lastURL);
-				return;
-			} else
-			{
-				setAttr(OjConstants.MSG_TYPE, "error");
-				setAttr(OjConstants.MSG_TITLE, "Error!");
-				setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
-				keepPara("name");
-			}// login failed! render login page with error message.
-		}
-		
+	
 		boolean ajax = getParaToBoolean("ajax", false);
 		if (ajax)
 			render("ajax/login.html");
 		else
 			render("login.html");
+	}
+	
+	@Before(POST.class)
+	public void signin()
+	{
+	  UserModel userModel = null;
+    String name = null;
+    String password = null;
+    name = getPara("name").trim();
+    password = getPara("password");
+    userModel = UserModel.dao.getUserByNameAndPassword(name, password);
+
+    if (userModel != null)
+    {
+      String token = UUID.randomUUID().toString();
+      setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
+      if (getParaToBoolean("rememberPassword"))
+        setCookie(OjConstants.TOKEN_TOKEN, token, OjConstants.TOKEN_AGE);
+
+      userModel.updateLogin(token);
+      setSessionAttr(OjConstants.USER, userModel);
+
+      int uid = userModel.getInt("uid");
+      if (userModel.isAdmin(uid))
+        setSessionAttr(OjConstants.ADMIN_USER, uid);
+      
+      redirect(OjConfig.lastURL);
+      return;
+    } else
+    {
+      setAttr(OjConstants.MSG_TYPE, "error");
+      setAttr(OjConstants.MSG_TITLE, "Error!");
+      setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
+      keepPara("name");
+    }// login failed! render login page with error message.
+
+    boolean ajax = getParaToBoolean("ajax", false);
+    if (ajax)
+      render("ajax/login.html");
+    else
+      render("login.html");
 	}
 
 	@Before(LoginInterceptor.class)
