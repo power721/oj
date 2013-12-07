@@ -23,351 +23,350 @@ import com.power.oj.user.LoginInterceptor;
 
 public class ProblemController extends OjController
 {
-	
-	public void index()
-	{
-		setTitle("Problem List");
-		int pageNumber = 1;
-		if (isParaExists("p"))
-			pageNumber = getParaToInt("p", 1);
-		else
-			pageNumber = Integer.parseInt(getCookie("pageNumber", "1"));
-		int pageSize = getParaToInt("s", 50);
 
-		String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
-		StringBand sb = new StringBand("FROM problem");
-		if (getAttr("adminUser") == null)
-			sb.append(" WHERE status=1");
-		sb.append(" ORDER BY pid");
+  public void index()
+  {
+    setTitle("Problem List");
+    int pageNumber = 1;
+    if (isParaExists("p"))
+      pageNumber = getParaToInt("p", 1);
+    else
+      pageNumber = Integer.parseInt(getCookie("pageNumber", "1"));
+    int pageSize = getParaToInt("s", 50);
 
-		Page<ProblemModel> problemList = ProblemModel.dao.paginate(pageNumber, pageSize, sql, sb.toString());
-		/*
-		 * if(getAttr("userID") != null) { int uid = getAttrForInt("userID");
-		 * for(ProblemModel problemModel: problemList.getList()) { Record record
-		 * =Db.findFirst(
-		 * "SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1"
-		 * , uid, problemModel.getInt("pid")); if(record != null) {
-		 * problemModel.put("userResult", record.getInt("result")); } } }
-		 */
-		setAttr("problemList", problemList);
-		setCookie("pageNumber", String.valueOf(pageNumber), 3600 * 24 * 7);
+    String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
+    StringBand sb = new StringBand("FROM problem");
+    if (getAttr("adminUser") == null)
+      sb.append(" WHERE status=1");
+    sb.append(" ORDER BY pid");
 
-		render("index.html");
-	}
+    Page<ProblemModel> problemList = ProblemModel.dao.paginate(pageNumber, pageSize, sql, sb.toString());
+    /*
+     * if(getAttr("userID") != null) { int uid = getAttrForInt("userID");
+     * for(ProblemModel problemModel: problemList.getList()) { Record record
+     * =Db.findFirst(
+     * "SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1"
+     * , uid, problemModel.getInt("pid")); if(record != null) {
+     * problemModel.put("userResult", record.getInt("result")); } } }
+     */
+    setAttr("problemList", problemList);
+    setCookie("pageNumber", String.valueOf(pageNumber), 3600 * 24 * 7);
 
-	public void show()
-	{
-		if (!isParaExists(0))
-		{
-			redirect("/problem", "Please specify the problem ID.", "error", "Error!");
-			return;
-		}
+    render("index.html");
+  }
 
-		int pid = getParaToInt(0);
-		boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
-		ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
-		if (problemModel == null)
-		{
-			redirect("/problem", "Permission Denied.", "error", "Error!");
-			return;
-		}
-		int uid = 0;
-		if (getAttrForInt(OjConstants.USER_ID) != null)
-		{
-			uid = getAttrForInt(OjConstants.USER_ID);
-			Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
-			if (record != null)
-			{
-				setAttr("userResult", record.getInt("result"));
-			}
-		}
+  public void show()
+  {
+    if (!isParaExists(0))
+    {
+      redirect("/problem", "Please specify the problem ID.", "error", "Error!");
+      return;
+    }
 
-		int sample_input_rows = 1;
-		if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
-			sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
-		int sample_output_rows = 1;
-		if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
-			sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
-		problemModel.put("sample_input_rows", sample_input_rows);
-		problemModel.put("sample_output_rows", sample_output_rows);
+    int pid = getParaToInt(0);
+    boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
+    ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
+    if (problemModel == null)
+    {
+      redirect("/problem", "Permission Denied.", "error", "Error!");
+      return;
+    }
+    int uid = 0;
+    if (getAttrForInt(OjConstants.USER_ID) != null)
+    {
+      uid = getAttrForInt(OjConstants.USER_ID);
+      Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+      if (record != null)
+      {
+        setAttr("userResult", record.getInt("result"));
+      }
+    }
 
-		setTitle(new StringBand(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
-		setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
-		setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
-		setAttr("tagList", ProblemModel.dao.getTags(pid));
-		setAttr("problem", problemModel);
-		setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), 3600 * 24 * 7);
+    int sample_input_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
+      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
+    int sample_output_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
+      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
+    problemModel.put("sample_input_rows", sample_input_rows);
+    problemModel.put("sample_output_rows", sample_output_rows);
 
-		problemModel.incView();
-		render("show.html");
-	}
+    setTitle(new StringBand(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
+    setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
+    setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
+    setAttr("tagList", ProblemModel.dao.getTags(pid));
+    setAttr("problem", problemModel);
+    setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), 3600 * 24 * 7);
 
-	@Before(LoginInterceptor.class)
-	public void submit()
-	{
-		int pid = getParaToInt(0);
-		boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
-		ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
-		setAttr("problem", problemModel);
-		setAttr(OjConstants.USER, getSessionAttr(OjConstants.USER));
-		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
-		boolean ajax = getParaToBoolean("ajax", false);
-		int sid = 0;
-		if (isParaExists("s"))
-		{
-			sid = getParaToInt("s", 0);
-			StringBand sb = new StringBand("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
-			if (!isAdmin)
-				sb.append(" AND uid=").append(getAttrForInt(OjConstants.USER_ID));
-			sb.append(" LIMIT 1");
-			SolutionModel solutionModel = SolutionModel.dao.findFirst(sb.toString(), sid, pid);
-			if (solutionModel != null)
-			{
-				setAttr("solution", solutionModel);
-			}
-		}
+    problemModel.incView();
+    render("show.html");
+  }
 
-		if (ajax)
-			render("ajax/submit.html");
-		else
-			render("submit.html");
-	}
+  @Before(LoginInterceptor.class)
+  public void submit()
+  {
+    int pid = getParaToInt(0);
+    boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
+    ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
+    setAttr("problem", problemModel);
+    setAttr(OjConstants.USER, getSessionAttr(OjConstants.USER));
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    boolean ajax = getParaToBoolean("ajax", false);
+    int sid = 0;
+    if (isParaExists("s"))
+    {
+      sid = getParaToInt("s", 0);
+      StringBand sb = new StringBand("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
+      if (!isAdmin)
+        sb.append(" AND uid=").append(getAttrForInt(OjConstants.USER_ID));
+      sb.append(" LIMIT 1");
+      SolutionModel solutionModel = SolutionModel.dao.findFirst(sb.toString(), sid, pid);
+      if (solutionModel != null)
+      {
+        setAttr("solution", solutionModel);
+      }
+    }
 
-	@Before(AdminInterceptor.class)
-	public void edit()
-	{
-		if (!isParaExists(0))
-		{
-			redirect("/problem", "Please specify the problem ID.", "error", "Error!");
-			return;
-		}
+    if (ajax)
+      render("ajax/submit.html");
+    else
+      render("submit.html");
+  }
 
-		int pid = getParaToInt(0);
-		ProblemModel problemModel = ProblemModel.dao.findById(pid);
-		setAttr("problem", problemModel);
-		setTitle(new StringBand(2).append("Edit Problem ").append(pid).toString());
-		boolean ajax = getParaToBoolean("ajax", false);
+  @Before(AdminInterceptor.class)
+  public void edit()
+  {
+    if (!isParaExists(0))
+    {
+      redirect("/problem", "Please specify the problem ID.", "error", "Error!");
+      return;
+    }
 
-		if (ajax)
-			render("ajax/edit.html");
-		else
-			render("edit.html");
-	}
+    int pid = getParaToInt(0);
+    ProblemModel problemModel = ProblemModel.dao.findById(pid);
+    setAttr("problem", problemModel);
+    setTitle(new StringBand(2).append("Edit Problem ").append(pid).toString());
+    boolean ajax = getParaToBoolean("ajax", false);
 
-	@Before(AdminInterceptor.class)
-	public void update()
-	{
-		ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-		problemModel.updateProblem();
+    if (ajax)
+      render("ajax/edit.html");
+    else
+      render("edit.html");
+  }
 
-		redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The changes have been saved.");
-	}
+  @Before(AdminInterceptor.class)
+  public void update()
+  {
+    ProblemModel problemModel = getModel(ProblemModel.class, "problem");
+    problemModel.updateProblem();
 
-	@Before(AdminInterceptor.class)
-	public void add()
-	{
-		setTitle("Add a problem");
-		render("add.html");
-	}
+    redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The changes have been saved.");
+  }
 
-	@Before(AdminInterceptor.class)
-	public void save()
-	{
-		ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-		problemModel.set("uid", getAttr(OjConstants.USER_ID));
-		problemModel.saveProblem();
+  @Before(AdminInterceptor.class)
+  public void add()
+  {
+    setTitle("Add a problem");
+    render("add.html");
+  }
 
-		File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
-		if (dataDir.isDirectory())
-		{
-			redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory already exists.", "warning",
-					"Warning!");
-			return;
-		}
-		try
-		{
-			FileUtil.mkdirs(dataDir);
-		} catch (IOException e)
-		{
-			log.error(e.getMessage());
-			redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory cannot create.", "error",
-					"Error!");
-			return;
-		}
+  @Before(AdminInterceptor.class)
+  public void save()
+  {
+    ProblemModel problemModel = getModel(ProblemModel.class, "problem");
+    problemModel.set("uid", getAttr(OjConstants.USER_ID));
+    problemModel.saveProblem();
 
-		redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString());
-	}
+    File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
+    if (dataDir.isDirectory())
+    {
+      redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory already exists.", "warning",
+          "Warning!");
+      return;
+    }
+    try
+    {
+      FileUtil.mkdirs(dataDir);
+    } catch (IOException e)
+    {
+      log.error(e.getMessage());
+      redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString(), "The data directory cannot create.", "error", "Error!");
+      return;
+    }
 
-	@Before(AdminInterceptor.class)
-	public void delete()
-	{
-		renderText("TODO");
-	}
+    redirect(new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString());
+  }
 
-	public void status()
-	{
-		if (!isParaExists(0))
-		{
-			forwardAction("/contest/problem_status");
-			return;
-		}
+  @Before(AdminInterceptor.class)
+  public void delete()
+  {
+    renderText("TODO");
+  }
 
-		int pid = getParaToInt(0);
-		boolean ajax = getParaToBoolean("ajax", false);
+  public void status()
+  {
+    if (!isParaExists(0))
+    {
+      forwardAction("/contest/problem_status");
+      return;
+    }
 
-		if (!ajax)
-		{
-			boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
-			ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
-			if (problemModel == null)
-			{
-				redirect("/problem", "Permission Denied.", "error", "Error!");
-				return;
-			}
+    int pid = getParaToInt(0);
+    boolean ajax = getParaToBoolean("ajax", false);
 
-			List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
-			for (SolutionModel record : resultList)
-			{
-				try
-				{
-					ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
-					record.put("longName", resultType.getLongName());
-					record.put("name", resultType.getName());
-				} catch(NullPointerException e)
-				{
-					log.warn(e.getLocalizedMessage());
-				}
-			}
-			setAttr("resultList", resultList);
-			setAttr("problem", problemModel);
-			setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
-			setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
-		}
+    if (!ajax)
+    {
+      boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
+      ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
+      if (problemModel == null)
+      {
+        redirect("/problem", "Permission Denied.", "error", "Error!");
+        return;
+      }
 
-		int pageNumber = getParaToInt("p", 1);
-		int pageSize = getParaToInt("s", 20);
-		int language = getParaToInt("language", -1);
-		StringBand query = new StringBand();
-		if (language > -1)
-		{
-			query.append("&language=").append(language);
-		}
-		Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
+      List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
+      for (SolutionModel record : resultList)
+      {
+        try
+        {
+          ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
+          record.put("longName", resultType.getLongName());
+          record.put("name", resultType.getName());
+        } catch (NullPointerException e)
+        {
+          log.warn(e.getLocalizedMessage());
+        }
+      }
+      setAttr("resultList", resultList);
+      setAttr("problem", problemModel);
+      setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
+      setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
+    }
 
-		setTitle(new StringBand(3).append("Problem ").append(pid).append(" Status").toString());
-		setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
-		setAttr("language", language);
-		setAttr("query", query.toString());
-		setAttr("pid", pid);
-		setAttr("solutionList", solutionList);
+    int pageNumber = getParaToInt("p", 1);
+    int pageSize = getParaToInt("s", 20);
+    int language = getParaToInt("language", -1);
+    StringBand query = new StringBand();
+    if (language > -1)
+    {
+      query.append("&language=").append(language);
+    }
+    Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
 
-		if (ajax)
-		{
-			renderJson(new String[]
-			{ "pid", "language", "query", "program_languages", "solutionList" });
-			// render("ajax/status.html");
-		} else
-			render("status.html");
-	}
+    setTitle(new StringBand(3).append("Problem ").append(pid).append(" Status").toString());
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr("language", language);
+    setAttr("query", query.toString());
+    setAttr("pid", pid);
+    setAttr("solutionList", solutionList);
 
-	public void search()
-	{
-		int pid = 0;
-		ProblemModel problemModel = null;
-		try
-		{
-			pid = getParaToInt("word", 0);
-		} catch (NumberFormatException e)
-		{
-			pid = 0;
-		}
-		if (pid != 0)
-		{
-			problemModel = ProblemModel.dao.findByPid(pid, getAttr(OjConstants.ADMIN_USER) != null);
-			if (problemModel == null)
-				pid = 0;
-		} else if (isParaBlank("word"))
-			pid = ProblemModel.dao.getRandomProblem();
+    if (ajax)
+    {
+      renderJson(new String[]
+      { "pid", "language", "query", "program_languages", "solutionList" });
+      // render("ajax/status.html");
+    } else
+      render("status.html");
+  }
 
-		if (pid != 0)
-		{
-			redirect(new StringBand(2).append("/problem/show/").append(pid).toString());
-			return;
-		}
+  public void search()
+  {
+    int pid = 0;
+    ProblemModel problemModel = null;
+    try
+    {
+      pid = getParaToInt("word", 0);
+    } catch (NumberFormatException e)
+    {
+      pid = 0;
+    }
+    if (pid != 0)
+    {
+      problemModel = ProblemModel.dao.findByPid(pid, getAttr(OjConstants.ADMIN_USER) != null);
+      if (problemModel == null)
+        pid = 0;
+    } else if (isParaBlank("word"))
+      pid = ProblemModel.dao.getRandomProblem();
 
-		String word = HtmlEncoder.text(getPara("word").trim());
-		String scope = getPara("scope");
-		setAttr("problemList", ProblemModel.dao.searchProblem(scope, word));
-		setAttr("word", word);
-		setAttr("scope", scope != null ? scope : "all");
-		setTitle(new StringBand(2).append("Search problem: ").append(word).toString());
+    if (pid != 0)
+    {
+      redirect(new StringBand(2).append("/problem/show/").append(pid).toString());
+      return;
+    }
 
-		render("search.html");
-	}
+    String word = HtmlEncoder.text(getPara("word").trim());
+    String scope = getPara("scope");
+    setAttr("problemList", ProblemModel.dao.searchProblem(scope, word));
+    setAttr("word", word);
+    setAttr("scope", scope != null ? scope : "all");
+    setTitle(new StringBand(2).append("Search problem: ").append(word).toString());
 
-	public void userInfo()
-	{
-	  if (getAttrForInt(OjConstants.USER_ID) == null)
+    render("search.html");
+  }
+
+  public void userInfo()
+  {
+    if (getAttrForInt(OjConstants.USER_ID) == null)
     {
       return;
     }
-    
-		int pid = getParaToInt("pid");
-		int uid = getAttrForInt(OjConstants.USER_ID);
-		List<Record> userInfo = null;
 
-		if (uid > 0)
-		{
-			setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
-			setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
-			userInfo = ProblemModel.dao.getUserInfo(pid, uid);
-			setAttr("userInfo", userInfo);
-		}
-		renderJson(new String[]
-		{ "userInfo", "language_name", "result_type" });
-	}
+    int pid = getParaToInt("pid");
+    int uid = getAttrForInt(OjConstants.USER_ID);
+    List<Record> userInfo = null;
 
-	public void userResult()
-	{
-	  if (getAttrForInt(OjConstants.USER_ID) == null)
-	  {
-	    return;
-	  }
-	  
-		int pid = getParaToInt("pid");
-		int uid = getAttrForInt(OjConstants.USER_ID);
-		Record userResult = null;
+    if (uid > 0)
+    {
+      setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
+      setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
+      userInfo = ProblemModel.dao.getUserInfo(pid, uid);
+      setAttr("userInfo", userInfo);
+    }
+    renderJson(new String[]
+    { "userInfo", "language_name", "result_type" });
+  }
 
-		if (uid > 0)
-		{
-			userResult = ProblemModel.dao.getUserResult(pid, uid);
-			if (userResult != null && userResult.getInt("result") != null)
-				userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
-		}
-		renderJson(userResult);
-	}
+  public void userResult()
+  {
+    if (getAttrForInt(OjConstants.USER_ID) == null)
+    {
+      return;
+    }
 
-	@Before(LoginInterceptor.class)
-	public void tag()
-	{
-		String op = getPara("op");
-		String tag = HtmlEncoder.text(getPara("tag").trim());
-		int pid = getParaToInt("pid");
-		int uid = getAttrForInt(OjConstants.USER_ID);
-		if ("add".equals(op) && StringUtil.isNotBlank(tag))
-			ProblemModel.dao.addTag(pid, uid, tag);
+    int pid = getParaToInt("pid");
+    int uid = getAttrForInt(OjConstants.USER_ID);
+    Record userResult = null;
 
-		redirect(new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString(), "The changes have been saved.");
-	}
+    if (uid > 0)
+    {
+      userResult = ProblemModel.dao.getUserResult(pid, uid);
+      if (userResult != null && userResult.getInt("result") != null)
+        userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
+    }
+    renderJson(userResult);
+  }
 
-	@Before(AdminInterceptor.class)
-	public void build()
-	{
-		int pid = getParaToInt(0);
-		ProblemModel problemModel = ProblemModel.dao.findById(pid);
-		if (problemModel != null && !problemModel.build())
-			System.out.println("No!");
+  @Before(LoginInterceptor.class)
+  public void tag()
+  {
+    String op = getPara("op");
+    String tag = HtmlEncoder.text(getPara("tag").trim());
+    int pid = getParaToInt("pid");
+    int uid = getAttrForInt(OjConstants.USER_ID);
+    if ("add".equals(op) && StringUtil.isNotBlank(tag))
+      ProblemModel.dao.addTag(pid, uid, tag);
 
-		redirect(new StringBand(2).append("/problem/show/").append(pid).toString(), "The problem statistics have been updated.");
-	}
+    redirect(new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString(), "The changes have been saved.");
+  }
+
+  @Before(AdminInterceptor.class)
+  public void build()
+  {
+    int pid = getParaToInt(0);
+    ProblemModel problemModel = ProblemModel.dao.findById(pid);
+    if (problemModel != null && !problemModel.build())
+      System.out.println("No!");
+
+    redirect(new StringBand(2).append("/problem/show/").append(pid).toString(), "The problem statistics have been updated.");
+  }
 }

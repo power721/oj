@@ -2,66 +2,66 @@ package com.power.oj.core;
 
 public class ResultType
 {
-	public static final int AC = 0;
-	public static final int PE = 1;
-	public static final int TLE = 2;
-	public static final int MLE = 3;
-	public static final int WA = 4;
-	public static final int RE = 5;
-	public static final int OLE = 6;
-	public static final int CE = 7;
-	public static final int SE = 98;
-	public static final int VE = 99;
-	public static final int Wait = 10000;
+  public static final int AC = 0;
+  public static final int PE = 1;
+  public static final int TLE = 2;
+  public static final int MLE = 3;
+  public static final int WA = 4;
+  public static final int RE = 5;
+  public static final int OLE = 6;
+  public static final int CE = 7;
+  public static final int SE = 98;
+  public static final int VE = 99;
+  public static final int Wait = 10000;
 
-	private int id;
-	private String name;
-	private String longName;
+  private int id;
+  private String name;
+  private String longName;
 
-	ResultType()
-	{
+  ResultType()
+  {
 
-	}
+  }
 
-	ResultType(int id, String name, String longName)
-	{
-		this.id = id;
-		this.name = name;
-		this.longName = longName;
-	}
+  ResultType(int id, String name, String longName)
+  {
+    this.id = id;
+    this.name = name;
+    this.longName = longName;
+  }
 
-	public int getId()
-	{
-		return id;
-	}
+  public int getId()
+  {
+    return id;
+  }
 
-	public String getName()
-	{
-		return name;
-	}
+  public String getName()
+  {
+    return name;
+  }
 
-	public String getLongName()
-	{
-		return longName;
-	}
+  public String getLongName()
+  {
+    return longName;
+  }
 
-	public int setId(int id)
-	{
-		this.id = id;
-		return this.id;
-	}
+  public int setId(int id)
+  {
+    this.id = id;
+    return this.id;
+  }
 
-	public String setName(String name)
-	{
-		this.name = name;
-		return this.name;
-	}
+  public String setName(String name)
+  {
+    this.name = name;
+    return this.name;
+  }
 
-	public String setLongName(String longName)
-	{
-		this.longName = longName;
-		return this.longName;
-	}
+  public String setLongName(String longName)
+  {
+    this.longName = longName;
+    return this.longName;
+  }
 }
 
 /*

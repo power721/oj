@@ -16,21 +16,21 @@ import com.power.oj.core.OjConfig;
  */
 public class GlobalInterceptor implements Interceptor
 {
-	public void intercept(ActionInvocation ai)
-	{
-		OjConfig.startGlobalInterceptorTime = System.currentTimeMillis();
-		Controller controller = ai.getController();
+  public void intercept(ActionInvocation ai)
+  {
+    OjConfig.startGlobalInterceptorTime = System.currentTimeMillis();
+    Controller controller = ai.getController();
 
-		String actionKey = ai.getActionKey();
-		controller.setAttr("actionKey", actionKey.replace("/", ""));
-		String controllerKey = ai.getControllerKey();
-		controller.setAttr("controllerKey", controllerKey.replace("/", ""));
-		String methodName = ai.getMethodName();
-		controller.setAttr("methodName", methodName);
+    String actionKey = ai.getActionKey();
+    controller.setAttr("actionKey", actionKey.replace("/", ""));
+    String controllerKey = ai.getControllerKey();
+    controller.setAttr("controllerKey", controllerKey.replace("/", ""));
+    String methodName = ai.getMethodName();
+    controller.setAttr("methodName", methodName);
 
-		ai.invoke();
+    ai.invoke();
 
-		System.out.println(new StringBand(4).append(actionKey).append(" Action Invoking Time: ")
-				.append(System.currentTimeMillis() - OjConfig.startGlobalInterceptorTime).append(" milliseconds").toString());
-	}
+    System.out.println(new StringBand(4).append(actionKey).append(" Action Invoking Time: ")
+        .append(System.currentTimeMillis() - OjConfig.startGlobalInterceptorTime).append(" milliseconds").toString());
+  }
 }

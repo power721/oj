@@ -18,34 +18,34 @@ import com.power.oj.core.OjConstants;
  */
 public class BaseURLInterceptor implements Interceptor
 {
-	protected final Logger log = Logger.getLogger(getClass());
+  protected final Logger log = Logger.getLogger(getClass());
 
-	@Override
-	public void intercept(ActionInvocation ai)
-	{
-		String baseUrl = OjConfig.baseUrl;
-		Controller controller = ai.getController();
+  @Override
+  public void intercept(ActionInvocation ai)
+  {
+    String baseUrl = OjConfig.baseUrl;
+    Controller controller = ai.getController();
 
-		if (StringKit.isBlank(baseUrl)) // if the baseUrl not initialized, we
-										// detect from the scheme once.
-		{
-			HttpServletRequest request = controller.getRequest();
+    if (StringKit.isBlank(baseUrl)) // if the baseUrl not initialized, we
+    // detect from the scheme once.
+    {
+      HttpServletRequest request = controller.getRequest();
 
-			StringBuilder sb = new StringBuilder().append(request.getScheme()).append("://").append(request.getServerName());
-			if (request.getServerPort() != 80)
-			{
-				sb.append(":").append(request.getServerPort());
-			}
-			sb.append(request.getContextPath());
+      StringBuilder sb = new StringBuilder().append(request.getScheme()).append("://").append(request.getServerName());
+      if (request.getServerPort() != 80)
+      {
+        sb.append(":").append(request.getServerPort());
+      }
+      sb.append(request.getContextPath());
 
-			baseUrl = sb.toString();
-			OjConfig.baseUrl = baseUrl;
-			log.info("Auto detect baseUrl: " + baseUrl);
-		}
+      baseUrl = sb.toString();
+      OjConfig.baseUrl = baseUrl;
+      log.info("Auto detect baseUrl: " + baseUrl);
+    }
 
-		controller.setAttr(OjConstants.BASE_URL, baseUrl);
+    controller.setAttr(OjConstants.BASE_URL, baseUrl);
 
-		ai.invoke();
-	}
+    ai.invoke();
+  }
 
 }
