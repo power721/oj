@@ -17,7 +17,6 @@ import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminInterceptor;
@@ -154,24 +153,13 @@ public class ContestController extends OjController
     int cid = getParaToInt(0);
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", 50);
-
-    String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY accepts DESC,penalty";
-    Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realname", sql, cid);
-    setAttr("userRank", userRank);
-
-    List<Record> contestProblems = Db.find("SELECT * FROM contest_problem WHERE cid=? ORDER BY num", cid);
-    setAttr("Problems", contestProblems);
+    
     setTitle(new StringBand(2).append("Contest Standing ").append(cid).toString());
+    
     setAttr("cid", cid);
+    setAttr("contestRank", ContestModel.dao.getContestRank(pageNumber, pageSize, cid));
+    setAttr("contestProblems", ContestModel.dao.getContestProblems(cid, 0));
     setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
-
-    int problemCount = (int) ContestModel.dao.getProblemCount(cid);
-    char problemIDs[] = new char[problemCount];
-    for (int i = 0; i < problemCount; ++i)
-    {
-      problemIDs[i] = (char) (i + 'A');
-    }
-    setAttr("problemIDs", problemIDs);
 
     render("rank.html");
   }

@@ -91,6 +91,14 @@ public class ContestModel extends Model<ContestModel>
     return ContestList;
   }
 
+  public Page<Record> getContestRank(int pageNumber, int pageSize, int cid)
+  {
+    String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY accepts DESC,penalty";
+    Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realname", sql, cid);
+    
+    return userRank;
+  }
+  
   public ContestModel getContest(int cid)
   {
     ContestModel contestModle = findFirst(
@@ -109,7 +117,7 @@ public class ContestModel extends Model<ContestModel>
 
   public List<Record> getContestProblems(int cid, int uid)
   {
-    String sql = "SELECT * FROM contest_problem WHERE cid=?";
+    String sql = "SELECT * FROM contest_problem WHERE cid=? ORDER BY num";
     List<Record> contestProblems;
     if (uid > 0)
     {
