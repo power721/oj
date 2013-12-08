@@ -13,8 +13,7 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.model.SessionModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.util.Tool;
 
@@ -49,9 +48,9 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
 
     map.put(id, httpsessionevent.getSession());
 
-    Record session = new Record().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
+    SessionModel session = new SessionModel().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
     session.set("last_activity", System.currentTimeMillis() / 1000).set("session_expires", session_expires);
-    Db.save("session", session);
+    session.save();
 
     log.info("sessionCreated: " + id + ", ip: " + ip + ", total sessions: " + map.size());
   }
@@ -63,7 +62,7 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
   {
     String id = httpsessionevent.getSession().getId();
     map.remove(id);
-    Db.update("DELETE FROM session WHERE session_id=? OR session_expires <= UNIX_TIMESTAMP()", id);
+    SessionModel.dao.deleteSession(id);
 
     log.info("sessionDestroyed: " + id + ", total sessions: " + map.size());
   }
@@ -86,8 +85,8 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
       uid = userModel.getInt("uid");
       name = userModel.getStr("name");
 
-      List<Record> sessions = Db.find("SELECT session_id, ip_address, user_agent, last_activity, session_expires FROM session WHERE uid=?", uid);
-      for (Record sessionRecord : sessions)
+      List<SessionModel> sessions = SessionModel.dao.find("SELECT session_id, ip_address, user_agent, last_activity, session_expires FROM session WHERE uid=?", uid);
+      for (SessionModel sessionRecord : sessions)
       {
         String session_id = sessionRecord.getStr("session_id");
         HttpSession prevSession = map.get(session_id);
@@ -97,12 +96,12 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
           log.warn("Session " + session_id + " invalidate.");
         } else
         {
-          Db.deleteById("session", "session_id", session_id);
+          SessionModel.dao.deleteById(session_id);
           log.warn("Session " + session_id + " deleted.");
         }
       }
 
-      Db.update("UPDATE session SET uid=?,name=? WHERE session_id=?", uid, name, id);
+      SessionModel.dao.updateUser(uid, name, id);
 
       log.info("attributeAdded: uid=" + uid + ", name=" + name + ", session=" + id);
       /*

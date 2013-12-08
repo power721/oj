@@ -9,8 +9,8 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Db;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.model.SessionModel;
 
 /**
  * Update session table with url and timestamp.
@@ -47,7 +47,8 @@ public class AccessLogInterceptor implements Interceptor
       if (url.indexOf("ajax=1") == -1)
         OjConfig.lastAccessURL = url;
 
-      Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", url, session.getId());
+      // TODO move all sql statements to model
+      SessionModel.dao.updateURL(url, session.getId());
     }
 
     ai.invoke();

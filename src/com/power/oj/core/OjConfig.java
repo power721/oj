@@ -16,6 +16,7 @@ import com.power.oj.core.interceptor.BaseURLInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
 import com.power.oj.core.interceptor.MessageInterceptor;
 import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
@@ -117,6 +118,7 @@ public class OjConfig extends JFinalConfig
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);
+    arp.addMapping("session", "session_id", SessionModel.class);
     arp.addMapping("program_language", LanguageModel.class);
     arp.addMapping("variable", VariableModel.class);
     me.add(arp);
