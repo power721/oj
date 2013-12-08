@@ -68,7 +68,6 @@ public class OjConfig extends JFinalConfig
    */
   public void configConstant(Constants me)
   {
-    // 加载少量必要配置，随后可用getProperty(...)获取值
     loadPropertyFile("oj.properties");
 
     me.setDevMode(getPropertyToBoolean("devMode", false));
@@ -101,12 +100,6 @@ public class OjConfig extends JFinalConfig
    */
   public void configPlugin(Plugins me)
   {
-    // 配置C3p0数据库连接池插件
-    /*
-     * C3p0Plugin c3p0Plugin = new C3p0Plugin(getProperty("jdbcUrl"),
-     * getProperty("user"), getProperty("password") .trim());
-     * me.add(c3p0Plugin);
-     */
     DruidPlugin dp = new DruidPlugin(getProperty("jdbcUrl"), getProperty("user"), getProperty("password").trim());
     dp.addFilter(new StatFilter());
     WallFilter wall = new WallFilter();
@@ -117,8 +110,7 @@ public class OjConfig extends JFinalConfig
     // 配置ActiveRecord插件
     ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
     arp.setShowSql(true);
-    arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,
-    // 主键是uid
+    arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);
@@ -135,7 +127,6 @@ public class OjConfig extends JFinalConfig
   public void configInterceptor(Interceptors me)
   {
     me.add(new GlobalInterceptor());
-    //me.add(new SessionInViewInterceptor());
     me.add(new BaseURLInterceptor());
     me.add(new MessageInterceptor());
     me.add(new AccessLogInterceptor());

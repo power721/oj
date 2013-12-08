@@ -21,8 +21,6 @@ public abstract class OjConstants
   public final static String MSG_TYPE = "msgType";
   public final static String MSG_TITLE = "msgTitle";
 
-  // public final static String REDIRECT_URI = "redirectURI";
-
   public final static String USER = "user";
   public final static String USER_ID = "userID";
   public final static String USER_NAME = "userName";

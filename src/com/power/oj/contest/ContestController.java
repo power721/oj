@@ -124,8 +124,6 @@ public class ContestController extends OjController
 
     if (ContestModel.dao.isContestFinished(cid))
     {
-      // log.info(new
-      // StringBand(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
       redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), "This contest has finished!", "warn", "Warnning!");
       return;
     }
@@ -327,7 +325,6 @@ public class ContestController extends OjController
         renderJson("{\"error\":network error}");
         return;
       }
-      // System.out.println(html);
 
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       long timeStamp = 0;
