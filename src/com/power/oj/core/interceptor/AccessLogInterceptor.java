@@ -45,7 +45,7 @@ public class AccessLogInterceptor implements Interceptor
 
       String url = sb.toString();
       if (url.indexOf("ajax=1") == -1)
-        OjConfig.lastURL = url;
+        OjConfig.lastAccessURL = url;
 
       Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", url, session.getId());
     }

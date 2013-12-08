@@ -388,14 +388,14 @@ public class ContestController extends OjController
     {
       String token_name = new StringBand("cid").append(cid).toString();
       setCookie(token_name, password, -1);
-      redirect(OjConfig.lastURL);
+      redirect(OjConfig.lastAccessURL);
       return;
     }
 
     keepPara("cid");
     keepPara("title");
 
-    redirect(OjConfig.lastURL, "Sorry, you entered an invalid password.", "error", "Error!");
+    redirect(OjConfig.lastAccessURL, "Sorry, you entered an invalid password.", "error", "Error!");
   }
 
   @Before(AdminInterceptor.class)

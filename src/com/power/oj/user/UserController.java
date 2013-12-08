@@ -34,7 +34,7 @@ public class UserController extends OjController
   {
     if (getSessionAttr(OjConstants.USER) != null)// user already login
     {
-      redirect(OjConfig.lastURL, "You already login.", "error", "Error!");
+      redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
       return;
     }
 
@@ -52,7 +52,7 @@ public class UserController extends OjController
   {
     if (getSessionAttr(OjConstants.USER) != null)// user already login
     {
-      redirect(OjConfig.lastURL, "You already login.", "error", "Error!");
+      redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
       return;
     }
 
@@ -74,7 +74,7 @@ public class UserController extends OjController
       if (userModel.isAdmin(uid))
         setSessionAttr(OjConstants.ADMIN_USER, uid);
 
-      redirect(OjConfig.lastURL);
+      redirect(OjConfig.lastAccessURL);
       return;
     } else
     {
@@ -107,7 +107,7 @@ public class UserController extends OjController
 
     getSession().invalidate();
 
-    redirect(OjConfig.lastURL);
+    redirect(OjConfig.lastAccessURL);
   }
 
   public void profile()
