@@ -13,8 +13,19 @@ public class ContestPasswordInterceptor implements Interceptor
   @Override
   public void intercept(ActionInvocation ai)
   {
+    
     Controller controller = ai.getController();
-    int cid = controller.getParaToInt(0);
+    if (controller.getSessionAttr(OjConstants.ADMIN_USER) != null)
+    {
+      ai.invoke();
+      return;
+    }
+    
+    int cid = 0;
+    if (controller.getParaToInt(0) != null)
+      cid = controller.getParaToInt(0);
+    else if (controller.getParaToInt("cid") != null)
+      cid = controller.getParaToInt("cid");
 
     if (!ContestModel.dao.isContestHasPassword(cid))
     {
