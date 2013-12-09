@@ -12,9 +12,13 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 
-@SuppressWarnings("serial")
 public class UserModel extends Model<UserModel>
 {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 7553341600472286034L;
+  
   public static final UserModel dao = new UserModel();
 
   public UserModel getUserByNameAndPassword(String name, String password)

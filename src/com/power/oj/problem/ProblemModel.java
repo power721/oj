@@ -10,9 +10,13 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 
-@SuppressWarnings("serial")
 public class ProblemModel extends Model<ProblemModel>
 {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1943890587086216047L;
+  
   public static final ProblemModel dao = new ProblemModel();
 
   public int getNextPid(int pid, boolean isAdmin)

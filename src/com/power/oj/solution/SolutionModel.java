@@ -14,9 +14,13 @@ import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.user.UserModel;
 
-@SuppressWarnings("serial")
 public class SolutionModel extends Model<SolutionModel>
 {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -287562753616099282L;
+  
   public static final SolutionModel dao = new SolutionModel();
 
   public Page<SolutionModel> getPage(int pageNumber, int pageSize, int result, int language, int pid, String userName)

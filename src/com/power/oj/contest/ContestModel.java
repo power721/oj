@@ -17,9 +17,13 @@ import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
 
-@SuppressWarnings("serial")
 public class ContestModel extends Model<ContestModel>
 {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 2557500234914909223L;
+  
   public static final ContestModel dao = new ContestModel();
   public static final int Public = 0;
   public static final int Private = 1;

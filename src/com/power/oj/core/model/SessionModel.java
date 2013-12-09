@@ -3,9 +3,13 @@ package com.power.oj.core.model;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
-@SuppressWarnings("serial")
 public class SessionModel extends Model<SessionModel>
 {
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -7121738309176622245L;
+  
   public static final SessionModel dao = new SessionModel();
   
   public void updateURL(String url, String sessionID)
