@@ -43,8 +43,8 @@ public class UserInterceptor implements Interceptor
           log.info("User " + name + " login automatically.");
         } catch(AutoLoginException e)
         {
-          controller.removeCookie(name);
-          controller.removeCookie(token);
+          controller.removeCookie(OjConstants.TOKEN_NAME);
+          controller.removeCookie(OjConstants.TOKEN_TOKEN);
           log.warn(e.getMessage());
         }
       }
