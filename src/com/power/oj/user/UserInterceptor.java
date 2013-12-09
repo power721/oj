@@ -16,7 +16,7 @@ import com.power.oj.core.OjConstants;
  */
 public class UserInterceptor implements Interceptor
 {
-  protected final Logger log = Logger.getLogger(getClass());
+  protected static final Logger log = Logger.getLogger(UserInterceptor.class);
 
   @Override
   public void intercept(ActionInvocation ai)
@@ -28,12 +28,7 @@ public class UserInterceptor implements Interceptor
     {
       String name = controller.getCookie(OjConstants.TOKEN_NAME);
       String token = controller.getCookie(OjConstants.TOKEN_TOKEN);
-      if (StringUtil.isNotBlank(name) && StringUtil.isNotBlank(token)) // try
-      // to
-      // auto
-      // login
-      // with
-      // cookie
+      if (StringUtil.isNotBlank(name) && StringUtil.isNotBlank(token)) // try to auto login with cookie
       {
         user = UserModel.dao.autoLogin(name, token);
         if (user != null)
@@ -52,8 +47,7 @@ public class UserInterceptor implements Interceptor
       }
     }
 
-    if (user != null) // if user is logined, set user information in
-    // controller
+    if (user != null) // if user is logined, set user information in controller
     {
       int uid = user.getInt("uid");
       controller.setAttr(OjConstants.USER_ID, uid);

@@ -26,7 +26,7 @@ import com.power.oj.util.Tool;
 public class OnlineListener implements HttpSessionListener, HttpSessionAttributeListener, ServletRequestListener
 {
   HttpServletRequest request = null;
-  protected final Logger log = Logger.getLogger(getClass());
+  protected static final Logger log = Logger.getLogger(OnlineListener.class);
   private static HashMap<String, HttpSession> map = new HashMap<String, HttpSession>();
 
   public OnlineListener()

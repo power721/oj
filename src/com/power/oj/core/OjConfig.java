@@ -42,7 +42,7 @@ import com.jfinal.plugin.druid.DruidStatViewHandler;
  */
 public class OjConfig extends JFinalConfig
 {
-  protected final Logger log = Logger.getLogger(getClass());
+  protected static final Logger log = Logger.getLogger(OjConfig.class);
 
   public static String baseUrl = null;
   public static String siteTitle = "Power OJ";

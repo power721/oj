@@ -20,7 +20,7 @@ import com.power.oj.core.model.SessionModel;
  */
 public class AccessLogInterceptor implements Interceptor
 {
-  protected final Logger log = Logger.getLogger(getClass());
+  protected static final Logger log = Logger.getLogger(AccessLogInterceptor.class);
   private String skipActions[] =
   { "/login", "/user/signin", "/logout", "/captcha", "/contest/password", "/problem/userResult" };
 

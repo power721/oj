@@ -16,6 +16,7 @@ import com.power.oj.core.OjConfig;
  */
 public class GlobalInterceptor implements Interceptor
 {
+  
   public void intercept(ActionInvocation ai)
   {
     OjConfig.startGlobalInterceptorTime = System.currentTimeMillis();
@@ -33,4 +34,5 @@ public class GlobalInterceptor implements Interceptor
     System.out.println(new StringBand(4).append(actionKey).append(" Action Invoking Time: ")
         .append(System.currentTimeMillis() - OjConfig.startGlobalInterceptorTime).append(" milliseconds").toString());
   }
+  
 }
