@@ -72,9 +72,12 @@ public class UserModel extends Model<UserModel>
     return userModel;
   }
 
-  public UserModel autoLogin(String name, String token)
+  public UserModel autoLogin(String name, String token) throws AutoLoginException
   {
     UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND token=? LIMIT 1", name, token);
+    if (userModel == null)
+      throw new AutoLoginException("Auto login for user " + name + " failed!");
+    
     return userModel;
   }
 

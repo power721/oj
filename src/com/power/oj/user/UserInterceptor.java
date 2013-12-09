@@ -30,9 +30,10 @@ public class UserInterceptor implements Interceptor
       String token = controller.getCookie(OjConstants.TOKEN_TOKEN);
       if (StringUtil.isNotBlank(name) && StringUtil.isNotBlank(token)) // try to auto login with cookie
       {
-        user = UserModel.dao.autoLogin(name, token);
-        if (user != null)
+        try
         {
+          user = UserModel.dao.autoLogin(name, token);
+ 
           controller.setSessionAttr(OjConstants.USER, user);
 
           int uid = user.getInt("uid");
@@ -40,9 +41,11 @@ public class UserInterceptor implements Interceptor
             controller.setSessionAttr(OjConstants.ADMIN_USER, uid);
 
           log.info("User " + name + " login automatically.");
-        } else
+        } catch(AutoLoginException e)
         {
-          log.warn("Auto login for user " + name + " failed!");
+          controller.removeCookie(name);
+          controller.removeCookie(token);
+          log.warn(e.getMessage());
         }
       }
     }
