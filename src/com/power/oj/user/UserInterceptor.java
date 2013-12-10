@@ -36,7 +36,7 @@ public class UserInterceptor implements Interceptor
  
           controller.setSessionAttr(OjConstants.USER, user);
 
-          int uid = user.getInt("uid");
+          int uid = user.getUid();
           if (user.isAdmin(uid)) // current user has admin role
             controller.setSessionAttr(OjConstants.ADMIN_USER, uid);
 
@@ -52,7 +52,7 @@ public class UserInterceptor implements Interceptor
 
     if (user != null) // if user is logined, set user information in controller
     {
-      int uid = user.getInt("uid");
+      int uid = user.getUid();
       controller.setAttr(OjConstants.USER_ID, uid);
       controller.setAttr(OjConstants.USER_NAME, user.getStr("name"));
       controller.setAttr(OjConstants.USER_EMAIL, user.getStr("email"));

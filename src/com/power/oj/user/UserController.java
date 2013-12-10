@@ -62,12 +62,6 @@ public class UserController extends OjController
 
     if (userModel != null)
     {
-      if (userModel.getStatus() != UserModel.STATUS_PENDING && userModel.getStatus() != UserModel.STATUS_ACTIVE)
-      {
-        redirect("/", "This account is not activated!", "error", "Error!");
-        return;
-      }
-      
       String token = UUID.randomUUID().toString();
       setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
       if (getParaToBoolean("rememberPassword"))
@@ -76,7 +70,7 @@ public class UserController extends OjController
       userModel.updateLogin(token);
       setSessionAttr(OjConstants.USER, userModel);
 
-      int uid = userModel.getInt("uid");
+      int uid = userModel.getUid();
       if (userModel.isAdmin(uid))
         setSessionAttr(OjConstants.ADMIN_USER, uid);
 
@@ -142,7 +136,7 @@ public class UserController extends OjController
     setAttr("createTime", sdf.format(new Date(user.getInt("ctime") * 1000L)));
     setAttr("loginTime", sdf.format(new Date(user.getInt("login") * 1000L)));
     setAttr(OjConstants.USER, user);
-    setAttr("userRank", UserModel.dao.getUserRank(user.getInt("uid")));
+    setAttr("userRank", UserModel.dao.getUserRank(user.getUid()));
     setTitle("User Profile");
     render("profile.html");
   }
@@ -172,7 +166,7 @@ public class UserController extends OjController
     UserModel userModel = getModel(UserModel.class, "user");
     userModel.saveUser();
 
-    userModel = userModel.findById(userModel.getInt("uid"));
+    userModel = userModel.findById(userModel.getUid());
     setSessionAttr(OjConstants.USER, userModel);
 
     redirect("/user/edit", "Congratulations!You have a new account now.<br>Please update your information.");

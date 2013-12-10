@@ -72,7 +72,7 @@ public class SolutionController extends OjController
     boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
     SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=? LIMIT 1", sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
-    int uid = solutionModel.getInt("uid");
+    int uid = solutionModel.getUid();
     int loginUid = getAttrForInt(OjConstants.USER_ID);
     if (uid != loginUid && !isAdmin)
     {
@@ -142,7 +142,7 @@ public class SolutionController extends OjController
       if (cid > 0)
       {
         url = "/contest/status/" + cid;
-        ContestRankWebSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") + ": " + solutionModel.getInt("uid"));
+        ContestRankWebSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") + ": " + solutionModel.getUid());
       }
     }
 

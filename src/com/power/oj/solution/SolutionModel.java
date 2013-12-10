@@ -23,6 +23,11 @@ public class SolutionModel extends Model<SolutionModel>
   
   public static final SolutionModel dao = new SolutionModel();
 
+  public int getUid()
+  {
+    return getInt("uid");
+  }
+  
   public Page<SolutionModel> getPage(int pageNumber, int pageSize, int result, int language, int pid, String userName)
   {
     int uid = 0;
@@ -63,7 +68,7 @@ public class SolutionModel extends Model<SolutionModel>
     {
       if (StringUtil.isBlank(userName))
       {
-        uid = solution.getInt("uid");
+        uid = solution.getUid();
         name = UserModel.dao.findById(uid, "name").get("name");
       }
       solution.put("name", name);
@@ -123,7 +128,7 @@ public class SolutionModel extends Model<SolutionModel>
 
     for (SolutionModel solution : solutionList.getList())
     {
-      uid = solution.getInt("uid");
+      uid = solution.getUid();
       userModel = UserModel.dao.findById(uid, "name,nick");
       if (StringUtil.isBlank(userName))
       {
@@ -167,7 +172,7 @@ public class SolutionModel extends Model<SolutionModel>
     for (SolutionModel solution : solutionList.getList())
     {
 
-      uid = solution.getInt("uid");
+      uid = solution.getUid();
       try
       {
         name = UserModel.dao.findById(uid, "name").get("name");
@@ -210,7 +215,7 @@ public class SolutionModel extends Model<SolutionModel>
     for (SolutionModel solution : solutionList.getList())
     {
 
-      uid = solution.getInt("uid");
+      uid = solution.getUid();
       name = UserModel.dao.findById(uid, "name").get("name");
       solution.put("name", name);
 

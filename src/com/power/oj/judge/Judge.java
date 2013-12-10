@@ -252,7 +252,7 @@ public class Judge extends Thread
       int cid = solutionModel.getInt("cid");
       if (cid > 0)
       {
-        int uid = solutionModel.getInt("uid");
+        int uid = solutionModel.getUid();
         int num = solutionModel.getInt("num");
         char c = (char) (num + 'A');
         StringBand message = new StringBand().append("UID: ").append(uid).append(" Problem: ").append(c).append(" result: ").append(result).append("  time: ")

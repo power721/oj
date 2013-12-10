@@ -20,12 +20,12 @@ public class UserModel extends Model<UserModel>
   private static final long serialVersionUID = 7553341600472286034L;
   
   public static final UserModel dao = new UserModel();
-  
-  public static final int STATUS_PENDING = 0;
-  public static final int STATUS_ACTIVE = 1;
-  public static final int STATUS_DISABLE = 2;
-  public static final int STATUS_REMOVED = 3;
 
+  public int getUid()
+  {
+    return getInt("uid");
+  }
+  
   public UserModel getUserByNameAndPassword(String name, String password)
   {
     UserModel userModel = getUserByName(name);
@@ -50,25 +50,10 @@ public class UserModel extends Model<UserModel>
     int uid = 0;
     UserModel userModel = findFirst("SELECT uid FROM user WHERE name=? LIMIT 1", name);
     if (userModel != null)
-      uid = userModel.getInt("uid");
+      uid = userModel.getUid();
     return uid;
   }
 
-  public int getStatus(int uid)
-  {
-    UserModel userModel = findFirst("SELECT status FROM user WHERE uid=? LIMIT 1", uid);
-    
-    if (userModel != null)
-      return userModel.getStatus();
-    
-    return -1;
-  }
-
-  public int getStatus()
-  {
-      return getInt("status");
-  }
-  
   public int getUserRank(int uid)
   {
     int userRank = 0;
@@ -225,7 +210,7 @@ public class UserModel extends Model<UserModel>
 
   public boolean build()
   {
-    int uid = this.getInt("uid");
+    int uid = this.getUid();
     long accept = 0;
     long submit = 0;
     long solved = 0;
