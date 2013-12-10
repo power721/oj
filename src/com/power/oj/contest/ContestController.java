@@ -26,6 +26,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.util.CryptUtils;
 import com.power.oj.util.Tool;
 
 public class ContestController extends OjController
@@ -374,8 +375,10 @@ public class ContestController extends OjController
 
     if (ContestModel.dao.checkContestPassword(cid, password))
     {
-      String token_name = new StringBand("cid").append(cid).toString();
-      setCookie(token_name, password, -1);
+      String token_name = new StringBand("cid-").append(cid).toString();
+      String token_token = CryptUtils.encrypt(password, token_name);
+      log.info(token_token);
+      setCookie(token_name, token_token, -1);
       redirect(OjConfig.lastAccessURL);
       return;
     }

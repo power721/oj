@@ -5,11 +5,15 @@ import jodd.util.StringBand;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
+import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
+import com.power.oj.util.CryptUtils;
 
 public class ContestPasswordInterceptor implements Interceptor
 {
 
+  private static final Logger log = Logger.getLogger(ContestPasswordInterceptor.class);
+      
   @Override
   public void intercept(ActionInvocation ai)
   {
@@ -33,20 +37,27 @@ public class ContestPasswordInterceptor implements Interceptor
       return;
     }
 
-    String token_name = new StringBand("cid").append(cid).toString();
-    String contest_token = controller.getCookie(token_name);
-    if (ContestModel.dao.checkContestPassword(cid, contest_token))
+    String token_name = new StringBand("cid-").append(cid).toString();
+    String token_token = "";
+    try
     {
-      ai.invoke();
-    } else
+      token_token = CryptUtils.decrypt(controller.getCookie(token_name), token_name);
+      if (ContestModel.dao.checkContestPassword(cid, token_token))
+      {
+        ai.invoke();
+        return;
+      }
+    } catch (Exception e)
     {
-      controller.keepPara(OjConstants.PAGE_TITLE);
-
-      controller.setAttr("title", ContestModel.dao.getContestTitle(cid));
-      controller.setAttr("cid", cid);
-
-      controller.render("password.html");
+      log.error(e.getMessage());
     }
+   
+    controller.keepPara(OjConstants.PAGE_TITLE);
+
+    controller.setAttr("title", ContestModel.dao.getContestTitle(cid));
+    controller.setAttr("cid", cid);
+
+    controller.render("password.html");
   }
 
 }
