@@ -62,6 +62,12 @@ public class UserController extends OjController
 
     if (userModel != null)
     {
+      if (userModel.getStatus() != UserModel.STATUS_PENDING && userModel.getStatus() != UserModel.STATUS_ACTIVE)
+      {
+        redirect("/", "This account is not activated!", "error", "Error!");
+        return;
+      }
+      
       String token = UUID.randomUUID().toString();
       setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
       if (getParaToBoolean("rememberPassword"))
