@@ -21,6 +21,7 @@ import com.power.oj.core.model.VariableModel;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.service.ExpiresSessionService;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.*;
@@ -159,7 +160,9 @@ public class OjConfig extends JFinalConfig
     baseUrl = Tool.formatBaseURL(getProperty(OjConstants.BASE_URL));
     siteTitle = getProperty(OjConstants.SITE_TITLE, "Power OJ");
     init();
-
+    
+    ExpiresSessionService.start();
+    
     log.debug("afterJFinalStart finished.");
   }
 

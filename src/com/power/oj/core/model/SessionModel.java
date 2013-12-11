@@ -12,18 +12,23 @@ public class SessionModel extends Model<SessionModel>
   
   public static final SessionModel dao = new SessionModel();
   
-  public void updateURL(String url, String sessionID)
+  public int updateURL(String url, String sessionID)
   {
-    Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", url, sessionID);
+    return Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", url, sessionID);
   }
   
-  public void updateUser(int uid, String name, String sessionID)
+  public int updateUser(int uid, String name, String sessionID)
   {
-    Db.update("UPDATE session SET uid=?,name=? WHERE session_id=?", uid, name, sessionID);
+    return Db.update("UPDATE session SET uid=?,name=? WHERE session_id=?", uid, name, sessionID);
   }
   
-  public void deleteSession(String sessionID)
+  public int deleteSession(String sessionID)
   {
-    Db.update("DELETE FROM session WHERE session_id=? OR session_expires <= UNIX_TIMESTAMP()", sessionID);
+    return Db.update("DELETE FROM session WHERE session_id=?", sessionID);
+  }
+  
+  public int expiresSession()
+  {
+    return Db.update("DELETE FROM session WHERE session_expires <= UNIX_TIMESTAMP()");
   }
 }

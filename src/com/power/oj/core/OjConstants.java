@@ -9,6 +9,11 @@ package com.power.oj.core;
 public abstract class OjConstants
 {
   /*
+   * These contants are used in general.
+   */
+  public final static int SessionExpiresTime = 15 * 60 * 1000;
+  
+  /*
    * These contants are used in view(attr name) and session.
    */
 
