@@ -98,7 +98,7 @@ public class UserController extends OjController
     UserModel user = getSessionAttr(OjConstants.USER);
     if (user != null)
     {
-      user.set(OjConstants.TOKEN_TOKEN, null);
+      user.set("token", null);
       user.update();
     }
     removeSessionAttr(OjConstants.USER);

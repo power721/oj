@@ -63,7 +63,7 @@ public class ContestController extends OjController
     }
     List<Record> contestProblems = ContestModel.dao.getContestProblems(cid, uid);
 
-    long ctime = System.currentTimeMillis() / 1000;
+    long ctime = OjConfig.timeStamp;
     int start_time = contestModle.getInt("start_time");
     int end_time = contestModle.getInt("end_time");
     String status = "Running";

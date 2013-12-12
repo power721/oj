@@ -154,7 +154,7 @@ public class SolutionController extends OjController
         redirect(url, "Please choose a correct problem.", "error", "Error!");
         return;
       }
-      long stime = System.currentTimeMillis() / 1000;
+      long stime = OjConfig.timeStamp;
       problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime);
       problemModel.update();
 

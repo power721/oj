@@ -60,6 +60,7 @@ public class OjConfig extends JFinalConfig
   public static int problemPageSize = 50;
   public static int userPageSize = 20;
 
+  public static long timeStamp;
   public static long startGlobalInterceptorTime;
   public static long startGlobalHandlerTime;
 

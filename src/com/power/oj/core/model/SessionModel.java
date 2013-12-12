@@ -12,6 +12,11 @@ public class SessionModel extends Model<SessionModel>
   
   public static final SessionModel dao = new SessionModel();
   
+  public String getId()
+  {
+    return getStr("session_id");
+  }
+  
   public int updateURL(String url, String sessionID)
   {
     return Db.update("UPDATE session SET last_activity=UNIX_TIMESTAMP(),uri=? WHERE session_id=?", url, sessionID);

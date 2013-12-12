@@ -11,6 +11,7 @@ import jodd.util.StringUtil;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.OjConfig;
 
 public class UserModel extends Model<UserModel>
 {
@@ -170,7 +171,7 @@ public class UserModel extends Model<UserModel>
     this.set("pass", password);
     this.set("name", HtmlEncoder.text(this.getStr("name")));
 
-    long ctime = System.currentTimeMillis() / 1000;
+    long ctime = OjConfig.timeStamp;
     this.set("atime", ctime).set("ctime", ctime).set("mtime", ctime).set("login", ctime);
 
     return this.save();
@@ -194,14 +195,14 @@ public class UserModel extends Model<UserModel>
     // this.set("email", HtmlEncoder.text(this.getStr("email")));
     this.set("phone", HtmlEncoder.text(this.getStr("phone")));
 
-    long mtime = System.currentTimeMillis() / 1000;
+    long mtime = OjConfig.timeStamp;
     this.set("mtime", mtime);
     return this.update();
   }
 
   public boolean updateLogin(String token)
   {
-    int login = (int) (System.currentTimeMillis() / 1000);
+    int login = (int) (OjConfig.timeStamp);
     this.set("login", login);
     if (StringUtil.isNotBlank(token))
       this.set("token", token);

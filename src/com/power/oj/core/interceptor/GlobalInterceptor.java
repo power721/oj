@@ -20,6 +20,7 @@ public class GlobalInterceptor implements Interceptor
   public void intercept(ActionInvocation ai)
   {
     OjConfig.startGlobalInterceptorTime = System.currentTimeMillis();
+    OjConfig.timeStamp = OjConfig.startGlobalInterceptorTime / 1000;
     Controller controller = ai.getController();
 
     String actionKey = ai.getActionKey();

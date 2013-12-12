@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import com.jfinal.log.Logger;
+import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.util.Tool;
@@ -49,8 +50,10 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
     map.put(id, httpsessionevent.getSession());
 
     SessionModel session = new SessionModel().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
-    session.set("last_activity", System.currentTimeMillis() / 1000).set("session_expires", session_expires);
+    session.set("last_activity", OjConfig.timeStamp).set("session_expires", session_expires);
     session.save();
+    
+    AccessLogInterceptor.put(session);
 
     log.info("sessionCreated: " + id + ", ip: " + ip + ", total sessions: " + map.size());
   }
@@ -63,6 +66,8 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
     String id = httpsessionevent.getSession().getId();
     map.remove(id);
     SessionModel.dao.deleteSession(id);
+    
+    AccessLogInterceptor.remove(id);
 
     log.info("sessionDestroyed: " + id + ", total sessions: " + map.size());
   }
@@ -101,7 +106,10 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
         }
       }
 
-      SessionModel.dao.updateUser(uid, name, id);
+      SessionModel sessionModel = SessionModel.dao.findById(id, "session_id,uid,name");
+      sessionModel.set("uid", uid).set("name", name).update();
+      AccessLogInterceptor.put(sessionModel);
+      //SessionModel.dao.updateUser(uid, name, id);
 
       log.info("attributeAdded: uid=" + uid + ", name=" + name + ", session=" + id);
       /*

@@ -24,6 +24,7 @@ public class VisitCountService extends TimerTask
   { 0x01, 0x02, 0x03, 0x04, 0x05 };
 
   // 内存队列
+  @SuppressWarnings("serial")
   private final static ConcurrentHashMap<Byte, ConcurrentHashMap<Long, Integer>> queues = new ConcurrentHashMap<Byte, ConcurrentHashMap<Long, Integer>>() {
     {
       for (byte type : TYPES)

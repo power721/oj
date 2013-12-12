@@ -227,7 +227,7 @@ public class SolutionModel extends Model<SolutionModel>
 
   public boolean addSolution()
   {
-    long ctime = System.currentTimeMillis() / 1000;
+    long ctime = OjConfig.timeStamp;
     if (get("cid") != null)
     {
       int pid = ContestModel.dao.getPid(getInt("cid"), getInt("num"));

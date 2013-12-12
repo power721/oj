@@ -63,7 +63,7 @@ public class ContestModel extends Model<ContestModel>
 
     for (ContestModel contest : ContestList.getList())
     {
-      long ctime = System.currentTimeMillis() / 1000;
+      long ctime = OjConfig.timeStamp;
       int start_time = contest.getInt("start_time");
       int end_time = contest.getInt("end_time");
       String cstatus = "Running";
@@ -193,7 +193,7 @@ public class ContestModel extends Model<ContestModel>
     ContestModel contestModle = findFirst("SELECT start_time,end_time FROM contest WHERE cid=? LIMIT 1", cid);
     if (contestModle == null)
       return -1;
-    long ctime = System.currentTimeMillis() / 1000;
+    long ctime = OjConfig.timeStamp;
     int start_time = contestModle.getInt("start_time");
     int end_time = contestModle.getInt("end_time");
 
@@ -230,7 +230,7 @@ public class ContestModel extends Model<ContestModel>
 
   public boolean saveContest()
   {
-    long ctime = System.currentTimeMillis() / 1000;
+    long ctime = OjConfig.timeStamp;
     this.set("ctime", ctime);
 
     return this.save();

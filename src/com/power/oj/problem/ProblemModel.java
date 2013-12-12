@@ -9,6 +9,7 @@ import jodd.util.StringUtil;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.OjConfig;
 
 public class ProblemModel extends Model<ProblemModel>
 {
@@ -155,7 +156,7 @@ public class ProblemModel extends Model<ProblemModel>
 
   public boolean updateProblem()
   {
-    long mtime = System.currentTimeMillis() / 1000;
+    long mtime = OjConfig.timeStamp;
     this.set("mtime", mtime);
     if (this.get("status") == null)
       this.set("status", false);
@@ -165,7 +166,7 @@ public class ProblemModel extends Model<ProblemModel>
 
   public boolean saveProblem()
   {
-    long ctime = System.currentTimeMillis() / 1000;
+    long ctime = OjConfig.timeStamp;
     this.set("ctime", ctime).set("mtime", ctime);
     if (this.get("status") == null)
       this.set("status", false);
@@ -181,7 +182,7 @@ public class ProblemModel extends Model<ProblemModel>
 
   public boolean addTag(int pid, int uid, String tag)
   {
-    Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", System.currentTimeMillis() / 1000);
+    Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", OjConfig.timeStamp);
     return Db.save("tag", Tag);
   }
 
