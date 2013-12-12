@@ -106,10 +106,9 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
         }
       }
 
-      SessionModel sessionModel = SessionModel.dao.findById(id, "session_id,uid,name");
+      SessionModel sessionModel = SessionModel.dao.findById(id);
       sessionModel.set("uid", uid).set("name", name).update();
       AccessLogInterceptor.put(sessionModel);
-      //SessionModel.dao.updateUser(uid, name, id);
 
       log.info("attributeAdded: uid=" + uid + ", name=" + name + ", session=" + id);
       /*

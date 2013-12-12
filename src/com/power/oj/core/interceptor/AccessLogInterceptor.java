@@ -1,6 +1,8 @@
 package com.power.oj.core.interceptor;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
@@ -53,8 +55,6 @@ public class AccessLogInterceptor implements Interceptor
         OjConfig.lastAccessURL = url;
 
       update(session, url);
-      // TODO move all sql statements to model
-      //SessionModel.dao.updateURL(url, session.getId());
     }
 
     ai.invoke();
@@ -69,7 +69,7 @@ public class AccessLogInterceptor implements Interceptor
       sessionModel = new SessionModel().set("session_id", id);
     }
           
-    sessionModel.set("uri", url);
+    sessionModel.set("last_activity", OjConfig.timeStamp).set("uri", url);
     return accessLog.put(id, sessionModel);
   }
 
@@ -93,9 +93,13 @@ public class AccessLogInterceptor implements Interceptor
     return accessLog.remove(id);
   }
 
-  public static Enumeration<SessionModel> getAccessLog()
+  public static List<SessionModel> getAccessLog()
   {
-    return accessLog.elements();
+    List<SessionModel> sessions = new ArrayList<SessionModel>();
+    for (Enumeration<SessionModel> e = accessLog.elements(); e.hasMoreElements();)
+      sessions.add(e.nextElement());
+    
+    return sessions;
   }
   
   public static int size()

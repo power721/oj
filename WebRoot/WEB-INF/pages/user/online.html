@@ -22,7 +22,7 @@
             <tr>
                 <td>${User_index+1}</td>
                 <td><#if User.name??><a href="user/profile/${User.name}">${User.name}</a><#else>Guest</#if></td>
-                <td>${User.time!}</td>
+                <td class="timestamp" data="${User.last_activity!}"></td>
                 <td>${User.ip_address!}</td>
                 <td>${User.user_agent!}</td>
                 <td><a href="${User.uri!}">${User.uri!}</a></td>
@@ -41,6 +41,10 @@
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
                 
+    	  $('.timestamp').each(function() {
+    		  $(this).html(getLocalTime($(this).attr('data')));
+    	  });
+    	  
         $("#onlineuser").tablecloth({
           theme:"stats",
           condensed:true,
