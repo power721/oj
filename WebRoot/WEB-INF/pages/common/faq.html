@@ -180,11 +180,12 @@ C++语言:<br /><div class="data">
 <pre class="brush: cpp">
 #include &lt;iostream&gt;
 using namespace std;
+
 int main()
 {
-  int a,b;
-  while(cin&gt;&gt;a&gt;&gt;b) 
-	cout&lt;&lt;a+b&lt;&lt;endl;
+  int a, b;
+  while (cin &gt;&gt; a &gt;&gt; b) 
+	cout &lt;&lt; a+b &lt;&lt; endl;
   return 0;
 }
 </pre>
@@ -192,11 +193,12 @@ int main()
 C语言：<br /><div class="data">
 <pre class="brush: c">
 #include &lt;stdio.h&gt;
+
 int main()
 {
-  int a,b;
-  while(scanf("%d%d",&a,&b)!=EOF) 
-    printf("%d\n",a+b);
+  int a, b;
+  while (scanf("%d%d", &a, &b) != EOF) 
+    printf("%d\n", a+b);
   return 0;
 }
 </pre>
@@ -217,19 +219,19 @@ end.
 <pre class="brush: java">
 import java.io.*;
 import java.util.*;
+
 public class Main
 {
 	public static void main(String[] args)
 	{
 		Scanner cin = new Scanner(new BufferedInputStream(System.in));
-		int a,b;
-		while(cin.hasNext())
+		int a, b;
+		while (cin.hasNext())
 		{
 			a = cin.nextInt();
 			b = cin.nextInt();
 			System.out.println(a+b);
 		}
-
 	}
 }
 </pre>
@@ -239,8 +241,8 @@ public class Main
 import sys
 
 for s in sys.stdin:
-  a=[int(i) for i in s.split()]
-  print a[0]+a[1]
+  a = [int(i) for i in s.split()]
+  print a[0] + a[1]
 </pre>
 </div>
 <br />
