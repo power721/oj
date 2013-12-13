@@ -147,6 +147,34 @@ public class UserController extends OjController
   {
     render("avatar.html");
   }
+  
+  public void info()
+  {
+    int uid = 0;
+    String name = "";
+    UserModel user = null;
+    
+    if (isParaExists("uid"))
+    {
+      uid = getParaToInt("uid");
+      user = UserModel.dao.getUserInfoByUid(uid);
+    }
+    else if (isParaExists("name"))
+    {
+      name = getPara("name");
+      user = UserModel.dao.getUserInfoByName(name);
+    }
+    
+    if (user == null)
+    {
+      renderJson("{error:true}");
+    }
+    else
+    {
+      user.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
+      renderJson(user);
+    }
+  }
 
   @ActionKey("/signup")
   public void signup()

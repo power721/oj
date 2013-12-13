@@ -82,6 +82,18 @@ public class UserModel extends Model<UserModel>
     return userModel;
   }
 
+  public UserModel getUserInfoByName(String name)
+  {
+    UserModel userModel = dao.findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE name=? LIMIT 1", name);
+    return userModel;
+  }
+
+  public UserModel getUserInfoByUid(int uid)
+  {
+    UserModel userModel = dao.findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE uid=? LIMIT 1", uid);
+    return userModel;
+  }
+
   public UserModel autoLogin(String name, String token) throws AutoLoginException
   {
     UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND token=? LIMIT 1", name, token);

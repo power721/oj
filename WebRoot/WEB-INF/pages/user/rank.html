@@ -63,7 +63,7 @@
         <#list userList.list as User>
         <tr>
             <td>${User.rank!}</td>
-            <td><a href="user/profile/${User.name!}" <#if adminUser?? && User.realname??>data-toggle="tooltip" title="${(User.realname)!}"</#if>>${User.name!}</a></td>
+            <td><a href="user/profile/${User.name!}" class="user" <#if adminUser?? && User.realname??>data-toggle="tooltip" title="${(User.realname)!}"</#if>>${User.name!}</a></td>
             <td>${User.nick!}</td>
             <td><a href="status?name=${User.name!}&result=0">${User.solved!}</a></td>
             <td><a href="status?name=${User.name!}">${User.submit!}</a></td>
