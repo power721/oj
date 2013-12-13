@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50159
 File Encoding         : 65001
 
-Date: 2013-06-14 11:02:19
+Date: 2013-12-13 20:26:35
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -437,6 +437,7 @@ CREATE TABLE `session` (
 `name`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `ip_address`  varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' ,
 `user_agent`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,
+`ctime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Session create time.',
 `last_activity`  int(11) UNSIGNED NOT NULL DEFAULT 0 ,
 `session_expires`  int(11) NOT NULL ,
 `session_data`  blob NULL DEFAULT NULL ,

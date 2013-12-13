@@ -51,7 +51,7 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
     httpSession.put(id, httpsessionevent.getSession());
 
     SessionModel sessionModel = new SessionModel().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
-    sessionModel.set("last_activity", OjConfig.timeStamp).set("session_expires", session_expires);
+    sessionModel.set("ctime", OjConfig.timeStamp).set("last_activity", OjConfig.timeStamp).set("session_expires", session_expires);
     sessionModel.save();
     
     accessLog.put(id, sessionModel);
