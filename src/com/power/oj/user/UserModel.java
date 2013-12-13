@@ -26,7 +26,16 @@ public class UserModel extends Model<UserModel>
   {
     return getInt("uid");
   }
-  
+
+  public int getUidByName(String name)
+  {
+    int uid = 0;
+    UserModel userModel = findFirst("SELECT uid FROM user WHERE name=? LIMIT 1", name);
+    if (userModel != null)
+      uid = userModel.getUid();
+    return uid;
+  }
+
   public UserModel getUserByNameAndPassword(String name, String password)
   {
     UserModel userModel = getUserByName(name);
@@ -40,19 +49,28 @@ public class UserModel extends Model<UserModel>
     return null;
   }
 
-  public UserModel getUserByNameAndEmail(String name, String email)
+  public UserModel getUserByName(String name)
   {
-    UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND email=? LIMIT 1", name, email);
+    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
     return userModel;
   }
 
-  public int getUidByName(String name)
+  public UserModel getUserByNameAndEmail(String name, String email)
   {
-    int uid = 0;
-    UserModel userModel = findFirst("SELECT uid FROM user WHERE name=? LIMIT 1", name);
-    if (userModel != null)
-      uid = userModel.getUid();
-    return uid;
+    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? AND email=? LIMIT 1", name, email);
+    return userModel;
+  }
+
+  public UserModel getUserInfoByName(String name)
+  {
+    UserModel userModel = findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE name=? LIMIT 1", name);
+    return userModel;
+  }
+
+  public UserModel getUserInfoByUid(int uid)
+  {
+    UserModel userModel = findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE uid=? LIMIT 1", uid);
+    return userModel;
   }
 
   public int getUserRank(int uid)
@@ -61,6 +79,7 @@ public class UserModel extends Model<UserModel>
     Object object = findFirst(
         "SELECT rank FROM (SELECT @rank:=@rank+1 AS rank,uid FROM user,(SELECT @rank:=0)r ORDER BY solved desc,submit)t_rank WHERE uid=? LIMIT 1", uid).get(
         "rank");
+    
     if (object instanceof Double)
     {
       double d = (Double) object;
@@ -76,27 +95,9 @@ public class UserModel extends Model<UserModel>
     return userRank;
   }
 
-  public UserModel getUserByName(String name)
-  {
-    UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
-    return userModel;
-  }
-
-  public UserModel getUserInfoByName(String name)
-  {
-    UserModel userModel = dao.findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE name=? LIMIT 1", name);
-    return userModel;
-  }
-
-  public UserModel getUserInfoByUid(int uid)
-  {
-    UserModel userModel = dao.findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE uid=? LIMIT 1", uid);
-    return userModel;
-  }
-
   public UserModel autoLogin(String name, String token) throws AutoLoginException
   {
-    UserModel userModel = dao.findFirst("SELECT * FROM user WHERE name=? AND token=? LIMIT 1", name, token);
+    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? AND token=? LIMIT 1", name, token);
     if (userModel == null)
       throw new AutoLoginException("Auto login for user " + name + " failed!");
     
@@ -149,6 +150,7 @@ public class UserModel extends Model<UserModel>
     {
       word = new StringBand(3).append("%").append(word).append("%").toString();
       StringBand sb = new StringBand("SELECT uid,name,nick,school,solved,submit FROM user WHERE (");
+      
       if (StringUtil.isNotBlank(scope))
       {
         String scopes[] =
@@ -164,18 +166,20 @@ public class UserModel extends Model<UserModel>
           paras.add(word);
       }
       sb.append(") AND status=1 ORDER BY solved desc,submit,uid");
-      userList = dao.find(sb.toString(), paras.toArray());
+      
+      userList = find(sb.toString(), paras.toArray());
     }
+    
     return userList;
   }
-
+/*
   public List<Record> onlineUser()
   {
     List<Record> userList = Db
         .find("SELECT uid,name,ip_address,user_agent,FROM_UNIXTIME(last_activity, '%Y-%m-%d %H:%i:%s') AS time,uri FROM session WHERE session_expires > UNIX_TIMESTAMP() ORDER BY last_activity DESC");
     return userList;
   }
-
+*/
   public boolean saveUser()
   {
     String password = this.getStr("pass");
@@ -214,7 +218,7 @@ public class UserModel extends Model<UserModel>
 
   public boolean updateLogin(String token)
   {
-    int login = (int) (OjConfig.timeStamp);
+    long login = OjConfig.timeStamp;
     this.set("login", login);
     if (StringUtil.isNotBlank(token))
       this.set("token", token);
@@ -253,29 +257,29 @@ public class UserModel extends Model<UserModel>
     return this.update();
   }
 
-  public boolean containEmail(String email)
-  {
-    return dao.findFirst("select email from user where email=? limit 1", email) != null;
-  }
-
   public boolean checkPass(int uid, String password)
   {
-    String stored_hash = dao.findById(uid, "pass").getStr("pass");
+    String stored_hash = findById(uid, "pass").getStr("pass");
     return BCrypt.checkpw(password, stored_hash);
+  }
+
+  public boolean containEmail(String email)
+  {
+    return findFirst("select email from user where email=? limit 1", email) != null;
   }
 
   public boolean containUsername(String username)
   {
-    return dao.findFirst("select name from user where name=? limit 1", username) != null;
+    return findFirst("select name from user where name=? limit 1", username) != null;
   }
 
   public boolean containEmailExceptThis(int userID, String email)
   {
-    return dao.findFirst("select email from user where email=? and uid!=? limit 1", email, userID) != null;
+    return findFirst("select email from user where email=? and uid!=? limit 1", email, userID) != null;
   }
 
   public boolean containUsernameExceptThis(int userID, String username)
   {
-    return dao.findFirst("select name from user where name=? and uid!=? limit 1", username, userID) != null;
+    return findFirst("select name from user where name=? and uid!=? limit 1", username, userID) != null;
   }
 }
