@@ -1,10 +1,5 @@
 package com.power.oj.core.interceptor;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.servlet.http.HttpSession;
 
 import jodd.util.StringBand;
@@ -15,7 +10,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.model.SessionModel;
+import com.power.oj.core.OnlineListener;
 
 /**
  * Update session table with url and timestamp.
@@ -27,7 +22,6 @@ public class AccessLogInterceptor implements Interceptor
 {
   protected static final Logger log = Logger.getLogger(AccessLogInterceptor.class);
   
-  private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
   private String skipActions[] =
   { "/login", "/user/signin", "/logout", "/captcha", "/contest/password", "/problem/userResult" };
 
@@ -54,56 +48,10 @@ public class AccessLogInterceptor implements Interceptor
       if (url.indexOf("ajax=1") == -1)
         OjConfig.lastAccessURL = url;
 
-      update(session, url);
+      OnlineListener.update(session, url);
     }
 
     ai.invoke();
   }
   
-  public static SessionModel update(HttpSession session, String url)
-  {
-    String id = session.getId();
-    SessionModel sessionModel = get(id);
-    if (sessionModel == null)
-    {
-      sessionModel = new SessionModel().set("session_id", id);
-    }
-          
-    sessionModel.set("last_activity", OjConfig.timeStamp).set("uri", url);
-    return accessLog.put(id, sessionModel);
-  }
-
-  public static SessionModel put(SessionModel session)
-  {
-    return accessLog.put(session.getId(), session);
-  }
-  
-  public static SessionModel put(String id, SessionModel session)
-  {
-    return accessLog.put(id, session);
-  }
-  
-  public static SessionModel get(String id)
-  {
-    return accessLog.get(id);
-  }
-  
-  public static SessionModel remove(String id)
-  {
-    return accessLog.remove(id);
-  }
-
-  public static List<SessionModel> getAccessLog()
-  {
-    List<SessionModel> sessions = new ArrayList<SessionModel>();
-    for (Enumeration<SessionModel> e = accessLog.elements(); e.hasMoreElements();)
-      sessions.add(e.nextElement());
-    
-    return sessions;
-  }
-  
-  public static int size()
-  {
-    return accessLog.size();
-  }
 }

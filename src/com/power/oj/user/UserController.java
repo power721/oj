@@ -16,7 +16,7 @@ import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.interceptor.AccessLogInterceptor;
+import com.power.oj.core.OnlineListener;
 
 /**
  * 
@@ -236,7 +236,7 @@ public class UserController extends OjController
     setTitle("Online Users");
     setAttr("loginUserNum", Db.findFirst("SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0 LIMIT 1").getLong("count"));
     //setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
-    setAttr(OjConstants.USER_LIST, AccessLogInterceptor.getAccessLog());
+    setAttr(OjConstants.USER_LIST, OnlineListener.getAccessLog());
 
     render("online.html");
   }

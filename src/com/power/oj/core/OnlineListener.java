@@ -1,7 +1,9 @@
 package com.power.oj.core;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
@@ -13,7 +15,6 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 import com.jfinal.log.Logger;
-import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.util.Tool;
@@ -26,14 +27,14 @@ import com.power.oj.util.Tool;
  */
 public class OnlineListener implements HttpSessionListener, HttpSessionAttributeListener, ServletRequestListener
 {
-  HttpServletRequest request = null;
   protected static final Logger log = Logger.getLogger(OnlineListener.class);
-  private static HashMap<String, HttpSession> map = new HashMap<String, HttpSession>();
+  
+  private HttpServletRequest request = null;
+  private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
+  private static ConcurrentHashMap<String, HttpSession> httpSession = new ConcurrentHashMap<String, HttpSession>();
 
   public OnlineListener()
   {
-    // request = null;
-    // Db.update("DELETE FROM session WHERE session_expires <= UNIX_TIMESTAMP()");
   }
 
   /**
@@ -47,15 +48,15 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
     String id = httpsessionevent.getSession().getId();
     long session_expires = httpsessionevent.getSession().getCreationTime() / 1000 + httpsessionevent.getSession().getMaxInactiveInterval();
 
-    map.put(id, httpsessionevent.getSession());
+    httpSession.put(id, httpsessionevent.getSession());
 
-    SessionModel session = new SessionModel().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
-    session.set("last_activity", OjConfig.timeStamp).set("session_expires", session_expires);
-    session.save();
+    SessionModel sessionModel = new SessionModel().set("session_id", id).set("ip_address", ip).set("user_agent", agent);
+    sessionModel.set("last_activity", OjConfig.timeStamp).set("session_expires", session_expires);
+    sessionModel.save();
     
-    AccessLogInterceptor.put(session);
+    accessLog.put(id, sessionModel);
 
-    log.info("sessionCreated: " + id + ", ip: " + ip + ", total sessions: " + map.size());
+    log.info("sessionCreated: " + id + ", ip: " + ip + ", total sessions: " + httpSession.size());
   }
 
   /**
@@ -64,12 +65,12 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
   public void sessionDestroyed(HttpSessionEvent httpsessionevent)
   {
     String id = httpsessionevent.getSession().getId();
-    map.remove(id);
+    
+    httpSession.remove(id);
+    accessLog.remove(id);
     SessionModel.dao.deleteSession(id);
     
-    AccessLogInterceptor.remove(id);
-
-    log.info("sessionDestroyed: " + id + ", total sessions: " + map.size());
+    log.info("sessionDestroyed: " + id + ", total sessions: " + httpSession.size());
   }
 
   /**
@@ -94,7 +95,7 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
       for (SessionModel sessionRecord : sessions)
       {
         String session_id = sessionRecord.getStr("session_id");
-        HttpSession prevSession = map.get(session_id);
+        HttpSession prevSession = httpSession.get(session_id);
         if (prevSession != null)
         {
           prevSession.invalidate();
@@ -108,7 +109,7 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
 
       SessionModel sessionModel = SessionModel.dao.findById(id);
       sessionModel.set("uid", uid).set("name", name).update();
-      AccessLogInterceptor.put(sessionModel);
+      accessLog.put(id, sessionModel);
 
       log.info("attributeAdded: uid=" + uid + ", name=" + name + ", session=" + id);
       /*
@@ -147,4 +148,52 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
     request = (HttpServletRequest) event.getServletRequest();
     log.debug("requestInitialized.");
   }
+
+  public static SessionModel update(HttpSession session, String url)
+  {
+    String id = session.getId();
+    SessionModel sessionModel = get(id);
+    if (sessionModel == null)
+    {
+      sessionModel = new SessionModel().set("session_id", id);
+    }
+          
+    sessionModel.set("last_activity", OjConfig.timeStamp).set("uri", url);
+    return accessLog.put(id, sessionModel);
+  }
+
+  public static SessionModel put(SessionModel session)
+  {
+    return accessLog.put(session.getId(), session);
+  }
+  
+  public static SessionModel put(String id, SessionModel session)
+  {
+    return accessLog.put(id, session);
+  }
+  
+  public static SessionModel get(String id)
+  {
+    return accessLog.get(id);
+  }
+  
+  public static SessionModel remove(String id)
+  {
+    return accessLog.remove(id);
+  }
+
+  public static List<SessionModel> getAccessLog()
+  {
+    List<SessionModel> sessions = new ArrayList<SessionModel>();
+    for (Enumeration<SessionModel> e = accessLog.elements(); e.hasMoreElements();)
+      sessions.add(e.nextElement());
+    
+    return sessions;
+  }
+  
+  public static int size()
+  {
+    return accessLog.size();
+  }
+  
 }
