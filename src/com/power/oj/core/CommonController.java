@@ -63,29 +63,6 @@ public class CommonController extends OjController
     renderText("TODO");
   }
 
-  @Before(LoginInterceptor.class)
-  public void uploadAvatar()
-  {
-    UploadFile file = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
-    int uid = getParaToInt("uid", 0);
-    String userName = getPara("name");
-    System.out.println("file path: " + file.getFileName());
-    System.out.println(getPara("name"));
-    if (userName != null)
-    {
-      String fileName = new StringBand(4).append(PathKit.getWebRootPath()).append("/assets/images/user/").append(uid).append(".png").toString();
-      try
-      {
-        FileUtil.moveFile(file.getFile(), new File(fileName));
-      } catch (IOException e)
-      {
-        log.warn(e.getMessage());
-      }
-    }
-
-    renderText("FILEID:");
-  }
-
   @Before(AdminInterceptor.class)
   public void uploadImage()
   {

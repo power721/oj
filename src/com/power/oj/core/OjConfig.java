@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import jodd.util.StringBand;
 import jodd.util.collection.IntHashMap;
 
 import com.power.oj.admin.AdminController;
@@ -12,7 +13,6 @@ import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
-import com.power.oj.core.interceptor.BaseURLInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
 import com.power.oj.core.interceptor.MessageInterceptor;
 import com.power.oj.core.model.LanguageModel;
@@ -30,6 +30,8 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
+import com.jfinal.ext.handler.ContextPathHandler;
+import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
@@ -47,6 +49,8 @@ public class OjConfig extends JFinalConfig
 
   public static String baseUrl = null;
   public static String siteTitle = "Power OJ";
+  public static String userAvatarPath = null;
+  public static String problemImagePath = null;
 
   public static List<LanguageModel> program_languages;
   public static IntHashMap language_type = new IntHashMap();
@@ -134,7 +138,6 @@ public class OjConfig extends JFinalConfig
   public void configInterceptor(Interceptors me)
   {
     me.add(new GlobalInterceptor());
-    me.add(new BaseURLInterceptor());
     me.add(new MessageInterceptor());
     me.add(new AccessLogInterceptor());
     me.add(new UserInterceptor());
@@ -147,6 +150,7 @@ public class OjConfig extends JFinalConfig
    */
   public void configHandler(Handlers me)
   {
+    me.add(new ContextPathHandler(OjConstants.BASE_URL));
     me.add(new UrlFilterHandler());
     me.add(new DruidStatViewHandler("/druid"));
 
@@ -160,6 +164,8 @@ public class OjConfig extends JFinalConfig
   {
     baseUrl = Tool.formatBaseURL(getProperty(OjConstants.BASE_URL));
     siteTitle = getProperty(OjConstants.SITE_TITLE, "Power OJ");
+    userAvatarPath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/user/").toString();
+    problemImagePath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/problem/").toString();
     init();
     
     ExpiresSessionService.start();
