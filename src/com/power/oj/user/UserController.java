@@ -1,9 +1,12 @@
 package com.power.oj.user;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringBand;
 
@@ -12,11 +15,13 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.upload.UploadFile;
 import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.OnlineListener;
+import com.power.oj.util.FileKit;
 
 /**
  * 
@@ -147,7 +152,43 @@ public class UserController extends OjController
   {
     render("avatar.html");
   }
-  
+
+  @Before({POST.class, LoginInterceptor.class})
+  public void uploadAvatar()
+  {
+    UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
+    UserModel user = getSessionAttr(OjConstants.USER);
+    int uid = getParaToInt("uid", 0);
+    
+    if (uid != 0)
+    {
+      String ext = FileKit.getFileType(uploadFile.getOriginalFileName());
+      String fileName = new StringBand(4).append(OjConfig.userAvatarPath).append(uid).append(".").append(user.getStr("avatar")).toString();
+      
+      try
+      {
+        FileUtil.deleteFile(fileName);
+      } catch (IOException e)
+      {
+        log.warn(e.getLocalizedMessage());
+      }
+      
+      fileName = new StringBand(3).append(OjConfig.userAvatarPath).append(uid).append(ext).toString();
+      try
+      {
+        FileUtil.moveFile(uploadFile.getFile(), new File(fileName));
+        user.set("avatar", ext.substring(1)).update();
+        renderJson("FILEID:/oj/assets/images/user/" + uid + ext);
+        return;
+      } catch (IOException e)
+      {
+        log.error(e.getLocalizedMessage());
+      }
+    }
+
+    renderJson("ERROR:true");
+  }
+
   public void info()
   {
     int uid = 0;

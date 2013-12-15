@@ -14,10 +14,12 @@ import java.util.Random;
  */
 public class FileKit
 {
-
-  private String[] allowFiles =
+    
+  private static String[] allowFiles =
   { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
-
+  
+  private static String[] imageFileType = { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
+  
   /**
    * Get the files in a directory recursively.
    * 
@@ -115,9 +117,7 @@ public class FileKit
    */
   public static String getImageType(String fileName)
   {
-    String[] fileType =
-    { ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
-    Iterator<String> type = Arrays.asList(fileType).iterator();
+    Iterator<String> type = Arrays.asList(imageFileType).iterator();
     while (type.hasNext())
     {
       String t = type.next();
@@ -128,7 +128,7 @@ public class FileKit
     }
     return "";
   }
-
+  
   /**
    * Check the file type in allowed types.
    * 
@@ -138,7 +138,7 @@ public class FileKit
    */
   public boolean checkFileType(String fileName)
   {
-    Iterator<String> type = Arrays.asList(this.allowFiles).iterator();
+    Iterator<String> type = Arrays.asList(getAllowFiles()).iterator();
     while (type.hasNext())
     {
       String ext = type.next();
@@ -161,17 +161,6 @@ public class FileKit
   }
 
   /**
-   * Set allowed file types.
-   * 
-   * @param allowFiles
-   *          an array of allowed file types
-   */
-  public void setAllowFiles(String[] allowFiles)
-  {
-    this.allowFiles = allowFiles;
-  }
-
-  /**
    * Generate new file name base on original one.
    * 
    * @return the new file name
@@ -180,6 +169,26 @@ public class FileKit
   {
     Random random = new Random();
     return "" + random.nextInt(10000) + System.currentTimeMillis() + getFileExt(fileName);
+  }
+
+  public static String[] getImageFileType()
+  {
+    return imageFileType;
+  }
+
+  public static void setImageFileType(String[] imageFileType)
+  {
+    FileKit.imageFileType = imageFileType;
+  }
+
+  public static String[] getAllowFiles()
+  {
+    return allowFiles;
+  }
+
+  public void setAllowFiles(String[] allowFiles)
+  {
+    FileKit.allowFiles = allowFiles;
   }
 
 }

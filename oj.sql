@@ -587,7 +587,7 @@ CREATE TABLE `user` (
 `share`  tinyint(1) NOT NULL DEFAULT 0 ,
 `avatar`  enum('bmp','gif','png','jpeg','jpg') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'uid.suffix(e.g.15.png)' ,
 `role`  enum('title','source_browser','member','administrator','root') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`status`  tinyint(1) NOT NULL DEFAULT 1 COMMENT 'Whether the user is active(1) or blocked(0).' ,
+`status`  tinyint(2) NOT NULL DEFAULT 1 COMMENT 'Whether the user is active(1) or blocked(0).' ,
 `data`  blob NULL DEFAULT NULL ,
 `token`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`uid`)

@@ -1,19 +1,19 @@
 <#include "../common/_layout.html" />
 <@layout>
 <script type="text/javascript" src="assets/swfupload/swfupload.js"></script>
-<script type="text/javascript" src="assets/js/handlers.js"></script>
+<script type="text/javascript" src="assets/js/uploadHandlers.js"></script>
 <script type="text/javascript">
         var swfu;
         window.onload = function () {
             swfu = new SWFUpload({
                 // Backend Settings
-                upload_url: "${baseUrl!}/uploadAvatar/",
+                upload_url: "${baseUrl!}/user/uploadAvatar/",
                 post_params: {"uid": "${userID}", "name": "${userName}"},
 
                 // File Upload Settings
                 file_size_limit : "10 MB",
-                file_types : "*.jpg;*.png;*.gif",
-                file_types_description : "JPG Images; PNG Image; GIF Image",
+                file_types : "*.png;*.jpg;*.gif",
+                file_types_description : "PNG Image; JPG Images; GIF Image",
                 file_upload_limit : 0,
 
                 // Event Handler Settings - these functions as defined in Handlers.js
@@ -29,7 +29,7 @@
                 upload_complete_handler : uploadComplete,
 
                 // Button Settings
-                button_image_url : "${baseUrl!}assets/images/SmallSpyGlassWithTransperancy_17x18.png",
+                button_image_url : "${baseUrl!}/assets/images/SmallSpyGlassWithTransperancy_17x18.png",
                 button_placeholder_id : "spanButtonPlaceholder",
                 button_width: 180,
                 button_height: 18,
@@ -64,5 +64,99 @@
     </form>
 
     <div id="divFileProgressContainer" style="height: 75px;"></div>
+    <div id="thumbnails"></div>
+
+    <div class="Post-inner">
+                                        <div class="PostMetadataHeader">
+                                            <h2 class="PostHeader">
+                                                Example
+                                            </h2>
+                                        </div>
+                                        <div class="PostContent">
+                                              <div class="boxes">
+                                                  <div id="crop_container"></div>
+                                                  <div class="result">
+                                                    <div class="txt">Here you will see the cropped image</div>
+                                                  </div> 
+                                                  <div class="cleared"></div> 
+                                              </div>  
+                                              <br />
+                                              <span class="button-wrapper" id="crop">
+                                                    <span class="l"> </span>
+                                                    <span class="r"> </span>
+                                                    <a class="button" href="javascript:void(0)">Crop</a>
+                                              </span>
+                                              &nbsp;
+                                              <span class="button-wrapper" id="restore">
+                                                    <span class="l"> </span>
+                                                    <span class="r"> </span>
+                                                    <a class="button" href="javascript:void(0)">Restore</a>
+                                              </span>
+                                        </div>
+                                        <div class="cleared"></div>
+                        </div>
+
+    <script type="text/javascript" src="assets/cropzoom/js/script.js"></script>
+    <link href="assets/cropzoom/css/jquery-ui-1.10.3.custom.min.css" rel="Stylesheet" type="text/css" /> 
+    <link href="assets/cropzoom/css/jquery.cropzoom.css" rel="Stylesheet" type="text/css" /> 
+    <script type="text/javascript" src="assets/cropzoom/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="assets/cropzoom/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script type="text/javascript" src="assets/cropzoom/js/jquery.cropzoom.js"></script>
+    <!--<script type="text/javascript" src="http://cropzoom.googlecode.com/svn/trunk/plugin/jquery.cropzoom.js"></script>-->
+    <link rel="stylesheet" href="assets/cropzoom/css/style.css" type="text/css" media="screen" />
+    <!--[if IE 6]><link rel="stylesheet" href="assets/cropzoom/css/style.ie6.css" type="text/css" media="screen" /><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" href="assets/cropzoom/css/style.ie7.css" type="text/css" media="screen" /><![endif]-->
+    <style type="text/css">
+        #zoom,#rot{
+            width:360px;
+            margin:auto;
+            height:25px;
+        }
+    </style>
+    <script type="text/javascript">
+    $(document).ready(function(){
+       var cropzoom = $('#crop_container').cropzoom({
+            width:400,
+            height:300,
+            bgColor: '#FFF',
+            enableRotation:true,
+            enableZoom:true,
+            zoomSteps:10,
+            rotationSteps:10,
+            selector:{        
+              centered:true,
+              startWithOverlay: true,
+              borderColor:'blue',
+              borderColorHover:'red'
+            },
+            image:{
+                source:'${baseUrl!}/assets/images/user/default.png',
+                width:1024,
+                height:768,
+                minZoom:10,
+                maxZoom:150
+            }
+        });
+        cropzoom.setSelector(45,45,200,150,true);
+        $('#crop').click(function(){ 
+            cropzoom.send('resize_and_crop_imagick.php','POST',{},function(rta){
+                $('.result').find('img').remove();
+                var img = $('<img />').attr('src',rta);
+                $('.result').find('.txt').hide().end().append(img);
+            });
+        });
+        $('#restore').click(function(){
+            $('.result').find('img').remove();
+            $('.result').find('.txt').show();
+            cropzoom.restore();
+        })
+    })
+</script>
+<style type="text/css">
+    #img_to_crop{
+        -webkit-user-drag: element;
+        -webkit-user-select: none;
+    }
+</style>
 
 </@layout>

@@ -49,7 +49,8 @@ function fileQueueError(file, errorCode, message) {
 function fileDialogComplete(numFilesSelected, numFilesQueued) {
 	try {
 		if (numFilesQueued > 0) {
-			this.startResizedUpload(this.getFile(0).ID, this.customSettings.thumbnail_width, this.customSettings.thumbnail_height, SWFUpload.RESIZE_ENCODING.JPEG, this.customSettings.thumbnail_quality, false);
+			this.startUpload(this.getFile(0).ID);
+			//this.startResizedUpload(this.getFile(0).ID, this.customSettings.thumbnail_width, this.customSettings.thumbnail_height, SWFUpload.RESIZE_ENCODING.JPEG, this.customSettings.thumbnail_quality, false);
 		}
 	} catch (ex) {
 		this.debug(ex);
@@ -75,7 +76,7 @@ function uploadSuccess(file, serverData) {
 		var progress = new FileProgress(file,  this.customSettings.upload_target);
 
 		if (serverData.substring(0, 7) === "FILEID:") {
-			addImage("thumbnail.php?id=" + serverData.substring(7));
+			addImage(serverData.substring(7));
 
 			progress.setStatus("Upload Complete.");
 			progress.toggleCancel(false);
@@ -97,7 +98,8 @@ function uploadComplete(file) {
 	try {
 		/*  I want the next upload to continue automatically so I'll call startUpload here */
 		if (this.getStats().files_queued > 0) {
-			this.startResizedUpload(this.getFile(0).ID, this.customSettings.thumbnail_width, this.customSettings.thumbnail_height, SWFUpload.RESIZE_ENCODING.JPEG, this.customSettings.thumbnail_quality, false);
+			this.startUpload(this.getFile(0).ID);
+			//this.startResizedUpload(this.getFile(0).ID, this.customSettings.thumbnail_width, this.customSettings.thumbnail_height, SWFUpload.RESIZE_ENCODING.JPEG, this.customSettings.thumbnail_quality, false);
 		} else {
 			var progress = new FileProgress(file,  this.customSettings.upload_target);
 			progress.setComplete();
