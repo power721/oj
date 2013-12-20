@@ -12,6 +12,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
+import com.power.oj.user.interceptor.AutoLoginException;
 
 public class UserModel extends Model<UserModel>
 {

@@ -21,6 +21,9 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.OnlineListener;
+import com.power.oj.user.interceptor.LoginInterceptor;
+import com.power.oj.user.validator.SignupValidator;
+import com.power.oj.user.validator.UpdateUserValidator;
 import com.power.oj.util.FileKit;
 
 /**

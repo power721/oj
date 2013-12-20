@@ -1,4 +1,4 @@
-package com.power.oj.user;
+package com.power.oj.user.validator;
 
 import jodd.util.StringUtil;
 
@@ -6,6 +6,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
+import com.power.oj.user.UserModel;
 
 public class UpdateUserValidator extends Validator
 {

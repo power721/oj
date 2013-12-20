@@ -25,6 +25,7 @@ import com.power.oj.service.ExpiresSessionService;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.*;
+import com.power.oj.user.interceptor.UserInterceptor;
 import com.power.oj.util.Tool;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;

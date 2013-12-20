@@ -1,4 +1,4 @@
-package com.power.oj.user;
+package com.power.oj.user.validator;
 
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;

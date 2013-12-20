@@ -15,8 +15,8 @@ import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.judge.Judge;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.user.LoginInterceptor;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.interceptor.LoginInterceptor;
 
 public class SolutionController extends OjController
 {

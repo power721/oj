@@ -1,4 +1,4 @@
-package com.power.oj.user;
+package com.power.oj.user.interceptor;
 
 public class AutoLoginException extends RuntimeException
 {

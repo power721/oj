@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 
 import sun.misc.BASE64Decoder;
-
 import jodd.io.FileUtil;
 import jodd.util.StringBand;
 
@@ -22,7 +21,7 @@ import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
-import com.power.oj.user.LoginInterceptor;
+import com.power.oj.user.interceptor.LoginInterceptor;
 import com.power.oj.util.FileKit;
 import com.power.oj.admin.AdminInterceptor;
 

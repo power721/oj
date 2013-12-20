@@ -1,4 +1,4 @@
-package com.power.oj.user;
+package com.power.oj.user.interceptor;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;

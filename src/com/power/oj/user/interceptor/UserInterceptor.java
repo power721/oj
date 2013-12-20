@@ -1,4 +1,4 @@
-package com.power.oj.user;
+package com.power.oj.user.interceptor;
 
 import jodd.util.StringUtil;
 
@@ -7,6 +7,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
+import com.power.oj.user.UserModel;
 
 /**
  * Get and Set user session and controller attributes, auto login.
