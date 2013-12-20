@@ -1,6 +1,7 @@
 package com.power.oj.core.interceptor;
 
-import javax.servlet.http.HttpSession;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
@@ -29,7 +30,7 @@ public class AccessLogInterceptor implements Interceptor
   public void intercept(ActionInvocation ai)
   {
     Controller controller = ai.getController();
-    HttpSession session = controller.getSession(true);
+    Session session = SecurityUtils.getSubject().getSession(true);
     String actionKey = ai.getActionKey();
 
     if (StringUtil.equalsOne(actionKey, skipActions) == -1)

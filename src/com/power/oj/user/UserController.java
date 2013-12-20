@@ -6,6 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringBand;
@@ -41,7 +47,7 @@ public class UserController extends OjController
   @ActionKey("/login")
   public void login()
   {
-    if (getSessionAttr(OjConstants.USER) != null)// user already login
+    if (SecurityUtils.getSubject().isAuthenticated())
     {
       redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
       return;
@@ -59,7 +65,8 @@ public class UserController extends OjController
   @Before(POST.class)
   public void signin()
   {
-    if (getSessionAttr(OjConstants.USER) != null)// user already login
+    Subject currentUser = SecurityUtils.getSubject();
+    if (currentUser.isAuthenticated())
     {
       redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
       return;
@@ -67,26 +74,34 @@ public class UserController extends OjController
 
     String name = getPara("name").trim();
     String password = getPara("password");
-    UserModel userModel = UserModel.dao.getUserByNameAndPassword(name, password);
+    UsernamePasswordToken token = new UsernamePasswordToken(name, password);
+    token.setRememberMe(getParaToBoolean("rememberMe", false));
 
-    if (userModel != null)
+    try
     {
-      String token = UUID.randomUUID().toString();
+      currentUser.login(token);
+      
+      UserModel userModel = UserModel.dao.getUserByNameAndPassword(name, password);
+      String token_token = UUID.randomUUID().toString();
       setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
-      if (getParaToBoolean("rememberPassword"))
-        setCookie(OjConstants.TOKEN_TOKEN, token, OjConstants.TOKEN_AGE);
+      if (getParaToBoolean("rememberMe", false))
+        setCookie(OjConstants.TOKEN_TOKEN, token_token, OjConstants.TOKEN_AGE);
 
-      userModel.updateLogin(token);
-      setSessionAttr(OjConstants.USER, userModel);
+      userModel.updateLogin(token_token);
+      Session session = currentUser.getSession(true);
+      session.setAttribute(OjConstants.USER, userModel);
 
       int uid = userModel.getUid();
       if (userModel.isAdmin(uid))
-        setSessionAttr(OjConstants.ADMIN_USER, uid);
+        session.setAttribute(OjConstants.ADMIN_USER, uid);
 
       redirect(OjConfig.lastAccessURL);
       return;
-    } else
+    } catch (AuthenticationException ae)
     {
+      log.warn("User signin failed.");
+    }
+   
       setAttr(OjConstants.MSG_TYPE, "error");
       setAttr(OjConstants.MSG_TITLE, "Error!");
       setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
@@ -97,24 +112,24 @@ public class UserController extends OjController
         render("ajax/login.html");
       else
         render("login.html");
-    }
   }
 
   @Before(LoginInterceptor.class)
   @ActionKey("/logout")
   public void logout()
   {
-    UserModel user = getSessionAttr(OjConstants.USER);
-    if (user != null)
+    Subject currentUser = SecurityUtils.getSubject();
+    UserModel userModel = getSessionAttr(OjConstants.USER);
+    if (userModel != null)
     {
-      user.set("token", null);
-      user.update();
+      userModel.set("token", null);
+      userModel.update();
     }
-    removeSessionAttr(OjConstants.USER);
-    removeCookie(OjConstants.TOKEN_NAME);
+    
+    currentUser.logout();
+    /*removeCookie(OjConstants.TOKEN_NAME);
     removeCookie(OjConstants.TOKEN_TOKEN);
-
-    getSession().invalidate();
+    removeSessionAttr(OjConstants.USER);*/
 
     redirect(OjConfig.lastAccessURL);
   }
@@ -156,18 +171,19 @@ public class UserController extends OjController
     render("avatar.html");
   }
 
-  @Before({POST.class, LoginInterceptor.class})
+  @Before(
+  { POST.class, LoginInterceptor.class })
   public void uploadAvatar()
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
     UserModel user = getSessionAttr(OjConstants.USER);
     int uid = getParaToInt("uid", 0);
-    
+
     if (uid != 0)
     {
       String ext = FileKit.getFileType(uploadFile.getOriginalFileName());
       String fileName = new StringBand(4).append(OjConfig.userAvatarPath).append(uid).append(".").append(user.getStr("avatar")).toString();
-      
+
       try
       {
         FileUtil.deleteFile(fileName);
@@ -175,7 +191,7 @@ public class UserController extends OjController
       {
         log.warn(e.getLocalizedMessage());
       }
-      
+
       fileName = new StringBand(3).append(OjConfig.userAvatarPath).append(uid).append(ext).toString();
       try
       {
@@ -197,23 +213,21 @@ public class UserController extends OjController
     int uid = 0;
     String name = "";
     UserModel user = null;
-    
+
     if (isParaExists("uid"))
     {
       uid = getParaToInt("uid");
       user = UserModel.dao.getUserInfoByUid(uid);
-    }
-    else if (isParaExists("name"))
+    } else if (isParaExists("name"))
     {
       name = getPara("name");
       user = UserModel.dao.getUserInfoByName(name);
     }
-    
+
     if (user == null)
     {
       renderJson("{error:true}");
-    }
-    else
+    } else
     {
       user.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
       renderJson(user);
@@ -307,7 +321,7 @@ public class UserController extends OjController
   {
     setTitle("Online Users");
     setAttr("loginUserNum", Db.findFirst("SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0 LIMIT 1").getLong("count"));
-    //setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
+    // setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
     setAttr(OjConstants.USER_LIST, OnlineListener.getAccessLog());
 
     render("online.html");

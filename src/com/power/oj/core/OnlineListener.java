@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+import org.apache.shiro.session.Session;
+
 import com.jfinal.log.Logger;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.user.UserModel;
@@ -27,7 +29,7 @@ import com.power.oj.util.Tool;
  */
 public class OnlineListener implements HttpSessionListener, HttpSessionAttributeListener, ServletRequestListener
 {
-  protected static final Logger log = Logger.getLogger(OnlineListener.class);
+  private static final Logger log = Logger.getLogger(OnlineListener.class);
   
   private HttpServletRequest request = null;
   private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
@@ -152,6 +154,19 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
   public static SessionModel update(HttpSession session, String url)
   {
     String id = session.getId();
+    SessionModel sessionModel = get(id);
+    if (sessionModel == null)
+    {
+      sessionModel = new SessionModel().set("session_id", id);
+    }
+          
+    sessionModel.set("last_activity", OjConfig.timeStamp).set("uri", url);
+    return accessLog.put(id, sessionModel);
+  }
+
+  public static SessionModel update(Session session, String url)
+  {
+    String id = (String) session.getId();
     SessionModel sessionModel = get(id);
     if (sessionModel == null)
     {

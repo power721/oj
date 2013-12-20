@@ -2,6 +2,9 @@ package com.power.oj.core;
 
 import javax.servlet.http.Cookie;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 
@@ -140,6 +143,40 @@ public class OjController extends Controller
     return this;
   }
 
+  /**
+   * Return a Object from session.
+   * @param key a String specifying the key of the Object stored in session
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T getSessionAttr(String key) {
+    Session session = SecurityUtils.getSubject().getSession(false);
+    return session != null ? (T)session.getAttribute(key) : null;
+  }
+
+  /**
+   * Store Object to session.
+   * @param key a String specifying the key of the Object stored in session
+   * @param value a Object specifying the value stored in session
+   */
+  @Override
+  public Controller setSessionAttr(String key, Object value) {
+    SecurityUtils.getSubject().getSession().setAttribute(key, value);
+    return this;
+  }
+  
+  /**
+   * Remove Object in session.
+   * @param key a String specifying the key of the Object stored in session
+   */
+  @Override
+  public Controller removeSessionAttr(String key) {
+    Session session = SecurityUtils.getSubject().getSession(false);
+    if (session != null)
+      session.removeAttribute(key);
+    return this;
+  }
+  
   /**
    * Get the Logger object.
    * 
