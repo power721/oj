@@ -43,6 +43,8 @@ public class OjAuthorizingRealm extends AuthorizingRealm
 
       if (permissionList != null && permissionList.size() > 0)
       {
+        log.info(userModel.toString());
+        
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> pers = new HashSet<String>();
         for (Record record : permissionList)
@@ -51,6 +53,17 @@ public class OjAuthorizingRealm extends AuthorizingRealm
           log.info(record.getStr("permission"));
         }
         info.setStringPermissions(pers);
+        
+        sql = "SELECT r.name AS role FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
+        List<Record> roleList = Db.find(sql, userModel.getUid());
+        Set<String> roles = new HashSet<String>();
+        for (Record record : roleList)
+        {
+          roles.add(record.getStr("role"));
+          log.info(record.getStr("role"));
+        }
+        info.setRoles(roles);
+        
         return info;
       }
     }

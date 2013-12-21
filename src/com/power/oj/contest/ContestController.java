@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
@@ -19,7 +21,6 @@ import com.jfinal.kit.JsonKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -391,20 +392,20 @@ public class ContestController extends OjController
     redirect(SessionService.getLastAccessURL(), "Sorry, you entered an invalid password.", "error", "Error!");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("contest:edit")
   public void edit()
   {
     renderText("TODO");
   }
 
-  @Before(
-  { POST.class, AdminInterceptor.class })
+  @Before(POST.class)
+  @RequiresPermissions("contest:edit")
   public void update()
   {
     renderText("TODO");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("contest:add")
   public void add()
   {
     setTitle("Create a contest");
@@ -417,8 +418,8 @@ public class ContestController extends OjController
     render("add.html");
   }
 
-  @Before(
-  { POST.class, AdminInterceptor.class, AddContestValidator.class })
+  @Before(POST.class)
+  @RequiresPermissions("contest:add")
   public void save()
   {
     String start_time = getPara("start_time");
@@ -443,7 +444,7 @@ public class ContestController extends OjController
     redirect(new StringBand(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("contest:build")
   public void buildRank()
   {
     int cid = getParaToInt(0);

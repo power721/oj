@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 
 import jodd.io.FileUtil;
@@ -17,7 +18,6 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.upload.UploadFile;
-import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -285,7 +285,7 @@ public class UserController extends OjController
    * renderJson(userList); }
    */
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("user:online")
   public void online()
   {
     setTitle("Online Users");
@@ -309,7 +309,7 @@ public class UserController extends OjController
     render("rank.html");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("user:build")
   public void build()
   {
     int uid = getParaToInt(0);

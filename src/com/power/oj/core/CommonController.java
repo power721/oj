@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import sun.misc.BASE64Decoder;
 import jodd.io.FileUtil;
 import jodd.util.StringBand;
@@ -23,7 +25,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.user.interceptor.LoginInterceptor;
 import com.power.oj.util.FileKit;
-import com.power.oj.admin.AdminInterceptor;
 
 /**
  * The controller for some common pages.
@@ -62,7 +63,7 @@ public class CommonController extends OjController
     renderText("TODO");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("image:upload")
   public void uploadImage()
   {
     UploadFile file = getFile("upfile", "", 10 * 1024 * 1024, "UTF-8");
@@ -87,7 +88,7 @@ public class CommonController extends OjController
     renderText("{'original':'" + originalName + "','url':'" + file.getFileName() + "','title':'" + title + "','state':'" + state + "'}");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("image:upload")
   public void uploadScrawl()
   {
     String action = getPara("action");
@@ -126,7 +127,7 @@ public class CommonController extends OjController
     renderText("{'url':'" + outFile.getName() + "',state:'" + state + "'}");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("image:upload")
   public void remoteImage()
   {
     String url = getPara("upfile");
@@ -196,7 +197,7 @@ public class CommonController extends OjController
     renderText("{'url':'" + outstr + "','tip':'" + state + "','srcUrl':'" + url + "'}");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("image:upload")
   public void listImages()
   {
     String imagesDir = new StringBand(2).append(PathKit.getWebRootPath()).append("\\assets\\images\\problem\\").toString();

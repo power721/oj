@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringBand;
@@ -14,7 +16,6 @@ import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -135,7 +136,7 @@ public class ProblemController extends OjController
       render("submit.html");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("problem:edit")
   public void edit()
   {
     if (!isParaExists(0))
@@ -156,7 +157,7 @@ public class ProblemController extends OjController
       render("edit.html");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("problem:edit")
   public void update()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
@@ -166,14 +167,14 @@ public class ProblemController extends OjController
     redirect(redirectURL, "The changes have been saved.");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("problem:add")
   public void add()
   {
     setTitle("Add a problem");
     render("add.html");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("problem:add")
   public void save()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
@@ -201,7 +202,7 @@ public class ProblemController extends OjController
     redirect(redirectURL);
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("problem:delete")
   public void delete()
   {
     renderText("TODO");
@@ -364,7 +365,7 @@ public class ProblemController extends OjController
     redirect(redirectURL, "The changes have been saved.");
   }
 
-  @Before(AdminInterceptor.class)
+  @RequiresPermissions("problem:build")
   public void build()
   {
     int pid = getParaToInt(0);

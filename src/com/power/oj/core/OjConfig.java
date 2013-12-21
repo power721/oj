@@ -18,6 +18,7 @@ import com.power.oj.core.interceptor.MessageInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
+import com.power.oj.core.shiro.ShiroInViewInterceptor;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
@@ -149,7 +150,9 @@ public class OjConfig extends JFinalConfig
     me.add(new MessageInterceptor());
     me.add(new AccessLogInterceptor());
     me.add(new UserInterceptor());
+    
     me.add(new ShiroInterceptor());
+    me.add(new ShiroInViewInterceptor());
     
     log.debug("configInterceptor finished.");
   }
