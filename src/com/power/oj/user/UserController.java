@@ -93,9 +93,10 @@ public class UserController extends OjController
   @ActionKey("/logout")
   public void logout()
   {
+    String lastAccessURL = SessionService.getLastAccessURL();
     UserService.logout();
 
-    redirect(SessionService.getLastAccessURL());
+    redirect(lastAccessURL);
   }
 
   public void profile()
