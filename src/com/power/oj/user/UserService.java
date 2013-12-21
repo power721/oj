@@ -19,7 +19,7 @@ public class UserService
   public static boolean login(String name, String password, boolean rememberMe)
   {
     Subject currentUser = getCurrentUser();
-    Session session = currentUser.getSession();
+    //Session session = currentUser.getSession();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
 
@@ -27,11 +27,11 @@ public class UserService
     {
       currentUser.login(token);
       
-      UserModel userModel = getPrincipal();
+      //UserModel userModel = getPrincipal();
       
-      int uid = userModel.getUid();
-      if (userModel.isAdmin(uid))
-        session.setAttribute(OjConstants.ADMIN_USER, uid);
+      //int uid = userModel.getUid();
+      //if (userModel.isAdmin(uid))
+      //  session.setAttribute(OjConstants.ADMIN_USER, uid);
 
       SessionService.updateLogin();
     } catch (AuthenticationException ae)

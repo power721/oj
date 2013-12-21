@@ -32,6 +32,8 @@ import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
+import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
+import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
@@ -70,6 +72,8 @@ public class OjConfig extends JFinalConfig
   public static long startGlobalInterceptorTime;
   public static long startGlobalHandlerTime;
 
+  private Routes routes;
+  
   /**
    * 配置常量
    */
@@ -79,8 +83,10 @@ public class OjConfig extends JFinalConfig
 
     me.setDevMode(getPropertyToBoolean("devMode", false));
     me.setBaseViewPath("/WEB-INF/pages");
-    me.setError404View("/WEB-INF/pages/common/404.html");
-    me.setError500View("/WEB-INF/pages/common/500.html");
+    me.setError401View("/WEB-INF/pages/error/401.html");
+    me.setError403View("/WEB-INF/pages/error/403.html");
+    me.setError404View("/WEB-INF/pages/error/404.html");
+    me.setError500View("/WEB-INF/pages/error/500.html");
 
     log.debug("configConstant finished.");
   }
@@ -90,6 +96,8 @@ public class OjConfig extends JFinalConfig
    */
   public void configRoute(Routes me)
   {
+    this.routes = me;
+    
     me.add("/", CommonController.class, "/common/");
     me.add("/admin", AdminController.class);
     me.add("/bbs", BBSController.class);
@@ -127,7 +135,7 @@ public class OjConfig extends JFinalConfig
     me.add(arp);
 
     me.add(new EhCachePlugin());
-    //me.add(new ShiroPlugin(routes));
+    me.add(new ShiroPlugin(routes));
     
     log.debug("configPlugin finished.");
   }
@@ -141,7 +149,8 @@ public class OjConfig extends JFinalConfig
     me.add(new MessageInterceptor());
     me.add(new AccessLogInterceptor());
     me.add(new UserInterceptor());
-
+    me.add(new ShiroInterceptor());
+    
     log.debug("configInterceptor finished.");
   }
 

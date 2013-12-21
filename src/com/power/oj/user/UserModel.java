@@ -94,7 +94,7 @@ public class UserModel extends Model<UserModel>
     }
     return userRank;
   }
-
+/*
   public boolean isRoot(int uid)
   {
     return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND role='root' AND status=1 LIMIT 1", uid) != null;
@@ -131,7 +131,7 @@ public class UserModel extends Model<UserModel>
       return record.getStr("role");
     return null;
   }
-
+*/
   public List<UserModel> searchUser(String scope, String word)
   {
     List<UserModel> userList = null;
