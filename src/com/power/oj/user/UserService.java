@@ -8,16 +8,17 @@ import org.apache.shiro.subject.Subject;
 
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
+import com.power.oj.core.service.SessionService;
 
 public class UserService
 {
   private static final Logger log = Logger.getLogger(UserService.class);
-  private static final UserService userService = new UserService();
-  private UserModel dao = UserModel.dao;
+  //private static final UserService userService = new UserService();
+  //private UserModel dao = UserModel.dao;
   
   public static boolean login(String name, String password, boolean rememberMe)
   {
-    Subject currentUser = SecurityUtils.getSubject();
+    Subject currentUser = getCurrentUser();
     Session session = currentUser.getSession();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
@@ -26,12 +27,13 @@ public class UserService
     {
       currentUser.login(token);
       
-      UserModel userModel = (UserModel) currentUser.getPrincipal();
+      UserModel userModel = getPrincipal();
       
       int uid = userModel.getUid();
       if (userModel.isAdmin(uid))
         session.setAttribute(OjConstants.ADMIN_USER, uid);
 
+      SessionService.updateLogin();
     } catch (AuthenticationException ae)
     {
       log.warn("User signin failed.");
@@ -43,8 +45,8 @@ public class UserService
   
   public static void logout()
   {
-    Subject currentUser = SecurityUtils.getSubject();
-    UserModel userModel = (UserModel) currentUser.getPrincipal();
+    Subject currentUser = getCurrentUser();
+    UserModel userModel = getPrincipal();
     if (userModel != null)
     {
       userModel.set("token", null);

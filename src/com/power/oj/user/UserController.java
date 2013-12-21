@@ -22,7 +22,7 @@ import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.shiro.OjSessionListener;
+import com.power.oj.core.service.SessionService;
 import com.power.oj.user.interceptor.LoginInterceptor;
 import com.power.oj.user.validator.SignupValidator;
 import com.power.oj.user.validator.UpdateUserValidator;
@@ -43,9 +43,9 @@ public class UserController extends OjController
   @ActionKey("/login")
   public void login()
   {
-    if (UserService.getCurrentUser().isAuthenticated())
+    if (UserService.isAuthenticated())
     {
-      redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
+      redirect(SessionService.getLastAccessURL(), "You already login.", "error", "Error!");
       return;
     }
 
@@ -64,7 +64,7 @@ public class UserController extends OjController
     Subject currentUser = UserService.getCurrentUser();
     if (currentUser.isAuthenticated())
     {
-      redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
+      redirect(SessionService.getLastAccessURL(), "You already login.", "error", "Error!");
       return;
     }
 
@@ -74,7 +74,7 @@ public class UserController extends OjController
 
     if (UserService.login(name, password, rememberMe))
     {
-      redirect(OjConfig.lastAccessURL);
+      redirect(SessionService.getLastAccessURL());
       return;
     }
 
@@ -96,7 +96,7 @@ public class UserController extends OjController
   {
     UserService.logout();
 
-    redirect(OjConfig.lastAccessURL);
+    redirect(SessionService.getLastAccessURL());
   }
 
   public void profile()
@@ -203,7 +203,7 @@ public class UserController extends OjController
   @ActionKey("/signup")
   public void signup()
   {
-    if (UserService.getCurrentUser().isAuthenticated())// user already login
+    if (UserService.isAuthenticated())// user already login
     {
       redirect("/");
       return;
@@ -291,7 +291,7 @@ public class UserController extends OjController
     setTitle("Online Users");
     setAttr("loginUserNum", Db.findFirst("SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0 LIMIT 1").getLong("count"));
     // setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
-    setAttr(OjConstants.USER_LIST, OjSessionListener.getAccessLog());
+    setAttr(OjConstants.USER_LIST, SessionService.getAccessLog());
 
     render("online.html");
   }

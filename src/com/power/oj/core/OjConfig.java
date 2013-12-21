@@ -32,7 +32,6 @@ import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
-import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
@@ -72,12 +71,6 @@ public class OjConfig extends JFinalConfig
   public static long startGlobalHandlerTime;
 
   /**
-   * @see AccessLogInterceptor
-   */
-  public static String lastAccessURL = "/";
-
-  private Routes routes;
-  /**
    * 配置常量
    */
   public void configConstant(Constants me)
@@ -97,7 +90,6 @@ public class OjConfig extends JFinalConfig
    */
   public void configRoute(Routes me)
   {
-    this.routes = me;
     me.add("/", CommonController.class, "/common/");
     me.add("/admin", AdminController.class);
     me.add("/bbs", BBSController.class);

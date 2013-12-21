@@ -24,6 +24,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
+import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
@@ -380,14 +381,14 @@ public class ContestController extends OjController
       String token_token = CryptUtils.encrypt(password, token_name);
       log.info(token_token);
       setCookie(token_name, token_token, -1);
-      redirect(OjConfig.lastAccessURL);
+      redirect(SessionService.getLastAccessURL());
       return;
     }
 
     keepPara("cid");
     keepPara("title");
 
-    redirect(OjConfig.lastAccessURL, "Sorry, you entered an invalid password.", "error", "Error!");
+    redirect(SessionService.getLastAccessURL(), "Sorry, you entered an invalid password.", "error", "Error!");
   }
 
   @Before(AdminInterceptor.class)

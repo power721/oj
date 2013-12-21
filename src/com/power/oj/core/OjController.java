@@ -4,8 +4,10 @@ import javax.servlet.http.Cookie;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
+
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
+import com.power.oj.core.interceptor.AccessLogInterceptor;
 
 /**
  * Base Controller
@@ -16,6 +18,21 @@ import com.jfinal.log.Logger;
 public class OjController extends Controller
 {
   protected final Logger log = Logger.getLogger(getClass());
+
+  /**
+   * @see AccessLogInterceptor
+   */
+  private String lastAccessURL = "/";
+  
+  public String getLastAccessURL()
+  {
+    return lastAccessURL;
+  }
+
+  public void setLastAccessURL(String lastAccessURL)
+  {
+    this.lastAccessURL = lastAccessURL;
+  }
 
   /**
    * Redirect to url with succes message。

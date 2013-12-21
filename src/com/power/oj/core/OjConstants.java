@@ -36,7 +36,8 @@ public abstract class OjConstants
   public final static String LANGUAGE_NAME = "language_name";
   public final static String JUDGE_RESULT = "judge_result";
   public final static String RESULT_TYPE = "result_type";
-
+  
+  public final static String LAST_ACCESS_URL = "lastAccessURL";
   /*
    * These contants are used in cookie.
    */
