@@ -4,6 +4,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.user.UserService;
 
 public class LoginInterceptor implements Interceptor
 {
@@ -11,7 +12,7 @@ public class LoginInterceptor implements Interceptor
   public void intercept(ActionInvocation ai)
   {
     OjController controller = (OjController) ai.getController();
-    if (controller.getPrincipal() != null)
+    if (UserService.getPrincipal() != null)
     {
       ai.invoke();
     } else

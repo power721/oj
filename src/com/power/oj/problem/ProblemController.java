@@ -20,6 +20,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.user.UserService;
 import com.power.oj.user.interceptor.LoginInterceptor;
 
 public class ProblemController extends OjController
@@ -110,7 +111,7 @@ public class ProblemController extends OjController
     boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
     ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
     setAttr("problem", problemModel);
-    setAttr(OjConstants.USER, getPrincipal());
+    setAttr(OjConstants.USER, UserService.getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     boolean ajax = getParaToBoolean("ajax", false);
     int sid = 0;

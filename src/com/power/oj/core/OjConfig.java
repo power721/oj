@@ -32,11 +32,13 @@ import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
+import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
+import com.jfinal.plugin.ehcache.EhCachePlugin;
 
 /**
  * Configure the system.
@@ -74,6 +76,7 @@ public class OjConfig extends JFinalConfig
    */
   public static String lastAccessURL = "/";
 
+  private Routes routes;
   /**
    * 配置常量
    */
@@ -94,6 +97,7 @@ public class OjConfig extends JFinalConfig
    */
   public void configRoute(Routes me)
   {
+    this.routes = me;
     me.add("/", CommonController.class, "/common/");
     me.add("/admin", AdminController.class);
     me.add("/bbs", BBSController.class);
@@ -130,6 +134,9 @@ public class OjConfig extends JFinalConfig
     arp.addMapping("variable", VariableModel.class);
     me.add(arp);
 
+    me.add(new EhCachePlugin());
+    //me.add(new ShiroPlugin(routes));
+    
     log.debug("configPlugin finished.");
   }
 

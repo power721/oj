@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
@@ -24,7 +22,7 @@ import com.power.oj.admin.AdminInterceptor;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.OnlineListener;
+import com.power.oj.core.shiro.OjSessionListener;
 import com.power.oj.user.interceptor.LoginInterceptor;
 import com.power.oj.user.validator.SignupValidator;
 import com.power.oj.user.validator.UpdateUserValidator;
@@ -45,7 +43,7 @@ public class UserController extends OjController
   @ActionKey("/login")
   public void login()
   {
-    if (getCurrentUser().isAuthenticated())
+    if (UserService.getCurrentUser().isAuthenticated())
     {
       redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
       return;
@@ -63,7 +61,7 @@ public class UserController extends OjController
   @Before(POST.class)
   public void signin()
   {
-    Subject currentUser = getCurrentUser();
+    Subject currentUser = UserService.getCurrentUser();
     if (currentUser.isAuthenticated())
     {
       redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
@@ -72,30 +70,12 @@ public class UserController extends OjController
 
     String name = getPara("name").trim();
     String password = getPara("password");
-    UsernamePasswordToken token = new UsernamePasswordToken(name, password);
-    token.setRememberMe(getParaToBoolean("rememberMe", false));
+    boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    try
+    if (UserService.login(name, password, rememberMe))
     {
-      currentUser.login(token);
-      
-      UserModel userModel = (UserModel) getPrincipal();
-      String token_token = UUID.randomUUID().toString();
-      setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
-      if (getParaToBoolean("rememberMe", false))
-        setCookie(OjConstants.TOKEN_TOKEN, token_token, OjConstants.TOKEN_AGE);
-
-      userModel.updateLogin(token_token);
-
-      int uid = userModel.getUid();
-      if (userModel.isAdmin(uid))
-        setSessionAttr(OjConstants.ADMIN_USER, uid);
-
       redirect(OjConfig.lastAccessURL);
       return;
-    } catch (AuthenticationException ae)
-    {
-      log.warn("User signin failed.");
     }
 
     setAttr(OjConstants.MSG_TYPE, "error");
@@ -114,18 +94,7 @@ public class UserController extends OjController
   @ActionKey("/logout")
   public void logout()
   {
-    Subject currentUser = getCurrentUser();
-    UserModel userModel = (UserModel) getPrincipal();
-    if (userModel != null)
-    {
-      userModel.set("token", null);
-      userModel.update();
-    }
-    
-    currentUser.logout();
-    
-    removeCookie(OjConstants.TOKEN_NAME);
-    removeCookie(OjConstants.TOKEN_TOKEN);
+    UserService.logout();
 
     redirect(OjConfig.lastAccessURL);
   }
@@ -136,8 +105,8 @@ public class UserController extends OjController
     UserModel userModel = null;
     if (name == null)
     {
-      userModel = (UserModel) getPrincipal();
-      
+      userModel = UserService.getPrincipal();
+
       if (userModel == null)
       {
         redirect("/");
@@ -173,7 +142,7 @@ public class UserController extends OjController
   public void uploadAvatar()
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
-    UserModel userModel = (UserModel) getPrincipal();
+    UserModel userModel = UserService.getPrincipal();
     int uid = getParaToInt("uid", 0);
 
     if (uid != 0)
@@ -234,7 +203,7 @@ public class UserController extends OjController
   @ActionKey("/signup")
   public void signup()
   {
-    if (getCurrentUser().isAuthenticated())// user already login
+    if (UserService.getCurrentUser().isAuthenticated())// user already login
     {
       redirect("/");
       return;
@@ -253,7 +222,7 @@ public class UserController extends OjController
 
     userModel = userModel.findById(userModel.getUid());
     UsernamePasswordToken token = new UsernamePasswordToken(userModel.getStr("name"), password);
-    Subject currentUser = getCurrentUser();
+    Subject currentUser = UserService.getCurrentUser();
     currentUser.login(token);
 
     redirect("/user/edit", "Congratulations!You have a new account now.<br>Please update your information.");
@@ -322,7 +291,7 @@ public class UserController extends OjController
     setTitle("Online Users");
     setAttr("loginUserNum", Db.findFirst("SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0 LIMIT 1").getLong("count"));
     // setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
-    setAttr(OjConstants.USER_LIST, OnlineListener.getAccessLog());
+    setAttr(OjConstants.USER_LIST, OjSessionListener.getAccessLog());
 
     render("online.html");
   }

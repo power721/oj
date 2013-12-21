@@ -11,7 +11,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.OnlineListener;
+import com.power.oj.core.shiro.OjSessionListener;
 
 /**
  * Update session table with url and timestamp.
@@ -49,7 +49,7 @@ public class AccessLogInterceptor implements Interceptor
       if (url.indexOf("ajax=1") == -1)
         OjConfig.lastAccessURL = url;
 
-      OnlineListener.update(session, url);
+      OjSessionListener.update(session, url);
     }
 
     ai.invoke();

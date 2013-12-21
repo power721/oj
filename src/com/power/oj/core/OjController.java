@@ -4,11 +4,8 @@ import javax.servlet.http.Cookie;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
-
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.power.oj.user.UserModel;
 
 /**
  * Base Controller
@@ -179,24 +176,6 @@ public class OjController extends Controller
     return this;
   }
   
-  public Subject getCurrentUser()
-  {
-    return SecurityUtils.getSubject();
-  }
-  
-  public UserModel getPrincipal()
-  {
-    Object principal = getCurrentUser().getPrincipal();
-    if (principal instanceof UserModel)
-    {
-      return (UserModel) principal;
-    }
-    
-    if (principal != null)
-      log.warn(principal.toString());
-    
-    return null;
-  }
   /**
    * Get the Logger object.
    * 

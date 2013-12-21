@@ -26,6 +26,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
 import com.power.oj.util.Tool;
 
@@ -138,7 +139,7 @@ public class ContestController extends OjController
 
     setTitle(new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("problem", problemModel);
-    setAttr(OjConstants.USER, getPrincipal());
+    setAttr(OjConstants.USER, UserService.getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("cid", cid);
 

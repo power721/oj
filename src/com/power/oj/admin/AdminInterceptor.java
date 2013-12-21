@@ -4,6 +4,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.user.UserService;
 
 public class AdminInterceptor implements Interceptor
 {
@@ -15,7 +16,7 @@ public class AdminInterceptor implements Interceptor
       ai.invoke();
     } else
     {
-      if (controller.getPrincipal() == null)
+      if (UserService.isUser())
       {
         controller.setAttr(OjConstants.MSG_TYPE, "error");
         controller.setAttr(OjConstants.MSG_TITLE, "Error!");
