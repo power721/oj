@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -20,7 +19,7 @@ public class SessionService
 {
   private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
   private static ConcurrentHashMap<String, Session> shiroSession = new ConcurrentHashMap<String, Session>();
-
+  
   /**
    * @see AccessLogInterceptor
    */
@@ -122,6 +121,19 @@ public class SessionService
   public static Session removeSession(String id)
   {
     return shiroSession.remove(id);
+  }
+  
+  public static int getUserNumber()
+  {
+    int number = 0;
+    for (Enumeration<SessionModel> e = accessLog.elements(); e.hasMoreElements();)
+    {
+      SessionModel sessionModel = e.nextElement();
+      if (sessionModel.getInt("uid") != null)
+        number++;
+    }
+    
+    return number;
   }
   
 }

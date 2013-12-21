@@ -15,7 +15,6 @@ import jodd.util.StringBand;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.admin.AdminInterceptor;
@@ -289,8 +288,7 @@ public class UserController extends OjController
   public void online()
   {
     setTitle("Online Users");
-    setAttr("loginUserNum", Db.findFirst("SELECT COUNT(uid) AS count FROM session WHERE session_expires > UNIX_TIMESTAMP() AND uid>0 LIMIT 1").getLong("count"));
-    // setAttr(OjConstants.USER_LIST, UserModel.dao.onlineUser());
+    setAttr("loginUserNum", SessionService.getUserNumber());
     setAttr(OjConstants.USER_LIST, SessionService.getAccessLog());
 
     render("online.html");
