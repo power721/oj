@@ -22,7 +22,6 @@ import com.power.oj.core.shiro.ShiroInViewInterceptor;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.service.ExpiresSessionService;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.*;
@@ -179,8 +178,6 @@ public class OjConfig extends JFinalConfig
     userAvatarPath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/user/").toString();
     problemImagePath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/problem/").toString();
     init();
-    
-    ExpiresSessionService.start();
     
     log.debug("afterJFinalStart finished.");
   }

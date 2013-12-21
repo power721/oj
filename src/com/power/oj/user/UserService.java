@@ -3,17 +3,15 @@ package com.power.oj.user;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.jfinal.ext.plugin.shiro.ShiroMethod;
 import com.jfinal.log.Logger;
-import com.power.oj.core.OjConstants;
 import com.power.oj.core.service.SessionService;
 
 public class UserService
 {
   private static final Logger log = Logger.getLogger(UserService.class);
-  private static final String NAMES_DELIMETER = ",";
 
   // private static final UserService userService = new UserService();
   // private UserModel dao = UserModel.dao;
@@ -21,19 +19,12 @@ public class UserService
   public static boolean login(String name, String password, boolean rememberMe)
   {
     Subject currentUser = getCurrentUser();
-    // Session session = currentUser.getSession();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
 
     try
     {
       currentUser.login(token);
-
-      // UserModel userModel = getPrincipal();
-
-      // int uid = userModel.getUid();
-      // if (userModel.isAdmin(uid))
-      // session.setAttribute(OjConstants.ADMIN_USER, uid);
 
       SessionService.updateLogin();
     } catch (AuthenticationException ae)
@@ -83,42 +74,47 @@ public class UserService
 
   public static boolean isAuthenticated()
   {
-    return getCurrentUser() != null && getCurrentUser().isAuthenticated();
+    return ShiroMethod.authenticated();
   }
 
   public static boolean isUser()
   {
-    return getCurrentUser() != null && getCurrentUser().getPrincipal() != null;
+    return ShiroMethod.user();
   }
 
   public static boolean isGuest()
   {
-    return !isUser();
+    return ShiroMethod.guest();
   }
 
   public static boolean hasRole(String roleName)
   {
-    return getCurrentUser() != null && roleName != null && roleName.length() > 0 && getCurrentUser().hasRole(roleName);
+    return ShiroMethod.hasRole(roleName);
   }
-
+  
+  public static boolean lacksRole(String roleName)
+  {
+    return ShiroMethod.lacksRole(roleName);
+  }
+  
   public static boolean hasAnyRoles(String roleNames)
   {
-    boolean hasAnyRole = false;
-    Subject subject = getCurrentUser();
-    if (subject != null && roleNames != null && roleNames.length() > 0)
-    {
-      // Iterate through roles and check to see if the user has one of the
-      // roles
-      for (String role : roleNames.split(NAMES_DELIMETER))
-      {
-        if (subject.hasRole(role.trim()))
-        {
-          hasAnyRole = true;
-          break;
-        }
-      }
-    }
-    return hasAnyRole;
+    return ShiroMethod.hasAnyRoles(roleNames);
   }
-
+  
+  public static boolean hasAllRoles(String roleNames)
+  {
+    return ShiroMethod.hasAllRoles(roleNames);
+  }
+  
+  public static boolean hasPermission(String permission)
+  {
+    return ShiroMethod.hasPermission(permission);
+  }
+  
+  public static boolean lacksPermission(String permission)
+  {
+    return ShiroMethod.lacksPermission(permission);
+  }
+  
 }
