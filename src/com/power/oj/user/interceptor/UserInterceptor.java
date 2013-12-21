@@ -4,9 +4,9 @@ import jodd.util.StringUtil;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
-import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjController;
 import com.power.oj.user.UserModel;
 
 /**
@@ -22,10 +22,10 @@ public class UserInterceptor implements Interceptor
   @Override
   public void intercept(ActionInvocation ai)
   {
-    Controller controller = ai.getController();
-    UserModel user = controller.getSessionAttr(OjConstants.USER);
+    OjController controller = (OjController) ai.getController();
+    UserModel userModel = controller.getPrincipal();
 
-    if (user == null) // user does not login
+    if (userModel == null) // user does not login
     {
       String name = controller.getCookie(OjConstants.TOKEN_NAME);
       String token = controller.getCookie(OjConstants.TOKEN_TOKEN);
@@ -33,12 +33,13 @@ public class UserInterceptor implements Interceptor
       {
         try
         {
-          user = UserModel.dao.autoLogin(name, token);
+          userModel = UserModel.dao.autoLogin(name, token);
  
-          controller.setSessionAttr(OjConstants.USER, user);
+          //controller.setSessionAttr(OjConstants.USER, userModel);
 
-          int uid = user.getUid();
-          if (user.isAdmin(uid)) // current user has admin role
+          // TODO: use Shiro role
+          int uid = userModel.getUid();
+          if (userModel.isAdmin(uid)) // current user has admin role
             controller.setSessionAttr(OjConstants.ADMIN_USER, uid);
 
           log.info("User " + name + " login automatically.");
@@ -51,12 +52,12 @@ public class UserInterceptor implements Interceptor
       }
     }
 
-    if (user != null) // if user is logined, set user information in controller
+    if (userModel != null) // if user is logined, set user information in controller
     {
-      int uid = user.getUid();
+      int uid = userModel.getUid();
       controller.setAttr(OjConstants.USER_ID, uid);
-      controller.setAttr(OjConstants.USER_NAME, user.getStr("name"));
-      controller.setAttr(OjConstants.USER_EMAIL, user.getStr("email"));
+      controller.setAttr(OjConstants.USER_NAME, userModel.getStr("name"));
+      controller.setAttr(OjConstants.USER_EMAIL, userModel.getStr("email"));
       if (controller.getSessionAttr(OjConstants.ADMIN_USER) != null)
         controller.setAttr(OjConstants.ADMIN_USER, uid);
     }

@@ -15,7 +15,7 @@ public class AdminInterceptor implements Interceptor
       ai.invoke();
     } else
     {
-      if (controller.getSessionAttr(OjConstants.USER) == null)
+      if (controller.getPrincipal() == null)
       {
         controller.setAttr(OjConstants.MSG_TYPE, "error");
         controller.setAttr(OjConstants.MSG_TITLE, "Error!");

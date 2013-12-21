@@ -6,10 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import jodd.io.FileUtil;
@@ -47,7 +45,7 @@ public class UserController extends OjController
   @ActionKey("/login")
   public void login()
   {
-    if (SecurityUtils.getSubject().isAuthenticated())
+    if (getCurrentUser().isAuthenticated())
     {
       redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
       return;
@@ -65,7 +63,7 @@ public class UserController extends OjController
   @Before(POST.class)
   public void signin()
   {
-    Subject currentUser = SecurityUtils.getSubject();
+    Subject currentUser = getCurrentUser();
     if (currentUser.isAuthenticated())
     {
       redirect(OjConfig.lastAccessURL, "You already login.", "error", "Error!");
@@ -81,19 +79,17 @@ public class UserController extends OjController
     {
       currentUser.login(token);
       
-      UserModel userModel = UserModel.dao.getUserByNameAndPassword(name, password);
+      UserModel userModel = (UserModel) getPrincipal();
       String token_token = UUID.randomUUID().toString();
       setCookie(OjConstants.TOKEN_NAME, name, OjConstants.TOKEN_AGE);
       if (getParaToBoolean("rememberMe", false))
         setCookie(OjConstants.TOKEN_TOKEN, token_token, OjConstants.TOKEN_AGE);
 
       userModel.updateLogin(token_token);
-      Session session = currentUser.getSession(true);
-      session.setAttribute(OjConstants.USER, userModel);
 
       int uid = userModel.getUid();
       if (userModel.isAdmin(uid))
-        session.setAttribute(OjConstants.ADMIN_USER, uid);
+        setSessionAttr(OjConstants.ADMIN_USER, uid);
 
       redirect(OjConfig.lastAccessURL);
       return;
@@ -101,25 +97,25 @@ public class UserController extends OjController
     {
       log.warn("User signin failed.");
     }
-   
-      setAttr(OjConstants.MSG_TYPE, "error");
-      setAttr(OjConstants.MSG_TITLE, "Error!");
-      setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
-      keepPara("name");
 
-      boolean ajax = getParaToBoolean("ajax", false);
-      if (ajax)
-        render("ajax/login.html");
-      else
-        render("login.html");
+    setAttr(OjConstants.MSG_TYPE, "error");
+    setAttr(OjConstants.MSG_TITLE, "Error!");
+    setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
+    keepPara("name");
+
+    boolean ajax = getParaToBoolean("ajax", false);
+    if (ajax)
+      render("ajax/login.html");
+    else
+      render("login.html");
   }
 
   @Before(LoginInterceptor.class)
   @ActionKey("/logout")
   public void logout()
   {
-    Subject currentUser = SecurityUtils.getSubject();
-    UserModel userModel = getSessionAttr(OjConstants.USER);
+    Subject currentUser = getCurrentUser();
+    UserModel userModel = (UserModel) getPrincipal();
     if (userModel != null)
     {
       userModel.set("token", null);
@@ -127,9 +123,9 @@ public class UserController extends OjController
     }
     
     currentUser.logout();
-    /*removeCookie(OjConstants.TOKEN_NAME);
+    
+    removeCookie(OjConstants.TOKEN_NAME);
     removeCookie(OjConstants.TOKEN_TOKEN);
-    removeSessionAttr(OjConstants.USER);*/
 
     redirect(OjConfig.lastAccessURL);
   }
@@ -137,19 +133,20 @@ public class UserController extends OjController
   public void profile()
   {
     String name = getPara(0);
-    UserModel user = null;
+    UserModel userModel = null;
     if (name == null)
     {
-      user = getSessionAttr(OjConstants.USER);
-      if (user == null)
+      userModel = (UserModel) getPrincipal();
+      
+      if (userModel == null)
       {
         redirect("/");
         return;
       }
     } else
     {
-      user = UserModel.dao.getUserByName(name);
-      if (user == null)
+      userModel = UserModel.dao.getUserByName(name);
+      if (userModel == null)
       {
         redirect("/");
         return;
@@ -157,10 +154,10 @@ public class UserController extends OjController
     }
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    setAttr("createTime", sdf.format(new Date(user.getInt("ctime") * 1000L)));
-    setAttr("loginTime", sdf.format(new Date(user.getInt("login") * 1000L)));
-    setAttr(OjConstants.USER, user);
-    setAttr("userRank", UserModel.dao.getUserRank(user.getUid()));
+    setAttr("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
+    setAttr("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
+    setAttr(OjConstants.USER, userModel);
+    setAttr("userRank", UserModel.dao.getUserRank(userModel.getUid()));
     setTitle("User Profile");
     render("profile.html");
   }
@@ -176,13 +173,13 @@ public class UserController extends OjController
   public void uploadAvatar()
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
-    UserModel user = getSessionAttr(OjConstants.USER);
+    UserModel userModel = (UserModel) getPrincipal();
     int uid = getParaToInt("uid", 0);
 
     if (uid != 0)
     {
       String ext = FileKit.getFileType(uploadFile.getOriginalFileName());
-      String fileName = new StringBand(4).append(OjConfig.userAvatarPath).append(uid).append(".").append(user.getStr("avatar")).toString();
+      String fileName = new StringBand(4).append(OjConfig.userAvatarPath).append(uid).append(".").append(userModel.getStr("avatar")).toString();
 
       try
       {
@@ -196,7 +193,7 @@ public class UserController extends OjController
       try
       {
         FileUtil.moveFile(uploadFile.getFile(), new File(fileName));
-        user.set("avatar", ext.substring(1)).update();
+        userModel.set("avatar", ext.substring(1)).update();
         renderJson("FILEID:/oj/assets/images/user/" + uid + ext);
         return;
       } catch (IOException e)
@@ -237,7 +234,7 @@ public class UserController extends OjController
   @ActionKey("/signup")
   public void signup()
   {
-    if (getSessionAttr(OjConstants.USER) != null)// user already login
+    if (getCurrentUser().isAuthenticated())// user already login
     {
       redirect("/");
       return;
@@ -251,10 +248,13 @@ public class UserController extends OjController
   public void save()
   {
     UserModel userModel = getModel(UserModel.class, "user");
+    String password = userModel.getStr("pass");
     userModel.saveUser();
 
     userModel = userModel.findById(userModel.getUid());
-    setSessionAttr(OjConstants.USER, userModel);
+    UsernamePasswordToken token = new UsernamePasswordToken(userModel.getStr("name"), password);
+    Subject currentUser = getCurrentUser();
+    currentUser.login(token);
 
     redirect("/user/edit", "Congratulations!You have a new account now.<br>Please update your information.");
   }

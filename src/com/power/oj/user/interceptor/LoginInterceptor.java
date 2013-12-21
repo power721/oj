@@ -2,16 +2,16 @@ package com.power.oj.user.interceptor;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
-import com.jfinal.core.Controller;
 import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjController;
 
 public class LoginInterceptor implements Interceptor
 {
   @Override
   public void intercept(ActionInvocation ai)
   {
-    Controller controller = ai.getController();
-    if (controller.getSessionAttr(OjConstants.USER) != null)
+    OjController controller = (OjController) ai.getController();
+    if (controller.getPrincipal() != null)
     {
       ai.invoke();
     } else

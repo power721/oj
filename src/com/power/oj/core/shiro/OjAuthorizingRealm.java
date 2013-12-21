@@ -31,7 +31,7 @@ public class OjAuthorizingRealm extends AuthorizingRealm
     
     if (userModel != null)
     {
-      return new SimpleAuthenticationInfo(userModel.getUid(), userModel.getStr("pass"), getName());
+      return new SimpleAuthenticationInfo(userModel, userModel.getStr("pass"), getName());
     }
 
     return null;

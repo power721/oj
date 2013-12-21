@@ -138,7 +138,7 @@ public class ContestController extends OjController
 
     setTitle(new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("problem", problemModel);
-    setAttr(OjConstants.USER, getSessionAttr(OjConstants.USER));
+    setAttr(OjConstants.USER, getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("cid", cid);
 

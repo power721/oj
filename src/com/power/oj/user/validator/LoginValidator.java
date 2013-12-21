@@ -1,8 +1,12 @@
 package com.power.oj.user.validator;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
 import com.power.oj.core.OjConstants;
+import com.power.oj.user.UserModel;
 
 public class LoginValidator extends Validator
 {
@@ -12,7 +16,9 @@ public class LoginValidator extends Validator
   {
     if (c.getRequest().getMethod() == "GET")
       return;
-    if (c.getSessionAttr(OjConstants.USER) != null)
+    Subject currentUser = SecurityUtils.getSubject();
+    UserModel userModel = (UserModel) currentUser.getPrincipal();
+    if (userModel != null)
     {
       c.redirect("/");
       return;
