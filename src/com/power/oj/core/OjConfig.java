@@ -82,11 +82,11 @@ public class OjConfig extends JFinalConfig
     loadPropertyFile("oj.properties");
 
     me.setDevMode(getPropertyToBoolean("devMode", false));
-    me.setBaseViewPath("/WEB-INF/pages");
-    me.setError401View("/WEB-INF/pages/error/401.html");
-    me.setError403View("/WEB-INF/pages/error/403.html");
-    me.setError404View("/WEB-INF/pages/error/404.html");
-    me.setError500View("/WEB-INF/pages/error/500.html");
+    me.setBaseViewPath("/WEB-INF/view");
+    me.setError401View("/WEB-INF/view/error/401.html");
+    me.setError403View("/WEB-INF/view/error/403.html");
+    me.setError404View("/WEB-INF/view/error/404.html");
+    me.setError500View("/WEB-INF/view/error/500.html");
 
     log.debug("configConstant finished.");
   }
