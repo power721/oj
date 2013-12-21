@@ -406,28 +406,6 @@ INSERT INTO `program_language` (`id`, `name`, `description`, `ext_time`, `ext_me
 INSERT INTO `program_language` (`id`, `name`, `description`, `ext_time`, `ext_memory`, `time_factor`, `memory_factor`, `ext`, `exe`, `complie_order`, `compile_cmd`, `brush`, `script`, `status`) VALUES ('5', 'Python', '', '0', '7000', '4', '3', 'py', 'exe', '1', 'C:\\power\\oj\\JudgeOnline\\bin\\Python\\Python.bat %PATH% %NAME% %EXT%', 'python', '0', '1');
 
 -- ----------------------------
--- Table structure for `role`
--- ----------------------------
-DROP TABLE IF EXISTS `role`;
-CREATE TABLE `role` (
-`id`  int(9) NOT NULL AUTO_INCREMENT ,
-`uid`  int(9) NOT NULL ,
-`role`  enum('root','administrator','member','source_browser','title') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'title' ,
-`status`  tinyint(1) NOT NULL DEFAULT 1 ,
-PRIMARY KEY (`id`)
-)
-ENGINE=MyISAM
-DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=2
-
-;
-
--- ----------------------------
--- Records of role
--- ----------------------------
-INSERT INTO `role` (`id`, `uid`, `role`, `status`) VALUES ('1', '1000', 'root', '1');
-
--- ----------------------------
 -- Table structure for `session`
 -- ----------------------------
 DROP TABLE IF EXISTS `session`;
@@ -555,6 +533,101 @@ AUTO_INCREMENT=1
 -- ----------------------------
 -- Records of team
 -- ----------------------------
+-- ----------------------------
+-- Table structure for `permission`
+-- ----------------------------
+DROP TABLE IF EXISTS `permission`;
+CREATE TABLE `permission` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `module` varchar(20) NOT NULL,
+  `type` tinyint(2) NOT NULL DEFAULT '1',
+  `name` varchar(64) NOT NULL,
+  `title` varchar(64) NOT NULL,
+  `parentID` int(9) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of permission
+-- ----------------------------
+INSERT INTO `permission` VALUES ('1', 'admin', '1', 'admin', 'admin', '0', '1');
+INSERT INTO `permission` VALUES ('2', 'admin', '1', 'admin:index', 'admin index', '1', '1');
+INSERT INTO `permission` VALUES ('3', 'admin', '1', 'admin:view', '', '1', '1');
+INSERT INTO `permission` VALUES ('4', 'admin', '1', 'admin:view:user', '', '3', '1');
+INSERT INTO `permission` VALUES ('5', 'admin', '1', 'admin:view:problem', '', '3', '1');
+INSERT INTO `permission` VALUES ('6', 'admin', '1', 'admin:view:contest', '', '3', '1');
+INSERT INTO `permission` VALUES ('7', 'admin', '1', 'admin:view:code', '', '3', '1');
+INSERT INTO `permission` VALUES ('8', 'admin', '1', 'contest:edit', '', '0', '1');
+INSERT INTO `permission` VALUES ('9', 'admin', '1', 'contest:view', '', '0', '1');
+INSERT INTO `permission` VALUES ('10', 'admin', '1', 'contest:add', '', '0', '1');
+INSERT INTO `permission` VALUES ('11', 'admin', '1', 'contest:build', '', '0', '1');
+INSERT INTO `permission` VALUES ('12', 'system', '1', 'image:upload', '', '0', '1');
+INSERT INTO `permission` VALUES ('13', 'system', '1', 'file:upload', '', '0', '1');
+INSERT INTO `permission` VALUES ('14', 'problem', '1', 'problem:edit', '', '0', '1');
+INSERT INTO `permission` VALUES ('15', 'problem', '1', 'problem:add', '', '0', '1');
+INSERT INTO `permission` VALUES ('16', 'problem', '1', 'problem:delete', '', '0', '1');
+INSERT INTO `permission` VALUES ('17', 'problem', '1', 'problem:build', '', '0', '1');
+INSERT INTO `permission` VALUES ('18', 'user', '1', 'user:view', '', '0', '1');
+INSERT INTO `permission` VALUES ('19', 'user', '1', 'user:edit', '', '0', '1');
+INSERT INTO `permission` VALUES ('20', 'user', '1', 'user:add', '', '0', '1');
+INSERT INTO `permission` VALUES ('21', 'user', '1', 'user:delete', '', '0', '1');
+INSERT INTO `permission` VALUES ('22', 'user', '1', 'user', '', '0', '1');
+INSERT INTO `permission` VALUES ('23', 'problem', '1', 'problem', '', '0', '1');
+
+-- ----------------------------
+-- Table structure for `roles`
+-- ----------------------------
+DROP TABLE IF EXISTS `roles`;
+CREATE TABLE `roles` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `description` varchar(80) NOT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of roles
+-- ----------------------------
+INSERT INTO `roles` VALUES ('1', 'root', 'root', '1');
+INSERT INTO `roles` VALUES ('2', 'admin', 'administrator', '1');
+
+-- ----------------------------
+-- Table structure for `role_permission`
+-- ----------------------------
+DROP TABLE IF EXISTS `role_permission`;
+CREATE TABLE `role_permission` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `rid` int(9) NOT NULL,
+  `pid` int(9) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of role_permission
+-- ----------------------------
+INSERT INTO `role_permission` VALUES ('1', '1', '1');
+INSERT INTO `role_permission` VALUES ('2', '1', '22');
+INSERT INTO `role_permission` VALUES ('3', '1', '23');
+
+-- ----------------------------
+-- Table structure for `user_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_role`;
+CREATE TABLE `user_role` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `rid` int(9) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `rid` (`rid`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user_role
+-- ----------------------------
+INSERT INTO `user_role` VALUES ('1', '1000', '1', '1');
 
 -- ----------------------------
 -- Table structure for `user`
