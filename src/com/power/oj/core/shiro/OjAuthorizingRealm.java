@@ -34,35 +34,32 @@ public class OjAuthorizingRealm extends AuthorizingRealm
 
     if (userModel != null)
     {
-      String sql = "SELECT p.name AS permission FROM permission p WHERE p.id IN " +
-      "(SELECT rp.pid FROM role_permission rp " + 
-      "LEFT JOIN roles r ON rp.rid = r.id " + 
-      "LEFT JOIN user_role ur ON ur.rid = r.id " + 
-      "WHERE ur.uid = ?)";
-      List<Record> permissionList = Db.find(sql, userModel.getUid());
+      String sql = "SELECT r.name AS role, r.id AS rid FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
+      List<Record> roleList = Db.find(sql, userModel.getUid());
+      SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+      Set<String> roles = new HashSet<String>();
+      Set<String> pers = new HashSet<String>();
 
-      if (permissionList != null && permissionList.size() > 0)
+      if (roleList != null && roleList.size() > 0)
       {
         log.info(userModel.toString());
         
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        Set<String> pers = new HashSet<String>();
-        for (Record record : permissionList)
-        {
-          pers.add(record.getStr("permission"));
-          log.info(record.getStr("permission"));
-        }
-        info.setStringPermissions(pers);
-        
-        sql = "SELECT r.name AS role FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
-        List<Record> roleList = Db.find(sql, userModel.getUid());
-        Set<String> roles = new HashSet<String>();
         for (Record record : roleList)
         {
           roles.add(record.getStr("role"));
-          log.info(record.getStr("role"));
+          log.info("role: " + record.getStr("role"));
+          
+          sql = "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
+          List<Record> permissionList = Db.find(sql, record.getInt("rid"));
+
+          for (Record permissionRecord : permissionList)
+          {
+            pers.add(permissionRecord.getStr("permission"));
+            log.info("permission: " + permissionRecord.getStr("permission"));
+          }
         }
         info.setRoles(roles);
+        info.setStringPermissions(pers);
         
         return info;
       }
