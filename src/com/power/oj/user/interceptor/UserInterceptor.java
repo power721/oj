@@ -22,14 +22,16 @@ public class UserInterceptor implements Interceptor
   public void intercept(ActionInvocation ai)
   {
     OjController controller = (OjController) ai.getController();
-    UserModel userModel = UserService.getPrincipal();
     
     if (UserService.isUser()) // if user is logined, set user information in controller
     {
+      UserModel userModel = UserService.getPrincipal();
       int uid = userModel.getUid();
       controller.setAttr(OjConstants.USER_ID, uid);
       controller.setAttr(OjConstants.USER_NAME, userModel.getStr("name"));
       controller.setAttr(OjConstants.USER_EMAIL, userModel.getStr("email"));
+      
+      // TODO: Use Shiro Role
       if (controller.getSessionAttr(OjConstants.ADMIN_USER) != null)
         controller.setAttr(OjConstants.ADMIN_USER, uid);
     }

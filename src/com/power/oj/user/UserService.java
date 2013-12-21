@@ -40,22 +40,7 @@ public class UserService
     
     return true;
   }
-  /*
-  public static boolean autoLogin()
-  {
-    Subject currentUser = SecurityUtils.getSubject();
-    if (currentUser.isRemembered())
-    {
-      UserModel userModel = (UserModel) currentUser.getPrincipal();
-      UsernamePasswordToken token = new UsernamePasswordToken(userModel.getStr("name"), userModel.getStr("pass"));
-      token.setRememberMe(true);
-
-      currentUser.login(token);
-    }
-    
-    return true;
-  }
-  */
+  
   public static void logout()
   {
     Subject currentUser = SecurityUtils.getSubject();
@@ -76,7 +61,11 @@ public class UserService
   
   public static UserModel getPrincipal()
   {
-    Object principal = getCurrentUser().getPrincipal();
+    Subject currentUser = getCurrentUser();
+    if (currentUser == null)
+      return null;
+    
+    Object principal = currentUser.getPrincipal();
     if (principal instanceof UserModel)
     {
       return (UserModel) principal;
@@ -86,6 +75,11 @@ public class UserService
       log.warn(principal.toString());
     
     return null;
+  }
+  
+  public static boolean isAuthenticated()
+  {
+    return getCurrentUser() != null && getCurrentUser().isAuthenticated();
   }
   
   public static boolean isUser()

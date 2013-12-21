@@ -12,7 +12,6 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
-import com.power.oj.user.interceptor.AutoLoginException;
 
 public class UserModel extends Model<UserModel>
 {
@@ -94,15 +93,6 @@ public class UserModel extends Model<UserModel>
       userRank = (Integer) object;
     }
     return userRank;
-  }
-
-  public UserModel autoLogin(String name, String token) throws AutoLoginException
-  {
-    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? AND token=? LIMIT 1", name, token);
-    if (userModel == null)
-      throw new AutoLoginException("Auto login for user " + name + " failed!");
-    
-    return userModel;
   }
 
   public boolean isRoot(int uid)
