@@ -46,6 +46,16 @@ body > .navbar {
     font-size: 13px;
 }
 
+.main {
+	min-height: 600px;
+}
+
+.copyright {
+	line-height: 39px;
+	text-align: center;
+	border-top: 1px solid #ccc;
+}
+
 .footer {
     border-top: 1px solid #E5E5E5;
     margin-top: 70px;

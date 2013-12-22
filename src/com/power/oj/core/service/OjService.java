@@ -34,7 +34,7 @@ public class OjService
     }
   }
   
-  public static void loadJudgeResult()
+  public static void initJudgeResult()
   {
     OjConfig.judge_result = new ArrayList<ResultType>();
     OjConfig.judge_result.add(new ResultType(ResultType.AC, "AC", "Accepted"));

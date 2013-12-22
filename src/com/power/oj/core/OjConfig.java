@@ -176,7 +176,8 @@ public class OjConfig extends JFinalConfig
     siteTitle = getProperty(OjConstants.SITE_TITLE, "Power OJ");
     userAvatarPath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/user/").toString();
     problemImagePath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/problem/").toString();
-    OjService.loadJudgeResult();
+    
+    OjService.initJudgeResult();
     OjService.loadLanguage();
     OjService.loadVariable();
     
