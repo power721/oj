@@ -42,6 +42,16 @@ public class CommonController extends OjController
   {
     render("index.html");
   }
+  
+  public void contact()
+  {
+    
+  }
+  
+  public void changelog()
+  {
+    
+  }
 
   /**
    * Frequently Asked Questions page.
