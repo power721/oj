@@ -1,8 +1,6 @@
 package com.power.oj.core;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import jodd.util.StringBand;
@@ -18,6 +16,7 @@ import com.power.oj.core.interceptor.MessageInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
+import com.power.oj.core.service.OjService;
 import com.power.oj.core.shiro.ShiroInViewInterceptor;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
@@ -177,47 +176,11 @@ public class OjConfig extends JFinalConfig
     siteTitle = getProperty(OjConstants.SITE_TITLE, "Power OJ");
     userAvatarPath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/user/").toString();
     problemImagePath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/problem/").toString();
-    init();
+    OjService.loadJudgeResult();
+    OjService.loadLanguage();
+    OjService.loadVariable();
     
     log.debug("afterJFinalStart finished.");
-  }
-
-  /**
-   * Initialize configuration form DB. Initialize the programming language and
-   * judge result type.
-   */
-  public static void init()
-  {
-    for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable"))
-    {
-      variable.put(variableModel.getStr("name"), variableModel);
-    }
-
-    program_languages = LanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
-    for (LanguageModel Language : program_languages)
-    {
-      language_type.put(Language.getInt("id"), Language);
-      language_name.put(Language.getInt("id"), Language.getStr("name"));
-    }
-
-    judge_result = new ArrayList<ResultType>();
-    judge_result.add(new ResultType(ResultType.AC, "AC", "Accepted"));
-    judge_result.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
-    judge_result.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
-    judge_result.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
-    judge_result.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
-    judge_result.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
-    judge_result.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
-    judge_result.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
-    judge_result.add(new ResultType(ResultType.SE, "SE", "System Error"));
-    judge_result.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
-    judge_result.add(new ResultType(ResultType.Wait, "Wait", "Waiting"));
-
-    for (Iterator<ResultType> it = judge_result.iterator(); it.hasNext();)
-    {
-      ResultType resultType = it.next();
-      result_type.put(resultType.getId(), resultType);
-    }
   }
 
   /*

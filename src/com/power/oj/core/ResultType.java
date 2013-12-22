@@ -18,12 +18,12 @@ public class ResultType
   private String name;
   private String longName;
 
-  ResultType()
+  public ResultType()
   {
 
   }
 
-  ResultType(int id, String name, String longName)
+  public ResultType(int id, String name, String longName)
   {
     this.id = id;
     this.name = name;
