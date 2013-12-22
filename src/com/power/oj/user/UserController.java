@@ -16,6 +16,7 @@ import jodd.util.StringBand;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
+import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
@@ -58,6 +59,7 @@ public class UserController extends OjController
   }
 
   @Before(POST.class)
+  @ClearShiro
   public void signin()
   {
     Subject currentUser = UserService.getCurrentUser();
