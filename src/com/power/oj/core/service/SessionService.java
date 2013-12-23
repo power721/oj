@@ -45,7 +45,7 @@ public class SessionService
 
   public static void updateLogin()
   {
-    Subject currentUser = UserService.getCurrentUser();
+    Subject currentUser = UserService.getSubject();
     Session session = currentUser.getSession();
     UserModel userModel = (UserModel) currentUser.getPrincipal();
     String id = (String) session.getId();

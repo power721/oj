@@ -23,7 +23,7 @@ public class AccessLogInterceptor implements Interceptor
   protected static final Logger log = Logger.getLogger(AccessLogInterceptor.class);
   
   private String skipActions[] =
-  { "/login", "/user/signin", "/logout", "signup", "/captcha", "/contest/password", "/problem/userResult" };
+  { "/login", "/user/signin", "/logout", "/signup", "/captcha", "/contest/password", "/problem/userResult" };
 
   @Override
   public void intercept(ActionInvocation ai)

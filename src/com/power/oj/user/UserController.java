@@ -220,7 +220,7 @@ public class UserController extends OjController
 
     userModel = userModel.findById(userModel.getUid());
     UsernamePasswordToken token = new UsernamePasswordToken(userModel.getStr("name"), password);
-    Subject currentUser = UserService.getCurrentUser();
+    Subject currentUser = UserService.getSubject();
     currentUser.login(token);
 
     redirect("/user/edit", "Congratulations!You have a new account now.<br>Please update your information.");

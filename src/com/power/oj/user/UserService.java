@@ -5,9 +5,9 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
-import com.jfinal.ext.plugin.shiro.ShiroMethod;
 import com.jfinal.log.Logger;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.core.shiro.ShiroKit;
 
 public class UserService
 {
@@ -18,7 +18,7 @@ public class UserService
 
   public static boolean login(String name, String password, boolean rememberMe)
   {
-    Subject currentUser = getCurrentUser();
+    Subject currentUser = getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
 
@@ -38,7 +38,7 @@ public class UserService
 
   public static void logout()
   {
-    Subject currentUser = getCurrentUser();
+    Subject currentUser = getSubject();
     UserModel userModel = getPrincipal();
     if (userModel != null)
     {
@@ -49,14 +49,14 @@ public class UserService
     currentUser.logout();
   }
 
-  public static Subject getCurrentUser()
+  public static Subject getSubject()
   {
     return SecurityUtils.getSubject();
   }
 
   public static UserModel getPrincipal()
   {
-    Subject currentUser = getCurrentUser();
+    Subject currentUser = getSubject();
     if (currentUser == null)
       return null;
 
@@ -74,52 +74,52 @@ public class UserService
 
   public static boolean isAuthenticated()
   {
-    return ShiroMethod.authenticated();
+    return ShiroKit.isAuthenticated();
   }
   
   public static boolean isRemembered()
   {
-    return getCurrentUser() != null && getCurrentUser().isRemembered();
+    return ShiroKit.isRemembered();
   }
   
   public static boolean isUser()
   {
-    return ShiroMethod.user();
+    return ShiroKit.isUser();
   }
 
   public static boolean isGuest()
   {
-    return ShiroMethod.guest();
+    return ShiroKit.isGuest();
   }
 
   public static boolean hasRole(String roleName)
   {
-    return ShiroMethod.hasRole(roleName);
+    return ShiroKit.hasRole(roleName);
   }
   
   public static boolean lacksRole(String roleName)
   {
-    return ShiroMethod.lacksRole(roleName);
+    return ShiroKit.lacksRole(roleName);
   }
   
   public static boolean hasAnyRoles(String roleNames)
   {
-    return ShiroMethod.hasAnyRoles(roleNames);
+    return ShiroKit.hasAnyRoles(roleNames);
   }
   
   public static boolean hasAllRoles(String roleNames)
   {
-    return ShiroMethod.hasAllRoles(roleNames);
+    return ShiroKit.hasAllRoles(roleNames);
   }
   
   public static boolean hasPermission(String permission)
   {
-    return ShiroMethod.hasPermission(permission);
+    return ShiroKit.hasPermission(permission);
   }
   
   public static boolean lacksPermission(String permission)
   {
-    return ShiroMethod.lacksPermission(permission);
+    return ShiroKit.lacksPermission(permission);
   }
   
 }

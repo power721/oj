@@ -18,6 +18,7 @@ import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.shiro.ShiroInViewInterceptor;
+import com.power.oj.core.shiro.ShiroKit;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
@@ -39,6 +40,9 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
+import com.jfinal.render.FreeMarkerRender;
+
+import freemarker.template.TemplateModelException;
 
 /**
  * Configure the system.
@@ -79,7 +83,14 @@ public class OjConfig extends JFinalConfig
   public void configConstant(Constants me)
   {
     loadPropertyFile("oj.properties");
-
+    
+    try
+    {
+      FreeMarkerRender.getConfiguration().setSharedVariable("ShiroKit", new ShiroKit());
+    } catch (TemplateModelException e)
+    {
+      log.error(e.getLocalizedMessage());
+    }
     me.setDevMode(getPropertyToBoolean("devMode", false));
     me.setBaseViewPath("/WEB-INF/view");
     me.setError401View("/WEB-INF/view/error/401.html");
