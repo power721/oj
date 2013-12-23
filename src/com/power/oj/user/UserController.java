@@ -20,7 +20,6 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
-import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.upload.UploadFile;
 
 import com.power.oj.core.OjConfig;
@@ -300,11 +299,9 @@ public class UserController extends OjController
   {
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", 20);
-    Page<UserModel> userList = UserModel.dao.paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rank,uid,name,nick,realname,solved,submit",
-        "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1) * pageSize);
-
+    
     setTitle("Ranklist");
-    setAttr(OjConstants.USER_LIST, userList);
+    setAttr(OjConstants.USER_LIST, UserService.getUserRankList(pageNumber, pageSize));
 
     render("rank.html");
   }

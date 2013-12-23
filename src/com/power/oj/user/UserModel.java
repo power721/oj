@@ -10,6 +10,7 @@ import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 
@@ -93,6 +94,14 @@ public class UserModel extends Model<UserModel>
       userRank = (Integer) object;
     }
     return userRank;
+  }
+
+  public Page<UserModel> getUserRankList(int pageNumber, int pageSize)
+  {
+    Page<UserModel> userList = UserModel.dao.paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rank,uid,name,nick,realname,solved,submit",
+        "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1) * pageSize);
+    
+    return userList;
   }
 
   public List<UserModel> searchUser(String scope, String word)

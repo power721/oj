@@ -6,6 +6,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
 import com.jfinal.log.Logger;
+import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
 
@@ -52,6 +53,11 @@ public class UserService
   public static UserModel getUserByName(String name)
   {
     return dao.getUserByName(name);
+  }
+  
+  public static Page<UserModel> getUserRankList(int pageNumber, int pageSize)
+  {
+    return dao.getUserRankList(pageNumber, pageSize);
   }
 
   public static Subject getSubject()
