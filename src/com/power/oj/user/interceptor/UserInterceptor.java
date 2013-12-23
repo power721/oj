@@ -26,8 +26,7 @@ public class UserInterceptor implements Interceptor
     if (UserService.isUser()) // if user is logined, set user information in controller
     {
       UserModel userModel = UserService.getPrincipal();
-      int uid = userModel.getUid();
-      controller.setAttr(OjConstants.USER_ID, uid);
+      controller.setAttr(OjConstants.USER_ID, userModel.getUid());
       controller.setAttr(OjConstants.USER_NAME, userModel.getStr("name"));
       controller.setAttr(OjConstants.USER_EMAIL, userModel.getStr("email"));
     }

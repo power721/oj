@@ -36,6 +36,12 @@ public class UserModel extends Model<UserModel>
     return uid;
   }
 
+  public UserModel getUserByName(String name)
+  {
+    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
+    return userModel;
+  }
+
   public UserModel getUserByNameAndPassword(String name, String password)
   {
     UserModel userModel = getUserByName(name);
@@ -47,12 +53,6 @@ public class UserModel extends Model<UserModel>
     }
 
     return null;
-  }
-
-  public UserModel getUserByName(String name)
-  {
-    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
-    return userModel;
   }
 
   public UserModel getUserByNameAndEmail(String name, String email)
@@ -94,44 +94,7 @@ public class UserModel extends Model<UserModel>
     }
     return userRank;
   }
-/*
-  public boolean isRoot(int uid)
-  {
-    return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND role='root' AND status=1 LIMIT 1", uid) != null;
-  }
 
-  public boolean isAdmin(int uid)
-  {
-    return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator') AND status=1 LIMIT 1", uid) != null;
-  }
-
-  public boolean isMember(int uid)
-  {
-    return Db.findFirst("SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member') AND status=1 LIMIT 1", uid) != null;
-  }
-
-  public boolean isSourceBrowser(int uid)
-  {
-    return Db.findFirst(
-        "SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member' OR role='source_browser') AND status=1 LIMIT 1", uid) != null;
-  }
-
-  public boolean isTitle(int uid)
-  {
-    return Db
-        .findFirst(
-            "SELECT 1 FROM role WHERE uid=? AND (role='root' OR role='administrator' OR role='member' OR role='source_browser' OR role='title') AND status=1 LIMIT 1",
-            uid) != null;
-  }
-
-  public String getRole(int uid)
-  {
-    Record record = Db.findFirst("SELECT role FROM role WHERE uid=? AND status=1 LIMIT 1", uid);
-    if (record != null)
-      return record.getStr("role");
-    return null;
-  }
-*/
   public List<UserModel> searchUser(String scope, String word)
   {
     List<UserModel> userList = null;
@@ -163,62 +126,54 @@ public class UserModel extends Model<UserModel>
     
     return userList;
   }
-/*
-  public List<Record> onlineUser()
-  {
-    List<Record> userList = Db
-        .find("SELECT uid,name,ip_address,user_agent,FROM_UNIXTIME(last_activity, '%Y-%m-%d %H:%i:%s') AS time,uri FROM session WHERE session_expires > UNIX_TIMESTAMP() ORDER BY last_activity DESC");
-    return userList;
-  }
-*/
+
   public boolean saveUser()
   {
-    String password = this.getStr("pass");
+    String password = getStr("pass");
     password = BCrypt.hashpw(password, BCrypt.gensalt());
-    this.set("pass", password);
-    this.set("name", HtmlEncoder.text(this.getStr("name")));
+    set("pass", password);
+    set("name", HtmlEncoder.text(getStr("name")));
 
     long ctime = OjConfig.timeStamp;
-    this.set("atime", ctime).set("ctime", ctime).set("mtime", ctime).set("login", ctime);
+    set("atime", ctime).set("ctime", ctime).set("mtime", ctime).set("login", ctime);
 
-    return this.save();
+    return save();
   }
 
   public boolean updateUser()
   {
-    String password = this.getStr("pass");
+    String password = getStr("pass");
     if (StringUtil.isNotBlank(password))
     {
       password = BCrypt.hashpw(password, BCrypt.gensalt());
-      this.set("pass", password);
+      set("pass", password);
     } else
     {
-      this.remove("pass");
+      remove("pass");
     }
-    this.set("nick", HtmlEncoder.text(this.getStr("nick")));
-    this.set("school", HtmlEncoder.text(this.getStr("school")));
-    this.set("realname", HtmlEncoder.text(this.getStr("realname")));
-    this.set("blog", HtmlEncoder.text(this.getStr("blog")));
-    // this.set("email", HtmlEncoder.text(this.getStr("email")));
-    this.set("phone", HtmlEncoder.text(this.getStr("phone")));
-
-    long mtime = OjConfig.timeStamp;
-    this.set("mtime", mtime);
-    return this.update();
+    
+    set("nick", HtmlEncoder.text(getStr("nick")));
+    set("school", HtmlEncoder.text(getStr("school")));
+    set("realname", HtmlEncoder.text(getStr("realname")));
+    set("blog", HtmlEncoder.text(getStr("blog")));
+    set("email", HtmlEncoder.text(getStr("email")));
+    set("phone", HtmlEncoder.text(getStr("phone")));
+    set("mtime", OjConfig.timeStamp);
+    
+    return update();
   }
 
   public boolean updateLogin(String token)
   {
-    long login = OjConfig.timeStamp;
-    this.set("login", login);
+    set("login", OjConfig.timeStamp);
     if (StringUtil.isNotBlank(token))
-      this.set("token", token);
-    return this.update();
+      set("token", token);
+    return update();
   }
 
   public boolean build()
   {
-    int uid = this.getUid();
+    int uid = getUid();
     long accept = 0;
     long submit = 0;
     long solved = 0;
@@ -228,24 +183,24 @@ public class UserModel extends Model<UserModel>
     if (record != null)
     {
       submit = record.getLong("count");
-      this.set("submit", submit);
+      set("submit", submit);
     }
 
     record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
     if (record != null)
     {
       accept = record.getLong("count");
-      this.set("accept", accept);
+      set("accept", accept);
     }
 
     record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
     if (record != null)
     {
       solved = record.getLong("count");
-      this.set("solved", solved);
+      set("solved", solved);
     }
 
-    return this.update();
+    return update();
   }
 
   public boolean checkPass(int uid, String password)
