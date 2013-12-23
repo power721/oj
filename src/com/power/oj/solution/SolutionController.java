@@ -1,5 +1,8 @@
 package com.power.oj.solution;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
+
 import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
@@ -16,7 +19,6 @@ import com.power.oj.core.model.LanguageModel;
 import com.power.oj.judge.Judge;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserModel;
-import com.power.oj.user.interceptor.LoginInterceptor;
 
 public class SolutionController extends OjController
 {
@@ -65,7 +67,7 @@ public class SolutionController extends OjController
   }
 
   @ActionKey("/code")
-  @Before(LoginInterceptor.class)
+  @RequiresUser
   public void show()
   {
     int sid = getParaToInt(0);
@@ -130,7 +132,8 @@ public class SolutionController extends OjController
     renderText("TODO");
   }
 
-  @Before({POST.class, LoginInterceptor.class})
+  @Before(POST.class)
+  @RequiresPermissions("problem:submit")//code:add
   public void save()
   {
     SolutionModel solutionModel = getModel(SolutionModel.class, "solution");

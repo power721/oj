@@ -17,13 +17,11 @@ import sun.misc.BASE64Decoder;
 import jodd.io.FileUtil;
 import jodd.util.StringBand;
 
-import com.jfinal.aop.Before;
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
-import com.power.oj.user.interceptor.LoginInterceptor;
 import com.power.oj.util.FileKit;
 
 /**
@@ -65,7 +63,7 @@ public class CommonController extends OjController
    * public void status() { render("index.html"); }
    */
 
-  @Before(LoginInterceptor.class)
+  @RequiresPermissions("admin:upload")
   public void upload()
   {
     // UploadFile file = getFile("Filedata", "", 10*1024*1024, "UTF-8");

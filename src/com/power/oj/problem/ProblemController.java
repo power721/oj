@@ -22,7 +22,6 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.ResultType;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
-import com.power.oj.user.interceptor.LoginInterceptor;
 
 public class ProblemController extends OjController
 {
@@ -105,7 +104,7 @@ public class ProblemController extends OjController
     render("show.html");
   }
 
-  @Before(LoginInterceptor.class)
+  @RequiresPermissions("problem:submit")
   public void submit()
   {
     int pid = getParaToInt(0);
@@ -351,7 +350,8 @@ public class ProblemController extends OjController
     renderJson(userResult);
   }
 
-  @Before({POST.class, LoginInterceptor.class})
+  @Before(POST.class)
+  @RequiresPermissions("problem:addTag")
   public void tag()
   {
     String op = getPara("op");
