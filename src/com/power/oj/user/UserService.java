@@ -48,6 +48,11 @@ public class UserService
 
     currentUser.logout();
   }
+  
+  public static UserModel getUserByName(String name)
+  {
+    return dao.getUserByName(name);
+  }
 
   public static Subject getSubject()
   {

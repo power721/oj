@@ -17,9 +17,10 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.service.OjService;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class OjAuthorizingRealm extends AuthorizingRealm
 {
@@ -34,24 +35,21 @@ public class OjAuthorizingRealm extends AuthorizingRealm
 
     if (uid != null)
     {
-      String sql = "SELECT r.name AS role, r.id AS rid FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
-      List<Record> roleList = Db.find(sql, uid);
-      SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-      Set<String> roles = new HashSet<String>();
-      Set<String> pers = new HashSet<String>();
-
+      log.info(uid.toString());
+      List<Record> roleList = OjService.getUserRoles(uid);
+      
       if (roleList != null && roleList.size() > 0)
       {
-        log.info(uid.toString());
-        
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        Set<String> roles = new HashSet<String>();
+        Set<String> pers = new HashSet<String>();
+
         for (Record record : roleList)
         {
           roles.add(record.getStr("role"));
           log.info("role: " + record.getStr("role"));
           
-          sql = "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
-          List<Record> permissionList = Db.find(sql, record.getInt("rid"));
-
+          List<Record> permissionList = OjService.getRolePermission(record.getInt("rid"));
           for (Record permissionRecord : permissionList)
           {
             pers.add(permissionRecord.getStr("permission"));
@@ -72,7 +70,7 @@ public class OjAuthorizingRealm extends AuthorizingRealm
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException
   {
     UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-    UserModel userModel = UserModel.dao.getUserByName(token.getUsername());
+    UserModel userModel = UserService.getUserByName(token.getUsername());
 
     if (userModel != null)
     {

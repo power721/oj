@@ -3,8 +3,12 @@ package com.power.oj.core.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
+
 import jodd.util.collection.IntHashMap;
 
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.ResultType;
 import com.power.oj.core.model.LanguageModel;
@@ -57,4 +61,19 @@ public class OjService
     }
   }
 
+  public static List<Record> getUserRoles(int uid)
+  {
+    String sql = "SELECT r.name AS role, r.id AS rid FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
+    List<Record> roleList = Db.find(sql, uid);
+    
+    return roleList;
+  }
+  
+  public static List<Record> getRolePermission(int rid)
+  {
+    String sql = "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
+    List<Record> permissionList = Db.find(sql,rid);
+    
+    return permissionList;
+  }
 }
