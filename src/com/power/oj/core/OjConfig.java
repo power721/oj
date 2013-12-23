@@ -21,7 +21,7 @@ import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.shiro.ShiroInViewInterceptor;
-import com.power.oj.shiro.ShiroKit;
+import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.*;
@@ -41,8 +41,6 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
-
-import freemarker.template.TemplateModelException;
 
 /**
  * Configure the system.
@@ -83,14 +81,8 @@ public class OjConfig extends JFinalConfig
   public void configConstant(Constants me)
   {
     loadPropertyFile("oj.properties");
-    
-    try
-    {
-      FreeMarkerRender.getConfiguration().setSharedVariable("ShiroKit", new ShiroKit());
-    } catch (TemplateModelException e)
-    {
-      log.error(e.getLocalizedMessage());
-    }
+
+    FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
     me.setDevMode(getPropertyToBoolean("devMode", false));
     me.setBaseViewPath("/WEB-INF/view");
     me.setError401View("/WEB-INF/view/error/401.html");
@@ -191,7 +183,7 @@ public class OjConfig extends JFinalConfig
     OjService.initJudgeResult();
     OjService.loadLanguage();
     OjService.loadVariable();
-    
+
     log.debug("afterJFinalStart finished.");
   }
 
