@@ -7,7 +7,7 @@ import org.apache.shiro.subject.Subject;
 
 import com.jfinal.log.Logger;
 import com.power.oj.core.service.SessionService;
-import com.power.oj.core.shiro.ShiroKit;
+import com.power.oj.shiro.ShiroKit;
 
 public class UserService
 {

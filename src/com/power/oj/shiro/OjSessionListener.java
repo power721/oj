@@ -1,4 +1,4 @@
-package com.power.oj.core.shiro;
+package com.power.oj.shiro;
 
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.SessionListener;

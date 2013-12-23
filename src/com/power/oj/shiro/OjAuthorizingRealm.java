@@ -1,4 +1,4 @@
-package com.power.oj.core.shiro;
+package com.power.oj.shiro;
 
 import java.util.HashSet;
 import java.util.List;

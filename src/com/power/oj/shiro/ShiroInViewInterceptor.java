@@ -1,4 +1,4 @@
-package com.power.oj.core.shiro;
+package com.power.oj.shiro;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
