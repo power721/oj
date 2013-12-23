@@ -6,7 +6,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.subject.Subject;
 
 import jodd.io.FileUtil;
@@ -23,7 +26,6 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.SessionService;
-import com.power.oj.user.interceptor.LoginInterceptor;
 import com.power.oj.user.validator.SignupValidator;
 import com.power.oj.user.validator.UpdateUserValidator;
 import com.power.oj.util.FileKit;
@@ -48,9 +50,9 @@ public class UserController extends OjController
       redirect(SessionService.getLastAccessURL(), "You already login.", "error", "Error!");
       return;
     }
-
+    
     setTitle("Login");
-
+    
     boolean ajax = getParaToBoolean("ajax", false);
     if (ajax)
       render("ajax/login.html");
@@ -62,13 +64,12 @@ public class UserController extends OjController
   @ClearShiro
   public void signin()
   {
-    Subject currentUser = UserService.getCurrentUser();
-    if (currentUser.isAuthenticated())
+    if (UserService.isAuthenticated())
     {
       redirect(SessionService.getLastAccessURL(), "You already login.", "error", "Error!");
       return;
     }
-
+    
     String name = getPara("name").trim();
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
@@ -91,7 +92,7 @@ public class UserController extends OjController
       render("login.html");
   }
 
-  @Before(LoginInterceptor.class)
+  @RequiresUser
   @ActionKey("/logout")
   public void logout()
   {
@@ -108,10 +109,9 @@ public class UserController extends OjController
     if (name == null)
     {
       userModel = UserService.getPrincipal();
-
       if (userModel == null)
       {
-        redirect("/");
+        redirect(SessionService.getLastAccessURL());
         return;
       }
     } else
@@ -119,7 +119,7 @@ public class UserController extends OjController
       userModel = UserModel.dao.getUserByName(name);
       if (userModel == null)
       {
-        redirect("/");
+        redirect(SessionService.getLastAccessURL());
         return;
       }
     }
@@ -133,14 +133,14 @@ public class UserController extends OjController
     render("profile.html");
   }
 
-  @Before(LoginInterceptor.class)
+  @RequiresPermissions("user:upload:avatar")
   public void avatar()
   {
     render("avatar.html");
   }
 
-  @Before(
-  { POST.class, LoginInterceptor.class })
+  @Before(POST.class)
+  @RequiresPermissions("user:upload:avatar")
   public void uploadAvatar()
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
@@ -203,19 +203,15 @@ public class UserController extends OjController
   }
 
   @ActionKey("/signup")
+  @RequiresGuest
   public void signup()
   {
-    if (UserService.isAuthenticated())// user already login
-    {
-      redirect("/");
-      return;
-    }
-
     setTitle("Signup");
     render("signup.html");
   }
 
   @Before(SignupValidator.class)
+  @RequiresGuest
   public void save()
   {
     UserModel userModel = getModel(UserModel.class, "user");
@@ -230,19 +226,19 @@ public class UserController extends OjController
     redirect("/user/edit", "Congratulations!You have a new account now.<br>Please update your information.");
   }
 
-  @Before(LoginInterceptor.class)
+  @RequiresAuthentication
   public void edit()
   {
     setTitle("Account");
-    UserModel user = UserModel.dao.findById(getAttr("userID"));
-    setAttr(OjConstants.USER, user);
+    
+    setAttr(OjConstants.USER, UserService.getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 
     render("edit.html");
   }
 
-  @Before(
-  { LoginInterceptor.class, UpdateUserValidator.class })
+  @Before(UpdateUserValidator.class)
+  @RequiresAuthentication
   public void update()
   {
     UserModel userModel = getModel(UserModel.class, "user");
@@ -252,6 +248,7 @@ public class UserController extends OjController
     redirect(redirectURL, "The changes have been saved.");
   }
 
+  @RequiresPermissions("user:delete")
   public void delete()
   {
     renderText("TODO");

@@ -76,7 +76,12 @@ public class UserService
   {
     return ShiroMethod.authenticated();
   }
-
+  
+  public static boolean isRemembered()
+  {
+    return getCurrentUser() != null && getCurrentUser().isRemembered();
+  }
+  
   public static boolean isUser()
   {
     return ShiroMethod.user();

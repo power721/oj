@@ -600,7 +600,7 @@ INSERT INTO `permission` VALUES ('45', 'admin', '1', 'user:edit', '编辑', '31'
 INSERT INTO `permission` VALUES ('46', 'user', '1', 'user:edit:self', '自己', '45', '1');
 INSERT INTO `permission` VALUES ('47', 'user', '1', 'user:edit:nick', '昵称', '45', '1');
 INSERT INTO `permission` VALUES ('48', 'user', '1', 'user:edit:password', '密码', '45', '1');
-INSERT INTO `permission` VALUES ('49', 'user', '1', 'user:edit:avatar', '头像', '45', '1');
+INSERT INTO `permission` VALUES ('49', 'user', '1', 'user:upload:avatar', '上传头像', '31', '1');
 INSERT INTO `permission` VALUES ('50', 'admin', '1', 'user:delete', '删除', '31', '1');
 INSERT INTO `permission` VALUES ('51', 'admin', '1', 'user:switch', '切换', '31', '1');
 INSERT INTO `permission` VALUES ('52', 'admin', '1', 'user:forbid', '禁用', '31', '1');
