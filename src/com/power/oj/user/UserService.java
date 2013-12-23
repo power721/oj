@@ -14,7 +14,7 @@ public class UserService
   private static final Logger log = Logger.getLogger(UserService.class);
 
   // private static final UserService userService = new UserService();
-  // private UserModel dao = UserModel.dao;
+  private static final UserModel dao = UserModel.dao;
 
   public static boolean login(String name, String password, boolean rememberMe)
   {
@@ -61,15 +61,10 @@ public class UserService
       return null;
 
     Object principal = currentUser.getPrincipal();
-    if (principal instanceof UserModel)
-    {
-      return (UserModel) principal;
-    }
+    if (principal == null)
+      return null;
 
-    if (principal != null)
-      log.warn(principal.toString());
-
-    return null;
+    return dao.findById(principal);
   }
 
   public static boolean isAuthenticated()

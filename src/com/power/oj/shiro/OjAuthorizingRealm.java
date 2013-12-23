@@ -30,19 +30,19 @@ public class OjAuthorizingRealm extends AuthorizingRealm
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection printcipals)
   {
     // TODO Auto-generated method stub
-    UserModel userModel = (UserModel) printcipals.fromRealm(getName()).iterator().next();
+    Integer uid = (Integer) printcipals.fromRealm(getName()).iterator().next();
 
-    if (userModel != null)
+    if (uid != null)
     {
       String sql = "SELECT r.name AS role, r.id AS rid FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
-      List<Record> roleList = Db.find(sql, userModel.getUid());
+      List<Record> roleList = Db.find(sql, uid);
       SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
       Set<String> roles = new HashSet<String>();
       Set<String> pers = new HashSet<String>();
 
       if (roleList != null && roleList.size() > 0)
       {
-        log.info(userModel.toString());
+        log.info(uid.toString());
         
         for (Record record : roleList)
         {
@@ -76,7 +76,7 @@ public class OjAuthorizingRealm extends AuthorizingRealm
 
     if (userModel != null)
     {
-      return new SimpleAuthenticationInfo(userModel, userModel.getStr("pass"), getName());
+      return new SimpleAuthenticationInfo(userModel.getInt("uid"), userModel.getStr("pass"), getName());
     }
 
     return null;
