@@ -14,6 +14,8 @@ import com.power.oj.contest.ContestRankWebSocket;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.judge.Judge;
@@ -78,7 +80,8 @@ public class SolutionController extends OjController
     int loginUid = getAttrForInt(OjConstants.USER_ID);
     if (uid != loginUid && !isAdmin)
     {
-      redirect("/status", "Permission Denied.", "error", "Error!");
+      Message msg = new Message("Permission Denied.", MessageType.ERROR, "Error!");
+      redirect("/status", msg);
       return;
     }
 
@@ -154,7 +157,8 @@ public class SolutionController extends OjController
       ProblemModel problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
       if (problemModel == null)
       {
-        redirect(url, "Please choose a correct problem.", "error", "Error!");
+        Message msg = new Message("Please choose a correct problem", MessageType.ERROR, "Error!");
+        redirect(url, msg);
         return;
       }
       long stime = OjConfig.timeStamp;
@@ -173,7 +177,11 @@ public class SolutionController extends OjController
       }
       System.out.println(solutionModel.getInt("sid"));
     } else
-      redirect(url, "Submit failed, maybe code length is incorrect.", "error", "Error!");
+    {
+      Message msg = new Message("Submit failed, maybe code length is incorrect.", MessageType.ERROR, "Error!");
+      redirect(url, msg);
+      return;
+    }
 
     redirect(url);
   }

@@ -24,6 +24,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
@@ -61,7 +63,8 @@ public class ContestController extends OjController
     if (contestModle == null)
     {
       log.warn(new StringBand(2).append("Cannot find this contest: ").append(cid).toString());
-      redirect("/contest", "Cannot find this contest!", "error", "Error!");
+      Message msg = new Message("Cannot find this contest!", MessageType.ERROR, "Error!");
+      redirect("/contest", msg);
       return;
     }
     List<Record> contestProblems = ContestModel.dao.getContestProblems(cid, uid);
@@ -98,7 +101,8 @@ public class ContestController extends OjController
     if (problemModel == null)
     {
       log.warn(new StringBand(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
-      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), "Cannot find this contest problem!", "error", "Error!");
+      Message msg = new Message("Cannot find this contest problem!", MessageType.ERROR, "Error!");
+      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
@@ -127,7 +131,8 @@ public class ContestController extends OjController
 
     if (ContestModel.dao.isContestFinished(cid))
     {
-      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), "This contest has finished!", "warn", "Warnning!");
+      Message msg = new Message("This contest has finished!", MessageType.WRAN, "Warnning!");
+      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
@@ -135,7 +140,8 @@ public class ContestController extends OjController
     if (problemModel == null)
     {
       log.warn(new StringBand(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
-      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), "Cannot find this contest problem!", "error", "Error!");
+      Message msg = new Message("Cannot find this contest problem!", MessageType.ERROR, "Error!");
+      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
@@ -239,7 +245,8 @@ public class ContestController extends OjController
     {
       if (problemModel == null)
       {
-        redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), "Permission Denied.", "error", "Error!");
+        Message msg = new Message("Cannot find this problem!", MessageType.ERROR, "Error!");
+        redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
         return;
       }
 
@@ -388,8 +395,9 @@ public class ContestController extends OjController
 
     keepPara("cid");
     keepPara("title");
-
-    redirect(SessionService.getLastAccessURL(), "Sorry, you entered an invalid password.", "error", "Error!");
+    
+    Message msg = new Message("Sorry, you entered an invalid password.", MessageType.ERROR, "Error!");
+    redirect(SessionService.getLastAccessURL(), msg);
   }
 
   @RequiresPermissions("contest:edit")
@@ -450,7 +458,7 @@ public class ContestController extends OjController
     int cid = getParaToInt(0);
     ContestModel.dao.buildRank(cid);
 
-    redirect(new StringBand(2).append("/contest/rank/").append(cid).toString(), "The contest rank build success!");
+    redirect(new StringBand(2).append("/contest/rank/").append(cid).toString(), new Message("The contest rank build success!"));
   }
 
 }

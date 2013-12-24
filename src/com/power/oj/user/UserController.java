@@ -227,7 +227,7 @@ public class UserController extends OjController
     Subject currentUser = UserService.getSubject();
     currentUser.login(token);
 
-    redirect("/user/edit", "Congratulations!You have a new account now.<br>Please update your information.");
+    redirect("/user/edit", new Message("Congratulations!You have a new account now.<br>Please update your information."));
   }
 
   @RequiresAuthentication
@@ -249,7 +249,7 @@ public class UserController extends OjController
     userModel.updateUser();
 
     String redirectURL = new StringBand(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
-    redirect(redirectURL, "The changes have been saved.");
+    redirect(redirectURL, new Message("The changes have been saved."));
   }
 
   @RequiresPermissions("user:delete")
@@ -320,6 +320,6 @@ public class UserController extends OjController
       user.build();
 
     String redirectURL = new StringBand(2).append("/user/profile/").append(user.getStr("name")).toString();
-    redirect(redirectURL, "The user statistics have been saved.");
+    redirect(redirectURL, new Message("The user statistics have been saved."));
   }
 }

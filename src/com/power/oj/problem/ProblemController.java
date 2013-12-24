@@ -19,6 +19,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
@@ -61,7 +63,8 @@ public class ProblemController extends OjController
   {
     if (!isParaExists(0))
     {
-      redirect("/problem", "Please specify the problem ID.", "error", "Error!");
+      Message msg = new Message("Please specify the problem ID.", MessageType.ERROR, "Error!");
+      redirect("/problem", msg);
       return;
     }
 
@@ -70,7 +73,8 @@ public class ProblemController extends OjController
     ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
     if (problemModel == null)
     {
-      redirect("/problem", "Permission Denied.", "error", "Error!");
+      Message msg = new Message("Cannot find this problem!", MessageType.ERROR, "Error!");
+      redirect("/problem", msg);
       return;
     }
     int uid = 0;
@@ -140,7 +144,8 @@ public class ProblemController extends OjController
   {
     if (!isParaExists(0))
     {
-      redirect("/problem", "Please specify the problem ID.", "error", "Error!");
+      Message msg = new Message("Please specify the problem ID.", MessageType.ERROR, "Error!");
+      redirect("/problem", msg);
       return;
     }
 
@@ -163,7 +168,7 @@ public class ProblemController extends OjController
     problemModel.updateProblem();
 
     String redirectURL = new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
-    redirect(redirectURL, "The changes have been saved.");
+    redirect(redirectURL, new Message("The changes have been saved."));
   }
 
   @RequiresPermissions("problem:add")
@@ -184,7 +189,8 @@ public class ProblemController extends OjController
     File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
-      redirect(redirectURL, "The data directory already exists.", "warning", "Warning!");
+      Message msg = new Message("The data directory already exists.", MessageType.WRAN, "Warning!");
+      redirect(redirectURL, msg);
       return;
     }
 
@@ -194,7 +200,8 @@ public class ProblemController extends OjController
     } catch (IOException e)
     {
       log.error(e.getMessage());
-      redirect(redirectURL, "The data directory cannot create.", "error", "Error!");
+      Message msg = new Message("The data directory cannot create.", MessageType.ERROR, "Error!");
+      redirect(redirectURL, msg);
       return;
     }
 
@@ -224,7 +231,8 @@ public class ProblemController extends OjController
       ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
       if (problemModel == null)
       {
-        redirect("/problem", "Permission Denied.", "error", "Error!");
+        Message msg = new Message("Permission Denied.", MessageType.ERROR, "Error!");
+        redirect("/problem", msg);
         return;
       }
 
@@ -362,7 +370,7 @@ public class ProblemController extends OjController
       ProblemModel.dao.addTag(pid, uid, tag);
 
     String redirectURL = new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString();
-    redirect(redirectURL, "The changes have been saved.");
+    redirect(redirectURL, new Message("The changes have been saved."));
   }
 
   @RequiresPermissions("problem:build")
@@ -375,9 +383,9 @@ public class ProblemController extends OjController
     if (problemModel != null && !problemModel.build())
     {
       log.error(new StringBand(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
-      redirect(redirectURL, "Build problem statistics failed!");
+      redirect(redirectURL, new Message("Build problem statistics failed!"));
     }
 
-    redirect(redirectURL, "The problem statistics have been updated.");
+    redirect(redirectURL, new Message("The problem statistics have been updated."));
   }
 }
