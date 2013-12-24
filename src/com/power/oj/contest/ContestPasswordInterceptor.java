@@ -7,6 +7,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
+import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
 
 public class ContestPasswordInterceptor implements Interceptor
@@ -19,7 +20,7 @@ public class ContestPasswordInterceptor implements Interceptor
   {
     
     Controller controller = ai.getController();
-    if (controller.getSessionAttr(OjConstants.ADMIN_USER) != null)
+    if (UserService.hasPermission("contest:view:password"))
     {
       ai.invoke();
       return;

@@ -20,6 +20,7 @@ public class SessionService
 {
   private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
   private static ConcurrentHashMap<String, Session> shiroSession = new ConcurrentHashMap<String, Session>();
+  private static final SessionModel dao = SessionModel.dao;
   
   /**
    * @see AccessLogInterceptor
@@ -52,12 +53,12 @@ public class SessionService
     int uid = userModel.getUid();
     String name = userModel.getStr("name");
     
-    SessionModel sessionModel = SessionModel.dao.findById(id);
+    SessionModel sessionModel = dao.findById(id);
     sessionModel.set("uid", uid).set("name", name).update();
     SessionService.putModel(id, sessionModel);
   }
   
-  public static SessionModel update(Session session, String url)
+  public static SessionModel updateSession(Session session, String url)
   {
     String id = (String) session.getId();
     SessionModel sessionModel = SessionService.getModel(id);
@@ -68,6 +69,31 @@ public class SessionService
           
     sessionModel.set("last_activity", OjConfig.timeStamp).set("uri", url);
     return SessionService.putModel(id, sessionModel);
+  }
+  
+  public static SessionModel saveSession(Session session)
+  {
+    String id = (String) session.getId();
+    
+    SessionModel sessionModel = new SessionModel().set("session_id", id).set("ip_address", session.getHost());//.set("user_agent", agent);
+    sessionModel.set("ctime", OjConfig.timeStamp).set("last_activity", OjConfig.timeStamp);
+    sessionModel.set("session_expires", OjConfig.timeStamp + session.getTimeout());
+    sessionModel.save();
+
+    SessionService.putModel(id, sessionModel);
+    SessionService.putShiroSession(id, session);
+    
+    return sessionModel;
+  }
+  
+  public static int deleteSession(Session session)
+  {
+    String id = (String) session.getId();
+    
+    SessionService.removeModel(id);
+    SessionService.removeShiroSession(id);
+    
+    return dao.deleteSession(id);
   }
 
   public static SessionModel putModel(SessionModel session)
@@ -104,22 +130,22 @@ public class SessionService
     return accessLog.size();
   }
   
-  public static Session  putSession(Session session)
+  public static Session putShiroSession(Session session)
   {
     return shiroSession.put((String) session.getId(), session);
   }
   
-  public static Session putSession(String id, Session session)
+  public static Session putShiroSession(String id, Session session)
   {
     return shiroSession.put(id, session);
   }
   
-  public static Session getSession(String id)
+  public static Session getShiroSession(String id)
   {
     return shiroSession.get(id);
   }
   
-  public static Session removeSession(String id)
+  public static Session removeShiroSession(String id)
   {
     return shiroSession.remove(id);
   }
