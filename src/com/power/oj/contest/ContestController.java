@@ -24,7 +24,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.ResultType;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;

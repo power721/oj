@@ -10,6 +10,7 @@ import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
 import com.power.oj.core.interceptor.MessageInterceptor;

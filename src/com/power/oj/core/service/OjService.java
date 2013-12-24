@@ -10,7 +10,7 @@ import jodd.util.collection.IntHashMap;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.ResultType;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.VariableModel;
 

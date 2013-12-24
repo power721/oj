@@ -7,7 +7,7 @@ import org.apache.shiro.session.Session;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.power.oj.core.interceptor.AccessLogInterceptor;
+import com.power.oj.core.bean.Message;
 
 /**
  * Base Controller
@@ -19,21 +19,12 @@ public class OjController extends Controller
 {
   protected final Logger log = Logger.getLogger(getClass());
 
-  /**
-   * @see AccessLogInterceptor
-   */
-  private String lastAccessURL = "/";
+  public void redirect(String url, Message msg)
+  {
+    setMessage(msg);
+    super.redirect(url);
+  }
   
-  public String getLastAccessURL()
-  {
-    return lastAccessURL;
-  }
-
-  public void setLastAccessURL(String lastAccessURL)
-  {
-    this.lastAccessURL = lastAccessURL;
-  }
-
   /**
    * Redirect to url with succes message。
    * 
@@ -100,6 +91,13 @@ public class OjController extends Controller
   {
     setMessage(msg, msgType, msgTitle);
     super.redirect(url, withQueryString);
+  }
+  
+  public void setMessage(Message message)
+  {
+    setSessionAttr(OjConstants.MSG, message.getContent());
+    setSessionAttr(OjConstants.MSG_TYPE, message.getType());
+    setSessionAttr(OjConstants.MSG_TITLE, message.getTitle());
   }
 
   /**

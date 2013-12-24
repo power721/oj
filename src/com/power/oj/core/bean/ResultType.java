@@ -1,4 +1,4 @@
-package com.power.oj.core;
+package com.power.oj.core.bean;
 
 public class ResultType
 {

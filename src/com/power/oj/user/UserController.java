@@ -25,6 +25,8 @@ import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.user.validator.SignupValidator;
 import com.power.oj.user.validator.UpdateUserValidator;
@@ -47,7 +49,8 @@ public class UserController extends OjController
   {
     if (UserService.isAuthenticated())
     {
-      redirect(SessionService.getLastAccessURL(), "You already login.", "error", "Error!");
+      Message msg = new Message("You already login.", MessageType.ERROR, "Error!");
+      redirect(SessionService.getLastAccessURL(), msg);
       return;
     }
     
@@ -66,7 +69,8 @@ public class UserController extends OjController
   {
     if (UserService.isAuthenticated())
     {
-      redirect(SessionService.getLastAccessURL(), "You already login.", "error", "Error!");
+      Message msg = new Message("You already login.", MessageType.ERROR, "Error!");
+      redirect(SessionService.getLastAccessURL(), msg);
       return;
     }
     
