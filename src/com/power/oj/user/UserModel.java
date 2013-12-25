@@ -180,6 +180,13 @@ public class UserModel extends Model<UserModel>
     return update();
   }
 
+  public boolean updateLogin()
+  {
+    set("login", OjConfig.timeStamp);
+    
+    return update();
+  }
+
   public boolean build()
   {
     int uid = getUid();

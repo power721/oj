@@ -3,10 +3,14 @@ package com.power.oj.user;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import com.jfinal.log.Logger;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
 
@@ -27,14 +31,33 @@ public class UserService
     {
       currentUser.login(token);
 
+      updateLogin(name ,true);
       SessionService.updateLogin();
     } catch (AuthenticationException ae)
     {
+      updateLogin(name, false);
       log.warn("User signin failed.");
       return false;
     }
 
     return true;
+  }
+
+  public static boolean updateLogin(String name, boolean success)
+  {
+    boolean ret = true;
+    UserModel userModel = dao.getUserByName(name);
+    Record loginLog = new Record();
+    loginLog.set("uid", userModel.getUid()).set("ctime", OjConfig.timeStamp);
+    loginLog.set("ip", SessionService.getHost()).set("succeed", success);
+    ret = Db.save("loginlog", loginLog);
+    
+    Session session = SessionService.getSession();
+    log.info(session.getClass().getName());
+    if (success)
+      ret = userModel.updateLogin() && ret;
+    
+    return ret;
   }
 
   public static void logout()

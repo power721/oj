@@ -44,6 +44,11 @@ public class SessionService
     return SecurityUtils.getSubject().getSession();
   }
 
+  public static String getHost()
+  {
+    return getSession().getHost();
+  }
+
   public static void updateLogin()
   {
     Subject currentUser = UserService.getSubject();
