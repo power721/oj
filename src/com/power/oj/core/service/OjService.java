@@ -16,8 +16,19 @@ import com.power.oj.core.model.VariableModel;
 
 public class OjService
 {
-
-  public static void loadVariable()
+  private static final OjService me = new OjService();
+  
+  private OjService()
+  {
+    
+  }
+  
+  public static OjService me()
+  {
+    return me;
+  }
+  
+  public void loadVariable()
   {
     OjConfig.variable = new HashMap<String, VariableModel>();
     for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable"))
@@ -26,7 +37,7 @@ public class OjService
     }
   }
   
-  public static void loadLanguage()
+  public void loadLanguage()
   {
     OjConfig.language_type = new IntHashMap();
     OjConfig.language_name = new IntHashMap();
@@ -38,7 +49,7 @@ public class OjService
     }
   }
   
-  public static void initJudgeResult()
+  public void initJudgeResult()
   {
     OjConfig.judge_result = new ArrayList<ResultType>();
     OjConfig.judge_result.add(new ResultType(ResultType.AC, "AC", "Accepted"));
@@ -61,7 +72,7 @@ public class OjService
     }
   }
 
-  public static List<Record> getUserRoles(int uid)
+  public List<Record> getUserRoles(int uid)
   {
     String sql = "SELECT r.name AS role, r.id AS rid FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
     List<Record> roleList = Db.find(sql, uid);
@@ -69,7 +80,7 @@ public class OjService
     return roleList;
   }
   
-  public static List<Record> getRolePermission(int rid)
+  public List<Record> getRolePermission(int rid)
   {
     String sql = "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
     List<Record> permissionList = Db.find(sql,rid);

@@ -18,10 +18,20 @@ public class UserService
 {
   private static final Logger log = Logger.getLogger(UserService.class);
 
-  // private static final UserService userService = new UserService();
+  private static final UserService me = new UserService();
   private static final UserModel dao = UserModel.dao;
+  
+  private UserService()
+  {
+    
+  }
+  
+  public static UserService me()
+  {
+    return me;
+  }
 
-  public static boolean login(String name, String password, boolean rememberMe)
+  public boolean login(String name, String password, boolean rememberMe)
   {
     Subject currentUser = getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
@@ -32,7 +42,7 @@ public class UserService
       currentUser.login(token);
 
       updateLogin(name ,true);
-      SessionService.updateLogin();
+      SessionService.me().updateLogin();
     } catch (AuthenticationException ae)
     {
       updateLogin(name, false);
@@ -43,16 +53,16 @@ public class UserService
     return true;
   }
 
-  public static boolean updateLogin(String name, boolean success)
+  public boolean updateLogin(String name, boolean success)
   {
     boolean ret = true;
     UserModel userModel = dao.getUserByName(name);
     Record loginLog = new Record();
     loginLog.set("uid", userModel.getUid()).set("ctime", OjConfig.timeStamp);
-    loginLog.set("ip", SessionService.getHost()).set("succeed", success);
+    loginLog.set("ip", SessionService.me().getHost()).set("succeed", success);
     ret = Db.save("loginlog", loginLog);
     
-    Session session = SessionService.getSession();
+    Session session = SessionService.me().getSession();
     log.info(session.getClass().getName());
     if (success)
       ret = userModel.updateLogin() && ret;
@@ -60,7 +70,7 @@ public class UserService
     return ret;
   }
 
-  public static void logout()
+  public void logout()
   {
     Subject currentUser = getSubject();
     UserModel userModel = getPrincipal();
@@ -73,22 +83,22 @@ public class UserService
     currentUser.logout();
   }
   
-  public static UserModel getUserByName(String name)
+  public UserModel getUserByName(String name)
   {
     return dao.getUserByName(name);
   }
   
-  public static Page<UserModel> getUserRankList(int pageNumber, int pageSize)
+  public Page<UserModel> getUserRankList(int pageNumber, int pageSize)
   {
     return dao.getUserRankList(pageNumber, pageSize);
   }
 
-  public static Subject getSubject()
+  public Subject getSubject()
   {
     return SecurityUtils.getSubject();
   }
 
-  public static UserModel getPrincipal()
+  public UserModel getPrincipal()
   {
     Subject currentUser = getSubject();
     if (currentUser == null)
@@ -101,52 +111,52 @@ public class UserService
     return dao.findById(principal);
   }
 
-  public static boolean isAuthenticated()
+  public boolean isAuthenticated()
   {
     return ShiroKit.isAuthenticated();
   }
   
-  public static boolean isRemembered()
+  public boolean isRemembered()
   {
     return ShiroKit.isRemembered();
   }
   
-  public static boolean isUser()
+  public boolean isUser()
   {
     return ShiroKit.isUser();
   }
 
-  public static boolean isGuest()
+  public boolean isGuest()
   {
     return ShiroKit.isGuest();
   }
 
-  public static boolean hasRole(String roleName)
+  public boolean hasRole(String roleName)
   {
     return ShiroKit.hasRole(roleName);
   }
   
-  public static boolean lacksRole(String roleName)
+  public boolean lacksRole(String roleName)
   {
     return ShiroKit.lacksRole(roleName);
   }
   
-  public static boolean hasAnyRoles(String roleNames)
+  public boolean hasAnyRoles(String roleNames)
   {
     return ShiroKit.hasAnyRoles(roleNames);
   }
   
-  public static boolean hasAllRoles(String roleNames)
+  public boolean hasAllRoles(String roleNames)
   {
     return ShiroKit.hasAllRoles(roleNames);
   }
   
-  public static boolean hasPermission(String permission)
+  public boolean hasPermission(String permission)
   {
     return ShiroKit.hasPermission(permission);
   }
   
-  public static boolean lacksPermission(String permission)
+  public boolean lacksPermission(String permission)
   {
     return ShiroKit.lacksPermission(permission);
   }

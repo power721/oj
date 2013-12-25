@@ -13,7 +13,7 @@ public class OjSessionListener implements SessionListener
   @Override
   public void onExpiration(Session session)
   {
-    SessionService.deleteSession(session);
+    SessionService.me().deleteSession(session);
     
     log.info(session.toString());
     log.info(session.getStartTimestamp().toString());
@@ -22,7 +22,7 @@ public class OjSessionListener implements SessionListener
   @Override
   public void onStart(Session session)
   {
-    SessionService.saveSession(session);
+    SessionService.me().saveSession(session);
     
     log.info(session.toString());
   }
@@ -30,7 +30,7 @@ public class OjSessionListener implements SessionListener
   @Override
   public void onStop(Session session)
   {
-    SessionService.deleteSession(session);
+    SessionService.me().deleteSession(session);
 
     log.info(session.toString());
     log.info(session.getStartTimestamp().toString());

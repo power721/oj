@@ -47,10 +47,10 @@ public class UserController extends OjController
   @ActionKey("/login")
   public void login()
   {
-    if (UserService.isAuthenticated())
+    if (UserService.me().isAuthenticated())
     {
       Message msg = new Message("You already login.", MessageType.ERROR, "Error!");
-      redirect(SessionService.getLastAccessURL(), msg);
+      redirect(SessionService.me().getLastAccessURL(), msg);
       return;
     }
     
@@ -67,10 +67,10 @@ public class UserController extends OjController
   @ClearShiro
   public void signin()
   {
-    if (UserService.isAuthenticated())
+    if (UserService.me().isAuthenticated())
     {
       Message msg = new Message("You already login.", MessageType.ERROR, "Error!");
-      redirect(SessionService.getLastAccessURL(), msg);
+      redirect(SessionService.me().getLastAccessURL(), msg);
       return;
     }
     
@@ -78,9 +78,9 @@ public class UserController extends OjController
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    if (UserService.login(name, password, rememberMe))
+    if (UserService.me().login(name, password, rememberMe))
     {
-      redirect(SessionService.getLastAccessURL());
+      redirect(SessionService.me().getLastAccessURL());
       return;
     }
 
@@ -100,8 +100,8 @@ public class UserController extends OjController
   @ActionKey("/logout")
   public void logout()
   {
-    String lastAccessURL = SessionService.getLastAccessURL();
-    UserService.logout();
+    String lastAccessURL = SessionService.me().getLastAccessURL();
+    UserService.me().logout();
 
     redirect(lastAccessURL);
   }
@@ -112,10 +112,10 @@ public class UserController extends OjController
     UserModel userModel = null;
     if (name == null)
     {
-      userModel = UserService.getPrincipal();
+      userModel = UserService.me().getPrincipal();
       if (userModel == null)
       {
-        redirect(SessionService.getLastAccessURL());
+        redirect(SessionService.me().getLastAccessURL());
         return;
       }
     } else
@@ -123,7 +123,7 @@ public class UserController extends OjController
       userModel = UserModel.dao.getUserByName(name);
       if (userModel == null)
       {
-        redirect(SessionService.getLastAccessURL());
+        redirect(SessionService.me().getLastAccessURL());
         return;
       }
     }
@@ -148,7 +148,7 @@ public class UserController extends OjController
   public void uploadAvatar()
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
-    UserModel userModel = UserService.getPrincipal();
+    UserModel userModel = UserService.me().getPrincipal();
     int uid = getParaToInt("uid", 0);
 
     if (uid != 0)
@@ -224,7 +224,7 @@ public class UserController extends OjController
 
     userModel = userModel.findById(userModel.getUid());
     UsernamePasswordToken token = new UsernamePasswordToken(userModel.getStr("name"), password);
-    Subject currentUser = UserService.getSubject();
+    Subject currentUser = UserService.me().getSubject();
     currentUser.login(token);
 
     redirect("/user/edit", new Message("Congratulations!You have a new account now.<br>Please update your information."));
@@ -235,7 +235,7 @@ public class UserController extends OjController
   {
     setTitle("Account");
     
-    setAttr(OjConstants.USER, UserService.getPrincipal());
+    setAttr(OjConstants.USER, UserService.me().getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 
     render("edit.html");
@@ -292,8 +292,8 @@ public class UserController extends OjController
   public void online()
   {
     setTitle("Online Users");
-    setAttr("loginUserNum", SessionService.getUserNumber());
-    setAttr(OjConstants.USER_LIST, SessionService.getAccessLog());
+    setAttr("loginUserNum", SessionService.me().getUserNumber());
+    setAttr(OjConstants.USER_LIST, SessionService.me().getAccessLog());
 
     render("online.html");
   }
@@ -305,7 +305,7 @@ public class UserController extends OjController
     int pageSize = getParaToInt("s", 20);
     
     setTitle("Ranklist");
-    setAttr(OjConstants.USER_LIST, UserService.getUserRankList(pageNumber, pageSize));
+    setAttr(OjConstants.USER_LIST, UserService.me().getUserRankList(pageNumber, pageSize));
 
     render("rank.html");
   }

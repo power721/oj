@@ -115,7 +115,7 @@ public class ProblemController extends OjController
     boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
     ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
     setAttr("problem", problemModel);
-    setAttr(OjConstants.USER, UserService.getPrincipal());
+    setAttr(OjConstants.USER, UserService.me().getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     boolean ajax = getParaToBoolean("ajax", false);
     int sid = 0;

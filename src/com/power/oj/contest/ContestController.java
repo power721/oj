@@ -147,7 +147,7 @@ public class ContestController extends OjController
 
     setTitle(new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("problem", problemModel);
-    setAttr(OjConstants.USER, UserService.getPrincipal());
+    setAttr(OjConstants.USER, UserService.me().getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("cid", cid);
 
@@ -389,7 +389,7 @@ public class ContestController extends OjController
       String token_token = CryptUtils.encrypt(password, token_name);
       log.info(token_token);
       setCookie(token_name, token_token, -1);
-      redirect(SessionService.getLastAccessURL());
+      redirect(SessionService.me().getLastAccessURL());
       return;
     }
 
@@ -397,7 +397,7 @@ public class ContestController extends OjController
     keepPara("title");
     
     Message msg = new Message("Sorry, you entered an invalid password.", MessageType.ERROR, "Error!");
-    redirect(SessionService.getLastAccessURL(), msg);
+    redirect(SessionService.me().getLastAccessURL(), msg);
   }
 
   @RequiresPermissions("contest:edit")

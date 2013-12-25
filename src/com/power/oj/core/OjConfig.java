@@ -181,9 +181,9 @@ public class OjConfig extends JFinalConfig
     userAvatarPath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/user/").toString();
     problemImagePath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/problem/").toString();
     
-    OjService.initJudgeResult();
-    OjService.loadLanguage();
-    OjService.loadVariable();
+    OjService.me().initJudgeResult();
+    OjService.me().loadLanguage();
+    OjService.me().loadVariable();
 
     log.debug("afterJFinalStart finished.");
   }

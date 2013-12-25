@@ -20,7 +20,7 @@ public class ContestPasswordInterceptor implements Interceptor
   {
     
     Controller controller = ai.getController();
-    if (UserService.hasPermission("contest:view:password"))
+    if (UserService.me().hasPermission("contest:view:password"))
     {
       ai.invoke();
       return;

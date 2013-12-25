@@ -36,7 +36,7 @@ public class OjAuthorizingRealm extends AuthorizingRealm
     if (uid != null)
     {
       log.info(uid.toString());
-      List<Record> roleList = OjService.getUserRoles(uid);
+      List<Record> roleList = OjService.me().getUserRoles(uid);
       
       if (roleList != null && roleList.size() > 0)
       {
@@ -49,7 +49,7 @@ public class OjAuthorizingRealm extends AuthorizingRealm
           roles.add(record.getStr("role"));
           log.info("role: " + record.getStr("role"));
           
-          List<Record> permissionList = OjService.getRolePermission(record.getInt("rid"));
+          List<Record> permissionList = OjService.me().getRolePermission(record.getInt("rid"));
           for (Record permissionRecord : permissionList)
           {
             pers.add(permissionRecord.getStr("permission"));
@@ -70,7 +70,7 @@ public class OjAuthorizingRealm extends AuthorizingRealm
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException
   {
     UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-    UserModel userModel = UserService.getUserByName(token.getUsername());
+    UserModel userModel = UserService.me().getUserByName(token.getUsername());
 
     if (userModel != null)
     {
