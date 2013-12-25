@@ -129,13 +129,4 @@ public class OjController extends Controller
     return this;
   }
 
-  /**
-   * Get the Logger object.
-   * 
-   * @return log
-   */
-  public Logger getLog()
-  {
-    return log;
-  }
 }
