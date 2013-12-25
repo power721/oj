@@ -35,7 +35,7 @@ public class ProblemController extends OjController
     if (isParaExists("p"))
       pageNumber = getParaToInt("p", 1);
     else
-      pageNumber = Integer.parseInt(getCookie("pageNumber", "1"));
+      pageNumber = getCookieToInt("pageNumber", 1);
     int pageSize = getParaToInt("s", 50);
 
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
