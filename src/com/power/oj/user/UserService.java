@@ -58,8 +58,9 @@ public class UserService
     boolean ret = true;
     UserModel userModel = dao.getUserByName(name);
     Record loginLog = new Record();
-    loginLog.set("uid", userModel.getUid()).set("ctime", OjConfig.timeStamp);
-    loginLog.set("ip", SessionService.me().getHost()).set("succeed", success);
+    if (success)
+      loginLog.set("uid", userModel.getUid());
+    loginLog.set("ip", SessionService.me().getHost()).set("ctime", OjConfig.timeStamp).set("succeed", success);
     ret = Db.save("loginlog", loginLog);
     
     Session session = SessionService.me().getSession();
