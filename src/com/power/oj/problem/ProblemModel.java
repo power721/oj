@@ -3,7 +3,6 @@ package com.power.oj.problem;
 import java.util.ArrayList;
 import java.util.List;
 
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Db;
@@ -23,7 +22,7 @@ public class ProblemModel extends Model<ProblemModel>
   public int getNextPid(int pid, boolean isAdmin)
   {
     int nextPid = 0;
-    StringBand sb = new StringBand("SELECT pid FROM problem WHERE pid>?");
+    StringBuilder sb = new StringBuilder("SELECT pid FROM problem WHERE pid>?");
     if (!isAdmin)
       sb.append(" AND status=1");
     sb.append(" ORDER BY pid LIMIT 1");
@@ -41,7 +40,7 @@ public class ProblemModel extends Model<ProblemModel>
   public int getPrevPid(int pid, boolean isAdmin)
   {
     int prevPid = 0;
-    StringBand sb = new StringBand("SELECT pid FROM problem WHERE pid<?");
+    StringBuilder sb = new StringBuilder("SELECT pid FROM problem WHERE pid<?");
     if (!isAdmin)
       sb.append(" AND status=1");
     sb.append(" ORDER BY pid DESC LIMIT 1");
@@ -122,8 +121,8 @@ public class ProblemModel extends Model<ProblemModel>
 
     if (StringUtil.isNotBlank(word))
     {
-      word = new StringBand(3).append("%").append(word).append("%").toString();
-      StringBand sb = new StringBand("SELECT pid,title,accept,submit,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime FROM problem WHERE (");
+      word = new StringBuilder(3).append("%").append(word).append("%").toString();
+      StringBuilder sb = new StringBuilder("SELECT pid,title,accept,submit,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime FROM problem WHERE (");
       if (StringUtil.isNotBlank(scope))
       {
         String scopes[] =

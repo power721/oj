@@ -11,7 +11,6 @@ import java.util.List;
 
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
@@ -75,12 +74,12 @@ public class Judge extends Thread
   {
     log.info(solutionModel.getInt("sid") + " Start compiling...");
     String workPath = OjConfig.get("work_path");
-    workPath = new StringBand(2).append(FileNameUtil.normalizeNoEndSeparator(workPath)).append("\\").toString();
+    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(workPath)).append("\\").toString();
     // workPath = FileNameUtil.separatorsToSystem(workPath); //Converts all
     // separators to the system separator.
     if (OjConfig.getBoolean("delete_tmp_file"))
     {
-      File prevWorkDir = new File(new StringBand(2).append(workPath).append(solutionModel.getInt("sid") - 2).toString());
+      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid") - 2).toString());
       if (prevWorkDir.isDirectory())
       {
         FileUtil.deleteDir(prevWorkDir);
@@ -89,12 +88,12 @@ public class Judge extends Thread
     }
     log.info("workPath: " + workPath);
 
-    File workDir = new File(new StringBand(2).append(workPath).append(solutionModel.getInt("sid")).toString());
+    File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid")).toString());
     FileUtil.mkdirs(workDir);
     log.info("workDir: " + workDir.getAbsolutePath());
 
     LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
-    File sourceFile = new File(new StringBand().append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("ext")).toString());
+    File sourceFile = new File(new StringBuilder().append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("ext")).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solutionModel.getStr("source"));
 
@@ -109,7 +108,7 @@ public class Judge extends Thread
 
     BufferedReader compileErrorBufferedReader = new BufferedReader(new InputStreamReader(compileProcess.getErrorStream()));
     long startTime = System.currentTimeMillis();
-    StringBand sb = new StringBand();
+    StringBuilder sb = new StringBuilder();
     String errorOutput = "";
     while ((startTime + 10000L > System.currentTimeMillis()) && ((errorOutput = compileErrorBufferedReader.readLine()) != null))
       sb.append(errorOutput).append("\n");
@@ -124,7 +123,7 @@ public class Judge extends Thread
       log.warn("Compile Process is interrupted.");
     }
 
-    File mainProgram = new File(new StringBand(3).append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("exe")).toString());
+    File mainProgram = new File(new StringBuilder(3).append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("exe")).toString());
     log.info(mainProgram.getAbsolutePath());
     boolean success = mainProgram.isFile();
 
@@ -147,10 +146,10 @@ public class Judge extends Thread
     Process runProcess = Runtime.getRuntime().exec(OjConfig.get("run_shell"));
     OutputStream runProcessOutputStream = runProcess.getOutputStream();
     log.info("runProcess: " + OjConfig.get("run_shell"));
-    File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(solutionModel.getInt("pid")).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(solutionModel.getInt("pid")).toString());
     if (!dataDir.isDirectory())
     {
-      String system_error = new StringBand(3).append("Data directory ").append(dataDir).append(" not exists.").toString();
+      String system_error = new StringBuilder(3).append("Data directory ").append(dataDir).append(" not exists.").toString();
       solutionModel.set("result", ResultType.SE).set("system_error", system_error);
       solutionModel.update();
       log.error(system_error);
@@ -167,7 +166,7 @@ public class Judge extends Thread
       File in_file = arrayOfFile[i];
       if (!in_file.getName().toLowerCase().endsWith(DATA_EXT_IN))
         continue;
-      File out_file = new File(new StringBand().append(dataDir.getAbsolutePath()).append("\\")
+      File out_file = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append("\\")
           .append(in_file.getName().substring(0, in_file.getName().length() - DATA_EXT_IN.length())).append(DATA_EXT_OUT).toString());
       if (!out_file.isFile())
         continue;
@@ -188,8 +187,8 @@ public class Judge extends Thread
     log.info("caseTimeLimit: " + caseTimeLimit);
     log.info("memoryLimit: " + memoryLimit);
 
-    File workDir = new File(new StringBand(2).append(OjConfig.get("work_path")).append("\\").append(solutionModel.getInt("sid")).toString());
-    String mainProgram = new StringBand(4).append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("exe")).append("\n").toString();
+    File workDir = new File(new StringBuilder(2).append(OjConfig.get("work_path")).append("\\").append(solutionModel.getInt("sid")).toString());
+    String mainProgram = new StringBuilder(4).append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("exe")).append("\n").toString();
     runProcessOutputStream.write(mainProgram.getBytes());
     runProcessOutputStream.write((workDir.getAbsolutePath() + "\n").getBytes());
     log.info("mainProgram: " + mainProgram);
@@ -202,7 +201,7 @@ public class Judge extends Thread
     for (int i = 0; i < inFiles.size(); ++i)
     {
       runProcessOutputStream.write((inFiles.get(i) + "\n").getBytes());
-      String userOutFile = new StringBand(4).append(workDir.getAbsolutePath()).append("\\").append(new File(outFiles.get(i)).getName()).append("\n").toString();
+      String userOutFile = new StringBuilder(4).append(workDir.getAbsolutePath()).append("\\").append(new File(outFiles.get(i)).getName()).append("\n").toString();
       runProcessOutputStream.write(userOutFile.getBytes());
       runProcessOutputStream.write((outFiles.get(i) + "\n").getBytes());
       log.info(inFiles.get(i));
@@ -221,7 +220,7 @@ public class Judge extends Thread
     int memory = Integer.parseInt(buff);
     if (memory > 0)
       memory -= language.getInt("ext_memory");
-    StringBand sb = new StringBand();
+    StringBuilder sb = new StringBuilder();
 
     InputStream errorStream = runProcess.getErrorStream();
     while (errorStream.available() > 0)
@@ -255,7 +254,7 @@ public class Judge extends Thread
         int uid = solutionModel.getUid();
         int num = solutionModel.getInt("num");
         char c = (char) (num + 'A');
-        StringBand message = new StringBand().append("UID: ").append(uid).append(" Problem: ").append(c).append(" result: ").append(result).append("  time: ")
+        StringBuilder message = new StringBuilder().append("UID: ").append(uid).append(" Problem: ").append(c).append(" result: ").append(result).append("  time: ")
             .append(time).append("  memory: ").append(memory);
         // OjMessageInbound.broadcast(message.toString());
         ContestRankWebSocket.broadcast(cid, message.toString());
@@ -268,11 +267,11 @@ public class Judge extends Thread
 
   public String getCompileCmd(String compileCmd, String path, String name, String ext)
   {
-    path = new StringBand(2).append(path).append("\\").toString();
+    path = new StringBuilder(2).append(path).append("\\").toString();
     compileCmd = StringUtil.replace(compileCmd, "%PATH%", path);
     compileCmd = StringUtil.replace(compileCmd, "%NAME%", name);
     compileCmd = StringUtil.replace(compileCmd, "%EXT%", ext);
-    compileCmd = new StringBand(2).append(compileCmd).append("\n").toString();
+    compileCmd = new StringBuilder(2).append(compileCmd).append("\n").toString();
 
     return compileCmd;
   }

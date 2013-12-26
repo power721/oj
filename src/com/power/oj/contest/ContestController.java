@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.alibaba.fastjson.JSON;
@@ -62,7 +61,7 @@ public class ContestController extends OjController
     ContestModel contestModle = ContestModel.dao.getContest(cid);
     if (contestModle == null)
     {
-      log.warn(new StringBand(2).append("Cannot find this contest: ").append(cid).toString());
+      log.warn(new StringBuilder(2).append("Cannot find this contest: ").append(cid).toString());
       Message msg = new Message("Cannot find this contest!", MessageType.ERROR, "Error!");
       redirect("/contest", msg);
       return;
@@ -79,7 +78,7 @@ public class ContestController extends OjController
     else if (end_time < ctime)
       status = "Finished";
 
-    setTitle(new StringBand(2).append("Contest ").append(cid).toString());
+    setTitle(new StringBuilder(2).append("Contest ").append(cid).toString());
     setAttr("cid", cid);
     setAttr("contest", contestModle);
     setAttr("contestProblems", contestProblems);
@@ -100,16 +99,16 @@ public class ContestController extends OjController
     ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
     if (problemModel == null)
     {
-      log.warn(new StringBand(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
+      log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
       Message msg = new Message("Cannot find this contest problem!", MessageType.ERROR, "Error!");
-      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
+      redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
     problemModel.put("sample_input_rows", StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1);
     problemModel.put("sample_output_rows", StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1);
 
-    setTitle(new StringBand(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
+    setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("problem", problemModel);
     setAttr("cid", cid);
     setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
@@ -132,20 +131,20 @@ public class ContestController extends OjController
     if (ContestModel.dao.isContestFinished(cid))
     {
       Message msg = new Message("This contest has finished!", MessageType.WRAN, "Warnning!");
-      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
+      redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
     ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
     if (problemModel == null)
     {
-      log.warn(new StringBand(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
+      log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
       Message msg = new Message("Cannot find this contest problem!", MessageType.ERROR, "Error!");
-      redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
+      redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
-    setTitle(new StringBand(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
+    setTitle(new StringBuilder(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("problem", problemModel);
     setAttr(OjConstants.USER, UserService.me().getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
@@ -164,7 +163,7 @@ public class ContestController extends OjController
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", 50);
     
-    setTitle(new StringBand(2).append("Contest Standing ").append(cid).toString());
+    setTitle(new StringBuilder(2).append("Contest Standing ").append(cid).toString());
     
     setAttr("cid", cid);
     setAttr("contestRank", ContestModel.dao.getContestRank(pageNumber, pageSize, cid));
@@ -179,7 +178,7 @@ public class ContestController extends OjController
   {
     int cid = getParaToInt(0);
     ContestModel contestModle = ContestModel.dao.findById(cid);
-    setTitle(new StringBand(3).append("Contest ").append(cid).append(" Status").toString());
+    setTitle(new StringBuilder(3).append("Contest ").append(cid).append(" Status").toString());
     setAttr("cid", cid);
     setAttr("contest", contestModle);
 
@@ -200,7 +199,7 @@ public class ContestController extends OjController
       }
     }
     String userName = getPara("name");
-    StringBand query = new StringBand();
+    StringBuilder query = new StringBuilder();
 
     if (result > -1)
     {
@@ -246,7 +245,7 @@ public class ContestController extends OjController
       if (problemModel == null)
       {
         Message msg = new Message("Cannot find this problem!", MessageType.ERROR, "Error!");
-        redirect(new StringBand(2).append("/contest/show/").append(cid).toString(), msg);
+        redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
         return;
       }
 
@@ -264,14 +263,14 @@ public class ContestController extends OjController
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", 20);
     int language = getParaToInt("language", -1);
-    StringBand query = new StringBand();
+    StringBuilder query = new StringBuilder();
     if (language > -1)
     {
       query.append("&language=").append(language);
     }
     Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
-    setTitle(new StringBand(5).append("Contest Problem ").append(cid).append("-").append(id).append(" Status").toString());
+    setTitle(new StringBuilder(5).append("Contest Problem ").append(cid).append("-").append(id).append(" Status").toString());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("solutionList", solutionList);
     setAttr("language", language);
@@ -289,7 +288,7 @@ public class ContestController extends OjController
   public void statistics()
   {
     int cid = getParaToInt(0);
-    setTitle(new StringBand(3).append("Contest Statistics ").append(cid).toString());
+    setTitle(new StringBuilder(3).append("Contest Statistics ").append(cid).toString());
     setAttr("cid", cid);
     List<Record> statistics = ContestModel.dao.getContestStatistics(cid);
     setAttr("statistics", statistics);
@@ -385,7 +384,7 @@ public class ContestController extends OjController
 
     if (ContestModel.dao.checkContestPassword(cid, password))
     {
-      String token_name = new StringBand("cid-").append(cid).toString();
+      String token_name = new StringBuilder("cid-").append(cid).toString();
       String token_token = CryptUtils.encrypt(password, token_name);
       log.info(token_token);
       setCookie(token_name, token_token, -1);
@@ -449,7 +448,7 @@ public class ContestController extends OjController
     }
     contestModel.saveContest();
 
-    redirect(new StringBand(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
+    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
 
   @RequiresPermissions("contest:build")
@@ -458,7 +457,7 @@ public class ContestController extends OjController
     int cid = getParaToInt(0);
     ContestModel.dao.buildRank(cid);
 
-    redirect(new StringBand(2).append("/contest/rank/").append(cid).toString(), new Message("The contest rank build success!"));
+    redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new Message("The contest rank build success!"));
   }
 
 }

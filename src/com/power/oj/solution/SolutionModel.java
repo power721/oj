@@ -3,7 +3,6 @@ package com.power.oj.solution;
 import java.util.ArrayList;
 import java.util.List;
 
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Model;
@@ -33,7 +32,7 @@ public class SolutionModel extends Model<SolutionModel>
     int uid = 0;
     String name = userName;
     String sql = "SELECT sid,uid,pid,cid,num,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBand sb = new StringBand("FROM solution WHERE 1=1");
+    StringBuilder sb = new StringBuilder("FROM solution WHERE 1=1");
 
     List<Object> paras = new ArrayList<Object>();
     if (result > -1)
@@ -93,7 +92,7 @@ public class SolutionModel extends Model<SolutionModel>
     int uid = 0;
     String name = userName;
     String sql = "SELECT sid,uid,pid,cid,num,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBand sb = new StringBand("FROM solution WHERE cid=?");
+    StringBuilder sb = new StringBuilder("FROM solution WHERE cid=?");
     UserModel userModel;
 
     List<Object> paras = new ArrayList<Object>();
@@ -153,7 +152,7 @@ public class SolutionModel extends Model<SolutionModel>
     int uid = 0;
     String name = "";
     String sql = "SELECT sid,uid,pid,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBand sb = new StringBand("FROM solution WHERE result=0");
+    StringBuilder sb = new StringBuilder("FROM solution WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();
 
@@ -193,7 +192,7 @@ public class SolutionModel extends Model<SolutionModel>
     int uid = 0;
     String name = "";
     String sql = "SELECT sid,uid,pid,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBand sb = new StringBand("FROM solution WHERE result=0");
+    StringBuilder sb = new StringBuilder("FROM solution WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();
 

@@ -3,7 +3,6 @@ package com.power.oj.service;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import jodd.util.StringBand;
 
 import org.apache.log4j.Logger;
 
@@ -23,7 +22,7 @@ public class ExpiresSessionService extends TimerTask
   public void run()
   {
     int numOfExpiresSession = SessionModel.dao.expiresSession();
-    log.info(new StringBand(3).append("ExpiresSessionService executed: ").append(numOfExpiresSession).append(" sessions deleted.").toString());
+    log.info(new StringBuilder(3).append("ExpiresSessionService executed: ").append(numOfExpiresSession).append(" sessions deleted.").toString());
   }
 
   public static void start()

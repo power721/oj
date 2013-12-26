@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Db;
@@ -39,7 +38,7 @@ public class ContestModel extends Model<ContestModel>
   {
     List<Object> paras = new ArrayList<Object>();
     String sql = "SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t";
-    StringBand sb = new StringBand("FROM contest WHERE 1=1");
+    StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
     if (type > -1)
     {
       sb.append(" AND type=?");
@@ -207,7 +206,7 @@ public class ContestModel extends Model<ContestModel>
 
   public List<Record> getContestStatistics(int cid)
   {
-    StringBand sb = new StringBand("SELECT ");
+    StringBuilder sb = new StringBuilder("SELECT ");
     for (LanguageModel language : OjConfig.program_languages)
     {
       sb.append("COUNT(IF(language=").append(language.getInt("id")).append(",1,NULL)) AS ").append(language.getStr("ext")).append(",");
@@ -307,8 +306,8 @@ public class ContestModel extends Model<ContestModel>
       paras.add(userInfo.uid);
       paras.add(userInfo.accepts);
       paras.add(userInfo.penalty);
-      StringBand fields = new StringBand();
-      StringBand values = new StringBand();
+      StringBuilder fields = new StringBuilder();
+      StringBuilder values = new StringBuilder();
       for (int i = 0; i < 26; ++i)
       {
         char c = (char) (i + 'A');
@@ -326,7 +325,7 @@ public class ContestModel extends Model<ContestModel>
           values.append(",?");
         }
       }
-      StringBand sb = new StringBand(5).append("INSERT INTO board (cid,uid,accepts,penalty").append(fields.toString()).append(") VALUES (?,?,?,?")
+      StringBuilder sb = new StringBuilder(5).append("INSERT INTO board (cid,uid,accepts,penalty").append(fields.toString()).append(") VALUES (?,?,?,?")
           .append(values.toString()).append(")");
       Db.update(sb.toString(), paras.toArray());
     }

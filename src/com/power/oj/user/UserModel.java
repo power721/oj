@@ -5,7 +5,6 @@ import java.util.List;
 
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Db;
@@ -111,8 +110,8 @@ public class UserModel extends Model<UserModel>
 
     if (StringUtil.isNotBlank(word))
     {
-      word = new StringBand(3).append("%").append(word).append("%").toString();
-      StringBand sb = new StringBand("SELECT uid,name,nick,school,solved,submit FROM user WHERE (");
+      word = new StringBuilder(3).append("%").append(word).append("%").toString();
+      StringBuilder sb = new StringBuilder("SELECT uid,name,nick,school,solved,submit FROM user WHERE (");
       
       if (StringUtil.isNotBlank(scope))
       {

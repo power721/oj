@@ -1,6 +1,5 @@
 package com.power.oj.core.interceptor;
 
-import jodd.util.StringBand;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
@@ -32,7 +31,7 @@ public class GlobalInterceptor implements Interceptor
 
     ai.invoke();
 
-    System.out.println(new StringBand(4).append(actionKey).append(" Action Invoking Time: ")
+    System.out.println(new StringBuilder(4).append(actionKey).append(" Action Invoking Time: ")
         .append(System.currentTimeMillis() - OjConfig.startGlobalInterceptorTime).append(" milliseconds").toString());
   }
   

@@ -3,7 +3,6 @@ package com.power.oj.solution;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
@@ -36,7 +35,7 @@ public class SolutionController extends OjController
     if (StringUtil.isNotBlank(getPara("pid")))
       pid = getParaToInt("pid", 0);
     String userName = getPara("name");
-    StringBand query = new StringBand();
+    StringBuilder query = new StringBuilder();
 
     if (result > -1)
     {

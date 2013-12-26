@@ -15,7 +15,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import sun.misc.BASE64Decoder;
 import jodd.io.FileUtil;
-import jodd.util.StringBand;
 
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.kit.PathKit;
@@ -83,7 +82,7 @@ public class CommonController extends OjController
     System.out.println("file: " + file.getFileName());
     System.out.println(file.getFile().getAbsolutePath());
 
-    String fileName = new StringBand(3).append(PathKit.getWebRootPath()).append("/assets/images/problem/").append(originalName).toString();
+    String fileName = new StringBuilder(3).append(PathKit.getWebRootPath()).append("/assets/images/problem/").append(originalName).toString();
     try
     {
       FileUtil.moveFile(file.getFile(), new File(fileName));
@@ -111,7 +110,7 @@ public class CommonController extends OjController
     String state = "SUCCESS";
     String base64Data = getPara("content");
     BASE64Decoder decoder = new BASE64Decoder();
-    File outFile = new File(new StringBand(3).append(PathKit.getWebRootPath()).append("/upload/").append(FileKit.getNewName("test.png")).toString());
+    File outFile = new File(new StringBuilder(3).append(PathKit.getWebRootPath()).append("/upload/").append(FileKit.getNewName("test.png")).toString());
     OutputStream ro;
     try
     {
@@ -147,7 +146,7 @@ public class CommonController extends OjController
     {
 
       // 保存文件路径
-      String savePath = new StringBand(2).append(PathKit.getWebRootPath()).append("/upload/").toString();
+      String savePath = new StringBuilder(2).append(PathKit.getWebRootPath()).append("/upload/").toString();
       // 格式验证
       String type = FileKit.getImageType(arr[i]);
       if (type.equals(""))
@@ -208,7 +207,7 @@ public class CommonController extends OjController
   @RequiresPermissions("image:upload")
   public void listImages()
   {
-    String imagesDir = new StringBand(2).append(PathKit.getWebRootPath()).append("\\assets\\images\\problem\\").toString();
+    String imagesDir = new StringBuilder(2).append(PathKit.getWebRootPath()).append("\\assets\\images\\problem\\").toString();
     String imgStr = "";
     List<File> files = FileKit.getImageFiles(imagesDir, new ArrayList<File>());
     System.out.println(imagesDir);

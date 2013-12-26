@@ -3,7 +3,6 @@ package com.power.oj.core.interceptor;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.aop.Interceptor;
@@ -34,7 +33,7 @@ public class AccessLogInterceptor implements Interceptor
 
     if (StringUtil.equalsOne(actionKey, skipActions) == -1)
     {
-      StringBand sb = new StringBand(actionKey);
+      StringBuilder sb = new StringBuilder(actionKey);
       if (controller.getPara() != null)
         sb.append("/").append(controller.getPara());
 

@@ -8,7 +8,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
-import jodd.util.StringBand;
 import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
@@ -35,11 +34,11 @@ public class ProblemController extends OjController
     if (isParaExists("p"))
       pageNumber = getParaToInt("p", 1);
     else
-      pageNumber = getCookieToInt("pageNumber", 1);
+      pageNumber = Integer.parseInt(getCookie("pageNumber", "1"));
     int pageSize = getParaToInt("s", 50);
 
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
-    StringBand sb = new StringBand("FROM problem");
+    StringBuilder sb = new StringBuilder("FROM problem");
     if (getAttr(OjConstants.ADMIN_USER) == null)
       sb.append(" WHERE status=1");
     sb.append(" ORDER BY pid");
@@ -97,7 +96,7 @@ public class ProblemController extends OjController
     problemModel.put("sample_input_rows", sample_input_rows);
     problemModel.put("sample_output_rows", sample_output_rows);
 
-    setTitle(new StringBand(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
+    setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
     setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
     setAttr("tagList", ProblemModel.dao.getTags(pid));
@@ -122,7 +121,7 @@ public class ProblemController extends OjController
     if (isParaExists("s"))
     {
       sid = getParaToInt("s", 0);
-      StringBand sb = new StringBand("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
+      StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
       if (!isAdmin)
         sb.append(" AND uid=").append(getAttrForInt(OjConstants.USER_ID));
       sb.append(" LIMIT 1");
@@ -152,7 +151,7 @@ public class ProblemController extends OjController
     int pid = getParaToInt(0);
     ProblemModel problemModel = ProblemModel.dao.findById(pid);
     setAttr("problem", problemModel);
-    setTitle(new StringBand(2).append("Edit Problem ").append(pid).toString());
+    setTitle(new StringBuilder(2).append("Edit Problem ").append(pid).toString());
     boolean ajax = getParaToBoolean("ajax", false);
 
     if (ajax)
@@ -167,7 +166,7 @@ public class ProblemController extends OjController
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
     problemModel.updateProblem();
 
-    String redirectURL = new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
     redirect(redirectURL, new Message("The changes have been saved."));
   }
 
@@ -185,8 +184,8 @@ public class ProblemController extends OjController
     problemModel.set("uid", getAttr(OjConstants.USER_ID));
     problemModel.saveProblem();
 
-    String redirectURL = new StringBand(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
-    File dataDir = new File(new StringBand(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
+    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
       Message msg = new Message("The data directory already exists.", MessageType.WRAN, "Warning!");
@@ -258,14 +257,14 @@ public class ProblemController extends OjController
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", 20);
     int language = getParaToInt("language", -1);
-    StringBand query = new StringBand();
+    StringBuilder query = new StringBuilder();
     if (language > -1)
     {
       query.append("&language=").append(language);
     }
     Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
 
-    setTitle(new StringBand(3).append("Problem ").append(pid).append(" Status").toString());
+    setTitle(new StringBuilder(3).append("Problem ").append(pid).append(" Status").toString());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("language", language);
     setAttr("query", query.toString());
@@ -302,7 +301,7 @@ public class ProblemController extends OjController
 
     if (pid != 0)
     {
-      redirect(new StringBand(2).append("/problem/show/").append(pid).toString());
+      redirect(new StringBuilder(2).append("/problem/show/").append(pid).toString());
       return;
     }
 
@@ -311,7 +310,7 @@ public class ProblemController extends OjController
     setAttr("problemList", ProblemModel.dao.searchProblem(scope, word));
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
-    setTitle(new StringBand(2).append("Search problem: ").append(word).toString());
+    setTitle(new StringBuilder(2).append("Search problem: ").append(word).toString());
 
     render("search.html");
   }
@@ -369,7 +368,7 @@ public class ProblemController extends OjController
     if ("add".equals(op) && StringUtil.isNotBlank(tag))
       ProblemModel.dao.addTag(pid, uid, tag);
 
-    String redirectURL = new StringBand(3).append("/problem/show/").append(pid).append("#tag").toString();
+    String redirectURL = new StringBuilder(3).append("/problem/show/").append(pid).append("#tag").toString();
     redirect(redirectURL, new Message("The changes have been saved."));
   }
 
@@ -377,12 +376,12 @@ public class ProblemController extends OjController
   public void build()
   {
     int pid = getParaToInt(0);
-    String redirectURL = new StringBand(2).append("/problem/show/").append(pid).toString();
+    String redirectURL = new StringBuilder(2).append("/problem/show/").append(pid).toString();
     ProblemModel problemModel = ProblemModel.dao.findById(pid);
     
     if (problemModel != null && !problemModel.build())
     {
-      log.error(new StringBand(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
+      log.error(new StringBuilder(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
       redirect(redirectURL, new Message("Build problem statistics failed!"));
     }
 

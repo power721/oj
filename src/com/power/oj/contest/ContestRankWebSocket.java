@@ -7,7 +7,6 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
 import jodd.util.HtmlEncoder;
-import jodd.util.StringBand;
 
 import com.jfinal.log.Logger;
 
@@ -46,13 +45,13 @@ public class ContestRankWebSocket
   {
     broadcast(cid, HtmlEncoder.block(message));
 
-    log.info(new StringBand(2).append("Accept Message: ").append(message).toString());
+    log.info(new StringBuilder(2).append("Accept Message: ").append(message).toString());
   }
 
   @OnError
   public void onError(Throwable t) throws Throwable
   {
-    log.error(new StringBand(2).append("WebSocket Error: ").append(t.toString()).toString(), t);
+    log.error(new StringBuilder(2).append("WebSocket Error: ").append(t.toString()).toString(), t);
   }
 
   public static void broadcast(int cid, String msg)

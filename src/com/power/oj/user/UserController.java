@@ -14,7 +14,6 @@ import org.apache.shiro.subject.Subject;
 
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
-import jodd.util.StringBand;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
@@ -157,7 +156,7 @@ public class UserController extends OjController
     if (uid != 0)
     {
       String ext = FileKit.getFileType(uploadFile.getOriginalFileName());
-      String fileName = new StringBand(4).append(OjConfig.userAvatarPath).append(uid).append(".").append(userModel.getStr("avatar")).toString();
+      String fileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(uid).append(".").append(userModel.getStr("avatar")).toString();
 
       try
       {
@@ -167,7 +166,7 @@ public class UserController extends OjController
         log.warn(e.getLocalizedMessage());
       }
 
-      fileName = new StringBand(3).append(OjConfig.userAvatarPath).append(uid).append(ext).toString();
+      fileName = new StringBuilder(3).append(OjConfig.userAvatarPath).append(uid).append(ext).toString();
       try
       {
         FileUtil.moveFile(uploadFile.getFile(), new File(fileName));
@@ -251,7 +250,7 @@ public class UserController extends OjController
     UserModel userModel = getModel(UserModel.class, "user");
     userModel.updateUser();
 
-    String redirectURL = new StringBand(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
+    String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
     redirect(redirectURL, new Message("The changes have been saved."));
   }
 
@@ -268,7 +267,7 @@ public class UserController extends OjController
     setAttr(OjConstants.USER_LIST, UserModel.dao.searchUser(scope, word));
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
-    setTitle(new StringBand(2).append("Search user: ").append(word).toString());
+    setTitle(new StringBuilder(2).append("Search user: ").append(word).toString());
 
     render("search.html");
   }
@@ -278,8 +277,8 @@ public class UserController extends OjController
    * HtmlEncoder.text(getPara("word").trim()); String scope = getPara("scope");
    * int pageNumber = getParaToInt("p", 1); Page<UserModel> userList = null;
    * 
-   * if(StringUtil.isNotBlank(word)) { StringBand sb = new
-   * StringBand("FROM user WHERE "); if(StringUtil.isNotBlank(scope))
+   * if(StringUtil.isNotBlank(word)) { StringBuilder sb = new
+   * StringBuilder("FROM user WHERE "); if(StringUtil.isNotBlank(scope))
    * sb.append(scope).append(" LIKE '%").append(word).append("%' "); else
    * sb.append ("name LIKE '%").append(word).append("%' OR nick LIKE '%").append
    * (word).append("%' OR email LIKE '%").append(word).append("%'");
@@ -322,7 +321,7 @@ public class UserController extends OjController
     if (user != null)
       user.build();
 
-    String redirectURL = new StringBand(2).append("/user/profile/").append(user.getStr("name")).toString();
+    String redirectURL = new StringBuilder(2).append("/user/profile/").append(user.getStr("name")).toString();
     redirect(redirectURL, new Message("The user statistics have been saved."));
   }
 }

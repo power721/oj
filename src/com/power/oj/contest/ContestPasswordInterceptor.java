@@ -1,6 +1,5 @@
 package com.power.oj.contest;
 
-import jodd.util.StringBand;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
@@ -38,7 +37,7 @@ public class ContestPasswordInterceptor implements Interceptor
       return;
     }
 
-    String token_name = new StringBand("cid-").append(cid).toString();
+    String token_name = new StringBuilder("cid-").append(cid).toString();
     String token_token = "";
     try
     {
