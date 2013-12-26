@@ -20,10 +20,13 @@ import com.power.oj.core.model.LanguageModel;
 import com.power.oj.judge.Judge;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class SolutionController extends OjController
 {
-
+  
+  private static final UserService userService = UserService.me();
+  
   @ActionKey("/status")
   public void index()
   {
@@ -72,7 +75,7 @@ public class SolutionController extends OjController
   public void show()
   {
     int sid = getParaToInt(0);
-    boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
+    boolean isAdmin = userService.isAdmin();
     SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=? LIMIT 1", sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
     int uid = solutionModel.getUid();

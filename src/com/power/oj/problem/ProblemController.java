@@ -26,7 +26,9 @@ import com.power.oj.user.UserService;
 
 public class ProblemController extends OjController
 {
-
+  
+  private static final UserService userService = UserService.me();
+  
   public void index()
   {
     setTitle("Problem List");
@@ -68,7 +70,7 @@ public class ProblemController extends OjController
     }
 
     int pid = getParaToInt(0);
-    boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
+    boolean isAdmin = userService.isAdmin();
     ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
     if (problemModel == null)
     {
@@ -111,10 +113,10 @@ public class ProblemController extends OjController
   public void submit()
   {
     int pid = getParaToInt(0);
-    boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
+    boolean isAdmin = userService.isAdmin();
     ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
     setAttr("problem", problemModel);
-    setAttr(OjConstants.USER, UserService.me().getPrincipal());
+    setAttr(OjConstants.USER, userService.getPrincipal());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     boolean ajax = getParaToBoolean("ajax", false);
     int sid = 0;
@@ -226,7 +228,7 @@ public class ProblemController extends OjController
 
     if (!ajax)
     {
-      boolean isAdmin = getAttr(OjConstants.ADMIN_USER) != null;
+      boolean isAdmin = userService.isAdmin();
       ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
       if (problemModel == null)
       {

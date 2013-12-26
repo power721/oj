@@ -131,6 +131,11 @@ public class UserService
   {
     return ShiroKit.isGuest();
   }
+  
+  public boolean isAdmin()
+  {
+    return ShiroKit.hasAnyRoles("admin,root");
+  }
 
   public boolean hasRole(String roleName)
   {
