@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import com.jfinal.kit.PathKit;
+
 /**
  * Some utils for file handling.
  * 
@@ -189,6 +191,17 @@ public class FileKit
   public void setAllowFiles(String[] allowFiles)
   {
     FileKit.allowFiles = allowFiles;
+  }
+  
+  public static String parsePath(String path)
+  {
+    if (!path.endsWith("/"))
+      path = path + "/";
+    
+    if (!path.startsWith("/"))
+      path = new StringBuilder(3).append(PathKit.getWebRootPath()).append("/").append(path).toString();
+    
+    return path;
   }
 
 }

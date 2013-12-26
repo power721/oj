@@ -7,13 +7,13 @@ import java.util.List;
 
 import jodd.util.collection.IntHashMap;
 
-import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.VariableModel;
+import com.power.oj.util.FileKit;
 
 public class OjService
 {
@@ -39,17 +39,11 @@ public class OjService
     
     OjConfig.siteTitle = OjConfig.get("siteTitle", "Power OJ");
     
-    String userAvatarPath = OjConfig.get("userAvatarPath");
-    if (userAvatarPath!= null && userAvatarPath.startsWith("/"))
-      OjConfig.userAvatarPath = userAvatarPath;
-    else
-      OjConfig.userAvatarPath = new StringBuilder(2).append(PathKit.getWebRootPath()).append(userAvatarPath).toString();
+    String userAvatarPath = OjConfig.get("userAvatarPath", "assets/images/user/");
+    OjConfig.userAvatarPath = FileKit.parsePath(userAvatarPath);
     
-    String problemImagePath = OjConfig.get("problemImagePath");
-    if (problemImagePath != null && problemImagePath.startsWith("/"))
-      OjConfig.problemImagePath = problemImagePath;
-    else
-      OjConfig.problemImagePath = new StringBuilder(2).append(PathKit.getWebRootPath()).append(problemImagePath).toString();
+    String problemImagePath = OjConfig.get("problemImagePath", "assets/images/problem/");
+    OjConfig.problemImagePath = FileKit.parsePath(problemImagePath);
     
     OjConfig.contestPageSize = OjConfig.getInt("contestPageSize", 20);
     OjConfig.contestRankPageSize = OjConfig.getInt("contestRankPageSize", 50);
