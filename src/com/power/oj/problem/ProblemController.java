@@ -35,7 +35,7 @@ public class ProblemController extends OjController
       pageNumber = getParaToInt("p", 1);
     else
       pageNumber = Integer.parseInt(getCookie("pageNumber", "1"));
-    int pageSize = getParaToInt("s", 50);
+    int pageSize = getParaToInt("s", OjConfig.problemPageSize);
 
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
     StringBuilder sb = new StringBuilder("FROM problem");
@@ -255,7 +255,7 @@ public class ProblemController extends OjController
     }
 
     int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", 20);
+    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
     int language = getParaToInt("language", -1);
     StringBuilder query = new StringBuilder();
     if (language > -1)

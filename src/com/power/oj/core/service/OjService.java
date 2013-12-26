@@ -37,23 +37,25 @@ public class OjService
       OjConfig.variable.put(variableModel.getStr("name"), variableModel);
     }
     
-    OjConfig.siteTitle = OjConfig.get("siteTitle");
+    OjConfig.siteTitle = OjConfig.get("siteTitle", "Power OJ");
     
     String userAvatarPath = OjConfig.get("userAvatarPath");
-    if (userAvatarPath.startsWith("/"))
+    if (userAvatarPath!= null && userAvatarPath.startsWith("/"))
       OjConfig.userAvatarPath = userAvatarPath;
     else
       OjConfig.userAvatarPath = new StringBuilder(2).append(PathKit.getWebRootPath()).append(userAvatarPath).toString();
     
     String problemImagePath = OjConfig.get("problemImagePath");
-    if (problemImagePath.startsWith("/"))
+    if (problemImagePath != null && problemImagePath.startsWith("/"))
       OjConfig.problemImagePath = problemImagePath;
     else
       OjConfig.problemImagePath = new StringBuilder(2).append(PathKit.getWebRootPath()).append(problemImagePath).toString();
     
-    OjConfig.contestPageSize = OjConfig.getInt("contestPageSize");
-    OjConfig.problemPageSize = OjConfig.getInt("problemPageSize");
-    OjConfig.userPageSize = OjConfig.getInt("userPageSize");
+    OjConfig.contestPageSize = OjConfig.getInt("contestPageSize", 20);
+    OjConfig.contestRankPageSize = OjConfig.getInt("contestRankPageSize", 50);
+    OjConfig.problemPageSize = OjConfig.getInt("problemPageSize", 50);
+    OjConfig.userPageSize = OjConfig.getInt("userPageSize", 20);
+    OjConfig.statusPageSize = OjConfig.getInt("statusPageSize", 20);
   }
   
   public void loadLanguage()

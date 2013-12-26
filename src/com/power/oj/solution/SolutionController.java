@@ -28,7 +28,7 @@ public class SolutionController extends OjController
   public void index()
   {
     int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", 20);
+    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
     int result = getParaToInt("result", -1);
     int language = getParaToInt("language", -1);
     int pid = 0;

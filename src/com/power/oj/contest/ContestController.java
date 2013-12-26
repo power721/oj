@@ -40,7 +40,7 @@ public class ContestController extends OjController
   public void index()
   {
     int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", 20);
+    int pageSize = getParaToInt("s", OjConfig.contestPageSize);
     int type = getParaToInt("type", -1);
     int status = getParaToInt("status", -1);
 
@@ -161,7 +161,7 @@ public class ContestController extends OjController
   {
     int cid = getParaToInt(0);
     int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", 50);
+    int pageSize = getParaToInt("s", OjConfig.contestRankPageSize);
     
     setTitle(new StringBuilder(2).append("Contest Standing ").append(cid).toString());
     
@@ -183,7 +183,7 @@ public class ContestController extends OjController
     setAttr("contest", contestModle);
 
     int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", 20);
+    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
     int result = getParaToInt("result", -1);
     int language = getParaToInt("language", -1);
     int num = -1;
@@ -261,7 +261,7 @@ public class ContestController extends OjController
     }
 
     int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", 20);
+    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
     int language = getParaToInt("language", -1);
     StringBuilder query = new StringBuilder();
     if (language > -1)

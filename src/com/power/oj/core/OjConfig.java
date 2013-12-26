@@ -50,7 +50,7 @@ public class OjConfig extends JFinalConfig
   protected static final Logger log = Logger.getLogger(OjConfig.class);
 
   public static String baseUrl = null;
-  public static String siteTitle = "Power OJ";
+  public static String siteTitle = null;
   public static String userAvatarPath = null;
   public static String problemImagePath = null;
 
@@ -63,8 +63,10 @@ public class OjConfig extends JFinalConfig
   public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
 
   public static int contestPageSize = 20;
+  public static int contestRankPageSize = 50;
   public static int problemPageSize = 50;
   public static int userPageSize = 20;
+  public static int statusPageSize = 20;
 
   public static long timeStamp;
   public static long startGlobalInterceptorTime;
