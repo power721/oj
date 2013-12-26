@@ -98,7 +98,7 @@
               </li>
             <#else>
               <li class="<#if actionKey=="login">active</#if>">
-                <a href="login?ajax=1" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+                <a href="#" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
               </li>
               <li class="<#if actionKey=="signup">active</#if>">
                 <a href="signup"><i class="icon-star"></i>Signup</a>
@@ -146,14 +146,59 @@
   </div><!-- container -->
 
   <#if !userID??>
-    <div class="modal fade userModal" id="loginModal">
+    <div class="modal hide fade userModal" id="loginModal">
         <form class="form-horizontal" action="user/signin" method="post">
         <div class="modal-header">
         <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h3 id="loginModalLabel"><a href="login" title="Login in another page" data-toggle="tooltip" data-placement="bottom">Login</a></h3>
         </div>
         <div class="modal-body">
-            <a href="login" class="btn btn-primary">Login</a>
+          <div class="control-group">
+            <div class="controls">
+              <span class="help-block">Don't have an account? <a
+                href="signup">Sign up here</a>
+              </span>
+            </div>
+          </div>
+          <div class="control-group
+            <#if nameMsg??>error</#if>">
+            <label class="control-label" for="inputAccount">Account</label>
+              <div class="controls">
+                <div class="input-prepend">
+                  <span class="add-on"><i class="icon-user"></i></span>
+                  <input type="text" id="inputAccount" name="name" value="${name!}" placeholder="User name" required>
+                </div>
+                <p class="text-error">${nameMsg!}</p>
+              </div>
+            </div>
+          <div class="control-group">
+            <label class="control-label" for="inputPassword">
+              Password
+            </label>
+            <div class="controls">
+              <div class="input-prepend">
+                <span class="add-on"><i class="icon-lock"></i>
+                </span>
+                <input type="password" id="inputPassword" name="password"
+                  placeholder="Password" required>
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <span class="help-block"><a href="#">Forgot Password</a>
+              </span>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <label class="checkbox inline">
+                <input type="checkbox" name="rememberMe" value="1"
+                  checked="checked">
+                Remember me
+              </label>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn btn-primary">Login</button>

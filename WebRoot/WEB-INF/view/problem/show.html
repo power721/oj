@@ -30,7 +30,7 @@
     </div>
     
     <#if adminUser??>
-	<div class="modal fade problemModal" id="editModal">
+	<div class="modal hide fade problemModal" id="editModal">
 	<form class="" action="problem/update" id="editPorblemForm" method="post">
 		<div class="modal-header">
 		<button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
@@ -49,7 +49,7 @@
 	</#if>
 	
     <#if userID??>
-    <div class="modal fade problemModal" id="submitModal">
+    <div class="modal hide fade problemModal" id="submitModal">
         <form class="" id="submitForm" action="solution/save" method="post">
         <div class="modal-header">
         <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
