@@ -12,7 +12,7 @@ import com.power.oj.core.OjConstants;
  * @author power
  * 
  */
-public class MessageInterceptor implements Interceptor
+public class FlashMessageInterceptor implements Interceptor
 {
 
   @Override

@@ -23,9 +23,9 @@ public class OjController extends Controller
    * Redirect to url with flash message。
    * 
    * @param url
-   *          string of destination url
+   *          string of destination url.
    * @param msg
-   *          message with content, type and title
+   *          message with content, type and title.
    */
   public void redirect(String url, Message msg)
   {
@@ -34,14 +34,14 @@ public class OjController extends Controller
   }
 
   /**
-   * Redirect to url with succes message。
+   * Redirect to url with flash message。
    * 
    * @param url
-   *          string of destination url
+   *          string of destination url.
    * @param withQueryString
-   *          whether contains query string
+   *          whether contains query string.
    * @param msg
-   *          message with content, type and title
+   *          message with content, type and title.
    */
   public void redirect(String url, boolean withQueryString, Message msg)
   {
@@ -49,6 +49,12 @@ public class OjController extends Controller
     super.redirect(url, withQueryString);
   }
 
+  /**
+   * Set flash message in session.
+   * 
+   * @param message
+   *          message with content, type and title.
+   */
   public void setMessage(Message message)
   {
     setSessionAttr(OjConstants.MSG, message.getContent());

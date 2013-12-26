@@ -3,7 +3,6 @@ package com.power.oj.core;
 import java.util.HashMap;
 import java.util.List;
 
-import jodd.util.StringBand;
 import jodd.util.collection.IntHashMap;
 
 import com.power.oj.admin.AdminController;
@@ -13,7 +12,7 @@ import com.power.oj.contest.ContestModel;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
-import com.power.oj.core.interceptor.MessageInterceptor;
+import com.power.oj.core.interceptor.FlashMessageInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
@@ -21,13 +20,11 @@ import com.power.oj.core.service.OjService;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.shiro.ShiroInViewInterceptor;
 import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.*;
 import com.power.oj.user.interceptor.UserInterceptor;
-import com.power.oj.util.Tool;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
@@ -35,7 +32,6 @@ import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
 import com.jfinal.ext.plugin.shiro.ShiroPlugin;
-import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
@@ -75,7 +71,7 @@ public class OjConfig extends JFinalConfig
   public static long startGlobalHandlerTime;
 
   private Routes routes;
-  
+
   /**
    * 配置常量
    */
@@ -100,7 +96,7 @@ public class OjConfig extends JFinalConfig
   public void configRoute(Routes me)
   {
     this.routes = me;
-    
+
     me.add("/", CommonController.class, "/common/");
     me.add("/admin", AdminController.class);
     me.add("/bbs", BBSController.class);
@@ -127,7 +123,7 @@ public class OjConfig extends JFinalConfig
 
     // 配置ActiveRecord插件
     ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
-    arp.setShowSql(true);
+    arp.setShowSql(getPropertyToBoolean("devMode", false));
     arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
@@ -139,7 +135,7 @@ public class OjConfig extends JFinalConfig
 
     me.add(new EhCachePlugin());
     me.add(new ShiroPlugin(routes));
-    
+
     log.debug("configPlugin finished.");
   }
 
@@ -149,13 +145,11 @@ public class OjConfig extends JFinalConfig
   public void configInterceptor(Interceptors me)
   {
     me.add(new GlobalInterceptor());
-    me.add(new MessageInterceptor());
+    me.add(new FlashMessageInterceptor());
     me.add(new AccessLogInterceptor());
     me.add(new UserInterceptor());
-    
     me.add(new ShiroInterceptor());
-    me.add(new ShiroInViewInterceptor());
-    
+
     log.debug("configInterceptor finished.");
   }
 
@@ -176,11 +170,6 @@ public class OjConfig extends JFinalConfig
    */
   public void afterJFinalStart()
   {
-    baseUrl = Tool.formatBaseURL(getProperty(OjConstants.BASE_URL));
-    siteTitle = getProperty(OjConstants.SITE_TITLE, "Power OJ");
-    userAvatarPath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/user/").toString();
-    problemImagePath = new StringBand(2).append(PathKit.getWebRootPath()).append("/assets/images/problem/").toString();
-    
     OjService.me().initJudgeResult();
     OjService.me().loadLanguage();
     OjService.me().loadVariable();
@@ -193,17 +182,50 @@ public class OjConfig extends JFinalConfig
    */
   public static String get(String name)
   {
-    return variable.get(name).getStr("value");
+    return get(name, null);
+  }
+  
+  public static String get(String name, String defaultValue)
+  {
+    VariableModel model = variable.get(name);
+    if (model != null)
+    {
+      return model.getStr("value");
+    }
+    
+    return defaultValue;
+  }
+  
+  public static Integer getInt(String name)
+  {
+    return getInt(name, null);
   }
 
-  public static int getInt(String name)
+  public static Integer getInt(String name, Integer defaultValue)
   {
-    return variable.get(name).getInt("int_value");
+    VariableModel model = variable.get(name);
+    if (model != null)
+    {
+      return model.getInt("int_value");
+    }
+    
+    return defaultValue;
   }
 
-  public static boolean getBoolean(String name)
+  public static Boolean getBoolean(String name)
   {
-    return variable.get(name).getBoolean("boolean_value");
+    return getBoolean(name ,null);
+  }
+
+  public static Boolean getBoolean(String name, Boolean defaultValue)
+  {
+    VariableModel model = variable.get(name);
+    if (model != null)
+    {
+      return model.getBoolean("boolean_value");
+    }
+    
+    return defaultValue;
   }
 
   public static String getText(String name)

@@ -7,6 +7,7 @@ import java.util.List;
 
 import jodd.util.collection.IntHashMap;
 
+import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
@@ -35,6 +36,24 @@ public class OjService
     {
       OjConfig.variable.put(variableModel.getStr("name"), variableModel);
     }
+    
+    OjConfig.siteTitle = OjConfig.get("siteTitle");
+    
+    String userAvatarPath = OjConfig.get("userAvatarPath");
+    if (userAvatarPath.startsWith("/"))
+      OjConfig.userAvatarPath = userAvatarPath;
+    else
+      OjConfig.userAvatarPath = new StringBuilder(2).append(PathKit.getWebRootPath()).append(userAvatarPath).toString();
+    
+    String problemImagePath = OjConfig.get("problemImagePath");
+    if (problemImagePath.startsWith("/"))
+      OjConfig.problemImagePath = problemImagePath;
+    else
+      OjConfig.problemImagePath = new StringBuilder(2).append(PathKit.getWebRootPath()).append(problemImagePath).toString();
+    
+    OjConfig.contestPageSize = OjConfig.getInt("contestPageSize");
+    OjConfig.problemPageSize = OjConfig.getInt("problemPageSize");
+    OjConfig.userPageSize = OjConfig.getInt("userPageSize");
   }
   
   public void loadLanguage()
