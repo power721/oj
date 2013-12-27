@@ -164,8 +164,8 @@ public class OjConfig extends JFinalConfig
    */
   public void configHandler(Handlers me)
   {
-    me.add(new ContextPathHandler(OjConstants.BASE_URL));
     me.add(new UrlFilterHandler());
+    me.add(new ContextPathHandler(OjConstants.BASE_URL));
     me.add(new DruidStatViewHandler("/druid"));
 
     log.debug("configHandler finished.");
