@@ -21,7 +21,6 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.upload.UploadFile;
-
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -29,6 +28,7 @@ import com.power.oj.core.bean.Message;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.user.validator.RecoverAccountValidator;
+import com.power.oj.user.validator.ResetPasswordValidator;
 import com.power.oj.user.validator.SignupValidator;
 import com.power.oj.user.validator.UpdateUserValidator;
 import com.power.oj.util.FileKit;
@@ -225,7 +225,9 @@ public class UserController extends OjController
     
     if (userModel != null && token != null && token.equals(userModel.getStr("token")))
     {
+      setTitle("Reset Password");
       setAttr("name", name);
+      setAttr("token", token);
       render("reset.html");
       return;
     }
@@ -233,15 +235,14 @@ public class UserController extends OjController
     renderError(403);
   }
   
-  @Before(POST.class)
+  @Before({POST.class, ResetPasswordValidator.class})
   @RequiresGuest
   public void resetPassword()
   {
+    setTitle("Reset Password");
     String name = getPara("name");
     String password = getPara("pass");
-    UserModel userModel = userService.getUserByName(name);
-    
-    userModel.set("token", null).set("pass", password).update();
+    userService.resetPassword(name, password);
     
     Message msg = new Message("Congratulations! You updated your account.");
     redirect("/", msg);

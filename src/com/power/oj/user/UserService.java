@@ -1,5 +1,7 @@
 package com.power.oj.user;
 
+import jodd.util.BCrypt;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -64,6 +66,14 @@ public class UserService
     
     loginLog.set("name", name).set("ip", SessionService.me().getHost()).set("ctime", OjConfig.timeStamp).set("succeed", success);
     return Db.save("loginlog", loginLog);
+  }
+  
+  public boolean resetPassword(String name, String password)
+  {
+    UserModel userModel = me.getUserByName(name);
+    
+    userModel.set("token", null).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
+    return userModel.update();
   }
 
   public void logout()
