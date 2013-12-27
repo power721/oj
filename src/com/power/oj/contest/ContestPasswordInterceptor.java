@@ -41,7 +41,7 @@ public class ContestPasswordInterceptor implements Interceptor
     String token_token = "";
     try
     {
-      token_token = CryptUtils.decrypt(controller.getCookie(token_name), token_name);
+      token_token = CryptUtils.decrypt(controller.getSessionAttr(token_name).toString(), token_name);
       if (ContestModel.dao.checkContestPassword(cid, token_token))
       {
         ai.invoke();

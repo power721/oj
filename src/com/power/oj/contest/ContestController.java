@@ -387,7 +387,7 @@ public class ContestController extends OjController
       String token_name = new StringBuilder("cid-").append(cid).toString();
       String token_token = CryptUtils.encrypt(password, token_name);
       log.info(token_token);
-      setCookie(token_name, token_token, -1);
+      setSessionAttr(token_name, token_token);
       redirect(SessionService.me().getLastAccessURL());
       return;
     }
