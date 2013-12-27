@@ -252,6 +252,7 @@ DROP TABLE IF EXISTS `loginlog`;
 CREATE TABLE `loginlog` (
 `id`  int(9) NOT NULL AUTO_INCREMENT ,
 `uid`  int(9) NOT NULL DEFAULT 0 ,
+`name` varchar(35) DEFAULT NULL ,
 `password`  blob NULL DEFAULT NULL ,
 `ip`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `ctime`  int(11) NOT NULL ,

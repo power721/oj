@@ -40,11 +40,11 @@ public class UserService
     {
       currentUser.login(token);
 
-      updateLogin(true);
+      updateLogin(name, true);
       SessionService.me().updateLogin();
     } catch (AuthenticationException ae)
     {
-      updateLogin(false);
+      updateLogin(name, false);
       log.warn("User signin failed.");
       return false;
     }
@@ -52,7 +52,7 @@ public class UserService
     return true;
   }
 
-  public boolean updateLogin(boolean success)
+  public boolean updateLogin(String name, boolean success)
   {
     Record loginLog = new Record();
     if (success)
@@ -62,7 +62,7 @@ public class UserService
       loginLog.set("uid", userModel.getUid());
     }
     
-    loginLog.set("ip", SessionService.me().getHost()).set("ctime", OjConfig.timeStamp).set("succeed", success);
+    loginLog.set("name", name).set("ip", SessionService.me().getHost()).set("ctime", OjConfig.timeStamp).set("succeed", success);
     return Db.save("loginlog", loginLog);
   }
 
