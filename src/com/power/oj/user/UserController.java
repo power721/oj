@@ -226,8 +226,7 @@ public class UserController extends OjController
     if (userModel != null && token != null && token.equals(userModel.getStr("token")))
     {
       setTitle("Reset Password");
-      setAttr("name", name);
-      setAttr("token", token);
+      setSessionAttr("name", name);
       render("reset.html");
       return;
     }
@@ -240,12 +239,15 @@ public class UserController extends OjController
   public void resetPassword()
   {
     setTitle("Reset Password");
-    String name = getPara("name");
+    String name = getSessionAttr("name");
     String password = getPara("pass");
-    userService.resetPassword(name, password);
+    if (userService.resetPassword(name, password))
+    {
+      removeSessionAttr("name");
+    }
     
     Message msg = new Message("Congratulations! You updated your account.");
-    redirect("/", msg);
+    redirect("/login", msg);
   }
 
   @Before(SignupValidator.class)
