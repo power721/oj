@@ -3,7 +3,6 @@ package com.power.oj.user;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import com.jfinal.log.Logger;
@@ -55,20 +54,16 @@ public class UserService
 
   public boolean updateLogin(String name, boolean success)
   {
-    boolean ret = true;
-    UserModel userModel = dao.getUserByName(name);
     Record loginLog = new Record();
     if (success)
+    {
+      UserModel userModel = dao.getUserByName(name);
+      userModel.updateLogin();
       loginLog.set("uid", userModel.getUid());
+    }
+    
     loginLog.set("ip", SessionService.me().getHost()).set("ctime", OjConfig.timeStamp).set("succeed", success);
-    ret = Db.save("loginlog", loginLog);
-    
-    Session session = SessionService.me().getSession();
-    log.info(session.getClass().getName());
-    if (success)
-      ret = userModel.updateLogin() && ret;
-    
-    return ret;
+    return Db.save("loginlog", loginLog);
   }
 
   public void logout()

@@ -195,6 +195,7 @@ public class FileKit
   
   public static String parsePath(String path)
   {
+    path = path.trim();
     if (!path.endsWith("/"))
       path = path + "/";
     
