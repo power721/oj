@@ -211,10 +211,40 @@ public class UserController extends OjController
     userModel.set("token", token).update();
     // TODO: send mail
     
-    
     log.info("name: " + name + " Email: " + email);
     Message msg = new Message("Please check you mailbox and follow the instruction to recover your account.");
     redirect(sessionService.getLastAccessURL(), msg);
+  }
+  
+  @RequiresGuest
+  public void reset()
+  {
+    String name = getPara("name");
+    String token = getPara("token");
+    UserModel userModel = userService.getUserByName(name);
+    
+    if (userModel != null && token != null && token.equals(userModel.getStr("token")))
+    {
+      setAttr("name", name);
+      render("reset.html");
+      return;
+    }
+    
+    renderError(403);
+  }
+  
+  @Before(POST.class)
+  @RequiresGuest
+  public void resetPassword()
+  {
+    String name = getPara("name");
+    String password = getPara("pass");
+    UserModel userModel = userService.getUserByName(name);
+    
+    userModel.set("token", null).set("pass", password).update();
+    
+    Message msg = new Message("Congratulations! You updated your account.");
+    redirect("/", msg);
   }
 
   @Before(SignupValidator.class)
@@ -230,7 +260,7 @@ public class UserController extends OjController
     Subject currentUser = userService.getSubject();
     currentUser.login(token);
 
-    redirect("/user/edit", new Message("Congratulations!You have a new account now.<br>Please update your information."));
+    redirect("/user/edit", new Message("Congratulations! You have a new account now.<br>Please update your information."));
   }
 
   @RequiresAuthentication
