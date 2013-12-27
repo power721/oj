@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -201,10 +202,15 @@ public class UserController extends OjController
   @RequiresGuest
   public void recover()
   {
+    setTitle("Account Recovery");
     String name = getPara("name");
     String email = getPara("email");
+    String token = UUID.randomUUID().toString();
+    UserModel userModel = userService.getUserByName(name);
     
-    // TODO: generate token and send mail
+    userModel.set("token", token).update();
+    // TODO: send mail
+    
     
     log.info("name: " + name + " Email: " + email);
     Message msg = new Message("Please check you mailbox and follow the instruction to recover your account.");

@@ -72,7 +72,6 @@ public class UserService
     UserModel userModel = getPrincipal();
     if (userModel != null)
     {
-      userModel.set("token", null);
       userModel.update();
     }
 

@@ -171,14 +171,6 @@ public class UserModel extends Model<UserModel>
     return update();
   }
 
-  public boolean updateLogin(String token)
-  {
-    set("login", OjConfig.timeStamp);
-    if (StringUtil.isNotBlank(token))
-      set("token", token);
-    return update();
-  }
-
   public boolean updateLogin()
   {
     set("login", OjConfig.timeStamp);

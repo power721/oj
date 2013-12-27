@@ -2,6 +2,7 @@ package com.power.oj.user.validator;
 
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
+import com.power.oj.core.OjConstants;
 import com.power.oj.user.UserModel;
 
 public class RecoverAccountValidator extends Validator
@@ -18,13 +19,12 @@ public class RecoverAccountValidator extends Validator
     {
       addError("errorMsg", "This account is not registered with this email!");
     }
-
   }
 
   @Override
   protected void handleError(Controller c)
   {
-    // TODO Auto-generated method stub
+    c.setAttr(OjConstants.PAGE_TITLE, "Account Recovery");
     c.render("forget.html");
   }
 
