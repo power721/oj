@@ -102,4 +102,9 @@ public class OjService
     
     return permissionList;
   }
+  
+  public List<Record> tagList()
+  {
+    return Db.find("SELECT tag FROM tag WHERE status=1 GROUP by tag ORDER BY COUNT(tag) DESC");
+  }
 }

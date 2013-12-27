@@ -18,9 +18,8 @@ import jodd.io.FileUtil;
 
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.kit.PathKit;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
+import com.power.oj.core.service.OjService;
 import com.power.oj.util.FileKit;
 
 /**
@@ -82,7 +81,7 @@ public class CommonController extends OjController
     System.out.println("file: " + file.getFileName());
     System.out.println(file.getFile().getAbsolutePath());
 
-    String fileName = new StringBuilder(3).append(PathKit.getWebRootPath()).append("/assets/images/problem/").append(originalName).toString();
+    String fileName = new StringBuilder(3).append(PathKit.getWebRootPath()).append(OjConfig.problemImagePath).append(originalName).toString();
     try
     {
       FileUtil.moveFile(file.getFile(), new File(fileName));
@@ -175,7 +174,7 @@ public class CommonController extends OjController
         {
           dir.mkdirs();
         }
-        File savetoFile = new File(savePath + "/" + saveName);
+        File savetoFile = new File(savePath + File.separator + saveName);
         outSrc[i] = saveName;
 
         InputStream is = conn.getInputStream();
@@ -207,7 +206,7 @@ public class CommonController extends OjController
   @RequiresPermissions("image:upload")
   public void listImages()
   {
-    String imagesDir = new StringBuilder(2).append(PathKit.getWebRootPath()).append("\\assets\\images\\problem\\").toString();
+    String imagesDir = new StringBuilder(2).append(PathKit.getWebRootPath()).append(OjConfig.problemImagePath).toString();
     String imgStr = "";
     List<File> files = FileKit.getImageFiles(imagesDir, new ArrayList<File>());
     System.out.println(imagesDir);
@@ -231,8 +230,7 @@ public class CommonController extends OjController
    */
   public void tag()
   {
-    List<Record> tagList = Db.find("SELECT tag FROM tag WHERE status=1 GROUP by tag ORDER BY COUNT(tag) DESC");
-    setAttr("tagList", tagList);
+    setAttr("tagList", OjService.me().tagList());
 
     render("tag.html");
   }

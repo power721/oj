@@ -40,11 +40,11 @@ public class UserService
     {
       currentUser.login(token);
 
-      updateLogin(name ,true);
+      updateLogin(true);
       SessionService.me().updateLogin();
     } catch (AuthenticationException ae)
     {
-      updateLogin(name, false);
+      updateLogin(false);
       log.warn("User signin failed.");
       return false;
     }
@@ -52,12 +52,12 @@ public class UserService
     return true;
   }
 
-  public boolean updateLogin(String name, boolean success)
+  public boolean updateLogin(boolean success)
   {
     Record loginLog = new Record();
     if (success)
     {
-      UserModel userModel = dao.getUserByName(name);
+      UserModel userModel = getPrincipal();
       userModel.updateLogin();
       loginLog.set("uid", userModel.getUid());
     }
@@ -129,7 +129,7 @@ public class UserService
   
   public boolean isAdmin()
   {
-    return ShiroKit.hasAnyRoles("admin,root");
+    return ShiroKit.hasPermission("admin");
   }
 
   public boolean hasRole(String roleName)
