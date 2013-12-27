@@ -16,8 +16,7 @@ public class SignupValidator extends Validator
   {
     validateEmail("user.email", "emailMsg", "Invalid Email address!");
     validateRegex("user.pass", ".{6,20}", "passwordMsg", "Password length is between 6 and 20.");
-    // validateEqualField("user.pass", "repass", "confirmMsg",
-    // "The password not equal!");
+    validateEqualField("user.pass", "repass", "confirmMsg", "The password not equal!");
 
     String email = c.getPara("user.email");
     if (StringUtil.isNotBlank(email) && UserModel.dao.containEmail(email))
