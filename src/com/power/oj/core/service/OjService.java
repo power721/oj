@@ -7,6 +7,7 @@ import java.util.List;
 
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
+import jodd.mail.MailException;
 import jodd.mail.SendMailSession;
 import jodd.mail.SimpleAuthenticator;
 import jodd.mail.SmtpServer;
@@ -128,6 +129,10 @@ public class OjService
       session.sendMail(email);
       log.info("From: " + from + " to: " + to + " subject: " + subject);
     }
+    catch(MailException e)
+    {
+      log.error(e.getLocalizedMessage());
+    }
     finally
     {
       session.close();
@@ -140,11 +145,12 @@ public class OjService
     if (adminEmail == null)
       throw new Exception("Admin Email not set!");
 
+    String resetUrl = OjConfig.baseUrl + "/user/reset?name=" + name + "&token=" + token + "&t=" + OjConfig.timeStamp;
     EmailMessage htmlMessage = new EmailMessage(
         "<html><META http-equiv=Content-Type content=\"text/html; charset=utf-8\">" +
-        "<body><h2>Reset your account!</h2><br><div><p><a href=\"" +
-        OjConfig.baseUrl + "/user/reset?name=" + name + "&token=" + token + "&t=" + OjConfig.timeStamp +
-        "\" target=\"blank\">Reset Password</a></p></div></body></html>",
+        "<body><h2>Reset your account!</h2><br><div><p>" +
+        "To reset your password, click on the link below (or copy and paste the URL into your browser):<br>" +
+        "<a href=\"" + resetUrl + "\" target=\"blank\">" + resetUrl + "</a></p></div></body></html>",
         MimeTypes.MIME_TEXT_HTML);
     
     sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
