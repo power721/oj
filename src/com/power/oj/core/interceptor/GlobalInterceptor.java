@@ -5,6 +5,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 
 /**
  * Global interceptor<br>
@@ -22,12 +23,14 @@ public class GlobalInterceptor implements Interceptor
     OjConfig.timeStamp = OjConfig.startGlobalInterceptorTime / 1000;
     Controller controller = ai.getController();
 
-    String actionKey = ai.getActionKey();
-    controller.setAttr("actionKey", actionKey.replace("/", ""));
     String controllerKey = ai.getControllerKey();
-    controller.setAttr("controllerKey", controllerKey.replace("/", ""));
+    controller.setAttr(OjConstants.CONTROLLER_KEY, controllerKey.replace("/", ""));
+    
+    String actionKey = ai.getActionKey();
+    controller.setAttr(OjConstants.ACTION_KEY, actionKey.replace("/", ""));
+    
     String methodName = ai.getMethodName();
-    controller.setAttr("methodName", methodName);
+    controller.setAttr(OjConstants.METHOD_NAME, methodName);
 
     ai.invoke();
 

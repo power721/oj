@@ -20,6 +20,10 @@ public abstract class OjConstants
   public final static String SITE_TITLE = "siteTitle";
   public final static String PAGE_TITLE = "pageTitle";
   public final static String BASE_URL = "baseUrl";
+  
+  public final static String CONTROLLER_KEY = "controllerKey";
+  public final static String ACTION_KEY = "actionKey";
+  public final static String METHOD_NAME = "methodName";
 
   public final static String MSG = "msg";
   public final static String MSG_TYPE = "msgType";
