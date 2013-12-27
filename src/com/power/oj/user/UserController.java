@@ -27,6 +27,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.Message;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.user.validator.RecoverAccountValidator;
 import com.power.oj.user.validator.SignupValidator;
 import com.power.oj.user.validator.UpdateUserValidator;
 import com.power.oj.util.FileKit;
@@ -188,6 +189,26 @@ public class UserController extends OjController
   {
     setTitle("Signup");
     render("signup.html");
+  }
+  
+  @RequiresGuest
+  public void forget()
+  {
+    setTitle("Account Recovery");
+  }
+  
+  @Before({POST.class, RecoverAccountValidator.class})
+  @RequiresGuest
+  public void recover()
+  {
+    String name = getPara("name");
+    String email = getPara("email");
+    
+    // TODO: generate token and send mail
+    
+    log.info("name: " + name + " Email: " + email);
+    Message msg = new Message("Please check you mailbox and follow the instruction to recover your account.");
+    redirect(sessionService.getLastAccessURL(), msg);
   }
 
   @Before(SignupValidator.class)
