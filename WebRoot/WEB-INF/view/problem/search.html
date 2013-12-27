@@ -3,7 +3,8 @@
   <div class="pull-left">
     <form class="form-search" action="problem/search">
       <div class="input-append">
-        <input type="text" class="input-medium search-query" name="word" value="${word!}"> <select name="scope" class="input-small">
+        <input type="text" class="input-medium search-query" name="word" value="${word!}">
+        <select name="scope" class="input-small">
           <option value="">All</option>
           <option value="title"<#if scope=="title">selected</#if>>Title</option>
           <option value="source"<#if scope=="source">selected</#if>>Source</option>

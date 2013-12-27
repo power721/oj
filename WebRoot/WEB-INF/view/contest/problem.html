@@ -14,15 +14,14 @@
   <h2>
     <#if userResult??>
     <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>" />
-    </#if> <span class="black">${problem.id!}:</span> 
-            <#if problem.status==false><del></#if>
-            <#if adminUser??>
-                <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}">${problem.title!}
-            <#else>
-                ${problem.title!}
-            </#if>
-            <#if problem.status==false></del></#if>
-            <!--<span class="label label-important">SPJ</span>--></h2>
+    </#if> <span class="black">${problem.id!}:</span> <#if problem.status==false>
+    <del>
+      </#if> <#if adminUser??> <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}">${problem.title!} <#else>
+        ${problem.title!} </#if> <#if problem.status==false>
+    </del>
+    </#if>
+    <!--<span class="label label-important">SPJ</span>-->
+  </h2>
   <#if adminUser??><a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> <a href="#"
     class="btn btn-danger">Rejudge</a><br></#if> Time Limit:<span class="blue">${problem.time_limit!}MS</span> Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
   Total Submit:<a href="contest/status/${cid!}?id=${problem.id!}">${problem.submit!}</a> Accepted:<a href="contest/status/${cid!}?id=${problem.id!}&result=0">${problem.accept!}</a>
@@ -193,8 +192,9 @@
 </#if>
 
 <form class="form-inline" action="problem/tag">
-  <input type="hidden" name="op" value="add"> <input type="hidden" name="pid" value="${problem.pid!}"> <input type="text" class="input-small"
-    name="tag" placeholder="Add a tag">
+  <input type="hidden" name="op" value="add">
+  <input type="hidden" name="pid" value="${problem.pid!}">
+  <input type="text" class="input-small" name="tag" placeholder="Add a tag">
   <button type="submit" class="btn">Add</button>
 </form>
 </#if>
