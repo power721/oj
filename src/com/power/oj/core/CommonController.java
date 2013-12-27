@@ -109,7 +109,7 @@ public class CommonController extends OjController
     String state = "SUCCESS";
     String base64Data = getPara("content");
     BASE64Decoder decoder = new BASE64Decoder();
-    File outFile = new File(new StringBuilder(3).append(PathKit.getWebRootPath()).append("/upload/").append(FileKit.getNewName("test.png")).toString());
+    File outFile = new File(new StringBuilder(4).append(PathKit.getWebRootPath()).append(File.separator).append(OjConfig.uploadPath).append(FileKit.getNewName("test.png")).toString());
     OutputStream ro;
     try
     {
@@ -145,7 +145,7 @@ public class CommonController extends OjController
     {
 
       // 保存文件路径
-      String savePath = new StringBuilder(2).append(PathKit.getWebRootPath()).append("/upload/").toString();
+      String savePath = new StringBuilder(3).append(PathKit.getWebRootPath()).append(File.separator).append(OjConfig.uploadPath).toString();
       // 格式验证
       String type = FileKit.getImageType(arr[i]);
       if (type.equals(""))

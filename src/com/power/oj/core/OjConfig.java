@@ -54,6 +54,8 @@ public class OjConfig extends JFinalConfig
   public static String siteTitle = null;
   public static String userAvatarPath = null;
   public static String problemImagePath = null;
+  public static String uploadPath = null;
+  public static String downloadPath = null;
 
   public static List<LanguageModel> program_languages;
   public static IntHashMap language_type = new IntHashMap();

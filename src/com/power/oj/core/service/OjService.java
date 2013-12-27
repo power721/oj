@@ -38,6 +38,12 @@ public class OjService
     }
     
     OjConfig.siteTitle = OjConfig.get("siteTitle", "Power OJ");
+
+    String uploadPath = OjConfig.get("uploadPath", "upload/");
+    OjConfig.uploadPath = FileKit.parsePath(uploadPath);
+
+    String downloadPath = OjConfig.get("downloadPath", "download/");
+    OjConfig.downloadPath = FileKit.parsePath(downloadPath);
     
     String userAvatarPath = OjConfig.get("userAvatarPath", "assets/images/user/");
     OjConfig.userAvatarPath = FileKit.parsePath(userAvatarPath);
