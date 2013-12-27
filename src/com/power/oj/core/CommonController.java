@@ -36,14 +36,25 @@ public class CommonController extends OjController
    */
   public void index()
   {
-    render("index.html");
+    
   }
   
+  public void about()
+  {
+    
+  }
+  
+  /**
+   * contact me page.
+   */
   public void contact()
   {
     
   }
   
+  /**
+   * OJ changelog page.
+   */
   public void changelog()
   {
     
@@ -54,7 +65,24 @@ public class CommonController extends OjController
    */
   public void faq()
   {
-    render("faq.html");
+    
+  }
+
+  /**
+   * Show hot tags of the problems.
+   */
+  public void tag()
+  {
+    setAttr("tagList", OjService.me().tagList());
+  }
+
+  /**
+   * Generate captcha image.
+   */
+  public void captcha()
+  {
+    CaptchaRender img = new CaptchaRender(OjConstants.randomCodeKey);
+    render(img);
   }
 
   /*
@@ -69,6 +97,9 @@ public class CommonController extends OjController
     renderText("TODO");
   }
 
+  /*
+   * These bellow actions are used for UEditor.
+   */
   @RequiresPermissions("image:upload")
   public void uploadImage()
   {
@@ -91,7 +122,7 @@ public class CommonController extends OjController
       state = "IO Exception";
     }
 
-    renderText("{'original':'" + originalName + "','url':'" + file.getFileName() + "','title':'" + title + "','state':'" + state + "'}");
+    renderJson("{'original':'" + originalName + "','url':'" + file.getFileName() + "','title':'" + title + "','state':'" + state + "'}");
   }
 
   @RequiresPermissions("image:upload")
@@ -130,7 +161,7 @@ public class CommonController extends OjController
       log.warn(e.getLocalizedMessage());
       state = "IO Exception";
     }
-    renderText("{'url':'" + outFile.getName() + "',state:'" + state + "'}");
+    renderJson("{'url':'" + outFile.getName() + "',state:'" + state + "'}");
   }
 
   @RequiresPermissions("image:upload")
@@ -200,7 +231,7 @@ public class CommonController extends OjController
       outstr += outSrc[i] + "ue_separate_ue";
     }
     outstr = outstr.substring(0, outstr.lastIndexOf("ue_separate_ue"));
-    renderText("{'url':'" + outstr + "','tip':'" + state + "','srcUrl':'" + url + "'}");
+    renderJson("{'url':'" + outstr + "','tip':'" + state + "','srcUrl':'" + url + "'}");
   }
 
   @RequiresPermissions("image:upload")
@@ -223,41 +254,6 @@ public class CommonController extends OjController
     }
 
     renderText(imgStr);
-  }
-
-  /**
-   * Show hot tags of the problem.
-   */
-  public void tag()
-  {
-    setAttr("tagList", OjService.me().tagList());
-
-    render("tag.html");
-  }
-
-  /**
-   * Generate captcha image.
-   */
-  public void captcha()
-  {
-    CaptchaRender img = new CaptchaRender(OjConstants.randomCodeKey);
-    render(img);
-  }
-
-  /**
-   * Handle 404 error.
-   */
-  public void _404()
-  {
-    renderText("Page not found!");
-  }
-
-  /**
-   * Handle 500 error.
-   */
-  public void _500()
-  {
-    renderText("500 Internal Server Error");
   }
 
 }
