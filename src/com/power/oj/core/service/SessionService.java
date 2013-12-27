@@ -5,6 +5,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -74,7 +76,7 @@ public class SessionService
     SessionService.me().putModel(id, sessionModel);
   }
   
-  public SessionModel updateSession(Session session, String url)
+  public SessionModel updateSession(HttpSession session, String url)
   {
     String id = (String) session.getId();
     SessionModel sessionModel = SessionService.me().getModel(id);

@@ -1,14 +1,11 @@
 package com.power.oj.core.interceptor;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
-
+import javax.servlet.http.HttpSession;
 import jodd.util.StringUtil;
-
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
-import com.jfinal.log.Logger;
+
 import com.power.oj.core.service.SessionService;
 
 /**
@@ -19,8 +16,6 @@ import com.power.oj.core.service.SessionService;
  */
 public class AccessLogInterceptor implements Interceptor
 {
-  protected static final Logger log = Logger.getLogger(AccessLogInterceptor.class);
-  
   private String skipActions[] =
   { "/login", "/user/signin", "/logout", "/signup", "/captcha", "/contest/password", "/problem/userResult" };
 
@@ -28,7 +23,7 @@ public class AccessLogInterceptor implements Interceptor
   public void intercept(ActionInvocation ai)
   {
     Controller controller = ai.getController();
-    Session session = SecurityUtils.getSubject().getSession(true);
+    HttpSession session = controller.getSession();
     String actionKey = ai.getActionKey();
 
     if (StringUtil.equalsOne(actionKey, skipActions) == -1)
