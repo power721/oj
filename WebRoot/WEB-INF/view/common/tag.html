@@ -1,13 +1,9 @@
-<#include "../common/_layout.html" />
-<@layout>
-    <div class="row" id="tagsList">
-        <div>
-        <#if tagList??>
-        <#list tagList as Tag>
-            <span><a href="problem/search?word=${Tag.tag!}&scope=tag" title="${Tag.name!}" data-toggle="tooltip">${Tag.tag!}</a></span>
-        </#list>
-        </#if>
-        </div>
-    </div>
-    <script type="text/javascript" src="assets/js/tag.js" ></script>
+<#include "../common/_layout.html" /> <@layout>
+<div class="row" id="tagsList">
+  <div>
+    <#if tagList??> <#list tagList as Tag> <span><a href="problem/search?word=${Tag.tag!}&scope=tag" title="${Tag.name!}" data-toggle="tooltip">${Tag.tag!}</a></span>
+    </#list> </#if>
+  </div>
+</div>
+<script type="text/javascript" src="assets/js/tag.js"></script>
 </@layout>

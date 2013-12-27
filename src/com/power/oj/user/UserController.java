@@ -212,7 +212,7 @@ public class UserController extends OjController
     // TODO: send mail
     
     log.info("name: " + name + " Email: " + email);
-    Message msg = new Message("Please check you mailbox and follow the instruction to recover your account.");
+    Message msg = new Message("Please check your mailbox and follow the instruction to recover your account.");
     redirect(sessionService.getLastAccessURL(), msg);
   }
   

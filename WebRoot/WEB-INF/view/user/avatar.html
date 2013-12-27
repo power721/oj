@@ -1,5 +1,4 @@
-<#include "../common/_layout.html" />
-<@layout>
+<#include "../common/_layout.html" /> <@layout>
 <script type="text/javascript" src="assets/swfupload/swfupload.js"></script>
 <script type="text/javascript" src="assets/js/uploadHandlers.js"></script>
 <script type="text/javascript">
@@ -57,63 +56,52 @@
         };
     </script>
 
-    <form id="avatar" action="" method="post" enctype="multipart/form-data">
-        <div style="width: 180px; height: 18px; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
-            <span id="spanButtonPlaceholder"></span>
-        </div>
-    </form>
+<form id="avatar" action="" method="post" enctype="multipart/form-data">
+  <div style="width: 180px; height: 18px; border: solid 1px #7FAAFF; background-color: #C5D9FF; padding: 2px;">
+    <span id="spanButtonPlaceholder"></span>
+  </div>
+</form>
 
-    <div id="divFileProgressContainer" style="height: 75px;"></div>
-    <div id="thumbnails"></div>
+<div id="divFileProgressContainer" style="height: 75px;"></div>
+<div id="thumbnails"></div>
 
-    <div class="Post-inner">
-                                        <div class="PostMetadataHeader">
-                                            <h2 class="PostHeader">
-                                                Example
-                                            </h2>
-                                        </div>
-                                        <div class="PostContent">
-                                              <div class="boxes">
-                                                  <div id="crop_container"></div>
-                                                  <div class="result">
-                                                    <div class="txt">Here you will see the cropped image</div>
-                                                  </div> 
-                                                  <div class="cleared"></div> 
-                                              </div>  
-                                              <br />
-                                              <span class="button-wrapper" id="crop">
-                                                    <span class="l"> </span>
-                                                    <span class="r"> </span>
-                                                    <a class="button" href="javascript:void(0)">Crop</a>
-                                              </span>
-                                              &nbsp;
-                                              <span class="button-wrapper" id="restore">
-                                                    <span class="l"> </span>
-                                                    <span class="r"> </span>
-                                                    <a class="button" href="javascript:void(0)">Restore</a>
-                                              </span>
-                                        </div>
-                                        <div class="cleared"></div>
-                        </div>
+<div class="Post-inner">
+  <div class="PostMetadataHeader">
+    <h2 class="PostHeader">Example</h2>
+  </div>
+  <div class="PostContent">
+    <div class="boxes">
+      <div id="crop_container"></div>
+      <div class="result">
+        <div class="txt">Here you will see the cropped image</div>
+      </div>
+      <div class="cleared"></div>
+    </div>
+    <br /> <span class="button-wrapper" id="crop"> <span class="l"> </span> <span class="r"> </span> <a class="button" href="javascript:void(0)">Crop</a>
+    </span> &nbsp; <span class="button-wrapper" id="restore"> <span class="l"> </span> <span class="r"> </span> <a class="button" href="javascript:void(0)">Restore</a>
+    </span>
+  </div>
+  <div class="cleared"></div>
+</div>
 
-    <script type="text/javascript" src="assets/cropzoom/js/script.js"></script>
-    <link href="assets/cropzoom/css/jquery-ui-1.10.3.custom.min.css" rel="Stylesheet" type="text/css" /> 
-    <link href="assets/cropzoom/css/jquery.cropzoom.css" rel="Stylesheet" type="text/css" /> 
-    <script type="text/javascript" src="assets/cropzoom/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="assets/cropzoom/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script type="text/javascript" src="assets/cropzoom/js/jquery.cropzoom.js"></script>
-    <!--<script type="text/javascript" src="http://cropzoom.googlecode.com/svn/trunk/plugin/jquery.cropzoom.js"></script>-->
-    <link rel="stylesheet" href="assets/cropzoom/css/style.css" type="text/css" media="screen" />
-    <!--[if IE 6]><link rel="stylesheet" href="assets/cropzoom/css/style.ie6.css" type="text/css" media="screen" /><![endif]-->
-    <!--[if IE 7]><link rel="stylesheet" href="assets/cropzoom/css/style.ie7.css" type="text/css" media="screen" /><![endif]-->
-    <style type="text/css">
-        #zoom,#rot{
-            width:360px;
-            margin:auto;
-            height:25px;
-        }
-    </style>
-    <script type="text/javascript">
+<script type="text/javascript" src="assets/cropzoom/js/script.js"></script>
+<link href="assets/cropzoom/css/jquery-ui-1.10.3.custom.min.css" rel="Stylesheet" type="text/css" />
+<link href="assets/cropzoom/css/jquery.cropzoom.css" rel="Stylesheet" type="text/css" />
+<script type="text/javascript" src="assets/cropzoom/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="assets/cropzoom/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="assets/cropzoom/js/jquery.cropzoom.js"></script>
+<!--<script type="text/javascript" src="http://cropzoom.googlecode.com/svn/trunk/plugin/jquery.cropzoom.js"></script>-->
+<link rel="stylesheet" href="assets/cropzoom/css/style.css" type="text/css" media="screen" />
+<!--[if IE 6]><link rel="stylesheet" href="assets/cropzoom/css/style.ie6.css" type="text/css" media="screen" /><![endif]-->
+<!--[if IE 7]><link rel="stylesheet" href="assets/cropzoom/css/style.ie7.css" type="text/css" media="screen" /><![endif]-->
+<style type="text/css">
+#zoom,#rot {
+	width: 360px;
+	margin: auto;
+	height: 25px;
+}
+</style>
+<script type="text/javascript">
     $(document).ready(function(){
        var cropzoom = $('#crop_container').cropzoom({
             width:400,
@@ -153,10 +141,10 @@
     })
 </script>
 <style type="text/css">
-    #img_to_crop{
-        -webkit-user-drag: element;
-        -webkit-user-select: none;
-    }
+#img_to_crop {
+	-webkit-user-drag: element;
+	-webkit-user-select: none;
+}
 </style>
 
 </@layout>

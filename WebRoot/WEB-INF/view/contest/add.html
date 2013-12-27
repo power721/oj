@@ -1,71 +1,66 @@
-<#include "../common/_layout.html" />
-<@layout>
-    <form class="form-horizontal" action="contest/save" method="post">
-        <div class="control-group contest <#if titleMsg??>error</#if>">
-            <label class="control-label" for="inputTitle">Title</label>
-            <div class="controls">
-                <textarea id="inputTitle" name="contest.title" rows="1" cols="120" required></textarea>
-                <p class="text-error">${titleMsg!}</p>
-            </div>
-        </div>
-        <div class="control-group contest">
-            <label class="control-label" for="inputStartTime">Start Time</label>
-            <div class="controls input-append date form_datetime" id="startTime">
-                <input size="16" type="text" name="start_time" id="inputStartTime" value="${start_time!}" readonly required>
-                <span class="add-on"><i class="icon-th"></i></span>
-            </div>
-        </div>
-        <div class="control-group contest">
-            <label class="control-label" for="inputEndTime">End Time</label>
-            <div class="controls input-append date form_datetime" id="endTime">
-                <input size="16" type="text" name="end_time" id="inputEndTime" value="${end_time!}" readonly required>
-                <span class="add-on"><i class="icon-th"></i></span>
-            </div>
-        </div>
-        <div class="control-group contest">
-            <label class="control-label" for="inputDescription">Description</label>
-            <div class="controls">
-                <textarea id="inputDescription" name="contest.description" rows="13" cols="120"></textarea>
-            </div>
-        </div>
-        <div class="control-group contest">
-            <label class="control-label" for="inputType">Type</label>
-            <div class="controls">
-                <select name="contest.type" id="inputType">
-                    <option value="0">Public</option>
-                    <option value="1">Private</option>
-                    <option value="2">Strict Private</option>
-                    <option value="3">Password</option>
-                    <option value="4">Test</option>
-                </select>
-            </div>
-        </div>
-        <div class="control-group <#if passMsg??>error</#if>" id="password" style="display:none">
-            <label class="control-label" for="inputPassword">
-                Password
-            </label>
-            <div class="controls">
-                <div class="input-prepend" id="contest-password">
-                </div>
-                <p class="text-error">${passMsg!}</p>
-            </div>
-        </div>
-        <div class="control-group">
-            <div class="controls">
-                <label class="checkbox">
-                <input type="checkbox" name="contest.freeze" value="1">Freeze
-                </label>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-info">Reset</button>
-            </div>
-        </div>
-    </form>
+<#include "../common/_layout.html" /> <@layout>
+<form class="form-horizontal" action="contest/save" method="post">
+  <div class="control-group contest <#if titleMsg??>error</#if>">
+    <label class="control-label" for="inputTitle">Title</label>
+    <div class="controls">
+      <textarea id="inputTitle" name="contest.title" rows="1" cols="120" required></textarea>
+      <p class="text-error">${titleMsg!}</p>
+    </div>
+  </div>
+  <div class="control-group contest">
+    <label class="control-label" for="inputStartTime">Start Time</label>
+    <div class="controls input-append date form_datetime" id="startTime">
+      <input size="16" type="text" name="start_time" id="inputStartTime" value="${start_time!}" readonly required> <span class="add-on"><i
+        class="icon-th"></i></span>
+    </div>
+  </div>
+  <div class="control-group contest">
+    <label class="control-label" for="inputEndTime">End Time</label>
+    <div class="controls input-append date form_datetime" id="endTime">
+      <input size="16" type="text" name="end_time" id="inputEndTime" value="${end_time!}" readonly required> <span class="add-on"><i
+        class="icon-th"></i></span>
+    </div>
+  </div>
+  <div class="control-group contest">
+    <label class="control-label" for="inputDescription">Description</label>
+    <div class="controls">
+      <textarea id="inputDescription" name="contest.description" rows="13" cols="120"></textarea>
+    </div>
+  </div>
+  <div class="control-group contest">
+    <label class="control-label" for="inputType">Type</label>
+    <div class="controls">
+      <select name="contest.type" id="inputType">
+        <option value="0">Public</option>
+        <option value="1">Private</option>
+        <option value="2">Strict Private</option>
+        <option value="3">Password</option>
+        <option value="4">Test</option>
+      </select>
+    </div>
+  </div>
+  <div class="control-group <#if passMsg??>error</#if>" id="password" style="display: none">
+    <label class="control-label" for="inputPassword"> Password </label>
+    <div class="controls">
+      <div class="input-prepend" id="contest-password"></div>
+      <p class="text-error">${passMsg!}</p>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox"> <input type="checkbox" name="contest.freeze" value="1">Freeze
+      </label>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+    </div>
+  </div>
+</form>
 
 
-    <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
-    <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
+<script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function(){
         $("#inputType").change(function() {
             var val = $(this).val();
@@ -116,5 +111,5 @@
         function getLocalTime(time) {     
            return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");      
         }
-    </script>  
+    </script>
 </@layout>

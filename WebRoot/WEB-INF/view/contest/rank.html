@@ -1,7 +1,6 @@
-<#include "_layout.html" />
-<@layout>
-    
-    <script language="javascript" type="text/javascript">
+<#include "_layout.html" /> <@layout>
+
+<script language="javascript" type="text/javascript">
     $(document).ready(function(){
         document.onkeydown=nextpage
         document.onkeydown=nextpage
@@ -16,92 +15,85 @@
         });
     </script>
 
-    <div class="pagination pagination-centered">
-        <ul>
-        <li class="<#if contestRank.pageNumber==1>disabled</#if>"><a href="contest/rank/${cid!}?p=1<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&lt;&lt;</a></li>
-        <#if contestRank.pageNumber&gt;1><li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Prev</a></li></#if>
-        <#if contestRank??>
-        <#assign start=contestRank.pageNumber-3>
-        <#assign end=contestRank.pageNumber+3>
-        <#if start<1><#assign end=end-start+1><#assign start=1></#if>
-        <#if end&gt;contestRank.totalPage ><#assign start=start-(end-contestRank.totalPage)-1><#if start<1><#assign start=1></#if><#assign end=contestRank.totalPage></#if>
-        <#if end<start><#assign end=start></#if>
-            <#list start..end as x>
-            <li class="<#if x==contestRank.pageNumber>active</#if>"><a href="contest/rank/${cid!}?p=${x}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">${x}</a></li>
-            </#list>
-        </#if>
-        <#if contestRank.pageNumber<contestRank.totalPage><li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Next</a></li></#if>
-        <li class="<#if contestRank.pageNumber&gt;=contestRank.totalPage>disabled</#if>"><a href="contest/rank/${cid!}?p=${contestRank.totalPage}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&gt;&gt;</a></li>
-        </ul>
-        <div class="pull-right">
-            <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span>
-            <span class="badge badge-info">${contestRank.totalRow} Users</span>
-        </div>
-    </div>
-    
-    <table id="contest-rank" class="table table-condensed table-bordered">
-        <thead>
-          <tr>
-            <th width="5%">Rank</th>
-            <th width="10%">User</th>
-            <th width="15%">Nick Name</th>
-            <th width="5%">Solved</th>
-            <th width="10%">Penalty</th>
-            <#list contestProblems as Problem>
-            <th><a href="contest/problem/${cid!}-${Problem.id}" data-toggle="tooltip" title="${Problem.title}"><strong>${Problem.id}</strong></a><br>
-                <a href="contest/status/${cid!}?id=${Problem.id}&result=0">${Problem.accept}</a>/
-                <a href="contest/status/${cid!}?id=${Problem.id}">${Problem.submit}</a>
-            </th>
-            </#list>
-          </tr>
-        </thead>
-        <tbody>
-        <#if contestRank??>
-        <#list contestRank.list as User>
-        <tr>
-            <#assign rank=User_index+1+(contestRank.pageNumber-1)*contestRank.pageSize>
-            <td><#if cstatus==2 && rank<4><i class="oj-medal_${rank}"></i></#if>${rank}</td>
-            <td><a href="user/profile/${User.name!}" <#if adminUser?? && User.realname??>data-toggle="tooltip" title="${(User.realname)!}"</#if>>${User.name!}</a></td>
-            <td>${User.nick!}</td>
-            <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.accepts!}</a></td>
-            <td>${User.penalty!}</td>
-            <#list contestProblems as Problem>
-            <#assign ac=User["${Problem.id}_time"]>
-            <#assign wa=User["${Problem.id}_WrongSubmits"]>
-            <td class="<#if ac==0 && wa!=0>wa wa${(wa/5)?int}</#if><#if ac!=0 && wa==0>ac</#if><#if ac!=0 && wa!=0>ac1</#if><#if Problem.first_blood == User.uid> fb</#if>"><#-- 允许多个First Boold： Problem.first_blood_time == ac -->
-            <#if ac&gt;0>${ac}<#if wa&gt;0><br></#if></#if><#if wa&gt;0>(-${wa})</#if>
-            </td>
-            </#list>
-        </tr>
-        </#list>
-        </#if>
-        </tbody>
-    </table>
+<div class="pagination pagination-centered">
+  <ul>
+    <li class="<#if contestRank.pageNumber==1>disabled</#if>"><a
+      href="contest/rank/${cid!}?p=1<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&lt;&lt;</a></li> <#if contestRank.pageNumber&gt;1>
+    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Prev</a></li></#if> <#if
+    contestRank??> <#assign start=contestRank.pageNumber-3> <#assign end=contestRank.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if>
+    <#if end&gt;contestRank.totalPage ><#assign start=start-(end-contestRank.totalPage)-1><#if start<1><#assign start=1></#if><#assign
+    end=contestRank.totalPage></#if> <#if end
+    <start><#assign end=start></#if> <#list start..end as x>
+    <li class="<#if x==contestRank.pageNumber>active</#if>"><a
+      href="contest/rank/${cid!}?p=${x}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">${x}</a></li>
+    </#list> </#if> <#if contestRank.pageNumber<contestRank.totalPage>
+    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Next</a></li>
+    </#if>
+    <li class="<#if contestRank.pageNumber&gt;=contestRank.totalPage>disabled</#if>"><a
+      href="contest/rank/${cid!}?p=${contestRank.totalPage}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&gt;&gt;</a></li>
+  </ul>
+  <div class="pull-right">
+    <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span> <span class="badge badge-info">${contestRank.totalRow}
+      Users</span>
+  </div>
+</div>
 
-    <div class="pagination pagination-centered">
-        <ul>
-        <li class="<#if contestRank.pageNumber==1>disabled</#if>"><a href="contest/rank/${cid!}?p=1<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&lt;&lt;</a></li>
-        <#if contestRank.pageNumber&gt;1><li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Prev</a></li></#if>
-        <#if contestRank??>
-        <#assign start=contestRank.pageNumber-3>
-        <#assign end=contestRank.pageNumber+3>
-        <#if start<1><#assign end=end-start+1><#assign start=1></#if>
-        <#if end&gt;contestRank.totalPage ><#assign start=start-(end-contestRank.totalPage)-1><#if start<1><#assign start=1></#if><#assign end=contestRank.totalPage></#if>
-        <#if end<start><#assign end=start></#if>
-            <#list start..end as x>
-            <li class="<#if x==contestRank.pageNumber>active</#if>"><a href="contest/rank/${cid!}?p=${x}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">${x}</a></li>
-            </#list>
-        </#if>
-        <#if contestRank.pageNumber<contestRank.totalPage><li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Next</a></li></#if>
-        <li class="<#if contestRank.pageNumber&gt;=contestRank.totalPage>disabled</#if>"><a href="contest/rank/${cid!}?p=${contestRank.totalPage}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&gt;&gt;</a></li>
-        </ul>
-    </div>
-    
-    <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-    <script src="assets/tablecloth/js/jquery.metadata.js"></script>
-    <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<table id="contest-rank" class="table table-condensed table-bordered">
+  <thead>
+    <tr>
+      <th width="5%">Rank</th>
+      <th width="10%">User</th>
+      <th width="15%">Nick Name</th>
+      <th width="5%">Solved</th>
+      <th width="10%">Penalty</th> <#list contestProblems as Problem>
+      <th><a href="contest/problem/${cid!}-${Problem.id}" data-toggle="tooltip" title="${Problem.title}"><strong>${Problem.id}</strong></a><br> <a
+        href="contest/status/${cid!}?id=${Problem.id}&result=0">${Problem.accept}</a>/ <a href="contest/status/${cid!}?id=${Problem.id}">${Problem.submit}</a></th>
+      </#list>
+    </tr>
+  </thead>
+  <tbody>
+    <#if contestRank??> <#list contestRank.list as User>
+    <tr>
+      <#assign rank=User_index+1+(contestRank.pageNumber-1)*contestRank.pageSize>
+      <td><#if cstatus==2 && rank<4><i class="oj-medal_${rank}"></i></#if>${rank}
+      </td>
+      <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realname??>data-toggle="tooltip" title="${(User.realname)!}"</#if>>${User.name!}</a></td>
+      <td>${User.nick!}</td>
+      <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.accepts!}</a></td>
+      <td>${User.penalty!}</td> <#list contestProblems as Problem> <#assign ac=User["${Problem.id}_time"]> <#assign wa=User["${Problem.id}_WrongSubmits"]>
+      <td
+        class="<#if ac==0 && wa!=0>wa wa${(wa/5)?int}</#if><#if ac!=0 && wa==0>ac</#if><#if ac!=0 && wa!=0>ac1</#if><#if Problem.first_blood == User.uid> fb</#if>"><#--
+        允许多个First Boold： Problem.first_blood_time == ac --> <#if ac&gt;0>${ac}<#if wa&gt;0><br></#if></#if><#if wa&gt;0>(-${wa})</#if>
+      </td> </#list>
+    </tr>
+    </#list> </#if>
+  </tbody>
+</table>
 
-    <script type="text/javascript" charset="utf-8">
+<div class="pagination pagination-centered">
+  <ul>
+    <li class="<#if contestRank.pageNumber==1>disabled</#if>"><a
+      href="contest/rank/${cid!}?p=1<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&lt;&lt;</a></li> <#if contestRank.pageNumber&gt;1>
+    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Prev</a></li></#if> <#if
+    contestRank??> <#assign start=contestRank.pageNumber-3> <#assign end=contestRank.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if>
+    <#if end&gt;contestRank.totalPage ><#assign start=start-(end-contestRank.totalPage)-1><#if start<1><#assign start=1></#if><#assign
+    end=contestRank.totalPage></#if> <#if end
+    <start><#assign end=start></#if> <#list start..end as x>
+    <li class="<#if x==contestRank.pageNumber>active</#if>"><a
+      href="contest/rank/${cid!}?p=${x}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">${x}</a></li>
+    </#list> </#if> <#if contestRank.pageNumber<contestRank.totalPage>
+    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Next</a></li>
+    </#if>
+    <li class="<#if contestRank.pageNumber&gt;=contestRank.totalPage>disabled</#if>"><a
+      href="contest/rank/${cid!}?p=${contestRank.totalPage}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&gt;&gt;</a></li>
+  </ul>
+</div>
+
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+<script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
                 
         $("#contest-rank").tablecloth({
@@ -114,10 +106,10 @@
     </script>
 
 <#if adminUser??>
-  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css'/>
-  <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
+<link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+<script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
 
-  <script type="text/javascript">
+<script type="text/javascript">
     var ws = null;
     function startServer() {
       if(ws != null)
@@ -161,6 +153,4 @@
 
     startServer();
   </script>
-</#if>
-
-</@layout>
+</#if> </@layout>

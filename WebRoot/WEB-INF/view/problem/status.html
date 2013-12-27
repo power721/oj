@@ -1,8 +1,7 @@
-<#include "../common/_layout.html" />
-<@layout>
-    <script src="assets/Highcharts/js/highcharts.js"></script>
-    <script src="assets/Highcharts/js/modules/exporting.js"></script>
-    <script type="text/javascript">
+<#include "../common/_layout.html" /> <@layout>
+<script src="assets/Highcharts/js/highcharts.js"></script>
+<script src="assets/Highcharts/js/modules/exporting.js"></script>
+<script type="text/javascript">
     'use strict';
       $(document).ready(function () {
         var chart;
@@ -60,107 +59,109 @@
             
     </script>
 
-    <div class="row" id="problem-status">
-        <div class="span4">
-            <h4>Statistics</h4>
-            <table id="problem-status" class="table table-hover table-condensed table-bordered">
-                <tbody>
-                    <tr>
-                        <td>Total Submissions</td><td><a href="status?pid=${pid!}">${problem.submit!}</a></td>
-                    </tr>
-                    <tr>
-                        <td>Users (Submitted)</td><td>${problem.submit_user}</td>
-                    </tr>
-                    <tr>
-                        <td>Users (Solved)</td><td>${problem.solved}</td>
-                    </tr>
-                    <#if resultList??>
-                    <#list resultList as Result>
-                    <tr>
-                        <td id="${Result.name!}">${Result.longName!}</td><td><a href="status?pid=${pid!}&result=${Result.result!}">${Result.count!}</a></td>
-                    </tr>
-                    </#list>
-                    </#if>
-                </tbody>
-            </table>
-            <div id="container" style="min-width: 350px; height: 350px; margin: 0 auto"></div>
-        </div>
+<div class="row" id="problem-status">
+  <div class="span4">
+    <h4>Statistics</h4>
+    <table id="problem-status" class="table table-hover table-condensed table-bordered">
+      <tbody>
+        <tr>
+          <td>Total Submissions</td>
+          <td><a href="status?pid=${pid!}">${problem.submit!}</a></td>
+        </tr>
+        <tr>
+          <td>Users (Submitted)</td>
+          <td>${problem.submit_user}</td>
+        </tr>
+        <tr>
+          <td>Users (Solved)</td>
+          <td>${problem.solved}</td>
+        </tr>
+        <#if resultList??> <#list resultList as Result>
+        <tr>
+          <td id="${Result.name!}">${Result.longName!}</td>
+          <td><a href="status?pid=${pid!}&result=${Result.result!}">${Result.count!}</a></td>
+        </tr>
+        </#list> </#if>
+      </tbody>
+    </table>
+    <div id="container" style="min-width: 350px; height: 350px; margin: 0 auto"></div>
+  </div>
 
-        <div class="span8" id="ajax-container">
-            <h4>Best solutions of Problem <a href="problem/show/${pid!}" data-toggle="tooltip" title="${problem.title!}">${pid!}</a></h4>
-        <div class="pull-left ajax-loader">
-            <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>" class="btn-link btn-info ajax-loader<#if !language?? || language==-1> active</#if>" data="id--1">All</a>
-            <#if program_languages??>
-                <#list program_languages as Language>
-                <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>?language=${Language.id!}" class="btn-link btn-info ajax-loader<#if language?? && language==Language.id> active</#if>" type="a" data="id-${Language_index}">${Language.name!}</a>
-                </#list>
-            </#if>
-        </div>
-        <div class="pull-right">
-            <span id="pages" class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span>
-            <span id="records" class="badge badge-info">${solutionList.totalRow} Records</span>
-        </div>
-        <table id="problem-status" class="table table-hover table-condensed">
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Run ID</th>
-                <th>User</th>
-                <th>Time</th>
-                <th>Memory</th>
-                <th>Language</th>
-                <th>Code Length</th>
-                <th>Submit Time</th>
-              </tr>
-            </thead>
-            <tbody id="problem-status-tbody">
-            <#if solutionList??>
-            <#list solutionList.list as solution>
-            <tr>
-                <td class="id">${solution_index+1+(solutionList.pageNumber-1)*solutionList.pageSize}</td>
-                <td class="sid">${solution.sid!}</td>
-                <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
-                <td class="time">${solution.time!0} MS</td>
-                <td class="memory">${solution.memory!0} KB</td>
-                <td class="language">
-                    <#if userID?? &&(adminUser?? || userID==solution.uid)><a href="code/${solution.sid!}" target="blank" title="show source code"></#if>
-                    ${solution.language!}
-                    <#if userID?? &&(adminUser?? || userID==solution.uid)></a></#if>
-                </td>
-                <td class="code_len">${solution.code_len!}B</td>
-                <td class="ctime">${solution.ctime!}</td>
-            </tr>
-            </#list>
-            </#if>
-            </tbody>
-        </table>
-        <div id="page" class="pagination pagination-centered ajax-loader">
-        <ul>
-            <li class="<#if solutionList.pageNumber==1>disabled</#if>"><a class="btn-link" url="problem/status/${pid!}?p=1<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&lt;&lt;</a></li>
-            <#if solutionList.pageNumber&gt;1><li><a class="btn-link" url="problem/status/${pid!}?p=${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">Prev</a></li></#if>
-            <#if solutionList??>
-            <#assign start=solutionList.pageNumber-3>
-            <#assign end=solutionList.pageNumber+3>
-            <#if start<1><#assign end=end-start+1><#assign start=1></#if>
-            <#if end&gt;solutionList.totalPage ><#assign start=start-(end-solutionList.totalPage)-1><#if start<1><#assign start=1></#if><#assign end=solutionList.totalPage></#if>
-            <#if end<start><#assign end=start></#if>
-                <#list start..end as x>
-                <li class="<#if x==solutionList.pageNumber>active</#if>"><a class="btn-link" url="problem/status/${pid!}?p=${x}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">${x}</a></li>
-                </#list>
-            </#if>
-            <#if solutionList.pageNumber<solutionList.totalPage><li><a class="btn-link" url="problem/status/${pid!}?p=${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">Next</a></li></#if>
-            <li class="<#if solutionList.pageNumber&gt;=solutionList.totalPage>disabled</#if>"><a class="btn-link" url="problem/status/${pid!}?p=${solutionList.totalPage}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&gt;&gt;</a></li>
-            </ul>
-        </div>
-        </div>
+  <div class="span8" id="ajax-container">
+    <h4>
+      Best solutions of Problem <a href="problem/show/${pid!}" data-toggle="tooltip" title="${problem.title!}">${pid!}</a>
+    </h4>
+    <div class="pull-left ajax-loader">
+      <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+        class="btn-link btn-info ajax-loader<#if !language?? || language==-1> active</#if>" data="id--1">All</a> <#if program_languages??> <#list
+      program_languages as Language> <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>?language=${Language.id!}"
+        class="btn-link btn-info ajax-loader<#if language?? && language==Language.id> active</#if>" type="a" data="id-${Language_index}">${Language.name!}</a>
+      </#list> </#if>
     </div>
+    <div class="pull-right">
+      <span id="pages" class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span id="records" class="badge badge-info">${solutionList.totalRow}
+        Records</span>
+    </div>
+    <table id="problem-status" class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Run ID</th>
+          <th>User</th>
+          <th>Time</th>
+          <th>Memory</th>
+          <th>Language</th>
+          <th>Code Length</th>
+          <th>Submit Time</th>
+        </tr>
+      </thead>
+      <tbody id="problem-status-tbody">
+        <#if solutionList??> <#list solutionList.list as solution>
+        <tr>
+          <td class="id">${solution_index+1+(solutionList.pageNumber-1)*solutionList.pageSize}</td>
+          <td class="sid">${solution.sid!}</td>
+          <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
+          <td class="time">${solution.time!0} MS</td>
+          <td class="memory">${solution.memory!0} KB</td>
+          <td class="language"><#if userID?? &&(adminUser?? || userID==solution.uid)><a href="code/${solution.sid!}" target="blank"
+            title="show source code"></#if> ${solution.language!} <#if userID?? &&(adminUser?? || userID==solution.uid)></a></#if>
+          </td>
+          <td class="code_len">${solution.code_len!}B</td>
+          <td class="ctime">${solution.ctime!}</td>
+        </tr>
+        </#list> </#if>
+      </tbody>
+    </table>
+    <div id="page" class="pagination pagination-centered ajax-loader">
+      <ul>
+        <li class="<#if solutionList.pageNumber==1>disabled</#if>"><a class="btn-link"
+          url="problem/status/${pid!}?p=1<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&lt;&lt;</a></li> <#if
+        solutionList.pageNumber&gt;1>
+        <li><a class="btn-link"
+          url="problem/status/${pid!}?p=${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">Prev</a></li></#if>
+        <#if solutionList??> <#assign start=solutionList.pageNumber-3> <#assign end=solutionList.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign
+        start=1></#if> <#if end&gt;solutionList.totalPage ><#assign start=start-(end-solutionList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
+        end=solutionList.totalPage></#if> <#if end
+        <start><#assign end=start></#if> <#list start..end as x>
+        <li class="<#if x==solutionList.pageNumber>active</#if>"><a class="btn-link"
+          url="problem/status/${pid!}?p=${x}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">${x}</a></li>
+        </#list> </#if> <#if solutionList.pageNumber<solutionList.totalPage>
+        <li><a class="btn-link"
+          url="problem/status/${pid!}?p=${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">Next</a></li>
+        </#if>
+        <li class="<#if solutionList.pageNumber&gt;=solutionList.totalPage>disabled</#if>"><a class="btn-link"
+          url="problem/status/${pid!}?p=${solutionList.totalPage}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&gt;&gt;</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-    <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-    <script src="assets/tablecloth/js/jquery.metadata.js"></script>
-    <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-    <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         
       function problemStatus(url) {

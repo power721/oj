@@ -1,87 +1,79 @@
-<#if alpha??>
-<#include "../contest/_layout.html" />
-<#else>
-<#include "../common/_layout.html" />
+<#if alpha??> <#include "../contest/_layout.html" /> <#else> <#include "../common/_layout.html" /> </#if> <@layout>
+<div class="row">
+  <div class="span4 offset4" id="source-code">
+    <span class="green">Problem<#if alpha?? && adminUser??>(<a href="problem/show/${solution.pid!}">${solution.pid!}</a>)</#if>
+    </span>: <#if alpha??> <a href="contest/problem/${solution.cid!}-${alpha!}">${solution.cid!}-${alpha!} (${problemTitle!})</a> <#else> <a
+      href="problem/show/${solution.pid!}">${solution.pid!} (${problemTitle!})</a> </#if> <span class="green">User</span>:<a href="user/profile/${user!}">${user!}</a>
+    <br> <span class="green">Memory</span>:${solution.memory!}K <span class="green">Time</span>:${solution.time!}MS <br> <span class="green">Language</span>:${language!}
+    <span class="green">Result</span>:<span id="${resultName!}">${resultLongName!}</span> <br>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span12">
+    <h2>Source Code</h2>
+    <span><a href="javascript:" id="copy-description" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span> <#if !alpha??><span
+      class="pull-right"><a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal"
+      data-target="#submitModal">Re Submit</a></span></#if>
+    <textarea id="source" class='brush: ${brush!' cpp'} auto-width' cols="120" rows="20">${solution.source!}</textarea>
+  </div>
+</div>
+
+<#if solution.error??>
+<div class="row">
+  <div class="span12">
+    <h3>Compile Error</h3>
+    <pre class="error">${solution.error!}</pre>
+  </div>
+</div>
+</#if> <#if adminUser?? && solution.system_error??>
+<div class="row">
+  <div class="span12">
+    <h3>System Error</h3>
+    <pre class="error">${solution.system_error!}</pre>
+  </div>
+</div>
+</#if> <#if !alpha?? && userID??>
+<div class="modal hide fade problemModal" id="submitModal">
+  <form class="" action="solution/save" method="post">
+    <div class="modal-header">
+      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+      <h3 id="submitModalLabel">
+        Submit Problem ${solution.pid!}:<a href="problem/submit/${solution.pid!}" title="Submit in another page" data-toggle="tooltip" data-placement="bottom">${(problem.title)!}</a>
+      </h3>
+    </div>
+    <div class="modal-body">
+      <a href="problem/submit/${solution.pid!}" class="btn btn-primary">Submit</a>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+      <button class="btn" data-dismiss="modal">Cancel</button>
+    </div>
+  </form>
+</div>
 </#if>
-<@layout>
-    <div class="row">
-        <div class="span4 offset4" id="source-code">
-            <span class="green">Problem<#if alpha?? && adminUser??>(<a href="problem/show/${solution.pid!}">${solution.pid!}</a>)</#if></span>:
-            <#if alpha??>
-            <a href="contest/problem/${solution.cid!}-${alpha!}">${solution.cid!}-${alpha!} (${problemTitle!})</a>
-            <#else>
-            <a href="problem/show/${solution.pid!}">${solution.pid!} (${problemTitle!})</a>
-            </#if>
-            <span class="green">User</span>:<a href="user/profile/${user!}">${user!}</a> <br>
 
-            <span class="green">Memory</span>:${solution.memory!}K
-            <span class="green">Time</span>:${solution.time!}MS <br>
+<link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shCore.css' />
+<link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shThemeDefault.css' />
+<script src='assets/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
+<script src='assets/js/jquery.zclip.min.js' type='text/javascript'></script>
+<#if brush=='cpp'>
+<script src='assets/syntaxhighlighter/scripts/shBrushCpp.js' type='text/javascript'></script>
+</#if> <#if brush=='java'>
+<script src='assets/syntaxhighlighter/scripts/shBrushJava.js' type='text/javascript'></script>
+</#if> <#if brush=='pascal'>
+<script src='assets/syntaxhighlighter/scripts/shBrushDelphi.js' type='text/javascript'></script>
+</#if> <#if brush=='python'>
+<script src='assets/syntaxhighlighter/scripts/shBrushPython.js' type='text/javascript'></script>
+</#if> <#if brush=='xml'>
+<script src='assets/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
+</#if>
 
-            <span class="green">Language</span>:${language!}
-            <span class="green">Result</span>:<span id="${resultName!}">${resultLongName!}</span> <br>
-        </div>
-    </div>
+<link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+<script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
 
-    <div class="row">
-        <div class="span12">
-            <h2>Source Code</h2>
-            <span><a href="javascript:" id="copy-description" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span>
-            <#if !alpha??><span class="pull-right"><a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal" data-target="#submitModal">Re Submit</a></span></#if>
-            <textarea id="source" class='brush: ${brush!'cpp'} auto-width' cols="120" rows="20">${solution.source!}</textarea>
-        </div>
-    </div>
-
-    <#if solution.error??>
-    <div class="row">
-        <div class="span12">
-            <h3>Compile Error</h3>
-            <pre class="error">${solution.error!}</pre>
-        </div>
-    </div>
-    </#if>
-
-    <#if adminUser?? && solution.system_error??>
-    <div class="row">
-        <div class="span12">
-            <h3>System Error</h3>
-            <pre class="error">${solution.system_error!}</pre>
-        </div>
-    </div>
-    </#if>
-	
-    <#if !alpha?? && userID??>
-    <div class="modal hide fade problemModal" id="submitModal">
-        <form class="" action="solution/save" method="post">
-        <div class="modal-header">
-        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-        <h3 id="submitModalLabel">Submit Problem ${solution.pid!}:<a href="problem/submit/${solution.pid!}" title="Submit in another page" data-toggle="tooltip" data-placement="bottom">${(problem.title)!}</a></h3>
-        </div>
-        <div class="modal-body">
-            <a href="problem/submit/${solution.pid!}" class="btn btn-primary">Submit</a>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <button type="reset" class="btn btn-info">Reset</button>
-            <button class="btn" data-dismiss="modal">Cancel</button>
-        </div>
-       </form> 
-    </div>
-    </#if>
-    
-    <link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shCore.css'/>
-    <link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shThemeDefault.css'/>
-    <script src='assets/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
-    <script src='assets/js/jquery.zclip.min.js' type='text/javascript'></script>
-    <#if brush=='cpp'><script src='assets/syntaxhighlighter/scripts/shBrushCpp.js' type='text/javascript'></script></#if>
-    <#if brush=='java'><script src='assets/syntaxhighlighter/scripts/shBrushJava.js' type='text/javascript'></script></#if>
-    <#if brush=='pascal'><script src='assets/syntaxhighlighter/scripts/shBrushDelphi.js' type='text/javascript'></script></#if>
-    <#if brush=='python'><script src='assets/syntaxhighlighter/scripts/shBrushPython.js' type='text/javascript'></script></#if>
-    <#if brush=='xml'><script src='assets/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script></#if>
-
-    <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css'/>
-    <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
-
-    <script language='javascript' type='text/javascript'>
+<script language='javascript' type='text/javascript'>
         $(document).ready(function(){
 
 

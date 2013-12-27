@@ -173,6 +173,7 @@ public class UserModel extends Model<UserModel>
 
   public boolean updateLogin()
   {
+    set("token", null);
     set("login", OjConfig.timeStamp);
     
     return update();

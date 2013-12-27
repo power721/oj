@@ -2,32 +2,30 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
-    <meta name="author" content="power721">
-	<base href="${baseUrl!}/"/>
-	<title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
-	
-	<!-- styles -->
-  <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-  <link href="assets/css/oj.css" type="text/css" rel="stylesheet">
-  
-  <#if extCss??>
-    <#list extCss as css>
-  <link href="${css}" type="text/css" rel="stylesheet">
-    </#list>
-  </#if>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
+<meta name="author" content="power721">
+<base href="${baseUrl!}/" />
+<title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
 
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
+<!-- styles -->
+<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="assets/css/oj.css" type="text/css" rel="stylesheet">
+
+<#if extCss??> <#list extCss as css>
+<link href="${css}" type="text/css" rel="stylesheet">
+</#list> </#if>
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
     <script src="assets/js/html5shiv.js"></script>
   <![endif]-->
-  <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-  
-  <#if gaAccount??>
-    <script type="text/javascript">
+<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+
+<#if gaAccount??>
+<script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', '${gaAccount}']);
       _gaq.push(['_trackPageview']);
@@ -37,78 +35,63 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
     </script>
-  </#if>
+</#if>
 </head>
 
 <body>
- 
+
   <!-- Navbar
     ================================================== -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="./">PowerOJ</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="<#if actionKey?? && actionKey=="">active</#if>">
-                <a href="./"><i class="icon-home"></i>Home</a>
-              </li>
-              <li class="<#if controllerKey?? && controllerKey=="bbs">active</#if>">
-                <a href="bbs"><i class="icon-comment"></i>Web Board</a>
-              </li>
-              <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>">
-                <a href="problem"><i class="icon-list"></i>Problems</a>
-              </li>
-              <li class="<#if actionKey?? && actionKey=="status">active</#if>">
-                <a href="status"><i class="icon-check"></i>Status</a>
-              </li>
-              <li class="<#if actionKey?? && actionKey=="rank">active</#if>">
-                <a href="rank"><i class="icon-signal"></i>Ranklist</a>
-              </li>
-              <li class="<#if controllerKey?? && controllerKey=="contest">active</#if>">
-                <a href="contest"><i class="icon-fire"></i>Contest</a>
-              </li>
-              <li class="<#if actionKey?? && actionKey=="faq">active</#if>">
-                <a href="faq"><i class="icon-question-sign"></i>F.A.Qs</a>
-              </li>
-            </ul>
-            <ul class="nav pull-right">
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="./">PowerOJ</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="<#if actionKey?? && actionKey=="">active</#if>"> <a href="./"><i class="icon-home"></i>Home</a>
+            </li>
+            <li class="<#if controllerKey?? && controllerKey=="bbs">active</#if>"> <a href="bbs"><i class="icon-comment"></i>Web Board</a>
+            </li>
+            <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>"> <a href="problem"><i class="icon-list"></i>Problems</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="status">active</#if>"> <a href="status"><i class="icon-check"></i>Status</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="rank">active</#if>"> <a href="rank"><i class="icon-signal"></i>Ranklist</a>
+            </li>
+            <li class="<#if controllerKey?? && controllerKey=="contest">active</#if>"> <a href="contest"><i class="icon-fire"></i>Contest</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="faq">active</#if>"> <a href="faq"><i class="icon-question-sign"></i>F.A.Qs</a>
+            </li>
+          </ul>
+          <ul class="nav pull-right">
             <#if userName??>
-              <li class="dropdown active">
-                <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${userName!"user"} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="user/profile/${userName!}">Profile</a></li>
-                  <li><a href="#">Mail</a></li>
-                  <li><a href="#">Login Log</a></li>
-                  <li class="divider"></li>
-                  <li class="nav-header">Admin</li>
-                  <li><a href="user/edit">Edit</a></li>
-                  <li><a href="#">Archive</a></li>
-                </ul>
-              </li>
-              <li class="active">
-                <a href="logout"><i class="icon-off"></i>Logout</a>
-              </li>
-            <#else>
-              <li class="<#if actionKey?? && actionKey=="login">active</#if>">
-                <a href="#" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
-              </li>
-              <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
-                <a href="signup"><i class="icon-star"></i>Signup</a>
-              </li>
-            </#if>
-            </ul>
-          </div>
+            <li class="dropdown active"><a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${userName!"user"}
+                <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="user/profile/${userName!}">Profile</a></li>
+                <li><a href="#">Mail</a></li>
+                <li><a href="#">Login Log</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Admin</li>
+                <li><a href="user/edit">Edit</a></li>
+                <li><a href="#">Archive</a></li>
+              </ul></li>
+            <li class="active"><a href="logout"><i class="icon-off"></i>Logout</a></li> <#else>
+            <li class="<#if actionKey?? && actionKey=="login">active</#if>"> <a href="#" data-toggle="modal" data-target="#loginModal"><i
+                class="icon-user"></i>Login</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="signup">active</#if>"> <a href="signup"><i class="icon-star"></i>Signup</a>
+            </li> </#if>
+          </ul>
         </div>
       </div>
     </div>
- 
- <!-- Masthead
+  </div>
+
+  <!-- Masthead
   ================================================== -->
   <header class="jumbotron subhead" id="overview">
     <div class="container">
@@ -120,121 +103,109 @@
     ================================================== -->
   <div class="main container">
     <div class="row">
-      	<div class="span12">
-      	
-    <#if msg??>
-			<div class="row">
-				<div class="span5 offset4">
-					<div class="alert alert-${msgType!"success"}">
-						<button type="button" class="close" data-dismiss="alert">
-							&times;
-						</button>
-						<h4>
-							${msgTitle!"Success"}
-						</h4>
-						${msg!}
-					</div>
-				</div>
-			</div>
-		</#if>
+      <div class="span12">
 
-      	<#nested>
-    	</div>
-    </div><!-- row -->
-  </div><!-- container -->
+        <#if msg??>
+        <div class="row">
+          <div class="span5 offset4">
+            <div class="alert alert-${msgType!"success"}">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <h4>${msgTitle!"Success"}</h4>
+              ${msg!}
+            </div>
+          </div>
+        </div>
+        </#if> <#nested>
+      </div>
+    </div>
+    <!-- row -->
+  </div>
+  <!-- container -->
 
   <#if !userID??>
-    <div class="modal hide fade userModal" id="loginModal">
-        <form class="form-horizontal" action="user/signin" method="post">
-        <div class="modal-header">
+  <div class="modal hide fade userModal" id="loginModal">
+    <form class="form-horizontal" action="user/signin" method="post">
+      <div class="modal-header">
         <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-        <h3 id="loginModalLabel"><a href="login" title="Login in another page" data-toggle="tooltip" data-placement="bottom">Login</a></h3>
+        <h3 id="loginModalLabel">
+          <a href="login" title="Login in another page" data-toggle="tooltip" data-placement="bottom">Login</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <div class="control-group">
+          <div class="controls">
+            <span class="help-block">Don't have an account? <a href="signup">Sign up here</a>
+            </span>
+          </div>
         </div>
-        <div class="modal-body">
-          <div class="control-group">
-		        <div class="controls">
-		          <span class="help-block">Don't have an account? <a
-		            href="signup">Sign up here</a>
-		          </span>
-		        </div>
-		      </div>
-		      <div class="control-group
+        <div class="control-group
 		        <#if nameMsg??>error</#if>">
-		        <label class="control-label" for="inputAccount">Account</label>
-		          <div class="controls">
-		            <div class="input-prepend">
-		              <span class="add-on"><i class="icon-user"></i></span>
-		              <input type="text" id="inputAccount" name="name" value="${name!}" placeholder="User name" required>
-		            </div>
-		            <p class="text-error">${nameMsg!}</p>
-		          </div>
-		        </div>
-		      <div class="control-group">
-		        <label class="control-label" for="inputPassword">
-		          Password
-		        </label>
-		        <div class="controls">
-		          <div class="input-prepend">
-		            <span class="add-on"><i class="icon-lock"></i>
-		            </span>
-		            <input type="password" id="inputPassword" name="password"
-		              placeholder="Password" required>
-		          </div>
-		        </div>
-		      </div>
-		      <div class="control-group">
-		        <div class="controls">
-		          <span class="help-block"><a href="user/forget">Forgot Password</a>
-		          </span>
-		        </div>
-		      </div>
-		      <div class="control-group">
-		        <div class="controls">
-		          <label class="checkbox inline">
-		            <input type="checkbox" name="rememberMe" value="1"
-		              checked="checked">
-		            Remember me
-		          </label>
-		        </div>
-		      </div>
+          <label class="control-label" for="inputAccount">Account</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-user"></i></span> <input type="text" id="inputAccount" name="name" value="${name!}" placeholder="User name"
+                required>
+            </div>
+            <p class="text-error">${nameMsg!}</p>
+          </div>
         </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Login</button>
-            <button class="btn" data-dismiss="modal">Cancel</button>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword"> Password </label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-lock"></i> </span> <input type="password" id="inputPassword" name="password" placeholder="Password" required>
+            </div>
+          </div>
         </div>
-       </form> 
-    </div>
+        <div class="control-group">
+          <div class="controls">
+            <span class="help-block"><a href="user/forget">Forgot Password</a> </span>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox inline"> <input type="checkbox" name="rememberMe" value="1" checked="checked"> Remember me
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Login</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
   </#if>
 
   <!-- Footer
     ================================================== -->
-    <footer class="footer">
-      <div class="container">
-        <div class="copyright">©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="balnk">PowerOJ Rev.20131222</a></div>
-        <ul class="footer-links">
-          <li><a href="http://git.oschina.net/power/oj" target="balnk">Source</a></li>
-          <li class="muted">&middot;</li>
-          <li><a href="faq">F.A.Q</a></li>
-          <li class="muted">&middot;</li>
-          <li><a href="contact">Contact</a></li>
-          <li class="muted">&middot;</li>
-          <li><a href="changelog">Changelog</a></li>
-        </ul>
+  <footer class="footer">
+    <div class="container">
+      <div class="copyright">
+        ©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="balnk">PowerOJ Rev.20131222</a>
       </div>
-    </footer>
+      <ul class="footer-links">
+        <li><a href="http://git.oschina.net/power/oj" target="balnk">Source</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="faq">F.A.Q</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="contact">Contact</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="changelog">Changelog</a></li>
+      </ul>
+    </div>
+  </footer>
 
   <!-- javascript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
-	
-	<script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
-	<script type="text/javascript" src="assets/js/oj.js"></script>
-	<#if extJs??>
-    <#list extJs as js>
-  <script type="text/javascript" src="${js}"></script>
-    </#list>
-  </#if>
 
- </body>
+  <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/js/oj.js"></script>
+  <#if extJs??> <#list extJs as js>
+  <script type="text/javascript" src="${js}"></script>
+  </#list> </#if>
+
+</body>
 </html>
 </#macro>

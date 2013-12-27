@@ -1,62 +1,58 @@
-<#include "../common/_layout.html" />
-<@layout>
-    <div class="row">
-        <div class="pull-left">
-            <form class="form-search" action="problem/search">
-                <div class="input-append">
-                <input type="text" class="input-medium search-query" name="word" value="${word!}">
-                <select name="scope" class="input-small">
-                    <option value="">All</option>
-                    <option value="title" <#if scope=="title">selected</#if>>Title</option>
-                    <option value="source" <#if scope=="source">selected</#if>>Source</option>
-                    <option value="tag" <#if scope=="tag">selected</#if>>Tag</option>
-                    <option value="content" <#if scope=="content">selected</#if>>Content</option>
-                </select>
-                <button type="submit" class="btn">Search</button>
-                </div>
-            </form>
-        </div>
-        <div class="pull-right">
-            <span class="badge badge-info">${(problemList?size)!0} Results</span>
-        </div>
-    </div>
-    <div class="row">
-        <table id="problem-list" class="table table-hover table-condensed">
-            <thead>
-              <tr>
-                <th></th>
-                <th>ID</th>
-                <th>Title</th>
-                <th>AC</th>
-                <th>Submit</th>
-                <th>Source</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-            <#if problemList??>
-            <#list problemList as Problem>
-            <tr>
-                <td></td>
-                <td>${Problem.pid!}</td>
-                <td><a href="problem/show/${Problem.pid!}">${Problem.title!}</a></td>
-                <td><a href="#">${Problem.accept!}</a></td>
-                <td><a href="#">${Problem.submit!}</a></td>
-                <td><a href="problem/search?word=${Problem.source!}&scope=source">${Problem.source!}</a></td>
-                <td>${Problem.ctime!}</td>
-            </tr>
-            </#list>
-            </#if>
-            </tbody>
-        </table>
-    </div>
-    
-    <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-    <script src="assets/tablecloth/js/jquery.metadata.js"></script>
-    <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-    <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<#include "../common/_layout.html" /> <@layout>
+<div class="row">
+  <div class="pull-left">
+    <form class="form-search" action="problem/search">
+      <div class="input-append">
+        <input type="text" class="input-medium search-query" name="word" value="${word!}"> <select name="scope" class="input-small">
+          <option value="">All</option>
+          <option value="title"<#if scope=="title">selected</#if>>Title</option>
+          <option value="source"<#if scope=="source">selected</#if>>Source</option>
+          <option value="tag"<#if scope=="tag">selected</#if>>Tag</option>
+          <option value="content"<#if scope=="content">selected</#if>>Content</option>
+        </select>
+        <button type="submit" class="btn">Search</button>
+      </div>
+    </form>
+  </div>
+  <div class="pull-right">
+    <span class="badge badge-info">${(problemList?size)!0} Results</span>
+  </div>
+</div>
+<div class="row">
+  <table id="problem-list" class="table table-hover table-condensed">
+    <thead>
+      <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Title</th>
+        <th>AC</th>
+        <th>Submit</th>
+        <th>Source</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <#if problemList??> <#list problemList as Problem>
+      <tr>
+        <td></td>
+        <td>${Problem.pid!}</td>
+        <td><a href="problem/show/${Problem.pid!}">${Problem.title!}</a></td>
+        <td><a href="#">${Problem.accept!}</a></td>
+        <td><a href="#">${Problem.submit!}</a></td>
+        <td><a href="problem/search?word=${Problem.source!}&scope=source">${Problem.source!}</a></td>
+        <td>${Problem.ctime!}</td>
+      </tr>
+      </#list> </#if>
+    </tbody>
+  </table>
+</div>
 
-    <script type="text/javascript" charset="utf-8">
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+<script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
                 
         $("#problem-list").tablecloth({
