@@ -17,7 +17,7 @@ public class ResetPasswordValidator extends Validator
   @Override
   protected void handleError(Controller c)
   {
-    c.keepPara("name", "token", OjConstants.PAGE_TITLE);
+    c.setAttr(OjConstants.PAGE_TITLE, "Reset Password");
     c.render("reset.html");
   }
 

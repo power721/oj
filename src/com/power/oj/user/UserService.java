@@ -12,6 +12,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
 
@@ -75,6 +76,25 @@ public class UserService
     userModel.set("token", null).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
     return userModel.update();
   }
+  
+  public boolean checkResetToken(String name, String token)
+  {
+    UserModel userModel = me.getUserByName(name);
+    
+    if (userModel != null && token != null && token.equals(userModel.getStr("token")))
+    {
+      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.resetPasswordExpiresTime)
+      {
+        return true;
+      }
+      else
+      {
+        userModel.set("token", null).update();
+      }
+    }
+    
+    return false;
+  }
 
   public void logout()
   {
@@ -112,7 +132,7 @@ public class UserService
     Object principal = currentUser.getPrincipal();
     if (principal == null)
       return null;
-
+    
     return dao.findById(principal);
   }
 

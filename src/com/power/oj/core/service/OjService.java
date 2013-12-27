@@ -5,8 +5,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import jodd.mail.Email;
+import jodd.mail.EmailMessage;
+import jodd.mail.SendMailSession;
+import jodd.mail.SimpleAuthenticator;
+import jodd.mail.SmtpServer;
+import jodd.util.MimeTypes;
 import jodd.util.collection.IntHashMap;
 
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
@@ -17,6 +24,7 @@ import com.power.oj.util.FileKit;
 
 public class OjService
 {
+  private static final Logger log = Logger.getLogger(OjService.class);
   private static final OjService me = new OjService();
   
   private OjService()
@@ -91,6 +99,58 @@ public class OjService
       ResultType resultType = it.next();
       OjConfig.result_type.put(resultType.getId(), resultType);
     }
+  }
+
+  public void sendEmail(String from, String to, String subject, String content)
+  {
+    EmailMessage textMessage = new EmailMessage(content, MimeTypes.MIME_TEXT_PLAIN);
+    sendEmail(from, to, subject, textMessage);
+  }
+  
+  public void sendEmail(String from, String to, String subject, EmailMessage content)
+  {
+    Email email = new Email();
+
+    email.setFrom(from);
+    email.setTo(to);
+    email.setSubject(subject);
+    email.addMessage(content);
+    
+    String emailServer = OjConfig.get("emailServer");
+    String emailUser = OjConfig.get("emailUser");
+    String emailPass = OjConfig.get("emailPass");
+    SmtpServer smtpServer = new SmtpServer(emailServer, new SimpleAuthenticator(emailUser, emailPass));
+    
+    SendMailSession session = smtpServer.createSession();
+    try
+    {
+      session.open();
+      session.sendMail(email);
+      log.info("From: " + from + " to: " + to + " subject: " + subject);
+    }
+    finally
+    {
+      session.close();
+    }
+  }
+  
+  public boolean sendResetPasswordEmail(String name, String email, String token) throws Exception
+  {
+    String adminEmail = OjConfig.get("adminEmail");
+    if (adminEmail == null)
+      throw new Exception("Admin Email not set!");
+
+    EmailMessage htmlMessage = new EmailMessage(
+        "<html><META http-equiv=Content-Type content=\"text/html; charset=utf-8\">" +
+        "<body><h2>Reset your account!</h2><br><div><p><a href=\"" +
+        OjConfig.baseUrl + "/user/reset?name=" + name + "&token=" + token + "&t=" + OjConfig.timeStamp +
+        "\" target=\"blank\">Reset Password</a></p></div></body></html>",
+        MimeTypes.MIME_TEXT_HTML);
+    
+    sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
+    
+    log.info("Account recovery email send to user " + name);
+    return true;
   }
 
   public List<Record> getUserRoles(int uid)

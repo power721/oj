@@ -26,6 +26,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.Message;
 import com.power.oj.core.bean.MessageType;
+import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.user.validator.RecoverAccountValidator;
 import com.power.oj.user.validator.ResetPasswordValidator;
@@ -200,16 +201,15 @@ public class UserController extends OjController
   
   @Before({POST.class, RecoverAccountValidator.class})
   @RequiresGuest
-  public void recover()
+  public void recover() throws Exception
   {
-    setTitle("Account Recovery");
     String name = getPara("name");
     String email = getPara("email");
     String token = UUID.randomUUID().toString();
     UserModel userModel = userService.getUserByName(name);
     
-    userModel.set("token", token).update();
-    // TODO: send mail
+    userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
+    OjService.me().sendResetPasswordEmail(name, email, token);
     
     log.info("name: " + name + " Email: " + email);
     Message msg = new Message("Please check your mailbox and follow the instruction to recover your account.");
@@ -221,9 +221,8 @@ public class UserController extends OjController
   {
     String name = getPara("name");
     String token = getPara("token");
-    UserModel userModel = userService.getUserByName(name);
-    
-    if (userModel != null && token != null && token.equals(userModel.getStr("token")))
+   
+    if (userService.checkResetToken(name, token))
     {
       setTitle("Reset Password");
       setSessionAttr("name", name);
@@ -238,7 +237,6 @@ public class UserController extends OjController
   @RequiresGuest
   public void resetPassword()
   {
-    setTitle("Reset Password");
     String name = getSessionAttr("name");
     String password = getPara("pass");
     if (userService.resetPassword(name, password))

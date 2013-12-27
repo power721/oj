@@ -11,6 +11,7 @@ import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
+import com.power.oj.core.interceptor.BaseURLInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
 import com.power.oj.core.interceptor.FlashMessageInterceptor;
 import com.power.oj.core.model.LanguageModel;
@@ -30,7 +31,6 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
-import com.jfinal.ext.handler.ContextPathHandler;
 import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
 import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.log.Logger;
@@ -149,6 +149,7 @@ public class OjConfig extends JFinalConfig
    */
   public void configInterceptor(Interceptors me)
   {
+    me.add(new BaseURLInterceptor());
     me.add(new GlobalInterceptor());
     me.add(new FlashMessageInterceptor());
     me.add(new AccessLogInterceptor());
@@ -165,7 +166,7 @@ public class OjConfig extends JFinalConfig
   public void configHandler(Handlers me)
   {
     me.add(new UrlFilterHandler());
-    me.add(new ContextPathHandler(OjConstants.BASE_URL));
+    //me.add(new ContextPathHandler(OjConstants.BASE_URL));
     me.add(new DruidStatViewHandler("/druid"));
 
     log.debug("configHandler finished.");
