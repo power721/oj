@@ -16,6 +16,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import sun.misc.BASE64Decoder;
 import jodd.io.FileUtil;
 
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
@@ -79,6 +81,7 @@ public class CommonController extends OjController
   /**
    * Generate captcha image.
    */
+  @ClearInterceptor(ClearLayer.ALL)
   public void captcha()
   {
     CaptchaRender img = new CaptchaRender(OjConstants.randomCodeKey);
