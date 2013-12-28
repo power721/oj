@@ -1,4 +1,6 @@
-<#include "../common/_layout.html" /> <@layout> <#if msg??>
+<#include "../common/_layout.html" />
+<@layout> 
+<#if msg??>
 <div class="row">
   <div class="span5 offset4">
     <div class="alert alert-error">
@@ -80,14 +82,14 @@
 </div>
 
 <script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
-<script language="javascript" type="text/javascript">   
-    	function getCaptcha() {
-			$("img#captcha").attr("src", "${baseUrl!}/captcha?r="+Math.random());
-			$(":input[name='captcha']").val("");
-		}
-		$().ready(function() {
-			$("#signupForm").validate();
-		});
-	</script>
+<script language="javascript" type="text/javascript">
+	function getCaptcha() {
+		$("img#captcha").attr("src", "${baseUrl!}/captcha?r=" + Math.random());
+		$(":input[name='captcha']").val("");
+	}
+	$().ready(function() {
+		$("#signupForm").validate();
+	});
+</script>
 
 </@layout>

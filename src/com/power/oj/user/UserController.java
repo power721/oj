@@ -201,18 +201,24 @@ public class UserController extends OjController
   
   @Before({POST.class, RecoverAccountValidator.class})
   @RequiresGuest
-  public void recover() throws Exception
+  public void recover()
   {
     String name = getPara("name");
     String email = getPara("email");
     String token = UUID.randomUUID().toString();
     UserModel userModel = userService.getUserByName(name);
+    Message msg = new Message("Please check your mailbox and follow the instruction to recover your account.");
     
     userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
-    OjService.me().sendResetPasswordEmail(name, email, token);
+    try
+    {
+      OjService.me().sendResetPasswordEmail(name, email, token);
+    } catch (Exception e)
+    {
+      log.error(e.getLocalizedMessage());
+      msg = new Message("Sorry.Send mail failed, please inform admin.", MessageType.ERROR, "Error!");
+    }
     
-    log.info("name: " + name + " Email: " + email);
-    Message msg = new Message("Please check your mailbox and follow the instruction to recover your account.");
     redirect(sessionService.getLastAccessURL(), msg);
   }
   
@@ -230,7 +236,7 @@ public class UserController extends OjController
       return;
     }
     
-    renderError(403);
+    renderError(404);
   }
   
   @Before({POST.class, ResetPasswordValidator.class})
@@ -244,7 +250,7 @@ public class UserController extends OjController
       removeSessionAttr("name");
     }
     
-    Message msg = new Message("Congratulations! You updated your account.");
+    Message msg = new Message("Congratulations! Your password is reseted.");
     redirect("/login", msg);
   }
 

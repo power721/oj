@@ -127,7 +127,7 @@ public class OjService
     {
       session.open();
       session.sendMail(email);
-      log.info("From: " + from + " to: " + to + " subject: " + subject);
+      log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
     }
     catch(MailException e)
     {
@@ -145,7 +145,7 @@ public class OjService
     if (adminEmail == null)
       throw new Exception("Admin Email not set!");
 
-    String resetUrl = OjConfig.baseUrl + "/user/reset?name=" + name + "&token=" + token + "&t=" + OjConfig.timeStamp;
+    String resetUrl = new StringBuilder(7).append(OjConfig.baseUrl).append( "/user/reset?name=").append(name).append("&token=").append(token).append("&t=").append(OjConfig.timeStamp).toString();
     EmailMessage htmlMessage = new EmailMessage(
         "<html><META http-equiv=Content-Type content=\"text/html; charset=utf-8\">" +
         "<body><h2>Reset your account!</h2><br><div><p>" +
