@@ -1,16 +1,11 @@
 package com.power.oj.user;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 
 public class UserModel extends Model<UserModel>
@@ -38,8 +33,7 @@ public class UserModel extends Model<UserModel>
 
   public UserModel getUserByName(String name)
   {
-    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
-    return userModel;
+    return findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
   }
 
   public UserModel getUserByNameAndPassword(String name, String password)
@@ -57,20 +51,17 @@ public class UserModel extends Model<UserModel>
 
   public UserModel getUserByNameAndEmail(String name, String email)
   {
-    UserModel userModel = findFirst("SELECT * FROM user WHERE name=? AND email=? LIMIT 1", name, email);
-    return userModel;
+    return findFirst("SELECT * FROM user WHERE name=? AND email=? LIMIT 1", name, email);
   }
 
   public UserModel getUserInfoByName(String name)
   {
-    UserModel userModel = findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE name=? LIMIT 1", name);
-    return userModel;
+    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE name=? LIMIT 1", name);
   }
 
   public UserModel getUserInfoByUid(int uid)
   {
-    UserModel userModel = findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE uid=? LIMIT 1", uid);
-    return userModel;
+    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE uid=? LIMIT 1", uid);
   }
 
   public int getUserRank(int uid)
@@ -97,40 +88,8 @@ public class UserModel extends Model<UserModel>
 
   public Page<UserModel> getUserRankList(int pageNumber, int pageSize)
   {
-    Page<UserModel> userList = UserModel.dao.paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rank,uid,name,nick,realname,solved,submit",
+    Page<UserModel> userList = paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rank,uid,name,nick,realname,solved,submit",
         "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1) * pageSize);
-    
-    return userList;
-  }
-
-  public List<UserModel> searchUser(String scope, String word)
-  {
-    List<UserModel> userList = null;
-    List<Object> paras = new ArrayList<Object>();
-
-    if (StringUtil.isNotBlank(word))
-    {
-      word = new StringBuilder(3).append("%").append(word).append("%").toString();
-      StringBuilder sb = new StringBuilder("SELECT uid,name,nick,school,solved,submit FROM user WHERE (");
-      
-      if (StringUtil.isNotBlank(scope))
-      {
-        String scopes[] =
-        { "name", "nick", "school", "email" };
-        if (StringUtil.equalsOneIgnoreCase(scope, scopes) == -1)
-          return null;
-        sb.append(scope).append(" LIKE ? ");
-        paras.add(word);
-      } else
-      {
-        sb.append("name LIKE ? OR nick LIKE ? OR school LIKE ? OR email LIKE ?");
-        for (int i = 0; i < 4; ++i)
-          paras.add(word);
-      }
-      sb.append(") AND status=1 ORDER BY solved desc,submit,uid");
-      
-      userList = find(sb.toString(), paras.toArray());
-    }
     
     return userList;
   }
@@ -179,39 +138,7 @@ public class UserModel extends Model<UserModel>
     return update();
   }
 
-  public boolean build()
-  {
-    int uid = getUid();
-    long accept = 0;
-    long submit = 0;
-    long solved = 0;
-
-    Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);
-
-    if (record != null)
-    {
-      submit = record.getLong("count");
-      set("submit", submit);
-    }
-
-    record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
-    if (record != null)
-    {
-      accept = record.getLong("count");
-      set("accept", accept);
-    }
-
-    record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
-    if (record != null)
-    {
-      solved = record.getLong("count");
-      set("solved", solved);
-    }
-
-    return update();
-  }
-
-  public boolean checkPass(int uid, String password)
+  public boolean checkPassword(int uid, String password)
   {
     String stored_hash = findById(uid, "pass").getStr("pass");
     return BCrypt.checkpw(password, stored_hash);
@@ -219,21 +146,21 @@ public class UserModel extends Model<UserModel>
 
   public boolean containEmail(String email)
   {
-    return findFirst("select email from user where email=? limit 1", email) != null;
+    return findFirst("SELECT email FROM user WHERE email=? LIMIT 1", email) != null;
   }
 
   public boolean containUsername(String username)
   {
-    return findFirst("select name from user where name=? limit 1", username) != null;
+    return findFirst("SELECT name FROM user WHERE name=? LIMIT 1", username) != null;
   }
 
   public boolean containEmailExceptThis(int userID, String email)
   {
-    return findFirst("select email from user where email=? and uid!=? limit 1", email, userID) != null;
+    return findFirst("SELECT email FROM user WHERE email=? AND uid!=? LIMIT 1", email, userID) != null;
   }
 
   public boolean containUsernameExceptThis(int userID, String username)
   {
-    return findFirst("select name from user where name=? and uid!=? limit 1", username, userID) != null;
+    return findFirst("SELECT name FROM user WHERE name=? AND uid!=? LIMIT 1", username, userID) != null;
   }
 }

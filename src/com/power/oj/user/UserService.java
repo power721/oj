@@ -1,6 +1,10 @@
 package com.power.oj.user;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jodd.util.BCrypt;
+import jodd.util.StringUtil;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -9,7 +13,6 @@ import org.apache.shiro.subject.Subject;
 
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -33,6 +36,13 @@ public class UserService
     return me;
   }
 
+  /**
+   * User login with name and password.
+   * @param name user name.
+   * @param password user password.
+   * @param rememberMe ture if remember user.
+   * @return true if login successfully, otherwise false.
+   */
   public boolean login(String name, String password, boolean rememberMe)
   {
     Subject currentUser = getSubject();
@@ -55,6 +65,27 @@ public class UserService
     return true;
   }
 
+  /**
+   * User logout in Shiro session.
+   */
+  public void logout()
+  {
+    Subject currentUser = getSubject();
+    /*UserModel userModel = getCurrentUser();
+    if (userModel != null)
+    {
+      userModel.update();
+    }*/
+
+    currentUser.logout();
+  }
+  
+  /**
+   * Update user login time and loginlog.
+   * @param name user name.
+   * @param success true if user login sucessfully.
+   * @return
+   */
   public boolean updateLogin(String name, boolean success)
   {
     Record loginLog = new Record();
@@ -69,17 +100,29 @@ public class UserService
     return Db.save("loginlog", loginLog);
   }
   
+  /**
+   * Reset user password for recover account.
+   * @param name user name.
+   * @param password new password.
+   * @return
+   */
   public boolean resetPassword(String name, String password)
   {
-    UserModel userModel = me.getUserByName(name);
+    UserModel userModel = dao.getUserByName(name);
     
     userModel.set("token", null).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
     return userModel.update();
   }
   
+  /**
+   * Check if the token is valid for reset password.
+   * @param name user name.
+   * @param token reset token.
+   * @return true if the token is valid.
+   */
   public boolean checkResetToken(String name, String token)
   {
-    UserModel userModel = me.getUserByName(name);
+    UserModel userModel = dao.getUserByName(name);
     
     if (userModel != null && token != null && token.equals(userModel.getStr("token")))
     {
@@ -96,38 +139,57 @@ public class UserService
     return false;
   }
 
-  public void logout()
+  /**
+   * Search user by key word in scope.
+   * @param scope "all", "name", "nick", "school", "email".
+   * @param word key word.
+   * @return the list of users.
+   */
+  public List<UserModel> searchUser(String scope, String word)
   {
-    Subject currentUser = getSubject();
-    UserModel userModel = getCurrentUser();
-    if (userModel != null)
+    List<UserModel> userList = null;
+    List<Object> paras = new ArrayList<Object>();
+
+    if (StringUtil.isNotBlank(word))
     {
-      userModel.update();
+      word = new StringBuilder(3).append("%").append(word).append("%").toString();
+      StringBuilder sb = new StringBuilder("SELECT uid,name,nick,school,solved,submit FROM user WHERE (");
+      
+      if (StringUtil.isNotBlank(scope))
+      {
+        String scopes[] =
+        { "name", "nick", "school", "email" };
+        if (StringUtil.equalsOneIgnoreCase(scope, scopes) == -1)
+          return null;
+        sb.append(scope).append(" LIKE ? ");
+        paras.add(word);
+      } else
+      {
+        sb.append("name LIKE ? OR nick LIKE ? OR school LIKE ? OR email LIKE ?");
+        for (int i = 0; i < 4; ++i)
+          paras.add(word);
+      }
+      sb.append(") AND status=1 ORDER BY solved desc,submit,uid");
+      
+      userList = dao.find(sb.toString(), paras.toArray());
     }
-
-    currentUser.logout();
-  }
-  
-  public UserModel getUserByName(String name)
-  {
-    return dao.getUserByName(name);
-  }
-  
-  public Page<UserModel> getUserRankList(int pageNumber, int pageSize)
-  {
-    return dao.getUserRankList(pageNumber, pageSize);
+    
+    return userList;
   }
 
-  public Subject getSubject()
-  {
-    return SecurityUtils.getSubject();
-  }
-
+  /**
+   * Get current user by uid.
+   * @return current user or null.
+   */
   public UserModel getCurrentUser()
   {
     return dao.findById(getCurrentUid());
   }
-  
+
+  /**
+   * Get current uid form Shiro.
+   * @return the uid of current user or null.
+   */
   public Integer getCurrentUid()
   {
     Subject currentUser = getSubject();
@@ -139,6 +201,45 @@ public class UserService
       return null;
     
     return (Integer) principal;
+  }
+
+  /**
+   * Build user statistics.
+   * @param userModel the user.
+   * @return
+   */
+  public boolean build(UserModel userModel)
+  {
+    int uid = userModel.getUid();
+    
+    Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);
+
+    if (record != null)
+    {
+      userModel.set("submit", record.getLong("count"));
+    }
+
+    record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
+    if (record != null)
+    {
+      userModel.set("accept", record.getLong("count"));
+    }
+
+    record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
+    if (record != null)
+    {
+      userModel.set("solved", record.getLong("count"));
+    }
+
+    return userModel.update();
+  }
+
+  /*
+   * Methods for Shiro.
+   */
+  public Subject getSubject()
+  {
+    return SecurityUtils.getSubject();
   }
 
   public boolean isAuthenticated()

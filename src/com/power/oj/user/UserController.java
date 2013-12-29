@@ -206,7 +206,7 @@ public class UserController extends OjController
     String name = getPara("name");
     String email = getPara("email");
     String token = UUID.randomUUID().toString();
-    UserModel userModel = userService.getUserByName(name);
+    UserModel userModel = UserModel.dao.getUserByName(name);
     Message msg = new Message("Please check your mailbox and follow the instruction to recover your account.");
     
     userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
@@ -328,7 +328,7 @@ public class UserController extends OjController
   {
     String word = HtmlEncoder.text(getPara("word").trim());
     String scope = getPara("scope");
-    setAttr(OjConstants.USER_LIST, UserModel.dao.searchUser(scope, word));
+    setAttr(OjConstants.USER_LIST, userService.searchUser(scope, word));
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
     setTitle(new StringBuilder(2).append("Search user: ").append(word).toString());
@@ -371,7 +371,7 @@ public class UserController extends OjController
     int pageSize = getParaToInt("s", OjConfig.userPageSize);
     
     setTitle("Ranklist");
-    setAttr(OjConstants.USER_LIST, userService.getUserRankList(pageNumber, pageSize));
+    setAttr(OjConstants.USER_LIST, UserModel.dao.getUserRankList(pageNumber, pageSize));
 
     render("rank.html");
   }
@@ -380,12 +380,16 @@ public class UserController extends OjController
   public void build()
   {
     int uid = getParaToInt(0);
-    UserModel user = UserModel.dao.findById(uid);
+    UserModel userModel = UserModel.dao.findById(uid);
+    String redirectURL = new StringBuilder(2).append("/user/profile/").append(userModel.getStr("name")).toString();
+    Message msg = new Message("The user statistics have been updated.");
+    
+    if (!userService.build(userModel))
+    {
+      msg = new Message("The user statistics build failed.", MessageType.ERROR, "Error!");
+      log.error(msg.getContent());
+    }
 
-    if (user != null)
-      user.build();
-
-    String redirectURL = new StringBuilder(2).append("/user/profile/").append(user.getStr("name")).toString();
-    redirect(redirectURL, new Message("The user statistics have been saved."));
+    redirect(redirectURL, msg);
   }
 }

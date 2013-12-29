@@ -30,7 +30,7 @@ public class UpdateUserValidator extends Validator
     }
 
     password = c.getPara("oldpass");
-    if (!UserModel.dao.checkPass(uid, password))
+    if (!UserModel.dao.checkPassword(uid, password))
     {
       addError("passwordMsg", "The password is incorrect!");
     }
