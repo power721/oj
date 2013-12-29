@@ -5,6 +5,7 @@ import javax.servlet.http.Cookie;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.core.bean.Message;
+import com.power.oj.user.UserModel;
 
 /**
  * Base Controller provides some common methods.
@@ -25,7 +26,7 @@ public class OjController extends Controller
    * @param msg
    *          message with content, type and title.
    */
-  public void redirect(String url, Message msg)
+  protected void redirect(String url, Message msg)
   {
     setMessage(msg);
     super.redirect(url);
@@ -41,7 +42,7 @@ public class OjController extends Controller
    * @param msg
    *          message with content, type and title.
    */
-  public void redirect(String url, boolean withQueryString, Message msg)
+  protected void redirect(String url, boolean withQueryString, Message msg)
   {
     setMessage(msg);
     super.redirect(url, withQueryString);
@@ -53,7 +54,7 @@ public class OjController extends Controller
    * @param message
    *          message with content, type and title.
    */
-  public void setMessage(Message message)
+  protected void setMessage(Message message)
   {
     setSessionAttr(OjConstants.MSG, message.getContent());
     setSessionAttr(OjConstants.MSG_TYPE, message.getType());
@@ -66,7 +67,7 @@ public class OjController extends Controller
    * @param title
    *          string of the page title.
    */
-  public void setTitle(String title)
+  protected void setTitle(String title)
   {
     setAttr(OjConstants.PAGE_TITLE, title);
   }
@@ -79,7 +80,7 @@ public class OjController extends Controller
    * @param maxAgeInSeconds
    * @return this OjController.
    */
-  public OjController setCookieHttpOnly(String name, String value, int maxAgeInSeconds)
+  protected OjController setCookieHttpOnly(String name, String value, int maxAgeInSeconds)
   {
     Cookie cookie = new Cookie(name, value);
     cookie.setMaxAge(maxAgeInSeconds);
@@ -88,5 +89,10 @@ public class OjController extends Controller
     setCookie(cookie);
     return this;
   }
-
+  
+  protected UserModel getCurrentUser()
+  {
+    return getAttr(OjConstants.USER);
+  }
+  
 }

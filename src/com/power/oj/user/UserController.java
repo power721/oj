@@ -117,7 +117,7 @@ public class UserController extends OjController
     UserModel userModel = null;
     if (name == null)
     {
-      userModel = userService.getCurrentUser();
+      userModel = getCurrentUser();
       if (userModel == null)
       {
         redirect(sessionService.getLastAccessURL());
@@ -153,7 +153,7 @@ public class UserController extends OjController
   public void uploadAvatar()
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
-    UserModel userModel = userService.getCurrentUser();
+    UserModel userModel = getCurrentUser();
     int uid = getParaToInt("uid", 0);
 
     if (uid != 0)
@@ -275,7 +275,6 @@ public class UserController extends OjController
   {
     setTitle("Account");
     
-    setAttr(OjConstants.USER, userService.getCurrentUser());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
 
     render("edit.html");
