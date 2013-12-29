@@ -5,12 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import jodd.mail.Email;
 import jodd.mail.EmailMessage;
-import jodd.mail.MailException;
-import jodd.mail.SendMailSession;
-import jodd.mail.SimpleAuthenticator;
-import jodd.mail.SmtpServer;
 import jodd.util.MimeTypes;
 import jodd.util.collection.IntHashMap;
 
@@ -22,6 +17,7 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.util.FileKit;
+import com.power.oj.util.Tool;
 
 public class OjService
 {
@@ -102,43 +98,6 @@ public class OjService
     }
   }
 
-  public void sendEmail(String from, String to, String subject, String content)
-  {
-    EmailMessage textMessage = new EmailMessage(content, MimeTypes.MIME_TEXT_PLAIN);
-    sendEmail(from, to, subject, textMessage);
-  }
-  
-  public void sendEmail(String from, String to, String subject, EmailMessage content)
-  {
-    Email email = new Email();
-
-    email.setFrom(from);
-    email.setTo(to);
-    email.setSubject(subject);
-    email.addMessage(content);
-    
-    String emailServer = OjConfig.get("emailServer");
-    String emailUser = OjConfig.get("emailUser");
-    String emailPass = OjConfig.get("emailPass");
-    SmtpServer smtpServer = new SmtpServer(emailServer, new SimpleAuthenticator(emailUser, emailPass));
-    
-    SendMailSession session = smtpServer.createSession();
-    try
-    {
-      session.open();
-      session.sendMail(email);
-      log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
-    }
-    catch(MailException e)
-    {
-      log.error(e.getLocalizedMessage());
-    }
-    finally
-    {
-      session.close();
-    }
-  }
-  
   public boolean sendResetPasswordEmail(String name, String email, String token) throws Exception
   {
     String adminEmail = OjConfig.get("adminEmail");
@@ -153,7 +112,7 @@ public class OjService
         "<a href=\"" + resetUrl + "\" target=\"blank\">" + resetUrl + "</a></p></div></body></html>",
         MimeTypes.MIME_TEXT_HTML);
     
-    sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
+    Tool.sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
     
     log.info("Account recovery email send to user " + name);
     return true;

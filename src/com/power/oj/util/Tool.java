@@ -4,8 +4,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.jfinal.kit.StringKit;
 import com.jfinal.log.Logger;
+import com.power.oj.core.OjConfig;
 
 import java.io.IOException;
+
+import jodd.mail.Email;
+import jodd.mail.EmailMessage;
+import jodd.mail.MailException;
+import jodd.mail.SendMailSession;
+import jodd.mail.SimpleAuthenticator;
+import jodd.mail.SmtpServer;
+import jodd.util.MimeTypes;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -94,4 +103,56 @@ public class Tool
 
     return html;
   }
+  
+  /**
+   * Send Email.
+   * @param from
+   * @param to
+   * @param subject
+   * @param content
+   */
+  public static void sendEmail(String from, String to, String subject, String content)
+  {
+    EmailMessage textMessage = new EmailMessage(content, MimeTypes.MIME_TEXT_PLAIN);
+    sendEmail(from, to, subject, textMessage);
+  }
+  
+  /**
+   * Send Email
+   * @param from
+   * @param to
+   * @param subject
+   * @param content
+   */
+  public static void sendEmail(String from, String to, String subject, EmailMessage content)
+  {
+    Email email = new Email();
+
+    email.setFrom(from);
+    email.setTo(to);
+    email.setSubject(subject);
+    email.addMessage(content);
+    
+    String emailServer = OjConfig.get("emailServer");
+    String emailUser = OjConfig.get("emailUser");
+    String emailPass = OjConfig.get("emailPass");
+    SmtpServer smtpServer = new SmtpServer(emailServer, new SimpleAuthenticator(emailUser, emailPass));
+    
+    SendMailSession session = smtpServer.createSession();
+    try
+    {
+      session.open();
+      session.sendMail(email);
+      log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
+    }
+    catch(MailException e)
+    {
+      log.error(e.getLocalizedMessage());
+    }
+    finally
+    {
+      session.close();
+    }
+  }
+  
 }
