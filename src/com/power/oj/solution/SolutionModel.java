@@ -47,7 +47,7 @@ public class SolutionModel extends Model<SolutionModel>
     }
     if (pid > 0)
     {
-      sb.append(" AND pid=?");
+      sb.append(" AND pid=? AND cid=0");
       paras.add(pid);
     }
     if (StringUtil.isNotBlank(userName))
@@ -92,7 +92,7 @@ public class SolutionModel extends Model<SolutionModel>
     int uid = 0;
     String name = userName;
     String sql = "SELECT sid,uid,pid,cid,num,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBuilder sb = new StringBuilder("FROM solution WHERE cid=?");
+    StringBuilder sb = new StringBuilder("FROM contest_solution WHERE cid=?");
     UserModel userModel;
 
     List<Object> paras = new ArrayList<Object>();
