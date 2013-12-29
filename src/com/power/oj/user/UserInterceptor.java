@@ -1,12 +1,10 @@
-package com.power.oj.user.interceptor;
+package com.power.oj.user;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.user.UserModel;
-import com.power.oj.user.UserService;
 
 /**
  * Get and Set user session and controller attributes, auto login.

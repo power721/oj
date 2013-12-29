@@ -26,7 +26,6 @@ import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.*;
-import com.power.oj.user.interceptor.UserInterceptor;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.*;
