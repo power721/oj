@@ -799,7 +799,7 @@ CREATE TABLE `user` (
 `atime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for previous time user accessed the site.' ,
 `ctime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for when user was created.' ,
 `mtime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for when user edit its profile.' ,
-`login`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for user\'s last login.' ,
+`login`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for user last login.' ,
 `phone`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `qq`  int(11) NULL DEFAULT NULL ,
 `blog`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
@@ -945,3 +945,9 @@ ALTER TABLE `user` AUTO_INCREMENT=1001;
 -- Auto increment value for `variable`
 -- ----------------------------
 ALTER TABLE `variable` AUTO_INCREMENT=15;
+
+-- ----------------------------
+-- View structure for `contest_solution`
+-- ----------------------------
+DROP VIEW IF EXISTS `contest_solution`;
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `contest_solution` AS select * from `solution` where (`solution`.`cid` <> 0);

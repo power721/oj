@@ -248,7 +248,7 @@ public class ContestController extends OjController
         return;
       }
 
-      List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE cid=? AND num=? GROUP BY result", cid, num);
+      List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM contest_solution WHERE cid=? AND num=? GROUP BY result", cid, num);
       for (SolutionModel record : resultList)
       {
         ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));

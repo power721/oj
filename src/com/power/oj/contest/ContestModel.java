@@ -124,7 +124,7 @@ public class ContestModel extends Model<ContestModel>
     List<Record> contestProblems;
     if (uid > 0)
     {
-      sql = "SELECT cp.pid,cp.num,cp.accept,cp.submit,title,status FROM contest_problem cp LEFT OUTER JOIN (SELECT pid,MIN(result) AS status FROM solution WHERE uid=? AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
+      sql = "SELECT cp.pid,cp.num,cp.accept,cp.submit,title,status FROM contest_problem cp LEFT OUTER JOIN (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
       contestProblems = Db.find(sql, uid, cid, cid);
     } else
     {
@@ -217,7 +217,7 @@ public class ContestModel extends Model<ContestModel>
         break;
       sb.append("COUNT(IF(result=").append(resultType.getId()).append(",1,NULL)) AS ").append(resultType.getName()).append(",");
     }
-    sb.append("pid,num,COUNT(IF(result>9,1,NULL)) AS Others,COUNT(*) AS total FROM solution WHERE cid=? GROUP BY pid ORDER BY num");
+    sb.append("pid,num,COUNT(IF(result>9,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? GROUP BY pid ORDER BY num");
     List<Record> statistics = Db.find(sb.toString(), cid);
     for (Record record : statistics)
     {
@@ -240,7 +240,7 @@ public class ContestModel extends Model<ContestModel>
     Db.update("DELETE FROM board WHERE cid=?", cid);
     ContestModel contestModle = getContest(cid);
     int contestStartTime = contestModle.getInt("start_time");
-    List<Record> solutions = Db.find("SELECT uid,pid,num,result,ctime FROM solution WHERE cid=? ORDER BY sid", cid);
+    List<Record> solutions = Db.find("SELECT uid,pid,num,result,ctime FROM contest_solution WHERE cid=? ORDER BY sid", cid);
     HashMap<Object, UserInfo> userRank = new HashMap<Object, UserInfo>();
     UserInfo userInfo = null;
     int uid = 0;
