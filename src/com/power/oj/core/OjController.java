@@ -34,6 +34,7 @@ public class OjController extends Controller
   /**
    * Redirect to url with flash message。
    * 
+   * @see FlashMessageInterceptor
    * @param url
    *          string of destination url.
    * @param withQueryString
@@ -72,6 +73,17 @@ public class OjController extends Controller
   }
 
   /**
+   * Get current user from attribute.
+   * 
+   * @see UserInterceptor
+   * @return UserModel.
+   */
+  protected UserModel getCurrentUser()
+  {
+    return getAttr(OjConstants.USER);
+  }
+
+  /**
    * Set the cookie in safe way.
    * 
    * @param name
@@ -88,10 +100,5 @@ public class OjController extends Controller
     setCookie(cookie);
     return this;
   }
-  
-  protected UserModel getCurrentUser()
-  {
-    return getAttr(OjConstants.USER);
-  }
-  
+
 }

@@ -58,12 +58,12 @@
             <li class="<#if controllerKey=="bbs">active</#if>"> <a href="bbs"><i class="icon-comment"></i>Web Board</a>
             </li>
             <li class=""><a href="contest"><i class="icon-fire"></i>Contest</a></li>
-            <li class="<#if controllerKey==" contest"&&methodName== "show" || methodName=="problem">active</#if>"> <a href="contest/show/${cid!}"><i
+            <li class="<#if controllerKey=="contest"&&methodName=="show" || methodName=="problem">active</#if>"> <a href="contest/show/${cid!}"><i
                 class="icon-list"></i>Problems</a>
             </li>
             <li class="<#if methodName=="rank">active</#if>"> <a href="contest/rank/${cid!}"><i class="icon-signal"></i>Standing</a>
             </li>
-            <li class="<#if methodName==" status" || methodName== "problem_status" || controllerKey=="solution">active</#if>"> <a
+            <li class="<#if methodName=="status" || methodName== "problem_status" || controllerKey=="solution">active</#if>"> <a
               href="contest/status/${cid!}"><i class="icon-check"></i>Status</a>
             </li>
             <li class="<#if methodName=="statistics">active</#if>"> <a href="contest/statistics/${cid!}"><i class="icon-flag"></i>Statistics</a>
