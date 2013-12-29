@@ -103,26 +103,36 @@ public class Tool
 
     return html;
   }
-  
+
   /**
    * Send Email.
+   * 
    * @param from
+   *          the email address of sender.
    * @param to
+   *          the email address of receiver.
    * @param subject
+   *          the title of email.
    * @param content
+   *          string of email body.
    */
   public static void sendEmail(String from, String to, String subject, String content)
   {
     EmailMessage textMessage = new EmailMessage(content, MimeTypes.MIME_TEXT_PLAIN);
     sendEmail(from, to, subject, textMessage);
   }
-  
+
   /**
-   * Send Email
+   * Send Email.
+   * 
    * @param from
+   *          the email address of sender.
    * @param to
+   *          the email address of receiver.
    * @param subject
+   *          the title of email.
    * @param content
+   *          EmailMessage of email body.
    */
   public static void sendEmail(String from, String to, String subject, EmailMessage content)
   {
@@ -132,27 +142,25 @@ public class Tool
     email.setTo(to);
     email.setSubject(subject);
     email.addMessage(content);
-    
+
     String emailServer = OjConfig.get("emailServer");
     String emailUser = OjConfig.get("emailUser");
     String emailPass = OjConfig.get("emailPass");
     SmtpServer smtpServer = new SmtpServer(emailServer, new SimpleAuthenticator(emailUser, emailPass));
-    
+
     SendMailSession session = smtpServer.createSession();
     try
     {
       session.open();
       session.sendMail(email);
       log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
-    }
-    catch(MailException e)
+    } catch (MailException e)
     {
       log.error(e.getLocalizedMessage());
-    }
-    finally
+    } finally
     {
       session.close();
     }
   }
-  
+
 }
