@@ -17,7 +17,7 @@ public class ShiroInViewInterceptor implements Interceptor
     
     if (UserService.me().isUser()) // if user is logined, set user information in controller
     {
-      UserModel userModel = UserService.me().getPrincipal();
+      UserModel userModel = UserService.me().getCurrentUser();
       int uid = userModel.getUid();
       
       if (UserService.me().hasAnyRoles("admin,root"))

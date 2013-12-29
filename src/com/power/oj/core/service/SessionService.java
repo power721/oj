@@ -66,7 +66,7 @@ public class SessionService
   {
     Subject currentUser = UserService.me().getSubject();
     Session session = currentUser.getSession();
-    UserModel userModel = UserService.me().getPrincipal();
+    UserModel userModel = UserService.me().getCurrentUser();
     String id = (String) session.getId();
     int uid = userModel.getUid();
     String name = userModel.getStr("name");

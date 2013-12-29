@@ -60,7 +60,7 @@ public class UserService
     Record loginLog = new Record();
     if (success)
     {
-      UserModel userModel = getPrincipal();
+      UserModel userModel = getCurrentUser();
       userModel.updateLogin();
       loginLog.set("uid", userModel.getUid());
     }
@@ -99,7 +99,7 @@ public class UserService
   public void logout()
   {
     Subject currentUser = getSubject();
-    UserModel userModel = getPrincipal();
+    UserModel userModel = getCurrentUser();
     if (userModel != null)
     {
       userModel.update();
@@ -123,7 +123,12 @@ public class UserService
     return SecurityUtils.getSubject();
   }
 
-  public UserModel getPrincipal()
+  public UserModel getCurrentUser()
+  {
+    return dao.findById(getCurrentUid());
+  }
+  
+  public Integer getCurrentUid()
   {
     Subject currentUser = getSubject();
     if (currentUser == null)
@@ -133,7 +138,7 @@ public class UserService
     if (principal == null)
       return null;
     
-    return dao.findById(principal);
+    return (Integer) principal;
   }
 
   public boolean isAuthenticated()
