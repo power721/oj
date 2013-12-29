@@ -9,7 +9,6 @@ import com.power.oj.user.UserModel;
 
 /**
  * Base Controller provides some common methods.
- * public void <method_name>() { ... } will reagrd as a action!
  * 
  * @author power
  * 

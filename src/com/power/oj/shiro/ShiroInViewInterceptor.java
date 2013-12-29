@@ -4,7 +4,6 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
 public class ShiroInViewInterceptor implements Interceptor
@@ -17,8 +16,7 @@ public class ShiroInViewInterceptor implements Interceptor
     
     if (UserService.me().isUser()) // if user is logined, set user information in controller
     {
-      UserModel userModel = UserService.me().getCurrentUser();
-      int uid = userModel.getUid();
+      int uid = UserService.me().getCurrentUid();
       
       if (UserService.me().hasAnyRoles("admin,root"))
         controller.setAttr(OjConstants.ADMIN_USER, uid);
