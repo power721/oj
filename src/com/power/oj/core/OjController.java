@@ -20,6 +20,7 @@ public class OjController extends Controller
   /**
    * Redirect to url with flash message。
    * 
+   * @see FlashMessageInterceptor
    * @param url
    *          string of destination url.
    * @param msg
@@ -62,7 +63,7 @@ public class OjController extends Controller
   }
 
   /**
-   * Set flash message in attr.
+   * Set message in attr.
    * 
    * @param message
    *          message with content, type and title.

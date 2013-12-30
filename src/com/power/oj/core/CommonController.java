@@ -38,12 +38,12 @@ public class CommonController extends OjController
    */
   public void index()
   {
-    
+    setTitle("SWUST ACM-ICPC");
   }
   
   public void about()
   {
-    
+    setTitle("About");
   }
   
   /**
@@ -51,7 +51,7 @@ public class CommonController extends OjController
    */
   public void contact()
   {
-    
+    setTitle("Contact us");
   }
   
   /**
@@ -59,7 +59,7 @@ public class CommonController extends OjController
    */
   public void changelog()
   {
-    
+    setTitle("Changelog");
   }
 
   /**
@@ -67,7 +67,7 @@ public class CommonController extends OjController
    */
   public void faq()
   {
-    
+    setTitle("Frequently Asked Questions");
   }
 
   /**
@@ -76,6 +76,7 @@ public class CommonController extends OjController
   public void tag()
   {
     setAttr("tagList", OjService.me().tagList());
+    setTitle("Problem tag");
   }
 
   /**
