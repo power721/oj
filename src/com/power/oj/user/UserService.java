@@ -210,6 +210,9 @@ public class UserService
    */
   public boolean build(UserModel userModel)
   {
+    if (userModel == null)
+      return false;
+    
     int uid = userModel.getUid();
     
     Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);

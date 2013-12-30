@@ -6,11 +6,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.subject.Subject;
 
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
@@ -22,6 +20,7 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.upload.UploadFile;
+
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -48,6 +47,84 @@ public class UserController extends OjController
   public void index()
   {
     setTitle("User Center");
+  }
+
+  @ActionKey("/rank")
+  public void rank()
+  {
+    int pageNumber = getParaToInt("p", 1);
+    int pageSize = getParaToInt("s", OjConfig.userPageSize);
+    
+    setAttr(OjConstants.USER_LIST, UserModel.dao.getUserRankList(pageNumber, pageSize));
+    
+    setTitle("Ranklist");
+  }
+
+  public void profile()
+  {
+    String name = getPara(0);
+    UserModel userModel = null;
+    
+    if (name == null)
+    {
+      userModel = getCurrentUser();
+    } else
+    {
+      userModel = UserModel.dao.getUserByName(name);
+    }
+    
+    if (userModel == null)
+    {
+      Message msg = new Message("The user does not exist!", MessageType.WARN, "Warning!");
+      redirect("/", msg);
+      return;
+    }
+    
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    setAttr("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
+    setAttr("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
+    userModel.put("rank", UserModel.dao.getUserRank(userModel.getUid()));
+    setAttr(OjConstants.USER, userModel);
+    
+    setTitle("User Profile");
+  }
+
+  public void info()
+  {
+    int uid = 0;
+    String name = "";
+    UserModel user = null;
+
+    if (isParaExists("uid"))
+    {
+      uid = getParaToInt("uid");
+      user = UserModel.dao.getUserInfoByUid(uid);
+    } else if (isParaExists("name"))
+    {
+      name = getPara("name");
+      user = UserModel.dao.getUserInfoByName(name);
+    }
+
+    if (user == null)
+    {
+      renderJson("{error:true}");
+    } else
+    {
+      user.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
+      renderJson(user);
+    }
+  }
+
+  public void search()
+  {
+    String word = HtmlEncoder.text(getPara("word").trim());
+    String scope = getPara("scope");
+    
+    setAttr(OjConstants.USER_LIST, userService.searchUser(scope, word));
+    setAttr("word", word);
+    setAttr("scope", scope != null ? scope : "all");
+    
+    setTitle(new StringBuilder(2).append("Search user: ").append(word).toString());
   }
 
   @ActionKey("/login")
@@ -102,35 +179,6 @@ public class UserController extends OjController
     redirect(lastAccessURL);
   }
 
-  public void profile()
-  {
-    String name = getPara(0);
-    UserModel userModel = null;
-    
-    if (name == null)
-    {
-      userModel = getCurrentUser();
-    } else
-    {
-      userModel = UserModel.dao.getUserByName(name);
-    }
-    
-    if (userModel == null)
-    {
-      Message msg = new Message("The user does not exist!", MessageType.WARN, "Warning!");
-      redirect("/", msg);
-      return;
-    }
-    
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    setAttr("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
-    setAttr("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
-    userModel.put("rank", UserModel.dao.getUserRank(userModel.getUid()));
-    setAttr(OjConstants.USER, userModel);
-    
-    setTitle("User Profile");
-  }
-  
   @RequiresPermissions("user:upload:avatar")
   public void avatar()
   {
@@ -246,13 +294,11 @@ public class UserController extends OjController
   public void save()
   {
     UserModel userModel = getModel(UserModel.class, "user");
+    String name = userModel.getStr("name");
     String password = userModel.getStr("pass");
     userModel.saveUser();
 
-    userModel = userModel.findById(userModel.getUid());
-    UsernamePasswordToken token = new UsernamePasswordToken(userModel.getStr("name"), password);
-    Subject currentUser = userService.getSubject();
-    currentUser.login(token);
+    userService.login(name, password, false);
 
     redirect("/user/edit", new Message("Congratulations! You have a new account now.<br>Please update your information."));
   }
@@ -272,71 +318,16 @@ public class UserController extends OjController
     UserModel userModel = getModel(UserModel.class, "user");
     userModel.updateUser();
 
-    String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
-    redirect(redirectURL, new Message("The changes have been saved."));
+    String redirectURL = new StringBuilder(2).append("/user/profile/").append(userModel.getStr("name")).toString();
+    redirect(redirectURL, new Message("Your account updated."));
   }
 
+  /******************** admin methods ********************/
   @RequiresPermissions("user:delete")
   public void delete()
   {
     renderText("TODO");
   }
-
-  public void info()
-  {
-    int uid = 0;
-    String name = "";
-    UserModel user = null;
-
-    if (isParaExists("uid"))
-    {
-      uid = getParaToInt("uid");
-      user = UserModel.dao.getUserInfoByUid(uid);
-    } else if (isParaExists("name"))
-    {
-      name = getPara("name");
-      user = UserModel.dao.getUserInfoByName(name);
-    }
-
-    if (user == null)
-    {
-      renderJson("{error:true}");
-    } else
-    {
-      user.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
-      renderJson(user);
-    }
-  }
-
-  public void search()
-  {
-    String word = HtmlEncoder.text(getPara("word").trim());
-    String scope = getPara("scope");
-    
-    setAttr(OjConstants.USER_LIST, userService.searchUser(scope, word));
-    setAttr("word", word);
-    setAttr("scope", scope != null ? scope : "all");
-    
-    setTitle(new StringBuilder(2).append("Search user: ").append(word).toString());
-  }
-
-  /*
-   * public void searchUser() { String word =
-   * HtmlEncoder.text(getPara("word").trim()); String scope = getPara("scope");
-   * int pageNumber = getParaToInt("p", 1); Page<UserModel> userList = null;
-   * 
-   * if(StringUtil.isNotBlank(word)) { StringBuilder sb = new
-   * StringBuilder("FROM user WHERE "); if(StringUtil.isNotBlank(scope))
-   * sb.append(scope).append(" LIKE '%").append(word).append("%' "); else
-   * sb.append ("name LIKE '%").append(word).append("%' OR nick LIKE '%").append
-   * (word).append("%' OR email LIKE '%").append(word).append("%'");
-   * sb.append(" AND status=1 ORDER BY solved desc,submit,uid");
-   * 
-   * userList = UserModel.dao.paginate(pageNumber, 50,
-   * "SELECT uid,name,nick,school,solved,submit", sb.toString()); }
-   * 
-   * renderJson(userList); }
-   */
 
   @RequiresPermissions("user:online")
   public void online()
@@ -347,23 +338,12 @@ public class UserController extends OjController
     setTitle("Online Users");
   }
 
-  @ActionKey("/rank")
-  public void rank()
-  {
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.userPageSize);
-    
-    setAttr(OjConstants.USER_LIST, UserModel.dao.getUserRankList(pageNumber, pageSize));
-    
-    setTitle("Ranklist");
-  }
-
   @RequiresPermissions("user:build")
   public void build()
   {
-    int uid = getParaToInt(0);
-    UserModel userModel = UserModel.dao.findById(uid);
-    String redirectURL = new StringBuilder(2).append("/user/profile/").append(userModel.getStr("name")).toString();
+    String name = getPara(0);
+    UserModel userModel = UserModel.dao.getUserByName(name);
+    String redirectURL = new StringBuilder(2).append("/user/profile/").append(name).toString();
     Message msg = new Message("The user statistics have been updated.");
     
     if (!userService.build(userModel))
@@ -374,4 +354,5 @@ public class UserController extends OjController
 
     redirect(redirectURL, msg);
   }
+  
 }
