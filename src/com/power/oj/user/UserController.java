@@ -106,31 +106,29 @@ public class UserController extends OjController
   public void profile()
   {
     String name = getPara(0);
-    Message msg = new Message("User not exists.", MessageType.WARN, "Warning!");
     UserModel userModel = null;
+    
     if (name == null)
     {
       userModel = getCurrentUser();
-      if (userModel == null)
-      {
-        redirect("/", msg);
-        return;
-      }
     } else
     {
       userModel = UserModel.dao.getUserByName(name);
-      if (userModel == null)
-      {
-        redirect("/", msg);
-        return;
-      }
     }
-
+    
+    if (userModel == null)
+    {
+      Message msg = new Message("The user does not exist!", MessageType.WARN, "Warning!");
+      redirect("/", msg);
+      return;
+    }
+    
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     setAttr("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
     setAttr("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
+    userModel.put("rank", UserModel.dao.getUserRank(userModel.getUid()));
     setAttr(OjConstants.USER, userModel);
-    setAttr("userRank", UserModel.dao.getUserRank(userModel.getUid()));
+    
     setTitle("User Profile");
     render("profile.html");
   }
