@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
+import jodd.mail.MailException;
 import jodd.mail.SendMailSession;
 import jodd.mail.SimpleAuthenticator;
 import jodd.mail.SmtpServer;
@@ -104,7 +105,7 @@ public class Tool
   }
 
   /**
-   * Send Email.
+   * Send Email with string content.
    * 
    * @param from
    *          the email address of sender.
@@ -114,15 +115,16 @@ public class Tool
    *          the title of email.
    * @param content
    *          string of email body.
+   * @throws Exception 
    */
-  public static void sendEmail(String from, String to, String subject, String content)
+  public static void sendEmail(String from, String to, String subject, String content) throws Exception
   {
     EmailMessage textMessage = new EmailMessage(content, MimeTypes.MIME_TEXT_PLAIN);
     sendEmail(from, to, subject, textMessage);
   }
 
   /**
-   * Send Email.
+   * Send Email with EmailMessage content.
    * 
    * @param from
    *          the email address of sender.
@@ -132,8 +134,9 @@ public class Tool
    *          the title of email.
    * @param content
    *          EmailMessage of email body.
+   * @throws Exception 
    */
-  public static void sendEmail(String from, String to, String subject, EmailMessage content)
+  public static void sendEmail(String from, String to, String subject, EmailMessage content) throws Exception
   {
     Email email = new Email();
 
@@ -153,8 +156,11 @@ public class Tool
       session.open();
       session.sendMail(email);
       log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
-    }
-    finally
+    } catch (MailException e)
+    {
+      log.error(e.getLocalizedMessage());
+      throw new Exception("Configuration for SMTP mail is incorrect.");
+    } finally
     {
       session.close();
     }
