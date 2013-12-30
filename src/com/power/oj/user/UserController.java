@@ -174,6 +174,7 @@ public class UserController extends OjController
   public void logout()
   {
     String lastAccessURL = sessionService.getLastAccessURL();
+    
     userService.logout();
 
     redirect(lastAccessURL);
