@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -339,15 +340,17 @@ public class ProblemController extends OjController
     { "userInfo", "language_name", "result_type" });
   }
 
+  @ClearInterceptor(ClearLayer.ALL)
   public void userResult()
   {
-    if (getAttrForInt(OjConstants.USER_ID) == null)
+    if (UserService.me().getCurrentUid() == null)
     {
+      renderNull();
       return;
     }
 
     int pid = getParaToInt("pid");
-    int uid = getAttrForInt(OjConstants.USER_ID);
+    int uid = UserService.me().getCurrentUid();
     Record userResult = null;
 
     if (uid > 0)
