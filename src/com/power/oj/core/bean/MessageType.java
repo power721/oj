@@ -3,7 +3,7 @@ package com.power.oj.core.bean;
 public enum MessageType
 {
   ERROR("error"), 
-  WRAN("wraning"), 
+  WARN("warning"), 
   INFO("info"), 
   SUCCESS("success");
 

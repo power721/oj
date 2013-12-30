@@ -106,13 +106,14 @@ public class UserController extends OjController
   public void profile()
   {
     String name = getPara(0);
+    Message msg = new Message("User not exists.", MessageType.WARN, "Warning!");
     UserModel userModel = null;
     if (name == null)
     {
       userModel = getCurrentUser();
       if (userModel == null)
       {
-        redirect("/");
+        redirect("/", msg);
         return;
       }
     } else
@@ -120,7 +121,7 @@ public class UserController extends OjController
       userModel = UserModel.dao.getUserByName(name);
       if (userModel == null)
       {
-        redirect(sessionService.getLastAccessURL());
+        redirect("/", msg);
         return;
       }
     }

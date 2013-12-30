@@ -129,7 +129,7 @@ public class ContestController extends OjController
 
     if (ContestModel.dao.isContestFinished(cid))
     {
-      Message msg = new Message("This contest has finished!", MessageType.WRAN, "Warnning!");
+      Message msg = new Message("This contest has finished!", MessageType.WARN, "Warnning!");
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }

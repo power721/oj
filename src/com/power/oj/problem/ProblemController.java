@@ -191,7 +191,7 @@ public class ProblemController extends OjController
     File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
-      Message msg = new Message("The data directory already exists.", MessageType.WRAN, "Warning!");
+      Message msg = new Message("The data directory already exists.", MessageType.WARN, "Warning!");
       redirect(redirectURL, msg);
       return;
     }
