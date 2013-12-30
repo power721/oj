@@ -60,12 +60,7 @@ public class UserController extends OjController
     }
     
     setTitle("Login");
-    
-    boolean ajax = getParaToBoolean("ajax", false);
-    if (ajax)
-      render("ajax/login.html");
-    else
-      render("login.html");
+    render("login.html");
   }
 
   @Before(POST.class)
@@ -89,16 +84,12 @@ public class UserController extends OjController
       return;
     }
 
-    setAttr(OjConstants.MSG_TYPE, "error");
-    setAttr(OjConstants.MSG_TITLE, "Error!");
-    setAttr(OjConstants.MSG, "Sorry, you entered an invalid username or password.");
+    Message msg = new Message("Sorry, you entered an invalid username or password.", MessageType.ERROR, "Error!");
+    setAttrMessage(msg);
+    setTitle("Login");
     keepPara("name");
-
-    boolean ajax = getParaToBoolean("ajax", false);
-    if (ajax)
-      render("ajax/login.html");
-    else
-      render("login.html");
+    
+    render("login.html");
   }
 
   @RequiresUser
@@ -185,14 +176,6 @@ public class UserController extends OjController
     renderJson("ERROR:true");
   }
 
-  @ActionKey("/signup")
-  @RequiresGuest
-  public void signup()
-  {
-    setTitle("Signup");
-    render("signup.html");
-  }
-  
   @RequiresGuest
   public void forget()
   {
@@ -254,7 +237,15 @@ public class UserController extends OjController
     redirect("/login", msg);
   }
 
-  @Before(SignupValidator.class)
+  @ActionKey("/signup")
+  @RequiresGuest
+  public void signup()
+  {
+    setTitle("Signup");
+    render("signup.html");
+  }
+  
+  @Before({POST.class, SignupValidator.class})
   @RequiresGuest
   public void save()
   {
@@ -280,7 +271,7 @@ public class UserController extends OjController
     render("edit.html");
   }
 
-  @Before(UpdateUserValidator.class)
+  @Before({POST.class, UpdateUserValidator.class})
   @RequiresAuthentication
   public void update()
   {
