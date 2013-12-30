@@ -47,7 +47,7 @@ public class UserController extends OjController
   
   public void index()
   {
-    render("index.html");
+    setTitle("User Center");
   }
 
   @ActionKey("/login")
@@ -61,7 +61,6 @@ public class UserController extends OjController
     }
     
     setTitle("Login");
-    render("login.html");
   }
 
   @Before(POST.class)
@@ -87,9 +86,9 @@ public class UserController extends OjController
 
     Message msg = new Message("Sorry, you entered invalid username or password.", MessageType.ERROR, "Error!");
     setAttrMessage(msg);
-    setTitle("Login");
     keepPara("name");
     
+    setTitle("Login");
     render("login.html");
   }
 
@@ -130,13 +129,12 @@ public class UserController extends OjController
     setAttr(OjConstants.USER, userModel);
     
     setTitle("User Profile");
-    render("profile.html");
   }
   
   @RequiresPermissions("user:upload:avatar")
   public void avatar()
   {
-    render("avatar.html");
+    setTitle("Upload Avatar");
   }
 
   @Before(POST.class)
@@ -213,9 +211,8 @@ public class UserController extends OjController
    
     if (userService.checkResetToken(name, token))
     {
-      setTitle("Reset Password");
       setSessionAttr("name", name);
-      render("reset.html");
+      setTitle("Reset Password");
       return;
     }
     
@@ -242,7 +239,6 @@ public class UserController extends OjController
   public void signup()
   {
     setTitle("Signup");
-    render("signup.html");
   }
   
   @Before({POST.class, SignupValidator.class})
@@ -264,11 +260,9 @@ public class UserController extends OjController
   @RequiresAuthentication
   public void edit()
   {
-    setTitle("Account");
-    
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
-
-    render("edit.html");
+    
+    setTitle("Account");
   }
 
   @Before({POST.class, UpdateUserValidator.class})
@@ -318,12 +312,12 @@ public class UserController extends OjController
   {
     String word = HtmlEncoder.text(getPara("word").trim());
     String scope = getPara("scope");
+    
     setAttr(OjConstants.USER_LIST, userService.searchUser(scope, word));
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
+    
     setTitle(new StringBuilder(2).append("Search user: ").append(word).toString());
-
-    render("search.html");
   }
 
   /*
@@ -347,11 +341,10 @@ public class UserController extends OjController
   @RequiresPermissions("user:online")
   public void online()
   {
-    setTitle("Online Users");
     setAttr("loginUserNum", sessionService.getUserNumber());
     setAttr(OjConstants.USER_LIST, sessionService.getAccessLog());
-
-    render("online.html");
+    
+    setTitle("Online Users");
   }
 
   @ActionKey("/rank")
@@ -360,10 +353,9 @@ public class UserController extends OjController
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", OjConfig.userPageSize);
     
-    setTitle("Ranklist");
     setAttr(OjConstants.USER_LIST, UserModel.dao.getUserRankList(pageNumber, pageSize));
-
-    render("rank.html");
+    
+    setTitle("Ranklist");
   }
 
   @RequiresPermissions("user:build")
