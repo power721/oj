@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
+import jodd.util.StringUtil;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -41,7 +43,7 @@ public class SessionService
   public String getLastAccessURL()
   {
     String lastAccessURL = (String) getSession().getAttribute(OjConstants.LAST_ACCESS_URL);
-    if (lastAccessURL == null)
+    if (StringUtil.isBlank(lastAccessURL))
       lastAccessURL = "/";
     
     return lastAccessURL;

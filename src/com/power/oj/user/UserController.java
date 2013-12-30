@@ -10,13 +10,14 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.authz.annotation.RequiresUser;
 import org.apache.shiro.subject.Subject;
 
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
@@ -84,7 +85,7 @@ public class UserController extends OjController
       return;
     }
 
-    Message msg = new Message("Sorry, you entered an invalid username or password.", MessageType.ERROR, "Error!");
+    Message msg = new Message("Sorry, you entered invalid username or password.", MessageType.ERROR, "Error!");
     setAttrMessage(msg);
     setTitle("Login");
     keepPara("name");
@@ -92,7 +93,7 @@ public class UserController extends OjController
     render("login.html");
   }
 
-  @RequiresUser
+  @ClearInterceptor(ClearLayer.ALL)
   @ActionKey("/logout")
   public void logout()
   {
@@ -111,7 +112,7 @@ public class UserController extends OjController
       userModel = getCurrentUser();
       if (userModel == null)
       {
-        redirect(sessionService.getLastAccessURL());
+        redirect("/");
         return;
       }
     } else
