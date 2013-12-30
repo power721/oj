@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
-import jodd.mail.MailException;
 import jodd.mail.SendMailSession;
 import jodd.mail.SimpleAuthenticator;
 import jodd.mail.SmtpServer;
@@ -154,10 +153,8 @@ public class Tool
       session.open();
       session.sendMail(email);
       log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
-    } catch (MailException e)
-    {
-      log.error(e.getLocalizedMessage());
-    } finally
+    }
+    finally
     {
       session.close();
     }
