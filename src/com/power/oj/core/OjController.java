@@ -62,6 +62,19 @@ public class OjController extends Controller
   }
 
   /**
+   * Set flash message in attr.
+   * 
+   * @param message
+   *          message with content, type and title.
+   */
+  protected void setAttrMessage(Message message)
+  {
+    setAttr(OjConstants.MSG, message.getContent());
+    setAttr(OjConstants.MSG_TYPE, message.getType());
+    setAttr(OjConstants.MSG_TITLE, message.getTitle());
+  }
+
+  /**
    * The the page title of the view.
    * 
    * @param title
