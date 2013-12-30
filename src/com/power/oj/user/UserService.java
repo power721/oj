@@ -80,6 +80,23 @@ public class UserService
     currentUser.logout();
   }
   
+  public boolean signup(UserModel userModel)
+  {
+    String name = userModel.getStr("name");
+    String password = userModel.getStr("pass");
+    
+    if (userModel.saveUser())
+    {
+      //int uid = userModel.getUid();
+     
+      //Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM roles WHERE name='user'", uid);
+      
+      return login(name, password, false);
+    }
+    
+    return false;
+  }
+  
   /**
    * Update user login time and loginlog.
    * @param name user name.

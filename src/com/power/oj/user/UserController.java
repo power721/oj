@@ -294,11 +294,8 @@ public class UserController extends OjController
   public void save()
   {
     UserModel userModel = getModel(UserModel.class, "user");
-    String name = userModel.getStr("name");
-    String password = userModel.getStr("pass");
-    userModel.saveUser();
 
-    userService.login(name, password, false);
+    userService.signup(userModel);
 
     redirect("/user/edit", new Message("Congratulations! You have a new account now.<br>Please update your information."));
   }
