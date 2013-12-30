@@ -81,8 +81,8 @@ public class UserController extends OjController
     }
     
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    setAttr("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
-    setAttr("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
+    userModel.put("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
+    userModel.put("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
     userModel.put("rank", UserModel.dao.getUserRank(userModel.getUid()));
     setAttr(OjConstants.USER, userModel);
     
