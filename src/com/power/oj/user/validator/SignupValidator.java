@@ -28,7 +28,7 @@ public class SignupValidator extends Validator
     if (StringUtil.isNotBlank(username) && UserModel.dao.containUsername(username))
     {
       addError("nameMsg", "This user name already registered!");
-    } else if (StringUtil.isNotBlank(username) && !validateName(username))
+    } else if (StringUtil.isNotBlank(username) && !checkReservedName(username))
     {
       addError("nameMsg", "This user name is reserved!");
     } else
@@ -41,7 +41,6 @@ public class SignupValidator extends Validator
     {
       addError("captchaMsg", "The captcha is incorrect!");
     }
-
   }
 
   @Override
@@ -53,13 +52,13 @@ public class SignupValidator extends Validator
     c.render("signup.html");
   }
 
-  public boolean validateName(String name)
+  public boolean checkReservedName(String name)
   {
     name = name.toLowerCase();
 
-    String reverseNames[] =
-    { "admin", "system", "default", "avatar" };
-    if (StringUtil.equalsOne(name, reverseNames) != -1)
+    String reservedNames[] =
+    { "admin", "root", "system", "default", "avatar" };
+    if (StringUtil.equalsOne(name, reservedNames) != -1)
       return false;
 
     if (name.startsWith("team"))
@@ -67,4 +66,5 @@ public class SignupValidator extends Validator
 
     return true;
   }
+  
 }
