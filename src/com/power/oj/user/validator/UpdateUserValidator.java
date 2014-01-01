@@ -7,6 +7,7 @@ import com.jfinal.validate.Validator;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class UpdateUserValidator extends Validator
 {
@@ -16,7 +17,7 @@ public class UpdateUserValidator extends Validator
   {
     validateEmail("user.email", "emailMsg", "Invalid Email address!");
 
-    int uid = c.getParaToInt("user.uid");
+    int uid = UserService.me().getCurrentUid();
     /*
      * String email = c.getPara("user.email"); if (StringUtil.isNotBlank(email)
      * && UserModel.dao.containEmailExceptThis(uid, email)) {

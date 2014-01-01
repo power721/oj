@@ -2,7 +2,6 @@ package com.power.oj.user;
 
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
-import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
@@ -105,29 +104,6 @@ public class UserModel extends Model<UserModel>
     set("atime", ctime).set("ctime", ctime).set("mtime", ctime).set("login", ctime);
 
     return save();
-  }
-
-  public boolean updateUser()
-  {
-    String password = getStr("pass");
-    if (StringUtil.isNotBlank(password))
-    {
-      password = BCrypt.hashpw(password, BCrypt.gensalt());
-      set("pass", password);
-    } else
-    {
-      remove("pass");
-    }
-    
-    set("nick", HtmlEncoder.text(getStr("nick")));
-    set("school", HtmlEncoder.text(getStr("school")));
-    set("realname", HtmlEncoder.text(getStr("realname")));
-    set("blog", HtmlEncoder.text(getStr("blog")));
-    set("email", HtmlEncoder.text(getStr("email")));
-    set("phone", HtmlEncoder.text(getStr("phone")));
-    set("mtime", OjConfig.timeStamp);
-    
-    return update();
   }
 
   public boolean updateLogin()

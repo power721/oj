@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jodd.util.BCrypt;
+import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
 import org.apache.shiro.SecurityUtils;
@@ -84,8 +85,11 @@ public class UserService
   {
     String name = userModel.getStr("name");
     String password = userModel.getStr("pass");
+    String email = userModel.getStr("email");
     
-    if (userModel.saveUser())
+    UserModel newUser = new UserModel().set("name", name).set("pass", password).set("email", email);
+    
+    if (newUser.saveUser())
     {
       //int uid = userModel.getUid();
      
@@ -95,6 +99,32 @@ public class UserService
     }
     
     return false;
+  }
+  
+  public boolean updateUser(UserModel userModel)
+  {
+    UserModel newUser = new UserModel();
+    String password = userModel.getStr("pass");
+    
+    if (StringUtil.isNotBlank(password))
+    {
+      password = BCrypt.hashpw(password, BCrypt.gensalt());
+      newUser.set("pass", password);
+    }
+    
+    newUser.set("uid", getCurrentUid());
+    newUser.set("nick", HtmlEncoder.text(userModel.getStr("nick")));
+    newUser.set("school", HtmlEncoder.text(userModel.getStr("school")));
+    newUser.set("realname", HtmlEncoder.text(userModel.getStr("realname")));
+    newUser.set("blog", HtmlEncoder.text(userModel.getStr("blog")));
+    newUser.set("email", HtmlEncoder.text(userModel.getStr("email")));
+    newUser.set("phone", HtmlEncoder.text(userModel.getStr("phone")));
+    newUser.set("gender", HtmlEncoder.text(userModel.getStr("gender")));
+    newUser.set("language", userModel.getInt("language"));
+    newUser.set("qq", userModel.getInt("qq"));
+    newUser.set("mtime", OjConfig.timeStamp);
+    
+    return newUser.update();
   }
   
   /**
