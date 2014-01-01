@@ -41,6 +41,9 @@ import com.power.oj.util.FileKit;
  */
 public class UserController extends OjController
 {
+  /*
+   * If most controllers use these services, move them to OjController.
+   */
   private static final UserService userService = UserService.me();
   private static final SessionService sessionService = SessionService.me();
   

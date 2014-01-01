@@ -84,8 +84,11 @@ public class UserService
   {
     String name = userModel.getStr("name");
     String password = userModel.getStr("pass");
+    String email = userModel.getStr("email");
     
-    if (userModel.saveUser())
+    UserModel newUser = new UserModel().set("name", name).set("pass", password).set("email", email);
+    
+    if (newUser.saveUser())
     {
       //int uid = userModel.getUid();
      
