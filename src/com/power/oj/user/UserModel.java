@@ -1,10 +1,9 @@
 package com.power.oj.user;
 
 import jodd.util.BCrypt;
-import jodd.util.HtmlEncoder;
-
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
+
 import com.power.oj.core.OjConfig;
 
 public class UserModel extends Model<UserModel>
@@ -91,19 +90,6 @@ public class UserModel extends Model<UserModel>
         "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1) * pageSize);
     
     return userList;
-  }
-
-  public boolean saveUser()
-  {
-    String password = getStr("pass");
-    password = BCrypt.hashpw(password, BCrypt.gensalt());
-    set("pass", password);
-    set("name", HtmlEncoder.text(getStr("name")));
-
-    long ctime = OjConfig.timeStamp;
-    set("atime", ctime).set("ctime", ctime).set("mtime", ctime).set("login", ctime);
-
-    return save();
   }
 
   public boolean updateLogin()
