@@ -19,7 +19,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.solution.SolutionModel;
@@ -65,7 +65,7 @@ public class ProblemController extends OjController
   {
     if (!isParaExists(0))
     {
-      Message msg = new Message("Please specify the problem ID.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Please specify the problem ID.", MessageType.ERROR, "Error!");
       redirect("/problem", msg);
       return;
     }
@@ -75,7 +75,7 @@ public class ProblemController extends OjController
     ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
     if (problemModel == null)
     {
-      Message msg = new Message("Cannot find this problem!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Cannot find this problem!", MessageType.ERROR, "Error!");
       redirect("/problem", msg);
       return;
     }
@@ -145,7 +145,7 @@ public class ProblemController extends OjController
   {
     if (!isParaExists(0))
     {
-      Message msg = new Message("Please specify the problem ID.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Please specify the problem ID.", MessageType.ERROR, "Error!");
       redirect("/problem", msg);
       return;
     }
@@ -169,7 +169,7 @@ public class ProblemController extends OjController
     problemModel.updateProblem();
 
     String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
-    redirect(redirectURL, new Message("The changes have been saved."));
+    redirect(redirectURL, new FlashMessage("The changes have been saved."));
   }
 
   @RequiresPermissions("problem:add")
@@ -190,7 +190,7 @@ public class ProblemController extends OjController
     File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
-      Message msg = new Message("The data directory already exists.", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage("The data directory already exists.", MessageType.WARN, "Warning!");
       redirect(redirectURL, msg);
       return;
     }
@@ -201,7 +201,7 @@ public class ProblemController extends OjController
     } catch (IOException e)
     {
       log.error(e.getMessage());
-      Message msg = new Message("The data directory cannot create.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("The data directory cannot create.", MessageType.ERROR, "Error!");
       redirect(redirectURL, msg);
       return;
     }
@@ -232,7 +232,7 @@ public class ProblemController extends OjController
       ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
       if (problemModel == null)
       {
-        Message msg = new Message("Permission Denied.", MessageType.ERROR, "Error!");
+        FlashMessage msg = new FlashMessage("Permission Denied.", MessageType.ERROR, "Error!");
         redirect("/problem", msg);
         return;
       }
@@ -373,7 +373,7 @@ public class ProblemController extends OjController
       ProblemModel.dao.addTag(pid, uid, tag);
 
     String redirectURL = new StringBuilder(3).append("/problem/show/").append(pid).append("#tag").toString();
-    redirect(redirectURL, new Message("The changes have been saved."));
+    redirect(redirectURL, new FlashMessage("The changes have been saved."));
   }
 
   @RequiresPermissions("problem:build")
@@ -386,9 +386,9 @@ public class ProblemController extends OjController
     if (problemModel != null && !problemModel.build())
     {
       log.error(new StringBuilder(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
-      redirect(redirectURL, new Message("Build problem statistics failed!"));
+      redirect(redirectURL, new FlashMessage("Build problem statistics failed!"));
     }
 
-    redirect(redirectURL, new Message("The problem statistics have been updated."));
+    redirect(redirectURL, new FlashMessage("The problem statistics have been updated."));
   }
 }

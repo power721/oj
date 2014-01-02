@@ -13,7 +13,7 @@ import com.power.oj.contest.ContestRankWebSocket;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
@@ -82,7 +82,7 @@ public class SolutionController extends OjController
     int loginUid = getAttrForInt(OjConstants.USER_ID);
     if (uid != loginUid && !isAdmin)
     {
-      Message msg = new Message("Permission Denied.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Permission Denied.", MessageType.ERROR, "Error!");
       redirect("/status", msg);
       return;
     }
@@ -159,7 +159,7 @@ public class SolutionController extends OjController
       ProblemModel problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
       if (problemModel == null)
       {
-        Message msg = new Message("Please choose a correct problem", MessageType.ERROR, "Error!");
+        FlashMessage msg = new FlashMessage("Please choose a correct problem", MessageType.ERROR, "Error!");
         redirect(url, msg);
         return;
       }
@@ -180,7 +180,7 @@ public class SolutionController extends OjController
       System.out.println(solutionModel.getInt("sid"));
     } else
     {
-      Message msg = new Message("Submit failed, maybe code length is incorrect.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Submit failed, maybe code length is incorrect.", MessageType.ERROR, "Error!");
       redirect(url, msg);
       return;
     }

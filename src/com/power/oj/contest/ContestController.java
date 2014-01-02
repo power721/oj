@@ -23,7 +23,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.service.SessionService;
@@ -61,7 +61,7 @@ public class ContestController extends OjController
     if (contestModle == null)
     {
       log.warn(new StringBuilder(2).append("Cannot find this contest: ").append(cid).toString());
-      Message msg = new Message("Cannot find this contest!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Cannot find this contest!", MessageType.ERROR, "Error!");
       redirect("/contest", msg);
       return;
     }
@@ -99,7 +99,7 @@ public class ContestController extends OjController
     if (problemModel == null)
     {
       log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
-      Message msg = new Message("Cannot find this contest problem!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Cannot find this contest problem!", MessageType.ERROR, "Error!");
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
@@ -129,7 +129,7 @@ public class ContestController extends OjController
 
     if (ContestModel.dao.isContestFinished(cid))
     {
-      Message msg = new Message("This contest has finished!", MessageType.WARN, "Warnning!");
+      FlashMessage msg = new FlashMessage("This contest has finished!", MessageType.WARN, "Warnning!");
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
@@ -138,7 +138,7 @@ public class ContestController extends OjController
     if (problemModel == null)
     {
       log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
-      Message msg = new Message("Cannot find this contest problem!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage("Cannot find this contest problem!", MessageType.ERROR, "Error!");
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
@@ -242,7 +242,7 @@ public class ContestController extends OjController
     {
       if (problemModel == null)
       {
-        Message msg = new Message("Cannot find this problem!", MessageType.ERROR, "Error!");
+        FlashMessage msg = new FlashMessage("Cannot find this problem!", MessageType.ERROR, "Error!");
         redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
         return;
       }
@@ -393,7 +393,7 @@ public class ContestController extends OjController
     keepPara("cid");
     keepPara("title");
     
-    Message msg = new Message("Sorry, you entered an invalid password.", MessageType.ERROR, "Error!");
+    FlashMessage msg = new FlashMessage("Sorry, you entered an invalid password.", MessageType.ERROR, "Error!");
     redirect(SessionService.me().getLastAccessURL(), msg);
   }
 
@@ -455,7 +455,7 @@ public class ContestController extends OjController
     int cid = getParaToInt(0);
     ContestModel.dao.buildRank(cid);
 
-    redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new Message("The contest rank build success!"));
+    redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new FlashMessage("The contest rank build success!"));
   }
 
 }

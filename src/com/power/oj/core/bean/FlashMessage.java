@@ -1,23 +1,23 @@
 package com.power.oj.core.bean;
 
-public class Message
+public class FlashMessage
 {
   private MessageType type;
   private String title;
   private String content;
 
-  public Message()
+  public FlashMessage()
   {
   }
 
-  public Message(String content)
+  public FlashMessage(String content)
   {
     this.content = content;
     this.type = MessageType.SUCCESS;
     this.title = "Success!";
   }
 
-  public Message(String content, MessageType type, String title)
+  public FlashMessage(String content, MessageType type, String title)
   {
     this.content = content;
     this.type = type;

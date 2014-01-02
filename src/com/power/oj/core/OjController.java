@@ -4,7 +4,7 @@ import javax.servlet.http.Cookie;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
-import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.user.UserModel;
 
 /**
@@ -26,9 +26,9 @@ public class OjController extends Controller
    * @param msg
    *          message with content, type and title.
    */
-  protected void redirect(String url, Message msg)
+  protected void redirect(String url, FlashMessage msg)
   {
-    setMessage(msg);
+    setFlashMessage(msg);
     super.redirect(url);
   }
 
@@ -43,9 +43,9 @@ public class OjController extends Controller
    * @param msg
    *          message with content, type and title.
    */
-  protected void redirect(String url, boolean withQueryString, Message msg)
+  protected void redirect(String url, boolean withQueryString, FlashMessage msg)
   {
-    setMessage(msg);
+    setFlashMessage(msg);
     super.redirect(url, withQueryString);
   }
 
@@ -55,7 +55,7 @@ public class OjController extends Controller
    * @param message
    *          message with content, type and title.
    */
-  protected void setMessage(Message message)
+  protected void setFlashMessage(FlashMessage message)
   {
     setSessionAttr(OjConstants.MSG, message.getContent());
     setSessionAttr(OjConstants.MSG_TYPE, message.getType());
@@ -68,7 +68,7 @@ public class OjController extends Controller
    * @param message
    *          message with content, type and title.
    */
-  protected void setAttrMessage(Message message)
+  protected void setAttrMessage(FlashMessage message)
   {
     setAttr(OjConstants.MSG, message.getContent());
     setAttr(OjConstants.MSG_TYPE, message.getType());

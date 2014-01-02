@@ -24,7 +24,7 @@ import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.bean.Message;
+import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
@@ -78,7 +78,7 @@ public class UserController extends OjController
     
     if (userModel == null)
     {
-      Message msg = new Message("The user does not exist!", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage("The user does not exist!", MessageType.WARN, "Warning!");
       redirect("/", msg);
       return;
     }
@@ -135,7 +135,7 @@ public class UserController extends OjController
   {
     if (userService.isAuthenticated())
     {
-      Message msg = new Message("You already login!", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage("You already login!", MessageType.WARN, "Warning!");
       redirect(sessionService.getLastAccessURL(), msg);
       return;
     }
@@ -149,7 +149,7 @@ public class UserController extends OjController
   {
     if (userService.isAuthenticated())
     {
-      Message msg = new Message("You already login!", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage("You already login!", MessageType.WARN, "Warning!");
       redirect(sessionService.getLastAccessURL(), msg);
       return;
     }
@@ -165,7 +165,7 @@ public class UserController extends OjController
     }
     // TODO: recodr login fail times
 
-    Message msg = new Message("Sorry, you entered invalid username or password.", MessageType.ERROR, "Error!");
+    FlashMessage msg = new FlashMessage("Sorry, you entered invalid username or password.", MessageType.ERROR, "Error!");
     setAttrMessage(msg);
     keepPara("name");
     
@@ -241,7 +241,7 @@ public class UserController extends OjController
     String email = getPara("email");
     String token = UUID.randomUUID().toString();
     UserModel userModel = UserModel.dao.getUserByName(name);
-    Message msg = new Message("Please check your mailbox and follow the instruction to recover your account.");
+    FlashMessage msg = new FlashMessage("Please check your mailbox and follow the instruction to recover your account.");
     
     userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
     try
@@ -251,7 +251,7 @@ public class UserController extends OjController
     } catch (Exception e)
     {
       log.error(e.getLocalizedMessage());
-      msg = new Message("Sorry.Send mail failed, please inform admin.", MessageType.ERROR, "Error!");
+      msg = new FlashMessage("Sorry.Send mail failed, please inform admin.", MessageType.ERROR, "Error!");
     }
     
     redirect(sessionService.getLastAccessURL(), msg);
@@ -285,7 +285,7 @@ public class UserController extends OjController
       removeSessionAttr("name");
     }
     
-    Message msg = new Message("Congratulations! Your password is reseted.");
+    FlashMessage msg = new FlashMessage("Congratulations! Your password is reseted.");
     redirect("/login", msg);
   }
 
@@ -304,7 +304,7 @@ public class UserController extends OjController
 
     userService.signup(userModel);
 
-    redirect("/user/edit", new Message("Congratulations! You have a new account now.<br>Please update your information."));
+    redirect("/user/edit", new FlashMessage("Congratulations! You have a new account now.<br>Please update your information."));
   }
 
   @RequiresAuthentication
@@ -324,7 +324,7 @@ public class UserController extends OjController
     userService.updateUser(userModel);
 
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
-    redirect(redirectURL, new Message("Your account updated."));
+    redirect(redirectURL, new FlashMessage("Your account updated."));
   }
 
   /******************** admin methods ********************/
@@ -349,11 +349,11 @@ public class UserController extends OjController
     String name = getPara(0);
     UserModel userModel = UserModel.dao.getUserByName(name);
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(name).toString();
-    Message msg = new Message("The user statistics have been updated.");
+    FlashMessage msg = new FlashMessage("The user statistics have been updated.");
     
     if (!userService.build(userModel))
     {
-      msg = new Message("The user statistics build failed.", MessageType.ERROR, "Error!");
+      msg = new FlashMessage("The user statistics build failed.", MessageType.ERROR, "Error!");
       log.error(msg.getContent());
     }
 

@@ -125,7 +125,7 @@ public class UserService
     newUser.set("phone", HtmlEncoder.text(userModel.getStr("phone")));
     newUser.set("gender", HtmlEncoder.text(userModel.getStr("gender")));
     newUser.set("language", userModel.getInt("language"));
-    newUser.set("qq", userModel.getLong("qq"));
+    newUser.set("qq", userModel.getInt("qq"));
     newUser.set("mtime", OjConfig.timeStamp);
     
     return newUser.update();
@@ -178,7 +178,7 @@ public class UserService
     
     if (userModel != null && token != null && token.equals(userModel.getStr("token")))
     {
-      if (OjConfig.timeStamp - userModel.getLong("mtime") <= OjConstants.resetPasswordExpiresTime)
+      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.resetPasswordExpiresTime)
       {
         return true;
       }
