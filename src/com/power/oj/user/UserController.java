@@ -96,25 +96,25 @@ public class UserController extends OjController
   {
     int uid = 0;
     String name = "";
-    UserModel user = null;
+    UserModel userModel = null;
 
     if (isParaExists("uid"))
     {
       uid = getParaToInt("uid");
-      user = UserModel.dao.getUserInfoByUid(uid);
+      userModel = UserModel.dao.getUserInfoByUid(uid);
     } else if (isParaExists("name"))
     {
       name = getPara("name");
-      user = UserModel.dao.getUserInfoByName(name);
+      userModel = UserModel.dao.getUserInfoByName(name);
     }
 
-    if (user == null)
+    if (userModel == null)
     {
       renderJson("{error:true}");
     } else
     {
-      user.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
-      renderJson(user);
+      userModel.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
+      renderJson(userModel);
     }
   }
 
@@ -135,7 +135,7 @@ public class UserController extends OjController
   {
     if (userService.isAuthenticated())
     {
-      Message msg = new Message("You already login.", MessageType.ERROR, "Error!");
+      Message msg = new Message("You already login!", MessageType.WARN, "Warning!");
       redirect(sessionService.getLastAccessURL(), msg);
       return;
     }
@@ -149,7 +149,7 @@ public class UserController extends OjController
   {
     if (userService.isAuthenticated())
     {
-      Message msg = new Message("You already login.", MessageType.ERROR, "Error!");
+      Message msg = new Message("You already login!", MessageType.WARN, "Warning!");
       redirect(sessionService.getLastAccessURL(), msg);
       return;
     }
@@ -163,6 +163,7 @@ public class UserController extends OjController
       redirect(sessionService.getLastAccessURL());
       return;
     }
+    // TODO: recodr login fail times
 
     Message msg = new Message("Sorry, you entered invalid username or password.", MessageType.ERROR, "Error!");
     setAttrMessage(msg);
@@ -245,6 +246,7 @@ public class UserController extends OjController
     userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
     try
     {
+      // TODO: create new thread to send mail
       OjService.me().sendResetPasswordEmail(name, email, token);
     } catch (Exception e)
     {
@@ -277,6 +279,7 @@ public class UserController extends OjController
   {
     String name = getSessionAttr("name");
     String password = getPara("pass");
+    
     if (userService.resetPassword(name, password))
     {
       removeSessionAttr("name");
@@ -317,6 +320,7 @@ public class UserController extends OjController
   public void update()
   {
     UserModel userModel = getModel(UserModel.class, "user");
+    
     userService.updateUser(userModel);
 
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
