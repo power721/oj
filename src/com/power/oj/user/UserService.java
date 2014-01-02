@@ -84,12 +84,12 @@ public class UserService
   public boolean signup(UserModel userModel)
   {
     String name = HtmlEncoder.text(userModel.getStr("name"));
-    String password = userModel.getStr("pass");
+    String password = BCrypt.hashpw(userModel.getStr("pass"), BCrypt.gensalt());
     String email = userModel.getStr("email");
     
     long ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
-    newUser.set("name", name).set("pass", BCrypt.hashpw(password, BCrypt.gensalt())).set("email", email);
+    newUser.set("name", name).set("pass", password).set("email", email);
     newUser.set("atime", ctime).set("ctime", ctime).set("mtime", ctime);
     
     if (newUser.save())
@@ -98,6 +98,7 @@ public class UserService
      
       //Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM roles WHERE name='user'", uid);
       
+      password = userModel.getStr("pass");
       return login(name, password, false);
     }
     
@@ -142,7 +143,8 @@ public class UserService
     if (success)
     {
       UserModel userModel = getCurrentUser();
-      userModel.updateLogin();
+      userModel.set("token", null).set("login", OjConfig.timeStamp).update();
+      
       loginLog.set("uid", userModel.getUid());
     }
     

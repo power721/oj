@@ -4,8 +4,6 @@ import jodd.util.BCrypt;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 
-import com.power.oj.core.OjConfig;
-
 public class UserModel extends Model<UserModel>
 {
   /**
@@ -90,14 +88,6 @@ public class UserModel extends Model<UserModel>
         "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1) * pageSize);
     
     return userList;
-  }
-
-  public boolean updateLogin()
-  {
-    set("token", null);
-    set("login", OjConfig.timeStamp);
-    
-    return update();
   }
 
   public boolean checkPassword(int uid, String password)
