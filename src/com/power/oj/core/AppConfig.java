@@ -17,6 +17,7 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
+
 import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
@@ -28,7 +29,6 @@ import com.power.oj.core.interceptor.GlobalInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
-import com.power.oj.core.service.OjService;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
@@ -145,9 +145,9 @@ public class AppConfig extends JFinalConfig
    */
   public void afterJFinalStart()
   {
-    OjService.me().initJudgeResult();
-    OjService.me().loadLanguage();
-    OjService.me().loadVariable();
+    OjConfig.initJudgeResult();
+    OjConfig.loadLanguage();
+    OjConfig.loadVariable();
 
     log.debug("afterJFinalStart finished.");
   }

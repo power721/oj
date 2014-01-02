@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import jodd.util.collection.IntHashMap;
+
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.util.FileKit;
-
-import jodd.util.collection.IntHashMap;
 
 /**
  * Configure the system.
@@ -20,21 +20,12 @@ import jodd.util.collection.IntHashMap;
  */
 public class OjConfig
 {
-
   public static String baseUrl = null;
   public static String siteTitle = null;
   public static String userAvatarPath = null;
   public static String problemImagePath = null;
   public static String uploadPath = null;
   public static String downloadPath = null;
-
-  public static List<LanguageModel> program_languages;
-  public static IntHashMap language_type = new IntHashMap();
-  public static IntHashMap language_name = new IntHashMap();
-  public static List<ResultType> judge_result;
-  public static IntHashMap result_type = new IntHashMap();
-
-  public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
 
   public static int contestPageSize = 20;
   public static int contestRankPageSize = 50;
@@ -45,6 +36,14 @@ public class OjConfig
   public static long timeStamp;
   public static long startGlobalInterceptorTime;
   public static long startGlobalHandlerTime;
+
+  public static List<LanguageModel> program_languages;
+  public static IntHashMap language_type = new IntHashMap();
+  public static IntHashMap language_name = new IntHashMap();
+  public static IntHashMap result_type = new IntHashMap();
+  public static List<ResultType> judge_result;
+
+  public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
 
   public static void loadVariable()
   {
