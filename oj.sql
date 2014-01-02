@@ -801,7 +801,7 @@ CREATE TABLE `user` (
 `mtime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for when user edit its profile.' ,
 `login`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for user last login.' ,
 `phone`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`qq`  int(11) NULL DEFAULT NULL ,
+`qq`  bigint(11) NULL DEFAULT NULL ,
 `blog`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `gender`  enum('female','male','secret') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'secret' ,
 `online`  int(9) NOT NULL DEFAULT 0 ,

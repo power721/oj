@@ -35,7 +35,6 @@ public class UpdateUserValidator extends Validator
     {
       addError("passwordMsg", "The password is incorrect!");
     }
-
   }
 
   @Override
