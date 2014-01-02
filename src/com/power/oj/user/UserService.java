@@ -84,12 +84,12 @@ public class UserService
   public boolean signup(UserModel userModel)
   {
     String name = HtmlEncoder.text(userModel.getStr("name"));
-    String password = BCrypt.hashpw(userModel.getStr("pass"), BCrypt.gensalt());
+    String password = userModel.getStr("pass");
     String email = userModel.getStr("email");
     
     long ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
-    newUser.set("name", name).set("pass", password).set("email", email);
+    newUser.set("name", name).set("pass", BCrypt.hashpw(password, BCrypt.gensalt())).set("email", email);
     newUser.set("atime", ctime).set("ctime", ctime).set("mtime", ctime);
     
     if (newUser.save())
