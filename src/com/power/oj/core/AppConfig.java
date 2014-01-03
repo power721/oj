@@ -1,5 +1,7 @@
 package com.power.oj.core;
 
+import java.util.Locale;
+
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Constants;
@@ -11,13 +13,13 @@ import com.jfinal.config.Routes;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
 import com.jfinal.ext.plugin.shiro.ShiroPlugin;
+import com.jfinal.i18n.I18N;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
-
 import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
@@ -26,6 +28,7 @@ import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.interceptor.BaseURLInterceptor;
 import com.power.oj.core.interceptor.FlashMessageInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
+import com.power.oj.core.interceptor.I18NInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
@@ -118,6 +121,7 @@ public class AppConfig extends JFinalConfig
   public void configInterceptor(Interceptors me)
   {
     me.add(new BaseURLInterceptor());
+    me.add(new I18NInterceptor());
     me.add(new GlobalInterceptor());
     me.add(new FlashMessageInterceptor());
     me.add(new AccessLogInterceptor());
@@ -148,7 +152,9 @@ public class AppConfig extends JFinalConfig
     OjConfig.initJudgeResult();
     OjConfig.loadLanguage();
     OjConfig.loadVariable();
-
+    
+    I18N.init("ojText", Locale.ENGLISH, null);
+    
     log.debug("afterJFinalStart finished.");
   }
 

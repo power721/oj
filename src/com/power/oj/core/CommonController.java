@@ -12,15 +12,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-
 import sun.misc.BASE64Decoder;
 import jodd.io.FileUtil;
-
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
+
 import com.power.oj.core.service.OjService;
 import com.power.oj.util.FileKit;
 
@@ -38,12 +37,12 @@ public class CommonController extends OjController
    */
   public void index()
   {
-    setTitle("SWUST ACM-ICPC");
+    setTitle(getText("page.index.title"));
   }
   
   public void about()
   {
-    setTitle("About");
+    setTitle(getText("page.about.title"));
   }
   
   /**
@@ -51,7 +50,7 @@ public class CommonController extends OjController
    */
   public void contact()
   {
-    setTitle("Contact us");
+    setTitle(getText("page.contact.title"));
   }
   
   /**
@@ -59,7 +58,7 @@ public class CommonController extends OjController
    */
   public void changelog()
   {
-    setTitle("Changelog");
+    setTitle(getText("page.changelog.title"));
   }
 
   /**
@@ -67,7 +66,7 @@ public class CommonController extends OjController
    */
   public void faq()
   {
-    setTitle("Frequently Asked Questions");
+    setTitle(getText("page.faq.title"));
   }
 
   /**
@@ -76,7 +75,7 @@ public class CommonController extends OjController
   public void tag()
   {
     setAttr("tagList", OjService.me().tagList());
-    setTitle("Problem tag");
+    setTitle(getText("page.tag.title"));
   }
 
   /**

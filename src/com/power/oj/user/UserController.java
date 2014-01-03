@@ -20,7 +20,6 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.upload.UploadFile;
-
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -49,7 +48,7 @@ public class UserController extends OjController
   
   public void index()
   {
-    setTitle("User Center");
+    setTitle(getText("user.index.title"));
   }
 
   @ActionKey("/rank")
@@ -61,7 +60,7 @@ public class UserController extends OjController
     setAttr("pageSize", OjConfig.userPageSize);
     setAttr(OjConstants.USER_LIST, UserModel.dao.getUserRankList(pageNumber, pageSize));
     
-    setTitle("Ranklist");
+    setTitle(getText("user.rank.title"));
   }
 
   public void profile()
@@ -79,7 +78,7 @@ public class UserController extends OjController
     
     if (userModel == null)
     {
-      FlashMessage msg = new FlashMessage("The user does not exist!", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage(getText("user.error.none"), MessageType.WARN, getText("message.warn.title"));
       redirect("/", msg);
       return;
     }
@@ -90,7 +89,7 @@ public class UserController extends OjController
     userModel.put("rank", UserModel.dao.getUserRank(userModel.getUid()));
     setAttr(OjConstants.USER, userModel);
     
-    setTitle("User Profile");
+    setTitle(getText("user.profile.title"));
   }
 
   public void info()
@@ -128,7 +127,7 @@ public class UserController extends OjController
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
     
-    setTitle(new StringBuilder(2).append("Search user: ").append(word).toString());
+    setTitle(new StringBuilder(2).append(getText("user.search.title")).append(word).toString());
   }
 
   @ActionKey("/login")
@@ -136,12 +135,12 @@ public class UserController extends OjController
   {
     if (userService.isAuthenticated())
     {
-      FlashMessage msg = new FlashMessage("You already login!", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage(getText("user.error.login"), MessageType.WARN, getText("message.warn.title"));
       redirect(sessionService.getLastAccessURL(), msg);
       return;
     }
     
-    setTitle("Login");
+    setTitle(getText("user.login.title"));
   }
 
   @Before(POST.class)
@@ -150,7 +149,7 @@ public class UserController extends OjController
   {
     if (userService.isAuthenticated())
     {
-      FlashMessage msg = new FlashMessage("You already login!", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage(getText("user.error.login"), MessageType.WARN, getText("message.warn.title"));
       redirect(sessionService.getLastAccessURL(), msg);
       return;
     }
@@ -166,11 +165,11 @@ public class UserController extends OjController
     }
     // TODO: recodr login fail times
 
-    FlashMessage msg = new FlashMessage("Sorry, you entered invalid username or password.", MessageType.ERROR, "Error!");
+    FlashMessage msg = new FlashMessage(getText("user.signin.error"), MessageType.ERROR, getText("message.error.title"));
     setAttrMessage(msg);
     keepPara("name");
     
-    setTitle("Login");
+    setTitle(getText("user.login.title"));
     render("login.html");
   }
 
@@ -188,7 +187,7 @@ public class UserController extends OjController
   @RequiresPermissions("user:upload:avatar")
   public void avatar()
   {
-    setTitle("Upload Avatar");
+    setTitle(getText("user.avatar.title"));
   }
 
   @Before(POST.class)
@@ -231,7 +230,7 @@ public class UserController extends OjController
   @RequiresGuest
   public void forget()
   {
-    setTitle("Account Recovery");
+    setTitle(getText("user.forget.title"));
   }
   
   @Before({POST.class, RecoverAccountValidator.class})
@@ -242,7 +241,7 @@ public class UserController extends OjController
     String email = getPara("email");
     String token = UUID.randomUUID().toString();
     UserModel userModel = UserModel.dao.getUserByName(name);
-    FlashMessage msg = new FlashMessage("Please check your mailbox and follow the instruction to recover your account.");
+    FlashMessage msg = new FlashMessage(getText("user.recover.success"));
     
     userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
     try
@@ -252,7 +251,7 @@ public class UserController extends OjController
     } catch (Exception e)
     {
       log.error(e.getLocalizedMessage());
-      msg = new FlashMessage("Sorry.Send mail failed, please inform admin.", MessageType.ERROR, "Error!");
+      msg = new FlashMessage(getText("user.recover.error"), MessageType.ERROR, getText("message.error.title"));
     }
     
     redirect(sessionService.getLastAccessURL(), msg);
@@ -267,7 +266,7 @@ public class UserController extends OjController
     if (userService.checkResetToken(name, token))
     {
       setSessionAttr("name", name);
-      setTitle("Reset Password");
+      setTitle(getText("user.reset.title"));
       return;
     }
     
@@ -286,7 +285,7 @@ public class UserController extends OjController
       removeSessionAttr("name");
     }
     
-    FlashMessage msg = new FlashMessage("Congratulations! Your password is reseted.");
+    FlashMessage msg = new FlashMessage(getText("user.resetPassword.success"));
     redirect("/login", msg);
   }
 
@@ -294,7 +293,7 @@ public class UserController extends OjController
   @RequiresGuest
   public void signup()
   {
-    setTitle("Signup");
+    setTitle(getText("user.signup.title"));
   }
   
   @Before({POST.class, SignupValidator.class})
@@ -305,7 +304,7 @@ public class UserController extends OjController
 
     userService.signup(userModel);
 
-    redirect("/user/edit", new FlashMessage("Congratulations! You have a new account now.<br>Please update your information."));
+    redirect("/user/edit", new FlashMessage(getText("user.save.success")));
   }
 
   @RequiresAuthentication
@@ -313,7 +312,7 @@ public class UserController extends OjController
   {
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     
-    setTitle("Account");
+    setTitle(getText("user.edit.title"));
   }
 
   @Before({POST.class, UpdateUserValidator.class})
@@ -325,7 +324,7 @@ public class UserController extends OjController
     userService.updateUser(userModel);
 
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
-    redirect(redirectURL, new FlashMessage("Your account updated."));
+    redirect(redirectURL, new FlashMessage(getText("user.update.success")));
   }
 
   /******************** admin methods ********************/
@@ -341,7 +340,7 @@ public class UserController extends OjController
     setAttr("loginUserNum", sessionService.getUserNumber());
     setAttr(OjConstants.USER_LIST, sessionService.getAccessLog());
     
-    setTitle("Online Users");
+    setTitle(getText("user.online.title"));
   }
 
   @RequiresPermissions("user:build")
@@ -350,11 +349,11 @@ public class UserController extends OjController
     String name = getPara(0);
     UserModel userModel = UserModel.dao.getUserByName(name);
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(name).toString();
-    FlashMessage msg = new FlashMessage("The user statistics have been updated.");
+    FlashMessage msg = new FlashMessage(getText("user.build.success"));
     
     if (!userService.build(userModel))
     {
-      msg = new FlashMessage("The user statistics build failed.", MessageType.ERROR, "Error!");
+      msg = new FlashMessage(getText("user.build.error"), MessageType.ERROR, getText("message.error.title"));
       log.error(msg.getContent());
     }
 
