@@ -4,8 +4,8 @@
     $(document).ready(function(){
         document.onkeydown=nextpage
         document.onkeydown=nextpage
-        var prevpage="rank/?p=${userList.pageNumber-1}<#if userList.pageSize!=20>&s=${userList.pageSize}</#if>"
-        var nextpage="rank/?p=${userList.pageNumber+1}<#if userList.pageSize!=20>&s=${userList.pageSize}</#if>"
+        var prevpage="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+        var nextpage="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
         function nextpage(event)
         {
             event=event?event:(window.event?window.event:null);
@@ -25,19 +25,19 @@
     </form>
   </div>
   <ul>
-    <li class="<#if userList.pageNumber==1>disabled</#if>"><a href="rank/?p=1<#if userList.pageSize!=20>&s=${userList.pageSize}</#if>">&lt;&lt;</a></li> <#if
+    <li class="<#if userList.pageNumber==1>disabled</#if>"><a href="rank/1<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">&lt;&lt;</a></li> <#if
     userList.pageNumber&gt;1>
-    <li><a href="rank/?p=${userList.pageNumber-1}<#if userList.pageSize!=20>&s=${userList.pageSize}</#if>">Prev</a></li></#if> <#if userList??> <#assign
+    <li><a href="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">Prev</a></li></#if> <#if userList??> <#assign
     start=userList.pageNumber-3> <#assign end=userList.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
     end&gt;userList.totalPage ><#assign start=start-(end-userList.totalPage)-1><#if start<1><#assign start=1></#if><#assign end=userList.totalPage></#if> <#if
     end
     <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==userList.pageNumber>active</#if>"><a href="rank/?p=${x}<#if userList.pageSize!=20>&s=${userList.pageSize}</#if>">${x}</a></li>
+    <li class="<#if x==userList.pageNumber>active</#if>"><a href="rank/${x}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">${x}</a></li>
     </#list> </#if> <#if userList.pageNumber<userList.totalPage>
-    <li><a href="rank/?p=${userList.pageNumber+1}<#if userList.pageSize!=20>&s=${userList.pageSize}</#if>">Next</a></li>
+    <li><a href="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">Next</a></li>
     </#if>
     <li class="<#if userList.pageNumber&gt;=userList.totalPage>disabled</#if>"><a
-      href="rank/?p=${userList.totalPage}<#if userList.pageSize!=20>&s=${userList.pageSize}</#if>">&gt;&gt;</a></li>
+      href="rank/${userList.totalPage}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">&gt;&gt;</a></li>
   </ul>
   <div class="pull-right">
     <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span> <span class="badge badge-info">${userList.totalRow} Users</span>

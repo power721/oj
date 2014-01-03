@@ -55,9 +55,10 @@ public class UserController extends OjController
   @ActionKey("/rank")
   public void rank()
   {
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.userPageSize);
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.userPageSize);
     
+    setAttr("pageSize", OjConfig.userPageSize);
     setAttr(OjConstants.USER_LIST, UserModel.dao.getUserRankList(pageNumber, pageSize));
     
     setTitle("Ranklist");
