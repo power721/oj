@@ -1,0 +1,202 @@
+body {
+    background-color: #EBEBEB;
+}
+
+.nav-previous a:hover, .nav-next a:hover, #commentform input#submit, #searchform input[type="submit"], .home_menu_item, .secondary-navigation a:hover, .post-date-ribbon, .currenttext, .pagination a:hover, .readMore a, .mts-subscribe input[type="submit"] {
+    background-color: #EA141F;
+}
+
+#tabber .inside li .meta b, footer .widget li a:hover, .fn a, .reply a, #tabber .inside li div.info .entry-title a:hover, #navigation ul ul a:hover, .single_post a, a:hover, .textwidget a, #commentform a, #tabber .inside li a, .copyrights a:hover, a, .sidebar.c-4-12 a:hover, .top a:hover,#logo span {
+    color: #EA141F;
+}
+
+.corner {
+    border-color: transparent transparent #EA141F transparent;
+}
+
+.secondary-navigation, footer, .sidebar #searchform input[type="submit"]:hover, .readMore a:hover, #commentform input#submit:hover {
+    background-color: #364956;
+}
+#line{
+    background-color: #EA141F;
+    height: 5px;
+    width: 100%;
+    min-width: 1000px;
+}
+#logo{
+    float: left;
+}
+#ds-top-threads, #recent-posts, #popular-posts {
+    padding: 6px 12px;
+}
+#ds-top-threads > li > a {
+    font-size: 13px;
+    margin-bottom: 0;
+    color: #919191 !important;
+}
+.highlight {
+    background-color: #ffd98c;
+}
+.backToTop {
+    width: 18px;
+    line-height: 1.2;
+    background-color: white;
+    color: gray;
+    padding: 8px 2px;
+    border: 1px dashed gray;
+    font-size: 12px;
+    text-align: center;
+    position: fixed;
+    _position: absolute;
+    right: 50px;
+    bottom: 100px;
+    _bottom: "auto";
+    cursor: pointer;
+    opacity: .6;
+    filter: Alpha(opacity=60)
+}
+
+/**QQ rss box*/
+.rssbook {
+    padding: 10px 15px;
+    overflow: hidden;
+    zoom: 1;
+    background: #f6f6f6;
+    border: 3px solid #ddd
+}
+
+.light {
+    background: #f6f6f6;
+    border: 3px solid #ddd
+}
+
+.mailInput {
+    margin-top: 5px
+}
+
+.rssbook .info {
+    color: #666;
+    font-size: 12px
+}
+
+.light .info {
+    margin-bottom: 0;
+    color: #666
+}
+
+.rssbutton {
+    width: 24%;
+    float: right;
+}
+
+.rssbutton input {
+    border: 0;
+    width: 100%;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    *line-height: 27px;
+    text-align: center;
+    background-color: #EA141F
+}
+
+.rssbutton input:hover {
+    background-color: #364956;
+    text-decoration: none
+}
+
+input.rsstxt {
+    width: 60%;
+    border: 1px solid #cccccc;
+}
+
+/** footer-links **/
+footer .top a img {
+    vertical-align: middle;
+}
+footer .top a {
+    padding-right: 8px;
+}
+
+/** itunes **/
+table tr {
+    height: 74px;
+}
+table th {
+    vertical-align: middle;
+}
+table tbody {
+    height: 716px;
+}
+
+/** tags-list **/
+.tag-box-item {
+    float: left;
+    padding: 15px;
+    border: 1px solid #e3e3e3;
+    margin: 20px 20px 0 0;
+    width: 284px;
+    height: 100px;
+}
+.tag-box-item img {
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    vertical-align: middle;
+}
+.tag-box-item h2 {
+    display: inline-block;
+    margin: 0;
+    font-size: 20px;
+}
+.tag-box-item p {
+    margin: 10px 0 15px;
+    line-height: 1.5;
+    color: #666;
+    height: 38px;
+    overflow: hidden;
+}
+
+/** font **/
+@font-face {
+  font-family: 'Monda';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Monda Regular'), local('Monda-Regular'), url(fonts/sk05J8GA1NvUxDnk43EgAQ.woff) format('woff');
+}
+@font-face {
+  font-family: 'Monda';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Monda Bold'), local('Monda-Bold'), url(fonts/uCFS-jQepl-zVlhjycME2fesZW2xOQ-xsNqO47m55DA.woff) format('woff');
+}
+
+/*share*/
+.lcm_share{margin: 0;padding: 0 4% 3%;background-color: #fff;float: left;clear: both;width: 92%;display:block}
+
+/*old-ie*/
+.old-ie {
+    background: #f2dede;
+    color: #a42625;
+    padding: 6px 0;
+    border: 0;
+    width: 100%;
+    text-align: center;
+}
+.old-ie a {
+    padding: 2px 4px;
+    background: #9a4444;
+    color: #FFF;
+}
+
+/*wumii-footer*/
+.wumii-footer {
+    display: none;
+}
+/*osc_git*/
+.osc_git_box {
+	margin: 1px 0px 40px 0px !important;
+}

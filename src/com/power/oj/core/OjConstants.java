@@ -17,7 +17,6 @@ public interface OjConstants
   /*
    * These contants are used in view(attr name) and session.
    */
-
   String SITE_TITLE = "siteTitle";
   String PAGE_TITLE = "pageTitle";
   String BASE_URL = "baseUrl";
@@ -43,6 +42,7 @@ public interface OjConstants
   String RESULT_TYPE = "result_type";
   
   String LAST_ACCESS_URL = "lastAccessURL";
+  
   /*
    * These contants are used in cookie.
    */
