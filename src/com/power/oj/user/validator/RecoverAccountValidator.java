@@ -12,21 +12,20 @@ public class RecoverAccountValidator extends Validator
   @Override
   protected void validate(Controller c)
   {
-    validateEmail("email", "errorMsg", "Invalid Email address!");
+    validateEmail("email", "errorMsg", c.getText("validate.email.error"));
     
     String name = c.getPara("name");
     String email = c.getPara("email");
     if (UserModel.dao.getUserByNameAndEmail(name, email) == null)
     {
-      addError("emailMsg", "This account is not registered with this email!");
+      addError("emailMsg", c.getText("recover.account.validate.error"));
     }
 
     String captcha = c.getPara("captcha").toUpperCase();
     if (!CaptchaRender.validate(c, captcha, OjConstants.randomCodeKey))
     {
-      addError("captchaMsg", "The captcha is incorrect!");
+      addError("captchaMsg", c.getText("validate.captcha.error"));
     }
-
   }
 
   @Override
@@ -35,7 +34,7 @@ public class RecoverAccountValidator extends Validator
     c.keepPara("name");
     if (c.getAttr("emailMsg") == null)
       c.keepPara("email");
-    c.setAttr(OjConstants.PAGE_TITLE, "Account Recovery");
+    c.setAttr(OjConstants.PAGE_TITLE, c.getText("user.forget.title"));
     c.render("forget.html");
   }
 

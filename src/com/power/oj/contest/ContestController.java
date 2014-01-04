@@ -44,10 +44,9 @@ public class ContestController extends OjController
     int status = getParaToInt("status", -1);
 
     Page<ContestModel> contestList = ContestModel.dao.getPage(pageNumber, pageSize, type, status);
-    setTitle("Contest List");
     setAttr("contestList", contestList);
 
-    render("index.html");
+    setTitle(getText("contest.index.title"));
   }
 
   @Before(ContestPasswordInterceptor.class)
@@ -61,7 +60,7 @@ public class ContestController extends OjController
     if (contestModle == null)
     {
       log.warn(new StringBuilder(2).append("Cannot find this contest: ").append(cid).toString());
-      FlashMessage msg = new FlashMessage("Cannot find this contest!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("contest.show.null"), MessageType.ERROR, getText("message.error.title"));
       redirect("/contest", msg);
       return;
     }
@@ -70,21 +69,20 @@ public class ContestController extends OjController
     long ctime = OjConfig.timeStamp;
     int start_time = contestModle.getInt("start_time");
     int end_time = contestModle.getInt("end_time");
-    String status = "Running";
+    String status = getText("contest.status.running");
 
     if (start_time > ctime)
-      status = "Pending";
+      status = getText("contest.status.pending");
     else if (end_time < ctime)
-      status = "Finished";
+      status = getText("contest.status.finished");
 
-    setTitle(new StringBuilder(2).append("Contest ").append(cid).toString());
     setAttr("cid", cid);
     setAttr("contest", contestModle);
     setAttr("contestProblems", contestProblems);
     setAttr("status", status);
     setAttr("ctime", ctime * 1000L);
 
-    render("show.html");
+    setTitle(new StringBuilder(2).append(getText("contest.show.title")).append(cid).toString());
   }
 
   @Before(ContestPasswordInterceptor.class)
@@ -99,7 +97,7 @@ public class ContestController extends OjController
     if (problemModel == null)
     {
       log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
-      FlashMessage msg = new FlashMessage("Cannot find this contest problem!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
@@ -107,7 +105,6 @@ public class ContestController extends OjController
     problemModel.put("sample_input_rows", StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1);
     problemModel.put("sample_output_rows", StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1);
 
-    setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("problem", problemModel);
     setAttr("cid", cid);
     setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
@@ -115,7 +112,7 @@ public class ContestController extends OjController
     List<Record> contestProblems = ContestModel.dao.getContestProblems(cid, 0);
     setAttr("contestProblems", contestProblems);
 
-    render("problem.html");
+    setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
   }
 
   @Before(ContestPasswordInterceptor.class)
@@ -129,7 +126,7 @@ public class ContestController extends OjController
 
     if (ContestModel.dao.isContestFinished(cid))
     {
-      FlashMessage msg = new FlashMessage("This contest has finished!", MessageType.WARN, "Warnning!");
+      FlashMessage msg = new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
@@ -138,16 +135,16 @@ public class ContestController extends OjController
     if (problemModel == null)
     {
       log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
-      FlashMessage msg = new FlashMessage("Cannot find this contest problem!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
-    setTitle(new StringBuilder(6).append("Submit Problem ").append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("problem", problemModel);
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("cid", cid);
-
+    
+    setTitle(new StringBuilder(6).append(getText("contest.problem.title")).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     if (ajax)
       render("ajax/submit.html");
     else
@@ -161,14 +158,12 @@ public class ContestController extends OjController
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", OjConfig.contestRankPageSize);
     
-    setTitle(new StringBuilder(2).append("Contest Standing ").append(cid).toString());
-    
     setAttr("cid", cid);
     setAttr("contestRank", ContestModel.dao.getContestRank(pageNumber, pageSize, cid));
     setAttr("contestProblems", ContestModel.dao.getContestProblems(cid, 0));
     setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
 
-    render("rank.html");
+    setTitle(new StringBuilder(2).append(getText("contest.rank.title")).append(cid).toString());
   }
 
   @Before(ContestPasswordInterceptor.class)
@@ -176,7 +171,7 @@ public class ContestController extends OjController
   {
     int cid = getParaToInt(0);
     ContestModel contestModle = ContestModel.dao.findById(cid);
-    setTitle(new StringBuilder(3).append("Contest ").append(cid).append(" Status").toString());
+    
     setAttr("cid", cid);
     setAttr("contest", contestModle);
 
@@ -216,7 +211,6 @@ public class ContestController extends OjController
       query.append("&name=").append(userName);
     }
 
-    setTitle("Status");
     setAttr("solutionList", SolutionModel.dao.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
@@ -226,7 +220,7 @@ public class ContestController extends OjController
     setAttr("name", userName);
     setAttr("query", query.toString());
 
-    render("status.html");
+    setTitle(new StringBuilder(2).append(getText("contest.status.title").replaceAll("{cid}", String.valueOf(cid))).toString());
   }
 
   @Before(ContestPasswordInterceptor.class)
@@ -242,7 +236,7 @@ public class ContestController extends OjController
     {
       if (problemModel == null)
       {
-        FlashMessage msg = new FlashMessage("Cannot find this problem!", MessageType.ERROR, "Error!");
+        FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
         redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
         return;
       }
@@ -268,7 +262,6 @@ public class ContestController extends OjController
     }
     Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
-    setTitle(new StringBuilder(5).append("Contest Problem ").append(cid).append("-").append(id).append(" Status").toString());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("solutionList", solutionList);
     setAttr("language", language);
@@ -276,6 +269,7 @@ public class ContestController extends OjController
     setAttr("cid", cid);
     setAttr("id", id);
 
+    setTitle(new StringBuilder(2).append(getText("contest.status.title").replaceAll("{cid}", String.valueOf(cid)).replaceAll("{id}", String.valueOf(id))).toString());
     if (ajax)
       render("ajax/problem_status.html");
     else
@@ -286,7 +280,7 @@ public class ContestController extends OjController
   public void statistics()
   {
     int cid = getParaToInt(0);
-    setTitle(new StringBuilder(3).append("Contest Statistics ").append(cid).toString());
+    
     setAttr("cid", cid);
     List<Record> statistics = ContestModel.dao.getContestStatistics(cid);
     setAttr("statistics", statistics);
@@ -302,7 +296,7 @@ public class ContestController extends OjController
     setAttr("resultName", resultName);
     setAttr("languageList", OjConfig.program_languages);
 
-    render("statistics.html");
+    setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());
   }
 
   public void recent_contest()
@@ -371,7 +365,7 @@ public class ContestController extends OjController
 
   public void recent()
   {
-    setTitle("Recent Contests on Other OJs");
+    setTitle(getText("contest.recent.title"));
   }
 
   @Before(POST.class)
@@ -393,7 +387,7 @@ public class ContestController extends OjController
     keepPara("cid");
     keepPara("title");
     
-    FlashMessage msg = new FlashMessage("Sorry, you entered an invalid password.", MessageType.ERROR, "Error!");
+    FlashMessage msg = new FlashMessage(getText("contest.password.error"), MessageType.ERROR, getText("message.error.title"));
     redirect(SessionService.me().getLastAccessURL(), msg);
   }
 
@@ -413,14 +407,13 @@ public class ContestController extends OjController
   @RequiresPermissions("contest:add")
   public void add()
   {
-    setTitle("Create a contest");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     long ctime = System.currentTimeMillis() + 3600000;
     setAttr("start_time", sdf.format(new Date(ctime)));
     setAttr("end_time", sdf.format(new Date(ctime + 18000000)));
     System.out.println(getAttr("end_time"));
 
-    render("add.html");
+    setTitle(getText("contest.add.title"));
   }
 
   @Before(POST.class)
@@ -455,7 +448,7 @@ public class ContestController extends OjController
     int cid = getParaToInt(0);
     ContestModel.dao.buildRank(cid);
 
-    redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new FlashMessage("The contest rank build success!"));
+    redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new FlashMessage(getText("contest.buildRank.success")));
   }
 
 }

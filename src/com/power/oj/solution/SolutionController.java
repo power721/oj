@@ -57,7 +57,7 @@ public class SolutionController extends OjController
       query.append("&name=").append(userName);
     }
 
-    setTitle("Status");
+    
     setAttr("solutionList", SolutionModel.dao.getPage(pageNumber, pageSize, result, language, pid, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
@@ -67,7 +67,7 @@ public class SolutionController extends OjController
     setAttr("name", getPara("name"));
     setAttr("query", query.toString());
 
-    render("index.html");
+    setTitle(getText("solution.index.title"));
   }
 
   @ActionKey("/code")
@@ -82,7 +82,7 @@ public class SolutionController extends OjController
     int loginUid = getAttrForInt(OjConstants.USER_ID);
     if (uid != loginUid && !isAdmin)
     {
-      FlashMessage msg = new FlashMessage("Permission Denied.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
       redirect("/status", msg);
       return;
     }
@@ -108,7 +108,6 @@ public class SolutionController extends OjController
       problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getInt("pid"));
     }
 
-    setTitle("Source code");
     setAttr("problemTitle", problemTitle);
     try
     {
@@ -129,6 +128,7 @@ public class SolutionController extends OjController
       brush = "cpp";
     setAttr("brush", brush);
 
+    setTitle(getText("solution.show.title"));
     render("code.html");
   }
 
@@ -159,7 +159,7 @@ public class SolutionController extends OjController
       ProblemModel problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
       if (problemModel == null)
       {
-        FlashMessage msg = new FlashMessage("Please choose a correct problem", MessageType.ERROR, "Error!");
+        FlashMessage msg = new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title"));
         redirect(url, msg);
         return;
       }
@@ -180,7 +180,7 @@ public class SolutionController extends OjController
       System.out.println(solutionModel.getInt("sid"));
     } else
     {
-      FlashMessage msg = new FlashMessage("Submit failed, maybe code length is incorrect.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title"));
       redirect(url, msg);
       return;
     }

@@ -22,7 +22,7 @@ public class AddContestValidator extends Validator
     int type = c.getParaToInt("contest.type");
     if (type == 3)
     {
-      validateRequired("contest.pass", "passMsg", "You must set a password!");
+      validateRequired("contest.pass", "passMsg", c.getText("contest.add.validate.pass"));
     }
   }
 

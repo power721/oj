@@ -15,7 +15,7 @@ public class UpdateUserValidator extends Validator
   @Override
   protected void validate(Controller c)
   {
-    validateEmail("user.email", "emailMsg", "Invalid Email address!");
+    validateEmail("user.email", "emailMsg", c.getText("validate.email.error"));
 
     int uid = UserService.me().getCurrentUid();
     /*
@@ -27,13 +27,13 @@ public class UpdateUserValidator extends Validator
     String password = c.getPara("user.pass");
     if (StringUtil.isNotBlank(password))
     {
-      validateEqualField("user.pass", "repass", "confirmMsg", "The password not equal!");
+      validateEqualField("user.pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
     }
 
     password = c.getPara("oldpass");
     if (!UserModel.dao.checkPassword(uid, password))
     {
-      addError("passwordMsg", "The password is incorrect!");
+      addError("passwordMsg", c.getText("validate.password.error"));
     }
   }
 
@@ -42,7 +42,7 @@ public class UpdateUserValidator extends Validator
   {
     c.keepModel(UserModel.class, "user");
     c.setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
-    c.setAttr(OjConstants.PAGE_TITLE, "Account");
+    c.setAttr(OjConstants.PAGE_TITLE, c.getText("user.edit.title"));
 
     c.render("edit.html");
   }

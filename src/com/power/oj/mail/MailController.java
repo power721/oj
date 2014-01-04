@@ -7,6 +7,6 @@ public class MailController extends OjController
 
   public void index()
   {
-    render("index.html");
+    setTitle(getText("mail.index.title"));
   }
 }

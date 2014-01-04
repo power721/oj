@@ -10,36 +10,38 @@ import com.power.oj.user.UserModel;
 
 public class SignupValidator extends Validator
 {
-
+  private int minLnegth = 6;
+  private int maxLength= 20;
+  
   @Override
   protected void validate(Controller c)
   {
-    validateEmail("user.email", "emailMsg", "Invalid Email address!");
-    validateRegex("user.pass", ".{6,20}", "passwordMsg", "Password length is between 6 and 20.");
-    validateEqualField("user.pass", "repass", "confirmMsg", "The password not equal!");
+    validateEmail("user.email", "emailMsg", c.getText("validate.email.error"));
+    validateRegex("user.pass", ".{6,20}", "passwordMsg", c.getText("validate.password.length").replaceAll("_min_", String.valueOf(minLnegth)).replaceAll("_max_", String.valueOf(maxLength)));
+    validateEqualField("user.pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
 
     String email = c.getPara("user.email");
     if (StringUtil.isNotBlank(email) && UserModel.dao.containEmail(email))
     {
-      addError("emailMsg", "This Email already registered!");
+      addError("emailMsg", c.getText("validate.email.exist"));
     }
 
     String username = c.getPara("user.name");
     if (StringUtil.isNotBlank(username) && UserModel.dao.containUsername(username))
     {
-      addError("nameMsg", "This user name already registered!");
+      addError("nameMsg", c.getText("validate.name.exist"));
     } else if (StringUtil.isNotBlank(username) && !checkReservedName(username))
     {
-      addError("nameMsg", "This user name is reserved!");
+      addError("nameMsg", c.getText("validate.name.reserved"));
     } else
     {
-      validateRegex("user.name", "[a-zA-Z0-9_]{5,15}", "nameMsg", "Username only contins 5~15 letters, numbers and underscores.");
+      validateRegex("user.name", "[a-zA-Z0-9_]{5,15}", "nameMsg", c.getText("validate.name.error"));
     }
 
     String captcha = c.getPara("captcha").toUpperCase();
     if (!CaptchaRender.validate(c, captcha, OjConstants.randomCodeKey))
     {
-      addError("captchaMsg", "The captcha is incorrect!");
+      addError("captchaMsg", c.getText("validate.captcha.error"));
     }
   }
 
@@ -47,7 +49,7 @@ public class SignupValidator extends Validator
   protected void handleError(Controller c)
   {
     c.keepModel(UserModel.class, "user");
-    c.setAttr(OjConstants.PAGE_TITLE, "Signup");
+    c.setAttr(OjConstants.PAGE_TITLE, c.getText("user.signup.title"));
 
     c.render("signup.html");
   }

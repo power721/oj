@@ -32,12 +32,11 @@ public class ProblemController extends OjController
   
   public void index()
   {
-    setTitle("Problem List");
     int pageNumber = 1;
     if (isParaExists("p"))
       pageNumber = getParaToInt("p", 1);
     else
-      pageNumber = Integer.parseInt(getCookie("pageNumber", "1"));
+      pageNumber = getCookieToInt("pageNumber", 1);
     int pageSize = getParaToInt("s", OjConfig.problemPageSize);
 
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
@@ -58,14 +57,14 @@ public class ProblemController extends OjController
     setAttr("problemList", problemList);
     setCookie("pageNumber", String.valueOf(pageNumber), 3600 * 24 * 7);
 
-    render("index.html");
+    setTitle(getText("problem.index.title"));
   }
 
   public void show()
   {
     if (!isParaExists(0))
     {
-      FlashMessage msg = new FlashMessage("Please specify the problem ID.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("problem.para.null"), MessageType.ERROR, getText("message.error.title"));
       redirect("/problem", msg);
       return;
     }
@@ -75,7 +74,7 @@ public class ProblemController extends OjController
     ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
     if (problemModel == null)
     {
-      FlashMessage msg = new FlashMessage("Cannot find this problem!", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
       redirect("/problem", msg);
       return;
     }
@@ -99,7 +98,6 @@ public class ProblemController extends OjController
     problemModel.put("sample_input_rows", sample_input_rows);
     problemModel.put("sample_output_rows", sample_output_rows);
 
-    setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
     setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
     setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
     setAttr("tagList", ProblemModel.dao.getTags(pid));
@@ -107,7 +105,8 @@ public class ProblemController extends OjController
     setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), 3600 * 24 * 7);
 
     problemModel.incView();
-    render("show.html");
+    
+    setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
   }
 
   @RequiresPermissions("problem:submit")
@@ -115,11 +114,13 @@ public class ProblemController extends OjController
   {
     int pid = getParaToInt(0);
     boolean isAdmin = userService.isAdmin();
-    ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
-    setAttr("problem", problemModel);
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     boolean ajax = getParaToBoolean("ajax", false);
     int sid = 0;
+    ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
+    
+    setAttr("problem", problemModel);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    
     if (isParaExists("s"))
     {
       sid = getParaToInt("s", 0);
@@ -134,6 +135,7 @@ public class ProblemController extends OjController
       }
     }
 
+    setTitle(getText("problem.submit.title"));
     if (ajax)
       render("ajax/submit.html");
     else
@@ -145,16 +147,17 @@ public class ProblemController extends OjController
   {
     if (!isParaExists(0))
     {
-      FlashMessage msg = new FlashMessage("Please specify the problem ID.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("problem.para.null"), MessageType.ERROR, getText("message.error.title"));
       redirect("/problem", msg);
       return;
     }
 
     int pid = getParaToInt(0);
-    ProblemModel problemModel = ProblemModel.dao.findById(pid);
-    setAttr("problem", problemModel);
-    setTitle(new StringBuilder(2).append("Edit Problem ").append(pid).toString());
     boolean ajax = getParaToBoolean("ajax", false);
+    ProblemModel problemModel = ProblemModel.dao.findById(pid);
+    
+    setAttr("problem", problemModel);
+    setTitle(new StringBuilder(2).append(getText("problem.edit.title")).append(pid).toString());
 
     if (ajax)
       render("ajax/edit.html");
@@ -169,14 +172,13 @@ public class ProblemController extends OjController
     problemModel.updateProblem();
 
     String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
-    redirect(redirectURL, new FlashMessage("The changes have been saved."));
+    redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
   }
 
   @RequiresPermissions("problem:add")
   public void add()
   {
-    setTitle("Add a problem");
-    render("add.html");
+    setTitle(getText("problem.add.title"));
   }
 
   @RequiresPermissions("problem:add")
@@ -190,7 +192,7 @@ public class ProblemController extends OjController
     File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
-      FlashMessage msg = new FlashMessage("The data directory already exists.", MessageType.WARN, "Warning!");
+      FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
       redirect(redirectURL, msg);
       return;
     }
@@ -201,7 +203,7 @@ public class ProblemController extends OjController
     } catch (IOException e)
     {
       log.error(e.getMessage());
-      FlashMessage msg = new FlashMessage("The data directory cannot create.", MessageType.ERROR, "Error!");
+      FlashMessage msg = new FlashMessage(getText("problem.save.error"), MessageType.ERROR, getText("message.error.title"));
       redirect(redirectURL, msg);
       return;
     }
@@ -232,7 +234,7 @@ public class ProblemController extends OjController
       ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
       if (problemModel == null)
       {
-        FlashMessage msg = new FlashMessage("Permission Denied.", MessageType.ERROR, "Error!");
+        FlashMessage msg = new FlashMessage(getText("problem.status.null"), MessageType.ERROR, getText("message.error.title"));
         redirect("/problem", msg);
         return;
       }
@@ -266,7 +268,6 @@ public class ProblemController extends OjController
     }
     Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
 
-    setTitle(new StringBuilder(3).append("Problem ").append(pid).append(" Status").toString());
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("language", language);
     setAttr("query", query.toString());
@@ -279,7 +280,10 @@ public class ProblemController extends OjController
       { "pid", "language", "query", "program_languages", "solutionList" });
       // render("ajax/status.html");
     } else
+    {
+      setTitle(new StringBuilder(2).append(getText("problem.status.title").replaceAll("_pid_", String.valueOf(pid))).toString());
       render("status.html");
+    }
   }
 
   public void search()
@@ -312,9 +316,8 @@ public class ProblemController extends OjController
     setAttr("problemList", ProblemModel.dao.searchProblem(scope, word));
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
-    setTitle(new StringBuilder(2).append("Search problem: ").append(word).toString());
-
-    render("search.html");
+    
+    setTitle(new StringBuilder(2).append(getText("problem.search.title")).append(word).toString());
   }
 
   public void userInfo()
@@ -373,7 +376,7 @@ public class ProblemController extends OjController
       ProblemModel.dao.addTag(pid, uid, tag);
 
     String redirectURL = new StringBuilder(3).append("/problem/show/").append(pid).append("#tag").toString();
-    redirect(redirectURL, new FlashMessage("The changes have been saved."));
+    redirect(redirectURL, new FlashMessage(getText("problem.tag.success")));
   }
 
   @RequiresPermissions("problem:build")
@@ -386,9 +389,10 @@ public class ProblemController extends OjController
     if (problemModel != null && !problemModel.build())
     {
       log.error(new StringBuilder(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
-      redirect(redirectURL, new FlashMessage("Build problem statistics failed!"));
+      FlashMessage msg = new FlashMessage(getText("problem.build.error"), MessageType.ERROR, getText("message.error.title"));
+      redirect(redirectURL, msg);
     }
 
-    redirect(redirectURL, new FlashMessage("The problem statistics have been updated."));
+    redirect(redirectURL, new FlashMessage(getText("problem.build.success")));
   }
 }

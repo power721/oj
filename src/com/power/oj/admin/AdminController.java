@@ -33,7 +33,7 @@ public class AdminController extends OjController
    
     setAttr("mysql", Db.queryStr("select version() as v"));
 
-    render("index.html");
+    setTitle(getText("admin.index.title"));
   }
 
 }

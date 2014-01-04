@@ -16,13 +16,13 @@ public class I18NInterceptor implements Interceptor
     String lang = controller.getPara("lang");
     Locale locale = null;
     
-    if ("en".equals(lang))
-      locale = Locale.ENGLISH;
-    else if ("zh".equals(lang))
+    if ("zh".equals(lang))
       locale = Locale.CHINESE;
+    else if (lang != null)
+      locale = Locale.ENGLISH;
     
     if (locale != null)
-    controller.setLocaleToCookie(locale);
+      controller.setLocaleToCookie(locale);
     
     ai.invoke();
   }

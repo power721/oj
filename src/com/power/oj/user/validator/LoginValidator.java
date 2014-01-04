@@ -14,8 +14,6 @@ public class LoginValidator extends Validator
   @Override
   protected void validate(Controller c)
   {
-    if (c.getRequest().getMethod() == "GET")
-      return;
     Subject currentUser = SecurityUtils.getSubject();
     UserModel userModel = (UserModel) currentUser.getPrincipal();
     if (userModel != null)
@@ -25,13 +23,13 @@ public class LoginValidator extends Validator
     }
 
     // validateEmail("mail", "msg", "邮箱格式不正确");
-    validateString("password", 6, 12, "msg", "密码长度不正确");
+    validateString("password", 6, 12, "msg", c.getText("validate.password.length"));
   }
 
   @Override
   protected void handleError(Controller c)
   {
-    c.setAttr(OjConstants.PAGE_TITLE, "Login");
+    c.setAttr(OjConstants.PAGE_TITLE, c.getText("user.login.title"));
     c.keepPara("name");
 
     c.render("login.html");

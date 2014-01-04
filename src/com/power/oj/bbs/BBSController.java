@@ -7,7 +7,6 @@ public class BBSController extends OjController
 
   public void index()
   {
-    setTitle("Web Board");
-    render("index.html");
+    setTitle(getText("bbs.index.title"));
   }
 }
