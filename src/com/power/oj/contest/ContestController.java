@@ -220,7 +220,7 @@ public class ContestController extends OjController
     setAttr("name", userName);
     setAttr("query", query.toString());
 
-    setTitle(new StringBuilder(2).append(getText("contest.status.title").replaceAll("{cid}", String.valueOf(cid))).toString());
+    setTitle(new StringBuilder(2).append(getText("contest.status.title").replaceAll("_cid_", String.valueOf(cid))).toString());
   }
 
   @Before(ContestPasswordInterceptor.class)
@@ -269,7 +269,7 @@ public class ContestController extends OjController
     setAttr("cid", cid);
     setAttr("id", id);
 
-    setTitle(new StringBuilder(2).append(getText("contest.status.title").replaceAll("{cid}", String.valueOf(cid)).replaceAll("{id}", String.valueOf(id))).toString());
+    setTitle(new StringBuilder(2).append(getText("contest.status.title").replaceAll("_cid_", String.valueOf(cid)).replaceAll("_id_", String.valueOf(id))).toString());
     if (ajax)
       render("ajax/problem_status.html");
     else
