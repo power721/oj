@@ -171,16 +171,16 @@
 </section>
 </#if>
 
+<#if problem.source?? && problem.source!="">
 <section id="source">
   <div class="page-header">
     <h4>Source</h4>
   </div>
   <div class="content" id="source">
-    <pre>
-			<a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip" title="Search other problems">${problem.source!}</a>
-		</pre>
+    <pre><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip" title="Search other problems">${problem.source!}</a></pre>
   </div>
 </section>
+</#if>
 
 <#if tagList??>
 <section id="tag">
