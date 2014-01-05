@@ -19,6 +19,7 @@ import com.jfinal.aop.ClearLayer;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
+import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -196,12 +197,13 @@ public class UserController extends OjController
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
     UserModel userModel = getCurrentUser();
-    int uid = getParaToInt("uid", 0);
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    int uid = userModel.getUid();
+    int wedith = 0;
+    int height = 0;
 
-    if (uid != 0)
-    {
       String ext = FileKit.getFileType(uploadFile.getOriginalFileName());
-      String fileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(uid).append(".").append(userModel.getStr("avatar")).toString();
+      String fileName = new StringBuilder(2).append(rootPath).append(userModel.getStr("avatar")).toString();
 
       try
       {
@@ -211,20 +213,27 @@ public class UserController extends OjController
         log.warn(e.getLocalizedMessage());
       }
 
-      fileName = new StringBuilder(3).append(OjConfig.userAvatarPath).append(uid).append(ext).toString();
+      fileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(uid).append(ext).toString();
+      File file = new File(fileName);
+      
       try
       {
-        FileUtil.moveFile(uploadFile.getFile(), new File(fileName));
-        userModel.set("avatar", ext.substring(1)).update();
-        renderJson("FILEID:/oj/assets/images/user/" + uid + ext);
+        FileUtil.moveFile(uploadFile.getFile(), file);
+        fileName = file.getAbsolutePath().replace(rootPath, "");
+        log.info(fileName);
+        userModel.set("avatar", fileName).update();
+        
+        /*setAttr("url", fileName);
+        setAttr("error", "false");
+        renderJson(new String[]{"error", "url"});*/
+        renderJson("FILEID:" + fileName);
         return;
       } catch (IOException e)
       {
         log.error(e.getLocalizedMessage());
       }
-    }
 
-    renderJson("ERROR:true");
+    renderJson("{error:true}");
   }
 
   @RequiresGuest

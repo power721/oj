@@ -74,9 +74,10 @@ function uploadProgress(file, bytesLoaded) {
 function uploadSuccess(file, serverData) {
 	try {
 		var progress = new FileProgress(file,  this.customSettings.upload_target);
-
-		if (serverData.substring(0, 7) === "FILEID:") {
-			addImage(serverData.substring(7));
+		var data = (typeof serverData == 'string') ? JSON.parse(serverData) : serverData;
+		
+		if (data.error == 'false') {
+			cropzoom = loadCropzoom(data);
 
 			progress.setStatus("Upload Complete.");
 			progress.toggleCancel(false);
@@ -159,7 +160,7 @@ function addImage(src) {
 	newImg.style.margin = "5px";
 	newImg.style.verticalAlign = "middle";
 
-	var divThumbs = document.getElementById("thumbnails");
+	var divThumbs = document.getElementById("crop_container");
 	divThumbs.insertBefore(newImg, divThumbs.firstChild);
 	//document.getElementById("thumbnails").appendChild(newImg);
 	if (newImg.filters) {

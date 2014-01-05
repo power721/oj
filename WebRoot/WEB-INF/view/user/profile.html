@@ -11,10 +11,10 @@
 <div class="container warp">
   <div class="row">
     <div class="span6 media">
-      <a href="user/avatar" class="pull-left"> <img class="pull-left img-polaroid media-object"
-        onerror="this.onerror=null;this.src='assets/images/user/avatar.png'" src="assets/images/user/<#if userAvatar??>${userAvatar!"avatar.png"}<#else>default.png</#if>"
-        width="96" height="96" />
-      </a>
+      <#if userName==user.name><a href="user/avatar" class="pull-left" title="click to upload new avatar"></#if>
+      <img class="pull-left img-polaroid media-object"
+        onerror="this.onerror=null;this.src='assets/images/user/default.png'" src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>" width="96" height="96" />
+      <#if userName==user.name></a></#if>
       <div class="media-body">
         <strong class="index-media-body-title">Profile Information</strong><br> 
         Username: ${user.name!}<br> 
