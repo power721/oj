@@ -83,15 +83,15 @@
   </div>
 </form>
 
+<script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
 <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.all.min.js"></script>
-<script language="javascript" type="text/javascript">   
+<script type="text/javascript">  
         //实例化编辑器
         var ue = UE.getEditor('inputDescription');
         ue.addListener('ready',function(){
             this.focus()
         });
-        
         
         $('.ueditor').click(function(){
         	var id = $(this).attr('for');
@@ -111,5 +111,5 @@
         		 $(this).attr('method', 'destroy');
         	}
         });
-    </script>
+</script>
 </@layout>
