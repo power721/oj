@@ -31,19 +31,19 @@
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputDescription">Description</label>
+    <label class="ueditor control-label" for="inputDescription" method="destroy">Description</label>
     <div class="controls">
       <textarea id="inputDescription" name="problem.description" rows="13" cols="120">${problem.description!}</textarea>
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputInput">Input</label>
+    <label class="ueditor control-label" for="inputInput">Input</label>
     <div class="controls">
       <textarea id="inputInput" name="problem.input" rows="9" cols="120">${problem.input!}</textarea>
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputOutput">Output</label>
+    <label class="ueditor control-label" for="inputOutput">Output</label>
     <div class="controls">
       <textarea id="inputOutput" name="problem.output" rows="9" cols="120">${problem.output!}</textarea>
     </div>
@@ -61,7 +61,7 @@
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputHint">Hint</label>
+    <label class="ueditor control-label" for="inputHint">Hint</label>
     <div class="controls">
       <textarea id="inputHint" name="problem.hint" rows="5" cols="120">${problem.hint!}</textarea>
     </div>
@@ -88,9 +88,28 @@
 <script language="javascript" type="text/javascript">   
         //实例化编辑器
         var ue = UE.getEditor('inputDescription');
-
         ue.addListener('ready',function(){
             this.focus()
+        });
+        
+        
+        $('.ueditor').click(function(){
+        	var id = $(this).attr('for');
+        	var method = $(this).attr('method');
+        	var ue = UE.getEditor(id);
+        	
+        	if (method == 'destroy')
+        	{
+        		ue.destroy();
+        		$(this).attr('method', 'create');
+        	}
+        	else
+        	{
+        		 ue.addListener('ready',function(){
+               this.focus()
+             });
+        		 $(this).attr('method', 'destroy');
+        	}
         });
     </script>
 </@layout>

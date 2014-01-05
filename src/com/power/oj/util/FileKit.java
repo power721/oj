@@ -196,11 +196,15 @@ public class FileKit
   public static String parsePath(String path)
   {
     path = path.trim();
-    if (!path.endsWith(File.separator))
-      path = path + File.separator;
+
+    if (!path.endsWith("/"))
+      path = path + "/";
     
-    if (!path.startsWith(File.separator))
-      path = new StringBuilder(3).append(PathKit.getWebRootPath()).append(File.separator).append(path).toString();
+    if (!path.startsWith("/"))
+      path = new StringBuilder(3).append(PathKit.getWebRootPath()).append("/").append(path).toString();
+    
+    File file = new File(path);
+    path = file.getAbsolutePath();
     
     return path;
   }

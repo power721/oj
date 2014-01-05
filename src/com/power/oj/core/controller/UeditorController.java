@@ -11,90 +11,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import jodd.io.FileUtil;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import sun.misc.BASE64Decoder;
-import jodd.io.FileUtil;
 
-import com.jfinal.aop.ClearInterceptor;
-import com.jfinal.aop.ClearLayer;
-import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.service.OjService;
 import com.power.oj.util.FileKit;
 
-/**
- * The controller for some common pages.
- * 
- * @author power
- * 
- */
-public class CommonController extends OjController
+public class UeditorController extends OjController
 {
-
-  /**
-   * The index page.
-   */
-  public void index()
-  {
-    setTitle(getText("page.index.title"));
-  }
-  
-  public void about()
-  {
-    setTitle(getText("page.about.title"));
-  }
-  
-  /**
-   * contact me page.
-   */
-  public void contact()
-  {
-    setTitle(getText("page.contact.title"));
-  }
-  
-  /**
-   * OJ changelog page.
-   */
-  public void changelog()
-  {
-    setTitle(getText("page.changelog.title"));
-  }
-
-  /**
-   * Frequently Asked Questions page.
-   */
-  public void faq()
-  {
-    setTitle(getText("page.faq.title"));
-  }
-
-  /**
-   * Show hot tags of the problems.
-   */
-  public void tag()
-  {
-    setAttr("tagList", OjService.me().tagList());
-    setTitle(getText("page.tag.title"));
-  }
-
-  /**
-   * Generate captcha image.
-   */
-  @ClearInterceptor(ClearLayer.ALL)
-  public void captcha()
-  {
-    CaptchaRender img = new CaptchaRender(OjConstants.randomCodeKey);
-    render(img);
-  }
-
-  /*
-   * public void status() { render("index.html"); }
-   */
 
   @RequiresPermissions("admin:upload")
   public void upload()
@@ -119,17 +49,19 @@ public class CommonController extends OjController
     System.out.println("file: " + file.getFileName());
     System.out.println(file.getFile().getAbsolutePath());
 
-    String fileName = new StringBuilder(3).append(PathKit.getWebRootPath()).append(OjConfig.problemImagePath).append(originalName).toString();
+    String fileName = new StringBuilder(3).append(OjConfig.problemImagePath).append(File.separator).append(originalName).toString();
+    File imageFile = new File(fileName);
+    log.info(fileName);
     try
     {
-      FileUtil.moveFile(file.getFile(), new File(fileName));
+      FileUtil.moveFile(file.getFile(), imageFile);
     } catch (IOException e)
     {
       log.warn(e.getLocalizedMessage());
       state = "IO Exception";
     }
 
-    renderJson("{'original':'" + originalName + "','url':'" + file.getFileName() + "','title':'" + title + "','state':'" + state + "'}");
+    renderJson("{'original':'" + originalName + "','url':'" + imageFile.getName() + "','title':'" + title + "','state':'" + state + "'}");
   }
 
   @RequiresPermissions("image:upload")
@@ -147,7 +79,7 @@ public class CommonController extends OjController
     String state = "SUCCESS";
     String base64Data = getPara("content");
     BASE64Decoder decoder = new BASE64Decoder();
-    File outFile = new File(new StringBuilder(4).append(PathKit.getWebRootPath()).append(File.separator).append(OjConfig.uploadPath).append(FileKit.getNewName("test.png")).toString());
+    File outFile = new File(new StringBuilder(3).append(OjConfig.uploadPath).append(File.separator).append(FileKit.getNewName("test.png")).toString());
     OutputStream ro;
     try
     {
@@ -183,7 +115,7 @@ public class CommonController extends OjController
     {
 
       // 保存文件路径
-      String savePath = new StringBuilder(3).append(PathKit.getWebRootPath()).append(File.separator).append(OjConfig.uploadPath).toString();
+      String savePath = OjConfig.uploadPath;
       // 格式验证
       String type = FileKit.getImageType(arr[i]);
       if (type.equals(""))
@@ -241,25 +173,32 @@ public class CommonController extends OjController
     renderJson("{'url':'" + outstr + "','tip':'" + state + "','srcUrl':'" + url + "'}");
   }
 
-  @RequiresPermissions("image:upload")
-  public void listImages()
+  @RequiresPermissions("image:admin")
+  public void imageManager()
   {
-    String imagesDir = new StringBuilder(2).append(PathKit.getWebRootPath()).append(OjConfig.problemImagePath).toString();
     String imgStr = "";
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    String imagesDir = OjConfig.problemImagePath;
     List<File> files = FileKit.getImageFiles(imagesDir, new ArrayList<File>());
-    System.out.println(imagesDir);
-
+    
     for (File file : files)
     {
-      System.out.println(file.getPath());
-      imgStr += file.getPath().replace(imagesDir, "") + "ue_separate_ue";
+      imgStr += file.getPath().replace(rootPath, "") + "ue_separate_ue";
     }
+    
+    imagesDir = OjConfig.uploadPath;
+    files = FileKit.getImageFiles(imagesDir, new ArrayList<File>());
+    
+    for (File file : files)
+    {
+      imgStr += file.getPath().replace(rootPath, "") + "ue_separate_ue";
+    }
+    
     if (imgStr != "")
     {
-      System.out.println(imgStr);
       imgStr = imgStr.substring(0, imgStr.lastIndexOf("ue_separate_ue")).replace(File.separator, "/").trim();
     }
-
+    
     renderText(imgStr);
   }
 

@@ -24,7 +24,8 @@ import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
-import com.power.oj.core.controller.CommonController;
+import com.power.oj.core.controller.MainController;
+import com.power.oj.core.controller.UeditorController;
 import com.power.oj.core.handler.UrlFilterHandler;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.interceptor.BaseURLInterceptor;
@@ -75,7 +76,8 @@ public class AppConfig extends JFinalConfig
   {
     this.routes = me;
 
-    me.add("/", CommonController.class, "/common/");
+    me.add("/", MainController.class, "/common/");
+    me.add("/ueditor", UeditorController.class, "/common/");
     me.add("/admin", AdminController.class);
     me.add("/bbs", BBSController.class);
     me.add("/contest", ContestController.class);
