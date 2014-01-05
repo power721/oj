@@ -24,6 +24,8 @@ import com.power.oj.admin.AdminController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
+import com.power.oj.core.controller.CommonController;
+import com.power.oj.core.handler.UrlFilterHandler;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.interceptor.BaseURLInterceptor;
 import com.power.oj.core.interceptor.FlashMessageInterceptor;

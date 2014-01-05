@@ -1,9 +1,11 @@
-package com.power.oj.core;
+package com.power.oj.core.handler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jfinal.handler.Handler;
+import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 
 /**
  * Filter the url which dose not handled by JFinal.

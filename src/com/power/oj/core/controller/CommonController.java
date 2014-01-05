@@ -1,4 +1,4 @@
-package com.power.oj.core;
+package com.power.oj.core.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,14 +12,18 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import sun.misc.BASE64Decoder;
 import jodd.io.FileUtil;
+
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
-
+import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjController;
 import com.power.oj.core.service.OjService;
 import com.power.oj.util.FileKit;
 

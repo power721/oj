@@ -29,7 +29,7 @@ public class OjController extends Controller
   protected void redirect(String url, FlashMessage msg)
   {
     setFlashMessage(msg);
-    super.redirect(url);
+    redirect(url);
   }
 
   /**
@@ -46,7 +46,7 @@ public class OjController extends Controller
   protected void redirect(String url, boolean withQueryString, FlashMessage msg)
   {
     setFlashMessage(msg);
-    super.redirect(url, withQueryString);
+    redirect(url, withQueryString);
   }
 
   /**
