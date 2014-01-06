@@ -268,7 +268,8 @@ public class ImageInfo {
 	}
 	
 	public void close() throws IOException {
-	  in.close();
+      if (in != null)
+	    in.close();
 	}
 	
 	private void addComment(String s) {
