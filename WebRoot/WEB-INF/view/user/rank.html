@@ -2,17 +2,13 @@
 
 <script language="javascript" type="text/javascript">
     $(document).ready(function(){
-        document.onkeydown=nextpage
-        document.onkeydown=nextpage
         var prevpage="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
         var nextpage="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-        function nextpage(event)
-        {
-            event=event?event:(window.event?window.event:null);
-            <#if userList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
+        $(document).keydown(function(event) {
+        	  <#if userList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
             <#if userList.pageNumber<userList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-        }
         });
+      });
     </script>
 
 <div class="pagination pagination-centered">
