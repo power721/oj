@@ -155,6 +155,7 @@ function uploadError(file, errorCode, message) {
 }
 
 function addNewImage(data) {
+	$('#photo').imgAreaSelect({remove:true});
 	$('#crop_container').empty();
 	var newImg = document.createElement("img");
 	$(newImg).attr('src', data.src).attr('id', 'photo').css({
