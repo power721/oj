@@ -1,13 +1,8 @@
 package com.power.oj.core.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-
-import magick.MagickException;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
@@ -24,7 +19,6 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.service.OjService;
 import com.power.oj.image.ImageInfo;
 import com.power.oj.image.ImageScaleImpl;
-import com.power.oj.image.MagickImageScale;
 import com.power.oj.util.FileKit;
 
 /**
@@ -120,12 +114,10 @@ public class MainController extends OjController
       info.close();
     } catch (FileNotFoundException e1)
     {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
+      log.error(e1.getLocalizedMessage());
     } catch (IOException e)
     {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      log.error(e.getLocalizedMessage());
     }
     
     setAttr("width", width);
@@ -156,8 +148,7 @@ public class MainController extends OjController
       fileName = destFile.getAbsolutePath().replace(rootPath, "");
     } catch (Exception e)
     {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      log.error(e.getLocalizedMessage());
     }
     
     renderJson(fileName);
