@@ -157,10 +157,9 @@
 
                 var ext = getExtensionSource();
                 if (ext == 'png' || ext == 'gif')
-                    $image.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"
-                        + $options.image.source
-                        + "',sizingMethod='scale');";
-
+                $($image).css({'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='"
+                		+ $options.image.source
+                		+ "',sizingMethod='scale'"});
                 $container.append($image);
                 _self.append($container);
 
@@ -171,8 +170,8 @@
                     refreshPositions: true,
                     drag: function (event, ui) {
 
-                        getData('image').posY = ui.position.top
-                        getData('image').posX = ui.position.left
+                        getData('image').posY = ui.position.top;
+                        getData('image').posX = ui.position.left;
 
                         if ($options.image.snapToContainer)
                             limitBounds(ui);
@@ -533,7 +532,7 @@
                                 {
                                     'border': '1px dashed '
                                         + $options.selector.borderColorHover
-                                })
+                                });
                         })
                         .mouseout(
                         function () {
@@ -542,7 +541,7 @@
                                 {
                                     'border': '1px dashed '
                                         + $options.selector.borderColor
-                                })
+                                });
                         });
                     // Add draggable to the selector
                     $selector
@@ -785,8 +784,7 @@
                     btns.push($('<div />').addClass('mvn_so mvn'));
                     btns.push($('<div />').addClass('mvn_s mvn'));
                     btns.push($('<div />').addClass('mvn_se mvn'));
-					
-					for (var i = 0; i < btns.length; i++) {
+                    for (var i = 0; i < btns.length; i++) {
 						// for each buttons that were created above,
 						// attach action listeners
                         btns[i].mousedown(function () {
@@ -882,7 +880,7 @@
 
                 $.fn.cropzoom.getSelf = function () {
                     return _self;
-                }
+                };
                 /*$.fn.cropzoom.getOptions = function() {
                  return _self.getData('options');
                  }*/

@@ -99,7 +99,7 @@
 
 <script type="text/javascript">
 	function loadCropzoom(data) {
-		alert(data.src+' '+data.width+' '+data.height);
+		//alert(data.src+' '+data.width+' '+data.height);
 		var cropzoom = $('#crop_container').cropzoom({
 			width : 400,
 			height : 300,
@@ -130,22 +130,24 @@
 	}
 
 	$(document).ready(function() {
-		var data = {'src':'${baseUrl!}/assets/images/user/default.jpg', 'width':96, 'height':96};
+		var data = {'src':'${baseUrl!}/assets/images/user/default.png', 'width':96, 'height':96};
 		var cropzoom = loadCropzoom(data);
 
-		$('#crop').click(function() {
-			cropzoom.send('cutAvatar', 'POST', {}, function(rta) {
-				$('.result').find('img').remove();
-				var img = $('<img />').attr('src', rta);
-				alert(img);
-				$('.result').find('.txt').hide().end().append(img);
-			});
-		});
-		$('#restore').click(function() {
-			$('.result').find('img').remove();
-			$('.result').find('.txt').show();
-			cropzoom.restore();
-		})
+	    $('#crop').click(function() {
+	      cropzoom.send('cutAvatar', 'POST', {}, function(rta) {
+	    	  alert(rta);
+	        $('.result').find('img').remove();
+	        var img = $('<img />').attr('src', rta);
+	        alert(img);
+	        $('.result').find('.txt').hide().end().append(img);
+	      });
+	    });
+	    $('#restore').click(function() {
+	      $('.result').find('img').remove();
+	      $('.result').find('.txt').show();
+	      cropzoom.restore();
+	    });
+	    
 	})
 </script>
 <style type="text/css">

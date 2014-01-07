@@ -1,8 +1,10 @@
 package com.power.oj.core.controller;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
@@ -17,7 +19,6 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.OjService;
-import com.power.oj.image.ImageInfo;
 import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.util.FileKit;
 
@@ -37,7 +38,7 @@ public class MainController extends OjController
   {
     setTitle(getText("page.index.title"));
   }
-  
+
   /**
    * The about page.
    */
@@ -45,7 +46,7 @@ public class MainController extends OjController
   {
     setTitle(getText("page.about.title"));
   }
-  
+
   /**
    * contact me page.
    */
@@ -53,7 +54,7 @@ public class MainController extends OjController
   {
     setTitle(getText("page.contact.title"));
   }
-  
+
   /**
    * OJ changelog page.
    */
@@ -99,59 +100,61 @@ public class MainController extends OjController
     int width = 0;
     int height = 0;
 
+    log.info(uploadFile.getFile().getAbsolutePath());
     setAttr("error", "true");
     try
     {
-      ImageInfo info = new ImageInfo(uploadFile.getFile());
-      
+      BufferedImage srcImgBuff = ImageIO.read(uploadFile.getFile());
+
       setAttr("error", "false");
       setAttr("src", fileName);
-      if (info.check())
-      {
-        width = info.getWidth();
-        height = info.getHeight();
-      }
-      info.close();
-    } catch (FileNotFoundException e1)
-    {
-      log.error(e1.getLocalizedMessage());
+      width = srcImgBuff.getWidth();
+      height = srcImgBuff.getHeight();
     } catch (IOException e)
     {
       log.error(e.getLocalizedMessage());
     }
-    
+
     setAttr("width", width);
     setAttr("height", height);
-    renderJson(new String[]{"error", "src", "width", "height"});
+    renderJson(new String[]
+    { "error", "src", "width", "height" });
   }
-  
-  public void cutAvatar()
+
+  @Before(POST.class)
+  @RequiresPermissions("user:upload:avatar")
+  public void cutAvatar() throws IOException
   {
     String rootPath = PathKit.getWebRootPath() + File.separator;
     String fileName = rootPath + getPara("imageSource");
     File srcFile = new File(fileName);
     File destFile = new File(new StringBuilder(3).append(OjConfig.uploadPath).append(File.separator).append(FileKit.getNewName(srcFile.getName())).toString());
-    int imageX = getParaToInt("imageX");
-    int imageY = getParaToInt("imageY");
-    int boxWidth = getParaToInt("imageW");
-    int boxHeight = getParaToInt("imageH");
-    int cutTop = getParaToInt("selectorY");
-    int cutLeft = getParaToInt("selectorX");
-    int cutWidth = getParaToInt("selectorW");
-    int catHeight = getParaToInt("selectorH");
+    BufferedImage srcImgBuff = ImageIO.read(srcFile);
     ImageScaleImpl imageScale = new ImageScaleImpl();
+    int width = srcImgBuff.getWidth();
+    float imageW = Float.parseFloat(getPara("imageW"));
+    float scale = (float)width / imageW;
+    float imageX = Math.round(Float.parseFloat(getPara("imageX")) * scale);
+    float imageY = Math.round(Float.parseFloat(getPara("imageY")) * scale);
+    int selectorY = Math.round((float)getParaToInt("selectorY") * scale);
+    int selectorX = Math.round((float)getParaToInt("selectorX") * scale);
+    int cutWidth = Math.round((float)getParaToInt("selectorW") * scale);
+    int catHeight = Math.round((float)getParaToInt("selectorH") * scale);
+    int cutTop = (int) (selectorY - imageY);
+    int cutLeft = (int) (selectorX - imageX);
     
     try
     {
-      log.info(String.valueOf(imageX+cutTop+catHeight));
-      imageScale.resizeFix(srcFile, destFile, boxWidth, boxHeight, imageX+cutTop, imageY+cutLeft, cutWidth, catHeight);
+      log.info(String.valueOf(cutTop));
+      log.info(String.valueOf(cutLeft));
+      imageScale.resizeFix(srcFile, destFile, 96, 96, cutTop, cutLeft, cutWidth, catHeight);
       fileName = destFile.getAbsolutePath().replace(rootPath, "");
     } catch (Exception e)
     {
       log.error(e.getLocalizedMessage());
     }
-    
+
     renderJson(fileName);
   }
-  
+
 }
