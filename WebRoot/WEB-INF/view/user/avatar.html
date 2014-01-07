@@ -1,62 +1,66 @@
 <#include "../common/_layout.html" /> <@layout>
+
+<script type="text/javascript" src="assets/jquery.imgareaselect/scripts/jquery.imgareaselect.pack.js"></script>
+<link href="assets/jquery.imgareaselect/css/imgareaselect-animated.css" rel="Stylesheet" type="text/css" />
+
 <script type="text/javascript" src="assets/swfupload/swfupload.js"></script>
 <script type="text/javascript" src="assets/js/uploadHandlers.js"></script>
 <script type="text/javascript">
-	var swfu;
-	window.onload = function() {
-		swfu = new SWFUpload({
-			// Backend Settings
-			upload_url : "${baseUrl!}/uploadAvatar/",
-			post_params : {
-				"uid" : "${userID}",
-				"name" : "${userName}"
-			},
+  var swfu;
+  window.onload = function() {
+    swfu = new SWFUpload({
+      // Backend Settings
+      upload_url : "${baseUrl!}/uploadAvatar/",
+      post_params : {
+        "uid" : "${userID}",
+        "name" : "${userName}"
+      },
 
-			// File Upload Settings
-			file_size_limit : "10 MB",
-			file_types : "*.png;*.jpg;*.gif",
-			file_types_description : "PNG Image; JPG Images; GIF Image",
-			file_upload_limit : 0,
+      // File Upload Settings
+      file_size_limit : "10 MB",
+      file_types : "*.png;*.jpg;*.gif",
+      file_types_description : "PNG Image; JPG Images; GIF Image",
+      file_upload_limit : 0,
 
-			// Event Handler Settings - these functions as defined in Handlers.js
-			//  The handlers are not part of SWFUpload but are part of my website and control how
-			//  my website reacts to the SWFUpload events.
-			swfupload_preload_handler : preLoad,
-			swfupload_load_failed_handler : loadFailed,
-			file_queue_error_handler : fileQueueError,
-			file_dialog_complete_handler : fileDialogComplete,
-			upload_progress_handler : uploadProgress,
-			upload_error_handler : uploadError,
-			upload_success_handler : uploadSuccess,
-			upload_complete_handler : uploadComplete,
+      // Event Handler Settings - these functions as defined in Handlers.js
+      //  The handlers are not part of SWFUpload but are part of my website and control how
+      //  my website reacts to the SWFUpload events.
+      swfupload_preload_handler : preLoad,
+      swfupload_load_failed_handler : loadFailed,
+      file_queue_error_handler : fileQueueError,
+      file_dialog_complete_handler : fileDialogComplete,
+      upload_progress_handler : uploadProgress,
+      upload_error_handler : uploadError,
+      upload_success_handler : uploadSuccess,
+      upload_complete_handler : uploadComplete,
 
-			// Button Settings
-			button_image_url : "${baseUrl!}/assets/images/SmallSpyGlassWithTransperancy_17x18.png",
-			button_placeholder_id : "spanButtonPlaceholder",
-			button_width : 180,
-			button_height : 18,
-			button_text : '<span class="button">Select Image <span class="buttonSmall">(2 MB Max)</span></span>',
-			button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
-			button_text_top_padding : 0,
-			button_text_left_padding : 18,
-			button_window_mode : SWFUpload.WINDOW_MODE.TRANSPARENT,
-			button_cursor : SWFUpload.CURSOR.HAND,
+      // Button Settings
+      button_image_url : "${baseUrl!}/assets/images/SmallSpyGlassWithTransperancy_17x18.png",
+      button_placeholder_id : "spanButtonPlaceholder",
+      button_width : 180,
+      button_height : 18,
+      button_text : '<span class="button">Select Image <span class="buttonSmall">(2 MB Max)</span></span>',
+      button_text_style : '.button { font-family: Helvetica, Arial, sans-serif; font-size: 12pt; } .buttonSmall { font-size: 10pt; }',
+      button_text_top_padding : 0,
+      button_text_left_padding : 18,
+      button_window_mode : SWFUpload.WINDOW_MODE.TRANSPARENT,
+      button_cursor : SWFUpload.CURSOR.HAND,
 
-			// Flash Settings
-			flash_url : "${baseUrl!}/assets/swfupload/swfupload.swf",
-			flash9_url : "${baseUrl!}/assets/swfupload/swfupload_fp9.swf",
+      // Flash Settings
+      flash_url : "${baseUrl!}/assets/swfupload/swfupload.swf",
+      flash9_url : "${baseUrl!}/assets/swfupload/swfupload_fp9.swf",
 
-			custom_settings : {
-				upload_target : "divFileProgressContainer",
-				thumbnail_height : 96,
-				thumbnail_width : 96,
-				thumbnail_quality : 100
-			},
+      custom_settings : {
+        upload_target : "divFileProgressContainer",
+        thumbnail_height : 96,
+        thumbnail_width : 96,
+        thumbnail_quality : 100
+      },
 
-			// Debug Settings
-			debug : false
-		});
-	};
+      // Debug Settings
+      debug : false
+    });
+  };
 </script>
 
 <form id="avatar" action="" method="post" enctype="multipart/form-data">
@@ -66,100 +70,6 @@
 </form>
 
 <div id="divFileProgressContainer" style="height: 75px;"></div>
-
-<div class="Post-inner">
-  <div class="PostMetadataHeader">
-    <h2 class="PostHeader">Example</h2>
-  </div>
-  <div class="PostContent">
-    <div class="boxes">
-      <div id="crop_container"></div>
-      <div class="result">
-        <div class="txt">Here you will see the cropped image</div>
-      </div>
-      <div class="cleared"></div>
-    </div>
-    <br> <span class="button-wrapper" id="crop"> <span class="l"> </span> <span class="r"> </span> <a class="button" href="javascript:void(0)">Crop</a>
-    </span> &nbsp; <span class="button-wrapper" id="restore"> <span class="l"> </span> <span class="r"> </span> <a class="button" href="javascript:void(0)">Restore</a>
-    </span>
-  </div>
-  <div class="cleared"></div>
-</div>
-
-<script type="text/javascript" src="assets/cropzoom/js/script.js"></script>
-<link href="assets/cropzoom/css/jquery-ui-1.10.3.custom.min.css" rel="Stylesheet" type="text/css" />
-<link href="assets/cropzoom/css/jquery.cropzoom.css" rel="Stylesheet" type="text/css" />
-<!--<script type="text/javascript" src="assets/cropzoom/js/jquery-1.9.1.min.js"></script>-->
-<script type="text/javascript" src="assets/cropzoom/js/jquery-ui-1.10.3.custom.min.js"></script>
-<script type="text/javascript" src="assets/cropzoom/js/jquery.cropzoom.js"></script>
-<!--<script type="text/javascript" src="http://cropzoom.googlecode.com/svn/trunk/plugin/jquery.cropzoom.js"></script>-->
-<link rel="stylesheet" href="assets/cropzoom/css/style.css" type="text/css" media="screen" />
-<!--[if IE 6]><link rel="stylesheet" href="assets/cropzoom/css/style.ie6.css" type="text/css" media="screen" /><![endif]-->
-<!--[if IE 7]><link rel="stylesheet" href="assets/cropzoom/css/style.ie7.css" type="text/css" media="screen" /><![endif]-->
-
-<script type="text/javascript">
-	function loadCropzoom(data) {
-		//alert(data.src+' '+data.width+' '+data.height);
-		var cropzoom = $('#crop_container').cropzoom({
-			width : 400,
-			height : 300,
-			bgColor : '#FFF',
-			enableRotation : false,
-			enableZoom : true,
-			zoomSteps : 10,
-			rotationSteps : 10,
-			selector : {
-				w : 96,
-				h : 96,
-				centered : true,
-				startWithOverlay : true,
-				showPositionsOnDrag: false,
-				showDimetionsOnDrag: false
-			},
-			image : {
-				source : data.src,
-				width : data.width,
-				height : data.height,
-				minZoom : 10,
-				maxZoom : 150
-			}
-		});
-		//cropzoom.setSelector(45, 45, 96, 96, true);
-
-		return cropzoom;
-	}
-
-	$(document).ready(function() {
-		var data = {'src':'${baseUrl!}/assets/images/user/default.png', 'width':96, 'height':96};
-		var cropzoom = loadCropzoom(data);
-
-	    $('#crop').click(function() {
-	      cropzoom.send('cutAvatar', 'POST', {}, function(rta) {
-	    	  alert(rta);
-	        $('.result').find('img').remove();
-	        var img = $('<img />').attr('src', rta);
-	        alert(img);
-	        $('.result').find('.txt').hide().end().append(img);
-	      });
-	    });
-	    $('#restore').click(function() {
-	      $('.result').find('img').remove();
-	      $('.result').find('.txt').show();
-	      cropzoom.restore();
-	    });
-	    
-	})
-</script>
-<style type="text/css">
-#img_to_crop {
-	-webkit-user-drag: element;
-	-webkit-user-select: none;
-}
-#zoom,#rot {
-  width: 360px;
-  margin: auto;
-  height: 25px;
-}
-</style>
+<div id="crop_container"></div>
 
 </@layout>

@@ -95,24 +95,29 @@ public class MainController extends OjController
   public void uploadAvatar()
   {
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
+    File file = uploadFile.getFile();
     String rootPath = PathKit.getWebRootPath() + File.separator;
-    String fileName = uploadFile.getFile().getAbsolutePath().replace(rootPath, "");
-    int width = 0;
-    int height = 0;
+    String fileName = file.getAbsolutePath().replace(rootPath, "");
+    ImageScaleImpl imageScale = new ImageScaleImpl();
+    int width = 400;
+    int height = 400;
 
     log.info(uploadFile.getFile().getAbsolutePath());
     setAttr("error", "true");
     try
     {
+      imageScale.resizeFix(file, file, width, height);
       BufferedImage srcImgBuff = ImageIO.read(uploadFile.getFile());
-
-      setAttr("error", "false");
-      setAttr("src", fileName);
       width = srcImgBuff.getWidth();
       height = srcImgBuff.getHeight();
+      setAttr("error", "false");
+      setAttr("src", fileName);
     } catch (IOException e)
     {
       log.error(e.getLocalizedMessage());
+    } catch (Exception e1)
+    {
+      log.error(e1.getLocalizedMessage());
     }
 
     setAttr("width", width);

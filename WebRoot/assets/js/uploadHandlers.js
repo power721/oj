@@ -77,7 +77,7 @@ function uploadSuccess(file, serverData) {
 		var data = (typeof serverData == 'string') ? JSON.parse(serverData) : serverData;
 		
 		if (data.error == 'false') {
-			cropzoom = loadCropzoom(data);
+			addNewImage(data);
 
 			progress.setStatus("Upload Complete.");
 			progress.toggleCancel(false);
@@ -154,13 +154,64 @@ function uploadError(file, errorCode, message) {
 
 }
 
+function addNewImage(data) {
+	$('#crop_container').empty();
+	var newImg = document.createElement("img");
+	$(newImg).attr('src', data.src).attr('id', 'photo').css({
+		float: 'left',
+		'margin-right': '10px'
+	}).appendTo('#crop_container');
+	
+	if (newImg.filters) {
+		try {
+			newImg.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 0;
+		} catch (e) {
+			// If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+			newImg.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + 0 + ')';
+		}
+	} else {
+		newImg.style.opacity = 0;
+	}
+
+	newImg.onload = function () {
+		fadeIn(newImg, 0);
+	};
+	
+    $('<div><img src="' + data.src + '" style="max-width: none; position: relative;" /></div>')
+    .css({
+        float: 'left',
+        position: 'relative',
+        overflow: 'hidden',
+        width: '100px',
+        height: '100px'
+    })
+    .insertAfter(newImg);
+
+	$(newImg).imgAreaSelect({
+		imageWidth: data.width,
+		imageHeight: data.height,
+        aspectRatio: '1:1',
+        onSelectEnd: function(img, selection) {
+            var scaleX = 100 / (selection.width || 1);
+            var scaleY = 100 / (selection.height || 1);
+            $('#sx').html(Math.round(scaleX * data.width));
+            $('#sy').html(Math.round(scaleY * data.height));
+            $('#photo + div > img').css({
+                width: Math.round(scaleX * data.width) + 'px',
+                height: Math.round(scaleY * data.height) + 'px',
+                marginLeft: '-' + Math.round(scaleX * selection.x1) + 'px',
+                marginTop: '-' + Math.round(scaleY * selection.y1) + 'px'
+            });
+        }
+    });
+}
 
 function addImage(src) {
 	var newImg = document.createElement("img");
 	newImg.style.margin = "5px";
 	newImg.style.verticalAlign = "middle";
 
-	var divThumbs = document.getElementById("crop_container");
+	var divThumbs = document.getElementById("thumbnails");
 	divThumbs.insertBefore(newImg, divThumbs.firstChild);
 	//document.getElementById("thumbnails").appendChild(newImg);
 	if (newImg.filters) {
@@ -183,7 +234,6 @@ function addImage(src) {
 function fadeIn(element, opacity) {
 	var reduceOpacityBy = 5;
 	var rate = 30;	// 15 fps
-
 
 	if (opacity < 100) {
 		opacity += reduceOpacityBy;
