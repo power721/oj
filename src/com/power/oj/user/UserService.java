@@ -23,6 +23,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjController;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.shiro.ShiroKit;
@@ -199,7 +200,7 @@ public class UserService
     return false;
   }
 
-  public void uploadAvatar(File file, int width, int height) throws Exception
+  public void uploadAvatar(File file, int width, int height, OjController c) throws Exception
   {
     ImageScaleImpl imageScale = new ImageScaleImpl();
     
@@ -207,6 +208,9 @@ public class UserService
     BufferedImage srcImgBuff = ImageIO.read(file);
     width = srcImgBuff.getWidth();
     height = srcImgBuff.getHeight();
+    
+    c.setAttr("width", width);
+    c.setAttr("height", height);
   }
   
   /**

@@ -203,7 +203,7 @@ public class UserController extends OjController
     log.info(file.getAbsolutePath());
     try
     {
-      userService.uploadAvatar(file, width, height);
+      userService.uploadAvatar(file, width, height, this);
       setAttr("error", "false");
     } catch (Exception e)
     {
@@ -212,8 +212,7 @@ public class UserController extends OjController
     }
 
     setAttr("src", fileName);
-    setAttr("width", width);
-    setAttr("height", height);
+    
     renderJson(new String[]{ "error", "src", "width", "height" });
   }
 
