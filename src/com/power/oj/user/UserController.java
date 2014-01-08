@@ -20,7 +20,6 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.kit.PathKit;
-import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -28,6 +27,7 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.user.validator.RecoverAccountValidator;
 import com.power.oj.user.validator.ResetPasswordValidator;
 import com.power.oj.user.validator.SignupValidator;
@@ -193,47 +193,36 @@ public class UserController extends OjController
 
   @Before(POST.class)
   @RequiresPermissions("user:upload:avatar")
-  public void uploadAvatar()
+  public void saveAvatar() throws IOException
   {
-    UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
-    UserModel userModel = getCurrentUser();
+    int x1 = getParaToInt("x1");
+    int y1 = getParaToInt("y1");
+    int x2 = getParaToInt("x2");
+    int y2 = getParaToInt("y2");
+    int cutWidth = x2 - x1;
+    int catHeight = y2 - y1;
     String rootPath = PathKit.getWebRootPath() + File.separator;
-    int uid = userModel.getUid();
-    int wedith = 0;
-    int height = 0;
+    String srcFileName = rootPath + getPara("imageSource");
+    String ext = FileKit.getFileType(srcFileName);
+    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userService.getCurrentUid()).append(ext).toString();
+    File srcFile = new File(srcFileName);
+    File destFile = new File(destFileName);
+    ImageScaleImpl imageScale = new ImageScaleImpl();
+    UserModel userModel = getCurrentUser();
+   
+    try
+    {
+      imageScale.resizeFix(srcFile, destFile, 96, 96, x1, y1, cutWidth, catHeight);
+      FileUtil.delete(srcFile);
+      userModel.set("avatar", destFileName.replace(rootPath, "")).update();
+      destFileName = destFile.getAbsolutePath().replace(rootPath, "");
+    } catch (Exception e)
+    {
+      log.error(e.getLocalizedMessage());
+    }
 
-      String ext = FileKit.getFileType(uploadFile.getOriginalFileName());
-      String fileName = new StringBuilder(2).append(rootPath).append(userModel.getStr("avatar")).toString();
-
-      try
-      {
-        FileUtil.deleteFile(fileName);
-      } catch (IOException e)
-      {
-        log.warn(e.getLocalizedMessage());
-      }
-
-      fileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(uid).append(ext).toString();
-      File file = new File(fileName);
-      
-      try
-      {
-        FileUtil.moveFile(uploadFile.getFile(), file);
-        fileName = file.getAbsolutePath().replace(rootPath, "");
-        log.info(fileName);
-        userModel.set("avatar", fileName).update();
-        
-        /*setAttr("url", fileName);
-        setAttr("error", "false");
-        renderJson(new String[]{"error", "url"});*/
-        renderJson("FILEID:" + fileName);
-        return;
-      } catch (IOException e)
-      {
-        log.error(e.getLocalizedMessage());
-      }
-
-    renderJson("{error:true}");
+    String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
+    redirect(redirectURL, new FlashMessage(getText("user.update.success")));
   }
 
   @RequiresGuest

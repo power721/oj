@@ -104,7 +104,7 @@ function uploadComplete(file) {
 		} else {
 			var progress = new FileProgress(file,  this.customSettings.upload_target);
 			progress.setComplete();
-			progress.setStatus("All images received.");
+			//progress.setStatus("All images received.");
 			progress.toggleCancel(false);
 		}
 	} catch (ex) {
@@ -187,12 +187,24 @@ function addNewImage(data) {
         height: '100px'
     })
     .insertAfter(newImg);
-
+    
+    $('#saveAvatar').css({clear:'both'}).show();
+    $('input[name="x1"]').val(0);
+    $('input[name="y1"]').val(0);
+    $('input[name="x2"]').val(data.width);
+    $('input[name="y2"]').val(data.height);
+    $('input[name="imageSource"]').val(data.src);
+    
 	$(newImg).imgAreaSelect({
 		imageWidth: data.width,
 		imageHeight: data.height,
         aspectRatio: '1:1',
         onSelectEnd: function(img, selection) {
+        	$('input[name="x1"]').val(selection.x1);
+            $('input[name="y1"]').val(selection.y1);
+            $('input[name="x2"]').val(selection.x2);
+            $('input[name="y2"]').val(selection.y2);
+            
             var scaleX = 100 / (selection.width || 1);
             var scaleY = 100 / (selection.height || 1);
             $('#sx').html(Math.round(scaleX * data.width));
