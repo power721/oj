@@ -13,6 +13,8 @@ public interface OjConstants
    */
   long SessionExpiresTime = 15 * 60 * 1000;
   long resetPasswordExpiresTime = 30 * 60 * 1000;
+  int avatarWidth = 100;
+  int avatarHeight = 100;
   
   /*
    * These contants are used in view(attr name) and session.

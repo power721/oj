@@ -1,6 +1,5 @@
 package com.power.oj.user;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,8 +8,6 @@ import java.util.UUID;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-
-import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 
 import com.jfinal.aop.Before;
@@ -19,7 +16,7 @@ import com.jfinal.aop.ClearLayer;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
-import com.jfinal.kit.PathKit;
+
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -27,12 +24,10 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
-import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.user.validator.RecoverAccountValidator;
 import com.power.oj.user.validator.ResetPasswordValidator;
 import com.power.oj.user.validator.SignupValidator;
 import com.power.oj.user.validator.UpdateUserValidator;
-import com.power.oj.util.FileKit;
 
 /**
  * 
@@ -195,28 +190,15 @@ public class UserController extends OjController
   @RequiresPermissions("user:upload:avatar")
   public void saveAvatar() throws IOException
   {
-    int x1 = getParaToInt("x1");
-    int y1 = getParaToInt("y1");
-    int x2 = getParaToInt("x2");
-    int y2 = getParaToInt("y2");
-    int cutWidth = x2 - x1;
-    int catHeight = y2 - y1;
-    String rootPath = PathKit.getWebRootPath() + File.separator;
-    String srcFileName = rootPath + getPara("imageSource");
-    String ext = FileKit.getFileType(srcFileName);
-    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userService.getCurrentUid()).append(ext).toString();
-    File srcFile = new File(srcFileName);
-    File destFile = new File(destFileName);
-    ImageScaleImpl imageScale = new ImageScaleImpl();
-    UserModel userModel = getCurrentUser();
+    int x1 = getParaToInt("x1", 0);
+    int y1 = getParaToInt("y1", 0);
+    int x2 = getParaToInt("x2", OjConstants.avatarWidth);
+    int y2 = getParaToInt("y2", OjConstants.avatarHeight);
     FlashMessage msg = new FlashMessage(getText("user.avatar.success"));
    
     try
     {
-      imageScale.resizeFix(srcFile, destFile, 96, 96, x1, y1, cutWidth, catHeight);
-      FileUtil.delete(srcFile);
-      userModel.set("avatar", destFileName.replace(rootPath, "")).update();
-      destFileName = destFile.getAbsolutePath().replace(rootPath, "");
+      userService.saveAvatar(getPara("imageSource"), x1, y1, x2, y2);
     } catch (Exception e)
     {
       log.error(e.getLocalizedMessage());

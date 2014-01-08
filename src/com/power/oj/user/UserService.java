@@ -1,8 +1,10 @@
 package com.power.oj.user;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import jodd.io.FileUtil;
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
@@ -12,13 +14,16 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 
+import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.shiro.ShiroKit;
+import com.power.oj.util.FileKit;
 
 public class UserService
 {
@@ -189,6 +194,33 @@ public class UserService
     }
     
     return false;
+  }
+
+  /**
+   * cut and save user avatar.
+   * @param imageSource source of image file.
+   * @param x1 left of selection area.
+   * @param y1 top of selection area.
+   * @param x2 right of selection area.
+   * @param y2 bottom of selection area.
+   * @throws Exception
+   */
+  public void saveAvatar(String imageSource, int x1, int y1, int x2, int y2) throws Exception
+  {
+    int cutWidth = x2 - x1;
+    int catHeight = y2 - y1;
+    UserModel userModel = getCurrentUser();
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    String srcFileName = rootPath + imageSource;
+    String ext = FileKit.getFileType(srcFileName);
+    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userModel.getUid()).append(ext).toString();
+    File srcFile = new File(srcFileName);
+    File destFile = new File(destFileName);
+    ImageScaleImpl imageScale = new ImageScaleImpl();
+
+    imageScale.resizeFix(srcFile, destFile, OjConstants.avatarWidth, OjConstants.avatarHeight, x1, y1, cutWidth, catHeight);
+    FileUtil.delete(srcFile);
+    userModel.set("avatar", destFileName.replace(rootPath, "")).update();
   }
 
   /**

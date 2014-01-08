@@ -160,7 +160,8 @@ function addNewImage(data) {
 	var newImg = document.createElement("img");
 	$(newImg).attr('src', data.src).attr('id', 'photo').css({
 		float: 'left',
-		'margin-right': '10px'
+		'margin-right': '10px',
+		'margin-bottom': '10px'
 	}).appendTo('#crop_container');
 	
 	if (newImg.filters) {
