@@ -1,8 +1,11 @@
 package com.power.oj.user;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import jodd.io.FileUtil;
 import jodd.util.BCrypt;
@@ -196,6 +199,16 @@ public class UserService
     return false;
   }
 
+  public void uploadAvatar(File file, int width, int height) throws Exception
+  {
+    ImageScaleImpl imageScale = new ImageScaleImpl();
+    
+    imageScale.resizeFix(file, file, width, height);
+    BufferedImage srcImgBuff = ImageIO.read(file);
+    width = srcImgBuff.getWidth();
+    height = srcImgBuff.getHeight();
+  }
+  
   /**
    * cut and save user avatar.
    * @param imageSource source of image file.

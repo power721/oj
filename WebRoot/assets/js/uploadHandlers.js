@@ -104,7 +104,7 @@ function uploadComplete(file) {
 		} else {
 			var progress = new FileProgress(file,  this.customSettings.upload_target);
 			progress.setComplete();
-			//progress.setStatus("All images received.");
+			progress.setStatus("Click and drag on the image to select an area.");
 			progress.toggleCancel(false);
 		}
 	} catch (ex) {
@@ -199,6 +199,8 @@ function addNewImage(data) {
 	$(newImg).imgAreaSelect({
 		imageWidth: data.width,
 		imageHeight: data.height,
+		minHeight: 32,
+		minWidth: 32,
         aspectRatio: '1:1',
         onSelectEnd: function(img, selection) {
         	$('input[name="x1"]').val(selection.x1);

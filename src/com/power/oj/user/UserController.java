@@ -1,5 +1,6 @@
 package com.power.oj.user;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,6 +17,8 @@ import com.jfinal.aop.ClearLayer;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
+import com.jfinal.kit.PathKit;
+import com.jfinal.upload.UploadFile;
 
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -184,6 +187,34 @@ public class UserController extends OjController
   public void avatar()
   {
     setTitle(getText("user.avatar.title"));
+  }
+
+  @Before(POST.class)
+  @RequiresPermissions("user:upload:avatar")
+  public void uploadAvatar()
+  {
+    UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
+    File file = uploadFile.getFile();
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    String fileName = file.getAbsolutePath().replace(rootPath, "");
+    int width = 400;
+    int height = 400;
+
+    log.info(file.getAbsolutePath());
+    try
+    {
+      userService.uploadAvatar(file, width, height);
+      setAttr("error", "false");
+    } catch (Exception e)
+    {
+      setAttr("error", "true");
+      log.error(e.getLocalizedMessage());
+    }
+
+    setAttr("src", fileName);
+    setAttr("width", width);
+    setAttr("height", height);
+    renderJson(new String[]{ "error", "src", "width", "height" });
   }
 
   @Before(POST.class)
