@@ -17,7 +17,7 @@ import com.power.oj.core.service.SessionService;
 public class AccessLogInterceptor implements Interceptor
 {
   private String skipActions[] =
-  { "/problem/userResult", "/login", "/user/signin", "/signup", "/captcha", "/contest/password", "/user/forget", "/user/recover", "/user/reset", "/user/resetPassword" };
+  { "/problem/userResult", "/login", "/signup", "/captcha", "/user/forget", "/user/reset" };
 
   @Override
   public void intercept(ActionInvocation ai)
@@ -25,8 +25,9 @@ public class AccessLogInterceptor implements Interceptor
     Controller controller = ai.getController();
     HttpSession session = controller.getSession();
     String actionKey = ai.getActionKey();
+    boolean isPOST = "POST".equalsIgnoreCase(controller.getRequest().getMethod().toUpperCase());
 
-    if (StringUtil.equalsOne(actionKey, skipActions) == -1)
+    if (!isPOST && StringUtil.equalsOne(actionKey, skipActions) == -1)
     {
       StringBuilder sb = new StringBuilder(actionKey);
       if (controller.getPara() != null)
