@@ -209,6 +209,7 @@ public class UserController extends OjController
     File destFile = new File(destFileName);
     ImageScaleImpl imageScale = new ImageScaleImpl();
     UserModel userModel = getCurrentUser();
+    FlashMessage msg = new FlashMessage(getText("user.avatar.success"));
    
     try
     {
@@ -219,10 +220,11 @@ public class UserController extends OjController
     } catch (Exception e)
     {
       log.error(e.getLocalizedMessage());
+      msg = new FlashMessage(getText("user.avatar.error"), MessageType.ERROR, getText("message.error.title"));
     }
 
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
-    redirect(redirectURL, new FlashMessage(getText("user.update.success")));
+    redirect(redirectURL, msg);
   }
 
   @RequiresGuest
