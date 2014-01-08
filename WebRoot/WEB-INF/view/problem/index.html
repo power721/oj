@@ -1,6 +1,6 @@
 <#include "../common/_layout.html" /> <@layout>
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function(){
         var prevpage="problem/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
         var nextpage="problem/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"

@@ -35,7 +35,7 @@
       <#if userList??> <#list userList as User>
       <tr>
         <td>${User_index+1}</td>
-        <td><a href="user/profile/${User.name!}">${User.name!}</a></td>
+        <td class="user"><a href="user/profile/${User.name!}">${User.name!}</a></td>
         <td>${User.nick!}</td>
         <td>${User.school!}</td>
         <td>${User.solved!}</td>

@@ -1,6 +1,6 @@
 <#include "../common/_layout.html" /> <@layout>
 
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function(){
         var prevpage="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
         var nextpage="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
@@ -55,7 +55,7 @@
     <#if userList??> <#list userList.list as User>
     <tr>
       <td>${User.rank!}</td>
-      <td><a href="user/profile/${User.name!}" class="user"<#if adminUser?? && User.realname??>data-toggle="tooltip"
+      <td class="user"><a href="user/profile/${User.name!}" class="user"<#if adminUser?? && User.realname??>data-toggle="tooltip"
           title="${(User.realname)!}"</#if>>${User.name!}</a></td>
       <td>${User.nick!}</td>
       <td><a href="status?name=${User.name!}&result=0">${User.solved!}</a></td>
