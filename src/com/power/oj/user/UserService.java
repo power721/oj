@@ -98,8 +98,8 @@ public class UserService
     
     long ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
-    newUser.set("name", name).set("pass", password).set("email", email);
-    newUser.set("atime", ctime).set("ctime", ctime).set("mtime", ctime);
+    newUser.set("name", name).set("pass", password).set("email", email).set("ctime", ctime);
+    //newUser.set("atime", ctime).set("mtime", ctime);
     
     if (newUser.save())
     {
@@ -149,15 +149,17 @@ public class UserService
   public boolean updateLogin(String name, boolean success)
   {
     Record loginLog = new Record();
+    String ip = SessionService.me().getHost();
+    
     if (success)
     {
       UserModel userModel = getCurrentUser();
-      userModel.set("token", null).set("login", OjConfig.timeStamp).update();
+      userModel.set("token", null).set("login", OjConfig.timeStamp).set("login_ip", ip).update();
       
       loginLog.set("uid", userModel.getUid());
     }
     
-    loginLog.set("name", name).set("ip", SessionService.me().getHost()).set("ctime", OjConfig.timeStamp).set("succeed", success);
+    loginLog.set("name", name).set("ip", ip).set("ctime", OjConfig.timeStamp).set("succeed", success);
     return Db.save("loginlog", loginLog);
   }
   

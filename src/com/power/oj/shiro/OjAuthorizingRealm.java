@@ -29,7 +29,6 @@ public class OjAuthorizingRealm extends AuthorizingRealm
   @Override
   protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection printcipals)
   {
-    // TODO Auto-generated method stub
     Integer uid = (Integer) printcipals.fromRealm(getName()).iterator().next();
 
     if (uid != null)

@@ -809,7 +809,6 @@ CREATE TABLE `user` (
 `credit`  int(9) NOT NULL DEFAULT 0 ,
 `share`  tinyint(1) NOT NULL DEFAULT 0 ,
 `avatar` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'user avatar path' ,
-`role`  enum('title','source_browser','member','administrator','root') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `status`  tinyint(2) NOT NULL DEFAULT 1 COMMENT 'Whether the user is active(1) or blocked(0).' ,
 `data`  blob NULL DEFAULT NULL ,
 `token`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
