@@ -173,18 +173,18 @@ public class ProblemModel extends Model<ProblemModel>
     return this.save();
   }
 
-  public boolean incView()
+  public boolean incViewCount()
   {
     this.set("view", this.getInt("view") + 1);
     return this.update();
   }
   
-  public Integer getView(int pid)
+  public Integer getViewCount(int pid)
   {
     return Db.queryInt("SELECT view FROM problem WHERE pid=? LIMIT 1", pid);
   }
 
-  public void setView(int pid, int view)
+  public void setViewCount(int pid, int view)
   {
     Db.update("UPDATE problem SET view=? WHERE pid=?", view, pid);
   }
