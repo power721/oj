@@ -800,6 +800,7 @@ CREATE TABLE `user` (
 `ctime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for when user was created.' ,
 `mtime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for when user edit its profile.' ,
 `login`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for user last login.' ,
+`login_ip` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
 `phone`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `qq`  bigint(11) NULL DEFAULT NULL ,
 `blog`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
