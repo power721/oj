@@ -1,7 +1,2 @@
 /com
-/ehcache-shiro.xml
-/ehcache.xml
-/log4j.properties
-/ojText.properties
-/ojText_en.properties
-/ojText_zh.properties
+/createEntity.properties
