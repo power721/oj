@@ -102,7 +102,6 @@ public class ContestController extends OjController
       return;
     }
 
-    log.info(problemModel.toString());
     problemModel.put("sample_input_rows", StringUtil.count((String) problemModel.get("sample_input", ""), '\n') + 1);
     problemModel.put("sample_output_rows", StringUtil.count((String) problemModel.get("sample_output", ""), '\n') + 1);
 

@@ -178,6 +178,16 @@ public class ProblemModel extends Model<ProblemModel>
     this.set("view", this.getInt("view") + 1);
     return this.update();
   }
+  
+  public Integer getView(int pid)
+  {
+    return Db.queryInt("SELECT view FROM problem WHERE pid=? LIMIT 1", pid);
+  }
+
+  public void setView(int pid, int view)
+  {
+    Db.update("UPDATE problem SET view=? WHERE pid=?", view, pid);
+  }
 
   public boolean addTag(int pid, int uid, String tag)
   {

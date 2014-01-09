@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
@@ -22,6 +23,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.service.VisitCountService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
@@ -104,7 +106,8 @@ public class ProblemController extends OjController
     setAttr("problem", problemModel);
     setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), 3600 * 24 * 7);
 
-    problemModel.incView();
+    //problemModel.incView();
+    VisitCountService.record(VisitCountService.problemViewCount, pid);
     
     setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
   }

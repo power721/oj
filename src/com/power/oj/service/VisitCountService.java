@@ -10,7 +10,14 @@ import org.apache.log4j.Logger;
 // TODO not implemented
 public class VisitCountService extends TimerTask
 {
-
+  public static final byte problemViewCount = 0x01;
+  public static final byte userViewCount = 0x02;
+  public static final byte contestViewCount = 0x03;
+  public static final byte contestProblemViewCount = 0x04;
+  public static final byte postViewCount = 0x05;
+  public static final byte noticeViewCount = 0x06;
+  public static final byte articleViewCount = 0x07;
+  
   private final static Logger log = Logger.getLogger(VisitCountService.class);
   private static boolean start = false;
   private static VisitCountService daemon;
@@ -44,7 +51,7 @@ public class VisitCountService extends TimerTask
     if (queue != null)
     {
       Integer nCount = queue.get(obj_id);
-      nCount = (nCount == null) ? 1 : nCount + 1;
+      nCount = (nCount == null) ? 1 : nCount + 1; // get number from DB.
       queue.put(obj_id, nCount.intValue());
       System.out.printf("record (type=%d,id=%d,count=%d)\n", type, obj_id, nCount);
     }
@@ -123,6 +130,9 @@ public class VisitCountService extends TimerTask
     switch (type)
     {
     // 数据写入数据库....
+    case problemViewCount:
+      //ProblemModel.dao.setView(pid, view);
+    break;
     }
     System.out.printf("Flush to database: type=%d\n", type);
   }
