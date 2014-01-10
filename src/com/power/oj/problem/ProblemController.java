@@ -284,7 +284,7 @@ public class ProblemController extends OjController
       // render("ajax/status.html");
     } else
     {
-      setTitle(new StringBuilder(2).append(getText("problem.status.title").replaceAll("_pid_", String.valueOf(pid))).toString());
+      setTitle(new StringBuilder(2).append(String.format(getText("problem.status.title"), pid)).toString());
       render("status.html");
     }
   }
