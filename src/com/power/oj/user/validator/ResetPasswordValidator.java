@@ -6,13 +6,16 @@ import com.power.oj.core.OjConstants;
 
 public class ResetPasswordValidator extends Validator
 {
-  private int minLnegth = 6;
-  private int maxLength= 20;
+  private static final int passwordMinLength = OjConstants.PASSWORD_MIN_LENGTH;
+  private static final int passwordMaxLength= OjConstants.PASSWORD_MAX_LENGTH;
   
   @Override
   protected void validate(Controller c)
   {
-    validateRegex("pass", ".{6,20}", "passwordMsg", c.getText("validate.password.length").replaceAll("_min_", String.valueOf(minLnegth)).replaceAll("_max_", String.valueOf(maxLength)));
+    String regExpression = String.format(".{%d,%d}", passwordMinLength, passwordMaxLength);
+    String passwordMsg = String.format(c.getText("validate.password.length"), passwordMinLength, passwordMaxLength);
+    
+    validateRegex("pass", regExpression, "passwordMsg", passwordMsg);
     validateEqualField("pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
   }
 

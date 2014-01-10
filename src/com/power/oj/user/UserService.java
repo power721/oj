@@ -237,7 +237,7 @@ public class UserService
     File destFile = new File(destFileName);
     ImageScaleImpl imageScale = new ImageScaleImpl();
 
-    imageScale.resizeFix(srcFile, destFile, OjConstants.avatarWidth, OjConstants.avatarHeight, x1, y1, cutWidth, catHeight);
+    imageScale.resizeFix(srcFile, destFile, OjConstants.AVATAR_WIDTH, OjConstants.AVATAR_HEIGHT, x1, y1, cutWidth, catHeight);
     FileUtil.delete(srcFile);
     userModel.set("avatar", destFileName.replace(rootPath, "")).update();
   }

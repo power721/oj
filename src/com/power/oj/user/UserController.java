@@ -222,8 +222,8 @@ public class UserController extends OjController
   {
     int x1 = getParaToInt("x1", 0);
     int y1 = getParaToInt("y1", 0);
-    int x2 = getParaToInt("x2", OjConstants.avatarWidth);
-    int y2 = getParaToInt("y2", OjConstants.avatarHeight);
+    int x2 = getParaToInt("x2", OjConstants.AVATAR_WIDTH);
+    int y2 = getParaToInt("y2", OjConstants.AVATAR_HEIGHT);
     FlashMessage msg = new FlashMessage(getText("user.avatar.success"));
    
     try
