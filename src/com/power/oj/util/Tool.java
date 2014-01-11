@@ -7,6 +7,7 @@ import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 
 import java.io.IOException;
+import java.util.Map;
 
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
@@ -15,6 +16,8 @@ import jodd.mail.SendMailSession;
 import jodd.mail.SimpleAuthenticator;
 import jodd.mail.SmtpServer;
 import jodd.util.MimeTypes;
+import jodd.util.StringTemplateParser;
+import jodd.util.StringTemplateParser.MacroResolver;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -166,4 +169,16 @@ public class Tool
     }
   }
 
+  public static String parseStringTemplate(final String template, final Map<String, String> map)
+  {
+    StringTemplateParser stp = new StringTemplateParser();
+    String result = stp.parse(template, new MacroResolver() {
+        public String resolve(String macroName) {
+            return map.get(macroName);
+        }
+    });
+    
+    return result;
+  }
+  
 }

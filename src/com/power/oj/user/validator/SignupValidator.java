@@ -11,14 +11,19 @@ import com.power.oj.user.UserService;
 
 public class SignupValidator extends Validator
 {
-  private int minLnegth = 6;
-  private int maxLength= 20;
+  private static final int usernameMinLength = OjConstants.USERNAME_MIN_LENGTH;
+  private static final int usernameMaxLength= OjConstants.USERNAME_MAX_LENGTH;
+  private static final int passwordMinLength = OjConstants.PASSWORD_MIN_LENGTH;
+  private static final int passwordMaxLength= OjConstants.PASSWORD_MAX_LENGTH;
   
   @Override
   protected void validate(Controller c)
   {
+    String regExpression = String.format(".{%d,%d}", passwordMinLength, passwordMaxLength);
+    String passwordMsg = String.format(c.getText("validate.password.length"), passwordMinLength, passwordMaxLength);
+    
     validateEmail("user.email", "emailMsg", c.getText("validate.email.error"));
-    validateRegex("user.pass", ".{6,20}", "passwordMsg", c.getText("validate.password.length").replaceAll("_min_", String.valueOf(minLnegth)).replaceAll("_max_", String.valueOf(maxLength)));
+    validateRegex("user.pass", regExpression, "passwordMsg", passwordMsg);
     validateEqualField("user.pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
 
     String email = c.getPara("user.email");
@@ -36,7 +41,9 @@ public class SignupValidator extends Validator
       addError("nameMsg", c.getText("validate.name.reserved"));
     } else
     {
-      validateRegex("user.name", "[a-zA-Z0-9_]{5,15}", "nameMsg", c.getText("validate.name.error"));
+      regExpression = String.format("[a-zA-Z0-9_]{5,15}", usernameMinLength, usernameMaxLength);
+      passwordMsg = String.format(c.getText("validate.name.error"), usernameMinLength, usernameMaxLength);
+      validateRegex("user.name", regExpression, "nameMsg", passwordMsg);
     }
 
     String captcha = c.getPara("captcha").toUpperCase();

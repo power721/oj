@@ -23,7 +23,7 @@ public class LoginValidator extends Validator
     }
 
     // validateEmail("mail", "msg", "邮箱格式不正确");
-    validateString("password", 6, 12, "msg", c.getText("validate.password.length"));
+    validateString("password", OjConstants.PASSWORD_MIN_LENGTH, OjConstants.PASSWORD_MAX_LENGTH, "msg", c.getText("validate.password.length"));
   }
 
   @Override
