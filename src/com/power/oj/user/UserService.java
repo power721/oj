@@ -281,9 +281,9 @@ public class UserService
     return userList;
   }
 
-  public Page<UserModel> getUserRankList(int pageNumber, int pageSize)
+  public UserModel getUserByUid(int uid)
   {
-    return dao.getUserRankList(pageNumber, pageSize);
+    return dao.findById(uid);
   }
 
   public UserModel getUserByName(String name)
@@ -296,11 +296,6 @@ public class UserService
     return dao.getUserByNameAndEmail(name, email);
   }
 
-  public int getUserRank(int uid)
-  {
-    return dao.getUserRank(uid);
-  }
-
   public UserModel getUserInfoByName(String name)
   {
     return dao.getUserInfoByName(name);
@@ -309,6 +304,16 @@ public class UserService
   public UserModel getUserInfoByUid(int uid)
   {
     return dao.getUserInfoByUid(uid);
+  }
+
+  public int getUserRank(int uid)
+  {
+    return dao.getUserRank(uid);
+  }
+
+  public Page<UserModel> getUserRankList(int pageNumber, int pageSize)
+  {
+    return dao.getUserRankList(pageNumber, pageSize);
   }
 
   public boolean checkPassword(int uid, String password)

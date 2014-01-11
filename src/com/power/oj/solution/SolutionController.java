@@ -19,7 +19,6 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.judge.Judge;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
 public class SolutionController extends OjController
@@ -111,7 +110,7 @@ public class SolutionController extends OjController
     setAttr("problemTitle", problemTitle);
     try
     {
-      setAttr(OjConstants.USER, UserModel.dao.findById(uid, "name").get("name"));
+      setAttr("submitUser", UserService.me().getUserByUid(uid));
     } catch (NullPointerException e)
     {
       log.warn(e.getLocalizedMessage());
