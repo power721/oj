@@ -248,8 +248,8 @@ public class Judge extends Thread
 
     synchronized (mute)
     {
-      int cid = solutionModel.getInt("cid");
-      if (cid > 0)
+      Integer cid = solutionModel.getInt("cid");
+      if (cid != null && cid > 0)
       {
         int uid = solutionModel.getUid();
         int num = solutionModel.getInt("num");

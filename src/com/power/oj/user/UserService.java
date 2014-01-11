@@ -20,6 +20,7 @@ import org.apache.shiro.subject.Subject;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -278,6 +279,52 @@ public class UserService
     }
     
     return userList;
+  }
+
+  public Page<UserModel> getUserRankList(int pageNumber, int pageSize)
+  {
+    return dao.getUserRankList(pageNumber, pageSize);
+  }
+
+  public UserModel getUserByName(String name)
+  {
+    return dao.getUserByName(name);
+  }
+
+  public UserModel getUserByNameAndEmail(String name, String email)
+  {
+    return dao.getUserByNameAndEmail(name, email);
+  }
+
+  public int getUserRank(int uid)
+  {
+    return dao.getUserRank(uid);
+  }
+
+  public UserModel getUserInfoByName(String name)
+  {
+    return dao.getUserInfoByName(name);
+  }
+
+  public UserModel getUserInfoByUid(int uid)
+  {
+    return dao.getUserInfoByUid(uid);
+  }
+
+  public boolean checkPassword(int uid, String password)
+  {
+    String stored_hash = dao.findById(uid, "pass").getStr("pass");
+    return BCrypt.checkpw(password, stored_hash);
+  }
+
+  public boolean containEmail(String email)
+  {
+    return dao.getUserByEmail(email) != null;
+  }
+
+  public boolean containUsername(String username)
+  {
+    return dao.getUserByName(username) != null;
   }
 
   /**

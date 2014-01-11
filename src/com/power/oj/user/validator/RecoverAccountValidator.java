@@ -4,7 +4,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.validate.Validator;
 import com.power.oj.core.OjConstants;
-import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class RecoverAccountValidator extends Validator
 {
@@ -16,7 +16,7 @@ public class RecoverAccountValidator extends Validator
     
     String name = c.getPara("name");
     String email = c.getPara("email");
-    if (UserModel.dao.getUserByNameAndEmail(name, email) == null)
+    if (UserService.me().getUserByNameAndEmail(name, email) == null)
     {
       addError("emailMsg", c.getText("recover.account.validate.error"));
     }

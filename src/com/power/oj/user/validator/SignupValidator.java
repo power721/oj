@@ -7,6 +7,7 @@ import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.validate.Validator;
 import com.power.oj.core.OjConstants;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class SignupValidator extends Validator
 {
@@ -21,13 +22,13 @@ public class SignupValidator extends Validator
     validateEqualField("user.pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
 
     String email = c.getPara("user.email");
-    if (StringUtil.isNotBlank(email) && UserModel.dao.containEmail(email))
+    if (StringUtil.isNotBlank(email) && UserService.me().containEmail(email))
     {
       addError("emailMsg", c.getText("validate.email.exist"));
     }
 
     String username = c.getPara("user.name");
-    if (StringUtil.isNotBlank(username) && UserModel.dao.containUsername(username))
+    if (StringUtil.isNotBlank(username) && UserService.me().containUsername(username))
     {
       addError("nameMsg", c.getText("validate.name.exist"));
     } else if (StringUtil.isNotBlank(username) && !checkReservedName(username))

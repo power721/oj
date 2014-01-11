@@ -20,6 +20,7 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.service.OjService;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class OjAuthorizingRealm extends AuthorizingRealm
 {
@@ -68,7 +69,7 @@ public class OjAuthorizingRealm extends AuthorizingRealm
   protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException
   {
     UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-    UserModel userModel = UserModel.dao.getUserByName(token.getUsername());
+    UserModel userModel = UserService.me().getUserByName(token.getUsername());
 
     if (userModel != null)
     {

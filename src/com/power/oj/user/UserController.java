@@ -57,7 +57,7 @@ public class UserController extends OjController
     int pageSize = getParaToInt(1, OjConfig.userPageSize);
     
     setAttr("pageSize", OjConfig.userPageSize);
-    setAttr(OjConstants.USER_LIST, UserModel.dao.getUserRankList(pageNumber, pageSize));
+    setAttr(OjConstants.USER_LIST, userService.getUserRankList(pageNumber, pageSize));
     
     setTitle(getText("user.rank.title"));
   }
@@ -72,7 +72,7 @@ public class UserController extends OjController
       userModel = getCurrentUser();
     } else
     {
-      userModel = UserModel.dao.getUserByName(name);
+      userModel = userService.getUserByName(name);
     }
     
     if (userModel == null)
@@ -85,7 +85,7 @@ public class UserController extends OjController
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     userModel.put("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
     userModel.put("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
-    userModel.put("rank", UserModel.dao.getUserRank(userModel.getUid()));
+    userModel.put("rank", userService.getUserRank(userModel.getUid()));
     setAttr(OjConstants.USER, userModel);
     
     setTitle(getText("user.profile.title"));
@@ -100,11 +100,11 @@ public class UserController extends OjController
     if (isParaExists("uid"))
     {
       uid = getParaToInt("uid");
-      userModel = UserModel.dao.getUserInfoByUid(uid);
+      userModel = userService.getUserInfoByUid(uid);
     } else if (isParaExists("name"))
     {
       name = getPara("name");
-      userModel = UserModel.dao.getUserInfoByName(name);
+      userModel = userService.getUserInfoByName(name);
     }
 
     if (userModel == null)
@@ -252,7 +252,7 @@ public class UserController extends OjController
     String name = getPara("name");
     String email = getPara("email");
     String token = UUID.randomUUID().toString();
-    UserModel userModel = UserModel.dao.getUserByName(name);
+    UserModel userModel = userService.getUserByName(name);
     FlashMessage msg = new FlashMessage(getText("user.recover.success"));
     
     userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
@@ -359,7 +359,7 @@ public class UserController extends OjController
   public void build()
   {
     String name = getPara(0);
-    UserModel userModel = UserModel.dao.getUserByName(name);
+    UserModel userModel = userService.getUserByName(name);
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(name).toString();
     FlashMessage msg = new FlashMessage(getText("user.build.success"));
     

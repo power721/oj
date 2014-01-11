@@ -15,7 +15,7 @@
     <span><a href="javascript:" id="copy-description" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span> <#if !alpha??><span
       class="pull-right"><a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal"
       data-target="#submitModal">Re Submit</a></span></#if>
-    <textarea id="source" class='brush: ${brush!' cpp'} auto-width' cols="120" rows="20">${solution.source!}</textarea>
+    <textarea id="source" class="brush: ${brush!'cpp'} auto-width" cols="120" rows="20">${solution.source!}</textarea>
   </div>
 </div>
 
@@ -76,7 +76,6 @@
 <script language='javascript' type='text/javascript'>
         $(document).ready(function(){
 
-
             $('a#copy-description').zclip({
                 path:'assets/js/ZeroClipboard.swf',
                 copy:$('textarea#source').text(),
@@ -93,6 +92,7 @@
             });
         });
 
-        SyntaxHighlighter.config.tagName = 'textarea';SyntaxHighlighter.all();
+        SyntaxHighlighter.config.tagName = 'textarea';
+        SyntaxHighlighter.all();
     </script>
 </@layout>

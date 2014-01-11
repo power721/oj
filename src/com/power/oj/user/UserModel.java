@@ -1,6 +1,5 @@
 package com.power.oj.user;
 
-import jodd.util.BCrypt;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
 
@@ -32,17 +31,9 @@ public class UserModel extends Model<UserModel>
     return findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
   }
 
-  public UserModel getUserByNameAndPassword(String name, String password)
+  public UserModel getUserByEmail(String email)
   {
-    UserModel userModel = getUserByName(name);
-    if (userModel != null)
-    {
-      String stored_hash = userModel.getStr("pass");
-      if (BCrypt.checkpw(password, stored_hash))
-        return userModel;
-    }
-
-    return null;
+    return findFirst("SELECT * FROM user WHERE email=? LIMIT 1", email);
   }
 
   public UserModel getUserByNameAndEmail(String name, String email)
@@ -88,22 +79,6 @@ public class UserModel extends Model<UserModel>
         "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submit,uid", (pageNumber - 1) * pageSize);
     
     return userList;
-  }
-
-  public boolean checkPassword(int uid, String password)
-  {
-    String stored_hash = findById(uid, "pass").getStr("pass");
-    return BCrypt.checkpw(password, stored_hash);
-  }
-
-  public boolean containEmail(String email)
-  {
-    return findFirst("SELECT email FROM user WHERE email=? LIMIT 1", email) != null;
-  }
-
-  public boolean containUsername(String username)
-  {
-    return findFirst("SELECT name FROM user WHERE name=? LIMIT 1", username) != null;
   }
 
   public boolean containEmailExceptThis(int userID, String email)
