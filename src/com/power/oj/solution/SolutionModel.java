@@ -232,7 +232,7 @@ public class SolutionModel extends Model<SolutionModel>
       int pid = ContestModel.dao.getPid(getInt("cid"), getInt("num"));
       set("pid", pid);
     }
-    this.set("ctime", ctime).set("result", ResultType.Wait).set("code_len", this.getStr("source").length());
+    this.set("ctime", ctime).set("result", ResultType.WAIT).set("code_len", this.getStr("source").length());
     System.out.println(this.getInt("code_len"));
     if (this.getInt("code_len") < 10 || this.getInt("code_len") > 30000)
       return false;

@@ -12,7 +12,7 @@ public class ResultType
   public static final int CE = 7;
   public static final int SE = 98;
   public static final int VE = 99;
-  public static final int Wait = 10000;
+  public static final int WAIT = 10000;
 
   private int id;
   private String name;

@@ -92,7 +92,7 @@ public class OjConfig
     judge_result.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
     judge_result.add(new ResultType(ResultType.SE, "SE", "System Error"));
     judge_result.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
-    judge_result.add(new ResultType(ResultType.Wait, "Wait", "Waiting"));
+    judge_result.add(new ResultType(ResultType.WAIT, "Wait", "Waiting"));
 
     result_type = new IntHashMap();
     for (Iterator<ResultType> it = judge_result.iterator(); it.hasNext();)
