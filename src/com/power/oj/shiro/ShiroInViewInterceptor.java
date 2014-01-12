@@ -14,11 +14,11 @@ public class ShiroInViewInterceptor implements Interceptor
   {
     OjController controller = (OjController) ai.getController();
     
-    if (UserService.me().isUser()) // if user is logined, set user information in controller
+    if (ShiroKit.isUser()) // if user is logined, set user information in controller
     {
       int uid = UserService.me().getCurrentUid();
       
-      if (UserService.me().hasAnyRoles("admin,root"))
+      if (UserService.me().isAdmin())
         controller.setAttr(OjConstants.ADMIN_USER, uid);
     }
 

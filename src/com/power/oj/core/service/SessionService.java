@@ -17,6 +17,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.model.SessionModel;
+import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
@@ -66,7 +67,7 @@ public class SessionService
 
   public void updateLogin()
   {
-    Subject currentUser = UserService.me().getSubject();
+    Subject currentUser = ShiroKit.getSubject();
     Session session = currentUser.getSession();
     UserModel userModel = UserService.me().getCurrentUser();
     String id = (String) session.getId();

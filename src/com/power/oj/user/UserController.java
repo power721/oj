@@ -27,6 +27,7 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.validator.RecoverAccountValidator;
 import com.power.oj.user.validator.ResetPasswordValidator;
 import com.power.oj.user.validator.SignupValidator;
@@ -132,7 +133,7 @@ public class UserController extends OjController
   @ActionKey("/login")
   public void login()
   {
-    if (userService.isAuthenticated())
+    if (ShiroKit.isAuthenticated())
     {
       FlashMessage msg = new FlashMessage(getText("user.error.login"), MessageType.WARN, getText("message.warn.title"));
       redirect(sessionService.getLastAccessURL(), msg);
@@ -146,7 +147,7 @@ public class UserController extends OjController
   @ClearShiro
   public void signin()
   {
-    if (userService.isAuthenticated())
+    if (ShiroKit.isAuthenticated())
     {
       FlashMessage msg = new FlashMessage(getText("user.error.login"), MessageType.WARN, getText("message.warn.title"));
       redirect(sessionService.getLastAccessURL(), msg);

@@ -5,6 +5,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.shiro.ShiroKit;
 
 /**
  * Get and Set user session and controller attributes, auto login.
@@ -21,7 +22,7 @@ public class UserInterceptor implements Interceptor
   {
     OjController controller = (OjController) ai.getController();
     
-    if (UserService.me().isUser()) // if user is logined, set user information in controller
+    if (ShiroKit.isUser()) // if user is logined, set user information in controller
     {
       UserModel userModel = UserService.me().getCurrentUser();
       controller.setAttr(OjConstants.USER, userModel);

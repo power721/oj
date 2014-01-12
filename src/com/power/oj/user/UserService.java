@@ -12,7 +12,6 @@ import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -33,7 +32,6 @@ import com.power.oj.util.FileKit;
 public class UserService
 {
   private static final Logger log = Logger.getLogger(UserService.class);
-
   private static final UserService me = new UserService();
   private static final UserModel dao = UserModel.dao;
   
@@ -56,7 +54,7 @@ public class UserService
    */
   public boolean login(String name, String password, boolean rememberMe)
   {
-    Subject currentUser = getSubject();
+    Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
 
@@ -81,7 +79,8 @@ public class UserService
    */
   public void logout()
   {
-    Subject currentUser = getSubject();
+    Subject currentUser = ShiroKit.getSubject();
+    // TODO: calculate online time in minutes
     /*UserModel userModel = getCurrentUser();
     if (userModel != null)
     {
@@ -91,6 +90,11 @@ public class UserService
     currentUser.logout();
   }
   
+  /**
+   * user signup
+   * @param userModel
+   * @return
+   */
   public boolean signup(UserModel userModel)
   {
     String name = HtmlEncoder.text(userModel.getStr("name"));
@@ -115,6 +119,11 @@ public class UserService
     return false;
   }
   
+  /**
+   * update user
+   * @param userModel
+   * @return
+   */
   public boolean updateUser(UserModel userModel)
   {
     UserModel newUser = new UserModel();
@@ -163,7 +172,41 @@ public class UserService
     loginLog.set("name", name).set("ip", ip).set("ctime", OjConfig.timeStamp).set("succeed", success);
     return Db.save("loginlog", loginLog);
   }
-  
+
+  /**
+   * Build user statistics.
+   * @param userModel the user.
+   * @return
+   */
+  public boolean build(UserModel userModel)
+  {
+    if (userModel == null)
+      return false;
+    
+    int uid = userModel.getUid();
+    
+    Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);
+
+    if (record != null)
+    {
+      userModel.set("submit", record.getLong("count"));
+    }
+
+    record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
+    if (record != null)
+    {
+      userModel.set("accept", record.getLong("count"));
+    }
+
+    record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
+    if (record != null)
+    {
+      userModel.set("solved", record.getLong("count"));
+    }
+
+    return userModel.update();
+  }
+
   /**
    * Reset user password for recover account.
    * @param name user name.
@@ -203,17 +246,22 @@ public class UserService
     return false;
   }
 
-  public void uploadAvatar(File file, int width, int height, OjController c) throws Exception
+  /**
+   * upload and resize user avatar.
+   * @param file file of the avatar.
+   * @param maxWidth max width of the thumbnail.
+   * @param maxHeight max height of the thumbnail.
+   * @param controller the controller to set attr.
+   * @throws Exception
+   */
+  public void uploadAvatar(File file, int maxWidth, int maxHeight, OjController controller) throws Exception
   {
     ImageScaleImpl imageScale = new ImageScaleImpl();
+    imageScale.resizeFix(file, file, maxWidth, maxHeight);
     
-    imageScale.resizeFix(file, file, width, height);
     BufferedImage srcImgBuff = ImageIO.read(file);
-    width = srcImgBuff.getWidth();
-    height = srcImgBuff.getHeight();
-    
-    c.setAttr("width", width);
-    c.setAttr("height", height);
+    controller.setAttr("width", srcImgBuff.getWidth());
+    controller.setAttr("height", srcImgBuff.getHeight());
   }
   
   /**
@@ -281,7 +329,33 @@ public class UserService
     return userList;
   }
 
-  public UserModel getUserByUid(int uid)
+  /**
+   * Get current uid form Shiro.
+   * @return the uid of current user or null.
+   */
+  public Integer getCurrentUid()
+  {
+    Subject currentUser = ShiroKit.getSubject();
+    if (currentUser == null)
+      return null;
+
+    Object principal = currentUser.getPrincipal();
+    if (principal == null)
+      return null;
+    
+    return (Integer) principal;
+  }
+
+  /**
+   * Get current user by uid.
+   * @return current user or null.
+   */
+  public UserModel getCurrentUser()
+  {
+    return getUserByUid(getCurrentUid());
+  }
+
+  public UserModel getUserByUid(Integer uid)
   {
     return dao.findById(uid);
   }
@@ -332,127 +406,9 @@ public class UserService
     return dao.getUserByName(username) != null;
   }
 
-  /**
-   * Get current user by uid.
-   * @return current user or null.
-   */
-  public UserModel getCurrentUser()
-  {
-    return dao.findById(getCurrentUid());
-  }
-
-  /**
-   * Get current uid form Shiro.
-   * @return the uid of current user or null.
-   */
-  public Integer getCurrentUid()
-  {
-    Subject currentUser = getSubject();
-    if (currentUser == null)
-      return null;
-
-    Object principal = currentUser.getPrincipal();
-    if (principal == null)
-      return null;
-    
-    return (Integer) principal;
-  }
-
-  /**
-   * Build user statistics.
-   * @param userModel the user.
-   * @return
-   */
-  public boolean build(UserModel userModel)
-  {
-    if (userModel == null)
-      return false;
-    
-    int uid = userModel.getUid();
-    
-    Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);
-
-    if (record != null)
-    {
-      userModel.set("submit", record.getLong("count"));
-    }
-
-    record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
-    if (record != null)
-    {
-      userModel.set("accept", record.getLong("count"));
-    }
-
-    record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
-    if (record != null)
-    {
-      userModel.set("solved", record.getLong("count"));
-    }
-
-    return userModel.update();
-  }
-
-  /*
-   * Methods for Shiro.
-   */
-  public Subject getSubject()
-  {
-    return SecurityUtils.getSubject();
-  }
-
-  public boolean isAuthenticated()
-  {
-    return ShiroKit.isAuthenticated();
-  }
-  
-  public boolean isRemembered()
-  {
-    return ShiroKit.isRemembered();
-  }
-  
-  public boolean isUser()
-  {
-    return ShiroKit.isUser();
-  }
-
-  public boolean isGuest()
-  {
-    return ShiroKit.isGuest();
-  }
-  
   public boolean isAdmin()
   {
     return ShiroKit.hasPermission("admin");
   }
 
-  public boolean hasRole(String roleName)
-  {
-    return ShiroKit.hasRole(roleName);
-  }
-  
-  public boolean lacksRole(String roleName)
-  {
-    return ShiroKit.lacksRole(roleName);
-  }
-  
-  public boolean hasAnyRoles(String roleNames)
-  {
-    return ShiroKit.hasAnyRoles(roleNames);
-  }
-  
-  public boolean hasAllRoles(String roleNames)
-  {
-    return ShiroKit.hasAllRoles(roleNames);
-  }
-  
-  public boolean hasPermission(String permission)
-  {
-    return ShiroKit.hasPermission(permission);
-  }
-  
-  public boolean lacksPermission(String permission)
-  {
-    return ShiroKit.lacksPermission(permission);
-  }
-  
 }
