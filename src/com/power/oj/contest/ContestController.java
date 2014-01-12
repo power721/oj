@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-
 import jodd.util.StringUtil;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;

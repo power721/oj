@@ -1,11 +1,12 @@
 package com.power.oj.core.interceptor;
 
 import javax.servlet.http.HttpSession;
+
 import jodd.util.StringUtil;
+
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
-
 import com.power.oj.core.service.SessionService;
 
 /**

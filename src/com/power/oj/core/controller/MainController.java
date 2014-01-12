@@ -3,7 +3,6 @@ package com.power.oj.core.controller;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.render.CaptchaRender;
-
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.OjService;

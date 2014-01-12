@@ -1,13 +1,18 @@
 package com.power.oj.shiro.freemarker;
 
-import freemarker.core.Environment;
-import freemarker.template.*;
+import java.io.IOException;
+import java.util.Map;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
-import java.io.IOException;
-import java.util.Map;
+import freemarker.core.Environment;
+import freemarker.template.SimpleScalar;
+import freemarker.template.TemplateDirectiveBody;
+import freemarker.template.TemplateDirectiveModel;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
 
 /**
  * <p>

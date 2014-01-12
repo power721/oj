@@ -1,11 +1,11 @@
 package com.power.oj.shiro.freemarker;
 
+import java.io.IOException;
+import java.util.Map;
+
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * <p>

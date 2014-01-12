@@ -1,12 +1,12 @@
 package com.power.oj.shiro.freemarker;
 
+import java.io.IOException;
+import java.util.Map;
+
 import freemarker.core.Environment;
 import freemarker.log.Logger;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateException;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * Freemarker tag that renders the tag body if the current user known to the

@@ -3,7 +3,6 @@ package com.power.oj.service;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
 import org.apache.log4j.Logger;
 
 import com.power.oj.core.OjConstants;

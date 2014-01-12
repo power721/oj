@@ -6,14 +6,13 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 
+import jodd.io.FileUtil;
 import magick.CompositeOperator;
 import magick.DrawInfo;
 import magick.ImageInfo;
 import magick.MagickException;
 import magick.MagickImage;
 import magick.PixelPacket;
-
-import jodd.io.FileUtil;
 
 import com.power.oj.image.ImageUtils.Position;
 

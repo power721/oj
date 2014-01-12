@@ -1,9 +1,9 @@
 package com.power.oj.solution;
 
+import jodd.util.StringUtil;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
-
-import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;

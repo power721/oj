@@ -1,13 +1,9 @@
 package com.power.oj.util;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.jfinal.kit.StringKit;
-import com.jfinal.log.Logger;
-import com.power.oj.core.OjConfig;
-
 import java.io.IOException;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
@@ -25,6 +21,10 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+
+import com.jfinal.kit.StringKit;
+import com.jfinal.log.Logger;
+import com.power.oj.core.OjConfig;
 
 /**
  * Utils for common usage.

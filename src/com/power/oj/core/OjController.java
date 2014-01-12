@@ -5,6 +5,8 @@ import javax.servlet.http.Cookie;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.core.bean.FlashMessage;
+import com.power.oj.core.interceptor.FlashMessageInterceptor;
+import com.power.oj.user.UserInterceptor;
 import com.power.oj.user.UserModel;
 
 /**
