@@ -12,14 +12,14 @@ public class UserModel extends Model<UserModel>
   
   public static final UserModel dao = new UserModel();
 
-  public int getUid()
+  public Integer getUid()
   {
     return getInt("uid");
   }
 
-  public int getUidByName(String name)
+  public Integer getUidByName(String name)
   {
-    int uid = 0;
+    Integer uid = 0;
     UserModel userModel = findFirst("SELECT uid FROM user WHERE name=? LIMIT 1", name);
     if (userModel != null)
       uid = userModel.getUid();
@@ -46,12 +46,12 @@ public class UserModel extends Model<UserModel>
     return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE name=? LIMIT 1", name);
   }
 
-  public UserModel getUserInfoByUid(int uid)
+  public UserModel getUserInfoByUid(Integer uid)
   {
     return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,accept,login,ctime FROM user WHERE uid=? LIMIT 1", uid);
   }
 
-  public int getUserRank(int uid)
+  public int getUserRank(Integer uid)
   {
     int userRank = 0;
     Object object = findFirst(
@@ -81,13 +81,13 @@ public class UserModel extends Model<UserModel>
     return userList;
   }
 
-  public boolean containEmailExceptThis(int userID, String email)
+  public boolean containEmailExceptThis(Integer uid, String email)
   {
-    return findFirst("SELECT email FROM user WHERE email=? AND uid!=? LIMIT 1", email, userID) != null;
+    return findFirst("SELECT email FROM user WHERE email=? AND uid!=? LIMIT 1", email, uid) != null;
   }
 
-  public boolean containUsernameExceptThis(int userID, String username)
+  public boolean containUsernameExceptThis(Integer uid, String username)
   {
-    return findFirst("SELECT name FROM user WHERE name=? AND uid!=? LIMIT 1", username, userID) != null;
+    return findFirst("SELECT name FROM user WHERE name=? AND uid!=? LIMIT 1", username, uid) != null;
   }
 }

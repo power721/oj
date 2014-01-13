@@ -183,7 +183,7 @@ public class UserService
     if (userModel == null)
       return false;
     
-    int uid = userModel.getUid();
+    Integer uid = userModel.getUid();
     
     Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);
 
@@ -375,12 +375,12 @@ public class UserService
     return dao.getUserInfoByName(name);
   }
 
-  public UserModel getUserInfoByUid(int uid)
+  public UserModel getUserInfoByUid(Integer uid)
   {
     return dao.getUserInfoByUid(uid);
   }
 
-  public int getUserRank(int uid)
+  public int getUserRank(Integer uid)
   {
     return dao.getUserRank(uid);
   }
@@ -390,7 +390,7 @@ public class UserService
     return dao.getUserRankList(pageNumber, pageSize);
   }
 
-  public boolean checkPassword(int uid, String password)
+  public boolean checkPassword(Integer uid, String password)
   {
     String stored_hash = dao.findById(uid, "pass").getStr("pass");
     return BCrypt.checkpw(password, stored_hash);
