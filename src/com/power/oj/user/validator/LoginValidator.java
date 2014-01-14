@@ -1,12 +1,10 @@
 package com.power.oj.user.validator;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
 import com.power.oj.core.OjConstants;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class LoginValidator extends Validator
 {
@@ -14,8 +12,7 @@ public class LoginValidator extends Validator
   @Override
   protected void validate(Controller c)
   {
-    Subject currentUser = SecurityUtils.getSubject();
-    UserModel userModel = (UserModel) currentUser.getPrincipal();
+    UserModel userModel = UserService.me().getCurrentUser();
     if (userModel != null)
     {
       c.redirect("/");
