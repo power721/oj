@@ -118,7 +118,7 @@ public class Tool
    *          the title of email.
    * @param content
    *          string of email body.
-   * @throws Exception 
+   * @throws Exception
    */
   public static void sendEmail(String from, String to, String subject, String content) throws Exception
   {
@@ -137,7 +137,7 @@ public class Tool
    *          the title of email.
    * @param content
    *          EmailMessage of email body.
-   * @throws Exception 
+   * @throws Exception
    */
   public static void sendEmail(String from, String to, String subject, EmailMessage content) throws Exception
   {
@@ -173,12 +173,13 @@ public class Tool
   {
     StringTemplateParser stp = new StringTemplateParser();
     String result = stp.parse(template, new MacroResolver() {
-        public String resolve(String macroName) {
-            return map.get(macroName);
-        }
+      public String resolve(String macroName)
+      {
+        return map.get(macroName);
+      }
     });
-    
+
     return result;
   }
-  
+
 }

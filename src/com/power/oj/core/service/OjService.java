@@ -16,10 +16,7 @@ public class OjService
   private static final Logger log = Logger.getLogger(OjService.class);
   private static final OjService me = new OjService();
   
-  private OjService()
-  {
-    
-  }
+  private OjService() {}
   
   public static OjService me()
   {

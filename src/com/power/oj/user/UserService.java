@@ -35,10 +35,7 @@ public class UserService
   private static final UserService me = new UserService();
   private static final UserModel dao = UserModel.dao;
   
-  private UserService()
-  {
-    
-  }
+  private UserService() {}
   
   public static UserService me()
   {
