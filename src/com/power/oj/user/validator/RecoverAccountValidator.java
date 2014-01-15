@@ -22,7 +22,7 @@ public class RecoverAccountValidator extends Validator
     }
 
     String captcha = c.getPara("captcha").toUpperCase();
-    if (!CaptchaRender.validate(c, captcha, OjConstants.randomCodeKey))
+    if (!CaptchaRender.validate(c, captcha, OjConstants.RANDOM_CODE_KEY))
     {
       addError("captchaMsg", c.getText("validate.captcha.error"));
     }

@@ -233,7 +233,7 @@ public class UserService
     
     if (userModel != null && token != null && token.equals(userModel.getStr("token")))
     {
-      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.resetPasswordExpiresTime)
+      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.RESET_PASSWORD_EXPIRES_TIME)
       {
         return true;
       }

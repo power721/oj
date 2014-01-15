@@ -71,7 +71,7 @@ public class MainController extends OjController
   @ClearInterceptor(ClearLayer.ALL)
   public void captcha()
   {
-    CaptchaRender img = new CaptchaRender(OjConstants.randomCodeKey);
+    CaptchaRender img = new CaptchaRender(OjConstants.RANDOM_CODE_KEY);
     render(img);
   }
 

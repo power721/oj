@@ -15,7 +15,7 @@ public class ExpiresSessionService extends TimerTask
   private static boolean start = false;
   private static ExpiresSessionService daemon;
   private static Timer click_timer;
-  private final static long INTERVAL = OjConstants.SessionExpiresTime;
+  private final static long INTERVAL = OjConstants.SESSION_EXPIRES_TIME;
 
   @Override
   public void run()

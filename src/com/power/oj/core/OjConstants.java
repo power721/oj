@@ -11,8 +11,8 @@ public interface OjConstants
   /*
    * These contants are used in general.
    */
-  long SessionExpiresTime = 15 * 60 * 1000;
-  long resetPasswordExpiresTime = 30 * 60 * 1000;
+  long SESSION_EXPIRES_TIME = 15 * 60 * 1000;
+  long RESET_PASSWORD_EXPIRES_TIME = 30 * 60 * 1000;
   int AVATAR_WIDTH = 100;
   int AVATAR_HEIGHT = 100;
   int USERNAME_MIN_LENGTH = 5;
@@ -52,7 +52,7 @@ public interface OjConstants
   /*
    * These contants are used in cookie.
    */
-  String randomCodeKey = "PowerOJCaptcha";
+  String RANDOM_CODE_KEY = "PowerOJCaptcha";
   
   int TOKEN_AGE = 3600 * 24 * 7;
   String TOKEN_NAME = "PowerOjName";
