@@ -393,12 +393,12 @@ public class UserService
     return BCrypt.checkpw(password, stored_hash);
   }
 
-  public boolean containEmail(String email)
+  public boolean containsEmail(String email)
   {
     return dao.getUserByEmail(email) != null;
   }
 
-  public boolean containUsername(String username)
+  public boolean containsUsername(String username)
   {
     return dao.getUserByName(username) != null;
   }

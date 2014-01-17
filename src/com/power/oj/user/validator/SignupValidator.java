@@ -27,13 +27,13 @@ public class SignupValidator extends Validator
     validateEqualField("user.pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
 
     String email = c.getPara("user.email");
-    if (StringUtil.isNotBlank(email) && UserService.me().containEmail(email))
+    if (StringUtil.isNotBlank(email) && UserService.me().containsEmail(email))
     {
       addError("emailMsg", c.getText("validate.email.exist"));
     }
 
     String username = c.getPara("user.name");
-    if (StringUtil.isNotBlank(username) && UserService.me().containUsername(username))
+    if (StringUtil.isNotBlank(username) && UserService.me().containsUsername(username))
     {
       addError("nameMsg", c.getText("validate.name.exist"));
     } else if (StringUtil.isNotBlank(username) && !checkReservedName(username))

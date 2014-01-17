@@ -81,12 +81,12 @@ public class UserModel extends Model<UserModel>
     return userList;
   }
 
-  public boolean containEmailExceptThis(Integer uid, String email)
+  public boolean containsEmailExceptThis(Integer uid, String email)
   {
     return findFirst("SELECT email FROM user WHERE email=? AND uid!=? LIMIT 1", email, uid) != null;
   }
 
-  public boolean containUsernameExceptThis(Integer uid, String username)
+  public boolean containsUsernameExceptThis(Integer uid, String username)
   {
     return findFirst("SELECT name FROM user WHERE name=? AND uid!=? LIMIT 1", username, uid) != null;
   }
