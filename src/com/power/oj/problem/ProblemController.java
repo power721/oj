@@ -205,6 +205,8 @@ public class ProblemController extends OjController
       FileUtil.mkdirs(dataDir);
     } catch (IOException e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.error(e.getMessage());
       FlashMessage msg = new FlashMessage(getText("problem.save.error"), MessageType.ERROR, getText("message.error.title"));
       redirect(redirectURL, msg);
@@ -252,6 +254,8 @@ public class ProblemController extends OjController
           record.put("name", resultType.getName());
         } catch (NullPointerException e)
         {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
           log.warn(e.getLocalizedMessage());
         }
       }

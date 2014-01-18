@@ -14,6 +14,7 @@ import javax.websocket.server.ServerEndpoint;
 import jodd.util.HtmlEncoder;
 
 import com.jfinal.log.Logger;
+import com.power.oj.core.OjConfig;
 
 @ServerEndpoint(value = "/contest/rank.ws")
 public class ContestRankWebSocket
@@ -74,6 +75,8 @@ public class ContestRankWebSocket
         }
       } catch (IOException e)
       {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
         log.warn("WebSocket Error: Failed to send message to client", e);
         connections.remove(client);
         try

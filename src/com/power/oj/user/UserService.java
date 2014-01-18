@@ -61,9 +61,11 @@ public class UserService
 
       updateLogin(name, true);
       SessionService.me().updateLogin();
-    } catch (AuthenticationException ae)
+    } catch (AuthenticationException e)
     {
       updateLogin(name, false);
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.warn("User signin failed.");
       return false;
     }

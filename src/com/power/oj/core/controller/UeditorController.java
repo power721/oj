@@ -57,6 +57,8 @@ public class UeditorController extends OjController
       FileUtil.moveFile(file.getFile(), imageFile);
     } catch (IOException e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.warn(e.getLocalizedMessage());
       state = "IO Exception";
     }
@@ -97,6 +99,8 @@ public class UeditorController extends OjController
       ro.close();
     } catch (Exception e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.warn(e.getLocalizedMessage());
       state = "IO Exception";
     }

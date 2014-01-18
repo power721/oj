@@ -64,6 +64,9 @@ public class Judge extends Thread
           solutionModel.update();
 
           threads = threads > 0 ? threads - 1 : 0;
+          
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
           log.error(e.getMessage());
         }
       }
@@ -117,10 +120,11 @@ public class Judge extends Thread
     try
     {
       compileProcess.waitFor();
-    } catch (InterruptedException localInterruptedException)
+    } catch (InterruptedException e)
     {
-      // log
-      log.warn("Compile Process is interrupted.");
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
     }
 
     File mainProgram = new File(new StringBuilder(3).append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("exe")).toString());

@@ -209,6 +209,8 @@ public class UserController extends OjController
     } catch (Exception e)
     {
       setAttr("error", "true");
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
 
@@ -232,6 +234,8 @@ public class UserController extends OjController
       userService.saveAvatar(getPara("imageSource"), x1, y1, x2, y2);
     } catch (Exception e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.error(e.getLocalizedMessage());
       msg = new FlashMessage(getText("user.avatar.error"), MessageType.ERROR, getText("message.error.title"));
     }
@@ -263,6 +267,8 @@ public class UserController extends OjController
       OjService.me().sendResetPasswordEmail(name, email, token);
     } catch (Exception e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.error(e.getLocalizedMessage());
       msg = new FlashMessage(getText("user.recover.error"), MessageType.ERROR, getText("message.error.title"));
     }

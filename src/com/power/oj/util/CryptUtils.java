@@ -7,6 +7,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
+import com.power.oj.core.OjConfig;
+
 /**
  * 加解密工具类
  * 
@@ -48,6 +50,8 @@ public class CryptUtils
       return cipher.doFinal(src);
     } catch (Exception e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       throw new RuntimeException(e);
     }
   }
@@ -83,6 +87,8 @@ public class CryptUtils
       return cipher.doFinal(src);
     } catch (Exception e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       throw new RuntimeException(e);
     }
   }
@@ -118,6 +124,8 @@ public class CryptUtils
         return byte2hex(encrypt(data.getBytes(), key.getBytes()));
       } catch (Exception e)
       {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
         throw new RuntimeException(e);
       }
     return null;

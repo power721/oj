@@ -92,9 +92,13 @@ public class Tool
 
     } catch (ClientProtocolException e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.warn(e.getLocalizedMessage());
     } catch (IOException e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.warn(e.getLocalizedMessage());
     } finally
     {
@@ -161,6 +165,8 @@ public class Tool
       log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
     } catch (MailException e)
     {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.error(e.getLocalizedMessage());
       throw new Exception("Configuration for SMTP mail is incorrect.");
     } finally
