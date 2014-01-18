@@ -7,7 +7,7 @@ public enum MessageType
   INFO("info"), 
   SUCCESS("success");
 
-  private String name;
+  private final String name;
 
   private MessageType(String name)
   {

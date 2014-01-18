@@ -7,6 +7,7 @@ import java.util.List;
 
 import jodd.util.collection.IntHashMap;
 
+import com.jfinal.core.JFinal;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.VariableModel;
@@ -45,6 +46,11 @@ public class OjConfig
 
   public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
 
+  public static boolean getDevMode()
+  {
+    return JFinal.me().getConstants().getDevMode();
+  }
+  
   public static void loadVariable()
   {
     variable = new HashMap<String, VariableModel>();
