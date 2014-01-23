@@ -824,7 +824,7 @@ AUTO_INCREMENT=1001
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` (`uid`, `tid`, `name`, `pass`, `nick`, `realname`, `email`, `language`, `school`, `solved`, `accept`, `submit`, `atime`, `ctime`, `mtime`, `login`, `phone`, `qq`, `blog`, `gender`, `online`, `level`, `credit`, `share`, `avatar`, `role`, `status`, `data`, `token`) VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, '', '0', null, '0', '0', '0', '0', '0', '0', '0', null, null, null, 'secret', '0', '1', '0', '0', null, null, '1', null, null);
+INSERT INTO `user` (`uid`, `tid`, `name`, `pass`, `nick`, `realname`, `email`, `language`, `school`, `solved`, `accept`, `submit`, `atime`, `ctime`, `mtime`, `login`, `phone`, `qq`, `blog`, `gender`, `online`, `level`, `credit`, `share`, `avatar`, `status`, `data`, `token`) VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, '', '0', null, '0', '0', '0', '0', '0', '0', '0', null, null, null, 'secret', '0', '1', '0', '0', null, '1', null, null);
 
 -- ----------------------------
 -- Table structure for `variable`
@@ -919,7 +919,7 @@ ALTER TABLE `problem` AUTO_INCREMENT=1000;
 -- ----------------------------
 -- Auto increment value for `role`
 -- ----------------------------
-ALTER TABLE `role` AUTO_INCREMENT=2;
+ALTER TABLE `roles` AUTO_INCREMENT=2;
 
 -- ----------------------------
 -- Auto increment value for `solution`
