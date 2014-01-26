@@ -2,7 +2,9 @@ package com.power.oj.user;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -197,7 +199,7 @@ public class UserService
       userModel.set("accept", record.getLong("count"));
     }
 
-    record = Db.findFirst("SELECT COUNT(pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
+    record = Db.findFirst("SELECT COUNT(distinct pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
     if (record != null)
     {
       userModel.set("solved", record.getLong("count"));
@@ -326,6 +328,30 @@ public class UserService
     }
     
     return userList;
+  }
+  
+  public UserModel getUserProfile(String name)
+  {
+	  UserModel userModel = null;
+	    
+	    if (name == null)
+	    {
+	      userModel = getCurrentUser();
+	    } else
+	    {
+	      userModel = getUserByName(name);
+	    }
+	    
+	    if (userModel != null)
+	    {
+	    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	        userModel.put("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
+	        userModel.put("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
+	        userModel.put("rank", getUserRank(userModel.getUid()));
+	        userModel.put("problems", dao.getSubmittedProblems(userModel.getUid()));
+	    }
+	    
+	    return userModel;
   }
 
   /**

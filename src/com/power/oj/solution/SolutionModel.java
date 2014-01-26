@@ -68,7 +68,14 @@ public class SolutionModel extends Model<SolutionModel>
       if (StringUtil.isBlank(userName))
       {
         uid = solution.getUid();
-        name = UserModel.dao.findById(uid, "name").get("name");
+        try
+        {
+        	name = UserModel.dao.findById(uid, "name").get("name");
+        }
+        catch (Exception e)
+        {
+        	name = "";
+        }
       }
       solution.put("name", name);
 

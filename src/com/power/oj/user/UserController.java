@@ -2,8 +2,6 @@ package com.power.oj.user;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import jodd.util.HtmlEncoder;
@@ -66,15 +64,7 @@ public class UserController extends OjController
   public void profile()
   {
     String name = getPara(0);
-    UserModel userModel = null;
-    
-    if (name == null)
-    {
-      userModel = getCurrentUser();
-    } else
-    {
-      userModel = userService.getUserByName(name);
-    }
+    UserModel userModel = userService.getUserProfile(name);
     
     if (userModel == null)
     {
@@ -82,11 +72,7 @@ public class UserController extends OjController
       redirect("/", msg);
       return;
     }
-    
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    userModel.put("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
-    userModel.put("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
-    userModel.put("rank", userService.getUserRank(userModel.getUid()));
+   
     setAttr(OjConstants.USER, userModel);
     
     setTitle(getText("user.profile.title"));

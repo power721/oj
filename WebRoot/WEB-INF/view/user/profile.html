@@ -45,7 +45,7 @@
         </dd>
       </dl>
       <dl class="dl-horizontal">
-        <dt>Submit:</dt>
+        <dt>Submissions:</dt>
         <dd>
           <a href="status?name=${user.name!}">${user.submit!0}</a>
         </dd>
@@ -56,6 +56,27 @@
           <a href="user/search?word=${user.school!}&scope=school" data-toggle="tooltip" title="search this school">${user.school!}</a>
         </dd>
       </dl>
+    </div>
+    <div class="span6 problems">
+    <#if user.problems??>
+    <h4>Solved Problems</h4>
+    <#list user.problems as problem>
+      <#if problem.result == 0>
+      <span><a href="status?pid=${problem.pid}&name=${user.name}&result=0">${problem.pid}</a></span>
+      </#if>
+    </#list>
+    </#if>
+    </div>
+    
+    <div class="span6 problems">
+    <#if user.problems??>
+    <h4>Unsolved Problems</h4>
+    <#list user.problems as problem>
+      <#if problem.result != 0>
+      <span><a href="status?pid=${problem.pid}&name=${user.name}&result=0">${problem.pid}</a></span>
+      </#if>
+    </#list>
+    </#if>
     </div>
   </div>
 </div>

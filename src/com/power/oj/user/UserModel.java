@@ -1,7 +1,11 @@
 package com.power.oj.user;
 
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 
 public class UserModel extends Model<UserModel>
 {
@@ -81,6 +85,21 @@ public class UserModel extends Model<UserModel>
     return userList;
   }
 
+  public List<Record> getSubmittedProblems(Integer uid)
+  {
+	  return Db.find("SELECT pid, MIN(result) AS result FROM solution WHERE uid=? GROUP BY pid", uid);
+  }
+  
+  public List<Record> getSolvedProblems(Integer uid)
+  {
+	  return Db.find("SELECT pid FROM solution WHERE uid=? AND result=0 GROUP BY pid", uid);
+  }
+/*
+  public List<Record> getUnsolvedProblems(Integer uid)
+  {
+	  return Db.find("SELECT pid FROM solution WHERE uid=? AND result!=0 GROUP BY pid", uid);
+  }
+*/
   public boolean containsEmailExceptThis(Integer uid, String email)
   {
     return findFirst("SELECT email FROM user WHERE email=? AND uid!=? LIMIT 1", email, uid) != null;
