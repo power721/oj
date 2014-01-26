@@ -20,7 +20,7 @@
         Username: ${user.name!}<br> 
         Nick: ${user.nick!}<br> 
         UID: ${user.uid!}<br>
-        <#if userName?? && userName==user.name> Email: <span><a href="mailto:${user.email!}">${user.email!}</a></span><br> </#if> 
+        <#if adminUser?? || (userName?? && userName==user.name)> Email: <span><a href="mailto:${user.email!}">${user.email!}</a></span><br> </#if> 
         Registered: ${user.createTime!}<br>
         Last Login: ${user.loginTime!}
       </div>
