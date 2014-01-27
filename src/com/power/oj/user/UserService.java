@@ -364,8 +364,9 @@ public class UserService
     
     int uid = userModel.getUid();
     String name = userModel.get("name");
-    Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT *",
-                        "FROM loginlog WHERE uid=? OR name=? ORDER BY ctime DESC", uid, name);
+    Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT @num:=@num+1 AS num,l.*",
+                        "FROM loginlog l,(SELECT @num:=?)r WHERE uid=? OR name=? ORDER BY ctime DESC", 
+                        (pageNumber - 1) * pageSize, uid, name);
     return logs;
   }
 
