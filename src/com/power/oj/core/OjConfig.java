@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import jodd.util.collection.IntHashMap;
-
 import com.jfinal.core.JFinal;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
@@ -39,9 +37,9 @@ public class OjConfig
   public static long startGlobalHandlerTime;
 
   public static List<LanguageModel> program_languages;
-  public static IntHashMap language_type = new IntHashMap();
-  public static IntHashMap language_name = new IntHashMap();
-  public static IntHashMap result_type = new IntHashMap();
+  public static HashMap<Integer, LanguageModel> language_type;
+  public static HashMap<Integer, String> language_name;
+  public static HashMap<Integer, ResultType> result_type;
   public static List<ResultType> judge_result;
 
   public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
@@ -75,8 +73,8 @@ public class OjConfig
   
   public static void loadLanguage()
   {
-    language_type = new IntHashMap();
-    language_name = new IntHashMap();
+    language_type = new HashMap<Integer, LanguageModel>();
+    language_name = new HashMap<Integer, String>();
     program_languages = LanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
     for (LanguageModel Language : program_languages)
     {
@@ -100,7 +98,7 @@ public class OjConfig
     judge_result.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
     judge_result.add(new ResultType(ResultType.WAIT, "Wait", "Waiting"));
 
-    result_type = new IntHashMap();
+    result_type = new HashMap<Integer, ResultType>();
     for (Iterator<ResultType> it = judge_result.iterator(); it.hasNext();)
     {
       ResultType resultType = it.next();
