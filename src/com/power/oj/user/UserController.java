@@ -9,6 +9,7 @@ import jodd.util.HtmlEncoder;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
@@ -76,6 +77,17 @@ public class UserController extends OjController
     setAttr(OjConstants.USER, userModel);
     
     setTitle(getText("user.profile.title"));
+  }
+  
+  @RequiresUser
+  public void loginlog()
+  {
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.userPageSize);
+    
+    setAttr("pageSize", OjConfig.userPageSize);
+    setAttr("logs", userService.getLoginlog(pageNumber, pageSize));
+    setTitle(getText("user.loginlog.title"));
   }
 
   public void info()

@@ -170,7 +170,7 @@ public class UserService
       loginLog.set("uid", userModel.getUid());
     }
     
-    loginLog.set("name", name).set("ip", ip).set("ctime", OjConfig.timeStamp).set("succeed", success);
+    loginLog.set("name", name).set("ip", ip).set("ctime", OjConfig.timeStamp).set("success", success);
     return Db.save("loginlog", loginLog);
   }
 
@@ -344,7 +344,7 @@ public class UserService
 	    
 	    if (userModel != null)
 	    {
-	    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	    	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	        userModel.put("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
 	        userModel.put("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
 	        userModel.put("rank", getUserRank(userModel.getUid()));
@@ -352,6 +352,21 @@ public class UserService
 	    }
 	    
 	    return userModel;
+  }
+  
+  public Page<Record> getLoginlog(int pageNumber, int pageSize)
+  {
+    UserModel userModel = getCurrentUser();
+    if (userModel == null)
+    {
+      return null;
+    }
+    
+    int uid = userModel.getUid();
+    String name = userModel.get("name");
+    Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT *",
+                        "FROM loginlog WHERE uid=? OR name=? ORDER BY ctime DESC", uid, name);
+    return logs;
   }
 
   /**

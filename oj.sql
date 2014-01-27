@@ -256,7 +256,7 @@ CREATE TABLE `loginlog` (
 `password`  blob NULL DEFAULT NULL ,
 `ip`  varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `ctime`  int(11) NOT NULL ,
-`succeed`  tinyint(1) NOT NULL DEFAULT 0 ,
+`success`  tinyint(1) NOT NULL DEFAULT 0 ,
 `info`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`id`)
 )
