@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import jodd.util.HtmlEncoder;
+import jodd.util.StringUtil;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresGuest;
@@ -118,12 +119,23 @@ public class UserController extends OjController
 
   public void search()
   {
-    String word = HtmlEncoder.text(getPara("word").trim());
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.userPageSize);
+    String word = HtmlEncoder.text(getPara("word", "").trim());
     String scope = getPara("scope");
+    StringBuilder query = new StringBuilder();
     
-    setAttr(OjConstants.USER_LIST, userService.searchUser(scope, word));
+    query.append("?word=").append(word);
+    if (StringUtil.isNotBlank(scope) && "all".equals(scope) == false)
+    {
+      query.append("&scope=").append(scope);
+    }
+    
+    setAttr(OjConstants.USER_LIST, userService.searchUser(pageNumber, pageSize, scope, word));
+    setAttr("pageSize", OjConfig.userPageSize);
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
+    setAttr("query", query.toString());
     
     setTitle(new StringBuilder(2).append(getText("user.search.title")).append(word).toString());
   }

@@ -298,15 +298,20 @@ public class UserService
    * @param word key word.
    * @return the list of users.
    */
-  public List<UserModel> searchUser(String scope, String word)
+  public Page<UserModel> searchUser(int pageNumber, int pageSize, String scope, String word)
   {
-    List<UserModel> userList = null;
+    String select = "SELECT @num:=@num+1 AS num,uid,name,nick,school,solved,submit";
+    Page<UserModel> userList = null;
     List<Object> paras = new ArrayList<Object>();
+    paras.add((pageNumber - 1) * pageSize);
 
-    if (StringUtil.isNotBlank(word))
+    if (StringUtil.isBlank(word))
+    {
+      word = "No Such User!";
+    }
     {
       word = new StringBuilder(3).append("%").append(word).append("%").toString();
-      StringBuilder sb = new StringBuilder("SELECT uid,name,nick,school,solved,submit FROM user WHERE (");
+      StringBuilder sb = new StringBuilder("FROM user,(SELECT @num:=?)r WHERE (");
       
       if (StringUtil.isNotBlank(scope))
       {
@@ -324,7 +329,7 @@ public class UserService
       }
       sb.append(") AND status=1 ORDER BY solved desc,submit,uid");
       
-      userList = dao.find(sb.toString(), paras.toArray());
+      userList = dao.paginate(pageNumber, pageSize, select, sb.toString(), paras.toArray());
     }
     
     return userList;
