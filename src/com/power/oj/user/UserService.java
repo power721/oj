@@ -2,7 +2,6 @@ package com.power.oj.user;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import jodd.io.FileUtil;
+import jodd.io.ZipUtil;
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
@@ -337,6 +337,11 @@ public class UserService
     return userList;
   }
   
+  /**
+   * get user profile by name.
+   * @param name string of user name.
+   * @return UseModel with submitted problems.
+   */
   public UserModel getUserProfile(String name)
   {
 	  UserModel userModel = null;
@@ -361,6 +366,12 @@ public class UserService
 	    return userModel;
   }
   
+  /**
+   * get user's login logs.
+   * @param pageNumber
+   * @param pageSize
+   * @return
+   */
   public Page<Record> getLoginlog(int pageNumber, int pageSize)
   {
     UserModel userModel = getCurrentUser();
@@ -373,39 +384,42 @@ public class UserService
     return logs;
   }
   
-  public void archiveCode() throws IOException
+  /**
+   * archive user source code.
+   * @return zip file.
+   * @throws IOException
+   */
+  public File archiveCode() throws IOException
   {
     UserModel userModel = getCurrentUser();
-    
     Integer uid = userModel.getUid();
     List<Record> codes = dao.getSolvedProblems(uid);
-    String userDir = OjConfig.downloadPath + userModel.getStr("name");
+    String userDir = new StringBuilder(3).append(OjConfig.downloadPath).append(File.separator).append(userModel.getStr("name")).toString();
     File userDirFile = new File(userDir);
-    userDirFile.mkdirs();
+    FileUtil.mkdirs(userDirFile);
+    
     for (Record code : codes)
     {
-      File problemDirFile = new File(userDir + File.separator + code.getStr("pid"));
-      problemDirFile.mkdirs();
+      String problemDir = new StringBuilder(3).append(userDir).append(File.separator).append(code.get("pid")).toString();
+      FileUtil.mkdirs(problemDir);
       
       String ext = OjConfig.language_type.get(code.get("language")).getStr("ext");
-      StringBuilder sb = new StringBuilder().append(code.getStr("sid")).append("_").append(code.getStr("time"));
-      sb.append("MS_").append(code.getStr("memory")).append("KB").append(".").append(ext);
+      StringBuilder sb = new StringBuilder(10).append(problemDir).append(File.separator).append(code.get("sid")).append("_").append(code.get("time"));
+      sb.append("MS_").append(code.get("memory")).append("KB").append(".").append(ext);
+      
       File file = new File(sb.toString());
-      FileOutputStream fos = null;
-      try
+      if (file.createNewFile() == false)
       {
-        fos = new FileOutputStream(file);
-        fos.write(code.getBytes("source"));
+        continue;
       }
-      finally
-      {
-        if (fos != null)
-        {
-          fos.close();
-        }
-      }
+      
+      FileUtil.writeString(file, code.getStr("source"));
     }
-    // TODO compress source files
+    
+    ZipUtil.zip(userDirFile);
+    File zipFile = new File(userDirFile.getAbsolutePath() + ".zip");
+    
+    return zipFile;
   }
 
   /**

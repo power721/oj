@@ -199,14 +199,14 @@ public class UserController extends OjController
   {
     try
     {
-      userService.archiveCode();
-      renderFile("");
-      // TODO render file
+      File file = userService.archiveCode();
+      renderFile(file);
     } catch (IOException e)
     {
       log.warn(e.getLocalizedMessage());
       if (OjConfig.getDevMode())
         e.printStackTrace();
+      redirect(sessionService.getLastAccessURL());
     }
   }
 
