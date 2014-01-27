@@ -87,7 +87,7 @@ public class UserModel extends Model<UserModel>
 
   public List<Record> getSubmittedProblems(Integer uid)
   {
-	  return Db.find("SELECT pid, MIN(result) AS result FROM solution WHERE uid=? GROUP BY pid", uid);
+	  return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid WHERE s.uid=? GROUP BY s.pid", uid);
   }
   
   public List<Record> getSolvedProblems(Integer uid)

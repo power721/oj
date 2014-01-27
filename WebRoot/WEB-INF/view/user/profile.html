@@ -62,7 +62,7 @@
     <h4>Solved Problems</h4>
     <#list user.problems as problem>
       <#if problem.result == 0>
-      <span><a href="status?pid=${problem.pid}&name=${user.name}&result=0">${problem.pid}</a></span>
+      <span><a href="status?pid=${problem.pid}&name=${user.name}&result=0" title="${problem.title}">${problem.pid}</a></span>
       </#if>
     </#list>
     </#if>
@@ -73,7 +73,7 @@
     <h4>Unsolved Problems</h4>
     <#list user.problems as problem>
       <#if problem.result != 0>
-      <span><a href="status?pid=${problem.pid}&name=${user.name}&result=0">${problem.pid}</a></span>
+      <span><a href="status?pid=${problem.pid}&name=${user.name}&result=0" title="${problem.title}">${problem.pid}</a></span>
       </#if>
     </#list>
     </#if>

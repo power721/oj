@@ -193,6 +193,12 @@ public class UserController extends OjController
 
     redirect(lastAccessURL);
   }
+  
+  @RequiresUser
+  public void archive()
+  {
+    
+  }
 
   @RequiresPermissions("user:upload:avatar")
   public void avatar()
