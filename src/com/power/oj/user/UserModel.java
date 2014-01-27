@@ -92,7 +92,7 @@ public class UserModel extends Model<UserModel>
   
   public List<Record> getSolvedProblems(Integer uid)
   {
-	  return Db.find("SELECT pid FROM solution WHERE uid=? AND result=0 GROUP BY pid", uid);
+	  return Db.find("SELECT * FROM solution WHERE uid=? AND result=0 GROUP BY pid", uid);
   }
 /*
   public List<Record> getUnsolvedProblems(Integer uid)

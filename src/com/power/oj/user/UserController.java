@@ -197,7 +197,17 @@ public class UserController extends OjController
   @RequiresUser
   public void archive()
   {
-    
+    try
+    {
+      userService.archiveCode();
+      renderFile("");
+      // TODO render file
+    } catch (IOException e)
+    {
+      log.warn(e.getLocalizedMessage());
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+    }
   }
 
   @RequiresPermissions("user:upload:avatar")

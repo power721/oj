@@ -2,6 +2,8 @@ package com.power.oj.user;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -362,17 +364,48 @@ public class UserService
   public Page<Record> getLoginlog(int pageNumber, int pageSize)
   {
     UserModel userModel = getCurrentUser();
-    if (userModel == null)
-    {
-      return null;
-    }
-    
-    int uid = userModel.getUid();
+   
+    Integer uid = userModel.getUid();
     String name = userModel.get("name");
     Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT @num:=@num+1 AS num,l.*",
                         "FROM loginlog l,(SELECT @num:=?)r WHERE uid=? OR name=? ORDER BY ctime DESC", 
                         (pageNumber - 1) * pageSize, uid, name);
     return logs;
+  }
+  
+  public void archiveCode() throws IOException
+  {
+    UserModel userModel = getCurrentUser();
+    
+    Integer uid = userModel.getUid();
+    List<Record> codes = dao.getSolvedProblems(uid);
+    String userDir = OjConfig.downloadPath + userModel.getStr("name");
+    File userDirFile = new File(userDir);
+    userDirFile.mkdirs();
+    for (Record code : codes)
+    {
+      File problemDirFile = new File(userDir + File.separator + code.getStr("pid"));
+      problemDirFile.mkdirs();
+      
+      String ext = OjConfig.language_type.get(code.get("language")).getStr("ext");
+      StringBuilder sb = new StringBuilder().append(code.getStr("sid")).append("_").append(code.getStr("time"));
+      sb.append("MS_").append(code.getStr("memory")).append("KB").append(".").append(ext);
+      File file = new File(sb.toString());
+      FileOutputStream fos = null;
+      try
+      {
+        fos = new FileOutputStream(file);
+        fos.write(code.getBytes("source"));
+      }
+      finally
+      {
+        if (fos != null)
+        {
+          fos.close();
+        }
+      }
+    }
+    // TODO compress source files
   }
 
   /**
