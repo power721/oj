@@ -14,6 +14,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
 import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.i18n.I18N;
+import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
@@ -159,6 +160,7 @@ public class AppConfig extends JFinalConfig
     
     I18N.init("ojText", Locale.ENGLISH, null);
     
+    log.info(PathKit.getWebRootPath());
     log.debug("afterJFinalStart finished.");
   }
 
