@@ -149,16 +149,16 @@ public class ProblemController extends OjController
   public void save()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    String redirectURL = "/problem";
     
     try
     {
       if (!problemService.addProblem(problemModel))
       {
         FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
-        redirect(redirectURL, msg);
-        return;
+        setFlashMessage(msg);
       }
+      redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
     } catch (IOException e)
     {
       if (OjConfig.getDevMode())
