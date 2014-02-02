@@ -1,12 +1,16 @@
 package com.power.oj.problem;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import jodd.io.FileUtil;
 
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.power.oj.core.OjConstants;
+import com.power.oj.core.OjConfig;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
@@ -76,6 +80,23 @@ public class ProblemService
     sb.append(" LIMIT 1");
     
     return SolutionModel.dao.findFirst(sb.toString(), sid, pid);
+  }
+  
+  public boolean addProblem(ProblemModel problemModel) throws IOException
+  {
+    problemModel.set("uid", userService.getCurrentUid());
+    problemModel.saveProblem();
+
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
+    if (dataDir.isDirectory())
+    {
+      log.warn("Data directory already exists: " + dataDir.getPath());
+      return false;
+    }
+    
+    FileUtil.mkdirs(dataDir);
+    
+    return true;
   }
   
 }

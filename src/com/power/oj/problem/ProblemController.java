@@ -1,10 +1,8 @@
 package com.power.oj.problem;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import jodd.io.FileUtil;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
@@ -87,6 +85,13 @@ public class ProblemController extends OjController
     boolean ajax = getParaToBoolean("ajax", false);
     ProblemModel problemModel = problemService.findProblem(pid);
     
+    if (problemModel == null)
+    {
+      FlashMessage msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
+      redirect("/problem", msg);
+      return;
+    }
+    
     setAttr("problem", problemModel);
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     
@@ -112,11 +117,10 @@ public class ProblemController extends OjController
       return;
     }
 
-    int pid = getParaToInt(0);
+    Integer pid = getParaToInt(0);
     boolean ajax = getParaToBoolean("ajax", false);
-    ProblemModel problemModel = ProblemModel.dao.findById(pid);
     
-    setAttr("problem", problemModel);
+    setAttr("problem", problemService.findProblem(pid));
     setTitle(new StringBuilder(2).append(getText("problem.edit.title")).append(pid).toString());
 
     if (ajax)
@@ -145,26 +149,22 @@ public class ProblemController extends OjController
   public void save()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-    problemModel.set("uid", getAttr(OjConstants.USER_ID));
-    problemModel.saveProblem();
-
     String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
-    if (dataDir.isDirectory())
-    {
-      FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
-      redirect(redirectURL, msg);
-      return;
-    }
-
+    
     try
     {
-      FileUtil.mkdirs(dataDir);
+      if (!problemService.addProblem(problemModel))
+      {
+        FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
+        redirect(redirectURL, msg);
+        return;
+      }
     } catch (IOException e)
     {
       if (OjConfig.getDevMode())
         e.printStackTrace();
       log.error(e.getMessage());
+      
       FlashMessage msg = new FlashMessage(getText("problem.save.error"), MessageType.ERROR, getText("message.error.title"));
       redirect(redirectURL, msg);
       return;
