@@ -6,6 +6,8 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.OjConstants;
+import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
 public class ProblemService
@@ -62,6 +64,18 @@ public class ProblemService
   public List<Record> getTags(Integer pid)
   {
     return dao.getTags(pid);
+  }
+  
+  public SolutionModel getSolution(Integer pid, Integer sid)
+  {
+    Integer uid = userService.getCurrentUid();
+    StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
+    
+    if (!userService.isAdmin())
+      sb.append(" AND uid=").append(uid);
+    sb.append(" LIMIT 1");
+    
+    return SolutionModel.dao.findFirst(sb.toString(), sid, pid);
   }
   
 }

@@ -58,12 +58,6 @@ public class ProblemController extends OjController
       return;
     }
     
-    Integer userResult = problemService.getUserResult(pid);
-    if (userResult != null)
-    {
-        setAttr("userResult", problemService.getUserResult(pid));
-    }
-
     int sample_input_rows = 1;
     if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
       sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
@@ -76,6 +70,7 @@ public class ProblemController extends OjController
     setAttr("prevPid", problemService.getPrevPid(pid));
     setAttr("nextPid", problemService.getNextPid(pid));
     setAttr("tagList", problemService.getTags(pid));
+    setAttr("userResult", problemService.getUserResult(pid));
     setAttr("problem", problemModel);
     setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), OjConstants.COOKIE_AGE);
 
@@ -88,27 +83,16 @@ public class ProblemController extends OjController
   @RequiresPermissions("problem:submit")
   public void submit()
   {
-    int pid = getParaToInt(0);
-    boolean isAdmin = userService.isAdmin();
+    Integer pid = getParaToInt(0);
     boolean ajax = getParaToBoolean("ajax", false);
-    int sid = 0;
-    ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
+    ProblemModel problemModel = problemService.findProblem(pid);
     
     setAttr("problem", problemModel);
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     
     if (isParaExists("s"))
     {
-      sid = getParaToInt("s", 0);
-      StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
-      if (!isAdmin)
-        sb.append(" AND uid=").append(getAttrForInt(OjConstants.USER_ID));
-      sb.append(" LIMIT 1");
-      SolutionModel solutionModel = SolutionModel.dao.findFirst(sb.toString(), sid, pid);
-      if (solutionModel != null)
-      {
-        setAttr("solution", solutionModel);
-      }
+      setAttr("solution", problemService.getSolution(pid, getParaToInt("s", 0)));
     }
 
     setTitle(getText("problem.submit.title"));
