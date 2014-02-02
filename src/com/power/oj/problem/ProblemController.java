@@ -14,7 +14,6 @@ import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
@@ -31,6 +30,7 @@ public class ProblemController extends OjController
 {
   
   private static final UserService userService = UserService.me();
+  private static final ProblemService problemService = ProblemService.me();
   
   public void index()
   {
@@ -41,54 +41,27 @@ public class ProblemController extends OjController
       pageNumber = getCookieToInt("pageNumber", 1);
     int pageSize = getParaToInt("s", OjConfig.problemPageSize);
 
-    String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
-    StringBuilder sb = new StringBuilder("FROM problem");
-    if (getAttr(OjConstants.ADMIN_USER) == null)
-      sb.append(" WHERE status=1");
-    sb.append(" ORDER BY pid");
-
-    Page<ProblemModel> problemList = ProblemModel.dao.paginate(pageNumber, pageSize, sql, sb.toString());
-    /*
-     * if(getAttr("userID") != null) { int uid = getAttrForInt("userID");
-     * for(ProblemModel problemModel: problemList.getList()) { Record record
-     * =Db.findFirst(
-     * "SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1"
-     * , uid, problemModel.getInt("pid")); if(record != null) {
-     * problemModel.put("userResult", record.getInt("result")); } } }
-     */
-    setAttr("problemList", problemList);
-    setCookie("pageNumber", String.valueOf(pageNumber), 3600 * 24 * 7);
+    setAttr("problemList", problemService.getProblems(pageNumber, pageSize));
+    setCookie("pageNumber", String.valueOf(pageNumber), OjConstants.COOKIE_AGE);
 
     setTitle(getText("problem.index.title"));
   }
 
   public void show()
   {
-    if (!isParaExists(0))
-    {
-      FlashMessage msg = new FlashMessage(getText("problem.para.null"), MessageType.ERROR, getText("message.error.title"));
-      redirect("/problem", msg);
-      return;
-    }
-
-    int pid = getParaToInt(0);
-    boolean isAdmin = userService.isAdmin();
-    ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
+    Integer pid = getParaToInt(0);
+    ProblemModel problemModel = problemService.findProblem(pid);
     if (problemModel == null)
     {
       FlashMessage msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
       redirect("/problem", msg);
       return;
     }
-    int uid = 0;
-    if (getAttrForInt(OjConstants.USER_ID) != null)
+    
+    Integer userResult = problemService.getUserResult(pid);
+    if (userResult != null)
     {
-      uid = getAttrForInt(OjConstants.USER_ID);
-      Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
-      if (record != null)
-      {
-        setAttr("userResult", record.getInt("result"));
-      }
+        setAttr("userResult", problemService.getUserResult(pid));
     }
 
     int sample_input_rows = 1;
@@ -100,11 +73,11 @@ public class ProblemController extends OjController
     problemModel.put("sample_input_rows", sample_input_rows);
     problemModel.put("sample_output_rows", sample_output_rows);
 
-    setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
-    setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
-    setAttr("tagList", ProblemModel.dao.getTags(pid));
+    setAttr("prevPid", problemService.getPrevPid(pid));
+    setAttr("nextPid", problemService.getNextPid(pid));
+    setAttr("tagList", problemService.getTags(pid));
     setAttr("problem", problemModel);
-    setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), 3600 * 24 * 7);
+    setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), OjConstants.COOKIE_AGE);
 
     //problemModel.incView();
     VisitCountService.record(VisitCountService.problemViewCount, pid);

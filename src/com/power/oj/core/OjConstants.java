@@ -54,6 +54,7 @@ public interface OjConstants
    */
   String RANDOM_CODE_KEY = "PowerOJCaptcha";
   
+  int COOKIE_AGE = 3600 * 24 * 7;
   int TOKEN_AGE = 3600 * 24 * 7;
   String TOKEN_NAME = "PowerOjName";
   String TOKEN_TOKEN = "PowerOjToken";

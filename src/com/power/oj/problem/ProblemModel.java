@@ -19,7 +19,7 @@ public class ProblemModel extends Model<ProblemModel>
   
   public static final ProblemModel dao = new ProblemModel();
 
-  public int getNextPid(int pid, boolean isAdmin)
+  public int getNextPid(Integer pid, boolean isAdmin)
   {
     int nextPid = 0;
     StringBuilder sb = new StringBuilder("SELECT pid FROM problem WHERE pid>?");
@@ -37,7 +37,7 @@ public class ProblemModel extends Model<ProblemModel>
     return nextPid;
   }
 
-  public int getPrevPid(int pid, boolean isAdmin)
+  public int getPrevPid(Integer pid, boolean isAdmin)
   {
     int prevPid = 0;
     StringBuilder sb = new StringBuilder("SELECT pid FROM problem WHERE pid<?");
@@ -65,7 +65,7 @@ public class ProblemModel extends Model<ProblemModel>
     return pid;
   }
 
-  public int getPageNumber(int pid, int pageSize)
+  public int getPageNumber(Integer pid, int pageSize)
   {
     long pageNumber = 0;
     pageNumber = findFirst("SELECT COUNT(*) AS idx FROM problem WHERE pid<? AND status=1 ORDER BY pid LIMIT 1", pid).getLong("idx");
@@ -73,7 +73,7 @@ public class ProblemModel extends Model<ProblemModel>
     return (int) pageNumber;
   }
 
-  public String getProblemTitle(int pid)
+  public String getProblemTitle(Integer pid)
   {
     ProblemModel problemModel = findFirst("SELECT title FROM problem WHERE pid=? AND status=1 LIMIT 1", pid);
     String title = null;
@@ -83,19 +83,19 @@ public class ProblemModel extends Model<ProblemModel>
     return title;
   }
 
-  public List<Record> getUserInfo(int pid, int uid)
+  public List<Record> getUserInfo(Integer pid, Integer uid)
   {
     List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,code_len,language FROM solution WHERE uid=? AND pid=?", uid, pid);
     return userInfo;
   }
 
-  public Record getUserResult(int pid, int uid)
+  public Record getUserResult(Integer pid, Integer uid)
   {
     Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
     return record;
   }
 
-  public List<Record> getTags(int pid)
+  public List<Record> getTags(Integer pid)
   {
     List<Record> tagList = Db.find("SELECT tag.tag,user.name FROM tag LEFT JOIN user on user.uid=tag.uid WHERE tag.pid=? AND tag.status=1", pid);
     if (tagList.isEmpty())
@@ -103,7 +103,7 @@ public class ProblemModel extends Model<ProblemModel>
     return tagList;
   }
 
-  public ProblemModel findByPid(int pid, boolean isAdmin)
+  public ProblemModel findByPid(Integer pid, boolean isAdmin)
   {
     ProblemModel problemModel = null;
     if (isAdmin)
@@ -179,17 +179,17 @@ public class ProblemModel extends Model<ProblemModel>
     return this.update();
   }
   
-  public Integer getViewCount(int pid)
+  public Integer getViewCount(Integer pid)
   {
     return Db.queryInt("SELECT view FROM problem WHERE pid=? LIMIT 1", pid);
   }
 
-  public void setViewCount(int pid, int view)
+  public void setViewCount(Integer pid, int view)
   {
     Db.update("UPDATE problem SET view=? WHERE pid=?", view, pid);
   }
 
-  public boolean addTag(int pid, int uid, String tag)
+  public boolean addTag(Integer pid, Integer uid, String tag)
   {
     Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", OjConfig.timeStamp);
     return Db.save("tag", Tag);
