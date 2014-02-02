@@ -11,6 +11,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
@@ -97,6 +98,33 @@ public class ProblemService
     FileUtil.mkdirs(dataDir);
     
     return true;
+  }
+  
+  public List<SolutionModel> getProblemStatus(Integer pid)
+  {
+    List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
+    
+    for (SolutionModel record : resultList)
+    {
+      try
+      {
+        ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
+        record.put("longName", resultType.getLongName());
+        record.put("name", resultType.getName());
+      } catch (NullPointerException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.warn(e.getLocalizedMessage());
+      }
+    }
+    
+    return resultList;
+  }
+  
+  public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
+  {
+    return SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
   }
   
 }

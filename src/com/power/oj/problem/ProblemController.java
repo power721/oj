@@ -12,22 +12,18 @@ import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
-import com.power.oj.core.bean.ResultType;
 import com.power.oj.service.VisitCountService;
-import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
 public class ProblemController extends OjController
 {
   
-  private static final UserService userService = UserService.me();
   private static final ProblemService problemService = ProblemService.me();
   
   public void index()
@@ -39,6 +35,7 @@ public class ProblemController extends OjController
       pageNumber = getCookieToInt("pageNumber", 1);
     int pageSize = getParaToInt("s", OjConfig.problemPageSize);
 
+    setAttr("pageSize", OjConfig.problemPageSize);
     setAttr("problemList", problemService.getProblems(pageNumber, pageSize));
     setCookie("pageNumber", String.valueOf(pageNumber), OjConstants.COOKIE_AGE);
 
@@ -187,13 +184,12 @@ public class ProblemController extends OjController
       return;
     }
 
-    int pid = getParaToInt(0);
+    Integer pid = getParaToInt(0);
     boolean ajax = getParaToBoolean("ajax", false);
 
     if (!ajax)
     {
-      boolean isAdmin = userService.isAdmin();
-      ProblemModel problemModel = ProblemModel.dao.findByPid(pid, isAdmin);
+      ProblemModel problemModel = problemService.findProblem(pid);
       if (problemModel == null)
       {
         FlashMessage msg = new FlashMessage(getText("problem.status.null"), MessageType.ERROR, getText("message.error.title"));
@@ -201,52 +197,36 @@ public class ProblemController extends OjController
         return;
       }
 
-      List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
-      for (SolutionModel record : resultList)
-      {
-        try
-        {
-          ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
-          record.put("longName", resultType.getLongName());
-          record.put("name", resultType.getName());
-        } catch (NullPointerException e)
-        {
-          if (OjConfig.getDevMode())
-            e.printStackTrace();
-          log.warn(e.getLocalizedMessage());
-        }
-      }
-      setAttr("resultList", resultList);
       setAttr("problem", problemModel);
-      setAttr("prevPid", ProblemModel.dao.getPrevPid(pid, isAdmin));
-      setAttr("nextPid", ProblemModel.dao.getNextPid(pid, isAdmin));
+      setAttr("resultList", problemService.getProblemStatus(pid));
+      setAttr("prevPid", problemService.getPrevPid(pid));
+      setAttr("nextPid", problemService.getNextPid(pid));
     }
 
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", OjConfig.statusPageSize);
-    int language = getParaToInt("language", -1);
+    Integer language = getParaToInt("language");
     StringBuilder query = new StringBuilder();
-    if (language > -1)
+    if (language != null)
     {
       query.append("&language=").append(language);
     }
-    Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
-
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("language", language);
-    setAttr("query", query.toString());
     setAttr("pid", pid);
-    setAttr("solutionList", solutionList);
-
+    
     if (ajax)
     {
+      setAttr("query", query.toString());
+      setAttr("solutionList", problemService.getProblemStatusPage(pageNumber, pageSize, language, pid));
       renderJson(new String[]
-      { "pid", "language", "query", "program_languages", "solutionList" });
+      { "pid", "userID", "adminUser", "pageSize", "language", "query", "program_languages", "solutionList" });
       // render("ajax/status.html");
     } else
     {
       setTitle(new StringBuilder(2).append(String.format(getText("problem.status.title"), pid)).toString());
-      render("status.html");
     }
   }
 

@@ -154,16 +154,16 @@ public class SolutionModel extends Model<SolutionModel>
     return solutionList;
   }
 
-  public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, int language, int pid)
+  public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
   {
-    int uid = 0;
+    Integer uid = 0;
     String name = "";
     String sql = "SELECT sid,uid,pid,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
     StringBuilder sb = new StringBuilder("FROM solution WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();
 
-    if (language > -1)
+    if (language != null)
     {
       sb.append(" AND language=?");
       paras.add(language);
@@ -188,7 +188,7 @@ public class SolutionModel extends Model<SolutionModel>
       }
       solution.put("name", name);
 
-      solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
+      solution.set("language", OjConfig.language_name.get(solution.getInt("language")));
     }
 
     return solutionList;
