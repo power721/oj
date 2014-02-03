@@ -232,8 +232,9 @@ public class ProblemController extends OjController
 
   public void search()
   {
-    int pid = 0;
+    Integer pid = 0;
     ProblemModel problemModel = null;
+    
     try
     {
       pid = getParaToInt("word", 0);
@@ -243,11 +244,13 @@ public class ProblemController extends OjController
     }
     if (pid != 0)
     {
-      problemModel = ProblemModel.dao.findByPid(pid, getAttr(OjConstants.ADMIN_USER) != null);
+      problemModel = problemService.findProblem(pid);
       if (problemModel == null)
         pid = 0;
     } else if (isParaBlank("word"))
-      pid = ProblemModel.dao.getRandomProblem();
+    {
+      pid = problemService.getRandomPid();
+    }
 
     if (pid != 0)
     {
@@ -255,9 +258,12 @@ public class ProblemController extends OjController
       return;
     }
 
+    int pageNumber = getParaToInt("p", 1);
+    int pageSize = getParaToInt("s", OjConfig.problemPageSize);
     String word = HtmlEncoder.text(getPara("word").trim());
     String scope = getPara("scope");
-    setAttr("problemList", ProblemModel.dao.searchProblem(scope, word));
+    setAttr("problemList", problemService.searchProblem(pageNumber, pageSize, scope, word));
+    setAttr("pageSize", OjConfig.problemPageSize);
     setAttr("word", word);
     setAttr("scope", scope != null ? scope : "all");
     

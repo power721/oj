@@ -2,9 +2,11 @@ package com.power.oj.problem;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jodd.io.FileUtil;
+import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
@@ -125,6 +127,51 @@ public class ProblemService
   public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
   {
     return SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
+  }
+  
+  public Integer getRandomPid()
+  {
+    return dao.getRandomPid();
+  }
+  
+  public Page<ProblemModel> searchProblem(int pageNumber, int pageSize, String scope, String word)
+  {
+    Page<ProblemModel> problemList = null;
+    List<Object> paras = new ArrayList<Object>();
+    String sql = "SELECT pid,title,accept,submit,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
+
+    if (StringUtil.isNotBlank(word))
+    {
+      word = new StringBuilder(3).append("%").append(word).append("%").toString();
+      StringBuilder sb = new StringBuilder("FROM problem WHERE (");
+      if (StringUtil.isNotBlank(scope))
+      {
+        String scopes[] = { "title", "source", "content", "tag" };
+        if (StringUtil.equalsOneIgnoreCase(scope, scopes) == -1)
+          return null;
+        if ("tag".equalsIgnoreCase(scope))
+        {
+          sb.append("pid IN (SELECT pid FROM tag WHERE tag LIKE ? AND status=1)");
+        } else if ("content".equalsIgnoreCase(scope))
+        {
+          sb.append("description LIKE ? ");
+        } else
+        {
+          sb.append(scope).append(" LIKE ? ");
+        }
+        paras.add(word);
+      } else
+      {
+        sb.append("title LIKE ? OR source LIKE ? OR description LIKE ?");
+        paras.add(word);
+        paras.add(word);
+        paras.add(word);
+      }
+      sb.append(" ) AND status=1 ORDER BY accept desc,submit desc,pid");
+      problemList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+    }
+    
+    return problemList;
   }
   
 }

@@ -1,9 +1,6 @@
 package com.power.oj.problem;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
@@ -55,9 +52,9 @@ public class ProblemModel extends Model<ProblemModel>
     return prevPid;
   }
 
-  public int getRandomProblem()
+  public Integer getRandomPid()
   {
-    int pid = 0;
+    Integer pid = 0;
     pid = dao
         .findFirst(
             "SELECT t1.pid FROM `problem` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(pid) FROM `problem`)-(SELECT MIN(pid) FROM `problem`))+(SELECT MIN(pid) FROM `problem`)) AS pid) AS t2 WHERE t1.pid >= t2.pid AND status=1 ORDER BY t1.pid LIMIT 1")
@@ -112,45 +109,6 @@ public class ProblemModel extends Model<ProblemModel>
       problemModel = dao.findFirst("SELECT * FROM problem WHERE status=1 AND pid=? LIMIT 1", pid);
 
     return problemModel;
-  }
-
-  public List<ProblemModel> searchProblem(String scope, String word)
-  {
-    List<ProblemModel> problemList = null;
-    List<Object> paras = new ArrayList<Object>();
-
-    if (StringUtil.isNotBlank(word))
-    {
-      word = new StringBuilder(3).append("%").append(word).append("%").toString();
-      StringBuilder sb = new StringBuilder("SELECT pid,title,accept,submit,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime FROM problem WHERE (");
-      if (StringUtil.isNotBlank(scope))
-      {
-        String scopes[] =
-        { "title", "source", "content", "tag" };
-        if (StringUtil.equalsOneIgnoreCase(scope, scopes) == -1)
-          return null;
-        if ("tag".equalsIgnoreCase(scope))
-        {
-          sb.append("pid IN (SELECT pid FROM tag WHERE tag LIKE ? AND status=1)");
-        } else if ("content".equalsIgnoreCase(scope))
-        {
-          sb.append("description LIKE ? ");
-        } else
-        {
-          sb.append(scope).append(" LIKE ? ");
-        }
-        paras.add(word);
-      } else
-      {
-        sb.append("title LIKE ? OR source LIKE ? OR description LIKE ?");
-        paras.add(word);
-        paras.add(word);
-        paras.add(word);
-      }
-      sb.append(" ) AND status=1 ORDER BY accept desc,submit desc,pid");
-      problemList = find(sb.toString(), paras.toArray());
-    }
-    return problemList;
   }
 
   public boolean updateProblem()
