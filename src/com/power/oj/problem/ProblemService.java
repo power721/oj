@@ -174,4 +174,14 @@ public class ProblemService
     return problemList;
   }
   
+  public List<Record> getUserInfo(Integer pid, Integer uid)
+  {
+    return dao.getUserInfo(pid, uid);
+  }
+  
+  public Record getUserResult(Integer pid, Integer uid)
+  {
+    return dao.getUserResult(pid, uid);
+  }
+  
 }

@@ -1,8 +1,6 @@
 package com.power.oj.problem;
 
 import java.io.IOException;
-import java.util.List;
-
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
@@ -270,24 +268,21 @@ public class ProblemController extends OjController
     setTitle(new StringBuilder(2).append(getText("problem.search.title")).append(word).toString());
   }
 
+  @ClearInterceptor(ClearLayer.ALL)
   public void userInfo()
   {
-    if (getAttrForInt(OjConstants.USER_ID) == null)
+    Integer pid = getParaToInt("pid");
+    Integer uid = UserService.me().getCurrentUid();
+    
+    if (uid == null)
     {
+      renderNull();
       return;
     }
 
-    int pid = getParaToInt("pid");
-    int uid = getAttrForInt(OjConstants.USER_ID);
-    List<Record> userInfo = null;
-
-    if (uid > 0)
-    {
-      setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
-      setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
-      userInfo = ProblemModel.dao.getUserInfo(pid, uid);
-      setAttr("userInfo", userInfo);
-    }
+    setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
+    setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
+    setAttr("userInfo", problemService.getUserInfo(pid, uid));
     renderJson(new String[]
     { "userInfo", "language_name", "result_type" });
   }
@@ -295,22 +290,18 @@ public class ProblemController extends OjController
   @ClearInterceptor(ClearLayer.ALL)
   public void userResult()
   {
-    if (UserService.me().getCurrentUid() == null)
+    Integer pid = getParaToInt("pid");
+    Integer uid = UserService.me().getCurrentUid();
+    if (uid == null)
     {
       renderNull();
       return;
     }
 
-    int pid = getParaToInt("pid");
-    int uid = UserService.me().getCurrentUid();
-    Record userResult = null;
-
-    if (uid > 0)
-    {
-      userResult = ProblemModel.dao.getUserResult(pid, uid);
-      if (userResult != null && userResult.getInt("result") != null)
-        userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
-    }
+    Record userResult = problemService.getUserResult(pid, uid);
+    if (userResult != null && userResult.getInt("result") != null)
+      userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
+    
     renderJson(userResult);
   }
 
