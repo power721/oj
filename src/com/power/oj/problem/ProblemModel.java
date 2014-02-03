@@ -62,14 +62,6 @@ public class ProblemModel extends Model<ProblemModel>
     return pid;
   }
 
-  public int getPageNumber(Integer pid, int pageSize)
-  {
-    long pageNumber = 0;
-    pageNumber = findFirst("SELECT COUNT(*) AS idx FROM problem WHERE pid<? AND status=1 ORDER BY pid LIMIT 1", pid).getLong("idx");
-    pageNumber = (pageNumber + pageSize) / pageSize;
-    return (int) pageNumber;
-  }
-
   public String getProblemTitle(Integer pid)
   {
     ProblemModel problemModel = findFirst("SELECT title FROM problem WHERE pid=? AND status=1 LIMIT 1", pid);

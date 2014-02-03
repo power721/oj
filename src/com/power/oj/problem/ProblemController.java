@@ -1,6 +1,7 @@
 package com.power.oj.problem;
 
 import java.io.IOException;
+
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
@@ -21,7 +22,6 @@ import com.power.oj.user.UserService;
 
 public class ProblemController extends OjController
 {
-  
   private static final ProblemService problemService = ProblemService.me();
   
   public void index()
@@ -34,7 +34,7 @@ public class ProblemController extends OjController
     int pageSize = getParaToInt("s", OjConfig.problemPageSize);
 
     setAttr("pageSize", OjConfig.problemPageSize);
-    setAttr("problemList", problemService.getProblems(pageNumber, pageSize));
+    setAttr("problemList", problemService.getProblemPage(pageNumber, pageSize));
     setCookie("pageNumber", String.valueOf(pageNumber), OjConstants.COOKIE_AGE);
 
     setTitle(getText("problem.index.title"));
@@ -65,113 +65,12 @@ public class ProblemController extends OjController
     setAttr("tagList", problemService.getTags(pid));
     setAttr("userResult", problemService.getUserResult(pid));
     setAttr("problem", problemModel);
-    setCookie("pageNumber", String.valueOf(ProblemModel.dao.getPageNumber(pid, OjConfig.problemPageSize)), OjConstants.COOKIE_AGE);
+    setCookie("pageNumber", String.valueOf(problemService.getPageNumber(pid, OjConfig.problemPageSize)), OjConstants.COOKIE_AGE);
 
     //problemModel.incView();
     VisitCountService.record(VisitCountService.problemViewCount, pid);
     
     setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
-  }
-
-  @RequiresPermissions("problem:submit")
-  public void submit()
-  {
-    Integer pid = getParaToInt(0);
-    boolean ajax = getParaToBoolean("ajax", false);
-    ProblemModel problemModel = problemService.findProblem(pid);
-    
-    if (problemModel == null)
-    {
-      FlashMessage msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
-      redirect("/problem", msg);
-      return;
-    }
-    
-    setAttr("problem", problemModel);
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
-    
-    if (isParaExists("s"))
-    {
-      setAttr("solution", problemService.getSolution(pid, getParaToInt("s", 0)));
-    }
-
-    setTitle(getText("problem.submit.title"));
-    if (ajax)
-      render("ajax/submit.html");
-    else
-      render("submit.html");
-  }
-
-  @RequiresPermissions("problem:edit")
-  public void edit()
-  {
-    if (!isParaExists(0))
-    {
-      FlashMessage msg = new FlashMessage(getText("problem.para.null"), MessageType.ERROR, getText("message.error.title"));
-      redirect("/problem", msg);
-      return;
-    }
-
-    Integer pid = getParaToInt(0);
-    boolean ajax = getParaToBoolean("ajax", false);
-    
-    setAttr("problem", problemService.findProblem(pid));
-    setTitle(new StringBuilder(2).append(getText("problem.edit.title")).append(pid).toString());
-
-    if (ajax)
-      render("ajax/edit.html");
-    else
-      render("edit.html");
-  }
-
-  @RequiresPermissions("problem:edit")
-  public void update()
-  {
-    ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-    problemModel.updateProblem();
-
-    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
-    redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
-  }
-
-  @RequiresPermissions("problem:add")
-  public void add()
-  {
-    setTitle(getText("problem.add.title"));
-  }
-
-  @RequiresPermissions("problem:add")
-  public void save()
-  {
-    ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-    String redirectURL = "/problem";
-    
-    try
-    {
-      if (!problemService.addProblem(problemModel))
-      {
-        FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
-        setFlashMessage(msg);
-      }
-      redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
-    } catch (IOException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getMessage());
-      
-      FlashMessage msg = new FlashMessage(getText("problem.save.error"), MessageType.ERROR, getText("message.error.title"));
-      redirect(redirectURL, msg);
-      return;
-    }
-
-    redirect(redirectURL);
-  }
-
-  @RequiresPermissions("problem:delete")
-  public void delete()
-  {
-    renderText("TODO");
   }
 
   public void status()
@@ -305,6 +204,35 @@ public class ProblemController extends OjController
     renderJson(userResult);
   }
 
+  @RequiresPermissions("problem:submit")
+  public void submit()
+  {
+    Integer pid = getParaToInt(0);
+    boolean ajax = getParaToBoolean("ajax", false);
+    ProblemModel problemModel = problemService.findProblem(pid);
+    
+    if (problemModel == null)
+    {
+      FlashMessage msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
+      redirect("/problem", msg);
+      return;
+    }
+    
+    setAttr("problem", problemModel);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    
+    if (isParaExists("s"))
+    {
+      setAttr("solution", problemService.getSolution(pid, getParaToInt("s", 0)));
+    }
+
+    setTitle(getText("problem.submit.title"));
+    if (ajax)
+      render("ajax/submit.html");
+    else
+      render("submit.html");
+  }
+
   @Before(POST.class)
   @RequiresPermissions("problem:addTag")
   public void tag()
@@ -318,6 +246,79 @@ public class ProblemController extends OjController
 
     String redirectURL = new StringBuilder(3).append("/problem/show/").append(pid).append("#tag").toString();
     redirect(redirectURL, new FlashMessage(getText("problem.tag.success")));
+  }
+  
+  /******************** admin methods ********************/
+  @RequiresPermissions("problem:edit")
+  public void edit()
+  {
+    if (!isParaExists(0))
+    {
+      FlashMessage msg = new FlashMessage(getText("problem.para.null"), MessageType.ERROR, getText("message.error.title"));
+      redirect("/problem", msg);
+      return;
+    }
+
+    Integer pid = getParaToInt(0);
+    boolean ajax = getParaToBoolean("ajax", false);
+    
+    setAttr("problem", problemService.findProblem(pid));
+    setTitle(new StringBuilder(2).append(getText("problem.edit.title")).append(pid).toString());
+
+    if (ajax)
+      render("ajax/edit.html");
+    else
+      render("edit.html");
+  }
+
+  @RequiresPermissions("problem:edit")
+  public void update()
+  {
+    ProblemModel problemModel = getModel(ProblemModel.class, "problem");
+    problemModel.updateProblem();
+
+    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
+  }
+
+  @RequiresPermissions("problem:add")
+  public void add()
+  {
+    setTitle(getText("problem.add.title"));
+  }
+
+  @RequiresPermissions("problem:add")
+  public void save()
+  {
+    ProblemModel problemModel = getModel(ProblemModel.class, "problem");
+    String redirectURL = "/problem";
+    
+    try
+    {
+      if (!problemService.addProblem(problemModel))
+      {
+        FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
+        setFlashMessage(msg);
+      }
+      redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getMessage());
+      
+      FlashMessage msg = new FlashMessage(getText("problem.save.error"), MessageType.ERROR, getText("message.error.title"));
+      redirect(redirectURL, msg);
+      return;
+    }
+
+    redirect(redirectURL);
+  }
+
+  @RequiresPermissions("problem:delete")
+  public void delete()
+  {
+    renderText("TODO");
   }
 
   @RequiresPermissions("problem:build")

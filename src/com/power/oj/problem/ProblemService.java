@@ -31,10 +31,10 @@ public class ProblemService
     return me;
   }
   
-  public Page<ProblemModel> getProblems(int pageNumber, int pageSize)
+  public Page<ProblemModel> getProblemPage(int pageNumber, int pageSize)
   {
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
-    StringBuilder sb = new StringBuilder("FROM problem");
+    StringBuilder sb = new StringBuilder().append("FROM problem");
     if (!userService.isAdmin())
       sb.append(" WHERE status=1");
     sb.append(" ORDER BY pid");
@@ -43,7 +43,20 @@ public class ProblemService
     
     return problemList;
   }
-  
+
+  public int getPageNumber(Integer pid, int pageSize)
+  {
+    long pageNumber = 0;
+    StringBuilder sb = new StringBuilder().append("SELECT COUNT(*) AS idx FROM problem WHERE pid<?");
+    if (!userService.isAdmin())
+      sb.append(" AND status=1");
+    sb.append(" ORDER BY pid LIMIT 1");
+    
+    pageNumber = dao.findFirst(sb.toString(), pid).getLong("idx");
+    pageNumber = (pageNumber + pageSize) / pageSize;
+    return (int) pageNumber;
+  }
+
   public ProblemModel findProblem(Integer pid)
   {
     return dao.findByPid(pid, userService.isAdmin());
@@ -58,16 +71,7 @@ public class ProblemService
   {
     return dao.getPrevPid(pid, userService.isAdmin());
   }
-  
-  public Integer getUserResult(Integer pid)
-  {
-    Integer uid = userService.getCurrentUid();
-    if (uid == null)
-      return null;
-    
-    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
-  }
-  
+
   public List<Record> getTags(Integer pid)
   {
     return dao.getTags(pid);
@@ -177,6 +181,15 @@ public class ProblemService
   public List<Record> getUserInfo(Integer pid, Integer uid)
   {
     return dao.getUserInfo(pid, uid);
+  }
+  
+  public Integer getUserResult(Integer pid)
+  {
+    Integer uid = userService.getCurrentUid();
+    if (uid == null)
+      return null;
+    
+    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
   }
   
   public Record getUserResult(Integer pid, Integer uid)
