@@ -21,10 +21,10 @@ public class GlobalInterceptor implements Interceptor
     Controller controller = ai.getController();
 
     String controllerKey = ai.getControllerKey();
-    controller.setAttr(OjConstants.CONTROLLER_KEY, controllerKey.replace("/", ""));
+    controller.setAttr(OjConstants.CONTROLLER_KEY, controllerKey.replaceFirst("/", ""));
     
     String actionKey = ai.getActionKey();
-    controller.setAttr(OjConstants.ACTION_KEY, actionKey.replace("/", ""));
+    controller.setAttr(OjConstants.ACTION_KEY, actionKey.replaceFirst("/", ""));
     
     String methodName = ai.getMethodName();
     controller.setAttr(OjConstants.METHOD_NAME, methodName);
