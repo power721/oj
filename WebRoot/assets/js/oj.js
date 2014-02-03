@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	$('li.disabled a').removeAttr('href');
+	
 	$('td.user a').each(function() {
 		var that = $(this);
 		var name = that.html();

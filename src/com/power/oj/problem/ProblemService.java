@@ -184,4 +184,63 @@ public class ProblemService
     return dao.getUserResult(pid, uid);
   }
   
+  public boolean addTag(Integer pid, String tag)
+  {
+    Integer uid = userService.getCurrentUid();
+    return dao.addTag(pid, uid, tag);
+  }
+
+  public boolean build(Integer pid)
+  {
+    ProblemModel problemModel = findProblem(pid);
+    if (problemModel == null)
+      throw new ProblemException("Problem is not exist!");
+    
+    long accept = 0;
+    long submit = 0;
+    long ratio = 0;
+    long submit_user = 0;
+    long solved = 0;
+    long difficulty = 0;
+
+    Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
+
+    if (record != null)
+    {
+      submit = record.getLong("count");
+      problemModel.set("submit", submit);
+    }
+
+    record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
+    if (record != null)
+    {
+      accept = record.getLong("count");
+      problemModel.set("accept", accept);
+    }
+
+    if (submit > 0)
+      ratio = accept / submit;
+    problemModel.set("ratio", ratio);
+
+    record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
+    if (record != null)
+    {
+      submit_user = record.getLong("count");
+      problemModel.set("submit_user", submit_user);
+    }
+
+    record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
+    if (record != null)
+    {
+      solved = record.getLong("count");
+      problemModel.set("solved", solved);
+    }
+
+    if (submit_user > 0)
+      difficulty = solved / submit_user;
+    problemModel.set("difficulty", difficulty);
+
+    return problemModel.update();
+  }
+  
 }

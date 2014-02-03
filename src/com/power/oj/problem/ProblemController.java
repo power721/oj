@@ -311,10 +311,10 @@ public class ProblemController extends OjController
   {
     String op = getPara("op");
     String tag = HtmlEncoder.text(getPara("tag").trim());
-    int pid = getParaToInt("pid");
-    int uid = getAttrForInt(OjConstants.USER_ID);
+    Integer pid = getParaToInt("pid");
+    
     if ("add".equals(op) && StringUtil.isNotBlank(tag))
-      ProblemModel.dao.addTag(pid, uid, tag);
+      problemService.addTag(pid, tag);
 
     String redirectURL = new StringBuilder(3).append("/problem/show/").append(pid).append("#tag").toString();
     redirect(redirectURL, new FlashMessage(getText("problem.tag.success")));
@@ -323,17 +323,23 @@ public class ProblemController extends OjController
   @RequiresPermissions("problem:build")
   public void build()
   {
-    int pid = getParaToInt(0);
+    Integer pid = getParaToInt(0);
     String redirectURL = new StringBuilder(2).append("/problem/show/").append(pid).toString();
-    ProblemModel problemModel = ProblemModel.dao.findById(pid);
+    FlashMessage msg = new FlashMessage(getText("problem.build.success"));
     
-    if (problemModel != null && !problemModel.build())
+    try
     {
-      log.error(new StringBuilder(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
-      FlashMessage msg = new FlashMessage(getText("problem.build.error"), MessageType.ERROR, getText("message.error.title"));
-      redirect(redirectURL, msg);
+      if (!problemService.build(pid))
+      {
+        log.error(new StringBuilder(3).append("Build problem ").append(pid).append(" statistics failed!").toString());
+        msg = new FlashMessage(getText("problem.build.error"), MessageType.ERROR, getText("message.error.title"));
+      }
+    } catch(ProblemException e)
+    {
+      log.error(e.getLocalizedMessage());
+      msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
     }
-
-    redirect(redirectURL, new FlashMessage(getText("problem.build.success")));
+    
+    redirect(redirectURL, msg);
   }
 }
