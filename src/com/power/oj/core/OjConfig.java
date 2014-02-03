@@ -33,7 +33,7 @@ public class OjConfig
   public static int statusPageSize = 20;
 
   public static long timeStamp;
-  public static long startGlobalInterceptorTime;
+  public static long startInterceptorTime;
   public static long startGlobalHandlerTime;
 
   public static List<LanguageModel> program_languages;

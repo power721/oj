@@ -33,6 +33,7 @@ import com.power.oj.core.interceptor.BaseURLInterceptor;
 import com.power.oj.core.interceptor.FlashMessageInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
 import com.power.oj.core.interceptor.I18NInterceptor;
+import com.power.oj.core.interceptor.DebugInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
@@ -125,6 +126,8 @@ public class AppConfig extends JFinalConfig
    */
   public void configInterceptor(Interceptors me)
   {
+    if (OjConfig.getDevMode())
+      me.add(new DebugInterceptor());
     me.add(new BaseURLInterceptor());
     me.add(new I18NInterceptor());
     me.add(new GlobalInterceptor());
