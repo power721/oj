@@ -2,7 +2,7 @@
 var system = {
   st: new Date().getTime(),
   ver: '0.0.4.4',
-  path: '/dotnet/date',
+  path: '/assets',
   debug: 0,
   location: 'location-guru',
   url: window.location.href.toString(),
@@ -22,8 +22,8 @@ var system = {
 var user = {
   ver: '0.0.2',
   lastVer: '0.0.0.0',
-  name: $.cookie('ac_username') || '用户',
-  avatar: $.cookie('ac_userimg') || system.path + '/style/image/avatar.jpg',
+  name: $.cookie('oj_username') || '用户',
+  avatar: $.cookie('oj_userimg') || system.path + '/images/user/default.png',
   online: 0,
   uid: -1,
   group: -1,
@@ -1107,7 +1107,7 @@ var cache = {
                 if (system.port.getUserInfo) {
                   system.port.getUserInfo.abort()
                 }
-                var url = !!uid ? '/usercard.aspx?uid=' + uid: name.length ? '/usercard.aspx?username=' + encodeURI(name) : '';
+                var url = !!uid ? 'user/info?uid=' + uid: name.length ? 'user/info?name=' + encodeURI(name) : '';
                 system.port.getUserInfo = $.get(url).done(function(data) {
                   if ( !! data.success) {
                     var a = data.userjson;
@@ -1124,7 +1124,7 @@ var cache = {
                     var arts = $.parsePts(a.posts);
                     var followed = a.followed;
                     var objFollow = !followed ? '<a id="follow-user-info"><i class="icon icon-white icon-plus-sign"></i>关注</a>': '<a id="follow-user-info"><i class="icon icon-white icon-star"></i>已关注</a>';
-                    var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="/member/user.aspx?uid=' + uid + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="/member/user.aspx?uid=' + uid + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=post-history" target="_blank">投稿</a><span class="pts">：' + arts + '</span>' + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="/member/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
+                    var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="user/user.aspx?uid=' + uid + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="user/user.aspx?uid=' + uid + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=post-history" target="_blank">投稿</a><span class="pts">：' + arts + '</span>' + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="user/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
                     inner.removeClass('card-video').css({
                       opacity: 0
                     }).stop().animate({
@@ -1216,7 +1216,7 @@ var cache = {
                   var shares = a.shares;
                   var channel = a.channel;
                   var date = a.date;
-                  var html = '' + '<div class="area-left">' + '<div class="l">' + '<a class="thumb" href="/v/ac' + aid + '">' + '<img class="preview" src="' + preview + '">' + '<div class="cover"></div>' + '<p class="ico-play"></p>' + '</a>' + '</div>' + '<div class="r">' + '<a class="title" href="/v/ac' + aid + '" title="' + title + '">' + $.parseSafe(title) + '</a>' + '<span class="desc">' + $.parseSafe(desc) + '</span>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="area-right">' + '<a class="name name-videocard" href="/member/user.aspx?uid=' + uid + '" title="Up主"><i class="icon grey icon-user"></i>' + author + '</a>' + '<span class="time" title="发布于' + date + '"><i class="icon grey icon-time">发布日期:</i>' + $.parseTime(date) + '</span>' + '<div id="extra-video-info">' + '<span class="views" title="点击数"><i class="icon grey icon-play-circle">点击:</i>' + $.parsePts(views) + '</span>&nbsp;&nbsp;' + '<span class="comments" title="评论数"><i class="icon grey icon-comment">评论:</i>' + $.parsePts(comments) + '</span>&nbsp;&nbsp;' + '<span class="favors" title="收藏数"><i class="icon grey icon-star">收藏:</i>' + $.parsePts(stows) + '</span>&nbsp;&nbsp;' + '<span class="shares" title="分享数"><i class="icon grey icon-share">分享:</i>' + $.parsePts(shares) + '</span>' + '</div>' + '<a class="channel" target="_blank" href="/v/list' + $.parseChannel(channel) + '/index.htm">' + channel + '</a>' + '</div>';
+                  var html = '' + '<div class="area-left">' + '<div class="l">' + '<a class="thumb" href="/v/ac' + aid + '">' + '<img class="preview" src="' + preview + '">' + '<div class="cover"></div>' + '<p class="ico-play"></p>' + '</a>' + '</div>' + '<div class="r">' + '<a class="title" href="/v/ac' + aid + '" title="' + title + '">' + $.parseSafe(title) + '</a>' + '<span class="desc">' + $.parseSafe(desc) + '</span>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="area-right">' + '<a class="name name-videocard" href="user/user.aspx?uid=' + uid + '" title="Up主"><i class="icon grey icon-user"></i>' + author + '</a>' + '<span class="time" title="发布于' + date + '"><i class="icon grey icon-time">发布日期:</i>' + $.parseTime(date) + '</span>' + '<div id="extra-video-info">' + '<span class="views" title="点击数"><i class="icon grey icon-play-circle">点击:</i>' + $.parsePts(views) + '</span>&nbsp;&nbsp;' + '<span class="comments" title="评论数"><i class="icon grey icon-comment">评论:</i>' + $.parsePts(comments) + '</span>&nbsp;&nbsp;' + '<span class="favors" title="收藏数"><i class="icon grey icon-star">收藏:</i>' + $.parsePts(stows) + '</span>&nbsp;&nbsp;' + '<span class="shares" title="分享数"><i class="icon grey icon-share">分享:</i>' + $.parsePts(shares) + '</span>' + '</div>' + '<a class="channel" target="_blank" href="/v/list' + $.parseChannel(channel) + '/index.htm">' + channel + '</a>' + '</div>';
                   inner.addClass('card-video').stop().animate({
                     opacity: 0
                   },
@@ -1282,7 +1282,7 @@ var cache = {
         user.uid = $.cookie('auth_key');
         if ( !! user.uid) {
           user.online = 1;
-          user.name = $.cookie('ac_username');
+          user.name = $.cookie('oj_username');
           user.key = $.cookie('auth_key_ac_sha1');
           if ($.cookie('ac_time')) {
             user.group = 0;
@@ -1302,7 +1302,7 @@ var cache = {
         }
       },
       'unread': function() {
-        $.get('/member/unRead.aspx', {
+        $.get('mail/unRead', {
           uid: user.uid
         }).done(function(data) {
           user.unread = {
@@ -1407,7 +1407,7 @@ var cache = {
                 }
               },
               '@mail': function() {
-                var url = '/member/#area=mail-new;username=' + (func.singer.data().name || '');
+                var url = 'user/#area=mail-new;username=' + (func.singer.data().name || '');
                 window.open(url)
               },
               '@reg': function() {
@@ -2184,7 +2184,7 @@ var cache = {
       } else {
         func.text = func.text.replace(/\[img\](\S+?)\[\/img\]/g, '<a class="thumb"href="$1"target="_blank"title="点击以浏览图像"><img class="preview"src="$1"></a>').replace(/\[img\=(\S+?)\](\S+?)\[\/img\]/g, '<a class="thumb" href="$2" target="_blank" title="$1"><img class="preview" src="$2"></a>')
       };
-      func.text = func.text.replace(/\[at\]([\s\S]+?)\[\/at\]/g, '<a class="name"target="_blank"href="/member/findUser.aspx?userName=$1">@$1</a>').replace(/\[\/?back.*?\]/g, '').replace(/\[username\]([\s\S]+?)\[\/username\]/g, '<a  class="name" target="_blank" href="/member/findUser.aspx?userName=$1">$1</a>').replace(/\[.*?\]/g, '').replace(/([\s\W\_])on\w+?\s*?\=/ig, '$1data-event=')
+      func.text = func.text.replace(/\[at\]([\s\S]+?)\[\/at\]/g, '<a class="name"target="_blank"href="user/findUser.aspx?userName=$1">@$1</a>').replace(/\[\/?back.*?\]/g, '').replace(/\[username\]([\s\S]+?)\[\/username\]/g, '<a  class="name" target="_blank" href="user/findUser.aspx?userName=$1">$1</a>').replace(/\[.*?\]/g, '').replace(/([\s\W\_])on\w+?\s*?\=/ig, '$1data-event=')
     } else {
       func.text = ''
     };
@@ -2577,7 +2577,7 @@ var cache = {
     system.tv = function() {
       if (user.online && system.url.search(/acfun/) != -1) {
         var check = function() {
-          $.get('/online.aspx', {
+          $.get('user/keepOnline', {
             uid: user.uid
           })
         };

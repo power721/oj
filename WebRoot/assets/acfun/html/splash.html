@@ -1,0 +1,228 @@
+<!--style-->
+<style>
+    #block-first .banner .more {
+        overflow: visible;
+        margin: 0 8px 0 0;
+        padding: 0;
+    }
+
+    #block-first .banner .more:hover {
+        background: none;
+        box-shadow: none;
+    }
+
+    #block-first .mainer {
+        padding: 16px;
+    }
+
+    #block-first .unit .l {
+        width: 120px;
+        padding: 0 0 0 40px;
+    }
+
+    #block-first .unit .r {
+        width: 620px;
+    }
+
+    #block-first .subtitle {
+        margin: 4px 0;
+        height: 24px;
+        line-height: 24px;
+        font-size: 13px;
+        padding: 0 4px;
+        border-radius: 2px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        background-color: #c66;
+        color: #fff;
+        display: inline-block;
+        *display: inline;
+        cursor: default;
+    }
+
+    #block-first .item {
+        position: relative;
+        overflow: hidden;
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    /**/
+    #list-info-splash {
+        font-family: verdana, Tahoma, Arial, "微软雅黑", "宋体", sans-serif;
+        margin: 0 0 16px;
+    }
+
+    #list-info-splash .a {
+        font-size: 32px;
+        font-weight: bold;
+        letter-spacing: -0.1em;
+        line-height: 1.2;
+        color: #333;
+        margin-top: 8px 0 0;
+    }
+
+    #list-info-splash .a .pts {
+        font-family: Candara, verdana, Tahoma, Arial, "微软雅黑", "宋体", sans-serif;
+        font-size: 50px;
+        margin: 0 8px;
+    }
+
+    #list-info-splash .b {
+        font-size: 13px;
+        font-style: italic;
+        line-height: 1.2;
+        color: #999;
+    }
+
+    #area-user-splash {
+        margin: 16px 0 0;
+        padding: 0;
+    }
+
+    #area-user-splash .r {
+        width: 550px;
+    }
+
+    #area-user-splash .r .name {
+        font-size: 32px;
+        font-weight: bold;
+        letter-spacing: -0.1em;
+        color: #333;
+        line-height: 1.2;
+    }
+
+    #area-user-splash .r .uid {
+        font-size: 16px;
+        font-weight: bold;
+        letter-spacing: 0;
+        color: #333;
+        margin: 0 0 0 4px;
+        vertical-align: bottom;
+    }
+
+    #area-user-splash .thumb {
+        position: relative;
+    }
+
+    #area-user-splash .avatar {
+        width: 100px;
+        height: 100px;
+    }
+
+    #area-user-splash .level {
+        width: 320px;
+        height: 24px;
+        display: block;
+        position: relative;
+        margin: 16px 0 8px 0;
+        text-align: center;
+        background-color: #969;
+        color: #fff;
+        border-radius: 2px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    #area-user-splash .level .a {
+        position: absolute;
+        width: 0;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background-color: #696;
+        border-radius: 0 1px 1px 0;
+    }
+
+    #area-user-splash .level .b {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        line-height: 24px;
+        left: 0;
+        top: 0;
+        cursor: default;
+    }
+
+    #hint-unread-splash {
+        font-family: verdana, Tahoma, Arial, "微软雅黑", "宋体", sans-serif;
+        font-size: 14px;
+        margin: 4px 0 0;
+    }
+
+    #hint-unread-splash .pts {
+        color: #c33;
+        font-size: 100%;
+        margin: 0 2px;
+    }
+
+    #hint-unread-splash a {
+        color: #08c;
+        margin: 0 2px;
+    }
+
+    /*calendar*/
+    #block-calendar-splash .mainer {
+        padding: 16px;
+    }
+</style>
+<!--style-->
+
+<!--html-->
+<div id="block-title-banner">
+    <p>欢迎</p>
+
+    <div>
+        <a href="/member/">AcFun</a>
+        <span class="d">Splash</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+
+        <div id="area-cont-splash"></div>
+
+    </div>
+</div>
+
+<!--
+<div id="block-calendar-splash" class="block">
+    <div class="mainer">
+        <i class="include">../children/ifr-calendar-splash</i>
+    </div>
+</div>
+-->
+<!--html-->
+
+<!--script-->
+<script>
+    system.tv = function () {
+        //
+        $('#area-cont-splash')
+                .load('user/splash', function () {
+                    //set handle
+                    var block = $('#block-first');
+                    var mainer = block.find('div.mainer').eq(0);
+                    //
+                    block.find('p.level').eq(0)
+                            .hoverInfo({
+                                type: 'info',
+                                direction: 'bottom'
+                            });
+                });
+        //
+
+        //calendar
+        $('#area-cont-right').data({
+            finish: function () {
+                $('#item-sign-calendar')
+                        .hoverInfo({
+                            type: 'info'
+                        });
+            }
+        });
+    }();
+</script>
+<!--script-->

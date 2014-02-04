@@ -46,6 +46,7 @@ public class UserController extends OjController
   private static final UserService userService = UserService.me();
   private static final SessionService sessionService = SessionService.me();
   
+  @RequiresUser
   public void index()
   {
     setTitle(getText("user.index.title"));
@@ -80,6 +81,11 @@ public class UserController extends OjController
     setTitle(getText("user.profile.title"));
   }
   
+  public void splash()
+  {
+    render("ajax/splash.html");
+  }
+  
   @RequiresUser
   public void loginlog()
   {
@@ -109,9 +115,10 @@ public class UserController extends OjController
 
     if (userModel == null)
     {
-      renderJson("{error:true}");
+      renderJson("{result:'User does not exist!'}");
     } else
     {
+      userModel.put("success", true);
       userModel.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
       renderJson(userModel);
     }
@@ -170,6 +177,9 @@ public class UserController extends OjController
 
     if (userService.login(name, password, rememberMe))
     {
+      UserModel userModel = userService.getCurrentUser();
+      setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      setCookie("oj_username", name, OjConstants.COOKIE_AGE);
       redirect(sessionService.getLastAccessURL());
       return;
     }

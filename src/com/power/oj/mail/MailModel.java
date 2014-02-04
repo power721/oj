@@ -1,5 +1,7 @@
 package com.power.oj.mail;
 
+import java.util.List;
+
 import com.jfinal.plugin.activerecord.Model;
 
 public class MailModel extends Model<MailModel>
@@ -20,5 +22,35 @@ public class MailModel extends Model<MailModel>
   public static final String READ = "read";
   public static final String ATIME = "atime";
   public static final String CTIME = "ctime";
+
+  public MailModel findMail(Integer id, Integer uid)
+  {
+    return findFirst("SELECT * FROM mail WHERE id=? AND (from=? OR to=?) LIMIT 1", id, uid, uid);
+  }
+  
+  public List<MailModel> findUserMails(Integer uid)
+  {
+    return find("SELECT * FROM mail WHERE from=? OR to=?", uid, uid);
+  }
+
+  public List<MailModel> findUserReceivedMails(Integer uid)
+  {
+    return find("SELECT * FROM mail WHERE to=?", uid);
+  }
+  
+  public List<MailModel> findUserSentMails(Integer uid)
+  {
+    return find("SELECT * FROM mail WHERE from=?", uid);
+  }
+
+  public List<MailModel> findUserNewMails(Integer uid)
+  {
+    return find("SELECT * FROM mail WHERE to=? AND read=0", uid);
+  }
+
+  public Integer countUserNewMails(Integer uid)
+  {
+    return findFirst("SELECT COUNT(*) AS count FROM mail WHERE to=? AND read=0", uid).getInt("count");
+  }
   
 }
