@@ -252,7 +252,7 @@ $(function() {
               $.info(text);
               btn.info(text)
             } else {
-              $.post("user/checkin").done(function(data) {
+              $.post("user/checkin?ajax=1").done(function(data) {
                 if (data.success) {
                   var text = "success::您已成功签到。请再接再厉。";
                   $.info(text);
@@ -261,7 +261,7 @@ $(function() {
                   }).info({
                     direction: "bottom",
                     text: text
-                  }).riseInfo("+3 exp")
+                  }).riseInfo("+" + data.incexp + " exp")
                 } else {
                   $.info("error::" + data.result);
                   btn.info(data.result)
@@ -383,7 +383,7 @@ $(function() {
           if (area.data().port) {
             area.data().port.abort()
           }
-          area.data().port = $.get("user/info", {
+          area.data().port = $.get("user/info?ajax=1", {
             uid: user.uid
           }).done(function(data) {
             if (data.success) {

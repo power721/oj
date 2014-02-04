@@ -1107,7 +1107,7 @@ var cache = {
                 if (system.port.getUserInfo) {
                   system.port.getUserInfo.abort()
                 }
-                var url = !!uid ? 'user/info?uid=' + uid: name.length ? 'user/info?name=' + encodeURI(name) : '';
+                var url = !!uid ? 'user/info?ajax=1&uid=' + uid: name.length ? 'user/info?ajax=1&name=' + encodeURI(name) : '';
                 system.port.getUserInfo = $.get(url).done(function(data) {
                   if ( !! data.success) {
                     var a = data.userjson;
@@ -1477,7 +1477,7 @@ var cache = {
     };
     if (func.id.length) {
       if (!$('#' + func.id).length) {
-        var temp = '<div id="[id]" class="win [type]">' + '<div class="block-title">' + '<p class="title"><i class="icon icon-[icon]"></i>[title]</p>' + '<div class="area-tool">' + '<div class="btn close" onClick="javascript:$(this).shut();" title="单击关闭窗体"><i class="icon gray icon-remove">X</i></div>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="mainer">' + '<div class="hint-window">少女祈祷中...</div>' + '</div>' + '</div>';
+        var temp = '<div id="[id]" class="win [type]">' + '<div class="block-title">' + '<p class="title"><i class="icon icon-[icon]"></i>[title]</p>' + '<div class="area-tool">' + '<div class="close" onClick="javascript:$(this).shut();" title="单击关闭窗体"><i class="icon gray icon-remove">X</i></div>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="mainer">' + '<div class="hint-window">少女祈祷中...</div>' + '</div>' + '</div>';
         var html = temp.replace(/\[id\]/g, func.id).replace(/\[type\]/g, (func['class'] || func.type || '')).replace(/\[icon\]/g, func.icon).replace(/\[title\]/g, func.title);
         area.append(html);
         var win = $('#' + func.id);
@@ -2577,7 +2577,7 @@ var cache = {
     system.tv = function() {
       if (user.online && system.url.search(/acfun/) != -1) {
         var check = function() {
-          $.get('user/keepOnline', {
+          $.get('user/keepOnline?ajax=1', {
             uid: user.uid
           })
         };

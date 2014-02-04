@@ -78,7 +78,7 @@ public class UserService
     return true;
   }
   
-  public boolean checkin(UserModel userModel)
+  public int checkin(UserModel userModel)
   {
     int timestamp = Tool.getDayTimestamp();
     int checkin = userModel.getInt("checkin");
@@ -94,10 +94,10 @@ public class UserService
       
       credit += Math.min(checkinTimes, 5);
       userModel.set("checkin", OjConfig.timeStamp).set("checkinTimes", checkinTimes).set("credit", credit).update();
-      return true;
+      return Math.min(checkinTimes, 5);
     }
     
-    return false;
+    return 0;
   }
   
   public boolean isCheckin(UserModel userModel)
@@ -105,13 +105,13 @@ public class UserService
     int timestamp = Tool.getDayTimestamp();
     int checkin = userModel.getInt("checkin");
     
-    userModel.put("isCheckin", checkin < timestamp);
     if (checkin < timestamp)
     {
       return false;
     }
     else
     {
+      userModel.put("isCheckin", checkin);
       return true;
     }
   }

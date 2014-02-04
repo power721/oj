@@ -85,6 +85,7 @@ public class UserController extends OjController
     setTitle(getText("user.profile.title"));
   }
   
+  @RequiresUser
   public void splash()
   {
     UserModel userModel = getAttr(OjConstants.USER);
@@ -230,6 +231,8 @@ public class UserController extends OjController
   public void logout()
   {
     String lastAccessURL = sessionService.getLastAccessURL();
+    if (isParaExists("t"))
+      lastAccessURL = getPara("t");
     
     userService.logout();
 
@@ -244,10 +247,11 @@ public class UserController extends OjController
       return;
     }
     
+    int incExp = 0;
     UserModel userModel = getAttr(OjConstants.USER);
-    if (userService.checkin(userModel))
+    if ((incExp = userService.checkin(userModel)) > 0)
     {
-      renderJson("{\"success\":true}");
+      renderJson("{\"success\":true, \"incexp\":" + incExp +"}");
     }
     else
     {

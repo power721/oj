@@ -31,7 +31,7 @@
       </p>
     </div>
     <div class="r">
-      <div class="switch active">
+      <div class="switch">
         <p>
           是
           <b>
@@ -87,7 +87,7 @@
         var text = "info::数据同步中...";
         $.info(text);
         win.info(text);
-        $.post("user/api?action=signSubmit", {
+        $.post("user/api?action=signSubmit&ajax=1", {
           sign: sign
         }).done(function(data) {
           if ( !! data.success) {
