@@ -59,7 +59,7 @@
     <tr>
       <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
       </td>
-      <td class="pid">${Problem.pid!}</td>
+      <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
       <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
       </a></td>
       <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
