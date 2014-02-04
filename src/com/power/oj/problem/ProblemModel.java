@@ -19,14 +19,14 @@ public class ProblemModel extends Model<ProblemModel>
   public int getNextPid(Integer pid, boolean isAdmin)
   {
     int nextPid = 0;
-    StringBuilder sb = new StringBuilder("SELECT pid FROM problem WHERE pid>?");
+    StringBuilder sb = new StringBuilder().append("SELECT pid FROM problem WHERE pid>?");
     if (!isAdmin)
       sb.append(" AND status=1");
     sb.append(" ORDER BY pid LIMIT 1");
 
     try
     {
-      nextPid = dao.findFirst(sb.toString(), pid).getInt("pid");
+      nextPid = findFirst(sb.toString(), pid).getInt("pid");
     } catch (Exception e)
     {
       nextPid = pid;
@@ -37,14 +37,14 @@ public class ProblemModel extends Model<ProblemModel>
   public int getPrevPid(Integer pid, boolean isAdmin)
   {
     int prevPid = 0;
-    StringBuilder sb = new StringBuilder("SELECT pid FROM problem WHERE pid<?");
+    StringBuilder sb = new StringBuilder().append("SELECT pid FROM problem WHERE pid<?");
     if (!isAdmin)
       sb.append(" AND status=1");
     sb.append(" ORDER BY pid DESC LIMIT 1");
 
     try
     {
-      prevPid = dao.findFirst(sb.toString(), pid).getInt("pid");
+      prevPid = findFirst(sb.toString(), pid).getInt("pid");
     } catch (Exception e)
     {
       prevPid = pid;
@@ -54,51 +54,30 @@ public class ProblemModel extends Model<ProblemModel>
 
   public Integer getRandomPid()
   {
-    Integer pid = 0;
-    pid = dao
-        .findFirst(
+    return findFirst(
             "SELECT t1.pid FROM `problem` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(pid) FROM `problem`)-(SELECT MIN(pid) FROM `problem`))+(SELECT MIN(pid) FROM `problem`)) AS pid) AS t2 WHERE t1.pid >= t2.pid AND status=1 ORDER BY t1.pid LIMIT 1")
         .getInt("pid");
-    return pid;
   }
 
   public String getProblemTitle(Integer pid)
   {
     ProblemModel problemModel = findFirst("SELECT title FROM problem WHERE pid=? AND status=1 LIMIT 1", pid);
-    String title = null;
+    
     if (problemModel != null)
-      title = problemModel.getStr("title");
+    {
+      return problemModel.getStr("title");
+    }
 
-    return title;
-  }
-
-  public List<Record> getUserInfo(Integer pid, Integer uid)
-  {
-    List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,code_len,language FROM solution WHERE uid=? AND pid=? GROUP BY result", uid, pid);
-    return userInfo;
-  }
-
-  public Record getUserResult(Integer pid, Integer uid)
-  {
-    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
-    return record;
-  }
-
-  public List<Record> getTags(Integer pid)
-  {
-    List<Record> tagList = Db.find("SELECT tag.tag,user.name FROM tag LEFT JOIN user on user.uid=tag.uid WHERE tag.pid=? AND tag.status=1", pid);
-    if (tagList.isEmpty())
-      return null;
-    return tagList;
+    return null;
   }
 
   public ProblemModel findByPid(Integer pid, boolean isAdmin)
   {
     ProblemModel problemModel = null;
     if (isAdmin)
-      problemModel = dao.findById(pid);
+      problemModel = findById(pid);
     else
-      problemModel = dao.findFirst("SELECT * FROM problem WHERE status=1 AND pid=? LIMIT 1", pid);
+      problemModel = findFirst("SELECT * FROM problem WHERE status=1 AND pid=? LIMIT 1", pid);
 
     return problemModel;
   }
@@ -137,6 +116,26 @@ public class ProblemModel extends Model<ProblemModel>
   public void setViewCount(Integer pid, int view)
   {
     Db.update("UPDATE problem SET view=? WHERE pid=?", view, pid);
+  }
+
+  public List<Record> getUserInfo(Integer pid, Integer uid)
+  {
+    List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,code_len,language FROM solution WHERE uid=? AND pid=? GROUP BY result", uid, pid);
+    return userInfo;
+  }
+
+  public Record getUserResult(Integer pid, Integer uid)
+  {
+    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+    return record;
+  }
+
+  public List<Record> getTags(Integer pid)
+  {
+    List<Record> tagList = Db.find("SELECT t.tag,u.name FROM tag t LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
+    if (tagList.isEmpty())
+      return null;
+    return tagList;
   }
 
   public boolean addTag(Integer pid, Integer uid, String tag)

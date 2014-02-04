@@ -31,6 +31,50 @@ public class ProblemService
     return me;
   }
   
+  public ProblemModel findProblem(Integer pid)
+  {
+    return dao.findByPid(pid, userService.isAdmin());
+  }
+  
+  public int getNextPid(Integer pid)
+  {
+    return dao.getNextPid(pid, userService.isAdmin());
+  }
+  
+  public int getPrevPid(Integer pid)
+  {
+    return dao.getPrevPid(pid, userService.isAdmin());
+  }
+
+  public Integer getRandomPid()
+  {
+    return dao.getRandomPid();
+  }
+  
+  public List<Record> getTags(Integer pid)
+  {
+    return dao.getTags(pid);
+  }
+
+  public List<Record> getUserInfo(Integer pid, Integer uid)
+  {
+    return dao.getUserInfo(pid, uid);
+  }
+  
+  public Integer getUserResult(Integer pid)
+  {
+    Integer uid = userService.getCurrentUid();
+    if (uid == null)
+      return null;
+    
+    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+  }
+  
+  public Record getUserResult(Integer pid, Integer uid)
+  {
+    return dao.getUserResult(pid, uid);
+  }
+  
   public Page<ProblemModel> getProblemPage(int pageNumber, int pageSize)
   {
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
@@ -57,26 +101,6 @@ public class ProblemService
     return (int) pageNumber;
   }
 
-  public ProblemModel findProblem(Integer pid)
-  {
-    return dao.findByPid(pid, userService.isAdmin());
-  }
-  
-  public int getNextPid(Integer pid)
-  {
-    return dao.getNextPid(pid, userService.isAdmin());
-  }
-  
-  public int getPrevPid(Integer pid)
-  {
-    return dao.getPrevPid(pid, userService.isAdmin());
-  }
-
-  public List<Record> getTags(Integer pid)
-  {
-    return dao.getTags(pid);
-  }
-  
   public SolutionModel getSolution(Integer pid, Integer sid)
   {
     Integer uid = userService.getCurrentUid();
@@ -87,23 +111,6 @@ public class ProblemService
     sb.append(" LIMIT 1");
     
     return SolutionModel.dao.findFirst(sb.toString(), sid, pid);
-  }
-  
-  public boolean addProblem(ProblemModel problemModel) throws IOException
-  {
-    problemModel.set("uid", userService.getCurrentUid());
-    problemModel.saveProblem();
-
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
-    if (dataDir.isDirectory())
-    {
-      log.warn("Data directory already exists: " + dataDir.getPath());
-      return false;
-    }
-    
-    FileUtil.mkdirs(dataDir);
-    
-    return true;
   }
   
   public List<SolutionModel> getProblemStatus(Integer pid)
@@ -131,11 +138,6 @@ public class ProblemService
   public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
   {
     return SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
-  }
-  
-  public Integer getRandomPid()
-  {
-    return dao.getRandomPid();
   }
   
   public Page<ProblemModel> searchProblem(int pageNumber, int pageSize, String scope, String word)
@@ -178,31 +180,29 @@ public class ProblemService
     return problemList;
   }
   
-  public List<Record> getUserInfo(Integer pid, Integer uid)
-  {
-    return dao.getUserInfo(pid, uid);
-  }
-  
-  public Integer getUserResult(Integer pid)
-  {
-    Integer uid = userService.getCurrentUid();
-    if (uid == null)
-      return null;
-    
-    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
-  }
-  
-  public Record getUserResult(Integer pid, Integer uid)
-  {
-    return dao.getUserResult(pid, uid);
-  }
-  
   public boolean addTag(Integer pid, String tag)
   {
     Integer uid = userService.getCurrentUid();
     return dao.addTag(pid, uid, tag);
   }
 
+  public boolean addProblem(ProblemModel problemModel) throws IOException
+  {
+    problemModel.set("uid", userService.getCurrentUid());
+    problemModel.saveProblem();
+
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
+    if (dataDir.isDirectory())
+    {
+      log.warn("Data directory already exists: " + dataDir.getPath());
+      return false;
+    }
+    
+    FileUtil.mkdirs(dataDir);
+    
+    return true;
+  }
+  
   public boolean build(Integer pid)
   {
     ProblemModel problemModel = findProblem(pid);
