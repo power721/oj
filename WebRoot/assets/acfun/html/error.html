@@ -40,12 +40,13 @@
 </div>
 <script>
     $('a#return').click(function() {
-        window.location.href = 'user/' + $('#list-guide-left').find('a').eq(0).attr('href');
+        window.location.href = BaseURL + $('#list-guide-left').find('a').eq(0).attr('href');
     });
+    
     system.tv = function () {
         window.setTimeout(function () {
             if (system.hash.area == 'error') {
-                window.location.href = 'user/' + $('#list-guide-left').find('a').eq(0).attr('href');
+                window.location.href = BaseURL + $('#list-guide-left').find('a').eq(0).attr('href');
             }
             ;
         }, 5000);
