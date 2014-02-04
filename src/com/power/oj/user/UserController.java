@@ -50,6 +50,7 @@ public class UserController extends OjController
   public void index()
   {
     UserModel userModel = getAttr(OjConstants.USER);
+    userService.isCheckin(userModel);
     setAttr(OjConstants.USER, userService.getLevel(userModel));
     
     setTitle(getText("user.index.title"));
@@ -233,6 +234,25 @@ public class UserController extends OjController
     userService.logout();
 
     redirect(lastAccessURL);
+  }
+  
+  public void checkin()
+  {
+    if (ShiroKit.isGuest())
+    {
+      renderJson("{\"result\":\"User does not login.\"}");
+      return;
+    }
+    
+    UserModel userModel = getAttr(OjConstants.USER);
+    if (userService.checkin(userModel))
+    {
+      renderJson("{\"success\":true}");
+    }
+    else
+    {
+      renderJson("{\"result\":\"User already checkin.\"}");
+    }
   }
   
   @RequiresUser

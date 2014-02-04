@@ -13,6 +13,7 @@ public interface OjConstants
    */
   long SESSION_EXPIRES_TIME = 15 * 60 * 1000;
   long RESET_PASSWORD_EXPIRES_TIME = 30 * 60 * 1000;
+  long DAY_TIMESTAMP = 24 * 60 * 60 * 1000;
   int AVATAR_WIDTH = 100;
   int AVATAR_HEIGHT = 100;
   int USERNAME_MIN_LENGTH = 5;

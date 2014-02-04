@@ -1,6 +1,7 @@
 package com.power.oj.util;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -186,6 +187,16 @@ public class Tool
     });
 
     return result;
+  }
+
+  public static int getDayTimestamp()
+  {
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    return (int) (cal.getTimeInMillis() / 1000);
   }
 
 }

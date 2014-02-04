@@ -841,6 +841,7 @@ CREATE TABLE `user` (
 `avatar` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'user avatar path' ,
 `sign` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
 `checkin` int(11) NOT NULL DEFAULT '0',
+`checkinTimes` int(5) NOT NULL DEFAULT '0',
 `status`  tinyint(2) NOT NULL DEFAULT 1 COMMENT 'Whether the user is active(1) or blocked(0).' ,
 `data`  blob NULL DEFAULT NULL ,
 `token`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,

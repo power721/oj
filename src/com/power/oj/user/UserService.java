@@ -32,6 +32,7 @@ import com.power.oj.core.service.SessionService;
 import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.util.FileKit;
+import com.power.oj.util.Tool;
 
 public class UserService
 {
@@ -75,6 +76,44 @@ public class UserService
     }
 
     return true;
+  }
+  
+  public boolean checkin(UserModel userModel)
+  {
+    int timestamp = Tool.getDayTimestamp();
+    int checkin = userModel.getInt("checkin");
+    int checkinTimes = userModel.getInt("checkinTimes");
+    int credit = userModel.getInt("credit");
+    
+    log.info("timestamp: " + timestamp + " checkinTime: " + checkin + " current: " + OjConfig.timeStamp);
+    if (checkin < timestamp)
+    {
+      checkinTimes += 1;
+      if (checkin + OjConstants.DAY_TIMESTAMP < timestamp)
+        checkinTimes = 1;
+      
+      credit += Math.min(checkinTimes, 5);
+      userModel.set("checkin", OjConfig.timeStamp).set("checkinTimes", checkinTimes).set("credit", credit).update();
+      return true;
+    }
+    
+    return false;
+  }
+  
+  public boolean isCheckin(UserModel userModel)
+  {
+    int timestamp = Tool.getDayTimestamp();
+    int checkin = userModel.getInt("checkin");
+    
+    userModel.put("isCheckin", checkin < timestamp);
+    if (checkin < timestamp)
+    {
+      return false;
+    }
+    else
+    {
+      return true;
+    }
   }
 
   /**

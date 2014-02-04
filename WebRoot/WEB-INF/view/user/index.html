@@ -143,11 +143,19 @@
                 <div class="r">
                   <!--<span class="label label-important">UID: ${userID}</span>
                   <span class="label label-info">Level: ${user.level}</span>-->
+                  <#if user.isCheckin??>
+                  <button id="btn-sign-user" data-checked="1" class="btn success">
+                    <i class="icon white icon-ok-sign">
+                    </i>
+                    已签到
+                  </button>
+                  <#else>
                   <button id="btn-sign-user" data-checked="0" class="btn primary">
                     <i class="icon white icon-ok-sign">
                     </i>
                     未签到
                   </button>
+                  </#if>
                   <p title="当前总经验值：${user.credit!0} / 下一级所需总经验值：${user.nextExp!200}" class="level">
                     <span style="width:${user.percent!0}%;" class="a">
                     </span>
