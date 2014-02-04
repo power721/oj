@@ -1,10 +1,21 @@
-<#if alpha??> <#include "../contest/_layout.html" /> <#else> <#include "../common/_layout.html" /> </#if> <@layout>
+<#if alpha??> 
+<#include "../contest/_layout.html" /> 
+<#else> 
+<#include "../common/_layout.html" /> 
+</#if> 
+<@layout>
 <div class="row">
   <div class="span4 offset4" id="source-code">
     <span class="green">Problem<#if alpha?? && adminUser??>(<a href="problem/show/${solution.pid!}">${solution.pid!}</a>)</#if>
-    </span>: <#if alpha??> <a href="contest/problem/${solution.cid!}-${alpha!}">${solution.cid!}-${alpha!} (${problemTitle!})</a> <#else> <a
-      href="problem/show/${solution.pid!}">${solution.pid!} (${problemTitle!})</a> </#if> <span class="green">User</span>:<a href="user/profile/${submitUser.name!}">${submitUser.name!}</a>
-    <br> <span class="green">Memory</span>:${solution.memory!}K <span class="green">Time</span>:${solution.time!}MS <br> <span class="green">Language</span>:${language!}
+    </span>: 
+    <#if alpha??> 
+    <a href="contest/problem/${solution.cid!}-${alpha!}">${solution.cid!}-${alpha!} (${problemTitle!})</a> 
+    <#else> 
+    <a href="problem/show/${solution.pid!}">${solution.pid!} (${problemTitle!})</a> 
+    </#if>
+    <span class="green">User</span>:<a href="user/profile/${submitUser.name!}">${submitUser.name!}</a> <br> 
+    <span class="green">Memory</span>:${solution.memory!}K <span class="green">Time</span>:${solution.time!}MS <br> 
+    <span class="green">Language</span>:${language!}
     <span class="green">Result</span>:<span id="${resultName!}">${resultLongName!}</span> <br>
   </div>
 </div>
@@ -12,9 +23,12 @@
 <div class="row">
   <div class="span12">
     <h2>Source Code</h2>
-    <span><a href="javascript:" id="copy-description" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span> <#if !alpha??><span
-      class="pull-right"><a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal"
-      data-target="#submitModal">Re Submit</a></span></#if>
+    <span><a href="javascript:" id="copy-description" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span> 
+    <#if !alpha??>
+    <span class="pull-right">
+    <a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal" data-target="#submitModal">Re Submit</a>
+    </span>
+    </#if>
     <textarea id="source" class="brush: ${brush!'cpp'} auto-width" cols="120" rows="20">${solution.source!}</textarea>
   </div>
 </div>
@@ -77,7 +91,7 @@
         $(document).ready(function(){
 
             $('a#copy-description').zclip({
-                path:'assets/js/ZeroClipboard.swf',
+                path:'${baseUrl!}/assets/js/ZeroClipboard.swf',
                 copy:$('textarea#source').text(),
                 afterCopy:function(){
                     $(this).attr("class", "btn btn-success");
