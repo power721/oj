@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 
+import com.power.oj.problem.ProblemService;
+
 // TODO not implemented
 public class VisitCountService extends TimerTask
 {
@@ -18,24 +20,26 @@ public class VisitCountService extends TimerTask
   public static final byte noticeViewCount = 0x06;
   public static final byte articleViewCount = 0x07;
   
+  private static final ProblemService problemService = ProblemService.me();
+  
   private final static Logger log = Logger.getLogger(VisitCountService.class);
   private static boolean start = false;
   private static VisitCountService daemon;
   private static Timer click_timer;
-  private final static long INTERVAL = 60 * 1000;
+  private final static long INTERVAL = 15 * 60 * 1000;
 
   /**
    * 支持统计的对象类型
    */
   private final static byte[] TYPES = new byte[]
-  { 0x01, 0x02, 0x03, 0x04, 0x05 };
+  { problemViewCount, userViewCount, contestViewCount, contestProblemViewCount, postViewCount, noticeViewCount };
 
   // 内存队列
   @SuppressWarnings("serial")
-  private final static ConcurrentHashMap<Byte, ConcurrentHashMap<Long, Integer>> queues = new ConcurrentHashMap<Byte, ConcurrentHashMap<Long, Integer>>() {
+  private final static ConcurrentHashMap<Byte, ConcurrentHashMap<Integer, Integer>> queues = new ConcurrentHashMap<Byte, ConcurrentHashMap<Integer, Integer>>() {
     {
       for (byte type : TYPES)
-        put(type, new ConcurrentHashMap<Long, Integer>());
+        put(type, new ConcurrentHashMap<Integer, Integer>());
     }
   };
 
@@ -45,16 +49,45 @@ public class VisitCountService extends TimerTask
    * @param type
    * @param obj_id
    */
-  public static void record(byte type, long obj_id)
+  public static void record(byte type, Integer obj_id)
   {
-    ConcurrentHashMap<Long, Integer> queue = queues.get(type);
+    ConcurrentHashMap<Integer, Integer> queue = queues.get(type);
     if (queue != null)
     {
       Integer nCount = queue.get(obj_id);
-      nCount = (nCount == null) ? 1 : nCount + 1; // get number from DB.
+      if (nCount == null)
+      {
+        switch(type)
+        {
+          case problemViewCount: nCount = problemService.getViewCount(obj_id);break;
+        }
+      }
+      else
+      {
+        nCount = nCount + 1;
+      }
+      
       queue.put(obj_id, nCount.intValue());
-      System.out.printf("record (type=%d,id=%d,count=%d)\n", type, obj_id, nCount);
     }
+  }
+  
+  public static Integer get(byte type, Integer obj_id)
+  {
+    ConcurrentHashMap<Integer, Integer> queue = queues.get(type);
+    if (queue != null)
+    {
+      Integer nCount = queue.get(obj_id);
+      if (nCount == null)
+      {
+        switch(type)
+        {
+          case problemViewCount: nCount = problemService.getViewCount(obj_id);break;
+        }
+      }
+      return nCount;
+    }
+    
+    return 0;
   }
 
   /**
@@ -92,8 +125,8 @@ public class VisitCountService extends TimerTask
   {
     for (byte type : TYPES)
     {
-      ConcurrentHashMap<Long, Integer> queue = queues.remove(type);
-      queues.put(type, new ConcurrentHashMap<Long, Integer>());
+      ConcurrentHashMap<Integer, Integer> queue = queues.remove(type);
+      queues.put(type, new ConcurrentHashMap<Integer, Integer>());
       try
       {
         _flush(type, queue);
@@ -123,16 +156,19 @@ public class VisitCountService extends TimerTask
    * @param type
    * @param queue
    */
-  private void _flush(byte type, ConcurrentHashMap<Long, Integer> queue)
+  private void _flush(byte type, ConcurrentHashMap<Integer, Integer> queue)
   {
     if (queue.size() == 0)
       return;
     switch (type)
     {
-    // 数据写入数据库....
-    case problemViewCount:
-      //ProblemModel.dao.setView(pid, view);
-    break;
+      // 数据写入数据库....
+      case problemViewCount:
+      for (Integer pid : queue.keySet())
+      {
+        problemService.setViewCount(pid, queue.get(pid));
+      }
+      break;
     }
     System.out.printf("Flush to database: type=%d\n", type);
   }

@@ -40,6 +40,7 @@ import com.power.oj.core.model.VariableModel;
 import com.power.oj.mail.MailController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.service.VisitCountService;
 import com.power.oj.shiro.ShiroInViewInterceptor;
 import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.solution.SolutionController;
@@ -162,6 +163,7 @@ public class AppConfig extends JFinalConfig
     OjConfig.loadVariable();
     
     I18N.init("ojText", Locale.ENGLISH, null);
+    VisitCountService.start();
     
     log.info(PathKit.getWebRootPath());
     log.debug("afterJFinalStart finished.");

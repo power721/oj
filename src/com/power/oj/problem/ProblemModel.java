@@ -110,12 +110,12 @@ public class ProblemModel extends Model<ProblemModel>
   
   public Integer getViewCount(Integer pid)
   {
-    return Db.queryInt("SELECT view FROM problem WHERE pid=? LIMIT 1", pid);
+    return Db.queryInt("SELECT `view` FROM problem WHERE pid=? LIMIT 1", pid);
   }
 
-  public void setViewCount(Integer pid, int view)
+  public void setViewCount(Integer pid, Integer view)
   {
-    Db.update("UPDATE problem SET view=? WHERE pid=?", view, pid);
+    Db.update("UPDATE problem SET `view`=? WHERE pid=?", view, pid);
   }
 
   public List<Record> getUserInfo(Integer pid, Integer uid)

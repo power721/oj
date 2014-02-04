@@ -60,6 +60,7 @@ public class ProblemController extends OjController
     if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
       sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
     problemModel.put("sample_output_rows", sample_output_rows);
+    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
 
     setAttr("prevPid", problemService.getPrevPid(pid));
     setAttr("nextPid", problemService.getNextPid(pid));
@@ -68,7 +69,7 @@ public class ProblemController extends OjController
     setAttr("problem", problemModel);
     setCookie("pageNumber", String.valueOf(problemService.getPageNumber(pid, OjConfig.problemPageSize)), OjConstants.COOKIE_AGE);
 
-    //problemModel.incView();
+    //problemModel.incViewCount();
     VisitCountService.record(VisitCountService.problemViewCount, pid);
     
     setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());

@@ -50,7 +50,17 @@ public class ProblemService
   {
     return dao.getRandomPid();
   }
-  
+
+  public Integer getViewCount(Integer pid)
+  {
+    return dao.getViewCount(pid);
+  }
+
+  public void setViewCount(Integer pid, Integer view)
+  {
+    dao.setViewCount(pid, view);;
+  }
+
   public List<Record> getTags(Integer pid)
   {
     return dao.getTags(pid);
