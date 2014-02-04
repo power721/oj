@@ -49,6 +49,9 @@ public class UserController extends OjController
   @RequiresUser
   public void index()
   {
+    UserModel userModel = getAttr(OjConstants.USER);
+    setAttr(OjConstants.USER, userService.getLevel(userModel));
+    
     setTitle(getText("user.index.title"));
   }
 
@@ -83,6 +86,9 @@ public class UserController extends OjController
   
   public void splash()
   {
+    UserModel userModel = getAttr(OjConstants.USER);
+    setAttr(OjConstants.USER, userService.getLevel(userModel));
+    
     render("ajax/splash.html");
   }
   

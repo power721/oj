@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.jfinal.core.JFinal;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.VariableModel;
@@ -41,6 +43,7 @@ public class OjConfig
   public static HashMap<Integer, String> language_name;
   public static HashMap<Integer, ResultType> result_type;
   public static List<ResultType> judge_result;
+  public static List<Integer> level;
 
   public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
 
@@ -106,6 +109,16 @@ public class OjConfig
     }
   }
 
+  public static void loadLevel()
+  {
+    level = new ArrayList<Integer>();
+    List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
+    for (Record record : levels)
+    {
+      level.add(record.getInt("credit"));
+    }
+  }
+  
   /*
    * get OJ variable from DB cache
    */

@@ -384,6 +384,29 @@ public class UserService
     return logs;
   }
   
+  public UserModel getLevel(UserModel userModel)
+  {
+    int credit = userModel.getInt("credit");
+    int level = 0;
+    int nextExp = OjConfig.level.get(0);
+    
+    for (level = 0; level < OjConfig.level.size(); level++)
+    {
+      int tmp = OjConfig.level.get(level);
+      if (tmp > credit)
+      {
+        nextExp = tmp;
+        break;
+      }
+    }
+    
+    userModel.set("level", level+1);
+    userModel.put("nextExp", nextExp);
+    userModel.put("percent", (int)(credit/(double)nextExp * 100));
+    
+    return userModel;
+  }
+  
   /**
    * archive user source code.
    * @return zip file.

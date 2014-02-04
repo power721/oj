@@ -148,8 +148,8 @@
                     </i>
                     未签到
                   </button>
-                  <p title="当前总经验值：${user.credit!0} / 下一级所需总经验值：500" class="level">
-                    <span style="width:85%;" class="a">
+                  <p title="当前总经验值：${user.credit!0} / 下一级所需总经验值：${user.nextExp!200}" class="level">
+                    <span style="width:${user.percent!0}%;" class="a">
                     </span>
                     <span class="b">
                       Lv.${user.level!1}

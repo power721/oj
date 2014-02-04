@@ -246,6 +246,35 @@ AUTO_INCREMENT=1
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `level`
+-- ----------------------------
+DROP TABLE IF EXISTS `level`;
+CREATE TABLE `level` (
+  `level` int(5) NOT NULL AUTO_INCREMENT,
+  `credit` int(5) NOT NULL,
+  PRIMARY KEY (`level`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of level
+-- ----------------------------
+INSERT INTO `level` VALUES ('1', '10');
+INSERT INTO `level` VALUES ('2', '20');
+INSERT INTO `level` VALUES ('3', '40');
+INSERT INTO `level` VALUES ('4', '80');
+INSERT INTO `level` VALUES ('5', '160');
+INSERT INTO `level` VALUES ('6', '320');
+INSERT INTO `level` VALUES ('7', '640');
+INSERT INTO `level` VALUES ('8', '1280');
+INSERT INTO `level` VALUES ('9', '2560');
+INSERT INTO `level` VALUES ('10', '5120');
+INSERT INTO `level` VALUES ('11', '10240');
+INSERT INTO `level` VALUES ('12', '20480');
+INSERT INTO `level` VALUES ('13', '40960');
+INSERT INTO `level` VALUES ('14', '81920');
+INSERT INTO `level` VALUES ('15', '163840');
+
+-- ----------------------------
 -- Table structure for `loginlog`
 -- ----------------------------
 DROP TABLE IF EXISTS `loginlog`;
