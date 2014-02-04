@@ -129,6 +129,31 @@ public class UserController extends OjController
       renderJson(userModel);
     }
   }
+  
+  public void api()
+  {
+    String action = getPara("action");
+    
+    if ("signSubmit".equals(action))
+    {
+      if (ShiroKit.isGuest())
+      {
+        renderJson("{\"result\":\"User does not login.\"}");
+        return;
+      }
+      String sign = HtmlEncoder.text(getPara("sign", "").trim());
+      UserModel userModel = getAttr(OjConstants.USER);
+      if (userModel.set("sign", sign).update())
+      {
+        renderJson("{\"success\":true}");
+      }
+      else
+      {
+        renderJson("{\"result\":\"Update sign failed.\"}");
+      }
+      return;
+    }
+  }
 
   public void search()
   {

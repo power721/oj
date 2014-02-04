@@ -138,7 +138,7 @@
     </div>
     <span class="clearfix"></span>
 </div>
-
+<!--
 <table id="table">
     <tbody valign="middle">
     <tr id="good">
@@ -155,6 +155,7 @@
     </tr>
     </tbody>
 </table>
+-->
 <!--html-->
 
 <!--script-->
@@ -339,8 +340,8 @@ system.tv = function () {
         avatars.splice(m, 1);
     }
     ;
-    $('#good').find('ul').eq(0)
-            .html(html);
+    //$('#good').find('ul').eq(0)
+    //        .html(html);
     html = '';
     for (var i = 0, l = rnd(seed, 7) % 3 + 2; i < l; i++) {
         var n = parseInt(sb * 0.01 * list.length, 10);
@@ -352,8 +353,8 @@ system.tv = function () {
         avatars.splice(m, 1);
     }
     ;
-    $('#bad').find('ul').eq(0)
-            .html(html);
+    //$('#bad').find('ul').eq(0)
+    //        .html(html);
     //lucky
     var f = function () {
         //
@@ -386,14 +387,14 @@ system.tv = function () {
             t = '大吉';
         }
         ;
-        $('#item-sign-calendar')
+        /*$('#item-sign-calendar')
                 .text(t)
                 .css({
                     color: 'rgb(' + (10 + n * 0.8) + '%, 20%, 20%)'
                 })
                 .attr({
                     title: '今日运势指数：' + n + '%'
-                })
+                })*/
     }();
 }();
 </script>

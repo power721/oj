@@ -354,7 +354,7 @@ $(function() {
           direction: "bottom"
         }).end().find("p.desc").click(function() {
           $(this).unfold({
-            src: "member/children/win-sign-personal",
+            src: "children/win-sign-personal",
             id: "win-sign-personal",
             "class": "win-children",
             title: "修改个性签名",

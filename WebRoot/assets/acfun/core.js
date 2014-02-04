@@ -1523,7 +1523,7 @@ var cache = {
           'line-height': height + 'px'
         });
         if (func.src.length) {
-          var src = func.src.search(/http\:\/\//) == -1 ? '/dotnet/date/html/' + func.src + '.html': func.src;
+          var src = func.src.search(/http\:\/\//) == -1 ? 'assets/acfun/html/' + func.src + '.html': func.src;
           src += '?date=' + (system.debug ? new Date().getTime() : parseInt(new Date().getTime() / 3600000));
           $.get(src).done(function(data) {
             if (data && data.length) {
