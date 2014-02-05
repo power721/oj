@@ -1,0 +1,103 @@
+<style>
+
+</style>
+
+<div id="area-avatar-personal">
+    <p class="alert alert-warning">
+        请勿使用包含不良信息或敏感内容的图片作为用户头像。
+    </p>
+
+    <div id="flash-avatar-upload"
+</div>
+
+<script>
+    system.tv = function () {
+        //set handle
+        var area = $('#area-avatar-personal');
+        //warning
+        $.info('warning::请勿使用包含不良信息或敏感内容的图片作为用户头像。');
+        //
+        system.tv = {
+            src: 'http://static.acfun.tv/player/libs/ACUserProfileUploader.swf',
+            id: 'flash-avatar-upload',
+            width: area.width()
+        };
+        system.tv.height = 500;
+        swfobject.embedSWF(
+                system.tv.src,
+                system.tv.id,
+                system.tv.width,
+                system.tv.height,
+                '9.0.115',
+                system.tv.src,
+                //flashvars
+                {
+                    jsfunc: 'system.func.uploadAvatarCallback',
+                    limited: 51200,
+                    uidurl: $('#img-avatar-personal').attr('src'),
+                    width: system.tv.width,
+                    height: system.tv.height,
+                    wmode: 'direct',
+                    allowFullscreenInteractive: 'true',
+                    allowfullscreen: 'true',
+                    allowscriptaccess: 'always'
+                },
+                //params
+                {
+                    wmode: 'direct',
+                    allowFullscreenInteractive: 'true',
+                    allowfullscreen: 'true',
+                    allowscriptaccess: 'always'
+                },
+                //attributes
+                {
+                    wmode: 'direct',
+                    allowFullscreenInteractive: 'true',
+                    allowfullscreen: 'true',
+                    allowscriptaccess: 'always'
+                }
+        );
+    }();
+    system.func.uploadAvatarCallback = function (code, message) {
+        //
+        var f = {
+            'M00004': function () {
+                $.info('error::上传原始文件出现内部错误。');
+            },
+            'M00010': function () {
+                $.info('error::上传文件出现内部错误。');
+            },
+            'M01108': function () {
+                $.info('error::文件过大，请剪切后上传。');
+            },
+            'M01107': function () {
+                $.info('error::上传的不是合法的图片文件。');
+            },
+            'M01106': function () {
+                $.info('error::您的权限不足或者已被管理员禁止更换头像。');
+            },
+            'M01109': function () {
+                $.info('error::系统错误，请稍后再试或者联系管理员。');
+            },
+            'M01105': function () {
+                $.info('error::您的Flash版本过低，需要升级Flash。');
+            },
+            'M01103': function () {
+                $.info(message);
+            },
+            'M00001': function () {
+                $.info('success::修改头像成功。');
+                $('#img-avatar-personal, #block-user-left img.avatar')
+                        .attr({
+                            src: message
+                        });
+                user.avatar = message;
+                $.save('user', function () {
+                    //close
+                    $('#curtain').click();
+                });
+            }
+        };
+        f[code]();
+    };
+</script>

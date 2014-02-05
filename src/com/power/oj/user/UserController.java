@@ -140,7 +140,7 @@ public class UserController extends OjController
     {
       if (ShiroKit.isGuest())
       {
-        renderJson("{\"result\":\"User does not login.\"}");
+        renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
         return;
       }
       String sign = HtmlEncoder.text(getPara("sign", "").trim());
@@ -151,9 +151,21 @@ public class UserController extends OjController
       }
       else
       {
-        renderJson("{\"result\":\"Update sign failed.\"}");
+        renderJson("{\"success\":false, \"result\":\"Update sign failed.\"}");
       }
       return;
+    }
+    else if ("profile".equals(action))
+    {
+      if (ShiroKit.isGuest())
+      {
+        renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
+        return;
+      }
+      UserModel userModel = getAttr(OjConstants.USER);
+      userModel.put("success", true);
+      userModel.remove("token").remove("pass").remove("data");
+      renderJson(userModel);
     }
   }
 
@@ -243,7 +255,7 @@ public class UserController extends OjController
   {
     if (ShiroKit.isGuest())
     {
-      renderJson("{\"result\":\"User does not login.\"}");
+      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
       return;
     }
     
@@ -255,7 +267,7 @@ public class UserController extends OjController
     }
     else
     {
-      renderJson("{\"result\":\"User already checkin.\"}");
+      renderJson("{\"success\":false, \"result\":\"User already checkin.\"}");
     }
   }
   
