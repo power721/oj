@@ -1283,8 +1283,8 @@ var cache = {
         if ( !! user.uid) {
           user.online = 1;
           user.name = $.cookie('oj_username');
-          user.key = $.cookie('auth_key_ac_sha1');
-          if ($.cookie('ac_time')) {
+          user.key = $.cookie('auth_key_oj_sha1');
+          if ($.cookie('oj_time')) {
             user.group = 0;
             $.info('debug::用户权限[管理员]。')
           } else {
@@ -2577,10 +2577,11 @@ var cache = {
       })
     } ();
     system.tv = function() {
-      if (user.online && system.url.search(/acfun/) != -1) {
+      if (user.online && system.url.search(/power-oj/) != -1) {
         var check = function() {
-          $.get('user/keepOnline?ajax=1', {
-            uid: user.uid
+          $.get('api/user/online', {
+            uid: user.uid,
+            ajax: 1
           })
         };
         window.setInterval(function() {

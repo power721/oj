@@ -51,7 +51,9 @@ public class UserController extends OjController
   {
     UserModel userModel = getAttr(OjConstants.USER);
     userService.isCheckin(userModel);
-    setAttr(OjConstants.USER, userService.getLevel(userModel));
+    userService.getLevel(userModel);
+    
+    setAttr(OjConstants.USER, userModel);
     
     setTitle(getText("user.index.title"));
   }
@@ -152,6 +154,10 @@ public class UserController extends OjController
       UserModel userModel = userService.getCurrentUser();
       setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
       setCookie("oj_username", name, OjConstants.COOKIE_AGE);
+      if (userService.isAdmin())
+      {
+        setCookie("oj_time", name, OjConstants.COOKIE_AGE);
+      }
       redirect(sessionService.getLastAccessURL());
       return;
     }

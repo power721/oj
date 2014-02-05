@@ -121,15 +121,14 @@ public class UserService
    */
   public void logout()
   {
-    Subject currentUser = ShiroKit.getSubject();
-    // TODO: calculate online time in minutes
-    /*UserModel userModel = getCurrentUser();
-    if (userModel != null)
-    {
-      userModel.update();
-    }*/
+    UserModel userModel = getCurrentUser();
+    int online = userModel.getInt("online");
+    int login = userModel.getInt("login");
+    
+    online += (OjConfig.timeStamp - login) / 60;
+    userModel.set("online", online).update();
 
-    currentUser.logout();
+    ShiroKit.getSubject().logout();
   }
   
   /**
@@ -426,6 +425,7 @@ public class UserService
   public UserModel getLevel(UserModel userModel)
   {
     int credit = userModel.getInt("credit");
+    int lastLevel = userModel.getInt("level");
     int level = 0;
     int nextExp = OjConfig.level.get(0);
     
@@ -440,6 +440,10 @@ public class UserService
     }
     
     userModel.set("level", level+1);
+    if (level > lastLevel)
+    {
+      userModel.update();
+    }
     userModel.put("nextExp", nextExp);
     userModel.put("percent", (int)(credit/(double)nextExp * 100));
     

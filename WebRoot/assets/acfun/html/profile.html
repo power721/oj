@@ -153,7 +153,7 @@
 
         <p class="alert">
             扩展信息将会显示在用户的个人空间中。<br/>
-            请留空您不想暴露的个人信息，以免造成不必要的隐私泄露。
+            真实姓名、联系电话等敏感信息仅管理员可见。
         </p>
 
         <div class="unit">
@@ -169,22 +169,6 @@
             </div>
             <span class="clearfix"></span>
         </div>
-
-        <!--<div class="unit">
-            <div class="l">
-                <p class="subtitle">性取向</p>
-            </div>
-            <div class="r">
-                <select id="ipt-sex-personal">
-                    <option value="-1">不公开</option>
-                    <option value="1">异性恋</option>
-                    <option value="0">同性恋</option>
-                    <option value="2">双性恋</option>
-                    <option value="3">其它</option>
-                </select>
-            </div>
-            <span class="clearfix"></span>
-        </div>-->
 
         <p class="sub-divider"></p>
 
@@ -270,6 +254,16 @@
         </div>
 
         <p class="sub-divider"></p>
+
+        <div class="unit">
+            <div class="l">
+                <p class="subtitle">学校</p>
+            </div>
+            <div class="r">
+                <input id="ipt-school-personal" class="req" data-name="学校或工作单位" data-length="0,63" type="text">
+            </div>
+            <span class="clearfix"></span>
+        </div>
 
         <div class="unit">
             <div class="l">
@@ -516,8 +510,10 @@ system.tv = function () {
                                     $('#ipt-truename-personal').val($.parseSafe(data.realname));
                                     //$('#ipt-birthday-personal').val($.parseSafe(data.birthday));
                                     $('#ipt-tel-personal').val($.parseSafe(data.phone));
+                                    $('#ipt-school-personal').val($.parseSafe(data.school));
                                     $('#ipt-home-personal').val($.parseSafe(data.blog));
-                                    $('#ipt-qq-personal').val($.parseSafe(data.qq + ''));
+                                    var qq = data.qq==null ? '' : data.qq + '';
+                                    $('#ipt-qq-personal').val($.parseSafe(qq));
                                     if (!!data.comefrom) {
                                         var a = data.comefrom.split(',');
                                         $('#ipt-location-a-personal').val(a[0]).change();
@@ -566,6 +562,11 @@ system.tv = function () {
                         },
                         realname: function () {
                             var a = $.parseSafe($('#ipt-truename-personal').val());
+                            a = a.search('请输入') != -1 ? '' : a;
+                            return a;
+                        },
+                        school: function () {
+                            var a = $.parseSafe($('#ipt-school-personal').val());
                             a = a.search('请输入') != -1 ? '' : a;
                             return a;
                         },

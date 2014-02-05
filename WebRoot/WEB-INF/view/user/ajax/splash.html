@@ -26,14 +26,22 @@
 </div>
 
 <ul id="list-info-splash">
-  <li class="a">用户在线时长<span class="pts" style="color:#f69;">${user.online}</span>Mins</li>
-  <li class="b">用户的在线时长总和。</li>
-    <li class="a"> 我的投稿总数<span class="pts" style="color:#ca6;">0</span>Posts</li>
-  <li class="b">用户发布成功的投稿总和。未审核、已退回与已删除的投稿不计入其中。</li>
-  <li class="a">投稿总点击数<span class="pts" style="color:#798;">0</span>Clicks</li>
-  <li class="b">当前所有有效投稿的点击数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>
-  <li class="a">投稿总收藏数<span class="pts" style="color:#696;">0</span>Favors</li>
-  <li class="b">当前所有有效投稿的收藏数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>
+  <li class="a">用户在线时长<span class="pts" style="color:#f69;" id="online"></span>Mins</li>
+    <li class="b">用户的在线时长总和。</li>
+  <li class="a">解决问题数量<span class="pts" style="color:#798;">${user.solved}</span>Problems</li>
+    <li class="b">用户解决问题总和。<!--未审核、已退回与已删除的投稿数据不计入其中。--></li>
+  <li class="a">我的提交总数<span class="pts" style="color:#ca6;">${user.submit}</span>Submissions</li>
+    <li class="b">用户提交代码总和。<!--未审核、已退回与已删除的投稿不计入其中。--></li>
+  <!--<li class="a">投稿总收藏数<span class="pts" style="color:#696;">0</span>Favors</li>
+    <li class="b">当前所有有效投稿的收藏数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>
   <li class="a">投稿总评论数<span class="pts" style="color:#69c;">0</span>Comms</li>
-  <li class="b">当前所有有效投稿的评论数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>
+    <li class="b">当前所有有效投稿的评论数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>-->
 </ul>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  var timestamp = Math.round(new Date().getTime()/1000);
+  var online = Math.round(parseInt(${user.online}) + (timestamp - parseInt(${user.login})) / 60);
+  $('span#online').html(online);
+});
+</script>

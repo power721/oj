@@ -252,7 +252,7 @@ $(function() {
               $.info(text);
               btn.info(text)
             } else {
-              $.post("user/checkin?ajax=1").done(function(data) {
+              $.post("api/user/checkin?ajax=1").done(function(data) {
                 if (data.success) {
                   var text = "success::您已成功签到。请再接再厉。";
                   $.info(text);
@@ -454,7 +454,7 @@ var m = {
   getUnread: function() {
     "use strict";
     var exe = function() {
-      $.get("mail/unRead").done(function(data) {
+      $.get("api/mail/unRead?ajax=1").done(function(data) {
         if (data.success) {
           var arr = ["newPush", "mention", "unReadMail", "newFollowed"];
           for (var i = 0,

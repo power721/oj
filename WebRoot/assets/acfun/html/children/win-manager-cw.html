@@ -1,0 +1,46 @@
+<style>
+    #win-manager-cw .center {
+        text-align: center;
+    }
+</style>
+<div class="center">
+    <div id="flash-manager-danmaku"></div>
+</div>
+<script>
+    system.tv = function () {
+        //set handle
+        var win = $('#win-manager-cw');
+        //insert flash
+        swfobject.embedSWF(
+                'http://static.acfun.tv/flash/test/commentmgr-ok.swf',
+                'flash-manager-danmaku',
+                1100, 530,
+                '9.0.115',
+                'false',
+                //flashvars
+                {
+                    handle: 'win-manager-cw',
+                    width: 1100,
+                    height: 530,
+                    wmode: 'transparent',
+                    allowFullscreenInteractive: 'true',
+                    allowfullscreen: 'true',
+                    allowscriptaccess: 'always'
+                },
+                //params
+                {
+                    wmode: 'transparent',
+                    allowFullscreenInteractive: 'true',
+                    allowfullscreen: 'true',
+                    allowscriptaccess: 'always'
+                },
+                //attributes
+                {
+                    wmode: 'transparent',
+                    allowFullscreenInteractive: 'true',
+                    allowfullscreen: 'true',
+                    allowscriptaccess: 'always'
+                }
+        );
+    }();
+</script>

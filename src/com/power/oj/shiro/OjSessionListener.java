@@ -5,6 +5,8 @@ import org.apache.shiro.session.SessionListener;
 
 import com.jfinal.log.Logger;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 public class OjSessionListener implements SessionListener
 {
@@ -14,6 +16,8 @@ public class OjSessionListener implements SessionListener
   @Override
   public void onExpiration(Session session)
   {
+    UserModel userModel = UserService.me().getCurrentUser();
+    log.info(userModel.toJson());
     SessionService.me().deleteSession(session);
     
     log.info(session.toString());
@@ -31,6 +35,8 @@ public class OjSessionListener implements SessionListener
   @Override
   public void onStop(Session session)
   {
+    UserModel userModel = UserService.me().getCurrentUser();
+    log.info(userModel.toJson());
     SessionService.me().deleteSession(session);
 
     log.info(session.toString());

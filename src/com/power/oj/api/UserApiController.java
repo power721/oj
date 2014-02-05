@@ -88,6 +88,18 @@ public class UserApiController extends OjController
     }
   }
   
+  public void online()
+  {
+    if (ShiroKit.isGuest())
+    {
+      renderNull();
+      return;
+    }
+    
+    //UserModel userModel = getAttr(OjConstants.USER);
+    renderNull();
+  }
+  
   @Before(POST.class)
   public void signSubmit()
   {
@@ -156,6 +168,7 @@ public class UserApiController extends OjController
     userModel.set("phone", getPara("phone"));
     userModel.set("realname", getPara("realname"));
     userModel.set("gender", getPara("gender"));
+    userModel.set("school", getPara("school"));
     
     if (userModel.update())
     {

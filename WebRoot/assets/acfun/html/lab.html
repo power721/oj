@@ -1,0 +1,34 @@
+<style>
+    .divider {
+        display: block;
+        border-top: 4px dashed #333;
+        width: 100%;
+        height: 1px;
+        margin: 16px auto;
+        clear: both;
+    }
+</style>
+<div id="block-title-banner">
+    <p>实验室</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Laboratory</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+        <i class="include">../lab/ifr-ribbon-lab</i>
+    </div>
+</div>
+<script>
+    system.tv = function () {
+        //set handle
+        var block = $('#block-first');
+        var mainer = block.find('div.mainer').eq(0);
+    }();
+</script>
