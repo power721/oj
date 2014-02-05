@@ -22,6 +22,7 @@ import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.power.oj.admin.AdminController;
+import com.power.oj.api.UserApiController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
@@ -88,6 +89,7 @@ public class AppConfig extends JFinalConfig
     me.add("/problem", ProblemController.class);
     me.add("/solution", SolutionController.class);
     me.add("/user", UserController.class);
+    me.add("/api/user", UserApiController.class, "/user/");
 
     log.debug("configRoute finished.");
   }

@@ -87,15 +87,17 @@
         var text = "info::数据同步中...";
         $.info(text);
         win.info(text);
-        $.post("user/api?action=signSubmit&ajax=1", {
-          sign: sign
+        $.post("api/user/signSubmit", {
+          sign: sign,
+          ajax: 1
         }).done(function(data) {
           if ( !! data.success) {
             $.info("success::个性签名修改成功。");
             if (swi.hasClass("active")) {
               system.port.newMail && system.port.newMail.abort();
-              system.port.newMail = $.post("mail/api?action=newDrift", {
-                content: sign + "（来自签名推送）"
+              system.port.newMail = $.post("api/mail/newDrift", {
+                content: sign + "（来自签名推送）",
+                ajax: 1
               })
             }
             m.refreshPart();

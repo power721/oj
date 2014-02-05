@@ -1907,10 +1907,11 @@ var cache = {
       if (system.port.followUser) {
         system.port.followUser.abort()
       };
-      system.port.followUser = $.post('/api/friend.aspx?name=follow', {
+      system.port.followUser = $.post('api/friend/follow', {
         username: func.username,
         userId: func.uid,
-        groupId: 0
+        groupId: 0,
+        ajax: 1
       }).done(function(data) {
         if (data.success) {
           var text = '关注' + (func.username ? ('[' + func.username + ']') : '用户') + '成功。';

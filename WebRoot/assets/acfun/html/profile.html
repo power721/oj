@@ -488,8 +488,8 @@ system.tv = function () {
             .setup({
                 finish: function () {
                     //load
-                    $.get('user/api?ajax=1&action=profile')
-                    //$.get('user/info?ajax=1')
+                    $.get('api/user/profile?ajax=1')
+                    //$.get('api/user/info?ajax=1')
                             .done(function (data) {
                                 if (!!data.success) {
                                     //input data
@@ -547,7 +547,7 @@ system.tv = function () {
                 },
                 callback: function () {
                     //
-                    $.post('user/api?action=profileSubmit', {
+                    $.post('api/user/profileSubmit?ajax=1', {
                         comefrom: ($('#ipt-location-a-personal').val() + ',' + $('#ipt-location-b-personal').val()).replace(/\,?不公开/g, ''),
                         qq: function () {
                             var a = $.parseSafe($('#ipt-qq-personal').val());

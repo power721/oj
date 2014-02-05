@@ -86,15 +86,6 @@ public class UserController extends OjController
   }
   
   @RequiresUser
-  public void splash()
-  {
-    UserModel userModel = getAttr(OjConstants.USER);
-    setAttr(OjConstants.USER, userService.getLevel(userModel));
-    
-    render("ajax/splash.html");
-  }
-  
-  @RequiresUser
   public void loginlog()
   {
     int pageNumber = getParaToInt(0, 1);
@@ -103,70 +94,6 @@ public class UserController extends OjController
     setAttr("pageSize", OjConfig.userPageSize);
     setAttr("logs", userService.getLoginlog(pageNumber, pageSize));
     setTitle(getText("user.loginlog.title"));
-  }
-
-  public void info()
-  {
-    int uid = 0;
-    String name = "";
-    UserModel userModel = null;
-
-    if (isParaExists("uid"))
-    {
-      uid = getParaToInt("uid");
-      userModel = userService.getUserInfoByUid(uid);
-    } else if (isParaExists("name"))
-    {
-      name = getPara("name");
-      userModel = userService.getUserInfoByName(name);
-    }
-
-    if (userModel == null)
-    {
-      renderJson("{result:'User does not exist!'}");
-    } else
-    {
-      userModel.put("success", true);
-      userModel.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
-      renderJson(userModel);
-    }
-  }
-  
-  public void api()
-  {
-    String action = getPara("action");
-    
-    if ("signSubmit".equals(action))
-    {
-      if (ShiroKit.isGuest())
-      {
-        renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-        return;
-      }
-      String sign = HtmlEncoder.text(getPara("sign", "").trim());
-      UserModel userModel = getAttr(OjConstants.USER);
-      if (userModel.set("sign", sign).update())
-      {
-        renderJson("{\"success\":true}");
-      }
-      else
-      {
-        renderJson("{\"success\":false, \"result\":\"Update sign failed.\"}");
-      }
-      return;
-    }
-    else if ("profile".equals(action))
-    {
-      if (ShiroKit.isGuest())
-      {
-        renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-        return;
-      }
-      UserModel userModel = getAttr(OjConstants.USER);
-      userModel.put("success", true);
-      userModel.remove("token").remove("pass").remove("data");
-      renderJson(userModel);
-    }
   }
 
   public void search()
@@ -249,26 +176,6 @@ public class UserController extends OjController
     userService.logout();
 
     redirect(lastAccessURL);
-  }
-  
-  public void checkin()
-  {
-    if (ShiroKit.isGuest())
-    {
-      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-      return;
-    }
-    
-    int incExp = 0;
-    UserModel userModel = getAttr(OjConstants.USER);
-    if ((incExp = userService.checkin(userModel)) > 0)
-    {
-      renderJson("{\"success\":true, \"incexp\":" + incExp +"}");
-    }
-    else
-    {
-      renderJson("{\"success\":false, \"result\":\"User already checkin.\"}");
-    }
   }
   
   @RequiresUser

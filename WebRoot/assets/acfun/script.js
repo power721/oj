@@ -383,8 +383,9 @@ $(function() {
           if (area.data().port) {
             area.data().port.abort()
           }
-          area.data().port = $.get("user/info?ajax=1", {
-            uid: user.uid
+          area.data().port = $.get("api/user/info", {
+            uid: user.uid,
+            ajax: 1
           }).done(function(data) {
             if (data.success) {
               var a = data;
@@ -524,16 +525,18 @@ var m = {
   },
   sendDrift: function(param, callback) {
     "use strict";
-    $.post("/api/mail.aspx?name=newDrift", {
-      content: $.parseSafe(param.cont)
+    $.post("api/mail/newDrift", {
+      content: $.parseSafe(param.cont),
+      ajax: 1
     });
     $.isFunction(callback) && callback()
   },
   sendMail: function(param, callback) {
     "use strict";
-    $.post("/api/mail.aspx?name=newMail", {
+    $.post("api/mail/newMail", {
       username: $.parseSafe(param.name),
-      content: $.parsePost(param.cont)
+      content: $.parsePost(param.cont),
+      ajax: 1
     });
     $.isFunction(callback) && callback()
   }

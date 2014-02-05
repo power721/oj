@@ -6,8 +6,9 @@ $(document).ready(function() {
 		var name = that.html();
 		that.hoverDelay({
 			hoverEvent : function() {
-				$.getJSON('user/info', {
-					'name' : name
+				$.getJSON('api/user/info', {
+					'name' : name,
+					'ajax' : 1
 				}, function(data) {
 					;
 				});
