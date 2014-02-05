@@ -1302,8 +1302,9 @@ var cache = {
         }
       },
       'unread': function() {
-        $.get('mail/unRead', {
-          uid: user.uid
+        $.get('api/mail/unRead', {
+          uid: user.uid,
+          ajax: 1
         }).done(function(data) {
           user.unread = {
             'push': data.newPush,

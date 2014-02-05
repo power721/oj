@@ -1,0 +1,166 @@
+<style>
+    #win-login input {
+        width: 192px;
+    }
+
+    #win-login .area {
+        height: auto;
+    }
+
+    #win-login .unit {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 0 8px;
+    }
+
+    #win-login .l {
+        width: 64px;
+        margin: 0;
+        padding: 0;
+        text-align: right;
+    }
+
+    #win-login .r {
+        width: 232px;
+        margin: 0;
+        padding: 0;
+    }
+
+    #win-login .unit-bottom {
+        border-top: 1px dashed #ddd;
+        margin-bottom: 0;
+    }
+
+    #win-login .unit-extra {
+        border-top: 1px dashed #ddd;
+        margin-top: 8px;
+        padding-top: 8px;
+    }
+
+    #win-login .unit-extra .l, #win-login .unit-bottom .l {
+        width: auto;
+        text-align: left;
+    }
+
+    #win-login .unit-extra .r, #win-login .unit-bottom .r {
+        width: auto;
+        text-align: left;
+    }
+
+    #win-login .unit-bottom .btn {
+        margin-top: 8px;
+        margin-bottom: 0;
+    }
+
+    #win-login .ico {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        *display: inline;
+        margin: 2px 4px 0 0;
+        vertical-align: text-top;
+    }
+</style>
+
+<div class="form" data-save="form-login" data-focus="true">
+
+    <div class="area unit">
+        <div class="area l">
+            <p class="subtitle">用户名</p>
+        </div>
+        <div class="area r">
+            <input class="name" type="text" data-length="1,50" autocomplete="off">
+        </div>
+        <span class="clearfix"></span>
+    </div>
+
+    <div class="area unit">
+        <div class="area l">
+            <p class="subtitle">密码</p>
+        </div>
+        <div class="area r">
+            <input class="password" type="password" autocomplete="off">
+        </div>
+        <span class="clearfix"></span>
+    </div>
+
+    <div class="area unit unit-extra">
+        <div class="area l">
+            <a id="btn-login-qq" class="btn" href="/loginbyqq.aspx" title="使用腾讯QQ帐号登录">
+                <img class="ico" src="http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_1.png"/>QQ登录
+            </a>
+            <a class="btn" href="/loginbysina.aspx" title="使用新浪微博帐号登录">
+                <img class="ico" src="http://g.etfv.co/http://weibo.com/"/>微博登录
+            </a>
+        </div>
+        <div class="area r"></div>
+        <span class="clearfix"></span>
+    </div>
+
+    <div class="area unit unit-bottom">
+        <div class="area l">
+            <a class="btn info" href="/member/forgot_password.aspx" target="_blank">
+                <i class="icon white icon-question-sign"></i>忘记密码
+            </a>
+        </div>
+        <div class="area r">
+            <a class="btn do success">
+                <i class="icon white icon-ok-circle"></i>登录
+            </a>
+        </div>
+        <span class="clearfix"></span>
+    </div>
+
+</div>
+
+<script>
+    system.tv = function () {
+        //use strict
+        'use strict';
+        //set handle
+        var win = $('#win-login');
+        var form = win.find('div.form');
+        //setup
+        form
+                .setup(function () {
+                    var text = 'info::登录中...';
+                    $.info(text);
+                    win.info(text);
+                    if (system.port.login) {
+                        system.port.login.abort();
+                    }
+                    system.port.login = $.post('api/user/signin', {
+                        'name': $.trim(form.data('name')),
+                        'password': $.trim(form.data('password')),
+                        'ajax': 1
+                    })
+                            .done(function (data) {
+                                if (data.success) {
+                                    //refresh
+                                    window.location.href = window.location.href.replace(/\#.*/, '');
+                                } else {
+                                    var text = 'warning::' + data.result;
+                                    win.info(text);
+                                    $.info(text);
+                                }
+                            })
+                            .fail(function () {
+                                var text = 'error::通信失败。请稍后重试。';
+                                win.info(text);
+                                $.info(text);
+                            })
+                    ;
+                });
+        $.curtain(true, function () {
+            //set handle
+            var btn = win.find('div.close').eq(0);
+            btn.click(function () {
+                $.curtain(false);
+            });
+            $('#curtain').one('click', function () {
+                btn.click();
+            });
+        });
+    }();
+</script>
