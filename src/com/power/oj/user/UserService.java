@@ -331,7 +331,25 @@ public class UserService
     FileUtil.delete(srcFile);
     userModel.set("avatar", destFileName.replace(rootPath, "")).update();
   }
-
+  
+  public String saveAvatar(File srcFile) throws Exception
+  {
+    UserModel userModel = getCurrentUser();
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    String srcFileName = srcFile.getAbsolutePath();
+    String ext = FileKit.getFileType(srcFileName);
+    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userModel.getUid()).append(ext).toString();
+    
+    File destFile = new File(destFileName);
+    
+    FileUtil.moveFile(srcFile, destFile);
+    
+    destFileName = destFileName.replace(rootPath, "");
+    userModel.set("avatar", destFileName).update();
+    
+    return destFileName;
+  }
+  
   /**
    * Search user by key word in scope.
    * @param scope "all", "name", "nick", "school", "email".

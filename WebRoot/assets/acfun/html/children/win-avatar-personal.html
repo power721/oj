@@ -18,7 +18,7 @@
         $.info('warning::请勿使用包含不良信息或敏感内容的图片作为用户头像。');
         //
         system.tv = {
-            src: 'http://static.acfun.tv/player/libs/ACUserProfileUploader.swf',
+            src: system.path + '/acfun/ACUserProfileUploader.swf',
             id: 'flash-avatar-upload',
             width: area.width()
         };
@@ -34,6 +34,8 @@
                 {
                     jsfunc: 'system.func.uploadAvatarCallback',
                     limited: 51200,
+                    filefieldname: 'Filedata',
+                    imgurl: 'api/user/uploadAvatar?ajax=1',
                     uidurl: $('#img-avatar-personal').attr('src'),
                     width: system.tv.width,
                     height: system.tv.height,

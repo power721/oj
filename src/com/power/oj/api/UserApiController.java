@@ -1,5 +1,7 @@
 package com.power.oj.api;
 
+import java.io.File;
+
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import jodd.util.BCrypt;
@@ -8,6 +10,8 @@ import jodd.util.HtmlEncoder;
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
+import com.jfinal.upload.UploadFile;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.shiro.ShiroKit;
@@ -178,6 +182,28 @@ public class UserApiController extends OjController
     {
       renderJson("{\"success\":false, \"result\":\"Update sign failed.\"}");
     }
+  }
+
+  @Before(POST.class)
+  public void uploadAvatar()
+  {
+    UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
+    File file = uploadFile.getFile();
+    String fileName = null;
+    
+    try
+    {
+      fileName = userService.saveAvatar(file);
+    } catch (Exception e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+      renderJson("{\"success\":false, \"state\":\"FAIL\"}");
+      return;
+    }
+
+    renderJson("{\"success\":true, \"state\":\"SUCCESS\", \"url\":\"" + fileName + "\"}");
   }
 
   @Before(POST.class)
