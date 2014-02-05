@@ -88,6 +88,7 @@ public class UserApiController extends OjController
     }
   }
   
+  @Before(POST.class)
   public void signSubmit()
   {
     if (ShiroKit.isGuest())
@@ -108,6 +109,7 @@ public class UserApiController extends OjController
     }
   }
   
+  @Before(POST.class)
   public void pwdSubmit()
   {
     if (ShiroKit.isGuest())
@@ -137,20 +139,47 @@ public class UserApiController extends OjController
       renderJson("{\"success\":false, \"result\":\"Password is incorrect.\"}");
     }
   }
+  
+  @Before(POST.class)
+  public void profileSubmit()
+  {
+    if (ShiroKit.isGuest())
+    {
+      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
+      return;
+    }
+    
+    UserModel userModel = getAttr(OjConstants.USER);
+    userModel.set("comefrom", getPara("comefrom"));
+    userModel.set("qq", getPara("qq"));
+    userModel.set("blog", getPara("blog"));
+    userModel.set("phone", getPara("phone"));
+    userModel.set("realname", getPara("realname"));
+    userModel.set("gender", getPara("gender"));
+    
+    if (userModel.update())
+    {
+      renderJson("{\"success\":true}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"result\":\"Update sign failed.\"}");
+    }
+  }
 
   @Before(POST.class)
   @ClearShiro
   public void signin()
   {
-    String name = getPara("name").trim();
+    String username = getPara("username");
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    if (userService.login(name, password, rememberMe))
+    if (userService.login(username, password, rememberMe))
     {
       UserModel userModel = userService.getCurrentUser();
       setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
-      setCookie("oj_username", name, OjConstants.COOKIE_AGE);
+      setCookie("oj_username", username, OjConstants.COOKIE_AGE);
       renderJson("{\"success\":true}");
     }
     else

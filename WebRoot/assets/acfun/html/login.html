@@ -131,7 +131,7 @@
                         system.port.login.abort();
                     }
                     system.port.login = $.post('api/user/signin', {
-                        'name': $.trim(form.data('name')),
+                        'username': $.trim(form.data('name')),
                         'password': $.trim(form.data('password')),
                         'ajax': 1
                     })

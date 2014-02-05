@@ -162,9 +162,9 @@
             </div>
             <div class="r">
                 <select id="ipt-gender-personal">
-                    <option value="-1">不公开</option>
-                    <option value="1">男</option>
-                    <option value="0">女</option>
+                    <option value="secret">不公开</option>
+                    <option value="male">男</option>
+                    <option value="female">女</option>
                 </select>
             </div>
             <span class="clearfix"></span>
@@ -527,8 +527,8 @@ system.tv = function () {
                                     }
                                     ;
                                     //gender
-                                    var b = (data.gender == 'female') ? 0 : ((data.gender == 'secret') ? -1 : 1);
-                                    $('#ipt-gender-personal').val(b);
+                                    //var b = (data.gender == 'female') ? 0 : ((data.gender == 'secret') ? -1 : 1);
+                                    $('#ipt-gender-personal').val(data.gender);
                                     //sextrend
                                     $('#ipt-sex-personal').val(data.sextrend);
                                 } else {
