@@ -327,6 +327,38 @@ AUTO_INCREMENT=1
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `mail_banlist`
+-- ----------------------------
+DROP TABLE IF EXISTS `mail_banlist`;
+CREATE TABLE `mail_banlist` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `ban_uid` int(9) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of mail_banlist
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `mail_group`
+-- ----------------------------
+DROP TABLE IF EXISTS `mail_group`;
+CREATE TABLE `mail_group` (
+  `id` int(9) NOT NULL,
+  `from` int(9) NOT NULL,
+  `to` int(9) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`from`,`to`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of mail_group
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `message`
 -- ----------------------------
 DROP TABLE IF EXISTS `message`;

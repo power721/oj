@@ -52,18 +52,74 @@ public class MailApiController extends OjController
   
   public void newMail()
   {
+    String username = getPara("username");
     Integer from = userService.getCurrentUid();
     Integer to = getParaToInt("userId");
     Integer gid = getParaToInt("gid");
     String content = getPara("content");
     
-    if (mailService.sendMail(from, to, gid, content))
+    if (to == null && username != null)
+    {
+      to = userService.getUserByName(username).getUid();
+    }
+    
+    if (to == null)
+    {
+      renderJson("{\"success\":false, \"status\":-100,\"result\":\"Cannot find user.\"}");
+    }
+    else if(from.equals(to))
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Cannot send mail to user self.\"}");
+    }
+    else if (mailService.sendMail(from, to, gid, content))
     {
       renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
     }
     else
     {
       renderJson("{\"success\":false, \"status\":500,\"result\":\"Save new mail failed.\"}");
+    }
+  }
+  
+  public void newBanlistItem()
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer userId = getParaToInt("userId");
+    //String username = getPara("username");
+    
+    if (mailService.addMailBanlistItem(uid, userId))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":500,\"result\":\"Add mail banlist item failed.\"}");
+    }
+  }
+  
+  public void getBanlist()
+  {
+    int pageNumber = getParaToInt("page", 1);
+    int pageSize = getParaToInt("size", OjConfig.mailPageSize);
+    Integer uid = userService.getCurrentUid();
+    
+    Page<MailModel> mailList = mailService.getUserMailBanlist(pageNumber, pageSize, uid);
+    
+    renderJson(mailList);
+  }
+  
+  public void deleteBanlistItem()
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer userId = getParaToInt("userId");
+
+    if (mailService.deleteMailBanlistItem(uid, userId))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":500,\"result\":\"Delete mail banlist item failed.\"}");
     }
   }
   

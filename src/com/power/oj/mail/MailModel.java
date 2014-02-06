@@ -2,6 +2,7 @@ package com.power.oj.mail;
 
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 
 public class MailModel extends Model<MailModel>
@@ -14,6 +15,7 @@ public class MailModel extends Model<MailModel>
   
   public static final MailModel dao = new MailModel();
   public static final String ID = "id";
+  public static final String GID = "gid";
   public static final String FROM = "from";
   public static final String TO = "to";
   public static final String TITLE = "title";
@@ -51,6 +53,16 @@ public class MailModel extends Model<MailModel>
   public Long countUserNewMails(Integer uid)
   {
     return findFirst("SELECT COUNT(*) AS count FROM mail WHERE `to`=? AND `read`=0", uid).getLong("count");
+  }
+  
+  public Integer getMaxId()
+  {
+    return Db.queryInt("SELECT max(id) FROM mail");
+  }
+  
+  public Integer getMailGroup(Integer from, Integer to)
+  {
+    return Db.queryInt("SELECT id FROM mail_group WHERE `from`=? AND `to`=?", from, to);
   }
   
 }

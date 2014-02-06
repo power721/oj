@@ -117,14 +117,14 @@
             })
                     .done(function (data) {
                         //
-                        if (!!data.success) {
+                        if (!!data.totalRow) {
                             //
-                            if (!!data.mailList && data.mailList.length) {
+                            if (!!data.list && data.list.length) {
                                 //set handle
                                 var temp = $('#temp-item-forbid').find('tbody').eq(0).html();
                                 var html = '';
-                                for (var i = 0, l = data.mailList.length; i < l; i++) {
-                                    var a = $.parseJson(data.mailList[i]);
+                                for (var i = 0, l = data.list.length; i < l; i++) {
+                                    var a = $.parseJson(data.list[i]);
                                     html += temp
                                             .replace(/\[name\]/g, a.uname)
                                             .replace(/\[uid\]/g, a.uid)
@@ -135,9 +135,9 @@
                                 table.find('tr').not(':first').remove();
                                 table.append(html);
                                 area.html($.makePager({
-                                    num: data.page,
+                                    num: data.pageNumber,
                                     size: data.pageSize,
-                                    count: data.totalCount
+                                    count: data.totalRow
                                 }));
                             } else {
                                 var html = '<p class="alert">屏蔽列表为空。</p>'

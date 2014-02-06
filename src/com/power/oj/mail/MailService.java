@@ -2,7 +2,9 @@ package com.power.oj.mail;
 
 import java.util.List;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 
 public class MailService
@@ -18,6 +20,14 @@ public class MailService
   
   public boolean sendMail(Integer from, Integer to, Integer gid, String content)
   {
+    if (gid == null)
+    {
+      gid = dao.getMailGroup(from, to);
+      if (gid == null)
+      {
+        gid = addMailGroup(from, to);
+      }
+    }
     MailModel mail = new MailModel();
     mail.set("from", from);
     mail.set("to", to);
@@ -26,6 +36,31 @@ public class MailService
     mail.set("ctime", OjConfig.timeStamp);
     
     return mail.save();
+  }
+
+  public Integer addMailGroup(Integer from, Integer to)
+  {
+    Integer id = Db.queryInt("SELECT max(id) FROM mail_group");
+    if (id == null)
+    {
+      id = 0;
+    }
+    
+    Record mailGroup = new Record();
+    mailGroup.set("id", id + 1);
+    mailGroup.set("from", from);
+    mailGroup.set("to", to);
+    mailGroup.set("ctime", OjConfig.timeStamp);
+    Db.save("mail_group", mailGroup);
+    
+    mailGroup = new Record();
+    mailGroup.set("id", id + 1);
+    mailGroup.set("from", to);
+    mailGroup.set("to", from);
+    mailGroup.set("ctime", OjConfig.timeStamp);
+    Db.save("mail_group", mailGroup);
+    
+    return id + 1;
   }
   
   public MailModel findMail(Integer id)
@@ -66,10 +101,10 @@ public class MailService
   public Page<MailModel> getUserMailGroups(int pageNumber, int pageSize, Integer uid)
   {
     String sql = "SELECT m.*,FROM_UNIXTIME(m.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,CONCAT(m.from, '-', m.to) AS p2p,"
-        + "u1.name AS fromuser,u2.name AS touser,u1.avatar AS avatar";
-    String from = "FROM mail m LEFT JOIN user u1 ON u1.uid=m.from LEFT JOIN user u2 ON u2.uid=m.to WHERE (`from`=? OR `to`=?) GROUP BY gid ORDER BY id DESC";
+        + "u.name AS fromuser,u.avatar AS avatar";
+    String from = "FROM mail_group m LEFT JOIN user u ON u.uid=m.from WHERE `to`=? ORDER BY id DESC";
     
-    return dao.paginate(pageNumber, pageSize, sql, from, uid, uid);
+    return dao.paginate(pageNumber, pageSize, sql, from, uid);
   }
   
   public Page<MailModel> getMailByGid(int pageNumber, int pageSize, Integer gid)
@@ -79,4 +114,30 @@ public class MailService
     
     return dao.paginate(pageNumber, pageSize, sql, from, gid);
   }
+  
+  public boolean addMailBanlistItem(Integer uid, Integer banUid)
+  {
+    // TODO check if item exists
+    Record record = new Record();
+    record.set("uid", uid);
+    record.set("ban_uid", banUid);
+    record.set("ctime", OjConfig.timeStamp);
+    
+    return Db.save("mail_banlist", record);
+  }
+
+  public boolean deleteMailBanlistItem(Integer uid, Integer banUid)
+  {
+    // TODO check if item exists
+    return Db.update("DELETE FROM mail_banlist WHERE uid=? AND ban_uid=?", uid, banUid) > 0;
+  }
+  
+  public Page<MailModel> getUserMailBanlist(int pageNumber, int pageSize, Integer uid)
+  {
+    String sql = "SELECT  m.ban_uid AS uid,u.name AS uname";
+    String from = "FROM mail_banlist m LEFT JOIN user u ON u.uid=m.ban_uid WHERE m.uid=?";
+    
+    return dao.paginate(pageNumber, pageSize, sql, from, uid);
+  }
+  
 }
