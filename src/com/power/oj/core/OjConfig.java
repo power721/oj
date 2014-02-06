@@ -33,6 +33,7 @@ public class OjConfig
   public static int problemPageSize = 50;
   public static int userPageSize = 20;
   public static int statusPageSize = 20;
+  public static int mailPageSize = 10;
 
   public static long timeStamp;
   public static long startInterceptorTime;

@@ -2,27 +2,25 @@ package com.power.oj.api;
 
 import java.io.File;
 
-import org.apache.shiro.authz.annotation.RequiresUser;
-
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
+@Before(GuestInterceptor.class)
 public class UserApiController extends OjController
 {
   private static final UserService userService = UserService.me();
 
-  @RequiresUser
   public void splash()
   {
     UserModel userModel = getAttr(OjConstants.USER);
@@ -31,20 +29,16 @@ public class UserApiController extends OjController
     render("ajax/splash.html");
   }
 
+  
   public void profile()
   {
-    if (ShiroKit.isGuest())
-    {
-      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-      return;
-    }
-    
     UserModel userModel = getAttr(OjConstants.USER);
     userModel.put("success", true);
     userModel.remove("token").remove("pass").remove("data");
     renderJson(userModel);
   }
 
+  @ClearInterceptor
   public void info()
   {
     int uid = 0;
@@ -74,12 +68,6 @@ public class UserApiController extends OjController
   
   public void checkin()
   {
-    if (ShiroKit.isGuest())
-    {
-      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-      return;
-    }
-    
     int incExp = 0;
     UserModel userModel = getAttr(OjConstants.USER);
     if ((incExp = userService.checkin(userModel)) > 0)
@@ -92,14 +80,9 @@ public class UserApiController extends OjController
     }
   }
   
+  @ClearInterceptor
   public void online()
   {
-    if (ShiroKit.isGuest())
-    {
-      renderNull();
-      return;
-    }
-    
     //UserModel userModel = getAttr(OjConstants.USER);
     renderNull();
   }
@@ -107,12 +90,6 @@ public class UserApiController extends OjController
   @Before(POST.class)
   public void signSubmit()
   {
-    if (ShiroKit.isGuest())
-    {
-      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-      return;
-    }
-    
     String sign = HtmlEncoder.text(getPara("sign", "").trim());
     UserModel userModel = getAttr(OjConstants.USER);
     if (userModel.set("sign", sign).update())
@@ -128,12 +105,6 @@ public class UserApiController extends OjController
   @Before(POST.class)
   public void pwdSubmit()
   {
-    if (ShiroKit.isGuest())
-    {
-      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-      return;
-    }
-    
     UserModel userModel = getAttr(OjConstants.USER);
     String origPwd = getPara("origPwd");
     String newPwd = getPara("newPwd");
@@ -159,12 +130,6 @@ public class UserApiController extends OjController
   @Before(POST.class)
   public void profileSubmit()
   {
-    if (ShiroKit.isGuest())
-    {
-      renderJson("{\"success\":false, \"result\":\"User does not login.\"}");
-      return;
-    }
-    
     UserModel userModel = getAttr(OjConstants.USER);
     userModel.set("comefrom", getPara("comefrom"));
     userModel.set("qq", getPara("qq"));
@@ -207,6 +172,7 @@ public class UserApiController extends OjController
   }
 
   @Before(POST.class)
+  @ClearInterceptor
   @ClearShiro
   public void signin()
   {
