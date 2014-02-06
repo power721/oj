@@ -372,7 +372,8 @@
           system.port.unreadedMailsCheck.abort()
         }
         system.port.unreadedMailsCheck = $.get("api/mail/isHaveUnreaded", {
-          p2p: $("#area-mails-mail").data().p2p
+          p2p: $("#area-mails-mail").data().p2p,
+          gid: $("#area-mails-mail").data().gid
         }).done(function(data) {
           if (data.success) {
             var btn = $("#btn-refresh-mail");
@@ -544,6 +545,7 @@
           }
           system.port.newMail = $.post("api/mail/newMail", {
             userId: area.data().uid,
+            gid: area.data().gid,
             content: $.parsePost(editor.getContent())
           }).done(function(data) {
             if ( !! data.success) {

@@ -38,11 +38,33 @@ public class MailApiController extends OjController
     int pageNumber = getParaToInt("page", 1);
     int pageSize = getParaToInt("size", OjConfig.mailPageSize);
     Integer gid = getParaToInt("gid");
-    //String p2p = getPara("p2p");
 
     Page<MailModel> mailList = mailService.getMailByGid(pageNumber, pageSize, gid);
     
     renderJson(mailList);
+  }
+  
+  public void isHaveUnreaded()
+  {
+    Integer gid = getParaToInt("gid");
+    
+  }
+  
+  public void newMail()
+  {
+    Integer from = userService.getCurrentUid();
+    Integer to = getParaToInt("userId");
+    Integer gid = getParaToInt("gid");
+    String content = getPara("content");
+    
+    if (mailService.sendMail(from, to, gid, content))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":500,\"result\":\"Save new mail failed.\"}");
+    }
   }
   
 }

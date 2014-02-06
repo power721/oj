@@ -308,7 +308,7 @@ CREATE TABLE `mail` (
 `gid` int(9) NOT NULL,
 `from`  int(9) NOT NULL ,
 `to`  int(9) NOT NULL ,
-`title`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`title`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `content`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `reply`  int(9) NULL DEFAULT NULL ,
 `read`  tinyint(1) NOT NULL DEFAULT 0 ,
