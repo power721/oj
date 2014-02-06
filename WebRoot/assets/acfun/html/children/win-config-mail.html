@@ -1,0 +1,111 @@
+<style>
+    #win-config-mail .unit .l {
+        width: 60px;
+    }
+
+    #win-config-mail .unit .r {
+        width: 390px;
+    }
+
+    #win-config-mail ul {
+        display: inline-block;
+        *display: inline;
+    }
+
+    #win-config-mail .hint {
+        color: #999;
+        font-size: 12px;
+        margin: 8px 0;
+    }
+</style>
+
+<div class="unit">
+    <div class="l">
+        <p class="subtitle">设定策略</p>
+    </div>
+    <div class="r">
+        <ul id="list-config-config">
+            <li class="btn">允许接收陌生人信息</li>
+            <li class="btn">拒绝接收陌生人信息</li>
+        </ul>
+        <p class="hint">
+            请选择陌生人信息策略。<br/>
+            当您选择拒接收陌生人信息时，仅有您关注的用户及系统管理员能够向您发送信息。<br/>
+            当拒绝接收陌生人信息时，将无法使用肥皂系统。
+        </p>
+    </div>
+    <span class="clearfix"></span>
+</div>
+
+<script>
+    system.tv = function () {
+        //set handle
+        var win = $('#win-config-mail');
+        var mainer = win.find('div.mainer').eq(0);
+        var list = mainer.find('ul').eq(0);
+        var tabs = list.find('li');
+        //prepare
+        win.data({
+            port: null
+        });
+        $.get('api/mail/getStrangersMailsSetting')
+                .done(function (data) {
+                    if (data.success) {
+                        if (data.result && data.result == 0) {
+                            tabs.eq(0)
+                                    .addClass('active primary');
+                        } else {
+                            tabs.eq(-1)
+                                    .addClass('active primary');
+                        }
+                        ;
+                    } else {
+                        var text = 'error::' + data.result;
+                        $.info(text);
+                        win.info(text);
+                    }
+                    ;
+                })
+                .fail(function () {
+                    var text = 'error::同服务器通信失败。请于稍后重试。';
+                    $.info(text);
+                    win.info(text);
+                });
+        //action
+        tabs.click(function () {
+            var tab = $(this);
+            if (!tab.hasClass('active')) {
+                var option = Math.abs(tab.index(tabs));
+                if (win.data().port) {
+                    win.data().port.abort();
+                }
+                ;
+                win.data().port = $.post('api/mail/setStrangersMailsSetting', {
+                    option: option
+                })
+                        .done(function (data) {
+                            //
+                            if (data.success) {
+                                tab
+                                        .addClass('active primary')
+                                        .siblings('li.active')
+                                        .removeClass('active primary');
+                                var text = 'info::' + (option ? '已设置为拒绝接收陌生人信息。' : '已设置为允许接收陌生人信息');
+                                $.info(text);
+                                tab.info(text);
+                            } else {
+                                $.info('error::' + data.result);
+                                tab.info(data.result);
+                            }
+                            ;
+                        })
+                        .fail(function () {
+                            var text = 'error::同服务器通信失败。请于稍后重试。';
+                            $.info(text);
+                            tab.info(text);
+                        });
+            }
+            ;
+        });
+    }();
+</script>

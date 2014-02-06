@@ -41,7 +41,7 @@ public class AccessLogInterceptor implements Interceptor
       }
 
       String url = sb.toString();
-      if (url.indexOf("ajax=1") == -1)
+      if (url.indexOf("ajax=1") == -1 && url.indexOf("api/") == -1)
         SessionService.me().setLastAccessURL(url);
 
       SessionService.me().updateSession(session, url);

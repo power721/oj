@@ -1,0 +1,195 @@
+<style>
+    #win-forbid-mail .unit .l {
+        width: 75px;
+        text-align: right;
+    }
+
+    #win-forbid-mail .unit .r {
+        width: 365px;
+    }
+
+    #win-forbid-mail table {
+        width: 100%;
+    }
+
+    #win-forbid-mail th {
+        text-align: center;
+        font-size: 14px;
+        height: 32px;
+        line-height: 32px;
+        color: #666;
+        border-bottom: 1px solid #ccc;
+    }
+
+    #win-forbid-mail .item {
+        background-color: #eee;
+    }
+
+    #win-forbid-mail .item:hover {
+        background-color: #e9e9e9;
+    }
+
+    #win-forbid-mail td {
+        border-bottom: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+        text-align: center;
+    }
+
+    #win-forbid-mail td.right {
+        border-right: 1px solid #ddd;
+    }
+
+    #win-forbid-mail .item .name {
+        margin: 4px auto 0;
+        width: auto;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    #win-forbid-mail .item .uid {
+        font-size: 10px;
+        font-weight: normal;
+        margin-left: 4px;
+        color: #666;
+    }
+
+    #win-forbid-mail .group {
+        display: block;
+        margin: 0 auto 0;
+        height: 32px;
+        line-height: 32px;
+        width: 100%;
+        float: left;
+        text-align: center;
+    }
+
+    #win-forbid-mail .group .btn {
+        float: none;
+        margin: 2px auto 0;
+    }
+
+    #area-pager-forbid .area-pager {
+        margin: 8px auto 0;
+        padding: 0;
+    }
+</style>
+<table id="temp-item-forbid" class="hidden">
+    <tbody>
+    <tr class="item" data-name="[name]" data-uid="[uid]">
+        <td>
+            <div class="group">
+                <p class="name">[name]<span class="uid">(Uid:[uid])</span></p>
+            </div>
+            <span class="clearfix"></span>
+        </td>
+        <td class="right">
+            <div class="group">
+                <button class="btn mini primary btn-delete-forbid" title="移出屏蔽列表">
+                    <i class="icon white icon-remove-circle"></i>移除
+                </button>
+            </div>
+            <span class="clearfix"></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <tbody>
+    <tr>
+        <th style="width:320px;">被屏蔽用户</th>
+        <th style="width:auto;">操作</th>
+    </tr>
+    </tbody>
+</table>
+<div id="area-pager-forbid"></div>
+<script>
+    system.tv = function () {
+        //set handle
+        var win = $('#win-forbid-mail');
+        var mainer = win.find('div.mainer').eq(0);
+        var table = mainer.find('table').eq(-1).find('tbody').eq(0);
+        var area = $('#area-pager-forbid');
+        //show
+        var showList = function (page, callback) {
+            //
+            $.get('api/mail/getBanlist', {
+                page: page
+            })
+                    .done(function (data) {
+                        //
+                        if (!!data.success) {
+                            //
+                            if (!!data.mailList && data.mailList.length) {
+                                //set handle
+                                var temp = $('#temp-item-forbid').find('tbody').eq(0).html();
+                                var html = '';
+                                for (var i = 0, l = data.mailList.length; i < l; i++) {
+                                    var a = $.parseJson(data.mailList[i]);
+                                    html += temp
+                                            .replace(/\[name\]/g, a.uname)
+                                            .replace(/\[uid\]/g, a.uid)
+                                    ;
+                                }
+                                ;
+                                //pager
+                                table.find('tr').not(':first').remove();
+                                table.append(html);
+                                area.html($.makePager({
+                                    num: data.page,
+                                    size: data.pageSize,
+                                    count: data.totalCount
+                                }));
+                            } else {
+                                var html = '<p class="alert">屏蔽列表为空。</p>'
+                                mainer.html(html);
+                            }
+                            ;
+                        } else {
+                            $.info('error::' + data.result);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        //
+                        $.info('error::同服务器通信失败。请于稍后重试。');
+                    });
+        };
+        //bidn action
+        table
+                .delegate('button.btn-delete-forbid', 'click', function () {
+                    //
+                    var obj = $(this).closest('tr');
+                    $.ensure(function () {
+                        $.post('api/mail/deleteBanlistItem', {
+                            userId: obj.attr('data-uid'),
+                            username: obj.attr('data-name')
+                        })
+                                .done(function (data) {
+                                    //
+                                    if (!!data.success) {
+                                        $.info('一位联系人已从屏蔽列表中移除。');
+                                        obj
+                                                .stop()
+                                                .animate({
+                                                    opacity: 0
+                                                }, 200, function () {
+                                                    obj.remove();
+                                                });
+                                    } else {
+                                        $.info('error::' + data.result);
+                                    }
+                                    ;
+                                })
+                                .fail(function () {
+                                    //
+                                    $.info('error::同服务器通信失败。请于稍后重试。');
+                                });
+                    });
+                });
+        area
+                .delegate('span.pager:not(.here)', 'click', function () {
+                    showList($(this).attr('data-page'));
+                });
+        showList(1);
+    }();
+</script>

@@ -1,0 +1,425 @@
+<!--style-->
+<style>
+#block-first .unit .l {
+    width: 120px;
+    padding: 0 0 0 40px;
+}
+
+#block-first .unit .r {
+    width: 620px;
+}
+
+#block-first .item {
+    position: relative;
+    overflow: hidden;
+}
+
+.no-rgba #block-first .item {
+    border-color: #ccc;
+}
+
+#block-first .inner {
+    position: relative;
+}
+
+#block-first .item .l {
+    position: relative;
+}
+
+#block-first .item .r {
+    position: relative;
+    width: 530px;
+}
+
+#block-first .item .thumb-preview {
+    margin: 8px 0 16px 8px;
+}
+
+#block-first .item .thumb-avatar {
+    position: absolute;
+    left: 96px;
+    top: 64px;
+}
+
+#block-first .item .avatar {
+    width: 40px;
+    height: 40px;
+}
+
+#block-first .item .block-title {
+    margin: 10px auto 0;
+}
+
+#block-first .item .title {
+    color: #08c;
+    font-size: 14px;
+}
+
+#block-first .item .area-info {
+    color: #999;
+    margin: 4px auto 0;
+}
+
+#block-first .item .desc {
+    color: #666;
+    margin: 4px auto 0;
+}
+
+#block-first .item .block-manage {
+    position: absolute;
+    left: auto;
+    top: auto;
+    right: -128px;
+    bottom: 8px;
+    transition: 0.2s all ease 0.2s;
+}
+
+#block-first .item:hover .block-manage {
+    right: 8px;
+}
+
+#block-first .hint-time-history {
+    display: inline-block;
+    *display: inline;
+    border-top: 1px dashed #ddd;
+    margin: 8px 0 16px;
+    padding: 8px 16px 0 0;
+    color: #999;
+    font-size: 12px;
+}
+
+#block-first .removed {
+    text-align: center;
+    line-height: 8;
+    color: #999;
+}
+
+#block-first .hint-list-index {
+    position: absolute;
+    left: auto;
+    top: auto;
+    right: 12px;
+    bottom: 0px;
+    font-size: 64px;
+    line-height: 64px;
+    height: 64px;
+    width: auto;
+    text-align: right;
+    color: #eee;
+    z-index: 0;
+    letter-spacing: -0.1em;
+    cursor: default;
+}
+
+#block-first .area-pager {
+    padding: 0;
+    margin: 8px auto;
+}
+
+#block-first .item .area-cont {
+    width: auto;
+    height: auto;
+    margin: 8px 10px;
+    padding: 8px;
+    background-color: #ffe;
+    color: #333;
+    display: none;
+    border: 1px solid #dddddd;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #b7b7b7;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+#block-first .item-comms .area-cont {
+    display: block;
+}
+</style>
+<!--style-->
+
+<!--html-->
+<div id="block-title-banner">
+    <p>历史</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">History</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="temp-item-history" class="hidden">
+    <div class="item item-[type] block" data-index="[i]">
+        <div class="inner">
+            <div class="l">
+                <a target="_blank" href="/v/ac[aid]" class="thumb thumb-preview">
+                    <img data-aid="[aid]" [preview] class="preview">
+                    <div class="cover"></div>
+                </a>
+                <a target="_blank" href="/member/user.aspx?uid=[uid]" class="thumb thumb-avatar"
+                   title="点击访问[[name]]的个人空间">
+                    <img data-uid="[uid]" [avatar] class="avatar">
+                </a>
+            </div>
+            <div class="r">
+                <p class="block-title">
+                    <a href="/v/list[cid]/index.htm" class="channel" title="点击访问[channel]频道"
+                       target="_blank">[channel]</a>
+                    <a data-aid="[aid]" target="_blank" href="/v/ac[aid]" class="title">[title]</a>
+                </p>
+
+                <div class="area-info">
+                    <a target="_blank" href="/member/user.aspx?uid=[uid]" class="name">[name]</a>
+                    &nbsp;&nbsp;/&nbsp;&nbsp;发布于
+                    <span class="time">[date]</span>
+                    &nbsp;&nbsp;/&nbsp;&nbsp;播放:
+                    <span class="views pts">[views]</span>
+                    &nbsp;&nbsp;评论:
+                    <span class="comments pts">[comments]</span>
+                    &nbsp;&nbsp;收藏:
+                    <span class="favors pts">[favors]</span>
+                </div>
+                <p class="desc">[desc]</p>
+
+                <div class="area-tag"></div>
+                <p class="hint-time-history">[time]</p>
+            </div>
+            <p class="hint-list-index">[index]</p>
+
+            <div class="block-manage">
+                <button title="删除历史记录" class="btn danger mini btn-delete">
+                    <i class="icon white icon-remove-circle"></i>删除历史记录
+                </button>
+            </div>
+            <span class="clearfix"></span>
+        </div>
+        <div class="area-cont">
+            <p class="cont">[cont]</p>
+        </div>
+    </div>
+</div>
+<div id="block-first" class="block">
+    <div class="banner">
+        <p class="tab" data-type="views" title="点击查看浏览历史">
+            浏览历史
+        </p>
+
+        <p class="tab" data-type="comms" title="点击查看评论历史">
+            评论历史
+        </p>
+    </div>
+    <div class="mainer">
+        <p class="alert alert-info">
+            <button id="btn-clear-history" class="btn danger r" title="点击清空所有历史记录">
+                <i class="icon white icon-remove-circle"></i>清空历史记录
+            </button>
+            下方列表中记录着您近期的浏览或评论历史记录。<br>
+            您可以点击右侧按钮以清空所有历史记录。
+            <span class="clearfix"></span>
+        </p>
+
+        <div id="list-history"></div>
+    </div>
+</div>
+<!--html-->
+
+<!--script-->
+<script>
+    system.tv = function () {
+        //set handle
+        var block = $('#block-first');
+        var list = $('#list-history');
+        //function
+        var showHistory = function (param, callback) {
+            //inner param
+            var func = {
+                name: 'showHistory()',
+                num: 1,
+                type: 'views',
+                size: 10,
+                callback: callback
+            };
+            $.extend(func, param);
+
+            //set handle
+            var temp = $('#temp-item-history').html();
+
+            //check browser
+            if (!!system.browser.localstorage) {
+                //check history
+                var html = '';
+
+                if (cache.history[func.type] && cache.history[func.type].length) {
+                    for (var i = cache.history[func.type].length - (func.num - 1) * func.size - 1, l = i - func.size; i > l && i >= 0; i--) {
+                        //check type
+                        if ($.inArray(func.type, ['views', 'comms']) > -1) {
+                            var a = cache.history[func.type][i];
+                            //cont
+                            var cont = func.type == 'comms' ? a.cont.text : '';
+                            //tag
+                            if (!!a.tags) {
+                                var b = a.tags.split(',');
+                                var tags = '';
+                                for (var j = 0, m = b.length; j < m; j++) {
+                                    tags += '<span class="tag">' +
+                                            '<a href="/search.aspx?q=r#query=' + encodeURI(b[j]) + '" target="_blank">' + b[j] + '</a>' +
+                                            '</span>';
+                                }
+                                ;
+                            } else {
+                                var tags = '<span class="hint">此视频尚无任何标签</span>';
+                            }
+                            ;
+                            html += temp
+                                    .replace(/\[aid\]/g, a.aid)
+                                    .replace(/\[cid\]/g, a.cid)
+                                    .replace(/\[preview\](?:\=\"\")?/g, 'src="' + a.preview + '"')
+                                    .replace(/\[uid\]/g, a.uid)
+                                    .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + a.avatar + '"')
+                                    .replace(/\[channel\]/g, $.parseChannel(a.cid))
+                                    .replace(/\[title\]/g, a.title)
+                                    .replace(/\[name\]/g, a.name)
+                                    .replace(/\[date\]/g, $.parseTime(a.date))
+                                    .replace(/\[views\]/g, a.views)
+                                    .replace(/\[comments\]/g, a.comms)
+                                    .replace(/\[favors\]/g, a.favors)
+                                    .replace(/\[desc\]/g, $.parseSafe(a.desc))
+                                    .replace(/\[tags\]/g, a.favors)
+                                    .replace(/\[time\]/g, (func.type == 'comms' ? '评论于 ' : '浏览于 ') + $.parseTime(a.time))
+                                    .replace(/\[cont\]/g, $.parseSafe((a.cont ? a.cont.text : '')))
+                                    .replace(/\[index\]/g, i + 1)
+                                    .replace(/\[i\]/g, i)
+                                    .replace(/\[type\]/g, func.type)
+                            ;
+                        }
+                        ;
+                    }
+                    ;
+
+                    //pager
+                    var phtml = $.makePager({
+                        num: func.num,
+                        count: cache.history[func.type].length,
+                        size: func.size,
+                        addon: true
+                    });
+
+                    list
+                        //insert html
+                            .html(phtml + html + phtml);
+
+                    //card
+                    list
+                            .find('div.area-info a.name')
+                            .card();
+                    //
+
+                    //scroll
+                    $('#stage').scrollOnto(0);
+                    //
+
+                } else {
+                    $.info('info::尚未记录任何历史信息。');
+                    var html = '<p class="alert alert-warning">尚未记录任何历史信息。</p>';
+                    list.html(html);
+                }
+                ;
+            } else {
+                var html = '<p class="alert alert-error">' +
+                        '不支持本地存储(localStorage)的老旧浏览器。' +
+                        '<br />' +
+                        '请使用最新版本的现代浏览器(如Google Chrome、Mozilla Firefox或IE10)访问本页面。' +
+                        '</p>';
+                list.html(html);
+            }
+            ;
+        };
+
+        //bind action
+        list
+            //delete
+                .delegate('button.btn-delete', 'click', function () {
+                    //set handle
+                    var btn = $(this);
+                    var obj = btn.closest('div.item');
+                    //ensure
+                    $.ensure({
+                        obj: btn,
+                        text: '是否确定删除历史记录？',
+                        curtain: true,
+                        callback: function () {
+                            cache.history[block.find('div.tab.active').attr('data-type') || 'views'].splice(obj.attr('data-index'), 1);
+                            $.save('cache');
+                            $.info('success::一条历史纪录已删除。');
+                            obj
+                                    .html('历史记录已删除。')
+                                    .addClass('removed');
+                        }
+                    });
+                })
+            //pager
+                .readyPager({
+                    addon: true,
+                    callback: function (n) {
+                        //
+                        showHistory({
+                            num: n || 1,
+                            type: list.data().type || 'views'
+                        });
+                        //
+                    }
+                })
+        ;
+
+        //
+        //clear history
+        $('#btn-clear-history')
+                .click(function () {
+                    //set handle
+                    var btn = $(this);
+                    //ensure
+                    $.ensure({
+                        obj: btn,
+                        text: '是否确定清空所有历史记录？',
+                        curtain: true,
+                        callback: function () {
+                            cache.history.views = [];
+                            cache.history.comms = [];
+                            $.save('cache');
+                            $.info('success::所有历史记录已清空。');
+                            //refresh
+                            m.refreshPart();
+                        }
+                    });
+                });
+        //
+
+        //bind action
+
+        //type
+        block.find('div.banner').eq(0).find('p.tab')
+                .click(function () {
+                    var btn = $(this);
+                    btn
+                            .addClass('active')
+                            .siblings('.active')
+                            .removeClass('active');
+                    //
+                    list.data({
+                        type: btn.data().type
+                    });
+                    //
+                    showHistory({
+                        num: 1,
+                        type: list.data().type || 'views'
+                    });
+                })
+                .eq(0)
+                .click()
+        ;
+        //
+
+    }();
+</script>
+<!--script-->
