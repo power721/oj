@@ -38,4 +38,14 @@ public class MailService
     return dao.findUserSentMails(uid);
   }
   
+  public List<MailModel> findUserNewMails(Integer uid)
+  {
+    return dao.findUserNewMails(uid);
+  }
+
+  public Long countUserNewMails(Integer uid)
+  {
+    return dao.countUserNewMails(uid);
+  }
+  
 }

@@ -22,6 +22,7 @@ import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.power.oj.admin.AdminController;
+import com.power.oj.api.MailApiController;
 import com.power.oj.api.UserApiController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
@@ -39,6 +40,7 @@ import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.mail.MailController;
+import com.power.oj.mail.MailModel;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.VisitCountService;
@@ -89,6 +91,7 @@ public class AppConfig extends JFinalConfig
     me.add("/problem", ProblemController.class);
     me.add("/solution", SolutionController.class);
     me.add("/user", UserController.class);
+    me.add("/api/mail", MailApiController.class, "/mail/");
     me.add("/api/user", UserApiController.class, "/user/");
 
     log.debug("configRoute finished.");
@@ -114,6 +117,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);
     arp.addMapping("session", "session_id", SessionModel.class);
+    arp.addMapping("mail", MailModel.class);
     arp.addMapping("program_language", LanguageModel.class);
     arp.addMapping("variable", VariableModel.class);
     me.add(arp);

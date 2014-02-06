@@ -482,8 +482,8 @@ system.tv = function () {
             .setup({
                 finish: function () {
                     //load
-                    $.get('api/user/profile?ajax=1')
-                    //$.get('api/user/info?ajax=1')
+                    $.get('api/user/profile')
+                    //$.get('api/user/info')
                             .done(function (data) {
                                 if (!!data.success) {
                                     //input data
@@ -543,7 +543,7 @@ system.tv = function () {
                 },
                 callback: function () {
                     //
-                    $.post('api/user/profileSubmit?ajax=1', {
+                    $.post('api/user/profileSubmit', {
                         comefrom: ($('#ipt-location-a-personal').val() + ',' + $('#ipt-location-b-personal').val()).replace(/\,?不公开/g, ''),
                         qq: function () {
                             var a = $.parseSafe($('#ipt-qq-personal').val());

@@ -25,32 +25,32 @@ public class MailModel extends Model<MailModel>
 
   public MailModel findMail(Integer id, Integer uid)
   {
-    return findFirst("SELECT * FROM mail WHERE id=? AND (from=? OR to=?) LIMIT 1", id, uid, uid);
+    return findFirst("SELECT * FROM mail WHERE id=? AND (`from`=? OR `to`=?) LIMIT 1", id, uid, uid);
   }
   
   public List<MailModel> findUserMails(Integer uid)
   {
-    return find("SELECT * FROM mail WHERE from=? OR to=?", uid, uid);
+    return find("SELECT * FROM mail WHERE `from`=? OR `to`=?", uid, uid);
   }
 
   public List<MailModel> findUserReceivedMails(Integer uid)
   {
-    return find("SELECT * FROM mail WHERE to=?", uid);
+    return find("SELECT * FROM mail WHERE `to`=?", uid);
   }
   
   public List<MailModel> findUserSentMails(Integer uid)
   {
-    return find("SELECT * FROM mail WHERE from=?", uid);
+    return find("SELECT * FROM mail WHERE `from`=?", uid);
   }
 
   public List<MailModel> findUserNewMails(Integer uid)
   {
-    return find("SELECT * FROM mail WHERE to=? AND read=0", uid);
+    return find("SELECT * FROM mail WHERE `to`=? AND `read`=0", uid);
   }
 
-  public Integer countUserNewMails(Integer uid)
+  public Long countUserNewMails(Integer uid)
   {
-    return findFirst("SELECT COUNT(*) AS count FROM mail WHERE to=? AND read=0", uid).getInt("count");
+    return findFirst("SELECT COUNT(*) AS count FROM mail WHERE `to`=? AND `read`=0", uid).getLong("count");
   }
   
 }

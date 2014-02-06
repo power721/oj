@@ -1107,7 +1107,7 @@ var cache = {
                 if (system.port.getUserInfo) {
                   system.port.getUserInfo.abort()
                 }
-                var url = !!uid ? 'user/info?ajax=1&uid=' + uid: name.length ? 'user/info?ajax=1&name=' + encodeURI(name) : '';
+                var url = !!uid ? 'user/info?uid=' + uid: name.length ? 'user/info?name=' + encodeURI(name) : '';
                 system.port.getUserInfo = $.get(url).done(function(data) {
                   if ( !! data.success) {
                     var a = data.userjson;
