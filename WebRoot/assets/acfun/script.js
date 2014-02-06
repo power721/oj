@@ -29,7 +29,7 @@ $(function() {
           checkTime()
         } ();
         system.tv = function() {
-          var html = '<link id="style-theme-member" href="' + system.path + "/acfun/" + (user.center.theme || "default") + "/theme.css?date=" + system.date + '" rel="stylesheet">';
+          var html = '<link id="style-theme-member" href="' + system.path + "/acfun/theme/" + (user.center.theme || "default") + "/theme.css?date=" + system.date + '" rel="stylesheet">';
           $("head").append(html)
         } ();
         system.tv = function() {

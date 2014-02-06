@@ -445,6 +445,7 @@ public class UserService
     int credit = userModel.getInt("credit");
     int lastLevel = userModel.getInt("level");
     int level = 0;
+    int lastExp = 0;
     int nextExp = OjConfig.level.get(0);
     
     for (level = 0; level < OjConfig.level.size(); level++)
@@ -452,6 +453,10 @@ public class UserService
       int tmp = OjConfig.level.get(level);
       if (tmp > credit)
       {
+        if (level > 0)
+        {
+          lastExp = OjConfig.level.get(level - 1);
+        }
         nextExp = tmp;
         break;
       }
@@ -463,7 +468,7 @@ public class UserService
       userModel.update();
     }
     userModel.put("nextExp", nextExp);
-    userModel.put("percent", (int)(credit/(double)nextExp * 100));
+    userModel.put("percent", (int)((credit-lastExp)/(double)(nextExp-lastExp) * 100));
     
     return userModel;
   }

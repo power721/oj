@@ -1,0 +1,193 @@
+<style>
+  #list-theme .unit{width:33.33333333%;padding:16px;float:left;text-align:center}#list-theme
+  .active:hover .btn-active-theme{display:none}#list-theme .active .preview{border-color:#36b1c0}#list-theme
+  .active .icon-active-theme{display:block}#list-theme .thumb{position:relative;margin:0
+  auto;text-align:left}#list-theme .thumb:hover .title{opacity:1}#list-theme
+  .thumb:hover .btn-active-theme{display:block}#list-theme .preview{width:200px;height:150px}#list-theme
+  .title{display:block;position:absolute;width:198px;height:32px;line-height:32px;background-color:#000;background-color:rgba(0,0,0,0.8);color:#fff;left:1px;bottom:1px;margin:0;padding:0
+  16px;opacity:0}#list-theme .icon-active-theme{position:absolute;width:35px;height:35px;background:transparent
+  url(assets/acfun/theme/preview/img-active-theme.png)
+  left top no-repeat;right:1px;top:1px;display:none}#list-theme .btn-active-theme{float:none;position:absolute;width:96px;height:32px;line-height:32px;left:52px;top:59px;display:none}
+</style>
+<div id="block-title-banner">
+  <p>
+    主题商店
+  </p>
+  <div>
+    <a href="user">
+      PowerOJ
+    </a>
+    <span class="d">
+      Theme
+    </span>
+  </div>
+  <span class="clerafix">
+  </span>
+</div>
+<div id="block-banner-right" class="block banner">
+  <i class="location">
+  </i>
+</div>
+<div id="block-first" class="block">
+  <div class="mainer">
+    <p class="alert">
+      欢迎访问主题商店。
+      <br/>
+      该功能目前正在测试中。如果您有好的意见或建议，请
+      <a target="_blank" href="feedback">
+        [反馈]
+      </a>
+      给我们，这将有助于我们改善相关功能。
+    </p>
+    <p class="alert success">
+      请在下方选择您喜爱的主题风格。
+    </p>
+    <div id="list-theme">
+      <span class="clearfix">
+      </span>
+    </div>
+    <div id="temp-unit-theme" class="hidden">
+      <div class="unit">
+        <a data-path="[path]" data-index="[index]" class="thumb [active]">
+          <img [preview]="[preview]" class="preview" />
+          <p class="title">
+            [title]
+          </p>
+          <p class="icon-active-theme">
+          </p>
+          <button class="btn primary btn-active-theme">
+            <i class="icon white icon-ok-circle">
+            </i>
+            应用主题
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  system.tv = function() {
+    "use strict";
+    var list = $("#list-theme");
+    var d = [{
+      title: "默认主题",
+      path: "default",
+      preview: "default",
+      update: "2013.10.29 12:33"
+    },
+    {
+      title: "万圣节",
+      path: "halloween",
+      preview: "halloween",
+      update: "2013.10.29 12:33"
+    },
+    {
+      title: "沙漠",
+      path: "koum",
+      preview: "koum",
+      update: "2013.10.31 14:11"
+    },
+    {
+      title: "圣战日",
+      path: "loneliness",
+      preview: "loneliness",
+      update: "2013.11.11 9:22"
+    },
+    {
+      title: "云",
+      path: "wolke",
+      preview: "wolke",
+      update: "2013.11.29 9:48"
+    },
+    {
+      title: "复仇者联盟",
+      path: "avengers",
+      preview: "avengers",
+      update: "2013.11.29 10:28"
+    },
+    {
+      title: "乐园幻想物语",
+      path: "elysion",
+      preview: "elysion",
+      update: "2013.12.9 10:52"
+    },
+    /*{
+      title: "彩虹小马",
+      path: "mlp",
+      preview: "mlp",
+      update: "2013.12.9 10:52"
+    },*/
+    {
+      title: "圣诞节",
+      path: "xmas",
+      preview: "xmas",
+      update: "2013.12.17 10:48"
+    },
+    /*{
+      title: "欢乐树的小伙伴",
+      path: "htf",
+      preview: "htf",
+      update: "2014.1.16 10:55"
+    },*/
+    {
+      title: "雨滴",
+      path: "drops",
+      preview: "drops",
+      update: "2014.1.22 17:37"
+    }/*,
+    {
+      title: "甲午春节",
+      path: "chunjie",
+      preview: "chunjie",
+      update: "2014.1.16 12:16"
+    }*/];
+    var f = function(param) {
+      var a = d[param];
+      html += temp.replace(/\[title\]/g, a.title || "未命名主题").replace(/\[path\]/g, a.path || "default").replace(/\[preview\](?:\=\"\")?/g, 'src="' + system.path + "/acfun/theme/preview/" + (a.preview || "blank") + '.png"').replace(/\[index\]/g, param).replace(/\[active\]/g, a.path == user.center.theme ? "active": "")
+    };
+    var html = "";
+    var temp = $("#temp-unit-theme").html();
+    f(0);
+    for (var i = d.length - 1; i > 0; i--) {
+      f(i)
+    }
+    list.data({
+      timer: null
+    }).prepend(html).find("a.thumb").hover(function() {
+      var elem = $(this);
+      if (!elem.hasClass("active")) {
+        window.clearTimeout(list.data().timer);
+        list.data().timer = window.setTimeout(function() {
+          $("#style-theme-member").remove();
+          var html = '<link id="style-theme-member" href="' + system.path + "/acfun/theme/" + elem.data().path + "/theme.css?date=" + system.date + '" rel="stylesheet">';
+          $("head").append(html);
+          elem.addClass("hover")
+        },
+        500)
+      }
+    },
+    function() {
+      window.clearTimeout(list.data().timer);
+      var elem = $(this);
+      if (elem.hasClass("hover") && !elem.hasClass("active")) {
+        $("#style-theme-member").remove();
+        var html = '<link id="style-theme-member" href="' + system.path + "/acfun/theme/" + (user.center.theme || "default") + "/theme.css?date=" + system.date + '" rel="stylesheet">';
+        $("head").append(html);
+        elem.removeClass("hover")
+      }
+    }).click(function() {
+      var elem = $(this);
+      if (!elem.hasClass("active")) {
+        $("#style-theme-member").remove();
+        var html = '<link id="style-theme-member" href="' + system.path + "/acfun/theme/" + elem.data().path + "/theme.css?date=" + system.date + '" rel="stylesheet">';
+        $("head").append(html);
+        list.find("a.thumb.active").removeClass("active");
+        var text = "success::已成功应用主题[" + (d[elem.data().index].title || "未命名主题") + "]。";
+        $.info(text);
+        elem.addClass("active").info(text);
+        user.center.theme = elem.data().path;
+        $.save("user")
+      }
+    })
+  } ();
+</script>
