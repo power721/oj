@@ -33,4 +33,16 @@ public class MailApiController extends OjController
     renderJson(mailList);
   }
   
+  public void getMails()
+  {
+    int pageNumber = getParaToInt("page", 1);
+    int pageSize = getParaToInt("size", OjConfig.mailPageSize);
+    Integer gid = getParaToInt("gid");
+    //String p2p = getPara("p2p");
+
+    Page<MailModel> mailList = mailService.getMailByGid(pageNumber, pageSize, gid);
+    
+    renderJson(mailList);
+  }
+  
 }

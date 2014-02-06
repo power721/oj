@@ -249,10 +249,10 @@
       system.port.getGroups = $.get("api/mail/getGroups", {
         page: page
       }).done(function(data) {
-        if ( !! data.success) {
+        if ( !! data.totalRow) {
           var area = $("#area-contact-mail");
           var temp = $("#temp-left-mail").html();
-          var a = data.mailList;
+          var a = data.list;
           if (!a.length) {
             $.info("info::当前尚未有任何联系人。");
             $("#btn-new-mail").info("info::当前尚未有任何联系人。单击这里发送新信息。")
@@ -262,15 +262,15 @@
           l = a.length; i < l; i++) {
             if (a[i]) {
               a[i] = $.parseJson(a[i]);
-              html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].user_img || "http://static.acfun.tv/dotnet/20120923/style/image/avatar.jpg") + '"').replace(/\[name\]/g, $.parseSafe(a[i].fromusername)).replace(/\[time\]/g, $.parseTime(a[i].postTime).replace(/[\s\(].*/g, "")).replace(/\[uid\]/g, a[i].fromuId).replace(/\[gid\]/g, a[i].mailGroupId).replace(/\[cont\]/g, $.trim(a[i].lastMessage).length > 6 ? $.trim(a[i].lastMessage).substr(0, 5) + "...": $.trim(a[i].lastMessage)).replace(/\[p2p\]/g, a[i].p2p).replace(/\[from\]/g, a[i].p2p.split("-")[0] != user.uid ? "from ": "to ").replace(/\[read\]/g, $.inArray(a[i].p2p, data.unReadList) == -1 ? "readed": "unreaded").replace(/\[star\]/g, parseInt(data.isFriendList[i]) !== 0 ? '<i class="icon grey icon-heart"></i>': "")
+              html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].avatar || "assets/images/user/default.png") + '"').replace(/\[name\]/g, $.parseSafe(a[i].fromuser)).replace(/\[time\]/g, $.parseTime(a[i].ctime).replace(/[\s\(].*/g, "")).replace(/\[uid\]/g, a[i].from).replace(/\[gid\]/g, a[i].gid).replace(/\[cont\]/g, $.trim(a[i].content).length > 6 ? $.trim(a[i].content).substr(0, 5) + "...": $.trim(a[i].content)).replace(/\[p2p\]/g, a[i].p2p).replace(/\[from\]/g, a[i].p2p.split("-")[0] != user.uid ? "from ": "to ").replace(/\[read\]/g, /*$.inArray(a[i].p2p, data.unReadList) == -1*/a[i].read ? "readed": "unreaded").replace(/\[star\]/g, /*parseInt(data.isFriendList[i])*/0 !== 0 ? '<i class="icon grey icon-heart"></i>': "")
             }
           }
           area.data({
             page: page
           }).html(html).find("div.item").eq(0).click();
           $("#area-pager-mail").html($.makePager({
-            num: data.page,
-            count: data.totalCount,
+            num: data.pageNumber,
+            count: data.totalRow,
             size: 10,
             "long": 2
           }));
@@ -291,12 +291,13 @@
       }
       system.port.getMailGroups = $.get("api/mail/getMails", {
         page: param.page,
+        gid: param.gid,
         p2p: param.p2p
       }).done(function(data) {
-        if ( !! data.success) {
+        if ( !! data.totalRow) {
           var area = $("#area-mails-mail");
           var temp = $("#temp-right-mail").html();
-          var a = data.mailList;
+          var a = data.list;
           if (!a.length) {
             $.info("info::当前尚未有任何信息。")
           }
@@ -304,14 +305,14 @@
           var html = "";
           for (var i = a.length - 1; i >= 0; i--) {
             a[i] = $.parseJson(a[i]);
-            html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].fromusername != user.name ? avatar: user.avatar) + '"').replace(/\[name\]/g, a[i].fromusername).replace(/\[time\]/g, $.parseTime(a[i].postTime)).replace(/\[uid\]/g, a[i].fromuId).replace(/\[mid\]/g, a[i].mailId).replace(/\[cont\]/g, $.parseGet({
-              text: a[i].text,
+            html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].fromuser != user.name ? avatar: user.avatar) + '"').replace(/\[name\]/g, a[i].fromuser).replace(/\[time\]/g, $.parseTime(a[i].ctime)).replace(/\[uid\]/g, a[i].from).replace(/\[mid\]/g, a[i].id).replace(/\[cont\]/g, $.parseGet({
+              text: a[i].content,
               showImage: true
-            })).replace(/\[from\]/g, a[i].fromusername != user.name ? "from ": "to ")
+            })).replace(/\[from\]/g, a[i].fromuser != user.name ? "from ": "to ")
           }
           var objLeft = $("#area-contact-mail").find("div.active").eq(0);
-          block.find("div.fixed").eq(0).html('私信<span class="hint">/ 正与 <a class="name" href="/u/' + objLeft.data().uid + '.aspx" target="_blank">' + objLeft.data().name + "</a> 通信中</a>");
-          if (data.page * data.pageSize < data.totalCount) {
+          block.find("div.fixed").eq(0).html('私信<span class="hint">/ 正与 <a class="name" href="user/profile/' + objLeft.data().name + '" target="_blank">' + objLeft.data().name + "</a> 通信中</a>");
+          if (data.pageNumber * data.pageSize < data.totalRow) {
             html = '<div class="btn-more-mail">单击以显示更多内容</div>' + html
           }
           area.data({
@@ -385,6 +386,7 @@
             if (data.result > 0) {
               showRight({
                 page: 1,
+                gid: $("#area-mails-mail").data().gid,
                 p2p: $("#area-mails-mail").data().p2p
               });
               titleNotice(true);
@@ -581,6 +583,7 @@
       obj.addClass("active").removeClass("unreaded").siblings("div.active").removeClass("active");
       showRight({
         page: 1,
+        gid: obj.data().gid,
         p2p: obj.data().p2p
       })
     }).delegate("a.btn-delete-mail", "click",
@@ -620,6 +623,7 @@
       showRight({
         type: "add",
         page: 1 + parseInt(area.data().page),
+        gid: area.data().gid,
         p2p: area.data().p2p
       })
     }).delegate("a.btn-report-mail", "click",

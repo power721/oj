@@ -1107,7 +1107,7 @@ var cache = {
                 if (system.port.getUserInfo) {
                   system.port.getUserInfo.abort()
                 }
-                var url = !!uid ? 'user/info?uid=' + uid: name.length ? 'user/info?name=' + encodeURI(name) : '';
+                var url = !!uid ? 'api/user/info?uid=' + uid: name.length ? 'api/user/info?name=' + encodeURI(name) : '';
                 system.port.getUserInfo = $.get(url).done(function(data) {
                   if ( !! data.success) {
                     var a = data.userjson;
@@ -2492,7 +2492,7 @@ var cache = {
           $.save('user')
         }
       };
-      user.avatar = $.cookie('ac_userimg') || system.path + '/style/image/avatar.jpg';
+      user.avatar = $.cookie('oj_userimg') || system.path + '/images/user/default.png';
       if (system.browser.localstorage) {
         var a = $.parseJson(window.localStorage.getItem('cache'));
         if (a) {

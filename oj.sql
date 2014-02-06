@@ -305,11 +305,11 @@ AUTO_INCREMENT=1
 DROP TABLE IF EXISTS `mail`;
 CREATE TABLE `mail` (
 `id`  int(9) NOT NULL AUTO_INCREMENT ,
+`gid` int(9) NOT NULL,
 `from`  int(9) NOT NULL ,
 `to`  int(9) NOT NULL ,
 `title`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 `content`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`group_id` int(9) NOT NULL,
 `reply`  int(9) NULL DEFAULT NULL ,
 `read`  tinyint(1) NOT NULL DEFAULT 0 ,
 `atime`  int(11) NULL DEFAULT NULL ,

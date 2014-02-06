@@ -52,10 +52,18 @@ public class MailService
   
   public Page<MailModel> getUserMailGroups(int pageNumber, int pageSize, Integer uid)
   {
-    String sql = "SELECT *,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    String from = "FROM mail WHERE (`from`=? OR `to`=?) GROUP BY group_id";
+    String sql = "SELECT m.*,FROM_UNIXTIME(m.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,CONCAT(m.from, '-', m.to) AS p2p,"
+        + "u1.name AS fromuser,u2.name AS touser,u1.avatar AS avatar";
+    String from = "FROM mail m LEFT JOIN user u1 ON u1.uid=m.from LEFT JOIN user u2 ON u2.uid=m.to WHERE (`from`=? OR `to`=?) GROUP BY gid";
     
     return dao.paginate(pageNumber, pageSize, sql, from, uid, uid);
   }
   
+  public Page<MailModel> getMailByGid(int pageNumber, int pageSize, Integer gid)
+  {
+    String sql = "SELECT m.*,FROM_UNIXTIME(m.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,u1.name AS fromuser,u2.name AS touser";
+    String from = "FROM mail m LEFT JOIN user u1 ON u1.uid=m.from LEFT JOIN user u2 ON u2.uid=m.to WHERE gid=? ORDER BY id DESC";
+    
+    return dao.paginate(pageNumber, pageSize, sql, from, gid);
+  }
 }
