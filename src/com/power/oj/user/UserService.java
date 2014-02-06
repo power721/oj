@@ -82,7 +82,7 @@ public class UserService
   {
     int timestamp = Tool.getDayTimestamp();
     int checkin = userModel.getInt("checkin");
-    int checkinTimes = userModel.getInt("checkinTimes");
+    int checkinTimes = userModel.getInt("checkin_times");
     int credit = userModel.getInt("credit");
     
     log.info("timestamp: " + timestamp + " checkinTime: " + checkin + " current: " + OjConfig.timeStamp);
@@ -93,7 +93,7 @@ public class UserService
         checkinTimes = 1;
       
       credit += Math.min(checkinTimes, 5);
-      userModel.set("checkin", OjConfig.timeStamp).set("checkinTimes", checkinTimes).set("credit", credit).update();
+      userModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).set("credit", credit).update();
       return Math.min(checkinTimes, 5);
     }
     
