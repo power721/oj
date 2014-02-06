@@ -429,12 +429,12 @@
       system.path = "${baseUrl!}/assets";
       system.date = Math.round(new Date().getTime()/1000);
       system.location = 'location-member';
-      window.UEDITOR_HOME_URL = "/dotnet/date/ueditor/";
+      window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
     </script>
     <script src="assets/acfun/swfobject.js"></script>
     <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
-    <script type="text/javascript" src="assets/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" src="assets/ueditor/ueditor.all.min.js"></script>
+    <script type="text/javascript" src="assets/acfun/editor_config.js"></script>
+    <script type="text/javascript" src="assets/acfun/editor_all_min.js"></script>
     
     <link rel="stylesheet" href="assets/ueditor/themes/default/css/ueditor.css">
     <script src="assets/acfun/ubb.min.js"></script>

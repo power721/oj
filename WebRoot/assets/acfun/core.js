@@ -1090,7 +1090,7 @@ var cache = {
               if (user.online && name != user.name && uid != user.uid) {
                 var time = !system.browser.cssanimations ? 0 : 200;
                 name = name.slice(0, 1) == '@' ? name.slice(1) : name;
-                inner.html('<div class="hint-info">少女祈祷中...</div>');
+                inner.html('<div class="hint-info">与服务器通信中...</div>');
                 win.css({
                   left: left - 16,
                   top: top,
@@ -1110,21 +1110,23 @@ var cache = {
                 var url = !!uid ? 'api/user/info?uid=' + uid: name.length ? 'api/user/info?name=' + encodeURI(name) : '';
                 system.port.getUserInfo = $.get(url).done(function(data) {
                   if ( !! data.success) {
-                    var a = data.userjson;
+                    var a = data;
                     var name = a.name;
                     var uid = a.uid || 4;
                     var gender = !!a.gender ? '♀​': '♂';
-                    var avatar = a.avatar;
+                    var avatar = a.avatar || system.path + '/images/user/default.png';
                     var sign = a.sign || '这个人很懒，神马都没有写…';
                     var location = a.comeFrom ? a.comeFrom.replace(/[\s\,]/g, '') : '未知地理位置';
-                    var lld = !!a.regTime ? $.parseTime(a.regTime) : '未知时间';
+                    var lld = !!a.ctime ? $.parseTime(a.ctime*1000) : '未知时间';
                     var uclass = !!a.userClass ? '' + a.userClass: '';
                     var flws = $.parsePts(a.follows);
                     var flwed = $.parsePts(a.fans);
                     var arts = $.parsePts(a.posts);
+                    var solved = $.parsePts(a.solved);
+                    var submit = $.parsePts(a.submit);
                     var followed = a.followed;
-                    var objFollow = !followed ? '<a id="follow-user-info"><i class="icon icon-white icon-plus-sign"></i>关注</a>': '<a id="follow-user-info"><i class="icon icon-white icon-star"></i>已关注</a>';
-                    var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="user/user.aspx?uid=' + uid + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="user/user.aspx?uid=' + uid + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=post-history" target="_blank">投稿</a><span class="pts">：' + arts + '</span>' + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="user/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
+                    var objFollow = !followed ? '<a id="follow-user-info" class="r"><i class="icon icon-white icon-plus-sign"></i>关注</a>': '<a id="follow-user-info" class="r"><i class="icon icon-white icon-star"></i>已关注</a>';
+                    var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="user/profile/' + name + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="user/profile/' + name + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=solved" target="_blank">解决</a><span class="pts">：' + solved + '</span>' + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=submit" target="_blank">提交</a><span class="pts">：' + submit + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="user/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
                     inner.removeClass('card-video').css({
                       opacity: 0
                     }).stop().animate({
@@ -1189,7 +1191,7 @@ var cache = {
             } else if (obj.hasClass('unit') || obj.hasClass('title') || obj.hasClass('preview')) {
               var aid = obj.is('[data-aid]') ? obj.attr('data-aid') : obj.closest('div.unit, span.unit, a.unit, li.unit').attr('data-aid');
               var time = !system.browser.cssanimations ? 0 : 200;
-              inner.html('<div class="hint-info">少女祈祷中...</div>');
+              inner.html('<div class="hint-info">与服务器通信中...</div>');
               win.css({
                 left: left,
                 top: top,
