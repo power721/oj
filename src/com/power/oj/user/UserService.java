@@ -80,6 +80,7 @@ public class UserService
   
   public int checkin(UserModel userModel)
   {
+    // TODO store in user_ext
     int timestamp = Tool.getDayTimestamp();
     int checkin = userModel.getInt("checkin");
     int checkinTimes = userModel.getInt("checkin_times");
