@@ -1,0 +1,82 @@
+<style>
+    #win-add-following .unit .l {
+        width: 75px;
+        text-align: right;
+    }
+
+    #win-add-following .unit .r {
+        width: 355px;
+    }
+
+    #ipt-name-add {
+        width: 265px;
+    }
+
+    #win-add-following .hint {
+        color: #999;
+        font-size: 12px;
+        margin: 8px 0;
+    }
+</style>
+<div class="form">
+    <div class="unit">
+        <div class="l">
+            <p class="subtitle">分组名称</p>
+        </div>
+        <div class="r">
+            <input id="ipt-name-add" class="name" data-length="1,8" data-name="分组名称" type="text">
+
+            <p class="hint">
+                请输入分组名称。分组名称长度应在1到8个字符之间。
+            </p>
+        </div>
+        <span class="clearfix"></span>
+    </div>
+
+    <div class="unit-tool">
+        <div class="l">
+            <button class="btn success do">
+                <i class="icon white icon-ok-circle"></i>添加分组
+            </button>
+        </div>
+        <div class="r"></div>
+        <span class="clearfix"></span>
+    </div>
+</div>
+<script>
+    system.tv = function () {
+        //set handle
+        var win = $('#win-add-following');
+        var mainer = win.find('div.mainer').eq(0);
+        var form = mainer.find('div.form').eq(0);
+        //bind form
+        form.setup(function () {
+            if (system.port.addGroup) {
+                system.port.addGroup.abort();
+            }
+            ;
+            system.port.addGroup = $.post('api/friend/addGroup', {
+                groupName: form.data().name
+            })
+                    .done(function (data) {
+                        var html = '';
+                        if (data.success) {
+                            $.info('添加分组[' + form.data().name + ']成功。');
+                            //callback
+                            if ($.isFunction(win.data().callback)) {
+                                win.data().callback();
+                            }
+                            ;
+                            //close
+                            $('#curtain').click();
+                        } else {
+                            $.info('error::' + data.result);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        $.info('error::添加分组[' + form.data().name + ']失败。请于稍后重试。');
+                    });
+        });
+    }();
+</script>
