@@ -18,74 +18,31 @@ public class MailService
     return me;
   }
   
-  public boolean sendMail(Integer from, Integer to, Integer gid, String content)
+  public boolean sendMail(Integer from, Integer to, String content)
   {
-    if (gid == null)
+    MailContentModel mailContent = new MailContentModel();
+    
+    mailContent.set("from", from);
+    mailContent.set("to", to);
+    mailContent.set("content", content);
+    mailContent.set("ctime", OjConfig.timeStamp);
+    if(!mailContent.save())
     {
-      gid = dao.getMailGroup(from, to);
-      if (gid == null)
-      {
-        gid = addMailGroup(from, to);
-      }
+      return false;
     }
+    
+    Integer mid = mailContent.getInt("id");
     MailModel mail = new MailModel();
-    mail.set("from", from);
-    mail.set("to", to);
-    mail.set("gid", gid);
-    mail.set("content", content);
-    mail.set("ctime", OjConfig.timeStamp);
+    mail.set("mid", mid);
+    mail.set("user", from);
+    mail.set("peer", to);
+    mail.save();
     
+    mail = new MailModel();
+    mail.set("mid", mid);
+    mail.set("user", to);
+    mail.set("peer", from);
     return mail.save();
-  }
-
-  public Integer addMailGroup(Integer from, Integer to)
-  {
-    Integer id = Db.queryInt("SELECT max(id) FROM mail_group");
-    if (id == null)
-    {
-      id = 0;
-    }
-    
-    Record mailGroup = new Record();
-    mailGroup.set("id", id + 1);
-    mailGroup.set("from", from);
-    mailGroup.set("to", to);
-    mailGroup.set("ctime", OjConfig.timeStamp);
-    Db.save("mail_group", mailGroup);
-    
-    mailGroup = new Record();
-    mailGroup.set("id", id + 1);
-    mailGroup.set("from", to);
-    mailGroup.set("to", from);
-    mailGroup.set("ctime", OjConfig.timeStamp);
-    Db.save("mail_group", mailGroup);
-    
-    return id + 1;
-  }
-  
-  public MailModel findMail(Integer id)
-  {
-    return dao.findById(id);
-  }
-
-  public MailModel findMail(Integer id, Integer uid)
-  {
-    return dao.findMail(id, uid);
-  }
-  
-  public List<MailModel> findUserMails(Integer uid)
-  {
-    return dao.findUserMails(uid);
-  }
-
-  public List<MailModel> findUserReceivedMails(Integer uid)
-  {
-    return dao.findUserReceivedMails(uid);
-  }
-  
-  public List<MailModel> findUserSentMails(Integer uid)
-  {
-    return dao.findUserSentMails(uid);
   }
   
   public List<MailModel> findUserNewMails(Integer uid)
@@ -97,22 +54,43 @@ public class MailService
   {
     return dao.countUserNewMails(uid);
   }
+
+  public Long countUserNewMails(Integer user, Integer peer)
+  {
+    return dao.countUserNewMails(user, peer);
+  }
+  
+  public boolean hasNewMails(Integer user, Integer peer)
+  {
+    return dao.hasNewMails(user, peer);
+  }
+
+  public void resetUserNewMails(Integer user, Integer peer)
+  {
+    dao.resetUserNewMails(user, peer);
+  }
   
   public Page<MailModel> getUserMailGroups(int pageNumber, int pageSize, Integer uid)
   {
-    String sql = "SELECT m.*,FROM_UNIXTIME(m.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,CONCAT(m.from, '-', m.to) AS p2p,"
-        + "u.name AS fromuser,u.avatar AS avatar";
-    String from = "FROM mail_group m LEFT JOIN user u ON u.uid=m.from WHERE `to`=? ORDER BY id DESC";
+    String sql = "SELECT m.*,FROM_UNIXTIME(max(mc.ctime), '%Y-%m-%d %H:%i:%s') AS ctime,CONCAT(m.user, '-', m.peer) AS p2p,u.name AS fromuser,u.avatar AS avatar";
+    String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u ON u.uid=m.peer WHERE user=? AND m.status!=2 GROUP BY peer ORDER BY max(mc.ctime) DESC";
     
     return dao.paginate(pageNumber, pageSize, sql, from, uid);
   }
-  
-  public Page<MailModel> getMailByGid(int pageNumber, int pageSize, Integer gid)
+
+  public Page<MailModel> getMails(int pageNumber, int pageSize, Integer user, Integer peer)
   {
-    String sql = "SELECT m.*,FROM_UNIXTIME(m.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,u1.name AS fromuser,u2.name AS touser";
-    String from = "FROM mail m LEFT JOIN user u1 ON u1.uid=m.from LEFT JOIN user u2 ON u2.uid=m.to WHERE gid=? ORDER BY id DESC";
+    resetUserNewMails(user, peer);
     
-    return dao.paginate(pageNumber, pageSize, sql, from, gid);
+    String sql = "SELECT m.id,mc.from,mc.to,mc.content,FROM_UNIXTIME(mc.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,u1.name AS fromuser,u2.name AS touser";
+    String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u1 ON u1.uid=mc.from LEFT JOIN user u2 ON u2.uid=mc.to WHERE user=? AND peer=? AND m.status!=2 ORDER BY id DESC";
+    
+    return dao.paginate(pageNumber, pageSize, sql, from, user, peer);
+  }
+  
+  public int deleteMail(Integer uid, Integer id)
+  {
+    return dao.deleteMail(uid, id);
   }
   
   public boolean addMailBanlistItem(Integer uid, Integer banUid)

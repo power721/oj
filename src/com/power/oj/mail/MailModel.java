@@ -15,54 +15,39 @@ public class MailModel extends Model<MailModel>
   
   public static final MailModel dao = new MailModel();
   public static final String ID = "id";
-  public static final String GID = "gid";
-  public static final String FROM = "from";
-  public static final String TO = "to";
-  public static final String TITLE = "title";
-  public static final String CONTENT = "content";
-  public static final String REPLY = "reply";
-  public static final String READ = "read";
-  public static final String ATIME = "atime";
-  public static final String CTIME = "ctime";
-
-  public MailModel findMail(Integer id, Integer uid)
-  {
-    return findFirst("SELECT * FROM mail WHERE id=? AND (`from`=? OR `to`=?) LIMIT 1", id, uid, uid);
-  }
-  
-  public List<MailModel> findUserMails(Integer uid)
-  {
-    return find("SELECT * FROM mail WHERE `from`=? OR `to`=?", uid, uid);
-  }
-
-  public List<MailModel> findUserReceivedMails(Integer uid)
-  {
-    return find("SELECT * FROM mail WHERE `to`=?", uid);
-  }
-  
-  public List<MailModel> findUserSentMails(Integer uid)
-  {
-    return find("SELECT * FROM mail WHERE `from`=?", uid);
-  }
+  public static final String MID = "mid";
+  public static final String USER = "user";
+  public static final String PEER = "peer";
+  public static final String STATUS = "status";
 
   public List<MailModel> findUserNewMails(Integer uid)
   {
-    return find("SELECT * FROM mail WHERE `to`=? AND `read`=0", uid);
+    return find("SELECT * FROM mail WHERE user=? AND status=0", uid);
   }
 
   public Long countUserNewMails(Integer uid)
   {
-    return findFirst("SELECT COUNT(*) AS count FROM mail WHERE `to`=? AND `read`=0", uid).getLong("count");
+    return findFirst("SELECT COUNT(*) AS count FROM mail WHERE user=? AND status=0", uid).getLong("count");
+  }
+
+  public Long countUserNewMails(Integer user, Integer peer)
+  {
+    return findFirst("SELECT COUNT(*) AS count FROM mail WHERE user=? AND peer=? AND status=0", user, peer).getLong("count");
   }
   
-  public Integer getMaxId()
+  public boolean hasNewMails(Integer user, Integer peer)
   {
-    return Db.queryInt("SELECT max(id) FROM mail");
+    return findFirst("SELECT 1 FROM mail WHERE user=? AND peer=? AND status=0 LIMIT 1", user, peer) != null;
+  }
+
+  public int resetUserNewMails(Integer user, Integer peer)
+  {
+    return Db.update("UPDATE mail SET status=1 WHERE user=? AND peer=? AND status=0", user, peer);
   }
   
-  public Integer getMailGroup(Integer from, Integer to)
+  public int deleteMail(Integer uid, Integer id)
   {
-    return Db.queryInt("SELECT id FROM mail_group WHERE `from`=? AND `to`=?", from, to);
+    return Db.update("UPDATE mail SET status=2 WHERE user=? AND id=?", uid, id);
   }
   
 }

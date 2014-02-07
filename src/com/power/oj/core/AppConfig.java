@@ -39,6 +39,7 @@ import com.power.oj.core.interceptor.DebugInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
+import com.power.oj.mail.MailContentModel;
 import com.power.oj.mail.MailController;
 import com.power.oj.mail.MailModel;
 import com.power.oj.problem.ProblemController;
@@ -118,6 +119,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("contest", "cid", ContestModel.class);
     arp.addMapping("session", "session_id", SessionModel.class);
     arp.addMapping("mail", MailModel.class);
+    arp.addMapping("mail_content", MailContentModel.class);
     arp.addMapping("program_language", LanguageModel.class);
     arp.addMapping("variable", VariableModel.class);
     me.add(arp);

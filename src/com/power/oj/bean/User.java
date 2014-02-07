@@ -33,7 +33,7 @@ public class User extends Model<User>{
 	public static final String AVATAR = "avatar";
 	public static final String SIGN = "sign";
 	public static final String CHECKIN = "checkin";
-	public static final String CHECKINTIMES = "checkinTimes";
+	public static final String CHECKIN_TIMES = "checkin_times";
 	public static final String STATUS = "status";
 	public static final String DATA = "data";
 	public static final String TOKEN = "token";

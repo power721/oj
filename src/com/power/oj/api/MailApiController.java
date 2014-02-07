@@ -1,6 +1,8 @@
 package com.power.oj.api;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
@@ -25,7 +27,7 @@ public class MailApiController extends OjController
   public void getGroups()
   {
     int pageNumber = getParaToInt("page", 1);
-    int pageSize = getParaToInt("size", OjConfig.mailPageSize);
+    int pageSize = getParaToInt("size", OjConfig.mailGroupPageSize);
     Integer uid = userService.getCurrentUid();
     
     Page<MailModel> mailList = mailService.getUserMailGroups(pageNumber, pageSize, uid);
@@ -37,26 +39,33 @@ public class MailApiController extends OjController
   {
     int pageNumber = getParaToInt("page", 1);
     int pageSize = getParaToInt("size", OjConfig.mailPageSize);
-    Integer gid = getParaToInt("gid");
+    String p2p = getPara("p2p");
+    Integer uid = userService.getCurrentUid();
+    Integer peer = Integer.parseInt(p2p.split("-")[1]);
+    
 
-    Page<MailModel> mailList = mailService.getMailByGid(pageNumber, pageSize, gid);
+    Page<MailModel> mailList = mailService.getMails(pageNumber, pageSize, uid, peer);
     
     renderJson(mailList);
   }
   
+  @ClearInterceptor(ClearLayer.ALL)
   public void isHaveUnreaded()
   {
-    Integer gid = getParaToInt("gid");
+    String p2p = getPara("p2p");
+    Integer uid = userService.getCurrentUid();
+    Integer peer = Integer.parseInt(p2p.split("-")[1]);
+    boolean result = mailService.hasNewMails(uid, peer);
     
+    renderJson("{\"success\":true, \"status\":200,\"result\":" + result + "}");
   }
   
   public void newMail()
   {
     String username = getPara("username");
+    String content = getPara("content");
     Integer from = userService.getCurrentUid();
     Integer to = getParaToInt("userId");
-    Integer gid = getParaToInt("gid");
-    String content = getPara("content");
     
     if (to == null && username != null)
     {
@@ -71,13 +80,28 @@ public class MailApiController extends OjController
     {
       renderJson("{\"success\":false, \"status\":-200,\"result\":\"Cannot send mail to user self.\"}");
     }
-    else if (mailService.sendMail(from, to, gid, content))
+    else if (mailService.sendMail(from, to, content))
     {
       renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
     }
     else
     {
       renderJson("{\"success\":false, \"status\":500,\"result\":\"Save new mail failed.\"}");
+    }
+  }
+  
+  public void deleteMail()
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer mailId = getParaToInt("mailId");
+    
+    if (mailService.deleteMail(uid, mailId) > 0)
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":500,\"result\":\"Delete mail failed.\"}");
     }
   }
   

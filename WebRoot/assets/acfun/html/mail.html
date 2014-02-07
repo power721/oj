@@ -262,7 +262,7 @@
           l = a.length; i < l; i++) {
             if (a[i]) {
               a[i] = $.parseJson(a[i]);
-              html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].avatar || "assets/images/user/default.png") + '"').replace(/\[name\]/g, $.parseSafe(a[i].fromuser)).replace(/\[time\]/g, $.parseTime(a[i].ctime).replace(/[\s\(].*/g, "")).replace(/\[uid\]/g, a[i].from).replace(/\[gid\]/g, a[i].id).replace(/\[cont\]/g, $.trim(a[i].content).length > 6 ? $.trim(a[i].content).substr(0, 5) + "...": $.trim(a[i].content)).replace(/\[p2p\]/g, a[i].p2p).replace(/\[from\]/g, a[i].p2p.split("-")[0] != user.uid ? "from ": "to ").replace(/\[read\]/g, /*$.inArray(a[i].p2p, data.unReadList) == -1*/a[i].read ? "readed": "unreaded").replace(/\[star\]/g, /*parseInt(data.isFriendList[i])*/0 !== 0 ? '<i class="icon grey icon-heart"></i>': "")
+              html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].avatar || "assets/images/user/default.png") + '"').replace(/\[name\]/g, $.parseSafe(a[i].fromuser)).replace(/\[time\]/g, $.parseTime(a[i].ctime).replace(/[\s\(].*/g, "")).replace(/\[uid\]/g, a[i].peer).replace(/\[gid\]/g, a[i].id).replace(/\[cont\]/g, $.trim(a[i].content).length > 6 ? $.trim(a[i].content).substr(0, 5) + "...": $.trim(a[i].content)).replace(/\[p2p\]/g, a[i].p2p).replace(/\[from\]/g, a[i].p2p.split("-")[0] != user.uid ? "from ": "to ").replace(/\[read\]/g, /*$.inArray(a[i].p2p, data.unReadList) == -1*/a[i].status ? "readed": "unreaded").replace(/\[star\]/g, /*parseInt(data.isFriendList[i])*/0 !== 0 ? '<i class="icon grey icon-heart"></i>': "")
             }
           }
           area.data({
@@ -545,6 +545,7 @@
           }
           system.port.newMail = $.post("api/mail/newMail", {
             userId: area.data().uid,
+            p2p: area.data().p2p,
             gid: area.data().gid,
             content: $.parsePost(editor.getContent())
           }).done(function(data) {
