@@ -31,7 +31,7 @@ CREATE TABLE `announce` (
 `status`  tinyint(1) NOT NULL DEFAULT 1 ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1000
 
@@ -105,7 +105,7 @@ CREATE TABLE `board` (
 `Z_WrongSubmits`  int(11) NULL DEFAULT 0 ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1
 
@@ -135,7 +135,7 @@ CREATE TABLE `contest` (
 `status`  tinyint(1) NOT NULL DEFAULT 1 ,
 PRIMARY KEY (`cid`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1000
 
@@ -161,7 +161,7 @@ CREATE TABLE `contest_problem` (
 `first_blood_time` int(9) NOT NULL DEFAULT '-1' COMMENT 'first time(minutes) solved this problem',
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1
 
@@ -235,7 +235,7 @@ CREATE TABLE `freeze_board` (
 `Z_WrongSubmits`  int(11) NULL DEFAULT 0 ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1
 
@@ -289,7 +289,7 @@ CREATE TABLE `loginlog` (
 `info`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1
 
@@ -304,23 +304,13 @@ AUTO_INCREMENT=1
 -- ----------------------------
 DROP TABLE IF EXISTS `mail`;
 CREATE TABLE `mail` (
-`id`  int(9) NOT NULL AUTO_INCREMENT ,
-`gid` int(9) NOT NULL,
-`from`  int(9) NOT NULL ,
-`to`  int(9) NOT NULL ,
-`title`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`content`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`reply`  int(9) NULL DEFAULT NULL ,
-`read`  tinyint(1) NOT NULL DEFAULT 0 ,
-`atime`  int(11) NULL DEFAULT NULL ,
-`ctime`  int(11) NOT NULL ,
-PRIMARY KEY (`id`)
-)
-ENGINE=MyISAM
-DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=1
-
-;
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `mid` int(9) NOT NULL COMMENT 'mail id',
+  `user` int(9) NOT NULL COMMENT 'user id',
+  `peer` int(9) NOT NULL COMMENT 'peer uid',
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=new, 1=read, 2=deleted',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mail
@@ -343,19 +333,20 @@ CREATE TABLE `mail_banlist` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `mail_group`
+-- Table structure for `mail_content`
 -- ----------------------------
-DROP TABLE IF EXISTS `mail_group`;
-CREATE TABLE `mail_group` (
-  `id` int(9) NOT NULL,
+DROP TABLE IF EXISTS `mail_content`;
+CREATE TABLE `mail_content` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
   `from` int(9) NOT NULL,
   `to` int(9) NOT NULL,
+  `content` text,
   `ctime` int(11) NOT NULL,
-  PRIMARY KEY (`id`,`from`,`to`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of mail_group
+-- Records of mail_content
 -- ----------------------------
 
 -- ----------------------------
@@ -377,7 +368,7 @@ CREATE TABLE `message` (
 `status`  tinyint(1) NOT NULL DEFAULT 1 ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1
 
@@ -422,7 +413,7 @@ CREATE TABLE `problem` (
 `status`  tinyint(1) NOT NULL DEFAULT 1 ,
 PRIMARY KEY (`pid`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1000
 
@@ -453,7 +444,7 @@ CREATE TABLE `program_language` (
 `status`  tinyint(1) NOT NULL DEFAULT 1 ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 
 ;
@@ -486,7 +477,7 @@ CREATE TABLE `session` (
 `uri`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,
 PRIMARY KEY (`session_id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 
 ;
@@ -516,7 +507,7 @@ CREATE TABLE `solution` (
 `system_error`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`sid`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1000
 
@@ -540,7 +531,7 @@ CREATE TABLE `tag` (
 `status`  tinyint(1) NOT NULL DEFAULT 1 ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1
 
@@ -587,7 +578,7 @@ CREATE TABLE `team` (
 `sp_team`  tinyint(1) NOT NULL DEFAULT 0 ,
 PRIMARY KEY (`tid`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1
 
@@ -834,7 +825,7 @@ CREATE TABLE `user_role` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `rid` (`rid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_role
@@ -881,7 +872,7 @@ CREATE TABLE `user` (
 `token`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`uid`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=1001
 
@@ -908,7 +899,7 @@ CREATE TABLE `variable` (
 `description`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`id`)
 )
-ENGINE=MyISAM
+ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
 AUTO_INCREMENT=15
 

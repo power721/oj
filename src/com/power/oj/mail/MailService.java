@@ -72,8 +72,8 @@ public class MailService
   
   public Page<MailModel> getUserMailGroups(int pageNumber, int pageSize, Integer uid)
   {
-    String sql = "SELECT m.*,FROM_UNIXTIME(max(mc.ctime), '%Y-%m-%d %H:%i:%s') AS ctime,CONCAT(m.user, '-', m.peer) AS p2p,u.name AS fromuser,u.avatar AS avatar";
-    String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u ON u.uid=m.peer WHERE user=? AND m.status!=2 GROUP BY peer ORDER BY max(mc.ctime) DESC";
+    String sql = "SELECT m.*,MAX(mc.ctime) AS ctime,CONCAT(m.user, '-', m.peer) AS p2p,u.name AS fromuser,u.avatar AS avatar";
+    String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u ON u.uid=m.peer WHERE user=? AND m.status!=2 GROUP BY peer ORDER BY MAX(mc.ctime) DESC";
     
     return dao.paginate(pageNumber, pageSize, sql, from, uid);
   }
@@ -82,7 +82,7 @@ public class MailService
   {
     resetUserNewMails(user, peer);
     
-    String sql = "SELECT m.id,mc.from,mc.to,mc.content,FROM_UNIXTIME(mc.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,u1.name AS fromuser,u2.name AS touser";
+    String sql = "SELECT m.id,mc.from,mc.to,mc.content,mc.ctime,u1.name AS fromuser,u2.name AS touser";
     String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u1 ON u1.uid=mc.from LEFT JOIN user u2 ON u2.uid=mc.to WHERE user=? AND peer=? AND m.status!=2 ORDER BY id DESC";
     
     return dao.paginate(pageNumber, pageSize, sql, from, user, peer);
