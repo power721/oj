@@ -180,7 +180,7 @@ public class UserController extends OjController
     if (isParaExists("t"))
       lastAccessURL = getPara("t");
     
-    userService.logout();
+    userService.logout(this);
 
     redirect(lastAccessURL);
   }

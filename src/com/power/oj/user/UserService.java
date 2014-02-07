@@ -120,7 +120,7 @@ public class UserService
   /**
    * User logout in Shiro session.
    */
-  public void logout()
+  public void logout(OjController controller)
   {
     UserModel userModel = getCurrentUser();
     int online = userModel.getInt("online");
@@ -128,6 +128,9 @@ public class UserService
     
     online += (OjConfig.timeStamp - login) / 60;
     userModel.set("online", online).update();
+    
+    controller.removeCookie("auth_key");
+    controller.removeCookie("oj_time");
 
     ShiroKit.getSubject().logout();
   }
