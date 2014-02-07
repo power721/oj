@@ -136,7 +136,7 @@ public class UserApiController extends OjController
     userModel.set("blog", getPara("blog"));
     userModel.set("phone", getPara("phone"));
     userModel.set("realname", getPara("realname"));
-    userModel.set("gender", getPara("gender"));
+    userModel.set("gender", getPara("gender")); // TODO check gender value
     userModel.set("school", getPara("school"));
     
     if (userModel.update())

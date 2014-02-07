@@ -487,11 +487,12 @@ system.tv = function () {
                             .done(function (data) {
                                 if (!!data.success) {
                                     //input data
+                                    var avatar = data.avatar || system.path + '/images/user/default.png';
                                     var ub = $('#unit-basic');
                                     var html = ub.html()
                                             .replace(/\[name\]/g, data.name)
                                             .replace(/\[uid\]/g, data.uid)
-                                            .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + data.avatar + '"')
+                                            .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + avatar + '"')
                                             .replace(/\[sign\]/g, data.sign || '这个人很懒，什么都没有写...')
                                             .replace(/\[email\]/g, data.email)
                                             .replace(/\[regTime\]/g, $.parseTime(data.ctime*1000));
