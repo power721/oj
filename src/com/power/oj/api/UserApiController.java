@@ -159,6 +159,7 @@ public class UserApiController extends OjController
     try
     {
       fileName = userService.saveAvatar(file);
+      setCookie("oj_userimg", fileName, OjConstants.COOKIE_AGE);
     } catch (Exception e)
     {
       if (OjConfig.getDevMode())
