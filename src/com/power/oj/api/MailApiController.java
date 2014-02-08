@@ -69,7 +69,7 @@ public class MailApiController extends OjController
     
     if (to == null && username != null)
     {
-      to = userService.getUserByName(username).getUid();
+      to = userService.getUidByName(username);
     }
     
     if (to == null)

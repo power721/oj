@@ -152,9 +152,13 @@ public class UserController extends OjController
     if (userService.login(name, password, rememberMe))
     {
       UserModel userModel = userService.getCurrentUser();
+      String avatar = userModel.getStr("avatar");
       setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
       setCookie("oj_username", name, OjConstants.COOKIE_AGE);
-      setCookie("oj_userimg", userModel.getStr("avatar"), OjConstants.COOKIE_AGE);
+      if (StringUtil.isNotBlank(avatar))
+      {
+        setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
       if (userService.isAdmin())
       {
         setCookie("oj_time", name, OjConstants.COOKIE_AGE);
@@ -340,7 +344,7 @@ public class UserController extends OjController
 
     userService.signup(userModel);
 
-    redirect("/user/edit", new FlashMessage(getText("user.save.success")));
+    redirect("/login", new FlashMessage(getText("user.save.success")));
   }
 
   @RequiresAuthentication

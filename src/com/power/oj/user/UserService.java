@@ -157,12 +157,12 @@ public class UserService
     
     if (newUser.save())
     {
-      //int uid = userModel.getUid();
-     
-      //Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM roles WHERE name='user'", uid);
+      int uid = userModel.getUid();
+      Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM roles WHERE name='user'", uid);
       
       password = userModel.getStr("pass");
-      return login(name, password, false);
+      //return login(name, password, false);
+      return true;
     }
     
     return false;
@@ -554,6 +554,17 @@ public class UserService
   public UserModel getUserByName(String name)
   {
     return dao.getUserByName(name);
+  }
+
+  public Integer getUidByName(String name)
+  {
+    UserModel userModel = getUserByName(name);
+    
+    if (userModel != null)
+    {
+      return userModel.getUid();
+    }
+    return null;
   }
 
   public UserModel getUserByNameAndEmail(String name, String email)
