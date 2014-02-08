@@ -157,7 +157,7 @@ public class UserService
     
     if (newUser.save())
     {
-      int uid = userModel.getUid();
+      int uid = newUser.getUid();
       Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM roles WHERE name='user'", uid);
       
       password = userModel.getStr("pass");

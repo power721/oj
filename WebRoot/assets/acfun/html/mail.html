@@ -249,7 +249,7 @@
       system.port.getGroups = $.get("api/mail/getGroups", {
         page: page
       }).done(function(data) {
-        if ( !! data.totalRow) {
+        if ( !! data.pageNumber) {
           var area = $("#area-contact-mail");
           var temp = $("#temp-left-mail").html();
           var a = data.list;

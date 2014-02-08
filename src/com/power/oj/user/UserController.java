@@ -161,7 +161,7 @@ public class UserController extends OjController
       }
       if (userService.isAdmin())
       {
-        setCookie("oj_time", name, OjConstants.COOKIE_AGE);
+        setCookie("oj_time", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
       }
       redirect(sessionService.getLastAccessURL());
       return;
@@ -342,9 +342,17 @@ public class UserController extends OjController
   {
     UserModel userModel = getModel(UserModel.class, "user");
 
-    userService.signup(userModel);
+    if (userService.signup(userModel))
+    {
+      setCookie("oj_username", userModel.getStr("name"), OjConstants.COOKIE_AGE);
+      setFlashMessage(new FlashMessage(getText("user.save.success")));
+    }
+    else
+    {
+      // TODO
+    }
 
-    redirect("/login", new FlashMessage(getText("user.save.success")));
+    redirect("/login");
   }
 
   @RequiresAuthentication
