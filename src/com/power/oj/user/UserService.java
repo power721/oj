@@ -529,7 +529,11 @@ public class UserService
     {
       lastExp = OjConfig.level.get(level-2);
     }
-    int nextExp = OjConfig.level.get(level-1);
+    int nextExp = (1<<31) - 1;
+    if (level - 1 < OjConfig.level.size())
+    {
+      nextExp = OjConfig.level.get(level-1);
+    }
     
     userModel.put("nextExp", nextExp);
     userModel.put("percent", (int)((credit-lastExp)/(double)(nextExp-lastExp) * 100));

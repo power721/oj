@@ -253,7 +253,7 @@ CREATE TABLE `level` (
   `level` int(5) NOT NULL AUTO_INCREMENT,
   `credit` int(5) NOT NULL,
   PRIMARY KEY (`level`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Records of level
@@ -273,6 +273,11 @@ INSERT INTO `level` VALUES ('12', '20480');
 INSERT INTO `level` VALUES ('13', '40960');
 INSERT INTO `level` VALUES ('14', '81920');
 INSERT INTO `level` VALUES ('15', '163840');
+INSERT INTO `level` VALUES ('16', '327680');
+INSERT INTO `level` VALUES ('17', '655360');
+INSERT INTO `level` VALUES ('18', '1310720');
+INSERT INTO `level` VALUES ('19', '2621440');
+INSERT INTO `level` VALUES ('20', '5242880');
 
 -- ----------------------------
 -- Table structure for `loginlog`
