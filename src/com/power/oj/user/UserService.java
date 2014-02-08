@@ -337,7 +337,8 @@ public class UserService
 
     imageScale.resizeFix(srcFile, destFile, OjConstants.AVATAR_WIDTH, OjConstants.AVATAR_HEIGHT, x1, y1, cutWidth, catHeight);
     FileUtil.delete(srcFile);
-    userModel.set("avatar", destFileName.replace(rootPath, "")).update();
+    destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
+    userModel.set("avatar", destFileName).update();
   }
   
   public String saveAvatar(File srcFile) throws Exception
@@ -352,7 +353,7 @@ public class UserService
     
     FileUtil.moveFile(srcFile, destFile);
     
-    destFileName = destFileName.replace(rootPath, "");
+    destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
     userModel.set("avatar", destFileName).update();
     
     return destFileName;
