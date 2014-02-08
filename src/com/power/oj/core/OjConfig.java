@@ -66,8 +66,8 @@ public class OjConfig
 
     uploadPath = FileKit.parsePath(get("uploadPath", "upload/"));
     downloadPath = FileKit.parsePath(get("downloadPath", "download/"));
-    userAvatarPath = FileKit.parsePath(get("userAvatarPath", "assets/images/user/"));
-    problemImagePath = FileKit.parsePath(get("problemImagePath", "assets/images/problem/"));
+    userAvatarPath = FileKit.parsePath(get("userAvatarPath", "upload/image/user/"));
+    problemImagePath = FileKit.parsePath(get("problemImagePath", "upload/image/problem/"));
     
     contestPageSize = getInt("contestPageSize", 20);
     contestRankPageSize = getInt("contestRankPageSize", 50);

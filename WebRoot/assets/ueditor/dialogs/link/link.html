@@ -73,7 +73,7 @@
         var href =$G('href').value.replace(/^\s+|\s+$/g, '');
         if(href){
             //if(!hrefStartWith(href,["http","/","ftp://"])) {
-            if(!hrefStartWith(href,["http","/","../","ftp://"])) { // power721
+            if(!hrefStartWith(href,["http","/","./","../","ftp://"])) { // power721
                 href  = "http://" + href;
             }
             var obj = {
