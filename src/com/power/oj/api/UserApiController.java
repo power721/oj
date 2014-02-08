@@ -14,6 +14,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.mail.MailService;
+import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
@@ -25,9 +26,8 @@ public class UserApiController extends OjController
 
   public void splash()
   {
-    UserModel userModel = getAttr(OjConstants.USER);
+    UserModel userModel = userService.getCurrentUserExt();
     
-    userService.getLevel(userModel);
     userModel.put("unReadMail", mailService.countUserNewMails(userModel.getUid()));
     
     setAttr(OjConstants.USER, userModel);
@@ -75,7 +75,8 @@ public class UserApiController extends OjController
   public void checkin()
   {
     int incExp = 0;
-    UserModel userModel = getAttr(OjConstants.USER);
+    Integer uid = userService.getCurrentUid();
+    UserExtModel userModel = UserExtModel.dao.findById(uid);
     if ((incExp = userService.checkin(userModel)) > 0)
     {
       renderJson("{\"success\":true, \"incexp\":" + incExp +"}");

@@ -30,6 +30,11 @@ public class UserModel extends Model<UserModel>
     return uid;
   }
 
+  public UserModel getUserExt(Integer uid)
+  {
+    return findFirst("SELECT * FROM user u LEFT JOIN user_ext ue ON u.uid=ue.uid WHERE u.uid=? LIMIT 1", uid);
+  }
+  
   public UserModel getUserByName(String name)
   {
     return findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);

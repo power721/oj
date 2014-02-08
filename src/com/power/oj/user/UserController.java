@@ -49,9 +49,8 @@ public class UserController extends OjController
   @RequiresUser
   public void index()
   {
-    UserModel userModel = getAttr(OjConstants.USER);
+    UserModel userModel = userService.getCurrentUserExt();
     userService.isCheckin(userModel);
-    userService.getLevel(userModel);
     
     setAttr(OjConstants.USER, userModel);
     

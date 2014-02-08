@@ -78,15 +78,13 @@ public class UserService
     return true;
   }
   
-  public int checkin(UserModel userModel)
+  public int checkin(UserExtModel userExtModel)
   {
-    // TODO store in user_ext
     int timestamp = Tool.getDayTimestamp();
-    int checkin = userModel.getInt("checkin");
-    int checkinTimes = userModel.getInt("checkin_times");
-    int credit = userModel.getInt("credit");
+    int checkin = userExtModel.getInt("checkin");
+    int checkinTimes = userExtModel.getInt("checkin_times");
+    int credit = userExtModel.getInt("credit");
     
-    //log.info("timestamp: " + timestamp + " checkinTime: " + checkin + " current: " + OjConfig.timeStamp);
     if (checkin < timestamp)
     {
       checkinTimes += 1;
@@ -94,7 +92,7 @@ public class UserService
         checkinTimes = 1;
       
       credit += Math.min(checkinTimes, 5);
-      userModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).set("credit", credit).update();
+      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).set("credit", credit).update();
       return Math.min(checkinTimes, 5);
     }
     
@@ -161,7 +159,9 @@ public class UserService
       int uid = newUser.getUid();
       Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
       
-      password = userModel.getStr("pass");
+      UserExtModel userExt = new UserExtModel();
+      userExt.set("uid", uid).save();
+      //password = userModel.getStr("pass");
       //return login(name, password, false);
       return true;
     }
@@ -450,39 +450,6 @@ public class UserService
     return logs;
   }
   
-  public UserModel getLevel(UserModel userModel)
-  {
-    int credit = userModel.getInt("credit");
-    int lastLevel = userModel.getInt("level");
-    int level = 0;
-    int lastExp = 0;
-    int nextExp = OjConfig.level.get(0);
-    
-    for (level = 0; level < OjConfig.level.size(); level++)
-    {
-      int tmp = OjConfig.level.get(level);
-      if (tmp > credit)
-      {
-        if (level > 0)
-        {
-          lastExp = OjConfig.level.get(level - 1);
-        }
-        nextExp = tmp;
-        break;
-      }
-    }
-    
-    userModel.set("level", level+1);
-    if (level > lastLevel)
-    {
-      userModel.update();
-    }
-    userModel.put("nextExp", nextExp);
-    userModel.put("percent", (int)((credit-lastExp)/(double)(nextExp-lastExp) * 100));
-    
-    return userModel;
-  }
-  
   /**
    * archive user source code.
    * @return zip file.
@@ -546,7 +513,12 @@ public class UserService
   {
     return getUserByUid(getCurrentUid());
   }
-
+  
+  public UserModel getCurrentUserExt()
+  {
+    return dao.getUserExt(getCurrentUid());
+  }
+  
   public UserModel getUserByUid(Integer uid)
   {
     return dao.findById(uid);
