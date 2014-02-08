@@ -6,6 +6,9 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
+import com.power.oj.user.UserExtModel;
+import com.power.oj.util.Tool;
 
 public class MailService
 {
@@ -46,17 +49,31 @@ public class MailService
     return true;
   }
 
-  public Integer sendDrift(Integer from, String content)
+  public int sendDrift(Integer from, String content)
   {
-    MailContentModel mailContent = new MailContentModel();
+    UserExtModel userExtModel = UserExtModel.dao.findById(from);
+    int timestamp = Tool.getDayTimestamp();
+    int drift = userExtModel.getInt("drift");
+    int last_drift = userExtModel.getInt("last_drift");
     
-    mailContent.set("from", from);
-    mailContent.set("to", 0);
-    mailContent.set("content", content);
-    mailContent.set("ctime", OjConfig.timeStamp);
-    mailContent.save();
+    if (last_drift + OjConstants.DAY_TIMESTAMP < timestamp)
+      drift = 0;
     
-    return 1;
+    if (drift < 10)
+    {
+      MailContentModel mailContent = new MailContentModel();
+    
+      mailContent.set("from", from);
+      mailContent.set("to", 0);
+      mailContent.set("content", content);
+      mailContent.set("ctime", OjConfig.timeStamp);
+      mailContent.save();
+      
+      drift += 1;
+      userExtModel.set("drift", drift).set("last_drift", OjConfig.timeStamp).update();
+    }
+    
+    return drift;
   }
   
   public List<MailModel> findUserNewMails(Integer uid)

@@ -139,11 +139,11 @@ public class MailApiController extends OjController
   {
     String content = getPara("content");
     Integer from = userService.getCurrentUid();
-    Integer result = mailService.sendDrift(from, content);
+    int result = mailService.sendDrift(from, content);
     
     if (result > 0)
     {
-      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+      renderJson("{\"success\":true, \"status\":200,\"result\":" + result + "}");
     }
     else
     {
