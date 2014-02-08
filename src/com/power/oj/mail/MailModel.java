@@ -47,7 +47,12 @@ public class MailModel extends Model<MailModel>
   
   public int deleteMail(Integer uid, Integer id)
   {
-    return Db.update("UPDATE mail SET status=2 WHERE user=? AND id=?", uid, id);
+    return Db.update("DELETE FROM mail WHERE user=? AND id=?", uid, id);
+  }
+  
+  public int deleteMailGroup(Integer user, Integer peer)
+  {
+    return Db.update("DELETE FROM mail WHERE user=? AND peer=?", user, peer);
   }
   
 }

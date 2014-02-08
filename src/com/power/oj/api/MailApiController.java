@@ -105,11 +105,26 @@ public class MailApiController extends OjController
     }
   }
   
+  public void deleteGroup()
+  {
+    String p2p = getPara("p2p");
+    Integer uid = userService.getCurrentUid();
+    Integer peer = Integer.parseInt(p2p.split("-")[1]);
+    
+    if (mailService.deleteMailGroup(uid, peer) > 0)
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":500,\"result\":\"Delete mail group failed.\"}");
+    }
+  }
+  
   public void newBanlistItem()
   {
     Integer uid = userService.getCurrentUid();
     Integer userId = getParaToInt("userId");
-    //String username = getPara("username");
     
     if (mailService.addMailBanlistItem(uid, userId))
     {

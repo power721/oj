@@ -94,6 +94,11 @@ public class MailService
     return dao.deleteMail(uid, id);
   }
   
+  public int deleteMailGroup(Integer user, Integer peer)
+  {
+    return dao.deleteMailGroup(user, peer);
+  }
+  
   public boolean addMailBanlistItem(Integer user, Integer banUser)
   {
     if (isUserInMailBanlist(banUser, user))
