@@ -20,7 +20,7 @@
      * window.UEDITOR_HOME_URL = "/xxxx/xxxx/";
      */
     window.UEDITOR_HOME_URL = BaseURL + "assets/ueditor/";
-    var problemImagesDir = BaseURL + "assets/images/problem/";
+    var problemImagesDir = BaseURL + "assets/image/problem/";
     var URL = window.UEDITOR_HOME_URL || getUEBasePath();
 
     /**
