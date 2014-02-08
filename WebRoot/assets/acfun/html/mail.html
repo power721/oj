@@ -82,7 +82,7 @@
   class="item [read]">
     <div class="l">
       <a ref="user/profile/[name]" target="_blank" class="thumb">
-        <img data-uid="[uid]" [avatar]="[avatar]" class="avatar" />
+        <img data-uid="[uid]" src="[avatar]" class="avatar" />
       </a>
     </div>
     <div class="r">
@@ -107,7 +107,7 @@
   <div data-mid="[mid]" class="item [from]">
     <div class="l">
       <a href="user/profile/[name]" target="_blank" class="thumb">
-        <img [avatar]="[avatar]" class="avatar" />
+        <img src="[avatar]" class="avatar" />
       </a>
     </div>
     <div class="r">
@@ -262,7 +262,7 @@
           l = a.length; i < l; i++) {
             if (a[i]) {
               a[i] = $.parseJson(a[i]);
-              html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].avatar || "assets/images/user/default.png") + '"').replace(/\[name\]/g, $.parseSafe(a[i].fromuser)).replace(/\[time\]/g, $.parseTime(a[i].ctime*1e3).replace(/[\s\(].*/g, "")).replace(/\[uid\]/g, a[i].peer).replace(/\[gid\]/g, a[i].id).replace(/\[cont\]/g, $.trim(a[i].content).length > 6 ? $.trim(a[i].content).substr(0, 5) + "...": $.trim(a[i].content)).replace(/\[p2p\]/g, a[i].p2p).replace(/\[from\]/g, a[i].p2p.split("-")[0] != user.uid ? "from ": "to ").replace(/\[read\]/g, /*$.inArray(a[i].p2p, data.unReadList) == -1*/a[i].status ? "readed": "unreaded").replace(/\[star\]/g, /*parseInt(data.isFriendList[i])*/0 !== 0 ? '<i class="icon grey icon-heart"></i>': "")
+              html += temp.replace(/\[avatar\]/g, (a[i].avatar || "assets/images/user/default.png")).replace(/\[name\]/g, $.parseSafe(a[i].peeruser)).replace(/\[time\]/g, $.parseTime(a[i].ctime*1e3).replace(/[\s\(].*/g, "")).replace(/\[uid\]/g, a[i].peer).replace(/\[gid\]/g, a[i].id).replace(/\[cont\]/g, $.trim(a[i].content).length > 6 ? $.trim(a[i].content).substr(0, 5) + "...": $.trim(a[i].content)).replace(/\[p2p\]/g, a[i].p2p).replace(/\[from\]/g, a[i].p2p.split("-")[0] != user.uid ? "from ": "to ").replace(/\[read\]/g, a[i].status ? "readed": "unreaded").replace(/\[star\]/g, /*parseInt(data.isFriendList[i])*/0 !== 0 ? '<i class="icon grey icon-heart"></i>': "")
             }
           }
           area.data({
@@ -305,7 +305,7 @@
           var html = "";
           for (var i = a.length - 1; i >= 0; i--) {
             a[i] = $.parseJson(a[i]);
-            html += temp.replace(/\[avatar\](?:\=\"\")?/g, 'src="' + (a[i].fromuser != user.name ? avatar: user.avatar) + '"').replace(/\[name\]/g, a[i].fromuser).replace(/\[time\]/g, $.parseTime(a[i].ctime*1e3)).replace(/\[uid\]/g, a[i].from).replace(/\[mid\]/g, a[i].id).replace(/\[cont\]/g, $.parseGet({
+            html += temp.replace(/\[avatar\]/g, (a[i].fromuser != user.name ? avatar: user.avatar)).replace(/\[name\]/g, a[i].fromuser).replace(/\[time\]/g, $.parseTime(a[i].ctime*1e3)).replace(/\[uid\]/g, a[i].from).replace(/\[mid\]/g, a[i].id).replace(/\[cont\]/g, $.parseGet({
               text: a[i].content,
               showImage: true
             })).replace(/\[from\]/g, a[i].fromuser != user.name ? "from ": "to ")

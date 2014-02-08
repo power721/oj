@@ -72,8 +72,8 @@ public class MailService
   
   public Page<MailModel> getUserMailGroups(int pageNumber, int pageSize, Integer uid)
   {
-    String sql = "SELECT m.*,MAX(mc.ctime) AS ctime,CONCAT(m.user, '-', m.peer) AS p2p,u.name AS fromuser,u.avatar AS avatar";
-    String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u ON u.uid=m.peer WHERE user=? AND m.status!=2 GROUP BY peer ORDER BY MAX(mc.ctime) DESC";
+    String sql = "SELECT m.*,mc.content,mc.ctime,CONCAT(m.user, '-', m.peer) AS p2p,u.name AS peeruser,u.avatar AS avatar";
+    String from = "FROM (SELECT * FROM mail WHERE user=? AND status!=2 ORDER BY id DESC)m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u ON u.uid=m.peer GROUP BY peer ORDER BY m.id DESC";
     
     return dao.paginate(pageNumber, pageSize, sql, from, uid);
   }
