@@ -53,8 +53,8 @@ public class MailService
   {
     UserExtModel userExtModel = UserExtModel.dao.findById(from);
     int timestamp = Tool.getDayTimestamp();
-    int drift = userExtModel.getInt("drift");
-    int last_drift = userExtModel.getInt("last_drift");
+    int drift = userExtModel.getInt("send_drift");
+    int last_drift = userExtModel.getInt("last_send_drift");
     
     if (last_drift + OjConstants.DAY_TIMESTAMP < timestamp)
       drift = 0;
@@ -70,10 +70,41 @@ public class MailService
       mailContent.save();
       
       drift += 1;
-      userExtModel.set("drift", drift).set("last_drift", OjConfig.timeStamp).update();
+      userExtModel.set("send_drift", drift).set("last_send_drift", OjConfig.timeStamp).update();
     }
     
     return drift;
+  }
+
+  public int getDrift(Integer uid)
+  {
+    UserExtModel userExtModel = UserExtModel.dao.findById(uid);
+    int timestamp = Tool.getDayTimestamp();
+    int drift = userExtModel.getInt("get_drift");
+    int last_drift = userExtModel.getInt("last_get_drift");
+    
+    if (last_drift + OjConstants.DAY_TIMESTAMP < timestamp)
+      drift = 0;
+    
+    if (drift < 5)
+    {
+      MailContentModel mailContent = MailContentModel.dao.findFirst("SELECT * FROM mail_content WHERE `to`=0 AND `from`!=? LIMIT 1", uid);
+      
+      if (mailContent != null)
+      {
+        MailModel mail = new MailModel();
+        mail.set("mid", mailContent.get("id")).set("user", uid).set("peer", mailContent.get("from"));
+        mail.save();
+        
+        mailContent.set("to", uid).update();
+        drift += 1;
+        userExtModel.set("get_drift", drift).set("last_get_drift", OjConfig.timeStamp).update();
+        return drift;
+      }
+      return 0;
+    }
+    
+    return -1;
   }
   
   public List<MailModel> findUserNewMails(Integer uid)

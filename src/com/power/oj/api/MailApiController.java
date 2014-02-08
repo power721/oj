@@ -147,7 +147,26 @@ public class MailApiController extends OjController
     }
     else
     {
-      renderJson("{\"success\":false, \"status\":500,\"result\":\"Save new drift failed.\"}");
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Send drift bottle failed.\"}");
+    }
+  }
+  
+  public void getDrift()
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer result = mailService.getDrift(uid);
+    
+    if (result > 0)
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":" + result + "}");
+    }
+    else if (result == 0)
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Cannot find a drift bottle.\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"You get too many drift bottles today.\"}");
     }
   }
   

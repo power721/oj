@@ -905,15 +905,17 @@ CREATE TABLE `user_ext` (
   `share` tinyint(1) NOT NULL DEFAULT '0',
   `checkin` int(11) NOT NULL DEFAULT '0',
   `checkin_times` tinyint(3) NOT NULL DEFAULT '0',
-  `last_drift` int(11) NOT NULL DEFAULT '0',
-  `drift` tinyint(3) NOT NULL DEFAULT '0',
+  `last_send_drift` int(11) NOT NULL DEFAULT '0',
+  `send_drift` tinyint(3) NOT NULL DEFAULT '0',
+  `last_get_drift` int(11) NOT NULL DEFAULT '0',
+  `get_drift` tinyint(3) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_ext
 -- ----------------------------
-INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '1', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '1', '0', '0', '0', '0', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `variable`
