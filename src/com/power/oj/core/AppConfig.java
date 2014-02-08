@@ -50,6 +50,7 @@ import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserController;
+import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserInterceptor;
 import com.power.oj.user.UserModel;
 
@@ -114,6 +115,7 @@ public class AppConfig extends JFinalConfig
     ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
     arp.setShowSql(getPropertyToBoolean("devMode", false));
     arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
+    arp.addMapping("user_ext", "uid", UserExtModel.class);
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);

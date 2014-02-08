@@ -135,6 +135,22 @@ public class MailApiController extends OjController
     }
   }
   
+  public void newDrift()
+  {
+    String content = getPara("content");
+    Integer from = userService.getCurrentUid();
+    Integer result = mailService.sendDrift(from, content);
+    
+    if (result > 0)
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":500,\"result\":\"Save new drift failed.\"}");
+    }
+  }
+  
   public void newBanlistItem()
   {
     Integer uid = userService.getCurrentUid();

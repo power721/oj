@@ -45,6 +45,19 @@ public class MailService
     
     return true;
   }
+
+  public Integer sendDrift(Integer from, String content)
+  {
+    MailContentModel mailContent = new MailContentModel();
+    
+    mailContent.set("from", from);
+    mailContent.set("to", 0);
+    mailContent.set("content", content);
+    mailContent.set("ctime", OjConfig.timeStamp);
+    mailContent.save();
+    
+    return 1;
+  }
   
   public List<MailModel> findUserNewMails(Integer uid)
   {

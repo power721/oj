@@ -13,5 +13,4 @@ public class Contest_problem extends Model<Contest_problem>{
 	public static final String SUBMIT = "submit";
 	public static final String FIRST_BLOOD = "first_blood";
 	public static final String FIRST_BLOOD_TIME = "first_blood_time";
-	public static final String VIEW = "view";
 }

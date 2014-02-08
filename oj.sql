@@ -884,6 +884,33 @@ AUTO_INCREMENT=1001
 INSERT INTO `user` (`uid`, `tid`, `name`, `pass`, `nick`, `realname`, `email`, `language`, `school`, `solved`, `accept`, `submit`, `atime`, `ctime`, `mtime`, `login`, `phone`, `qq`, `blog`, `gender`, `online`, `level`, `credit`, `share`, `avatar`, `status`, `data`, `token`) VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, '', '0', null, '0', '0', '0', '0', '0', '0', '0', null, null, null, 'secret', '0', '1', '0', '0', null, '1', null, null);
 
 -- ----------------------------
+-- Table structure for `user_ext`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_ext`;
+CREATE TABLE `user_ext` (
+  `uid` int(9) NOT NULL,
+  `tid` int(9) NOT NULL DEFAULT '0',
+  `realname` varchar(35) DEFAULT NULL,
+  `phone` varchar(35) DEFAULT NULL,
+  `qq` varchar(15) DEFAULT NULL,
+  `blog` varchar(255) DEFAULT NULL,
+  `online` int(9) NOT NULL DEFAULT '0',
+  `level` int(9) NOT NULL DEFAULT '1',
+  `credit` int(9) NOT NULL DEFAULT '0',
+  `share` tinyint(1) NOT NULL DEFAULT '0',
+  `checkin` int(11) NOT NULL DEFAULT '0',
+  `checkin_times` tinyint(3) NOT NULL DEFAULT '0',
+  `last_drift` int(11) NOT NULL DEFAULT '0',
+  `drift` tinyint(3) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of user_ext
+-- ----------------------------
+INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '1', '0', '0', '0', '0', '0', '0');
+
+-- ----------------------------
 -- Table structure for `variable`
 -- ----------------------------
 DROP TABLE IF EXISTS `variable`;
