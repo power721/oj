@@ -69,7 +69,7 @@ $(function() {
             };
             block.find("div.mainer").html(html).find("button.success").click(function() {
               $("#style-theme-member").remove();
-              var html = '<link id="style-theme-member" href="http://static.acfun.tv/dotnet/20130418/style/member/theme/' + t.p + "/theme.css?date=" + system.date + '" rel="stylesheet">';
+              var html = '<link id="style-theme-member" href="assets/acfun/theme/' + t.p + "/theme.css?date=" + system.date + '" rel="stylesheet">';
               $("head").append(html);
               var text = "success::已成功应用主题[" + t.n + "]。";
               $.info(text);

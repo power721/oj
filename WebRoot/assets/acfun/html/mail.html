@@ -308,7 +308,7 @@
             html += temp.replace(/\[avatar\]/g, 'src="' + (a[i].fromuser != user.name ? avatar: user.avatar) + '"').replace(/\[name\]/g, a[i].fromuser).replace(/\[time\]/g, $.parseTime(a[i].ctime*1e3)).replace(/\[uid\]/g, a[i].from).replace(/\[mid\]/g, a[i].id).replace(/\[cont\]/g, $.parseGet({
               text: a[i].content,
               showImage: true
-            })).replace(/\[from\]/g, a[i].fromuser != user.name ? "from ": "to ")
+            })).replace(/\[from\]/g, a[i].fromuser != user.name ? "to": "from")
           }
           var objLeft = $("#area-contact-mail").find("div.active").eq(0);
           block.find("div.fixed").eq(0).html('私信<span class="hint">/ 正与 <a class="name" href="user/profile/' + objLeft.data().name + '" target="_blank">' + objLeft.data().name + "</a> 通信中</a>");
@@ -639,7 +639,7 @@
         curtain: true,
         callback: function() {
           var elem = $("#area-contact-mail").children("div.active");
-          var url = "report#" + "name=" + elem.data().name + ";from=/member/" + ";type=私信" + ";desc=私信内容违反相关规定" + ";proof=mid-" + obj.data().mid + " " + $.trim(obj.find("div.cont").text()).replace(/[\r\n\s]/g, "").replace(/举报.*/, " ").substr(0, 50);
+          var url = "report#" + "name=" + elem.data().name + ";from=user" + ";type=私信" + ";desc=私信内容违反相关规定" + ";proof=mid-" + obj.data().mid + " " + $.trim(obj.find("div.cont").text()).replace(/[\r\n\s]/g, "").replace(/举报.*/, " ").substr(0, 50);
           url = encodeURI(url);
           window.open(url)
         }
