@@ -60,7 +60,7 @@ public class OjService
 
   public List<Record> getUserRoles(int uid)
   {
-    String sql = "SELECT r.name AS role, r.id AS rid FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
+    String sql = "SELECT r.name AS role, r.id AS rid FROM role r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
     List<Record> roleList = Db.find(sql, uid);
     
     return roleList;

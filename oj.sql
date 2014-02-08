@@ -781,10 +781,10 @@ INSERT INTO `permission` VALUES ('172', 'admin', '1', 'announcement:forbid', '�
 INSERT INTO `permission` VALUES ('173', 'admin', '1', 'announcement:resume', '启用', '162', '1');
 
 -- ----------------------------
--- Table structure for `roles`
+-- Table structure for `role`
 -- ----------------------------
-DROP TABLE IF EXISTS `roles`;
-CREATE TABLE `roles` (
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `description` varchar(80) NOT NULL,
@@ -793,10 +793,10 @@ CREATE TABLE `roles` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of roles
+-- Records of role
 -- ----------------------------
-INSERT INTO `roles` VALUES ('1', 'root', 'root', '1');
-INSERT INTO `roles` VALUES ('2', 'admin', 'administrator', '1');
+INSERT INTO `role` VALUES ('1', 'root', 'root', '1');
+INSERT INTO `role` VALUES ('2', 'admin', 'administrator', '1');
 
 -- ----------------------------
 -- Table structure for `role_permission`
