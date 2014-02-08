@@ -33,16 +33,17 @@ public class MailService
     
     Integer mid = mailContent.getInt("id");
     MailModel mail = new MailModel();
-    mail.set("mid", mid);
-    mail.set("user", from);
-    mail.set("peer", to);
+    mail.set("mid", mid).set("user", from).set("peer", to);
     mail.save();
     
-    mail = new MailModel();
-    mail.set("mid", mid);
-    mail.set("user", to);
-    mail.set("peer", from);
-    return mail.save();
+    if (!isUserInMailBanlist(from, to))
+    {
+      mail = new MailModel();
+      mail.set("mid", mid).set("user", to).set("peer", from);
+      mail.save();
+    }
+    
+    return true;
   }
   
   public List<MailModel> findUserNewMails(Integer uid)
@@ -93,29 +94,37 @@ public class MailService
     return dao.deleteMail(uid, id);
   }
   
-  public boolean addMailBanlistItem(Integer uid, Integer banUid)
+  public boolean addMailBanlistItem(Integer user, Integer banUser)
   {
-    // TODO check if item exists
+    if (isUserInMailBanlist(banUser, user))
+    {
+      return true;
+    }
+    
     Record record = new Record();
-    record.set("uid", uid);
-    record.set("ban_uid", banUid);
+    record.set("user", user);
+    record.set("ban_user", banUser);
     record.set("ctime", OjConfig.timeStamp);
     
     return Db.save("mail_banlist", record);
   }
 
-  public boolean deleteMailBanlistItem(Integer uid, Integer banUid)
+  public int deleteMailBanlistItem(Integer user, Integer banUser)
   {
-    // TODO check if item exists
-    return Db.update("DELETE FROM mail_banlist WHERE uid=? AND ban_uid=?", uid, banUid) > 0;
+    return Db.update("DELETE FROM mail_banlist WHERE user=? AND ban_user=?", user, banUser);
   }
   
-  public Page<MailModel> getUserMailBanlist(int pageNumber, int pageSize, Integer uid)
+  public boolean isUserInMailBanlist(Integer banUser, Integer user)
   {
-    String sql = "SELECT  m.ban_uid AS uid,u.name AS uname";
-    String from = "FROM mail_banlist m LEFT JOIN user u ON u.uid=m.ban_uid WHERE m.uid=?";
+    return Db.queryInt("SELECT id FROM mail_banlist WHERE user=? AND ban_user=?", user, banUser) != null;
+  }
+  
+  public Page<MailModel> getUserMailBanlist(int pageNumber, int pageSize, Integer user)
+  {
+    String sql = "SELECT m.ban_user AS uid,u.name AS uname";
+    String from = "FROM mail_banlist m LEFT JOIN user u ON u.uid=m.ban_user WHERE m.user=?";
     
-    return dao.paginate(pageNumber, pageSize, sql, from, uid);
+    return dao.paginate(pageNumber, pageSize, sql, from, user);
   }
   
 }

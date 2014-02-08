@@ -322,8 +322,8 @@ CREATE TABLE `mail` (
 DROP TABLE IF EXISTS `mail_banlist`;
 CREATE TABLE `mail_banlist` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
-  `uid` int(9) NOT NULL,
-  `ban_uid` int(9) NOT NULL,
+  `user` int(9) NOT NULL,
+  `ban_user` int(9) NOT NULL,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

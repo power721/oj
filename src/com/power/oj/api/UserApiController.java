@@ -13,6 +13,7 @@ import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.mail.MailService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
@@ -20,11 +21,16 @@ import com.power.oj.user.UserService;
 public class UserApiController extends OjController
 {
   private static final UserService userService = UserService.me();
+  private static final MailService mailService = MailService.me();
 
   public void splash()
   {
     UserModel userModel = getAttr(OjConstants.USER);
-    setAttr(OjConstants.USER, userService.getLevel(userModel));
+    
+    userService.getLevel(userModel);
+    userModel.put("unReadMail", mailService.countUserNewMails(userModel.getUid()));
+    
+    setAttr(OjConstants.USER, userModel);
     
     render("ajax/splash.html");
   }

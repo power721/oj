@@ -137,7 +137,7 @@ public class MailApiController extends OjController
     Integer uid = userService.getCurrentUid();
     Integer userId = getParaToInt("userId");
 
-    if (mailService.deleteMailBanlistItem(uid, userId))
+    if (mailService.deleteMailBanlistItem(uid, userId) > 0)
     {
       renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
     }

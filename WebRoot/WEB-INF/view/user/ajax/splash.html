@@ -14,7 +14,7 @@
         <span class="uid">Uid:${userID}</span>
         
         <p id="hint-unread-splash">
-          共有<span class="pts">0</span>次<a href="user/#area=mention">[召唤]</a>、<span class="pts">0</span>条<a href="user/#area=mail">[私信]</a>、<span class="pts">0</span>个<a href="user/#area=followers">[新听众]</a>和<span class="pts">0</span>条<a href="user/#area=push">[推送内容]</a>。
+          共有<span class="pts">0</span>次<a href="user/#area=mention">[召唤]</a>、<span class="pts">${user.unReadMail!0}</span>条<a href="user/#area=mail">[私信]</a>、<span class="pts">0</span>个<a href="user/#area=followers">[新听众]</a>和<span class="pts">0</span>条<a href="user/#area=push">[推送内容]</a>。
         </p>
         
         <p class="level" title="当前总经验值：${user.credit!0} / 下一级所需总经验值：${user.nextExp!200}">

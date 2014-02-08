@@ -86,7 +86,7 @@ public class UserService
     int checkinTimes = userModel.getInt("checkin_times");
     int credit = userModel.getInt("credit");
     
-    log.info("timestamp: " + timestamp + " checkinTime: " + checkin + " current: " + OjConfig.timeStamp);
+    //log.info("timestamp: " + timestamp + " checkinTime: " + checkin + " current: " + OjConfig.timeStamp);
     if (checkin < timestamp)
     {
       checkinTimes += 1;
@@ -128,6 +128,7 @@ public class UserService
       int online = userModel.getInt("online");
       int login = userModel.getInt("login");
       
+      log.info("online: " + online + " login: " + login + " current: " + OjConfig.timeStamp);
       online += (OjConfig.timeStamp - login) / 60;
       userModel.set("online", online).update();
     }
