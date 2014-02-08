@@ -1,0 +1,159 @@
+<!--style-->
+<style>
+    #block-first .unit .l {
+        width: 60px;
+        text-align: right;
+    }
+
+    #block-first .unit .r {
+        width: 610px;
+    }
+
+    #block-first .unit {
+        margin: 0 auto 8px;
+    }
+
+    #block-first .unit-tool {
+        margin: 16px auto 0;
+        padding: 8px 0 0;
+        border-top: 1px dashed #ddd;
+    }
+
+    #block-first .unit .r input, #block-first .unit .r textarea {
+        width: 320px;
+    }
+
+    #block-first .unit .r .hint {
+        color: #999;
+        font-size: 12px;
+        margin: 8px 0;
+    }
+
+    #btn-parter-post {
+        margin: 4px 0;
+    }
+
+    #hint-parter-post {
+        color: #666;
+    }
+
+    #editor-cont-drift {
+        margin: 4px 0;
+    }
+
+    .divider {
+        height: 1px;
+        border-bottom: 1px #ddd dashed;
+        margin: 16px 0;
+    }
+</style>
+<!--style-->
+
+<!--html-->
+<div id="block-title-banner">
+    <p>丢漂流瓶</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Hurl Soap</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <a class="tab" href="user/#area=mail">私信</a>
+    <a class="tab active" href="user/#area=drift-new">丢漂流瓶</a>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer form">
+
+        <p class="alert alert-info">
+            在下面的文本框内输入文字后，点击下方的发送按钮丢出漂流瓶。
+        </p>
+
+        <div class="unit">
+            <div class="l">
+                <p class="subtitle">正文</p>
+            </div>
+            <div class="r">
+                <script type="text/plain" id="editor-cont-drift" style="width:610px;"></script>
+            </div>
+            <span class="clearfix"></span>
+        </div>
+
+        <div class="unit-tool">
+            <div class="l">
+                <button class="btn success do">
+                    <i class="icon white icon-ok-circle"></i>发送信息
+                </button>
+            </div>
+            <div class="r">
+            </div>
+            <span class="clearfix"></span>
+        </div>
+
+    </div>
+</div>
+<!--html-->
+
+<!--script-->
+<script>
+    system.tv = function () {
+        //set handle
+        var block = $('#block-first');
+        var form = block.find('div.form').eq(0);
+        var btn = form.find('button.do').eq(0);
+        $.setEditorConfig({
+            toolbars: [
+                ['bold', 'italic', 'underline', 'strikethrough', '|', 'forecolor', 'fontsize', '|', 'emotion', 'insertimage', 'spechars', '|', 'link', 'unlink']
+            ], initialFrameWidth: 610, initialFrameHeight: 160, autoHeightEnabled: false, pasteplain: true, funcCtrlEnter: function () {
+                form.find('button.do').eq(0).click();
+            }
+        });
+        var editor = new UE.ui.Editor();
+        editor.render('editor-cont-drift');
+        //action
+        form.setup({
+            callback: function () {
+                var cont = editor.getContentTxt();
+                if (cont.length >= 5) {
+                    if (system.port.newMail) {
+                        system.port.newMail.abort();
+                    }
+                    ;
+                    var text = 'info::漂流瓶发射中...';
+                    $.info(text);
+                    btn.info(text);
+                    system.port.newMail = $.post('api/mail/newDrift', {
+                        content: $.parsePost(editor.getContent())
+                    })
+                            .done(function (data) {
+                                //
+                                if (!!data.success) {
+                                    //info
+                                    $.info('success::漂流瓶发射成功。今日尚能丢出' + (10 - data.result) + '个漂流瓶。');
+                                    //return
+                                    self.location.href = "user/#area=mail";
+                                } else {
+                                    var text = 'error::' + data.result;
+                                    $.info(text);
+                                    btn.info(text);
+                                }
+                                ;
+                            })
+                            .fail(function () {
+                                var text = 'error::同服务器通信失败。请于稍后重试。';
+                                $.info(text);
+                                btn.info(text);
+                            });
+                } else {
+                    var text = 'error::正文应包含至少五个字符。';
+                    $.info(text);
+                    $('#editor-cont-drift')
+                            .info(text);
+                }
+                ;
+            }
+        });
+    }();
+</script>
+<!--script-->

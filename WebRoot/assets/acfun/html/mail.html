@@ -136,23 +136,23 @@
 </div>
 <div id="block-first" class="block">
   <div class="mainer">
-    <!--<p class="alert">
+    <p class="alert">
       <span class="r">
         <a id="btn-drift-mail" class="btn primary">
           <i class="icon white icon-heart">
           </i>
-          捡肥皂
+          捡漂流瓶
         </a>
-        <a id="btn-newdrift-mail" href="#area=drift-new" class="btn primary">
+        <a id="btn-newdrift-mail" href="user/#area=drift-new" class="btn primary">
           <i class="icon white icon-share">
           </i>
-          丢肥皂
+          丢漂流瓶
         </a>
       </span>
       我们重新定义了私信系统，以使您能够更方便的同朋友们沟通与交流。
       <br/>
-      同时，您也可以通过新的肥皂系统来邂逅和结识陌生人。
-    </p>-->
+      同时，您也可以通过新的漂流瓶系统来邂逅和结识陌生人。
+    </p>
     <p class="alert warning">
       当被不良信息骚扰时，您可以举报发信者，或通过“写信”按钮右侧菜单将发信者纳入您的私信黑名单中。
       <br/>
@@ -413,7 +413,7 @@
       }
       system.port.getDrift = $.get("api/mail/getDrift").done(function(data) {
         if (data.success) {
-          var text = "success::已捡起了一块肥皂。今日尚能捡起" + (5 - data.result) + "块肥皂。";
+          var text = "success::已捡起了一个漂流瓶。今日尚能捡起" + (5 - data.result) + "个漂流瓶。";
           $.info(text);
           btn.info(text);
           showLeft(1)
