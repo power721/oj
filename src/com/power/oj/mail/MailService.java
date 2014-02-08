@@ -88,7 +88,7 @@ public class MailService
     
     if (drift < 5)
     {
-      MailContentModel mailContent = MailContentModel.dao.findFirst("SELECT * FROM mail_content WHERE `to`=0 AND `from`!=? LIMIT 1", uid);
+      MailContentModel mailContent = MailContentModel.dao.getRandMail(uid);
       
       if (mailContent != null)
       {
