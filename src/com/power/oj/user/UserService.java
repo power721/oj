@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -92,7 +93,11 @@ public class UserService
         checkinTimes = 1;
       
       credit += Math.min(checkinTimes, 5);
-      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).set("credit", credit).update();
+      int level = Arrays.binarySearch(OjConfig.level.toArray(), credit);
+      level = level<0 ? -level : level+2;
+      
+      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes);
+      userExtModel.set("credit", credit).set("level", level).update();
       return Math.min(checkinTimes, 5);
     }
     
@@ -114,7 +119,7 @@ public class UserService
       return true;
     }
   }
-
+  
   /**
    * User logout in Shiro session.
    */
@@ -516,7 +521,20 @@ public class UserService
   
   public UserModel getCurrentUserExt()
   {
-    return dao.getUserExt(getCurrentUid());
+    UserModel userModel = dao.getUserExt(getCurrentUid());
+    int credit = userModel.getInt("credit");
+    int level = userModel.getInt("level");
+    int lastExp = 0;
+    if (level > 1)
+    {
+      lastExp = OjConfig.level.get(level-2);
+    }
+    int nextExp = OjConfig.level.get(level-1);
+    
+    userModel.put("nextExp", nextExp);
+    userModel.put("percent", (int)((credit-lastExp)/(double)(nextExp-lastExp) * 100));
+    
+    return userModel;
   }
   
   public UserModel getUserByUid(Integer uid)
