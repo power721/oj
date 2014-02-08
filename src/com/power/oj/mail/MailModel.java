@@ -55,4 +55,9 @@ public class MailModel extends Model<MailModel>
     return Db.update("DELETE FROM mail WHERE user=? AND peer=?", user, peer);
   }
   
+  public int deleteUserAllMails(Integer uid)
+  {
+    return Db.update("DELETE FROM mail WHERE user=?", uid);
+  }
+  
 }

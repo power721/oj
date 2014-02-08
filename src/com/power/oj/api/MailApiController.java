@@ -121,6 +121,20 @@ public class MailApiController extends OjController
     }
   }
   
+  public void delAllMails()
+  {
+    Integer uid = userService.getCurrentUid();
+
+    if (mailService.deleteUserAllMails(uid) > 0)
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":500,\"result\":\"Delete mails failed.\"}");
+    }
+  }
+  
   public void newBanlistItem()
   {
     Integer uid = userService.getCurrentUid();
