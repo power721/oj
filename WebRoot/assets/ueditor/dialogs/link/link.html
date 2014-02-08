@@ -72,7 +72,8 @@
     function handleDialogOk(){
         var href =$G('href').value.replace(/^\s+|\s+$/g, '');
         if(href){
-            if(!hrefStartWith(href,["http","/","ftp://"])) {
+            //if(!hrefStartWith(href,["http","/","ftp://"])) {
+            if(!hrefStartWith(href,["http","/","../","ftp://"])) { // power721
                 href  = "http://" + href;
             }
             var obj = {
@@ -90,7 +91,8 @@
             if(range.collapsed){
                 obj.textValue = text.value;
             }
-            editor.execCommand('link',utils.clearEmptyAttrs(obj) );
+            //editor.execCommand('link',utils.clearEmptyAttrs(obj) ); // power721
+            editor.execCommand('link', obj);
             dialog.close();
         }
     }
