@@ -32,6 +32,7 @@ public class OjConfig
   public static int contestRankPageSize = 50;
   public static int problemPageSize = 50;
   public static int userPageSize = 20;
+  public static int friendPageSize = 10;
   public static int statusPageSize = 20;
   public static int mailGroupPageSize = 10;
   public static int mailPageSize = 25;

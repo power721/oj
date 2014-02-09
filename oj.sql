@@ -246,6 +246,40 @@ AUTO_INCREMENT=1
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `friend`
+-- ----------------------------
+DROP TABLE IF EXISTS `friend`;
+CREATE TABLE `friend` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `gid` int(9) NOT NULL DEFAULT '0',
+  `user` int(9) NOT NULL,
+  `friend` int(9) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of friend
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `friend_group`
+-- ----------------------------
+DROP TABLE IF EXISTS `friend_group`;
+CREATE TABLE `friend_group` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `name` varchar(35) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of friend_group
+-- ----------------------------
+INSERT INTO `friend_group` VALUES ('0', '0', '', '0');
+
+-- ----------------------------
 -- Table structure for `level`
 -- ----------------------------
 DROP TABLE IF EXISTS `level`;

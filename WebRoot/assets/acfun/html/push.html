@@ -356,8 +356,7 @@ system.tv = function () {
             system.port.getGroup.abort();
         }
         ;
-        system.port.getGroup = $.get('api/friend/getGroupList', {
-        })
+        system.port.getGroup = $.get('api/friend/getGroupList')
                 .done(function (data) {
                     var html = '';
                     if (data.success) {

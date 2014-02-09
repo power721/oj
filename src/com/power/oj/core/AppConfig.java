@@ -22,6 +22,7 @@ import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.power.oj.admin.AdminController;
+import com.power.oj.api.FriendApiController;
 import com.power.oj.api.MailApiController;
 import com.power.oj.api.UserApiController;
 import com.power.oj.bbs.BBSController;
@@ -47,6 +48,8 @@ import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.VisitCountService;
 import com.power.oj.shiro.ShiroInViewInterceptor;
 import com.power.oj.shiro.freemarker.ShiroTags;
+import com.power.oj.social.FriendGroupModel;
+import com.power.oj.social.FriendModel;
 import com.power.oj.solution.SolutionController;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserController;
@@ -95,6 +98,7 @@ public class AppConfig extends JFinalConfig
     me.add("/user", UserController.class);
     me.add("/api/mail", MailApiController.class, "/mail/");
     me.add("/api/user", UserApiController.class, "/user/");
+    me.add("/api/friend", FriendApiController.class, "/user/");
 
     log.debug("configRoute finished.");
   }
@@ -116,6 +120,8 @@ public class AppConfig extends JFinalConfig
     arp.setShowSql(getPropertyToBoolean("devMode", false));
     arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
     arp.addMapping("user_ext", "uid", UserExtModel.class);
+    arp.addMapping("friend", FriendModel.class);
+    arp.addMapping("friend_group", FriendGroupModel.class);
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);

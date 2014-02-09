@@ -328,8 +328,7 @@ system.tv = function () {
             system.port.getGroup.abort();
         }
         ;
-        system.port.getGroup = $.get('api/friend/getGroupList', {
-        })
+        system.port.getGroup = $.get('api/friend/getGroupList')
                 .done(function (data) {
                     var html = '';
                     if (data.success) {
@@ -337,9 +336,9 @@ system.tv = function () {
                         for (var i = 0, l = data.groupList.length; i < l; i++) {
                             var a = data.groupList[i];
                             html += temp
-                                    .replace(/\[gid\]/g, a.groupId)
-                                    .replace(/\[count\]/g, a.groupCount || 0)
-                                    .replace(/\[name\]/g, $.parseSafe(a.groupName || "非法分组"))
+                                    .replace(/\[gid\]/g, a.id)
+                                    .replace(/\[count\]/g, a.count || 0)
+                                    .replace(/\[name\]/g, $.parseSafe(a.name || "非法分组"))
                             ;
                         }
                         ;
@@ -375,23 +374,23 @@ system.tv = function () {
         ;
         system.port.getFollowed = $.get('api/friend/getFollowingList', {
             isGroup: param.isGroup || 0,
-            groupId: param.gid || 0,
-            pageNo: param.page || 1,
-            pageSize: param.size || 10
+            gid: param.gid || 0,
+            page: param.page || 1,
+            size: param.size || 10
         })
                 .done(function (data) {
                     var html = '';
-                    if (data.success) {
+                    if (data.pageNumber) {
                         //
-                        if (data.friendList.length) {
-                            for (var i = 0, l = data.friendList.length; i < l; i++) {
-                                var a = data.friendList[i];
+                        if (data.list.length) {
+                            for (var i = 0, l = data.list.length; i < l; i++) {
+                                var a = data.list[i];
                                 html += temp
-                                        .replace(/\[uid\]/g, a.userId)
-                                        .replace(/\[gid\]/g, a.groupId)
-                                        .replace(/\[sign\]/g, $.parseSafe(a.signature) || '这个人很懒，神马都没有写…')
-                                        .replace(/\[name\]/g, $.parseSafe(a.userName || "该用户不存在"))
-                                        .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.userImg) || 'http://static.acfun.tv/dotnet/20120923/style/image/avatar.jpg') + '"')
+                                        .replace(/\[uid\]/g, a.friend)
+                                        .replace(/\[gid\]/g, a.gid)
+                                        .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
+                                        .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
+                                        .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
                                         .replace(/\[isFriend\]/g, (!a.isFriend ? '<i class="icon grey icon-star"></i>已关注，<a class="btn-disfollow-followed">取消</a>' : '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>'))
                                         .replace(/\[followings\]/g, a.followingCount || 0)
                                         .replace(/\[followeds\]/g, a.followedCount || 0)
@@ -399,11 +398,11 @@ system.tv = function () {
                                         .replace(/\[favors\]/g, a.userContributeStow || 0)
                                         .replace(/\[comms\]/g, a.userContributeComment || 0)
                                         .replace(/\[views\]/g, a.userContributeView || 0)
-                                        .replace(/\[from\]/g, a.comeFrom ? ($.parseSafe(a.comeFrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
-                                        .replace(/\[gender\]/g, {'-1': 'TA', '0': '她', '1': '他'}[a.gender])
+                                        .replace(/\[from\]/g, a.comefrom ? ($.parseSafe(a.comefrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
+                                        .replace(/\[gender\]/g, {'secret': 'TA', 'female': '她', 'male': '他'}[a.gender])
                                         .replace(/\[sex\]/g, a.sexTrend)
                                         .replace(/\[group\]/g, !param.isGroup && a.groupName ? '/  <span style="color:' + $.parseColor(a.groupName) + ';">' + a.groupName + '</span>' : '')
-                                        .replace(/\[index\]/g, data.totalCount - (data.page - 1) * data.pageSize - i)
+                                        .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)
                                 ;
                             }
                             ;
@@ -412,8 +411,8 @@ system.tv = function () {
                         }
                         ;
                         var pager = $.makePager({
-                            count: data.totalCount,
-                            num: data.page,
+                            count: data.totalRow,
+                            num: data.pageNumber,
                             size: data.pageSize,
                             addon: true
                         });
@@ -424,7 +423,7 @@ system.tv = function () {
                                     gid: param.gid || 0,
                                     name: groupName
                                 })
-                                .html('<p class="alert alert-info">[' + groupName + ']分组内共有' + data.totalCount + '名用户。<br />您可以在下方列表的项目上点击或拖曳，以对选中项目进行操作。</p>' + pager + html + pager)
+                                .html('<p class="alert alert-info">[' + groupName + ']分组内共有' + data.totalRow + '名用户。<br />您可以在下方列表的项目上点击或拖曳，以对选中项目进行操作。</p>' + pager + html + pager)
                                 .find('a.name, img.avatar')
                                 .card();
                         //
