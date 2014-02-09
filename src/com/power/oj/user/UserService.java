@@ -203,7 +203,7 @@ public class UserService
     newUser.set("phone", HtmlEncoder.text(userModel.getStr("phone")));
     newUser.set("gender", HtmlEncoder.text(userModel.getStr("gender")));
     newUser.set("language", userModel.getInt("language"));
-    newUser.set("qq", userModel.getLong("qq"));
+    newUser.set("qq", userModel.getStr("qq"));
     newUser.set("mtime", OjConfig.timeStamp);
     
     return newUser.update();

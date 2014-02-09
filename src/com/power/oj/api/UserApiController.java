@@ -35,7 +35,6 @@ public class UserApiController extends OjController
     render("ajax/splash.html");
   }
 
-  
   public void profile()
   {
     UserModel userModel = getAttr(OjConstants.USER);

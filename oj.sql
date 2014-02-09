@@ -916,7 +916,7 @@ CREATE TABLE `user_ext` (
 -- ----------------------------
 -- Records of user_ext
 -- ----------------------------
-INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `variable`

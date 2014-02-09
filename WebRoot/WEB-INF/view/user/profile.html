@@ -73,7 +73,7 @@
     <h4>Unsolved Problems</h4>
     <#list user.problems as problem>
       <#if problem.result != 0>
-      <span><a href="status?pid=${problem.pid}&name=${user.name}&result=0" title="Problem ${problem.pid} : ${problem.title}">${problem.pid}</a></span>
+      <span><a href="status?pid=${problem.pid}&name=${user.name}" title="Problem ${problem.pid} : ${problem.title}">${problem.pid}</a></span>
       </#if>
     </#list>
     </#if>
