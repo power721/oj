@@ -29,10 +29,8 @@ public class SolutionModel extends Model<SolutionModel>
   
   public Page<SolutionModel> getPage(int pageNumber, int pageSize, int result, int language, int pid, String userName)
   {
-    int uid = 0;
-    String name = userName;
-    String sql = "SELECT sid,uid,pid,cid,num,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBuilder sb = new StringBuilder("FROM solution WHERE 1=1");
+    String sql = "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,code_len,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,u.name";
+    StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid WHERE 1=1");
 
     List<Object> paras = new ArrayList<Object>();
     if (result > -1)
@@ -52,33 +50,15 @@ public class SolutionModel extends Model<SolutionModel>
     }
     if (StringUtil.isNotBlank(userName))
     {
-      uid = UserModel.dao.getUidByName(userName);
-      sb.append(" AND uid=?");
-      paras.add(uid);
-
-      if (uid == 0)
-        userName = "";
+      sb.append(" AND name=?");
+      paras.add(userName);
     }
 
     sb.append(" ORDER BY sid DESC");
-    Page<SolutionModel> solutionList = SolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+    Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
     for (SolutionModel solution : solutionList.getList())
     {
-      if (StringUtil.isBlank(userName))
-      {
-        uid = solution.getUid();
-        try
-        {
-        	name = UserModel.dao.findById(uid, "name").get("name");
-        }
-        catch (Exception e)
-        {
-        	name = "";
-        }
-      }
-      solution.put("name", name);
-
       solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
 
       ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
@@ -96,14 +76,11 @@ public class SolutionModel extends Model<SolutionModel>
 
   public Page<SolutionModel> getPageForContest(int pageNumber, int pageSize, int result, int language, int cid, int num, String userName)
   {
-    int uid = 0;
-    String name = userName;
-    String sql = "SELECT sid,uid,pid,cid,num,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBuilder sb = new StringBuilder("FROM contest_solution WHERE cid=?");
-    UserModel userModel;
-
+    String sql = "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,code_len,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,u.name,u.nick";
+    StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE cid=?");
     List<Object> paras = new ArrayList<Object>();
     paras.add(cid);
+    
     if (result > -1)
     {
       sb.append(" AND result=?");
@@ -121,12 +98,8 @@ public class SolutionModel extends Model<SolutionModel>
     }
     if (StringUtil.isNotBlank(userName))
     {
-      uid = UserModel.dao.getUidByName(userName);
-      sb.append(" AND uid=?");
-      paras.add(uid);
-
-      if (uid == 0)
-        userName = "";
+      sb.append(" AND name=?");
+      paras.add(userName);
     }
 
     sb.append(" ORDER BY sid DESC");
@@ -134,15 +107,6 @@ public class SolutionModel extends Model<SolutionModel>
 
     for (SolutionModel solution : solutionList.getList())
     {
-      uid = solution.getUid();
-      userModel = UserModel.dao.findById(uid, "name,nick");
-      if (StringUtil.isBlank(userName))
-      {
-        name = userModel.get("name");
-      }
-      solution.put("name", name);
-      solution.put("nick", userModel.get("nick"));
-
       solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
 
       ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
