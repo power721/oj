@@ -85,20 +85,19 @@ public class UserService
     int checkin = userExtModel.getInt("checkin");
     int checkinTimes = userExtModel.getInt("checkin_times");
     int credit = userExtModel.getInt("credit");
+    int level = userExtModel.getInt("level");
     
     if (checkin < timestamp)
     {
-      checkinTimes += 1;
-      if (checkin + OjConstants.DAY_TIMESTAMP < timestamp)
-        checkinTimes = 1;
-      
-      credit += Math.min(checkinTimes, 5);
-      int level = Arrays.binarySearch(OjConfig.level.toArray(), credit);
+      checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
+      int incExp = Math.min(checkinTimes, level);
+      credit += incExp;
+      level = Arrays.binarySearch(OjConfig.level.toArray(), credit);
       level = level<0 ? -level : level+2;
       
       userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes);
       userExtModel.set("credit", credit).set("level", level).update();
-      return Math.min(checkinTimes, 5);
+      return incExp;
     }
     
     return 0;
@@ -106,10 +105,9 @@ public class UserService
   
   public boolean isCheckin(UserModel userModel)
   {
-    int timestamp = Tool.getDayTimestamp();
     int checkin = userModel.getInt("checkin");
     
-    if (checkin < timestamp)
+    if (checkin < Tool.getDayTimestamp())
     {
       return false;
     }
