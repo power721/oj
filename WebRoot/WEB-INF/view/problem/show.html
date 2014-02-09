@@ -21,7 +21,7 @@
 <div class="text-center">
   <h2>
     <#if userResult??>
-    <image src="assets/image/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>" />
+    <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>" />
     </#if><span class="black">${problem.pid!}:</span> <#if problem.status==false>
     <del></#if>${problem.title!}<#if problem.status==false></del>
     </#if>

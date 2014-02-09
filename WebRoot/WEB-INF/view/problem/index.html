@@ -57,7 +57,7 @@
   <tbody>
     <#if problemList??> <#list problemList.list as Problem>
     <tr>
-      <td class="result"><#if Problem.userResult??><image src="assets/image/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
+      <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
       </td>
       <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
       <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
@@ -96,9 +96,9 @@
             if (data.result)
             {
               if (data.result.id)
-                result.addClass('wa').html('<img src="assets/image/wrong.gif"/>');
+                result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
               else
-                result.addClass('ac').html('<img src="assets/image/accepted.gif"/>');
+                result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
             }
           });
         });

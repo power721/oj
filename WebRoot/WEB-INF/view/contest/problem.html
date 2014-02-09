@@ -13,7 +13,7 @@
 <div class="text-center">
   <h2>
     <#if userResult??>
-    <image src="assets/image/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>" />
+    <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>" />
     </#if> <span class="black">${problem.id!}:</span> <#if problem.status==false>
     <del>
       </#if> <#if adminUser??> <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}">${problem.title!} <#else>
