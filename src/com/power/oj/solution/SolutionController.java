@@ -19,6 +19,7 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.judge.Judge;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
 public class SolutionController extends OjController
@@ -140,8 +141,9 @@ public class SolutionController extends OjController
   @RequiresPermissions("problem:submit")//code:add
   public void save()
   {
+    UserModel userModel = getAttr(OjConstants.USER);
     SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
-    solutionModel.set("uid", getAttrForInt(OjConstants.USER_ID));
+    solutionModel.set("uid", userModel.getUid());
     String url = "/status";
     if (solutionModel.get("cid") != null)
     {
@@ -163,8 +165,9 @@ public class SolutionController extends OjController
         return;
       }
       long stime = OjConfig.timeStamp;
-      problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime);
-      problemModel.update();
+      problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime).update();
+      
+      userModel.set("submit", userModel.getInt("submit") + 1).update();
 
       synchronized (Judge.judgeList)
       {
