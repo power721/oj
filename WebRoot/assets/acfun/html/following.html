@@ -400,7 +400,6 @@ system.tv = function () {
                                         .replace(/\[views\]/g, a.userContributeView || 0)
                                         .replace(/\[from\]/g, a.comefrom ? ($.parseSafe(a.comefrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
                                         .replace(/\[gender\]/g, {'secret': 'TA', 'female': '她', 'male': '他'}[a.gender])
-                                        .replace(/\[sex\]/g, a.sexTrend)
                                         .replace(/\[group\]/g, !param.isGroup && a.groupName ? '/  <span style="color:' + $.parseColor(a.groupName) + ';">' + a.groupName + '</span>' : '')
                                         .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)
                                 ;

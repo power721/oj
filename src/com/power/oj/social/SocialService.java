@@ -43,5 +43,13 @@ public class SocialService
     }
     return dao.paginate(pageNumber, pageSize, sql, from, uid, gid);
   }
+
+  public Page<FriendGroupModel> getFollowedList(int pageNumber, int pageSize, Integer uid)
+  {
+    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submit,u.comefrom,u.gender,u.sign,u.avatar,(SELECT 1 FROM friend ff WHERE ff.user=f.friend AND ff.friend=f.user) AS isFriend";
+    String from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.user WHERE f.friend=?";
+    
+    return dao.paginate(pageNumber, pageSize, sql, from, uid);
+  }
   
 }

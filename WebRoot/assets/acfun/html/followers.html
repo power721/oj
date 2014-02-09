@@ -194,21 +194,21 @@
             }
             ;
             system.port.getFollowed = $.get('api/friend/getFollowedList', {
-                pageNo: param.page || 1,
-                pageSize: param.size || 10
+                page: param.page || 1,
+                size: param.size || 10
             })
                     .done(function (data) {
                         var html = '';
-                        if (data.success) {
+                        if (data.pageNumber) {
                             //
-                            if (data.friendList.length) {
-                                for (var i = 0, l = data.friendList.length; i < l; i++) {
-                                    var a = data.friendList[i];
+                            if (data.list.length) {
+                                for (var i = 0, l = data.list.length; i < l; i++) {
+                                    var a = data.list[i];
                                     html += temp
-                                            .replace(/\[uid\]/g, a.userId)
-                                            .replace(/\[sign\]/g, $.parseSafe(a.signature) || '这个人很懒，神马都没有写…')
-                                            .replace(/\[name\]/g, $.parseSafe(a.userName || "该用户不存在"))
-                                            .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.userImg) || 'http://static.acfun.tv/dotnet/20120923/style/image/avatar.jpg') + '"')
+                                            .replace(/\[uid\]/g, a.user)
+                                            .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
+                                            .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
+                                            .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
                                             .replace(/\[isFriend\]/g, (!a.isFriend ? '<button class="btn-follow-followed btn primary mini"><i class="icon white icon-plus-sign"></i>关注</button>' : '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>'))
                                             .replace(/\[followings\]/g, a.followingCount || 0)
                                             .replace(/\[followeds\]/g, a.followedCount || 0)
@@ -216,10 +216,9 @@
                                             .replace(/\[favors\]/g, a.userContributeStow || 0)
                                             .replace(/\[comms\]/g, a.userContributeComment || 0)
                                             .replace(/\[views\]/g, a.userContributeView || 0)
-                                            .replace(/\[from\]/g, a.comeFrom ? ($.parseSafe(a.comeFrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
-                                            .replace(/\[gender\]/g, {'-1': 'TA', '0': '她', '1': '他'}[a.gender])
-                                            .replace(/\[sex\]/g, a.sexTrend)
-                                            .replace(/\[index\]/g, data.totalCount - (data.page - 1) * data.pageSize - i)
+                                            .replace(/\[from\]/g, a.comefrom ? ($.parseSafe(a.comefrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
+                                            .replace(/\[gender\]/g, {'secret': 'TA', 'female': '她', 'male': '他'}[a.gender])
+                                            .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)
                                     ;
                                 }
                                 ;
@@ -228,8 +227,8 @@
                             }
                             ;
                             var pager = $.makePager({
-                                count: data.totalCount,
-                                num: data.page,
+                                count: data.totalRow,
+                                num: data.pageNumber,
                                 size: data.pageSize,
                                 addon: true
                             });

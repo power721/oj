@@ -32,4 +32,12 @@ public class FriendApiController extends OjController
     renderJson(socialService.getFollowingList(pageNumber, pageSize, uid, gid));
   }
   
+  public void getFollowedList()
+  {
+    Integer uid = userService.getCurrentUid();
+    int pageNumber = getParaToInt("page", 1);
+    int pageSize = getParaToInt("size", OjConfig.friendPageSize);
+    
+    renderJson(socialService.getFollowedList(pageNumber, pageSize, uid));
+  }
 }
