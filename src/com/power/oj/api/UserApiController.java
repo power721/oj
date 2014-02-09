@@ -79,7 +79,8 @@ public class UserApiController extends OjController
     UserExtModel userModel = UserExtModel.dao.findById(uid);
     if ((incExp = userService.checkin(userModel)) > 0)
     {
-      renderJson("{\"success\":true, \"incexp\":" + incExp +"}");
+      int checkinTimes = userModel.getInt("checkin_times");
+      renderJson("{\"success\":true, \"incexp\":" + incExp +",\"result\":" + checkinTimes + "}");
     }
     else
     {

@@ -251,7 +251,7 @@ AUTO_INCREMENT=1
 DROP TABLE IF EXISTS `level`;
 CREATE TABLE `level` (
   `level` int(5) NOT NULL AUTO_INCREMENT,
-  `credit` int(5) NOT NULL,
+  `exp` int(9) NOT NULL,
   PRIMARY KEY (`level`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
@@ -899,10 +899,11 @@ CREATE TABLE `user_ext` (
   `phone` varchar(35) DEFAULT NULL,
   `qq` varchar(15) DEFAULT NULL,
   `blog` varchar(255) DEFAULT NULL,
+  `share` tinyint(1) NOT NULL DEFAULT '0',
   `online` int(9) NOT NULL DEFAULT '0',
   `level` int(9) NOT NULL DEFAULT '1',
   `credit` int(9) NOT NULL DEFAULT '0',
-  `share` tinyint(1) NOT NULL DEFAULT '0',
+  `exp` int(9) NOT NULL DEFAULT '0',
   `checkin` int(11) NOT NULL DEFAULT '0',
   `checkin_times` tinyint(3) NOT NULL DEFAULT '0',
   `last_send_drift` int(11) NOT NULL DEFAULT '0',
@@ -915,7 +916,7 @@ CREATE TABLE `user_ext` (
 -- ----------------------------
 -- Records of user_ext
 -- ----------------------------
-INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '1', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for `variable`

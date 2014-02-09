@@ -117,7 +117,7 @@ public class OjConfig
     List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
     for (Record record : levels)
     {
-      level.add(record.getInt("credit"));
+      level.add(record.getInt("exp"));
     }
   }
   

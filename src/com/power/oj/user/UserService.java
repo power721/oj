@@ -79,24 +79,30 @@ public class UserService
     return true;
   }
   
+  public void addExp(UserExtModel userExtModel, int incExp)
+  {
+    int exp = userExtModel.getInt("exp") + incExp;
+    int credit = userExtModel.getInt("credit") + incExp;
+    int level = Arrays.binarySearch(OjConfig.level.toArray(), exp);
+    level = level<0 ? -level : level+2;
+    
+    userExtModel.set("credit", credit).set("exp", exp).set("level", level);
+  }
+  
   public int checkin(UserExtModel userExtModel)
   {
     int timestamp = Tool.getDayTimestamp();
     int checkin = userExtModel.getInt("checkin");
     int checkinTimes = userExtModel.getInt("checkin_times");
-    int credit = userExtModel.getInt("credit");
     int level = userExtModel.getInt("level");
     
     if (checkin < timestamp)
     {
       checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
       int incExp = Math.min(checkinTimes, level);
-      credit += incExp;
-      level = Arrays.binarySearch(OjConfig.level.toArray(), credit);
-      level = level<0 ? -level : level+2;
       
-      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes);
-      userExtModel.set("credit", credit).set("level", level).update();
+      addExp(userExtModel, incExp);
+      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).update();
       return incExp;
     }
     
@@ -520,7 +526,7 @@ public class UserService
   public UserModel getCurrentUserExt()
   {
     UserModel userModel = dao.getUserExt(getCurrentUid());
-    int credit = userModel.getInt("credit");
+    int exp = userModel.getInt("exp");
     int level = userModel.getInt("level");
     int lastExp = 0;
     if (level > 1)
@@ -534,7 +540,7 @@ public class UserService
     }
     
     userModel.put("nextExp", nextExp);
-    userModel.put("percent", (int)((credit-lastExp)/(double)(nextExp-lastExp) * 100));
+    userModel.put("percent", (int)((exp-lastExp)/(double)(nextExp-lastExp) * 100));
     
     return userModel;
   }

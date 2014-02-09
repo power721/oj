@@ -24,4 +24,16 @@ public class UserExtModel extends Model<UserExtModel>
   public static final String CHECKIN_TIMES = "checkin_times";
   public static final String LAST_DRIFT = "last_drift";
   public static final String DRIFT = "drift";
+  
+  public UserExtModel() {}
+  
+  public UserExtModel(UserModel userModel)
+  {
+    String[] attrNames = this.getAttrNames();
+    for (String attrName : attrNames)
+    {
+      this.set(attrName, userModel.get(attrName));
+    }
+  }
+  
 }
