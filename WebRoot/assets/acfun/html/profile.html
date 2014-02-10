@@ -539,10 +539,8 @@ system.tv = function () {
                                     }
                                     ;
                                     //gender
-                                    //var b = (data.gender == 'female') ? 0 : ((data.gender == 'secret') ? -1 : 1);
+                                    //var b = (data.gender == 'female') ? 'female' : ((data.gender == 'male') ? 'male' : 'secret');
                                     $('#ipt-gender-personal').val(data.gender);
-                                    //sextrend
-                                    $('#ipt-sex-personal').val(data.sextrend);
                                 } else {
                                     var html = '<p class="alert alert-danger">' + data.result + '</p>';
                                     mainer.prepend(html);
@@ -591,8 +589,7 @@ system.tv = function () {
                          a = a.search('请输入') != -1 ? '' : a;
                          return a;
                          },*/
-                        gender: $('#ipt-gender-personal').val(),
-                        sextrend: $('#ipt-sex-personal').val()
+                        gender: $('#ipt-gender-personal').val()
                     })
                             .done(function (data) {
                                 //

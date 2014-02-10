@@ -17,7 +17,8 @@ var system = {
   handle: {
     stage: $('#stage')
   },
-  session: {}
+  session: {},
+  browser: window.Modernizr || {}
 };
 var user = {
   ver: '0.0.2',
@@ -33,6 +34,7 @@ var config = {
   ver: '0.0.3',
   globe: {
     debug: 0,
+    sync: 0,
     jsAnimationAllowed: 1,
     guideFloatAllowed: 0
   },
@@ -62,8 +64,17 @@ var cache = {
     ver: '0.0.2',
     content: ''
   },
-  save: {}
+  save: {},
+  sync: {
+    time: 0,
+    todo: [],
+    index: [],
+    result: {}
+  }
 };
+$.ajaxSetup({
+  cache: true
+});
 (function($) {
   $.fn.hoverInfo = function(param, callback) {
     var func = {
@@ -1486,7 +1497,7 @@ var cache = {
     };
     if (func.id.length) {
       if (!$('#' + func.id).length) {
-        var temp = '<div id="[id]" class="win [type]">' + '<div class="block-title">' + '<p class="title"><i class="icon icon-[icon]"></i>[title]</p>' + '<div class="area-tool">' + '<div class="close" onClick="javascript:$(this).shut();" title="单击关闭窗体"><i class="icon gray icon-remove">X</i></div>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="mainer">' + '<div class="hint-window">少女祈祷中...</div>' + '</div>' + '</div>';
+        var temp = '<div id="[id]" class="win [type]">' + '<div class="block-title">' + '<p class="title"><i class="icon icon-[icon]"></i>[title]</p>' + '<div class="area-tool">' + '<div class="close" onClick="javascript:$(this).shut();" title="单击关闭窗体"><i class="icon gray icon-remove">X</i></div>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="mainer">' + '<div class="hint-window">与服务器通信中...</div>' + '</div>' + '</div>';
         var html = temp.replace(/\[id\]/g, func.id).replace(/\[type\]/g, (func['class'] || func.type || '')).replace(/\[icon\]/g, func.icon).replace(/\[title\]/g, func.title);
         area.append(html);
         var win = $('#' + func.id);
