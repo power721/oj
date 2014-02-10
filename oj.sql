@@ -273,7 +273,7 @@ CREATE TABLE `friend_group` (
   `count` int(9) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of friend_group
@@ -877,51 +877,44 @@ INSERT INTO `user_role` VALUES ('1', '1000', '1', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-`uid`  int(9) NOT NULL AUTO_INCREMENT COMMENT 'Unique user ID, internal use.' ,
-`tid`  int(9) NOT NULL DEFAULT 0 COMMENT 'refere team id.' ,
-`name`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'unique user login name.' ,
-`pass`  varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'User’s password (hashed).' ,
-`nick`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'nick' ,
-`realname`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`email`  varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'User’s e-mail address.' ,
-`language`  int(5) NOT NULL DEFAULT 0 ,
-`school`  varchar(65) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`solved`  int(6) NOT NULL DEFAULT 0 COMMENT 'the number of problems user solved' ,
-`accept`  int(6) NOT NULL DEFAULT 0 ,
-`submit`  int(6) NOT NULL DEFAULT 0 COMMENT 'the number of user submit code' ,
-`atime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for previous time user accessed the site.' ,
-`ctime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for when user was created.' ,
-`mtime`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for when user edit its profile.' ,
-`login`  int(11) NOT NULL DEFAULT 0 COMMENT 'Timestamp for user last login.' ,
-`login_ip` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-`phone`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`qq`  varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`blog`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`gender`  enum('female','male','secret') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'secret' ,
-`comefrom` varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-`online`  int(9) NOT NULL DEFAULT 0 ,
-`level`  int(5) NOT NULL DEFAULT 1 ,
-`credit`  int(9) NOT NULL DEFAULT 0 ,
-`share`  tinyint(1) NOT NULL DEFAULT 0 ,
-`avatar` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'user avatar path' ,
-`sign` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-`checkin` int(11) NOT NULL DEFAULT '0',
-`checkin_times` int(5) NOT NULL DEFAULT '0',
-`status`  tinyint(2) NOT NULL DEFAULT 1 COMMENT 'Whether the user is active(1) or blocked(0).' ,
-`data`  blob NULL DEFAULT NULL ,
-`token`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-PRIMARY KEY (`uid`)
-)
-ENGINE=InnoDB
-DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=1001
-
-;
+  `uid` int(9) NOT NULL AUTO_INCREMENT COMMENT 'Unique user ID, internal use.',
+  `tid` int(9) NOT NULL DEFAULT '0' COMMENT 'refere team id.',
+  `name` varchar(35) NOT NULL COMMENT 'unique user login name.',
+  `pass` varchar(128) NOT NULL COMMENT 'User’s password (hashed).',
+  `nick` varchar(255) DEFAULT NULL COMMENT 'nick',
+  `realname` varchar(35) DEFAULT NULL,
+  `reg_email` varchar(64) NOT NULL,
+  `email` varchar(64) NOT NULL COMMENT 'User’s e-mail address.',
+  `email_verified` tinyint(1) NOT NULL DEFAULT '0',
+  `language` int(5) NOT NULL DEFAULT '0',
+  `school` varchar(65) DEFAULT NULL,
+  `solved` int(6) NOT NULL DEFAULT '0' COMMENT 'the number of problems user solved',
+  `accept` int(6) NOT NULL DEFAULT '0',
+  `submit` int(6) NOT NULL DEFAULT '0' COMMENT 'the number of user submit code',
+  `atime` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp for previous time user accessed the site.',
+  `ctime` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp for when user was created.',
+  `mtime` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp for when user edit its profile.',
+  `login` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp for user last login.',
+  `login_ip` varchar(45) DEFAULT NULL,
+  `phone` varchar(35) DEFAULT NULL,
+  `qq` varchar(15) DEFAULT NULL,
+  `blog` varchar(255) DEFAULT NULL,
+  `gender` enum('female','male','secret') NOT NULL DEFAULT 'secret',
+  `comefrom` varchar(35) DEFAULT NULL,
+  `online` int(9) NOT NULL DEFAULT '0',
+  `level` int(5) NOT NULL DEFAULT '1',
+  `share` tinyint(1) NOT NULL DEFAULT '0',
+  `avatar` varchar(64) DEFAULT NULL COMMENT 'user avatar path',
+  `sign` varchar(255) DEFAULT NULL,
+  `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT 'Whether the user is active(1) or blocked(0).',
+  `token` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` (`uid`, `tid`, `name`, `pass`, `nick`, `realname`, `email`, `language`, `school`, `solved`, `accept`, `submit`, `atime`, `ctime`, `mtime`, `login`, `phone`, `qq`, `blog`, `gender`, `online`, `level`, `credit`, `share`, `avatar`, `status`, `data`, `token`) VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, '', '0', null, '0', '0', '0', '0', '0', '0', '0', null, null, null, 'secret', '0', '1', '0', '0', null, '1', null, null);
+INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, '', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '1392033606', '127.0.0.1', null, null, null, 'secret', null, '118', '1', '0', 'upload/image/user/1000.jpg', null, '1', null);
 
 -- ----------------------------
 -- Table structure for `user_ext`

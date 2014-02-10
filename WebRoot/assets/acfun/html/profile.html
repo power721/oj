@@ -115,7 +115,7 @@
             <div class="l">
                 <img id="img-avatar-personal" class="avatar" [avatar] title="单击修改头像" onerror="this.onerror=null;this.src='assets/images/user/default.png'">
             </div>
-            <div class="r">
+            <div class="r" id="unit-email" data-email="[email]">
                 <a id="name-personal" class="name" href="user/profile/[name]">[name]</a>
                 <span id="uid-personal">Uid:[uid]</span>
 
@@ -135,6 +135,9 @@
                 </button>
             </div>
             <div class="r">
+                <button id="btn-email-personal" class="btn info">
+                    <i class="icon white icon-envelope"></i>修改邮箱
+                </button>
                 <button id="btn-password-personal" class="btn info">
                     <i class="icon white icon-question-sign"></i>修改密码
                 </button>
@@ -473,6 +476,18 @@ system.tv = function () {
                     'class': 'win-children',
                     title: '修改密码',
                     icon: 'question-sign',
+                    width: 280,
+                    height: 'auto'
+                });
+            });
+    $('#btn-email-personal')
+            .click(function () {
+                $(this).unfold({
+                    src: 'children/win-email-personal',
+                    id: 'win-email-personal',
+                    'class': 'win-children',
+                    title: '修改邮箱',
+                    icon: 'envelope',
                     width: 280,
                     height: 'auto'
                 });

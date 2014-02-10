@@ -161,7 +161,7 @@ public class UserService
     
     long ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
-    newUser.set("name", name).set("pass", password).set("email", email).set("ctime", ctime);
+    newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email).set("ctime", ctime);
     //newUser.set("atime", ctime).set("mtime", ctime);
     
     if (newUser.save())

@@ -134,6 +134,30 @@ public class UserApiController extends OjController
     }
   }
   
+  public void emailSubmit()
+  {
+    UserModel userModel = getAttr(OjConstants.USER);
+    String origPwd = getPara("origPwd");
+    String newEmail = getPara("newEmail");
+    
+    if (userService.checkPassword(userModel.getUid(), origPwd))
+    {
+      userModel.set("email", newEmail).set("email_verified", 0);
+      if (userModel.update())
+      {
+        renderJson("{\"success\":true}");
+      }
+      else
+      {
+        renderJson("{\"success\":false, \"result\":\"Update email failed.\"}");
+      }
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"result\":\"Password is incorrect.\"}");
+    }
+  }
+  
   @Before(POST.class)
   public void profileSubmit()
   {
