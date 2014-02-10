@@ -140,7 +140,13 @@
       path: "chunjie",
       preview: "chunjie",
       update: "2014.1.16 12:16"
-    }*/];
+    }*/,
+    {
+      title: "情人节",
+      path: "feb14th",
+      preview: "feb14th",
+      update: "2014.2.10 17:19"
+    }];
     var f = function(param) {
       var a = d[param];
       html += temp.replace(/\[title\]/g, a.title || "未命名主题").replace(/\[path\]/g, a.path || "default").replace(/\[preview\](?:\=\"\")?/g, 'src="' + system.path + "/acfun/theme/preview/" + (a.preview || "blank") + '.png"').replace(/\[index\]/g, param).replace(/\[active\]/g, a.path == user.center.theme ? "active": "")

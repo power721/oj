@@ -34,7 +34,7 @@ $(function() {
         } ();
         system.tv = function() {
           if (user.center.theme == "xmas") {
-            $.getScript(system.path + "/script/jquery.snow.min.js?date=" + system.date,
+            $.getScript(system.path + "/js/jquery.snow.min.js?date=" + system.date,
             function() {
               var p = 1e3;
               var h = (new Date).getHours();
@@ -43,6 +43,17 @@ $(function() {
               }
               $.fn.snow({
                 interval: p
+              })
+            })
+          } else if (user.center.theme == "feb14th") {
+            $.getScript(system.path + "/js/jquery.snow.min.js?date=" + system.date,
+            function() {
+              $.fn.snow({
+                character: "♥",
+                size: [16, 32],
+                interval: 1e3,
+                color: ["#e4534f", "#bc455b", "#ca2f3b", "#ec7675"],
+                max: 24
               })
             })
           }
@@ -75,6 +86,55 @@ $(function() {
               $.info(text);
               user.center.theme = t.p;
               f()
+            }).end().find("button.info").click(function() {
+              f()
+            });
+            block.removeClass("hidden")
+          } else {
+            user.center.push = t.p;
+            $.save("user")
+          }
+        } ();*/
+        /*system.tv = function() {
+          var t = {
+            n: "情人节",
+            p: "feb14th"
+          };
+          if (user.center.theme != "loneliness" && (!user.center.push || user.center.push != t.p)) {
+            var block = $("#block-message-header");
+            var html = '<p class="alert info">' + "情浓一生，真心表爱意！<br />" + "“" + t.n + "”主题正式上线，是否立刻应用？" + "</p>" + '<div class="l">' + '<button class="btn success">' + '<i class="icon white icon-ok-circle"></i>应用主题' + "</button>" + "</div>" + '<div class="r">' + '<button class="btn info">' + '<i class="icon white icon-remove-circle"></i>不再提示' + "</button>" + "</div>" + '<span class="clearfix"></span>';
+            var f = function() {
+              user.center.push = t.p;
+              block.stop().animate({
+                top: -96,
+                opacity: 0
+              },
+              500,
+              function() {
+                block.addClass("hidden")
+              });
+              $.save("user")
+            };
+            block.find("div.mainer").html(html).find("button.success").click(function() {
+              $("#style-theme-member").remove();
+              var html = '<link id="style-theme-member" href="assets/acfun/theme/' + t.p + "/theme.css?date=" + system.date + '" rel="stylesheet">';
+              $("head").append(html);
+              var text = "success::已成功应用主题[" + t.n + "]。";
+              $.info(text);
+              user.center.theme = t.p;
+              f();
+              if (user.center.theme == "feb14th") {
+                $.getScript(system.path + "/js/jquery.snow.min.js?date=" + system.date,
+                function() {
+                  $.fn.snow({
+                    character: "♥",
+                    size: [16, 32],
+                    interval: 1e3,
+                    color: ["#e4534f", "#bc455b", "#ca2f3b", "#ec7675"],
+                    max: 24
+                  })
+                })
+              }
             }).end().find("button.info").click(function() {
               f()
             });
