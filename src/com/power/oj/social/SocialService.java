@@ -5,6 +5,7 @@ import java.util.List;
 import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Page;
+import com.power.oj.core.OjConfig;
 
 public class SocialService
 {
@@ -19,7 +20,7 @@ public class SocialService
   
   public List<FriendGroupModel> getGroupList(Integer uid)
   {
-    List<FriendGroupModel> groupList = dao.find("SELECT g.*,COUNT(f.user) AS count FROM friend_group g LEFT JOIN friend f ON f.gid=g.id WHERE f.user=? ORDER BY g.id", uid);
+    List<FriendGroupModel> groupList = dao.find("(SELECT g.id,g.uid,g.name,COUNT(f.user) AS count,g.ctime FROM friend_group g LEFT JOIN friend f ON f.user=? AND f.gid=g.id WHERE g.uid=0) UNION (SELECT * FROM friend_group WHERE uid=? ORDER BY id)", uid, uid);
     if (groupList.size() > 0 && StringUtil.isEmpty(groupList.get(0).getStr("name")))
     {
       groupList.get(0).set("id", 0).set("name", "未分组");
@@ -50,6 +51,21 @@ public class SocialService
     String from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.user WHERE f.friend=?";
     
     return dao.paginate(pageNumber, pageSize, sql, from, uid);
+  }
+  
+  public boolean addGroup(Integer uid, String groupName)
+  {
+    FriendGroupModel group = dao.findFirst("SELECT * FROM friend_group WHERE uid=? AND name=?", uid, groupName);
+    
+    if (group == null)
+    {
+      group = new FriendGroupModel();
+      group.set("uid", uid);
+      group.set("name", groupName);
+      group.set("ctime", OjConfig.timeStamp);
+      return group.save();
+    }
+    return true;
   }
   
 }

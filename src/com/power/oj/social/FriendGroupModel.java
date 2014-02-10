@@ -12,6 +12,7 @@ public class FriendGroupModel extends Model<FriendGroupModel>
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String NAME = "name";
+  public static final String COUNT = "count";
   public static final String CTIME = "ctime";
   public static final FriendGroupModel dao = new FriendGroupModel();
 }

@@ -40,4 +40,20 @@ public class FriendApiController extends OjController
     
     renderJson(socialService.getFollowedList(pageNumber, pageSize, uid));
   }
+  
+  public void addGroup()
+  {
+    Integer uid = userService.getCurrentUid();
+    String groupName = getPara("groupName");
+    
+    if (socialService.addGroup(uid, groupName))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Save friend group failed.\"}");
+    }
+  }
+  
 }

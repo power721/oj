@@ -251,7 +251,7 @@ AUTO_INCREMENT=1
 DROP TABLE IF EXISTS `friend`;
 CREATE TABLE `friend` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
-  `gid` int(9) NOT NULL DEFAULT '0',
+  `gid` int(9) NOT NULL DEFAULT '1',
   `user` int(9) NOT NULL,
   `friend` int(9) NOT NULL,
   `ctime` int(11) NOT NULL,
@@ -270,6 +270,7 @@ CREATE TABLE `friend_group` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `uid` int(9) NOT NULL,
   `name` varchar(35) NOT NULL,
+  `count` int(9) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -277,7 +278,7 @@ CREATE TABLE `friend_group` (
 -- ----------------------------
 -- Records of friend_group
 -- ----------------------------
-INSERT INTO `friend_group` VALUES ('0', '0', '', '0');
+INSERT INTO `friend_group` VALUES ('1', '0', '', '0');
 
 -- ----------------------------
 -- Table structure for `level`
