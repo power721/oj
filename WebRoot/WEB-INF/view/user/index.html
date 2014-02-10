@@ -79,20 +79,20 @@
             <a href="logout?t=/">
               退出登录
             </a>
-            <a href="user/#area=push">
+            <!--<a href="user/#area=push">
               <div id="hint-newPush-guide" class="hidden">
               </div>
               推送
-            </a>
-            <a href="user/#area=mention">
-              <div id="hint-mention-guide" class="hidden">
-              </div>
-              召唤
             </a>
             <a href="user/#area=followers">
               <div id="hint-newFollowed-guide" class="hidden">
               </div>
               听众
+            </a>-->
+            <a href="user/#area=mention">
+              <div id="hint-mention-guide" class="hidden">
+              </div>
+              召唤
             </a>
             <a href="user/#area=mail">
               <div id="hint-unReadMail-guide" class="hidden">
@@ -156,7 +156,7 @@
                     未签到
                   </button>
                   </#if>
-                  <p title="当前总经验值：${user.credit!0} / 下一级所需总经验值：${user.nextExp!200}" class="level">
+                  <p title="当前总经验值：${user.exp!0} / 下一级所需总经验值：${user.nextExp!200}" class="level" id="user-level" data-credit="${user.credit!0}">
                     <span style="width:${user.percent!0}%;" class="a">
                     </span>
                     <span class="b">
