@@ -613,4 +613,9 @@ public class UserService
     return ShiroKit.hasPermission("admin");
   }
 
+  public boolean containsEmailExceptThis(Integer uid, String email)
+  {
+    return dao.containsEmailExceptThis(uid, email);
+  }
+
 }

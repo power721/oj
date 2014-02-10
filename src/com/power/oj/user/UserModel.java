@@ -52,12 +52,12 @@ public class UserModel extends Model<UserModel>
 
   public UserModel getUserInfoByName(String name)
   {
-    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,solved,login,ctime,sign,comefrom FROM user WHERE name=? LIMIT 1", name);
+    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,share,gender,submit,solved,login,ctime,sign,comefrom FROM user WHERE name=? LIMIT 1", name);
   }
 
   public UserModel getUserInfoByUid(Integer uid)
   {
-    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,solved,login,ctime,sign,comefrom FROM user WHERE uid=? LIMIT 1", uid);
+    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,share,gender,submit,solved,login,ctime,sign,comefrom FROM user WHERE uid=? LIMIT 1", uid);
   }
 
   public int getUserRank(Integer uid)

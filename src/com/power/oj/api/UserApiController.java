@@ -137,11 +137,18 @@ public class UserApiController extends OjController
   public void emailSubmit()
   {
     UserModel userModel = getAttr(OjConstants.USER);
+    Integer uid = userModel.getUid();
     String origPwd = getPara("origPwd");
     String newEmail = getPara("newEmail");
     
-    if (userService.checkPassword(userModel.getUid(), origPwd))
+    if (userService.checkPassword(uid, origPwd))
     {
+      if (userService.containsEmailExceptThis(uid, newEmail))
+      {
+        renderJson("{\"success\":false, \"result\":\"This email already used by other.\"}");
+        return;
+      }
+      
       userModel.set("email", newEmail).set("email_verified", 0);
       if (userModel.update())
       {

@@ -902,7 +902,6 @@ CREATE TABLE `user` (
   `gender` enum('female','male','secret') NOT NULL DEFAULT 'secret',
   `comefrom` varchar(35) DEFAULT NULL,
   `online` int(9) NOT NULL DEFAULT '0',
-  `level` int(5) NOT NULL DEFAULT '1',
   `share` tinyint(1) NOT NULL DEFAULT '0',
   `avatar` varchar(64) DEFAULT NULL COMMENT 'user avatar path',
   `sign` varchar(255) DEFAULT NULL,
@@ -914,7 +913,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, '', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '1392033606', '127.0.0.1', null, null, null, 'secret', null, '118', '1', '0', 'upload/image/user/1000.jpg', null, '1', null);
+INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, 'admin@local.host', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '1392033606', '127.0.0.1', null, null, null, 'secret', null, '118', '0', 'upload/image/user/1000.jpg', null, '1', null);
 
 -- ----------------------------
 -- Table structure for `user_ext`
