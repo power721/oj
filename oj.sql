@@ -941,6 +941,7 @@ CREATE TABLE `user_ext` (
   `exp` int(9) NOT NULL DEFAULT '0',
   `checkin` int(11) NOT NULL DEFAULT '0',
   `checkin_times` tinyint(3) NOT NULL DEFAULT '0',
+  `total_checkin` int(9) NOT NULL DEFAULT '0',
   `last_send_drift` int(11) NOT NULL DEFAULT '0',
   `send_drift` tinyint(3) NOT NULL DEFAULT '0',
   `last_get_drift` int(11) NOT NULL DEFAULT '0',

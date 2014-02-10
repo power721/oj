@@ -100,9 +100,10 @@ public class UserService
     {
       checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
       int incExp = Math.min(checkinTimes, level);
+      int totalCheckin = userExtModel.getInt("total_checkin") + 1;
       
       addExp(userExtModel, incExp);
-      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).update();
+      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).set("total_checkin", totalCheckin).update();
       return incExp;
     }
     
