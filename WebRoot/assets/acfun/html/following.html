@@ -423,7 +423,7 @@ system.tv = function () {
                                     gid: param.gid || 0,
                                     name: groupName
                                 })
-                                .html('<p class="alert alert-info">[' + groupName + ']分组内共有' + data.totalRow + '名用户。<br />您可以在下方列表的项目上点击或拖曳，以对选中项目进行操作。</p>' + pager + html + pager)
+                                .html('<p class="alert alert-info">[' + groupName + ']分组内共有' + data.totalRow + '名用户。<br />您可以在下方列表的项目上点击或拖曳(或按Ctrl键选中多个)，以对选中项目进行操作。</p>' + pager + html + pager)
                                 .find('a.name, img.avatar')
                                 .card();
                         //
@@ -575,10 +575,11 @@ system.tv = function () {
                             gid: list.data().gid,
                             gids: gids,
                             callback: function () {
-                                items.remove();
+                                m.refreshPart();
+                                /*items.remove();
                                 //close
                                 $('#item-tool-following').find('button').eq(-1)
-                                        .click();
+                                        .click();*/
                             }
                         });
                     }

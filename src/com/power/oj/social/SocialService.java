@@ -74,24 +74,14 @@ public class SocialService
     return true;
   }
 
-  public boolean updateGroup(Integer uid, Integer gid, String groupName)
+  public int updateGroup(Integer uid, Integer gid, String groupName)
   {
-    if (gid <= 1)
-    {
-      return false;
-    }
-
-    FriendGroupModel group = dao.findFirst("SELECT * FROM friend_group WHERE uid=? AND id=?", uid, gid);
-    if (group != null)
-    {
-      if (groupName.equals(group.getStr("name")))
-      {
-        return true;
-      }
-      return group.set("name", groupName).update();
-    }
-
-    return false;
+    return Db.update("UPDATE friend_group SET name=? WHERE uid=? AND id=? AND id>1", groupName, uid, gid);
+  }
+  
+  public int deleteGroup(Integer uid, Integer gid)
+  {
+    return Db.update("DELETE FROM friend_group WHERE uid=? AND id=? AND id>1 AND count=0", uid, gid);
   }
 
   public boolean changeFollowingByGroup(Integer uid, Integer fid, Integer gid, Integer tgid)
