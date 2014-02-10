@@ -363,11 +363,11 @@ system.tv = function () {
                         //
                         for (var i = 0, l = data.groupList.length; i < l; i++) {
                             var a = data.groupList[i];
-                            if (a.groupId && a.groupId > 0) {
+                            if (a.id && a.id > 0) {
                                 html += temp
-                                        .replace(/\[gid\]/g, a.groupId)
-                                        .replace(/\[count\]/g, a.groupCount || 0)
-                                        .replace(/\[name\]/g, $.parseSafe(a.groupName || "非法分组"))
+                                        .replace(/\[gid\]/g, a.id)
+                                        .replace(/\[count\]/g, a.count || 0)
+                                        .replace(/\[name\]/g, $.parseSafe(a.name || "非法分组"))
                                 ;
                             }
                             ;

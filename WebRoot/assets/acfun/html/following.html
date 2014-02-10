@@ -202,7 +202,7 @@
         <div class="btn info mini btn-group-following">
             [name]([count])
         </div>
-        <div class="btn info mini btn-manage-following dropdown">
+        <div class="btn info mini btn-manage-following dropdown [hidden]">
             <i class="icon white icon-chevron-down"></i>
             <ul class="menu">
                 <li class="btn-rename-following"><i class="icon icon-edit"></i>重命名分组</li>
@@ -300,8 +300,8 @@ system.tv = function () {
         }
         ;
         system.port.followUser = $.post('api/friend/unfollow', {
-            userId: func.uid,
-            groupId: func.gid
+            uid: func.uid,
+            gid: func.gid
         })
                 .done(function (data) {
                     if (data.success) {
@@ -339,6 +339,7 @@ system.tv = function () {
                                     .replace(/\[gid\]/g, a.id)
                                     .replace(/\[count\]/g, a.count || 0)
                                     .replace(/\[name\]/g, $.parseSafe(a.name || "非法分组"))
+                                    .replace(/\[hidden\]/g, a.id == 1 ? 'hidden' : '')
                             ;
                         }
                         ;
@@ -473,10 +474,14 @@ system.tv = function () {
         //rename
             .delegate('li.btn-rename-following', 'click', function () {
                 var btn = $(this);
+                var gid = btn.closest('div.item').data().gid;
+                if (gid == 1) {
+                    return;
+                }
                 btn.unfold({
                     src: 'children/win-rename-following', id: 'win-rename-following', 'class': 'win-children', title: '重命名分组', icon: 'edit', width: 480, height: 'auto', callback: function () {
                         $('#win-rename-following').data({
-                            gid: btn.closest('div.item').data().gid,
+                            gid: gid,
                             callback: function () {
                                 m.refreshPart();
                             }
@@ -502,7 +507,7 @@ system.tv = function () {
                             }
                             ;
                             system.port.deleteGroup = $.post('api/friend/deleteGroup', {
-                                groupId: obj.data().gid
+                                gid: obj.data().gid
                             })
                                     .done(function (data) {
                                         var html = '';

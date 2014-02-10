@@ -56,8 +56,8 @@
             }
             ;
             system.port.addGroup = $.post('api/friend/updateGroup', {
-                groupId: win.data().gid,
-                groupName: form.data().name
+                gid: win.data().gid,
+                name: form.data().name
             })
                     .done(function (data) {
                         var html = '';

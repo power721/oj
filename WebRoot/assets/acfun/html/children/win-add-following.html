@@ -56,7 +56,7 @@
             }
             ;
             system.port.addGroup = $.post('api/friend/addGroup', {
-                groupName: form.data().name
+                name: form.data().name
             })
                     .done(function (data) {
                         var html = '';

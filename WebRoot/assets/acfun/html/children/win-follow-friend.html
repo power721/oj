@@ -104,8 +104,8 @@
                 ;
                 system.port.followUser = $.post('api/friend/follow', {
                     username: win.data().name,
-                    userId: win.data().uid,
-                    groupId: ipt.val()
+                    uid: win.data().uid,
+                    gid: ipt.val()
                 })
                         .done(function (data) {
                             if (data.success) {

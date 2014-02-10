@@ -44,7 +44,7 @@ public class FriendApiController extends OjController
   public void addGroup()
   {
     Integer uid = userService.getCurrentUid();
-    String groupName = getPara("groupName");
+    String groupName = getPara("name");
     
     if (socialService.addGroup(uid, groupName))
     {
@@ -54,6 +54,32 @@ public class FriendApiController extends OjController
     {
       renderJson("{\"success\":false, \"status\":-200,\"result\":\"Save friend group failed.\"}");
     }
+  }
+
+  public void updateGroup()
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer gid = getParaToInt("gid", 1);
+    String groupName = getPara("name");
+    
+    if (socialService.updateGroup(uid, gid, groupName))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Update friend group failed.\"}");
+    }
+  }
+  
+  public void deleteGroup()
+  {
+    
+  }
+
+  public void changeFollowingByGroup()
+  {
+    
   }
   
 }

@@ -101,9 +101,9 @@
                     }
                     ;
                     system.port.changeGroup = $.post('api/friend/changeFollowingByGroup', {
-                        followingUserId: win.data().uid.join(','),
-                        groupId: win.data().gids.join(','),
-                        targetGroupId: ipt.val()
+                        followingUid: win.data().uid.join(','),
+                        gid: win.data().gids.join(','),
+                        targetGid: ipt.val()
                     })
                             .done(function (data) {
                                 if (data.success) {

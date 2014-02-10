@@ -63,19 +63,20 @@ var cache = {
     content: ''
   },
   save: {}
-}; (function($) {
+};
+(function($) {
   $.fn.hoverInfo = function(param, callback) {
     var func = {
       name: '$.fn.hoverInfo()'
     };
     return this.each(function() {
       $(this).off('.hoverInfo').on('mouseenter.hoverInfo',
-      function() {
-        $(this).info(param, callback)
-      }).on('mouseleave.hoverInfo',
-      function() {
-        $('#win-hint').click()
-      })
+        function() {
+          $(this).info(param, callback)
+        }).on('mouseleave.hoverInfo',
+        function() {
+          $('#win-hint').click()
+        })
     })
   };
   $.info = function(para, callback) {
@@ -126,31 +127,31 @@ var cache = {
     if ( !! func.text) {
       if (func.type != 'debug' || (func.type == 'debug' && system.debug == 1)) {
         var area = $('#area-info');
-        var type = func.type == 'default' ? '': func.type.slice(0, 1).toUpperCase() + func.type.slice(1) + ': ';
+        var type = func.type == 'default' ? '' : func.type.slice(0, 1).toUpperCase() + func.type.slice(1) + ': ';
         var icon = '';
         switch (func.type) {
-        case 'debug':
-          icon = '<i class="icon white icon-comment"></i>';
-          break;
-        case 'error':
-          icon = '<i class="icon white icon-exclamation-sign"></i>';
-          break;
-        case 'info':
-          icon = '<i class="icon white icon-info-sign"></i>';
-          break;
-        case 'success':
-          icon = '<i class="icon white icon-ok-circle"></i>';
-          break;
-        case 'warning':
-          icon = '<i class="icon white icon-warning-sign"></i>';
-          break;
-        default:
-          icon = '<i class="icon white icon-chevron-right"></i>';
-          break
+          case 'debug':
+            icon = '<i class="icon white icon-comment"></i>';
+            break;
+          case 'error':
+            icon = '<i class="icon white icon-exclamation-sign"></i>';
+            break;
+          case 'info':
+            icon = '<i class="icon white icon-info-sign"></i>';
+            break;
+          case 'success':
+            icon = '<i class="icon white icon-ok-circle"></i>';
+            break;
+          case 'warning':
+            icon = '<i class="icon white icon-warning-sign"></i>';
+            break;
+          default:
+            icon = '<i class="icon white icon-chevron-right"></i>';
+            break
         };
         area.css({
           display: 'block'
-        }).append('<p class="item ' + func.type + '">' + icon + (system.debug ? type: '') + func.text + '</p>');
+        }).append('<p class="item ' + func.type + '">' + icon + (system.debug ? type : '') + func.text + '</p>');
         var objs = area.children('p');
         var info = objs.last();
         if (objs.length > func.ul) {
@@ -161,37 +162,37 @@ var cache = {
           left: -w,
           opacity: 0
         }).animate({
-          left: 0,
-          opacity: 1
-        },
-        200,
-        function() {
-          info.delay(10000).animate({
-            left: -w,
-            opacity: 0
+            left: 0,
+            opacity: 1
           },
           200,
           function() {
-            info.mouseover()
+            info.delay(10000).animate({
+                left: -w,
+                opacity: 0
+              },
+              200,
+              function() {
+                info.mouseover()
+              });
+            if ($.isFunction(func.callback)) {
+              func.callback()
+            }
           });
-          if ($.isFunction(func.callback)) {
-            func.callback()
-          }
-        });
         if (func.display == 'default') {
           info.one('mouseover',
-          function() {
-            info.remove();
-            window.clearTimeout(area.data().timer);
-            area.data().timer = window.setTimeout(function() {
-              if (!area.find('p').length) {
-                area.css({
-                  display: 'none'
-                })
-              }
-            },
-            200)
-          })
+            function() {
+              info.remove();
+              window.clearTimeout(area.data().timer);
+              area.data().timer = window.setTimeout(function() {
+                  if (!area.find('p').length) {
+                    area.css({
+                      display: 'none'
+                    })
+                  }
+                },
+                200)
+            })
         }
       }
     } else {
@@ -302,51 +303,51 @@ var cache = {
         };
         var cs = 'left right top bottom';
         switch (func.direction) {
-        case 'x':
-          var r = getX();
-          var left = r[0],
-          top = o.t,
-          fix = [r[2], 0];
-          tail.removeClass(cs).addClass(r[1]);
-          break;
-        case 'y':
-          var r = getY();
-          var left = o.l,
-          top = r[0],
-          fix = [0, r[2]];
-          tail.removeClass(cs).addClass(r[1]);
-          break;
-        case 'left':
-          var left = o.l - s.w - 16,
-          top = o.t,
-          fix = [ - 4, 0];
-          tail.removeClass(cs).addClass('left');
-          break;
-        case 'right':
-          var left = o.l + o.w + 16,
-          top = o.t,
-          fix = [4, 0];
-          tail.removeClass(cs).addClass('right');
-          break;
-        case 'top':
-          var left = o.l,
-          top = o.t - s.h - 8,
-          fix = [0, -4];
-          tail.removeClass(cs).addClass('top');
-          break;
-        case 'bottom':
-          var left = o.l,
-          top = o.t + o.h + 8,
-          fix = [0, 4];
-          tail.removeClass(cs).addClass('bottom');
-          break;
-        default:
-          var r = getY();
-          var left = o.l,
-          top = r[0],
-          fix = [0, r[2]];
-          tail.removeClass(cs).addClass(r[1]);
-          break
+          case 'x':
+            var r = getX();
+            var left = r[0],
+              top = o.t,
+              fix = [r[2], 0];
+            tail.removeClass(cs).addClass(r[1]);
+            break;
+          case 'y':
+            var r = getY();
+            var left = o.l,
+              top = r[0],
+              fix = [0, r[2]];
+            tail.removeClass(cs).addClass(r[1]);
+            break;
+          case 'left':
+            var left = o.l - s.w - 16,
+              top = o.t,
+              fix = [-4, 0];
+            tail.removeClass(cs).addClass('left');
+            break;
+          case 'right':
+            var left = o.l + o.w + 16,
+              top = o.t,
+              fix = [4, 0];
+            tail.removeClass(cs).addClass('right');
+            break;
+          case 'top':
+            var left = o.l,
+              top = o.t - s.h - 8,
+              fix = [0, -4];
+            tail.removeClass(cs).addClass('top');
+            break;
+          case 'bottom':
+            var left = o.l,
+              top = o.t + o.h + 8,
+              fix = [0, 4];
+            tail.removeClass(cs).addClass('bottom');
+            break;
+          default:
+            var r = getY();
+            var left = o.l,
+              top = r[0],
+              fix = [0, r[2]];
+            tail.removeClass(cs).addClass(r[1]);
+            break
         };
         win.stop(false, true).css({
           left: left,
@@ -354,31 +355,31 @@ var cache = {
           opacity: 0,
           display: 'block'
         }).animate({
-          left: left + fix[0],
-          top: top + fix[1],
-          opacity: 1
-        },
-        200,
-        function() {
-          if ($.isFunction(func.callback)) {
-            func.callback()
-          };
-          if (func.id == 'win-hint') {
-            if (func.fadeout && func.fadeout > 0) {
-              system.timer.hintFadeOut = window.setTimeout(function() {
-                win.click()
-              },
-              func.fadeout)
+            left: left + fix[0],
+            top: top + fix[1],
+            opacity: 1
+          },
+          200,
+          function() {
+            if ($.isFunction(func.callback)) {
+              func.callback()
+            };
+            if (func.id == 'win-hint') {
+              if (func.fadeout && func.fadeout > 0) {
+                system.timer.hintFadeOut = window.setTimeout(function() {
+                    win.click()
+                  },
+                  func.fadeout)
+              }
+            } else {
+              if (func.fadeout && func.fadeout > 0) {
+                window.setTimeout(function() {
+                    win.click()
+                  },
+                  func.fadeout)
+              }
             }
-          } else {
-            if (func.fadeout && func.fadeout > 0) {
-              window.setTimeout(function() {
-                win.click()
-              },
-              func.fadeout)
-            }
-          }
-        })
+          })
       } else {
         $.info('debug::' + func.name + '为空的非法信息。')
       }
@@ -411,23 +412,24 @@ var cache = {
         left: singer.offset().left,
         top: top
       }).animate({
-        opacity: 1,
-        top: top - 16
-      },
-      250).animate({
-        top: top - 20
-      },
-      500).animate({
-        opacity: 0,
-        top: top - 32
-      },
-      250,
-      function() {
-        obj.remove()
-      })
+          opacity: 1,
+          top: top - 16
+        },
+        250).animate({
+          top: top - 20
+        },
+        500).animate({
+          opacity: 0,
+          top: top - 32
+        },
+        250,
+        function() {
+          obj.remove()
+        })
     })
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.fn.scrollOnto = function(param, callback) {
     var func = {
       name: '$.fn.scrollOnto()',
@@ -447,14 +449,14 @@ var cache = {
       return this.eq(0).each(function() {
         var obj = $(this);
         $('body, html').stop().animate({
-          scrollTop: obj.offset().top - 64
-        },
-        func.time,
-        function() {
-          if ($.isFunction(func.callback)) {
-            func.callback()
-          }
-        })
+            scrollTop: obj.offset().top - 64
+          },
+          func.time,
+          function() {
+            if ($.isFunction(func.callback)) {
+              func.callback()
+            }
+          })
       })
     } else {
       $.info('debug::[' + func.name + ']指定了不存在于舞台上的非法元素。')
@@ -476,71 +478,73 @@ var cache = {
       return false
     }
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.save = function(param, callback) {
     window.clearTimeout(system.timer.systemSaveDelay);
     system.timer.systemSaveDelay = window.setTimeout(function() {
-      var func = {
-        name: '$.save()',
-        token: 'mimiko',
-        type: 'default',
-        callback: callback
-      };
-      if ( !! param) {
-        if ($.type(param) == 'string') {
-          func.type = $.trim(param)
-        } else {
-          $.info('debug::[' + func.name + ']非法的存储类型。')
-        }
-      };
-      var f = {
-        cache: function() {
-          if ( !! system.browser.localstorage) {
-            window.localStorage.setItem('cache', $.parseString(cache))
-          } else {
-            $.info('debug::[' + func.name + ']不支持本地存储的老旧浏览器。')
-          }
-        },
-        config: function() {
-          if ( !! system.browser.localstorage) {
-            window.localStorage.setItem('config', $.parseString(config))
-          } else {
-            func.key = 'config';
-            func.expires = 356;
-            func.data = $.parseString(config)
-          }
-        },
-        'default': function() {
-          $.info('debug::[' + func.name + ']未指定类型的非法参数。')
-        },
-        user: function() {
-          if ( !! system.browser.localstorage) {
-            window.localStorage.setItem('user', $.parseString(user))
-          } else {
-            func.key = 'user';
-            func.expires = 14;
-            func.data = $.parseString(user)
-          }
-        }
-      };
-      if ($.isFunction(f[func.type])) {
-        f[func.type]();
-        if ( !! func.key) {
-          $.cookie('av.' + func.key, func.data, {
-            expires: func.expires,
-            path: '/'
-          })
+        var func = {
+          name: '$.save()',
+          token: 'mimiko',
+          type: 'default',
+          callback: callback
         };
-        if ($.isFunction(func.callback)) {
-          func.callback()
+        if ( !! param) {
+          if ($.type(param) == 'string') {
+            func.type = $.trim(param)
+          } else {
+            $.info('debug::[' + func.name + ']非法的存储类型。')
+          }
+        };
+        var f = {
+          cache: function() {
+            if ( !! system.browser.localstorage) {
+              window.localStorage.setItem('cache', $.parseString(cache))
+            } else {
+              $.info('debug::[' + func.name + ']不支持本地存储的老旧浏览器。')
+            }
+          },
+          config: function() {
+            if ( !! system.browser.localstorage) {
+              window.localStorage.setItem('config', $.parseString(config))
+            } else {
+              func.key = 'config';
+              func.expires = 356;
+              func.data = $.parseString(config)
+            }
+          },
+          'default': function() {
+            $.info('debug::[' + func.name + ']未指定类型的非法参数。')
+          },
+          user: function() {
+            if ( !! system.browser.localstorage) {
+              window.localStorage.setItem('user', $.parseString(user))
+            } else {
+              func.key = 'user';
+              func.expires = 14;
+              func.data = $.parseString(user)
+            }
+          }
+        };
+        if ($.isFunction(f[func.type])) {
+          f[func.type]();
+          if ( !! func.key) {
+            $.cookie('av.' + func.key, func.data, {
+              expires: func.expires,
+              path: '/'
+            })
+          };
+          if ($.isFunction(func.callback)) {
+            func.callback()
+          }
+        } else {
+          $.info('debug::[' + func.name + ']未指定类型的非法参数。')
         }
-      } else {
-        $.info('debug::[' + func.name + ']未指定类型的非法参数。')
-      }
-    },
-    1000)
+      },
+      1000)
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   var readyDropdown = function(func) {
     if ($.isFunction(func.start)) {
       func.start()
@@ -549,51 +553,51 @@ var cache = {
     var menu = obj.find('ul.menu').eq(0);
     if (menu.length) {
       obj.unbind('mouseenter.setup').bind('mouseenter.setup',
-      function() {
-        if ($.isFunction(func.callback)) {
-          func.callback()
-        };
-        var m = {
-          w: menu.width(),
-          h: menu.height()
-        };
-        var o = {
-          w: obj.width(),
-          h: obj.height(),
-          t: obj.offset().top,
-          l: obj.offset().left
-        };
-        var w = {
-          w: $(window).innerWidth(),
-          h: $(window).innerHeight(),
-          t: $(window).scrollTop()
-        };
-        if (o.t + m.h + 32 > w.t + w.h) {
-          var t = ['auto', o.h]
-        } else {
-          var t = [o.h, 'auto']
-        };
-        menu.css({
-          top: t[0],
-          bottom: t[1],
-          opacity: 0,
-          display: 'block'
-        }).animate({
-          opacity: 1
-        },
-        200)
-      }).unbind('mouseleave.setup').bind('mouseleave.setup',
-      function() {
-        menu.stop().animate({
-          opacity: 0
-        },
-        200,
         function() {
+          if ($.isFunction(func.callback)) {
+            func.callback()
+          };
+          var m = {
+            w: menu.width(),
+            h: menu.height()
+          };
+          var o = {
+            w: obj.width(),
+            h: obj.height(),
+            t: obj.offset().top,
+            l: obj.offset().left
+          };
+          var w = {
+            w: $(window).innerWidth(),
+            h: $(window).innerHeight(),
+            t: $(window).scrollTop()
+          };
+          if (o.t + m.h + 32 > w.t + w.h) {
+            var t = ['auto', o.h]
+          } else {
+            var t = [o.h, 'auto']
+          };
           menu.css({
-            display: 'none'
-          })
-        })
-      });
+            top: t[0],
+            bottom: t[1],
+            opacity: 0,
+            display: 'block'
+          }).animate({
+              opacity: 1
+            },
+            200)
+        }).unbind('mouseleave.setup').bind('mouseleave.setup',
+        function() {
+          menu.stop().animate({
+              opacity: 0
+            },
+            200,
+            function() {
+              menu.css({
+                display: 'none'
+              })
+            })
+        });
       obj.data().setuped = 1;
       if ($.isFunction(func.finish)) {
         func.finish()
@@ -772,184 +776,184 @@ var cache = {
       ipt.data({
         'class': c
       }).removeAttr('disabled').off('keyup.setup').on('keyup.setup',
-      function(e) {
-        d.v = $.trim(ipt.val());
-        var hint = $('#win-hint-form');
-        if (d.p && d.v == d.p) {
-          ipt.data({
-            'errorinfo': '请输入' + d.n + '。'
-          }).removeClass('success').addClass('error')
-        } else {
-          var len = d.l;
-          if (len && (d.v.length < len[0] || d.v.length > len[1])) {
+        function(e) {
+          d.v = $.trim(ipt.val());
+          var hint = $('#win-hint-form');
+          if (d.p && d.v == d.p) {
             ipt.data({
-              'errorinfo': d.n + '长度应在' + len[0] + '到' + len[1] + '个字符之间。'
+              'errorinfo': '请输入' + d.n + '。'
             }).removeClass('success').addClass('error')
           } else {
-            var reg = d.r ? new RegExp(d.r) : null;
-            if (d.v.length && reg && !reg.test(d.v)) {
+            var len = d.l;
+            if (len && (d.v.length < len[0] || d.v.length > len[1])) {
               ipt.data({
-                'errorinfo': d.n + '格式错误。'
+                'errorinfo': d.n + '长度应在' + len[0] + '到' + len[1] + '个字符之间。'
               }).removeClass('success').addClass('error')
             } else {
-              if (c == 're-password') {
-                if (ipt.val() != form.find('input.password').val()) {
-                  ipt.data({
-                    'errorinfo': '两次输入密码不一致。'
-                  }).removeClass('success').addClass('error')
+              var reg = d.r ? new RegExp(d.r) : null;
+              if (d.v.length && reg && !reg.test(d.v)) {
+                ipt.data({
+                  'errorinfo': d.n + '格式错误。'
+                }).removeClass('success').addClass('error')
+              } else {
+                if (c == 're-password') {
+                  if (ipt.val() != form.find('input.password').val()) {
+                    ipt.data({
+                      'errorinfo': '两次输入密码不一致。'
+                    }).removeClass('success').addClass('error')
+                  } else {
+                    ipt.removeClass('error').addClass('success')
+                  }
                 } else {
                   ipt.removeClass('error').addClass('success')
                 }
-              } else {
-                ipt.removeClass('error').addClass('success')
               }
             }
-          }
-        };
-        if (ipt.hasClass('error')) {
-          var e = ipt.data().errorinfo;
-          if (e) {
-            if (e.substr(e.length - 1) == '。') {
-              e = e.substr(0, e.length - 1)
-            };
-            var h = hint.find('div.mainer').text() || 'empty';
-            if (form.data().setuped && (e != h || hint.css('display') == 'none')) {
-              window.clearTimeout(form.data().timer);
-              ipt.info({
-                id: 'win-hint-form',
-                type: 'warning',
-                direction: (ipt.data().direction ? ipt.data().direction: c == 'captcha' ? 'bottom': (ipt.width() < 640 ? 'x': 'auto')),
-                text: e,
-                fadeout: 0
-              })
+          };
+          if (ipt.hasClass('error')) {
+            var e = ipt.data().errorinfo;
+            if (e) {
+              if (e.substr(e.length - 1) == '。') {
+                e = e.substr(0, e.length - 1)
+              };
+              var h = hint.find('div.mainer').text() || 'empty';
+              if (form.data().setuped && (e != h || hint.css('display') == 'none')) {
+                window.clearTimeout(form.data().timer);
+                ipt.info({
+                  id: 'win-hint-form',
+                  type: 'warning',
+                  direction: (ipt.data().direction ? ipt.data().direction : c == 'captcha' ? 'bottom' : (ipt.width() < 640 ? 'x' : 'auto')),
+                  text: e,
+                  fadeout: 0
+                })
+              }
             }
-          }
-        } else {
-          hint.click()
-        }
-      }).off('keydown.setup').on('keydown.setup',
-      function(e) {
-        if (e.which == 9) {
-          e.preventDefault();
-          var iptsv = ipts.not('.hidden');
-          var index = iptsv.index(ipt);
-          if (index != iptsv.length - 1) {
-            iptsv.eq(1 + index).focus().select()
           } else {
-            if ( !! u) {
-              UE.getEditor(u).execCommand("selectAll")
-            } else {
-              iptsv.eq(0).focus().select()
-            }
+            hint.click()
           }
-        } else if (e.which == 13) {
-          if (ipt.is('input') || (ipt.is('textarea') && e.ctrlKey)) {
+        }).off('keydown.setup').on('keydown.setup',
+        function(e) {
+          if (e.which == 9) {
             e.preventDefault();
-            var index = ipts.index(ipt);
-            if (index != ipts.length - 1) {
-              ipts.eq(index + 1).focus()
+            var iptsv = ipts.not('.hidden');
+            var index = iptsv.index(ipt);
+            if (index != iptsv.length - 1) {
+              iptsv.eq(1 + index).focus().select()
             } else {
               if ( !! u) {
-                UE.getEditor(u).focus()
+                UE.getEditor(u).execCommand("selectAll")
               } else {
-                if (btnDo.is('input')) {
-                  form.submit()
+                iptsv.eq(0).focus().select()
+              }
+            }
+          } else if (e.which == 13) {
+            if (ipt.is('input') || (ipt.is('textarea') && e.ctrlKey)) {
+              e.preventDefault();
+              var index = ipts.index(ipt);
+              if (index != ipts.length - 1) {
+                ipts.eq(index + 1).focus()
+              } else {
+                if ( !! u) {
+                  UE.getEditor(u).focus()
                 } else {
-                  btnDo.click()
+                  if (btnDo.is('input')) {
+                    form.submit()
+                  } else {
+                    btnDo.click()
+                  }
                 }
               }
             }
           }
-        }
-      }).off('focus.setup').on('focus.setup',
-      function() {
-        d.v = $.trim(ipt.val());
-        if ( !! d.p && d.p.length && d.v == d.p) {
-          ipt.val('')
-        };
-        ipt.keyup()
-      }).off('blur.setup').on('blur.setup',
-      function() {
-        if (c == 'tag') {
-          var tvr = new RegExp(d.p, 'g');
-          var arr = $.unique($.trim(ipt.val().replace(tvr, '')).replace(/\s{2,}/g, ' ').split(' '));
-          if (arr.length > 10) {
-            arr.splice(10)
+        }).off('focus.setup').on('focus.setup',
+        function() {
+          d.v = $.trim(ipt.val());
+          if ( !! d.p && d.p.length && d.v == d.p) {
+            ipt.val('')
           };
-          ipt.val(arr.sort().join(' ')).change()
-        };
-        if ( !! d.p && d.p.length && !(c == 'password' || c == 're-password')) {
-          if (!ipt.val()) {
-            ipt.val(d.p)
-          }
-        };
-        window.clearTimeout(form.data().timer);
-        form.data().timer = window.setTimeout(function() {
-          $('#win-hint-form').click()
-        },
-        200)
-      }).off('change.setup').on('change.setup',
-      function() {
-        if (!ipt.hasClass('error')) {
-          d.v = $.trim(ipt.val().replace(d.p, ''));
-          if (d.v && d.v.length) {
-            form.data()[c] = d.v;
-            if (s && form.data().setuped && !ipt.hasClass('error')) {
-              cache.save[s][c] = d.v;
-              $.save('cache',
-              function() {
-                $.info('debug::表单内容已自动存储。')
-              })
+          ipt.keyup()
+        }).off('blur.setup').on('blur.setup',
+        function() {
+          if (c == 'tag') {
+            var tvr = new RegExp(d.p, 'g');
+            var arr = $.unique($.trim(ipt.val().replace(tvr, '')).replace(/\s{2,}/g, ' ').split(' '));
+            if (arr.length > 10) {
+              arr.splice(10)
+            };
+            ipt.val(arr.sort().join(' ')).change()
+          };
+          if ( !! d.p && d.p.length && !(c == 'password' || c == 're-password')) {
+            if (!ipt.val()) {
+              ipt.val(d.p)
             }
-          }
-        }
-      })
-    });
-    if (btnReset.length) {
-      btnReset.unbind('click.setup').bind('click.setup',
-      function() {
-        if (form.data().setuped) {
-          btnReset.ensure({
-            curtain: true,
-            text: '是否确定清空表单？',
-            callback: function() {
-              ipts.val('').keyup().blur().eq(0).focus().select();
-              $.info('info::表单已清空。')
-            }
-          })
-        }
-      })
-    };
-    if (btnDo.length) {
-      btnDo.unbind('click.setup').bind('click.setup',
-      function() {
-        if (form.data().setuped) {
-          if (!btnDo.hasClass('disabled')) {
-            btnDo.addClass('disabled');
-            window.setTimeout(function() {
-              btnDo.removeClass('disabled')
+          };
+          window.clearTimeout(form.data().timer);
+          form.data().timer = window.setTimeout(function() {
+              $('#win-hint-form').click()
             },
-            2000);
-            ipts.each(function() {
-              $(this).focus().change().blur()
-            });
-            var iptsErr = ipts.filter('input.error, textarea.error');
-            if (iptsErr.length) {
-              var hint = '';
-              iptsErr.each(function() {
-                var ipt = $(this);
-                hint += ipt.data().errorinfo + '<br />'
-              });
-              $.info('warning::' + hint);
-              iptsErr.eq(0).focus().select()
-            } else {
-              if ($.isFunction(func.callback)) {
-                func.callback()
+            200)
+        }).off('change.setup').on('change.setup',
+        function() {
+          if (!ipt.hasClass('error')) {
+            d.v = $.trim(ipt.val().replace(d.p, ''));
+            if (d.v && d.v.length) {
+              form.data()[c] = d.v;
+              if (s && form.data().setuped && !ipt.hasClass('error')) {
+                cache.save[s][c] = d.v;
+                $.save('cache',
+                  function() {
+                    $.info('debug::表单内容已自动存储。')
+                  })
               }
             }
           }
-        }
-      })
+        })
+    });
+    if (btnReset.length) {
+      btnReset.unbind('click.setup').bind('click.setup',
+        function() {
+          if (form.data().setuped) {
+            btnReset.ensure({
+              curtain: true,
+              text: '是否确定清空表单？',
+              callback: function() {
+                ipts.val('').keyup().blur().eq(0).focus().select();
+                $.info('info::表单已清空。')
+              }
+            })
+          }
+        })
+    };
+    if (btnDo.length) {
+      btnDo.unbind('click.setup').bind('click.setup',
+        function() {
+          if (form.data().setuped) {
+            if (!btnDo.hasClass('disabled')) {
+              btnDo.addClass('disabled');
+              window.setTimeout(function() {
+                  btnDo.removeClass('disabled')
+                },
+                2000);
+              ipts.each(function() {
+                $(this).focus().change().blur()
+              });
+              var iptsErr = ipts.filter('input.error, textarea.error');
+              if (iptsErr.length) {
+                var hint = '';
+                iptsErr.each(function() {
+                  var ipt = $(this);
+                  hint += ipt.data().errorinfo + '<br />'
+                });
+                $.info('warning::' + hint);
+                iptsErr.eq(0).focus().select()
+              } else {
+                if ($.isFunction(func.callback)) {
+                  func.callback()
+                }
+              }
+            }
+          }
+        })
     } else {
       $.info('error::[' + func.name + ']不包含提交按钮的非法表单。');
       form.info('error::[' + func.name + ']不包含提交按钮的非法表单。')
@@ -1020,7 +1024,8 @@ var cache = {
   $.fn.unistall = function(callback) {
     $.info('error::尚不可用的功能。')
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.fn.card = function(para, callback) {
     var func = {
       name: '$.fn.card()',
@@ -1044,217 +1049,218 @@ var cache = {
       return this.each(function() {
         var obj = $(this);
         obj.unbind('mouseenter.card').bind('mouseenter.card',
-        function() {
-          window.clearTimeout(system.timer.card);
-          system.timer.card = window.setTimeout(function() {
-            var win = func.win;
-            var inner = func.mainer;
-            if (func.direction == 'left') {
-              var left = obj.offset().left - win.width() - 24;
-              var top = obj.offset().top
-            } else if (func.direction == 'right') {
-              var left = obj.offset().left + obj.width() + 8;
-              var top = obj.offset().top
-            } else if (func.direction == 'top') {
-              var left = obj.offset().left;
-              var top = obj.offset().top - win.height()
-            } else if (func.direction == 'bottom') {
-              var left = obj.offset().left;
-              var top = obj.offset().top + obj.height()
-            } else {
-              if (obj.offset().top + win.height() > $(window).scrollTop() + $(window).innerHeight() - 32) {
-                var left = obj.offset().left;
-                var top = obj.offset().top - win.height()
-              } else {
-                var left = obj.offset().left;
-                var top = obj.offset().top + obj.height()
-              };
-              if (left + win.width() > $(window).innerWidth() - 16) {
-                left = $(window).innerWidth() - 16 - win.width()
-              }
-            };
-            if (obj.hasClass('name') || obj.hasClass('avatar')) {
-              var name = '';
-              var uid = 0;
-              if (obj.hasClass('name')) {
-                name = obj.text()
-              } else {
-                if ( !! obj.data('uid')) {
-                  uid = obj.data('uid')
-                } else if ( !! obj.data('name')) {
-                  name = obj.data('name')
+          function() {
+            window.clearTimeout(system.timer.card);
+            system.timer.card = window.setTimeout(function() {
+                var win = func.win;
+                var inner = func.mainer;
+                if (func.direction == 'left') {
+                  var left = obj.offset().left - win.width() - 24;
+                  var top = obj.offset().top
+                } else if (func.direction == 'right') {
+                  var left = obj.offset().left + obj.width() + 8;
+                  var top = obj.offset().top
+                } else if (func.direction == 'top') {
+                  var left = obj.offset().left;
+                  var top = obj.offset().top - win.height()
+                } else if (func.direction == 'bottom') {
+                  var left = obj.offset().left;
+                  var top = obj.offset().top + obj.height()
                 } else {
-                  $.info('error::[' + func.name + ']未能获取任何合法信息。')
-                }
-              };
-              if (user.online && name != user.name && uid != user.uid) {
-                var time = !system.browser.cssanimations ? 0 : 200;
-                name = name.slice(0, 1) == '@' ? name.slice(1) : name;
-                inner.html('<div class="hint-info">与服务器通信中...</div>');
-                win.css({
-                  left: left - 16,
-                  top: top,
-                  opacity: 0,
-                  display: 'block'
-                }).stop(true, false).animate({
-                  opacity: 1,
-                  left: left + 16
-                },
-                time).animate({
-                  left: left
-                },
-                time);
-                if (system.port.getUserInfo) {
-                  system.port.getUserInfo.abort()
-                }
-                var url = !!uid ? 'api/user/info?uid=' + uid: name.length ? 'api/user/info?name=' + encodeURI(name) : '';
-                system.port.getUserInfo = $.get(url).done(function(data) {
-                  if ( !! data.success) {
-                    var a = data;
-                    var name = a.name;
-                    var uid = a.uid || 4;
-                    var gender = !!a.gender ? '♀​': '♂';
-                    var avatar = a.avatar || system.path + '/images/user/default.png';
-                    var sign = a.sign || '这个人很懒，神马都没有写…';
-                    var location = a.comeFrom ? a.comeFrom.replace(/[\s\,]/g, '') : '未知地理位置';
-                    var lld = !!a.ctime ? $.parseTime(a.ctime*1000) : '未知时间';
-                    var uclass = !!a.userClass ? '' + a.userClass: '';
-                    var flws = $.parsePts(a.follows);
-                    var flwed = $.parsePts(a.fans);
-                    var arts = $.parsePts(a.posts);
-                    var solved = $.parsePts(a.solved);
-                    var submit = $.parsePts(a.submit);
-                    var followed = a.followed;
-                    var objFollow = !followed ? '<a id="follow-user-info" class="r"><i class="icon icon-white icon-plus-sign"></i>关注</a>': '<a id="follow-user-info" class="r"><i class="icon icon-white icon-star"></i>已关注</a>';
-                    var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="user/profile/' + name + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="user/profile/' + name + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=solved" target="_blank">解决</a><span class="pts">：' + solved + '</span>' + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=submit" target="_blank">提交</a><span class="pts">：' + submit + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="user/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
-                    inner.removeClass('card-video').css({
-                      opacity: 0
-                    }).stop().animate({
-                      'mimiko': 1
-                    },
-                    0,
-                    function() {
-                      inner.html(html);
-                      $('#mail-user-info').click(function(e) {
-                        var btn = $(this);
-                        if (user.online != 1) {
-                          e.preventDefault();
-                          $.info('error::您尚未登录。请先行登录。');
-                          btn.info('您尚未登录。请先行登录。');
-                          if (!$('#win-login').length) {
-                            btn.call('login')
-                          }
-                        }
-                      });
-                      $('#follow-user-info').click(function() {
-                        var btn = $(this);
-                        if (user.online == 1) {
-                          if (!followed) {
-                            $.followUser({
-                              singer: btn,
-                              uid: uid,
-                              username: a.name,
-                              callback: function() {
-                                var html = '<i class="icon white icon-star"></i>已关注';
-                                btn.html(html)
+                  if (obj.offset().top + win.height() > $(window).scrollTop() + $(window).innerHeight() - 32) {
+                    var left = obj.offset().left;
+                    var top = obj.offset().top - win.height()
+                  } else {
+                    var left = obj.offset().left;
+                    var top = obj.offset().top + obj.height()
+                  };
+                  if (left + win.width() > $(window).innerWidth() - 16) {
+                    left = $(window).innerWidth() - 16 - win.width()
+                  }
+                };
+                if (obj.hasClass('name') || obj.hasClass('avatar')) {
+                  var name = '';
+                  var uid = 0;
+                  if (obj.hasClass('name')) {
+                    name = obj.text()
+                  } else {
+                    if ( !! obj.data('uid')) {
+                      uid = obj.data('uid')
+                    } else if ( !! obj.data('name')) {
+                      name = obj.data('name')
+                    } else {
+                      $.info('error::[' + func.name + ']未能获取任何合法信息。')
+                    }
+                  };
+                  if (user.online && name != user.name && uid != user.uid) {
+                    var time = !system.browser.cssanimations ? 0 : 200;
+                    name = name.slice(0, 1) == '@' ? name.slice(1) : name;
+                    inner.html('<div class="hint-info">与服务器通信中...</div>');
+                    win.css({
+                      left: left - 16,
+                      top: top,
+                      opacity: 0,
+                      display: 'block'
+                    }).stop(true, false).animate({
+                        opacity: 1,
+                        left: left + 16
+                      },
+                      time).animate({
+                        left: left
+                      },
+                      time);
+                    if (system.port.getUserInfo) {
+                      system.port.getUserInfo.abort()
+                    }
+                    var url = !! uid ? 'api/user/info?uid=' + uid : name.length ? 'api/user/info?name=' + encodeURI(name) : '';
+                    system.port.getUserInfo = $.get(url).done(function(data) {
+                      if ( !! data.success) {
+                        var a = data;
+                        var name = a.name;
+                        var uid = a.uid || 4;
+                        var gender = !! a.gender ? '♀​' : '♂';
+                        var avatar = a.avatar || system.path + '/images/user/default.png';
+                        var sign = a.sign || '这个人很懒，神马都没有写…';
+                        var location = a.comeFrom ? a.comeFrom.replace(/[\s\,]/g, '') : '未知地理位置';
+                        var lld = !! a.ctime ? $.parseTime(a.ctime * 1000) : '未知时间';
+                        var uclass = !! a.userClass ? '' + a.userClass : '';
+                        var flws = $.parsePts(a.follows);
+                        var flwed = $.parsePts(a.fans);
+                        var arts = $.parsePts(a.posts);
+                        var solved = $.parsePts(a.solved);
+                        var submit = $.parsePts(a.submit);
+                        var followed = a.followed;
+                        var objFollow = !followed ? '<a id="follow-user-info" class="r"><i class="icon icon-white icon-plus-sign"></i>关注</a>' : '<a id="follow-user-info" class="r"><i class="icon icon-white icon-star"></i>已关注</a>';
+                        var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="user/profile/' + name + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="user/profile/' + name + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=solved" target="_blank">解决</a><span class="pts">：' + solved + '</span>' + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=submit" target="_blank">提交</a><span class="pts">：' + submit + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="user/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
+                        inner.removeClass('card-video').css({
+                          opacity: 0
+                        }).stop().animate({
+                            'mimiko': 1
+                          },
+                          0,
+                          function() {
+                            inner.html(html);
+                            $('#mail-user-info').click(function(e) {
+                              var btn = $(this);
+                              if (user.online != 1) {
+                                e.preventDefault();
+                                $.info('error::您尚未登录。请先行登录。');
+                                btn.info('您尚未登录。请先行登录。');
+                                if (!$('#win-login').length) {
+                                  btn.call('login')
+                                }
                               }
-                            })
-                          } else {
-                            var text = '您已经关注了[' + a.name + ']';
-                            $.info(text);
-                            btn.info(text)
-                          }
-                        } else {
-                          $.info('error::您尚未登录。请先行登录。');
-                          btn.info('您尚未登录。请先行登录。');
-                          if (!$('#win-login').length) {
-                            btn.call('login')
-                          }
-                        }
-                      });
-                      if (func.callback) {
-                        func.callback()
+                            });
+                            $('#follow-user-info').click(function() {
+                              var btn = $(this);
+                              if (user.online == 1) {
+                                if (!followed) {
+                                  $.followUser({
+                                    singer: btn,
+                                    uid: uid,
+                                    username: a.name,
+                                    callback: function() {
+                                      var html = '<i class="icon white icon-star"></i>已关注';
+                                      btn.html(html)
+                                    }
+                                  })
+                                } else {
+                                  var text = '您已经关注了[' + a.name + ']';
+                                  $.info(text);
+                                  btn.info(text)
+                                }
+                              } else {
+                                $.info('error::您尚未登录。请先行登录。');
+                                btn.info('您尚未登录。请先行登录。');
+                                if (!$('#win-login').length) {
+                                  btn.call('login')
+                                }
+                              }
+                            });
+                            if (func.callback) {
+                              func.callback()
+                            }
+                          }).delay(50).animate({
+                            opacity: 1
+                          },
+                          200)
+                      } else {
+                        $.info('error::该用户不存在或尚不可用。');
+                        inner.html('<div class="hint-info">不存在的用户。</div>')
                       }
-                    }).delay(50).animate({
+                    }).fail(function() {
+                      $.info('error::获取用户信息失败。请稍后重试。');
+                      inner.html('<div class="hint-info">网络连接超时。</div>')
+                    })
+                  }
+                } else if (obj.hasClass('unit') || obj.hasClass('title') || obj.hasClass('preview')) {
+                  var aid = obj.is('[data-aid]') ? obj.attr('data-aid') : obj.closest('div.unit, span.unit, a.unit, li.unit').attr('data-aid');
+                  var time = !system.browser.cssanimations ? 0 : 200;
+                  inner.html('<div class="hint-info">与服务器通信中...</div>');
+                  win.css({
+                    left: left,
+                    top: top,
+                    opacity: 0,
+                    display: 'block'
+                  }).stop(true, false).animate({
                       opacity: 1
                     },
-                    200)
-                  } else {
-                    $.info('error::该用户不存在或尚不可用。');
-                    inner.html('<div class="hint-info">不存在的用户。</div>')
+                    time);
+                  if (system.port.getVideoInfo) {
+                    system.port.getVideoInfo.abort()
+                  };
+                  system.port.getVideoInfo = $.get('/videoinfo.aspx?aid=' + aid).done(function(data) {
+                    if ( !! data.success) {
+                      var a = data.contentjson;
+                      var uid = a.authorId || 4;
+                      var title = a.title;
+                      var author = a.author;
+                      var desc = a.desc || '该视频暂无简介。';
+                      var preview = a.preview;
+                      var views = a.views;
+                      var comments = a.comments;
+                      var stows = a.stows;
+                      var shares = a.shares;
+                      var channel = a.channel;
+                      var date = a.date;
+                      var html = '' + '<div class="area-left">' + '<div class="l">' + '<a class="thumb" href="/v/ac' + aid + '">' + '<img class="preview" src="' + preview + '">' + '<div class="cover"></div>' + '<p class="ico-play"></p>' + '</a>' + '</div>' + '<div class="r">' + '<a class="title" href="/v/ac' + aid + '" title="' + title + '">' + $.parseSafe(title) + '</a>' + '<span class="desc">' + $.parseSafe(desc) + '</span>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="area-right">' + '<a class="name name-videocard" href="user/user.aspx?uid=' + uid + '" title="Up主"><i class="icon grey icon-user"></i>' + author + '</a>' + '<span class="time" title="发布于' + date + '"><i class="icon grey icon-time">发布日期:</i>' + $.parseTime(date) + '</span>' + '<div id="extra-video-info">' + '<span class="views" title="点击数"><i class="icon grey icon-play-circle">点击:</i>' + $.parsePts(views) + '</span>&nbsp;&nbsp;' + '<span class="comments" title="评论数"><i class="icon grey icon-comment">评论:</i>' + $.parsePts(comments) + '</span>&nbsp;&nbsp;' + '<span class="favors" title="收藏数"><i class="icon grey icon-star">收藏:</i>' + $.parsePts(stows) + '</span>&nbsp;&nbsp;' + '<span class="shares" title="分享数"><i class="icon grey icon-share">分享:</i>' + $.parsePts(shares) + '</span>' + '</div>' + '<a class="channel" target="_blank" href="/v/list' + $.parseChannel(channel) + '/index.htm">' + channel + '</a>' + '</div>';
+                      inner.addClass('card-video').stop().animate({
+                          opacity: 0
+                        },
+                        0,
+                        function() {
+                          inner.html(html)
+                        }).delay(50).animate({
+                          opacity: 1
+                        },
+                        200)
+                    } else {
+                      $.info('error::该视频不存在或尚不可用。');
+                      inner.html('<div class="hint-info">不存在的视频。</div>')
+                    }
+                  }).fail(function() {
+                    $.info('error::获取视频信息失败。请稍后重试。');
+                    inner.html('<div class="hint-info">网络连接超时。</div>')
+                  });
+                  if (func.callback) {
+                    func.callback()
                   }
-                }).fail(function() {
-                  $.info('error::获取用户信息失败。请稍后重试。');
-                  inner.html('<div class="hint-info">网络连接超时。</div>')
-                })
-              }
-            } else if (obj.hasClass('unit') || obj.hasClass('title') || obj.hasClass('preview')) {
-              var aid = obj.is('[data-aid]') ? obj.attr('data-aid') : obj.closest('div.unit, span.unit, a.unit, li.unit').attr('data-aid');
-              var time = !system.browser.cssanimations ? 0 : 200;
-              inner.html('<div class="hint-info">与服务器通信中...</div>');
-              win.css({
-                left: left,
-                top: top,
-                opacity: 0,
-                display: 'block'
-              }).stop(true, false).animate({
-                opacity: 1
-              },
-              time);
-              if (system.port.getVideoInfo) {
-                system.port.getVideoInfo.abort()
-              };
-              system.port.getVideoInfo = $.get('/videoinfo.aspx?aid=' + aid).done(function(data) {
-                if ( !! data.success) {
-                  var a = data.contentjson;
-                  var uid = a.authorId || 4;
-                  var title = a.title;
-                  var author = a.author;
-                  var desc = a.desc || '该视频暂无简介。';
-                  var preview = a.preview;
-                  var views = a.views;
-                  var comments = a.comments;
-                  var stows = a.stows;
-                  var shares = a.shares;
-                  var channel = a.channel;
-                  var date = a.date;
-                  var html = '' + '<div class="area-left">' + '<div class="l">' + '<a class="thumb" href="/v/ac' + aid + '">' + '<img class="preview" src="' + preview + '">' + '<div class="cover"></div>' + '<p class="ico-play"></p>' + '</a>' + '</div>' + '<div class="r">' + '<a class="title" href="/v/ac' + aid + '" title="' + title + '">' + $.parseSafe(title) + '</a>' + '<span class="desc">' + $.parseSafe(desc) + '</span>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="area-right">' + '<a class="name name-videocard" href="user/user.aspx?uid=' + uid + '" title="Up主"><i class="icon grey icon-user"></i>' + author + '</a>' + '<span class="time" title="发布于' + date + '"><i class="icon grey icon-time">发布日期:</i>' + $.parseTime(date) + '</span>' + '<div id="extra-video-info">' + '<span class="views" title="点击数"><i class="icon grey icon-play-circle">点击:</i>' + $.parsePts(views) + '</span>&nbsp;&nbsp;' + '<span class="comments" title="评论数"><i class="icon grey icon-comment">评论:</i>' + $.parsePts(comments) + '</span>&nbsp;&nbsp;' + '<span class="favors" title="收藏数"><i class="icon grey icon-star">收藏:</i>' + $.parsePts(stows) + '</span>&nbsp;&nbsp;' + '<span class="shares" title="分享数"><i class="icon grey icon-share">分享:</i>' + $.parsePts(shares) + '</span>' + '</div>' + '<a class="channel" target="_blank" href="/v/list' + $.parseChannel(channel) + '/index.htm">' + channel + '</a>' + '</div>';
-                  inner.addClass('card-video').stop().animate({
-                    opacity: 0
-                  },
-                  0,
-                  function() {
-                    inner.html(html)
-                  }).delay(50).animate({
-                    opacity: 1
-                  },
-                  200)
                 } else {
-                  $.info('error::该视频不存在或尚不可用。');
-                  inner.html('<div class="hint-info">不存在的视频。</div>')
+                  $.info('debug::[' + func.name + ']错误参数。')
                 }
-              }).fail(function() {
-                $.info('error::获取视频信息失败。请稍后重试。');
-                inner.html('<div class="hint-info">网络连接超时。</div>')
-              });
-              if (func.callback) {
-                func.callback()
-              }
-            } else {
-              $.info('debug::[' + func.name + ']错误参数。')
-            }
-          },
-          400)
-        }).unbind('mouseleave.card').bind('mouseleave.card',
-        function() {
-          $('#win-info').mouseleave()
-        })
+              },
+              400)
+          }).unbind('mouseleave.card').bind('mouseleave.card',
+          function() {
+            $('#win-info').mouseleave()
+          })
       })
     } else {
       $.info('debug::[' + func.name + ']不存在于舞台上的非法元素。')
     }
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.check = function(param, callback) {
     var func = {
       name: '$.check()',
@@ -1330,7 +1336,8 @@ var cache = {
       system.tv()
     }
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.fn.call = function(param, callback) {
     var func = {
       name: '$.fn.call()',
@@ -1502,7 +1509,7 @@ var cache = {
           var t = shadow.offset().top;
           var w = shadow.width();
           var h = shadow.height();
-          if (! (left > l + w || top > t + h || left + width < l || top + height < t)) {
+          if (!(left > l + w || top > t + h || left + width < l || top + height < t)) {
             var nl = l;
             var nt = top;
             if (left > l + w * 0.5 && l + w + 16 + width < $(window).innerWidth()) {
@@ -1526,7 +1533,7 @@ var cache = {
           'line-height': height + 'px'
         });
         if (func.src.length) {
-          var src = func.src.search(/http\:\/\//) == -1 ? 'assets/acfun/html/' + func.src + '.html': func.src;
+          var src = func.src.search(/http\:\/\//) == -1 ? 'assets/acfun/html/' + func.src + '.html' : func.src;
           src += '?date=' + (system.debug ? new Date().getTime() : parseInt(new Date().getTime() / 3600000));
           $.get(src).done(function(data) {
             if (data && data.length) {
@@ -1535,19 +1542,19 @@ var cache = {
               };
               mainer.html(data);
               window.setTimeout(function() {
-                if (!shadow.length && win.offset().top + win.height() > $(window).scrollTop() + $(window).innerHeight() - 48) {
-                  if (!func.curtain) {
-                    win.scrollOnto(200)
-                  } else {
-                    win.stop().animate({
-                      top: $(window).scrollTop() + 48,
-                      opacity: 1
-                    },
-                    500)
+                  if (!shadow.length && win.offset().top + win.height() > $(window).scrollTop() + $(window).innerHeight() - 48) {
+                    if (!func.curtain) {
+                      win.scrollOnto(200)
+                    } else {
+                      win.stop().animate({
+                          top: $(window).scrollTop() + 48,
+                          opacity: 1
+                        },
+                        500)
+                    }
                   }
-                }
-              },
-              500);
+                },
+                500);
               if ($.isFunction(func.callback)) {
                 func.callback()
               } else if ($.isFunction(func.finish)) {
@@ -1574,33 +1581,33 @@ var cache = {
           opacity: 0,
           display: 'block'
         }).stop().animate({
-          opacity: 0
-        },
-        0,
-        function() {
-          if (!func.src.length) {
-            if ($.isFunction(func.callback)) {
-              func.callback()
+            opacity: 0
+          },
+          0,
+          function() {
+            if (!func.src.length) {
+              if ($.isFunction(func.callback)) {
+                func.callback()
+              }
+            };
+            if (func.curtain) {
+              $.curtain(true,
+                function() {
+                  var btnClose = win.find('div.close').eq(0);
+                  $('#curtain').off('click').one('click',
+                    function() {
+                      btnClose.click()
+                    });
+                  btnClose.click(function() {
+                    $.curtain(false)
+                  })
+                })
             }
-          };
-          if (func.curtain) {
-            $.curtain(true,
-            function() {
-              var btnClose = win.find('div.close').eq(0);
-              $('#curtain').off('click').one('click',
-              function() {
-                btnClose.click()
-              });
-              btnClose.click(function() {
-                $.curtain(false)
-              })
-            })
-          }
-        }).animate({
-          top: top,
-          opacity: 1
-        },
-        500).click(function() {
+          }).animate({
+            top: top,
+            opacity: 1
+          },
+          500).click(function() {
           if (!win.hasClass('active')) {
             $('#area-window>div.active').removeClass('active');
             win.addClass('active')
@@ -1623,15 +1630,15 @@ var cache = {
             if (top < 48) {
               top = 48;
               $(this).stop().animate({
-                top: top
-              },
-              500)
+                  top: top
+                },
+                500)
             } else if (shadow.length) {
               var l = shadow.offset().left;
               var t = shadow.offset().top;
               var w = shadow.width();
               var h = shadow.height();
-              if (! (left > l + w || top > t + h || left + width < l || top + height < t)) {
+              if (!(left > l + w || top > t + h || left + width < l || top + height < t)) {
                 var nl = l;
                 var nt = top;
                 if (left > l + w * 0.5 && l + w + 16 + width < $(window).innerWidth()) {
@@ -1642,10 +1649,10 @@ var cache = {
                   nt = t + h + 16
                 };
                 $(this).stop().animate({
-                  left: nl,
-                  top: nt
-                },
-                500)
+                    left: nl,
+                    top: nt
+                  },
+                  500)
               }
             }
           }
@@ -1667,16 +1674,16 @@ var cache = {
           };
           $('#win-hint').click();
           win.stop().animate({
-            top: win.offset().top + 16,
-            opacity: 0
-          },
-          500,
-          function() {
-            win.remove();
-            if ($.isFunction(func.callback)) {
-              func.callback()
-            }
-          })
+              top: win.offset().top + 16,
+              opacity: 0
+            },
+            500,
+            function() {
+              win.remove();
+              if ($.isFunction(func.callback)) {
+                func.callback()
+              }
+            })
         } else {
           $.info('debug::[' + func.name + ']不存在的非法窗体。')
         }
@@ -1694,7 +1701,7 @@ var cache = {
     if ( !! param) {
       if ($.type(param) == 'string' && param.search(/\#/) >= 0) {
         func.id = $.trim(param.replace(/\#/, ''))
-      } else if ($.type(param) == 'object' && !!param.id) {
+      } else if ($.type(param) == 'object' && !! param.id) {
         $.extend(func, param)
       } else {
         $.info('debug::[' + name + ']非法参数。')
@@ -1741,7 +1748,8 @@ var cache = {
       $.info('error::[' + func.name + ']为空的非法参数。')
     }
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.curtain = function(param, callback) {
     if (param) {
       if (!$('#curtain').length) {
@@ -1797,34 +1805,11 @@ var cache = {
             top: top + 16,
             opacity: 0
           }).stop().animate({
-            top: top,
-            opacity: 1
-          },
-          500,
-          function() {
-            win.info({
-              type: 'warning',
-              text: func.text,
-              fadeout: 0,
-              id: 'win-hint-ensure'
-            })
-          })
-        } else {
-          $('#stage').one('click',
-          function(e) {
-            var left = e.pageX - win.width() * 0.5;
-            var top = e.pageY - win.height() * 0.5;
-            win.css({
-              left: left,
-              top: top + 16,
-              opacity: 0
-            }).stop().animate({
               top: top,
               opacity: 1
             },
             500,
             function() {
-              $.info('warning::' + func.text);
               win.info({
                 type: 'warning',
                 text: func.text,
@@ -1832,36 +1817,59 @@ var cache = {
                 id: 'win-hint-ensure'
               })
             })
-          })
+        } else {
+          $('#stage').one('click',
+            function(e) {
+              var left = e.pageX - win.width() * 0.5;
+              var top = e.pageY - win.height() * 0.5;
+              win.css({
+                left: left,
+                top: top + 16,
+                opacity: 0
+              }).stop().animate({
+                  top: top,
+                  opacity: 1
+                },
+                500,
+                function() {
+                  $.info('warning::' + func.text);
+                  win.info({
+                    type: 'warning',
+                    text: func.text,
+                    fadeout: 0,
+                    id: 'win-hint-ensure'
+                  })
+                })
+            })
         };
         if (func.curtain) {
           $.curtain(true,
-          function() {
-            $('#curtain').one('click',
             function() {
-              $('#win-hint-ensure').click();
-              $.curtain(false);
-              win.shut()
+              $('#curtain').one('click',
+                function() {
+                  $('#win-hint-ensure').click();
+                  $.curtain(false);
+                  win.shut()
+                })
             })
-          })
         };
         $('#btn-ok-ensure').one('click',
-        function() {
-          $('#win-hint-ensure').click();
-          win.shut();
-          func.callback();
-          if (func.curtain) {
-            $.curtain(false)
-          }
-        });
+          function() {
+            $('#win-hint-ensure').click();
+            win.shut();
+            func.callback();
+            if (func.curtain) {
+              $.curtain(false)
+            }
+          });
         $('#btn-cancel-ensure').one('click',
-        function() {
-          $('#win-hint-ensure').click();
-          win.shut();
-          if (func.curtain) {
-            $.curtain(false)
-          }
-        })
+          function() {
+            $('#win-hint-ensure').click();
+            win.shut();
+            if (func.curtain) {
+              $.curtain(false)
+            }
+          })
       } else {
         $.info('error::[' + func.name + ']为空的非法方法。')
       }
@@ -1912,9 +1920,8 @@ var cache = {
       };
       system.port.followUser = $.post('api/friend/follow', {
         username: func.username,
-        userId: func.uid,
-        groupId: 0,
-        ajax: 1
+        uid: func.uid,
+        gid: 1
       }).done(function(data) {
         if (data.success) {
           var text = '关注' + (func.username ? ('[' + func.username + ']') : '用户') + '成功。';
@@ -1949,26 +1956,26 @@ var cache = {
       callback: callback
     };
     $(document).on('keydown.konami',
-    function(e) {
-      if (e.which == func.keys[func.index]) {
-        if (func.index == func.keys.length - 1) {
-          if ($.isFunction(func.callback)) {
-            $(document).off('keydown.konami');
-            func.callback()
+      function(e) {
+        if (e.which == func.keys[func.index]) {
+          if (func.index == func.keys.length - 1) {
+            if ($.isFunction(func.callback)) {
+              $(document).off('keydown.konami');
+              func.callback()
+            } else {
+              $.info('debug::[' + func.name + ']非法方法。')
+            }
           } else {
-            $.info('debug::[' + func.name + ']非法方法。')
+            func.index++
           }
         } else {
-          func.index++
+          func.index = 0
         }
-      } else {
-        func.index = 0
-      }
-    });
+      });
     window.setTimeout(function() {
-      $(window).off('keydown.konami')
-    },
-    func.lifetime)
+        $(window).off('keydown.konami')
+      },
+      func.lifetime)
   };
   $.makePager = function(param) {
     var func = {
@@ -1986,21 +1993,21 @@ var cache = {
       num: func.num
     };
     if (page.total > 1) {
-      page.fore = page.num != 1 ? '<span class="pager pager-fore" data-page="' + (page.num - 1) + '"><i class="icon white icon-chevron-left" title="上一页">上一页</i></span>': '';
-      page.hind = page.num != page.total ? '<span class="pager pager-hind" data-page="' + (parseInt(page.num) + 1) + '"><i class="icon white icon-chevron-right" title="下一页">下一页</i></span>': '';
-      page.last = page.num != page.total ? '<span class="pager pager-first" data-page="' + page.total + '"><i class="icon white icon-step-forward" title="最末">最末</i></span>': '';
-      page.first = page.num != 1 ? '<span class="pager pager-last" data-page="' + 1 + '"><i class="icon white icon-step-backward" title="最初">最初</i></span>': '';
+      page.fore = page.num != 1 ? '<span class="pager pager-fore" data-page="' + (page.num - 1) + '"><i class="icon white icon-chevron-left" title="上一页">上一页</i></span>' : '';
+      page.hind = page.num != page.total ? '<span class="pager pager-hind" data-page="' + (parseInt(page.num) + 1) + '"><i class="icon white icon-chevron-right" title="下一页">下一页</i></span>' : '';
+      page.last = page.num != page.total ? '<span class="pager pager-first" data-page="' + page.total + '"><i class="icon white icon-step-forward" title="最末">最末</i></span>' : '';
+      page.first = page.num != 1 ? '<span class="pager pager-last" data-page="' + 1 + '"><i class="icon white icon-step-backward" title="最初">最初</i></span>' : '';
       page.here = '<span class="pager pager-here active" data-page="' + page.num + '">' + page.num + '</span>';
       page.fores = '';
       for (var i = page.num - 1,
-      n = page.num - func.long; i >= 1 && i > n; i = i - 1) {
+          n = page.num - func.long; i >= 1 && i > n; i = i - 1) {
         page.fores = '<span class="pager pager-hinds" data-page="' + i + '">' + i + '</span>' + page.fores
       };
       page.hinds = '';
       for (var i = (parseInt(page.num) + 1), n = (parseInt(page.num) + func.long); i <= page.total && i < n; i++) {
         page.hinds += '<span class="pager pager-fores" data-page="' + i + '">' + i + '</span>'
       };
-      page.html = '<div' + (func.id || '') + ' class="area-pager' + (func['class'] || '') + '">' + (func.before || '') + page.first + page.fore + page.fores + page.here + page.hinds + page.hind + page.last + '<span class="hint">当前位置：' + (!func.addon ? page.num: '<input class="ipt-pager" type="number" value="' + page.num + '" data-max="' + page.total + '">') + '/' + page.total + '页' + (func.addon ? '<button class="btn mini btn-pager">跳页</button>': '') + '</span>' + (func.after || '') + '<span class="clearfix"></span></div>'
+      page.html = '<div' + (func.id || '') + ' class="area-pager' + (func['class'] || '') + '">' + (func.before || '') + page.first + page.fore + page.fores + page.here + page.hinds + page.hind + page.last + '<span class="hint">当前位置：' + (!func.addon ? page.num : '<input class="ipt-pager" type="number" value="' + page.num + '" data-max="' + page.total + '">') + '/' + page.total + '页' + (func.addon ? '<button class="btn mini btn-pager">跳页</button>' : '') + '</span>' + (func.after || '') + '<span class="clearfix"></span></div>'
     } else {
       page.html = ''
     };
@@ -2029,44 +2036,44 @@ var cache = {
       return this.each(function() {
         var area = $(this);
         area.delegate('span.pager:not(.active)', 'click',
-        function() {
-          func.callback($(this).data().page)
-        });
+          function() {
+            func.callback($(this).data().page)
+          });
         if (func.addon) {
           area.delegate('input.ipt-pager', 'focus',
-          function() {
-            $(this).select()
-          }).delegate('input.ipt-pager', 'keyup',
-          function() {
-            var ipt = $(this);
-            var len = $.trim(ipt.val()).length;
-            var width = len ? (32 + (len - 1) * 8) : 32;
-            width = width > 240 ? 240 : width;
-            ipt.css({
-              width: width
+            function() {
+              $(this).select()
+            }).delegate('input.ipt-pager', 'keyup',
+            function() {
+              var ipt = $(this);
+              var len = $.trim(ipt.val()).length;
+              var width = len ? (32 + (len - 1) * 8) : 32;
+              width = width > 240 ? 240 : width;
+              ipt.css({
+                width: width
+              })
+            }).delegate('input.ipt-pager', 'keydown',
+            function(e) {
+              var ipt = $(this);
+              var btn = ipt.siblings('button.btn-pager').eq(0);
+              if (e.which == 13) {
+                btn.click()
+              } else if ($.inArray(e.which, [8, 35, 36, 37, 39, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105]) == -1) {
+                return false
+              }
+            }).delegate('button.btn-pager', 'click',
+            function() {
+              var btn = $(this);
+              var ipt = btn.siblings('input.ipt-pager').eq(0);
+              var n = parseInt(ipt.val()) || 1;
+              var m = ipt.data()['max'] || 65535;
+              if (n < 1) {
+                n = 1
+              } else if (n > m) {
+                n = m
+              };
+              func.callback(n)
             })
-          }).delegate('input.ipt-pager', 'keydown',
-          function(e) {
-            var ipt = $(this);
-            var btn = ipt.siblings('button.btn-pager').eq(0);
-            if (e.which == 13) {
-              btn.click()
-            } else if ($.inArray(e.which, [8, 35, 36, 37, 39, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105]) == -1) {
-              return false
-            }
-          }).delegate('button.btn-pager', 'click',
-          function() {
-            var btn = $(this);
-            var ipt = btn.siblings('input.ipt-pager').eq(0);
-            var n = parseInt(ipt.val()) || 1;
-            var m = ipt.data()['max'] || 65535;
-            if (n < 1) {
-              n = 1
-            } else if (n > m) {
-              n = m
-            };
-            func.callback(n)
-          })
         }
       })
     } else {
@@ -2089,7 +2096,11 @@ var cache = {
   };
   $.setEditorConfig = function(param) {
     $.extend(window.UEDITOR_CONFIG, {
-      toolbars: [['fullscreen', 'source', 'preview', 'searchreplace', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist'], ['directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'paragraph', 'fontfamily', 'fontsize'], ['link', 'unlink', 'insertimage', 'emotion', 'horizontal', 'spechars', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols']],
+      toolbars: [
+        ['fullscreen', 'source', 'preview', 'searchreplace', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist'],
+        ['directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'paragraph', 'fontfamily', 'fontsize'],
+        ['link', 'unlink', 'insertimage', 'emotion', 'horizontal', 'spechars', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols']
+      ],
       autoHeightEnabled: true,
       pasteplain: false,
       funcCtrlEnter: ''
@@ -2112,27 +2123,79 @@ var cache = {
       $.info('error::[' + func.name + ']为空的非法参数。')
     }
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.parseChannel = function(param) {
     var func = {
       name: '$.parseChannel()'
     };
-    var channels = [[1, '动画'], [106, '动画短片'], [107, 'MAD·AMV'], [108, 'MMD·3D'], [67, '新番连载'], [109, '动画合集'], [58, '音乐'], [101, '演唱·乐器'], [102, '宅舞'], [103, 'Vocaloid'], [105, '流行音乐'], [104, 'ACG音乐'], [59, '游戏'], [83, '游戏集锦'], [84, '实况解说'], [71, 'Flash游戏'], [72, 'Mugen'], [85, '英雄联盟'], [60, '娱乐'], [86, '生活娱乐'], [87, '鬼畜调教'], [88, '萌宠'], [89, '美食'], [70, '科技'], [90, '科普'], [91, '数码'], [92, '军事'], [69, '体育'], [93, '惊奇体育'], [94, '足球'], [95, '篮球'], [68, '影视'], [96, '电影'], [97, '剧集'], [98, '综艺'], [99, '特摄·霹雳'], [100, '纪录片'], [63, '文章'], [110, '文章综合'], [73, '工作·情感'], [74, '动漫文化'], [75, '漫画·小说'], [76, '页游资料'], [77, '1区'], [78, '21区'], [79, '31区'], [80, '41区'], [81, '文章里区(不审)'], [82, '视频里区(不审)'], [42, '图库']];
+    var channels = [
+      [1, '动画'],
+      [106, '动画短片'],
+      [107, 'MAD·AMV'],
+      [108, 'MMD·3D'],
+      [67, '新番连载'],
+      [109, '动画合集'],
+      [58, '音乐'],
+      [101, '演唱·乐器'],
+      [102, '宅舞'],
+      [103, 'Vocaloid'],
+      [105, '流行音乐'],
+      [104, 'ACG音乐'],
+      [59, '游戏'],
+      [83, '游戏集锦'],
+      [84, '实况解说'],
+      [71, 'Flash游戏'],
+      [72, 'Mugen'],
+      [85, '英雄联盟'],
+      [60, '娱乐'],
+      [86, '生活娱乐'],
+      [87, '鬼畜调教'],
+      [88, '萌宠'],
+      [89, '美食'],
+      [70, '科技'],
+      [90, '科普'],
+      [91, '数码'],
+      [92, '军事'],
+      [69, '体育'],
+      [93, '惊奇体育'],
+      [94, '足球'],
+      [95, '篮球'],
+      [68, '影视'],
+      [96, '电影'],
+      [97, '剧集'],
+      [98, '综艺'],
+      [99, '特摄·霹雳'],
+      [100, '纪录片'],
+      [63, '文章'],
+      [110, '文章综合'],
+      [73, '工作·情感'],
+      [74, '动漫文化'],
+      [75, '漫画·小说'],
+      [76, '页游资料'],
+      [77, '1区'],
+      [78, '21区'],
+      [79, '31区'],
+      [80, '41区'],
+      [81, '文章里区(不审)'],
+      [82, '视频里区(不审)'],
+      [42, '图库']
+    ];
     if ($.isNumeric(param)) {
       var c = 0;
       for (var i = 0,
-      l = channels.length; i < l; i++) {
+          l = channels.length; i < l; i++) {
         if (channels[i][0] == param) {
           c = channels[i][1];
           break
         }
       };
-      c = !c ? '未知频道': c;
+      c = !c ? '未知频道' : c;
       return c
     } else {
       var c = 0;
       for (var i = 0,
-      l = channels.length; i < l; i++) {
+          l = channels.length; i < l; i++) {
         if (channels[i][1] == param) {
           c = channels[i][0];
           break
@@ -2176,7 +2239,7 @@ var cache = {
         $.extend(func, param);
         func.name = '$.parseGet()'
       };
-      func.text = func.text.search(/(?:\[[^\]]*?\[)|(?:\][^\[]*?\])/) == -1 ? func.text: func.text.replace(/\[.*?\]/g, '').replace(/\[|\]/g, '');
+      func.text = func.text.search(/(?:\[[^\]]*?\[)|(?:\][^\[]*?\])/) == -1 ? func.text : func.text.replace(/\[.*?\]/g, '').replace(/\[|\]/g, '');
       func.text = func.text.replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/&amp;/g, "&").replace(/(?:&lt;|&gt;)/g, '').replace(/\&lt\;br\/\&gt\;/g, '').replace(/\<br\s?\/?\>/g, '').replace(/\r/g, '\n').replace(/\n{2,}/g, '\n');
       if (func.text.search(/\n+/) == 0) {
         func.text.replace(/\n+/, '')
@@ -2234,8 +2297,8 @@ var cache = {
     };
     if (func.data) {
       var r = 0,
-      g = 100,
-      b = 0;
+        g = 100,
+        b = 0;
       r = parseInt((func.data - 500) * 100 / 2000, 10);
       r = r < 0 ? 0 : r;
       r = r > 100 ? 100 : r;
@@ -2268,7 +2331,7 @@ var cache = {
       func.text = func.text.replace(/\<br\s?\/?\>/g, '').replace(/(http\:\/\/.*?\.(?:jpg|jpeg|png|gif))(?!\[)/g, '[img]$1[/img]').replace(/\[url\](.*?\.(?:jpg|jpeg|png|gif))\[\/url\]/g, '[img]$1[/img]').replace(/\[url\]\[img\](.*?)\[\/img\]\[\/url\]/g, '[img]$1[/img]').replace(/\@([^\s\<\>\[\]\(\)\{\}]{2,20})/g, '[at]$1[/at]').replace(/\[ac(\d+?)\]/g, '[ac=$1]ac$1[/ac]').replace(/([^\w\=\[\]\/])ac(\d+)/g, '$1[ac=$2]ac$2[/ac]').replace(/\[sm(\d+?)\]/g, '[sm=$1]sm$1[/sm]').replace(/([^\w\=\[\]\/])sm(\d+)/g, '$1[sm=$2]sm$2[/sm]').replace(/\[wiki([\s\S]+?)\]/g, '[wiki=$1]$1[/wiki]').replace(/\[mimiko\]/g, '');
       if (mails && mails.length) {
         for (var i = 0,
-        l = mails.length; i < l; i++) {
+            l = mails.length; i < l; i++) {
           func.text = func.text.replace(/\[mimiko\-mail\-mark\]/, '[email]' + mails[i] + '[/email]')
         }
       };
@@ -2276,7 +2339,7 @@ var cache = {
       if (fs && fs.length) {
         func.text = func.text.replace(/\[size.*?\]/g, '[mimiko-fontsize-mark]');
         for (var i = 0,
-        l = fs.length; i < l; i++) {
+            l = fs.length; i < l; i++) {
           var a = parseInt(fs[i].match(/\d+/)[0]);
           var list = [10, 11, 12, 14, 16, 18, 20, 24, 36];
           if ($.inArray(a, list) < 0) {
@@ -2288,11 +2351,11 @@ var cache = {
     };
     system.tv = function() {
       func.text = func.text.replace(/\[img\].+\/ueditor\/dialogs\/emotion\/images\/(\w+?)\/(\d+?)\.gif\[\/img\]/g, '[emot=$1,$2/]')
-    } ();
+    }();
     system.tv = function() {
       var list = ['b', 'i', 'u', 's', 'color'];
       for (var i = 0,
-      l = list.length; i < l; i++) {
+          l = list.length; i < l; i++) {
         var r = new RegExp('\\[' + list[i], 'ig');
         var a = func.text.match(r);
         if (a) {
@@ -2303,7 +2366,7 @@ var cache = {
           }
         }
       }
-    } ();
+    }();
     if (func.text.search(/\[[^\]]+\[/) >= 0 || func.text.search(/\][^\[]+\]/) >= 0) {
       $.info('error::[' + func.name + ']发言内容格式错误。');
       func.text = func.text.replace(/\[.*?\]/g, '')
@@ -2388,12 +2451,13 @@ var cache = {
     var tsNow = dtNow.getTime();
     var tsDistance = tsNow - ts;
     var hrMin, longAgo, longLongAgo, dayAgo, hrAgo, minAgo, secAgo;
-    hrMin = dt.getHours() + '时' + (dt.getMinutes() < 10 ? '0': '') + dt.getMinutes() + '分';
+    hrMin = dt.getHours() + '时' + (dt.getMinutes() < 10 ? '0' : '') + dt.getMinutes() + '分';
     longAgo = (dt.getMonth() + 1) + '月' + dt.getDate() + '日(星期' + ['日', '一', '二', '三', '四', '五', '六'][dt.getDay()] + ') ' + hrMin;
     longLongAgo = dt.getFullYear() + '年' + longAgo;
-    return tsDistance < 0 ? '刚刚': Math.floor(tsDistance / 1000 / 60 / 60 / 24 / 365) > 0 ? longLongAgo: (dayAgo = tsDistance / 1000 / 60 / 60 / 24) > 3 ? (dt.getFullYear() != dtNow.getFullYear() ? longLongAgo: longAgo) : (dayAgo = (dtNow.getDay() - dt.getDay() + 7) % 7) > 2 ? longAgo: dayAgo > 1 ? '前天 ' + hrMin: (hrAgo = tsDistance / 1000 / 60 / 60) > 12 ? (dt.getDay() != dtNow.getDay() ? '昨天 ': '今天 ') + hrMin: (hrAgo = Math.floor(tsDistance / 1000 / 60 / 60 % 60)) > 0 ? hrAgo + '小时前': (minAgo = Math.floor(tsDistance / 1000 / 60 % 60)) > 0 ? minAgo + '分钟前': (secAgo = Math.floor(tsDistance / 1000 % 60)) > 0 ? secAgo + '秒前': '刚刚'
+    return tsDistance < 0 ? '刚刚' : Math.floor(tsDistance / 1000 / 60 / 60 / 24 / 365) > 0 ? longLongAgo : (dayAgo = tsDistance / 1000 / 60 / 60 / 24) > 3 ? (dt.getFullYear() != dtNow.getFullYear() ? longLongAgo : longAgo) : (dayAgo = (dtNow.getDay() - dt.getDay() + 7) % 7) > 2 ? longAgo : dayAgo > 1 ? '前天 ' + hrMin : (hrAgo = tsDistance / 1000 / 60 / 60) > 12 ? (dt.getDay() != dtNow.getDay() ? '昨天 ' : '今天 ') + hrMin : (hrAgo = Math.floor(tsDistance / 1000 / 60 / 60 % 60)) > 0 ? hrAgo + '小时前' : (minAgo = Math.floor(tsDistance / 1000 / 60 % 60)) > 0 ? minAgo + '分钟前' : (secAgo = Math.floor(tsDistance / 1000 % 60)) > 0 ? secAgo + '秒前' : '刚刚'
   }
-})(jQuery); (function($) {
+})(jQuery);
+(function($) {
   $.fn.loadin = function(callback) {
     var func = {
       name: '$.fn.loadin()',
@@ -2447,14 +2511,14 @@ var cache = {
             loader.attr({
               'src': src
             }).one('load',
-            function() {
-              i++;
-              checkNext()
-            }).one('error',
-            function() {
-              $.info('debug::[' + func.name + ']文件' + src + '加载失败。');
-              loader.load()
-            })
+              function() {
+                i++;
+                checkNext()
+              }).one('error',
+              function() {
+                $.info('debug::[' + func.name + ']文件' + src + '加载失败。');
+                loader.load()
+              })
           } else {
             $.info('debug::[' + func.name + ']非法文件类型[' + src + ']。');
             i++;
@@ -2507,18 +2571,18 @@ var cache = {
           }
         }
       }
-    } ();
+    }();
     system.tv = function() {
       if (window.localStorage && cache.style.content && cache.style.content.length && system.location != 'location-style') {
         var html = '<style id="ushio">' + cache.style.content + '</style>';
         $('head').append(html)
       }
-    } ();
+    }();
     system.tv = function() {
       if (system.url.search(/\?/) != -1) {
         var a = system.url.replace(/.*\?/, '').split('&');
         for (var i = 0,
-        l = a.length; i < l; i++) {
+            l = a.length; i < l; i++) {
           var b = [a[i].replace(/\=[\s\S]+/, ''), a[i].replace(/[\s\S]+?\=/, '')];
           if (b[0] && b[1] && b[0].length && b[1].length) {
             system.param[b[0]] = b[1].replace(/[\(\)\<\>\[\]\{\}\'\"\:]/g, '')
@@ -2528,14 +2592,14 @@ var cache = {
       if (window.location.hash) {
         var a = window.location.hash.toString().replace(/\#/, '').split(';');
         for (var i = 0,
-        l = a.length; i < l; i++) {
+            l = a.length; i < l; i++) {
           var b = [a[i].replace(/\=[\s\S]+/, ''), a[i].replace(/[\s\S]+?\=/, '')];
           if (b[0] && b[1] && b[0].length && b[1].length) {
             system.hash[b[0]] = b[1].replace(/[\(\)\<\>\[\]\{\}\'\"\:]/g, '')
           }
         }
       }
-    } ();
+    }();
     system.debug = config.globe.debug ? 1 : 0;
     system.tv = function() {
       var win = $('#win-info');
@@ -2543,41 +2607,41 @@ var cache = {
         $.info('error::舞台上未发现必须元素[#win-info]。')
       };
       win.on('mouseenter',
-      function() {
-        window.clearTimeout(win.data().timer)
-      }).on('mouseleave',
-      function() {
-        window.clearTimeout(win.data().timer);
-        win.data().timer = window.setTimeout(function() {
-          win.css({
-            display: 'none'
-          })
-        },
-        200)
-      })
-    } ();
+        function() {
+          window.clearTimeout(win.data().timer)
+        }).on('mouseleave',
+        function() {
+          window.clearTimeout(win.data().timer);
+          win.data().timer = window.setTimeout(function() {
+              win.css({
+                display: 'none'
+              })
+            },
+            200)
+        })
+    }();
     system.tv = function() {
       var area = $('#area-window');
       if (!area.length) {
         $.info('error::舞台上未发现必须元素[#area-window]。')
       };
       $('#area-window').delegate('div.win-hint', 'click',
-      function() {
-        var win = $(this);
-        win.stop(false, true).animate({
-          opacity: 0
-        },
-        200,
         function() {
-          win.css({
-            display: 'none'
-          });
-          if (!win.is('#win-hint')) {
-            win.remove()
-          }
+          var win = $(this);
+          win.stop(false, true).animate({
+              opacity: 0
+            },
+            200,
+            function() {
+              win.css({
+                display: 'none'
+              });
+              if (!win.is('#win-hint')) {
+                win.remove()
+              }
+            })
         })
-      })
-    } ();
+    }();
     system.tv = function() {
       if (user.online && system.url.search(/power-oj/) != -1) {
         var check = function() {
@@ -2587,12 +2651,12 @@ var cache = {
           })
         };
         window.setInterval(function() {
-          check()
-        },
-        300000);
+            check()
+          },
+          300000);
         check()
       }
-    } ();
+    }();
     system.tv = function() {
       if (system.debug) {
         var elem = $('#block-baidu-tongji');
@@ -2611,7 +2675,7 @@ var cache = {
           $.info(text)
         }
       }
-    } ();
+    }();
     if ($.isFunction(func.callback)) {
       callback()
     }

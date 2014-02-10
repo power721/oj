@@ -278,7 +278,7 @@ CREATE TABLE `friend_group` (
 -- ----------------------------
 -- Records of friend_group
 -- ----------------------------
-INSERT INTO `friend_group` VALUES ('1', '0', '', '0');
+INSERT INTO `friend_group` VALUES ('1', '0', '', '0', '0');
 
 -- ----------------------------
 -- Table structure for `level`

@@ -165,8 +165,8 @@
             }
             ;
             system.port.followUser = $.post('api/friend/unfollow', {
-                userId: func.uid,
-                groupId: func.gid
+                uid: func.uid,
+                gid: func.gid
             })
                     .done(function (data) {
                         if (data.success) {
