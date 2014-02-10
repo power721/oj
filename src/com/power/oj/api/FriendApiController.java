@@ -61,10 +61,15 @@ public class FriendApiController extends OjController
     Integer uid = userService.getCurrentUid();
     Integer gid = getParaToInt("gid", 1);
     String groupName = getPara("name");
+    int result = socialService.updateGroup(uid, gid, groupName);
     
-    if (socialService.updateGroup(uid, gid, groupName) > 0)
+    if (result > 0)
     {
       renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else if (result < 0)
+    {
+      renderJson("{\"success\":false, \"status\":-500,\"result\":\"Group name already exists.\"}");
     }
     else
     {

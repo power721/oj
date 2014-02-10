@@ -76,6 +76,10 @@ public class SocialService
 
   public int updateGroup(Integer uid, Integer gid, String groupName)
   {
+    if (dao.findFirst("SELECT * FROM friend_group WHERE uid=? AND name=?", uid, groupName) != null)
+    {
+      return -1;
+    }
     return Db.update("UPDATE friend_group SET name=? WHERE uid=? AND id=? AND id>1", groupName, uid, gid);
   }
   
