@@ -102,7 +102,7 @@
                     ;
                     system.port.changeGroup = $.post('api/friend/changeFollowingByGroup', {
                         followingUid: win.data().uid.join(','),
-                        gid: win.data().gids.join(','),
+                        groupId: win.data().gids.join(','),
                         targetGid: ipt.val()
                     })
                             .done(function (data) {

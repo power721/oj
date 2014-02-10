@@ -79,7 +79,19 @@ public class FriendApiController extends OjController
 
   public void changeFollowingByGroup()
   {
+    Integer uid = userService.getCurrentUid();
+    String[] friendUid = getPara("followingUid").split(",");
+    String[] groupId = getPara("groupId").split(",");
+    Integer tgid = getParaToInt("targetGid", 1);
     
+    if (socialService.changeFollowingByGroup(uid, friendUid, groupId, tgid))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Update friend failed.\"}");
+    }
   }
   
 }
