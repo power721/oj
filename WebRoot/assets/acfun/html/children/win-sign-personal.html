@@ -88,16 +88,14 @@
         $.info(text);
         win.info(text);
         $.post("api/user/signSubmit", {
-          sign: sign,
-          ajax: 1
+          sign: sign
         }).done(function(data) {
           if ( !! data.success) {
             $.info("success::个性签名修改成功。");
             if (swi.hasClass("active")) {
               system.port.newMail && system.port.newMail.abort();
               system.port.newMail = $.post("api/mail/newDrift", {
-                content: sign + "（来自签名推送）",
-                ajax: 1
+                content: sign + "（来自签名推送）"
               })
             }
             m.refreshPart();

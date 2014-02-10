@@ -1311,8 +1311,7 @@ var cache = {
       },
       'unread': function() {
         $.get('api/mail/unRead', {
-          uid: user.uid,
-          ajax: 1
+          uid: user.uid
         }).done(function(data) {
           user.unread = {
             'push': data.newPush,
@@ -2646,8 +2645,7 @@ var cache = {
       if (user.online && system.url.search(/power-oj/) != -1) {
         var check = function() {
           $.get('api/user/online', {
-            uid: user.uid,
-            ajax: 1
+            uid: user.uid
           })
         };
         window.setInterval(function() {
