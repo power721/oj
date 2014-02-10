@@ -1045,7 +1045,7 @@ ALTER TABLE `problem` AUTO_INCREMENT=1000;
 -- ----------------------------
 -- Auto increment value for `role`
 -- ----------------------------
-ALTER TABLE `roles` AUTO_INCREMENT=2;
+ALTER TABLE `role` AUTO_INCREMENT=2;
 
 -- ----------------------------
 -- Auto increment value for `solution`
