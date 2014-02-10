@@ -124,5 +124,44 @@ public class SocialService
 
     return result;
   }
+  
+  public boolean addFriend(Integer uid, Integer fid, Integer gid)
+  {
+    FriendModel friend = FriendModel.dao.findFirst("SELECT * FROM friend WHERE user=? AND friend=?", uid, fid);
+    
+    if (friend == null)
+    {
+      friend = new FriendModel();
+      friend.set("user", uid);
+      friend.set("friend", fid);
+      friend.set("gid", gid);
+      friend.set("ctime", OjConfig.timeStamp);
+      if(friend.save())
+      {
+        if (gid > 1)
+        {
+          Db.update("UPDATE friend_group SET count=count+1 WHERE id=?", gid);
+        }
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean deleteFriend(Integer uid, Integer fid)
+  {
+    FriendModel friend = FriendModel.dao.findFirst("SELECT * FROM friend WHERE user=? AND friend=?", uid, fid);
+    
+    if (friend != null)
+    {
+      Integer gid = friend.getInt("gid");
+      if (friend.delete() && gid > 1)
+      {
+        Db.update("UPDATE friend_group SET count=count-1 WHERE id=?", gid);
+      }
+      return true;
+    }
+    return false;
+  }
 
 }

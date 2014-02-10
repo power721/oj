@@ -112,7 +112,7 @@
     <i class="location"></i>
 </div>
 <div id="temp-item-followed" class="hidden">
-    <div class="item" data-uid="[uid]" data-name="[name]">
+    <div class="item" data-uid="[uid]" data-name="[name]" data-gid="[gid]">
         <p class="hint-list-index">[index]</p>
 
         <div class="l">
@@ -157,7 +157,7 @@
             var func = {
                 username: (!!param.username ? '[' + param.username + ']' : '用户'),
                 uid: param.uid,
-                gid: param.gid || 20,
+                gid: param.gid || 1,
                 callback: callback
             };
             if (system.port.followUser) {
@@ -206,6 +206,7 @@
                                     var a = data.list[i];
                                     html += temp
                                             .replace(/\[uid\]/g, a.user)
+                                            .replace(/\[gid\]/g, a.gid)
                                             .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
                                             .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
                                             .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
@@ -301,6 +302,7 @@
                             var obj = btn.closest('div.item');
                             disfollow({
                                 uid: obj.attr('data-uid'),
+                                gid: obj.attr('data-gid'),
                                 name: obj.attr('data-name')
                             }, function () {
                                 //

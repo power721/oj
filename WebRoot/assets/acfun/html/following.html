@@ -228,7 +228,7 @@
             <div class="sign">[sign]</div>
             <div class="info">
                 [gender]来自<span class="from">[from]</span>&nbsp;&nbsp;/&nbsp;&nbsp;听众&nbsp;<span class="pts followeds">[followeds]</span>&nbsp;&nbsp;/&nbsp;&nbsp;关注&nbsp;<span
-                    class="pts">[followings]</span>&nbsp;&nbsp;/&nbsp;&nbsp;投稿&nbsp;<span class="pts">[posts]</span>
+                    class="pts">[followings]</span>&nbsp;&nbsp;/&nbsp;&nbsp;解决&nbsp;<span class="pts">[solved]</span>&nbsp;&nbsp;/&nbsp;&nbsp;提交&nbsp;<span class="pts">[submit]</span>
             </div>
             <div class="area-tool-following">
                 [isFriend]
@@ -292,7 +292,7 @@ system.tv = function () {
         var func = {
             username: (!!param.username ? '[' + param.username + ']' : '用户'),
             uid: param.uid,
-            gid: param.gid || 20,
+            gid: param.gid || 1,
             callback: callback
         };
         if (system.port.followUser) {
@@ -394,6 +394,8 @@ system.tv = function () {
                                         .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
                                         .replace(/\[isFriend\]/g, (!a.isFriend ? '<i class="icon grey icon-star"></i>已关注，<a class="btn-disfollow-followed">取消</a>' : '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>'))
                                         .replace(/\[followings\]/g, a.followingCount || 0)
+                                        .replace(/\[solved\]/g, a.solved || 0)
+                                        .replace(/\[submit\]/g, a.submit || 0)
                                         .replace(/\[followeds\]/g, a.followedCount || 0)
                                         .replace(/\[posts\]/g, a.userContributeCount || 0)
                                         .replace(/\[favors\]/g, a.userContributeStow || 0)
@@ -688,6 +690,7 @@ system.tv = function () {
                     callback: function () {
                         disfollow({
                             uid: obj.data().uid,
+                            gid: obj.data().gid,
                             username: obj.data().name
                         }, function () {
                             //

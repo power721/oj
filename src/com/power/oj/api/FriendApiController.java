@@ -104,4 +104,36 @@ public class FriendApiController extends OjController
     }
   }
   
+  public void follow()
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer gid = getParaToInt("gid");
+    Integer fid = getParaToInt("uid");
+    
+    if (socialService.addFriend(uid, fid, gid))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Add friend failed.\"}");
+    }
+  }
+  
+  public void unfollow()
+  {
+    Integer uid = userService.getCurrentUid();
+    //Integer gid = getParaToInt("gid");
+    Integer fid = getParaToInt("uid");
+    
+    if (socialService.deleteFriend(uid, fid))
+    {
+      renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"status\":-200,\"result\":\"Delete friend failed.\"}");
+    }
+  }
+  
 }
