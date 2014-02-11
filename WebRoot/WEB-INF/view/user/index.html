@@ -25,7 +25,8 @@
 <!--[if lt IE 9]>
     <script src="assets/js/html5shiv.js"></script>
   <![endif]-->
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
+<!--<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>-->
 
 <#if gaAccount??>
 <script type="text/javascript">
@@ -432,7 +433,6 @@
       window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
     </script>
     <script src="assets/acfun/swfobject.js"></script>
-    <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
     <script type="text/javascript" src="assets/acfun/editor_config.js"></script>
     <script type="text/javascript" src="assets/ueditor/ueditor.all.min.js"></script>
     

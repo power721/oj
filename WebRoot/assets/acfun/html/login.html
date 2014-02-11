@@ -138,7 +138,8 @@
                             .done(function (data) {
                                 if (data.success) {
                                     //refresh
-                                    window.location.href = window.location.href.replace(/\#.*/, '');
+                                    //window.location.href = window.location.href.replace(/\#.*/, '');
+                                    window.location.href = BaseURL + 'user/#area=splash';
                                 } else {
                                     var text = 'warning::' + data.result;
                                     win.info(text);

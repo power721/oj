@@ -913,7 +913,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, 'admin@local.host', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '1392033606', '127.0.0.1', null, null, null, 'secret', null, '118', '0', 'upload/image/user/1000.jpg', null, '1', null);
+INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, 'admin@local.host', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '0', '127.0.0.1', null, null, null, 'secret', null, '118', '0', '', null, '1', null);
 
 -- ----------------------------
 -- Table structure for `user_ext`
