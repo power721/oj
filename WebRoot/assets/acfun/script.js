@@ -448,7 +448,7 @@ $(function() {
             }).done(function(data) {
               if (data.success) {
                 var a = data;
-                f($.parsePts(a.posts), $.parsePts(a.follows), $.parsePts(a.fans))
+                f($.parsePts(a.submit), $.parsePts(a.follows), $.parsePts(a.fans))
               } else {
                 var text = "error::" + data.result;
                 $.info(text);

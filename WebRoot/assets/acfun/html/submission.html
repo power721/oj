@@ -281,12 +281,12 @@
                 <div class="info">
                     
                     &nbsp;&nbsp;/&nbsp;&nbsp;提交于
-                    <span class="time">[date]</span>
-                    &nbsp;&nbsp;/&nbsp;&nbsp;时间:
+                    <span class="time">[date]</span><br>
+                    &nbsp;&nbsp;/&nbsp;&nbsp;运行时间:
                     <span class="pts">[time] ms</span>
-                    &nbsp;&nbsp;内存:
+                    &nbsp;&nbsp;运行内存:
                     <span class="pts">[memory] KB</span>
-                    &nbsp;&nbsp;语言:
+                    &nbsp;&nbsp;程序语言:
                     <span class="language pts">[language]</span>
                     &nbsp;&nbsp;代码长度:
                     <span class="pts">[len] B</span>
@@ -360,7 +360,7 @@
         var showList = function (param) {
             //inner func
             var func = {
-                size: param.size || 20,
+                size: param.size || 10,
                 page: param.page || 1,
                 rid: param.rid || 0
             };
