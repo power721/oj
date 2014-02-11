@@ -118,6 +118,41 @@ public class SolutionModel extends Model<SolutionModel>
     return solutionList;
   }
 
+  public Page<SolutionModel> getPage(int pageNumber, int pageSize, Integer result, Integer language, Integer uid)
+  {
+    String sql = "SELECT sid,s.uid,s.pid,cid,num,result,time,memory,s.language,code_len,s.ctime,p.title";
+    StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN problem p ON p.pid=s.pid WHERE 1=1");
+
+    List<Object> paras = new ArrayList<Object>();
+    if (result > -1)
+    {
+      sb.append(" AND s.result=?");
+      paras.add(result);
+    }
+    if (language > -1)
+    {
+      sb.append(" AND s.language=?");
+      paras.add(language);
+    }
+    
+    sb.append(" AND s.uid=?");
+    paras.add(uid);
+
+    sb.append(" ORDER BY sid DESC");
+    Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+
+    for (SolutionModel solution : solutionList.getList())
+    {
+      solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
+
+      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
+      solution.put("resultName", resultType.getName());
+      solution.put("resultLongName", resultType.getLongName());
+    }
+
+    return solutionList;
+  }
+
   public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
   {
     Integer uid = 0;

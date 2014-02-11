@@ -14,6 +14,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.mail.MailService;
+import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
@@ -232,4 +233,15 @@ public class UserApiController extends OjController
     }
   }
 
+  public void getSubmissions()
+  {
+    int pageNumber = getParaToInt("page", 1);
+    int pageSize = getParaToInt("size", OjConfig.statusPageSize);
+    Integer result = getParaToInt("resultId", -1);
+    Integer language = getParaToInt("languageId", -1);
+    Integer uid = userService.getCurrentUid();
+    
+    renderJson(SolutionModel.dao.getPage(pageNumber, pageSize, result, language, uid));
+  }
+  
 }
