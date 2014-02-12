@@ -78,6 +78,15 @@ public class SessionService
     sessionModel.set("uid", uid).set("name", name).update();
     SessionService.me().putModel(id, sessionModel);
   }
+
+  public void updateOnline(Integer uid, String name)
+  {
+    String id = (String) ShiroKit.getSubject().getSession().getId();
+   
+    SessionModel sessionModel = dao.findById(id);
+    sessionModel.set("uid", uid).set("name", name).update();
+    SessionService.me().putModel(id, sessionModel);
+  }
   
   public SessionModel updateSession(HttpSession session, String url)
   {
