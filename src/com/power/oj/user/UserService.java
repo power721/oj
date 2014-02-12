@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -41,11 +42,46 @@ public class UserService
   private static final UserService me = new UserService();
   private static final UserModel dao = UserModel.dao;
   
+  private static int guestNumber = 0;
+  private static HashMap<Integer, String> users = new HashMap<Integer, String>();
+  
   private UserService() {}
   
   public static UserService me()
   {
     return me;
+  }
+  
+  public int getGuestNumber()
+  {
+    return guestNumber;
+  }
+  
+  public int addGuest()
+  {
+    guestNumber += 1;
+    return guestNumber;
+  }
+
+  public int removeGuest()
+  {
+    guestNumber -= 1;
+    return guestNumber;
+  }
+  
+  public HashMap<Integer, String> getOnlineUsers()
+  {
+    return users;
+  }
+  
+  public String addOnlineUser(Integer uid, String name)
+  {
+    return users.put(uid, name);
+  }
+  
+  public String removeOnlineUser(Integer uid)
+  {
+    return users.remove(uid);
   }
 
   /**
