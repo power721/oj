@@ -10,13 +10,11 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 import com.jfinal.log.Logger;
 import com.power.oj.core.service.SessionService;
-import com.power.oj.user.UserService;
 
 public class OjSessionListener implements SessionListener, AuthenticationListener
 {
 
   private static final Logger log = Logger.getLogger(OjSessionListener.class);
-  private static final UserService userService = UserService.me();
   
   @Override
   public void onExpiration(Session session)
@@ -29,9 +27,7 @@ public class OjSessionListener implements SessionListener, AuthenticationListene
   @Override
   public void onStart(Session session)
   {
-    // new guest
     SessionService.me().saveSession(session);
-    userService.addGuest();
     
     log.info(session.toString());
   }
@@ -40,8 +36,7 @@ public class OjSessionListener implements SessionListener, AuthenticationListene
   public void onStop(Session session)
   {
     SessionService.me().deleteSession(session);
-    userService.removeGuest();
-
+    
     log.info(session.toString());
   }
 
@@ -50,8 +45,8 @@ public class OjSessionListener implements SessionListener, AuthenticationListene
   {
     Integer uid = (Integer) info.getPrincipals().getPrimaryPrincipal();
     
-    userService.addOnlineUser(uid, token.getPrincipal().toString());
-    userService.removeGuest();
+    log.info(uid.toString());
+    log.info(token.getPrincipal().toString());
   }
 
   @Override
@@ -64,9 +59,6 @@ public class OjSessionListener implements SessionListener, AuthenticationListene
   @Override
   public void onLogout(PrincipalCollection principals)
   {
-    Integer uid = (Integer) principals.getPrimaryPrincipal();
-    userService.removeOnlineUser(uid);
-    
     log.info(principals.toString());
   }
 
