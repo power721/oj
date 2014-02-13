@@ -1,47 +1,40 @@
 <#macro paginate currentPage totalPage actionUrl urlParas="">
-	<#if (totalPage <= 0) || (currentPage > totalPage)><#return></#if>
-	<#local startPage = currentPage - 4>
-	<#if (startPage < 1)><#local startPage = 1></#if>
-	
-	<#local endPage = currentPage + 4>
-	<#if (endPage > totalPage)><#local endPage = totalPage></#if>
-	
-	<div class="area-pager">
-			<#if (currentPage <= 8)>
-				<#local startPage = 1>
-			</#if>
-			<#if ((totalPage - currentPage) < 8)>
-				<#local endPage = totalPage>
-			</#if>
-			
-			<#if (currentPage > 1)>
-				<a href="${actionUrl}#{1}${urlParas!}" class="pager">
-        	<i title="最初" class="icon white icon-step-backward"></i>
-    		</a>
-    		<a href="${actionUrl}#{currentPage - 1}${urlParas!}" class="pager">
-      		<i title="上一页" class="icon white icon-chevron-left"></i>
-    		</a>
-				<a href="${actionUrl}#{currentPage - 1}${urlParas!}" class="pager">上页</a>
-			</#if>
-			
-			<#list startPage..endPage as i>
-				<#if currentPage == i>
-					<a class="pager active">#{i}</a>
-				<#else>
-					<a href="${actionUrl}#{i}${urlParas!}">#{i}</a>
-				</#if>
-			</#list>
-			
-			<#if (currentPage != totalPage)>
-				<a href="${actionUrl}#{currentPage + 1}${urlParas!}" class="pager">
-					<i title="下一页" class="icon white icon-chevron-right"></i>
-				</a>
-				<a href="${actionUrl}#{currentPage + 1}${urlParas!}" class="pager">
-					<i title="最末" class="icon white icon-step-forward"></i>
-				</a>
-			</#if>
-		<span class="hint">
-      当前位置：${currentPage}/${totalPage}页
-    </span>
-	</div>
+  <#if (totalPage <= 0) || (currentPage > totalPage)><#return></#if>
+  <#local startPage = currentPage - 4>
+  <#if (startPage < 1)><#local startPage = 1></#if>
+  
+  <#local endPage = currentPage + 4>
+  <#if (endPage > totalPage)><#local endPage = totalPage></#if>
+  <div class="area-pager">
+  <#if (currentPage <= 4)>
+    <#local startPage = 1>
+  </#if>
+  <#if ((totalPage - currentPage) < 4)>
+    <#local endPage = totalPage>
+  </#if>
+  <#if (currentPage > 1)>
+    <a href="${actionUrl}#{1}${urlParas!}" class="pager">
+      <i title="最初" class="icon white icon-step-backward"></i>
+    </a>
+    <a href="${actionUrl}#{currentPage - 1}${urlParas!}" class="pager">
+      <i title="上一页" class="icon white icon-chevron-left"></i>
+    </a>
+  </#if>
+  <#list startPage..endPage as i>
+    <#if currentPage == i>
+      <a class="pager active">#{i}</a>
+    <#else>
+      <a href="${actionUrl}#{i}${urlParas!}" class="pager">#{i}</a>
+    </#if>
+  </#list>
+  <#if (currentPage != totalPage)>
+      <a href="${actionUrl}#{currentPage + 1}${urlParas!}" class="pager">
+        <i title="下一页" class="icon white icon-chevron-right"></i>
+      </a>
+      <a href="${actionUrl}#{totalPage}${urlParas!}" class="pager">
+        <i title="最末" class="icon white icon-step-forward"></i>
+      </a>
+  </#if>
+  <span class="hint">当前位置：${currentPage}/${totalPage}页</span>
+  </div>
 </#macro>

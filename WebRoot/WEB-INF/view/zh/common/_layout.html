@@ -14,7 +14,7 @@
 <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
 
 <link rel="stylesheet" href="assets/acfun/core.0.1.3.css">
-<link rel="stylesheet" href="assets/acfun/index/style.css?date=${date!20140212}">
+<link rel="stylesheet" href="assets/acfun/index/index.css?date=${date!20140212}">
 <link rel="stylesheet" href="assets/acfun/theme/default/theme.css?date=${date!20140212}">
 
 <script type="text/javascript">var BaseURL = "${baseUrl!}/";</script>
@@ -158,9 +158,9 @@
       <div id="mainer-inner">
           <div id="container" class="block">
             <#nested>
-          </div>
-        </div>
-    </div>
+          </div><!-- #container -->
+        </div><!-- #mainer-inner -->
+    </div><!-- #mainer -->
     <span class="clearfix"> </span>
     
       <div id="footer">

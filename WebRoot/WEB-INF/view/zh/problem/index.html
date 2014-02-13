@@ -1,68 +1,232 @@
 <#include "../common/_layout.html" /> <@layout>
 
-<div class="mainer">
-    <!--<form id="area-search-guide" method="get" action="problem/search" class="l">
-      <input type="hidden" name="scope" value="title">
-      <input type="text" name="word" value="搜索" autocomplete="off" x-webkit-speech class="ipt-search"> 
-      <input type="submit" value="" title="搜索" class="btn-search">
-      <ul class="menu menu-search"></ul>
-    </form>-->
+<div id="area-mainer-left" class="area-left">
+  <div id="block-channel-content">
+    <div class="banner">
+      <a href="problem/1" class="tab active">
+        全部
+      </a>
+      <a href="problem/1" class="tab">
+        简单
+      </a>
+      <a href="problem/1" class="tab">
+        搜索
+      </a>
+      <a href="problem/1" class="tab">
+        DP
+      </a>
+      <a href="problem/1" class="tab">
+        图论
+      </a>
+      <a href="problem/1" class="tab">
+        数论
+      </a>
+      <a href="problem/1" class="tab">
+        数据结构
+      </a>
+      <a href="problem/1" class="tab">
+        计算几何
+      </a>
+      <a href="problem/rank" class="tab right">
+        <i class="icon icon-fire">
+        </i>
+        日榜
+      </a>
+    </div><!-- .banner -->
+    <div class="mainer">
+    
+      <#include "../common/_paginate.html" />
+      <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/" />
+      
+        <!--
+        <form id="area-search-guide" method="get" action="problem/search" class="l">
+          <input type="hidden" name="scope" value="title">
+          <input type="text" name="word" value="搜索" autocomplete="off" x-webkit-speech class="ipt-search"> 
+          <input type="submit" value="" title="搜索" class="btn-search">
+          <ul class="menu menu-search"></ul>
+        </form>
+        -->
+      
+      <div id="block-list-pic">
 
-  <#include "../common/_paginate.html" />
-  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/" />
+        <table id="problem-list" class="table table-hover table-condensed">
+          <thead>
+            <tr>
+              <th></th>
+              <th>ID</th>
+              <th>Title</th>
+              <th>AC</th>
+              <th>Submit</th>
+              <th>Ratio</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <#if problemList??> <#list problemList.list as Problem>
+            <tr>
+              <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
+              </td>
+              <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
+              <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
+              </a></td>
+              <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
+              <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submit!}</a></td>
+              <td class="ratio"><#if Problem.submit&gt;0>${(Problem.accept/Problem.submit*100)?int}<#else>0</#if>%</td>
+              <td class="ctime">${Problem.ctime!}</td>
+            </tr>
+            </#list> </#if>
+          </tbody>
+        </table>
+        <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/" />
+      </div><!-- #block-list-pic -->
+    </div><!-- .mainer -->
+  </div><!-- #block-channel-content -->
+</div><!-- #area-mainer-left -->
 
-  <!--<ul>
-    <li class="<#if problemList.pageNumber==1>disabled</#if>"><a href="problem/?p=1<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">&lt;&lt;</a></li>
-    <#if problemList.pageNumber&gt;1>
-    <li><a href="problem/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">Prev</a></li></#if> <#if problemList??>
-    <#assign start=problemList.pageNumber-4> <#assign end=problemList.pageNumber+4> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
-    end&gt;problemList.totalPage ><#assign start=start-(end-problemList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=problemList.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==problemList.pageNumber>active</#if>"><a href="problem/?p=${x}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">${x}</a></li>
-    </#list> </#if> <#if problemList.pageNumber<problemList.totalPage>
-    <li><a href="problem/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">Next</a></li>
-    </#if>
-    <li class="<#if problemList.pageNumber&gt;=problemList.totalPage>disabled</#if>"><a
-      href="problem/?p=${problemList.totalPage}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">&gt;&gt;</a></li>
-  </ul>
-  <div class="pull-right">
-    <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> <span class="badge badge-info">${problemList.totalRow}
-      Problems</span>
-  </div>-->
-</div>
-
-<table id="problem-list" class="table table-hover table-condensed">
-  <thead>
-    <tr>
-      <th></th>
-      <th>ID</th>
-      <th>Title</th>
-      <th>AC</th>
-      <th>Submit</th>
-      <th>Ratio</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <#if problemList??> <#list problemList.list as Problem>
-    <tr>
-      <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
-      </td>
-      <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
-      <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
-      </a></td>
-      <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
-      <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submit!}</a></td>
-      <td class="ratio"><#if Problem.submit&gt;0>${(Problem.accept/Problem.submit*100)?int}<#else>0</#if>%</td>
-      <td class="ctime">${Problem.ctime!}</td>
-    </tr>
-    </#list> </#if>
-  </tbody>
-</table>
-
-<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
-
+<div id="area-mainer-right" class="area-right">
+  <div id="area-unfixed-pic">
+    <div id="block-ann-pic" class="block">
+      <div class="banner">
+        <span class="tab fixed">
+          公告
+          <span class="hint">
+            Announcement
+          </span>
+        </span>
+      </div>
+      <div class="mainer">
+        <p class="hint">
+         | 该功能目前正在测试中。 
+        </p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="banner">
+        <p class="tab fixed">
+          推荐题目
+          <span class="hint">
+            Channel Recommendation
+          </span>
+        </p>
+      </div>
+      <div class="mainer">
+        <div class="item">
+          <a href="problem/1001" target="_blank" title="A+B again!!(入门)"
+          data-pid="1001" class="item-tabb title">
+            A+B again!!(入门)
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="banner">
+        <p class="tab fixed">
+          最近提交
+          <span class="hint">
+            Channel Submissions
+          </span>
+        </p>
+      </div>
+      <div class="mainer">
+        <div class="item">
+          <a data-sid="1036736" class="item-tabb title">
+            power721-1001-AC
+          </a>
+        </div><!-- .item -->
+      </div><!-- .mainer -->
+    </div><!-- .block -->
+    <div id="area-fixed-pic">
+        <div id="block-about-pic" class="block">
+          <div class="banner">
+            <p class="tab fixed">
+              关于我们
+              <span class="hint">
+                About
+              </span>
+            </p>
+          </div>
+          <div class="mainer">
+            <div class="a">
+              <div class="l">
+                <a href="http://e.weibo.com/PowerOJ" target="_blank" class="thumb">
+                  <img src="assets/images/power-oj.gif" class="avatar">
+                </a>
+              </div>
+              <div class="r">
+                <a href="http://e.weibo.com/PowerOJ" target="_blank" class="name">
+                  PowerOJ
+                </a>
+                <div class="b">
+                  <a href="http://e.weibo.com/PowerOJ" target="_blank" class="btn info">
+                    新浪微博
+                  </a>
+                  <a href="http://t.qq.com/PowerOJ" target="_blank" class="btn info">
+                    腾讯微博
+                  </a>
+                </div>
+              </div>
+              <span class="clearfix">
+              </span>
+            </div>
+            <div class="c">
+              <div class="l">
+                <a href="info#page=help" target="_blank">
+                  <i class="icon grey icon-question-sign">
+                  </i>
+                  使用帮助
+                </a>
+              </div>
+              <!--<div class="r">
+                <a href="app/" target="_blank">
+                  <i class="icon grey icon-download">
+                  </i>
+                  客户端下载
+                </a>
+              </div>-->
+              <span class="clearfix">
+              </span>
+            </div>
+            <p class="d">
+              如果您在使用中发现问题，或有好的意见和建议，请
+              <a href="feedback">
+                [反馈]
+              </a>
+              给我们，这将有助于我们改善相关功能。
+            </p>
+          </div>
+        </div>
+        <!--<div id="block-function-pic" class="block">
+          <div class="banner">
+            <p class="tab fixed">
+              快捷功能
+              <span class="hint">
+                Function
+              </span>
+            </p>
+          </div>
+          <div class="mainer">
+            <a href="javascript:void(function(d,i,o){o=d.createElement('script');o.id=i;o.src='http://www.acfun.tv/dotnet/date/script/pic/pick.js?date='+new Date().getTime();o.setAttribute('charset','utf-8');d.body.appendChild(o)}(document,'js-p-p-ac'));"
+            onclick="$('#btn-public-header').click();return false;" title="请将本链接存为书签后使用"
+            class="btn primary">
+              <i class="icon white icon-share">
+              </i>
+              发布至AcFun
+            </a>
+            <span class="clearfix">
+            </span>
+            <p class="hint">
+              将上方左侧按钮拖放至书签栏后，即可在站外快速发布图片。
+            </p>
+          </div>
+        </div>-->
+      </div>
+    </div>
+    <span class="clearfix">
+    </span>
+  </div><!-- #area-unfixed-pic -->
+</div><!-- #area-mainer-right -->
+                    
+<!--<script type="text/javascript" src="assets/js/placeholders.min.js"></script>-->
 <script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
         var prevpage="problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
