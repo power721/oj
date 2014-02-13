@@ -20,6 +20,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -77,7 +78,7 @@ public class Tool
    *          the string of url.
    * @return the string of html content.
    */
-  public static String getHtmlByUrl(String url)
+  public static String getHtmlByUrl(String url) throws HttpHostConnectException
   {
     String html = null;
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 import jodd.util.StringUtil;
 
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.alibaba.fastjson.JSON;
@@ -305,10 +306,28 @@ public class ContestController extends OjController
     if (json == null)
     {
       List<ContestkendoSchedulerTask> contests = new ArrayList<ContestkendoSchedulerTask>();
-      String html = Tool.getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
-      if (html == null)
+      String html = null;
+      try
       {
         html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+      } catch(HttpHostConnectException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.info(e.getLocalizedMessage());
+      }
+      
+      if (html == null)
+      {
+        try
+        {
+          Tool.getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
+        } catch(HttpHostConnectException e)
+        {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.info(e.getLocalizedMessage());
+        }
       }
       if (html == null)
       {
@@ -325,7 +344,15 @@ public class ContestController extends OjController
         jsonArray = JSON.parseArray(html);
       } catch (JSONException e)
       {
-        html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+        try
+        {
+          html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+        } catch(HttpHostConnectException e1)
+        {
+          if (OjConfig.getDevMode())
+            e1.printStackTrace();
+          log.info(e1.getLocalizedMessage());
+        }
         jsonArray = JSON.parseArray(html);
       }
 
