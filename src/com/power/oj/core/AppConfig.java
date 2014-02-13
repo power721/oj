@@ -61,6 +61,7 @@ public class AppConfig extends JFinalConfig
 {
   private static final Logger log = Logger.getLogger(AppConfig.class);
   private Routes routes;
+  private static String baseViewPath;
 
   /**
    * 配置常量
@@ -71,7 +72,8 @@ public class AppConfig extends JFinalConfig
 
     FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
     me.setDevMode(getPropertyToBoolean("devMode", false));
-    me.setBaseViewPath("/WEB-INF/view");
+    baseViewPath = "/WEB-INF/view";
+    me.setBaseViewPath(baseViewPath);
     me.setError401View("/WEB-INF/view/error/401.html");
     me.setError403View("/WEB-INF/view/error/403.html");
     me.setError404View("/WEB-INF/view/error/404.html");
@@ -186,6 +188,11 @@ public class AppConfig extends JFinalConfig
     log.debug("afterJFinalStart finished.");
   }
 
+  public static String getBaseViewPath()
+  {
+    return baseViewPath;
+  }
+  
   /**
    * 建议使用 JFinal 手册推荐的方式启动项目 运行此 main 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此
    * 使用内置的Jetty容器， 基于Tomcat开发，需要将jetty.jar删除

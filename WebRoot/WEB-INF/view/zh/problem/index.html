@@ -1,0 +1,97 @@
+<#include "../common/_layout.html" /> <@layout>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        var prevpage="problem/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
+        var nextpage="problem/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
+        $(document).keydown(function(event) {
+            <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
+            <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
+        });
+      });
+    </script>
+
+<div class="mainer">
+    <!--<form id="area-search-guide" method="get" action="problem/search" class="l">
+      <input type="hidden" name="scope" value="title">
+      <input type="text" name="word" value="搜索" autocomplete="off" x-webkit-speech class="ipt-search"> 
+      <input type="submit" value="" title="搜索" class="btn-search">
+      <ul class="menu menu-search"></ul>
+    </form>-->
+
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/" />
+
+  <!--<ul>
+    <li class="<#if problemList.pageNumber==1>disabled</#if>"><a href="problem/?p=1<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">&lt;&lt;</a></li>
+    <#if problemList.pageNumber&gt;1>
+    <li><a href="problem/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">Prev</a></li></#if> <#if problemList??>
+    <#assign start=problemList.pageNumber-4> <#assign end=problemList.pageNumber+4> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
+    end&gt;problemList.totalPage ><#assign start=start-(end-problemList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
+    end=problemList.totalPage></#if> <#if end
+    <start><#assign end=start></#if> <#list start..end as x>
+    <li class="<#if x==problemList.pageNumber>active</#if>"><a href="problem/?p=${x}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">${x}</a></li>
+    </#list> </#if> <#if problemList.pageNumber<problemList.totalPage>
+    <li><a href="problem/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">Next</a></li>
+    </#if>
+    <li class="<#if problemList.pageNumber&gt;=problemList.totalPage>disabled</#if>"><a
+      href="problem/?p=${problemList.totalPage}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>">&gt;&gt;</a></li>
+  </ul>
+  <div class="pull-right">
+    <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> <span class="badge badge-info">${problemList.totalRow}
+      Problems</span>
+  </div>-->
+</div>
+
+<table id="problem-list" class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th></th>
+      <th>ID</th>
+      <th>Title</th>
+      <th>AC</th>
+      <th>Submit</th>
+      <th>Ratio</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <#if problemList??> <#list problemList.list as Problem>
+    <tr>
+      <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
+      </td>
+      <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
+      <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
+      </a></td>
+      <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
+      <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submit!}</a></td>
+      <td class="ratio"><#if Problem.submit&gt;0>${(Problem.accept/Problem.submit*100)?int}<#else>0</#if>%</td>
+      <td class="ctime">${Problem.ctime!}</td>
+    </tr>
+    </#list> </#if>
+  </tbody>
+</table>
+
+<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        
+        <#if userName??>
+        $('td.pid').each(function(i) {
+          var result = $(this).prev('.result');
+          $.getJSON('problem/userResult?pid=' + $(this).text(), function(data) {
+            if (data.result)
+            {
+              if (data.result.id)
+                result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
+              else
+                result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
+            }
+          });
+        });
+        </#if>
+    });
+    </script>
+
+</@layout>

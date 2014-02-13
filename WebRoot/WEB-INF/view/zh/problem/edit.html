@@ -1,0 +1,115 @@
+<#include "../common/_layout.html" /> <@layout>
+<form class="form-horizontal" id="editPorblemForm" action="problem/update" method="post">
+  <input type="hidden" name="problem.pid" value="${problem.pid!}">
+  <div class="control-group problem">
+    <label class="control-label" for="inputPid">Problem ID</label>
+    <div class="controls">
+      <span class="input-mini uneditable-input"><a href="problem/show/${problem.pid!}">${problem.pid!}</a></span>
+      <!--<input class="input-mini uneditable-input" type="number" id="inputPid" name="problem.pid" value="${problem.pid!}" disabled>-->
+    </div>
+  </div>
+  <div class="control-group problem <#if titleMsg??>error</#if>">
+    <label class="control-label" for="inputTitle">Title</label>
+    <div class="controls">
+      <textarea id="inputTitle" name="problem.title" rows="1" cols="120" required>${problem.title!}</textarea>
+      <!--<input class="input-xxlarge" type="text" id="inputTitle" name="problem.title" value="${problem.title!}" required>-->
+      <p class="text-error">${titleMsg!}</p>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="control-label" for="inputTimeLimit">Time Limit</label>
+    <div class="controls input-append">
+      <input class="input-mini" type="number" id="inputTimeLimit" name="problem.time_limit" value="${problem.time_limit!}" required>
+      <span class="add-on">MS</span>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="control-label" for="inputMemoryLimit">Memory Limit</label>
+    <div class="controls input-append">
+      <input class="input-mini" type="number" id="inputMemoryLimit" name="problem.memory_limit" value="${problem.memory_limit!}" required>
+      <span class="add-on">KB</span>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="ueditor control-label" for="inputDescription" method="destroy">Description</label>
+    <div class="controls">
+      <textarea id="inputDescription" name="problem.description" rows="13" cols="120">${problem.description!}</textarea>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="ueditor control-label" for="inputInput">Input</label>
+    <div class="controls">
+      <textarea id="inputInput" name="problem.input" rows="9" cols="120">${problem.input!}</textarea>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="ueditor control-label" for="inputOutput">Output</label>
+    <div class="controls">
+      <textarea id="inputOutput" name="problem.output" rows="9" cols="120">${problem.output!}</textarea>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="control-label" for="inputSampleInput">Sample Input</label>
+    <div class="controls">
+      <textarea id="inputSampleInput" name="problem.sample_input" rows="9" cols="120">${problem.sample_input!}</textarea>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="control-label" for="inputOutput">Sample Output</label>
+    <div class="controls">
+      <textarea id="inputSampleOutput" name="problem.sample_output" rows="9" cols="120">${problem.sample_output!}</textarea>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="ueditor control-label" for="inputHint">Hint</label>
+    <div class="controls">
+      <textarea id="inputHint" name="problem.hint" rows="5" cols="120">${problem.hint!}</textarea>
+    </div>
+  </div>
+  <div class="control-group problem">
+    <label class="control-label" for="inputSource">Source</label>
+    <div class="controls">
+      <textarea id="inputSource" name="problem.source" rows="1" cols="120">${problem.source!}</textarea>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox"> <input type="checkbox" name="problem.status" value="true"<#if problem.status==true>checked</#if>>Active
+      </label>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+      <a class="btn btn-warning" href="problem/show/${problem.pid!}">Cancel</a>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
+<script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript">  
+        //实例化编辑器
+        var ue = UE.getEditor('inputDescription');
+        ue.addListener('ready',function(){
+            this.focus()
+        });
+        
+        $('.ueditor').click(function(){
+        	var id = $(this).attr('for');
+        	var method = $(this).attr('method');
+        	var ue = UE.getEditor(id);
+        	
+        	if (method == 'destroy')
+        	{
+        		ue.destroy();
+        		$(this).attr('method', 'create');
+        	}
+        	else
+        	{
+        		 ue.addListener('ready',function(){
+               this.focus()
+             });
+        		 $(this).attr('method', 'destroy');
+        	}
+        });
+</script>
+</@layout>

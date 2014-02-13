@@ -1,0 +1,111 @@
+<style>
+    #win-reg input {
+        margin: 0 auto 8px;
+        width: 192px;
+    }
+
+    #win-reg .area {
+        height: auto;
+    }
+
+    #win-reg .unit {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 0 8px;
+    }
+
+    #win-reg .l {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    #win-reg .r {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    #win-reg .unit-bottom {
+        border-top: 1px dashed #ddd;
+        margin-bottom: 0;
+    }
+
+    #win-reg .unit-extra {
+        border-top: 1px dashed #ddd;
+        margin-top: 8px;
+        padding-top: 8px;
+    }
+
+    #win-reg .unit-bottom .btn {
+        margin-top: 8px;
+        margin-bottom: 0;
+    }
+
+    #win-reg .ico {
+        width: 16px;
+        height: 16px;
+        display: inline-block;
+        *display: inline;
+        margin: 2px 4px 0 0;
+        vertical-align: text-top;
+    }
+</style>
+
+<div class="form">
+
+    <div class="area unit">
+        <div class="area l">
+            <a id="btn-reg-qq" class="btn" href="loginbyqq?isNew=1" title="使用QQ账号注册">
+                <img class="ico" src="http://qzonestyle.gtimg.cn/qzone/vas/opensns/res/img/Connect_logo_1.png"/>使用QQ账号注册
+            </a>
+        </div>
+        <div class="area r">
+            <a id="btn-reg-sina" class="btn" href="loginbysina?isNew=1" title="使用新浪微博账号注册">
+                <img class="ico" src="http://g.etfv.co/http://weibo.com/"/>使用新浪微博账号注册
+            </a>
+        </div>
+        <span class="clearfix"></span>
+    </div>
+
+    <div class="area unit-bottom unit">
+        <div class="area l">
+            <a id="btn-reg-ac" class="btn primary" href="signup" title="注册新帐号">
+                <i class="icon white icon-user"></i>注册新帐号
+            </a>
+            <a class="btn info" href="info#page=agreement">
+                <i class="icon white icon-book"></i>阅读用户协议
+            </a>
+        </div>
+        <div class="area r">
+            <a id="btn-cancel-reg" class="btn danger">
+                <i class="icon white icon-remove-circle"></i>取消
+            </a>
+        </div>
+        <span class="clearfix"></span>
+    </div>
+
+</div>
+
+<script>
+    system.tv = function () {
+        //set handle
+        var win = $('#win-reg');
+        //bind action
+        $('#btn-cancel-reg')
+                .click(function () {
+                    $('#curtain').click();
+                })
+        ;
+        $.curtain(true, function () {
+            var btn = win.find('div.close').eq(0);
+            btn.click(function () {
+                $.curtain(false);
+            });
+            $('#curtain').one('click', function () {
+                btn.click();
+            });
+        });
+    }();
+</script>

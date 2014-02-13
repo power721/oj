@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="assets/acfun/theme/default/theme.css?date=${date!20140212}">
 
 <script type="text/javascript">var BaseURL = "${baseUrl!}/";</script>
+<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
 
 </head>
 
@@ -154,7 +155,11 @@
     </div>
     
     <div id="mainer">
-      <#nested>
+      <div id="mainer-inner">
+          <div id="container" class="block">
+            <#nested>
+          </div>
+        </div>
     </div>
     <span class="clearfix"> </span>
     

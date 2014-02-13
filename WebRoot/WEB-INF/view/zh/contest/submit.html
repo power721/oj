@@ -1,0 +1,58 @@
+<#include "_layout.html" /> <@layout>
+<form class="form-horizontal" id="submitForm" action="solution/save" method="post">
+  <div class="control-group solution">
+    <label class="control-label" for="inputPid">Problem ID</label>
+    <div class="controls">
+      <span id="problemID">${cid!}-${problem.id!}</span>
+      <input type="hidden" name="solution.cid" value="${cid}">
+      <input type="hidden" name="solution.num" value="${problem.num}">
+    </div>
+  </div>
+  <div class="control-group solution">
+    <label class="control-label" for="inputTitle">Title</label>
+    <div class="controls">
+      <span id="title"><a href="contest/problem/${cid!}-${problem.id!}">${problem.title!}</a></span>
+    </div>
+  </div>
+  <div class="control-group solution">
+    <label class="control-label" for="inputTimeLimit">Time Limit</label>
+    <div class="controls">
+      <span id="time_limit">${problem.time_limit!1000} MS</span>
+    </div>
+  </div>
+  <div class="control-group solution">
+    <label class="control-label" for="inputMemoryLimit">Memory Limit</label>
+    <div class="controls">
+      <span id="memory_limit">${problem.memory_limit!65536} KB</span>
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputLanguage">Language</label>
+    <div class="controls">
+      <select class="input-small" id="inputLanguage" name="solution.language"> <#if program_languages??> <#list program_languages as language>
+        <option value="${language.id!}"<#if (solution.language)??><#if solution.language==language.id>selected</#if><#else><#if
+          user.language==language.id>selected</#if></#if>>${language.name!}</option> </#list> </#if>
+      </select>
+    </div>
+  </div>
+  <div class="control-group solution">
+    <label class="control-label" for="inputSource">Source Code</label>
+    <div class="controls">
+      <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="120" required>${(solution.source)!}</textarea>
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+    </div>
+  </div>
+</form>
+
+<script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
+<script type="text/javascript">   
+    $().ready(function() {
+      $("#submitForm").validate();
+    });
+  </script>
+</@layout>
