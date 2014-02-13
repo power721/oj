@@ -1,16 +1,5 @@
 <#include "../common/_layout.html" /> <@layout>
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        var prevpage="problem/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
-        var nextpage="problem/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
-        $(document).keydown(function(event) {
-            <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
-            <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
-        });
-      });
-    </script>
-
 <div class="mainer">
     <!--<form id="area-search-guide" method="get" action="problem/search" class="l">
       <input type="hidden" name="scope" value="title">
@@ -76,6 +65,12 @@
 
 <script type="text/javascript" charset="utf-8">
       $(document).ready(function() {
+        var prevpage="problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+        var nextpage="problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+        $(document).keydown(function(event) {
+            <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
+            <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
+        });
         
         <#if userName??>
         $('td.pid').each(function(i) {
