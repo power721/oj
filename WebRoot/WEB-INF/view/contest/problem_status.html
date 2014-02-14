@@ -128,7 +128,9 @@
       </tbody>
     </table>
     <div class="pagination pagination-centered ajax-loader">
-      <ul>
+      <#include "../common/_paginate.html" />
+      <@paginate currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="problem/status/" urlParas="?cid=${cid!}&id=${id!}${query!}" />
+      <!--<ul>
         <li class="<#if solutionList.pageNumber==1>disabled</#if>"><a class="btn-link"
           url="problem/status/?cid=${cid!}&id=${id!}&p=1<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&lt;&lt;</a></li>
         <#if solutionList.pageNumber&gt;1>
@@ -146,7 +148,7 @@
         </#if>
         <li class="<#if solutionList.pageNumber&gt;=solutionList.totalPage>disabled</#if>"><a class="btn-link"
           url="problem/status/?cid=${cid!}&id=${id!}&p=${solutionList.totalPage}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&gt;&gt;</a></li>
-      </ul>
+      </ul>-->
     </div>
   </div>
 </div>

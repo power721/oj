@@ -27,21 +27,8 @@
       </div>
     </form>
   </div>
-  <ul>
-    <li class="<#if problemList.pageNumber==1>disabled</#if>"><a href="problem/search/?p=1<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">&lt;&lt;</a></li>
-    <#if problemList.pageNumber&gt;1>
-    <li><a href="problem/search/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">Prev</a></li></#if> <#if problemList??>
-    <#assign start=problemList.pageNumber-4> <#assign end=problemList.pageNumber+4> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
-    end&gt;problemList.totalPage ><#assign start=start-(end-problemList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=problemList.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==problemList.pageNumber>active</#if>"><a href="problem/search/?p=${x}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">${x}</a></li>
-    </#list> </#if> <#if problemList.pageNumber<problemList.totalPage>
-    <li><a href="problem/search/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">Next</a></li>
-    </#if>
-    <li class="<#if problemList.pageNumber&gt;=problemList.totalPage>disabled</#if>"><a
-      href="problem/search/?p=${problemList.totalPage}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">&gt;&gt;</a></li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" />
   <div class="pull-right">
     <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> <span class="badge badge-info">${problemList.totalRow}
       Problems</span>

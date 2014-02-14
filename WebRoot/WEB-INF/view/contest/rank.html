@@ -16,25 +16,11 @@
     </script>
 
 <div class="pagination pagination-centered">
-  <ul>
-    <li class="<#if contestRank.pageNumber==1>disabled</#if>"><a
-      href="contest/rank/${cid!}?p=1<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&lt;&lt;</a></li> <#if contestRank.pageNumber&gt;1>
-    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Prev</a></li></#if> <#if
-    contestRank??> <#assign start=contestRank.pageNumber-3> <#assign end=contestRank.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if>
-    <#if end&gt;contestRank.totalPage ><#assign start=start-(end-contestRank.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=contestRank.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==contestRank.pageNumber>active</#if>"><a
-      href="contest/rank/${cid!}?p=${x}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">${x}</a></li>
-    </#list> </#if> <#if contestRank.pageNumber<contestRank.totalPage>
-    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Next</a></li>
-    </#if>
-    <li class="<#if contestRank.pageNumber&gt;=contestRank.totalPage>disabled</#if>"><a
-      href="contest/rank/${cid!}?p=${contestRank.totalPage}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&gt;&gt;</a></li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}/" />
   <div class="pull-right">
-    <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span> <span class="badge badge-info">${contestRank.totalRow}
-      Users</span>
+    <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span> 
+    <span class="badge badge-info">${contestRank.totalRow} Users</span>
   </div>
 </div>
 
@@ -71,22 +57,8 @@
 </table>
 
 <div class="pagination pagination-centered">
-  <ul>
-    <li class="<#if contestRank.pageNumber==1>disabled</#if>"><a
-      href="contest/rank/${cid!}?p=1<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&lt;&lt;</a></li> <#if contestRank.pageNumber&gt;1>
-    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Prev</a></li></#if> <#if
-    contestRank??> <#assign start=contestRank.pageNumber-3> <#assign end=contestRank.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if>
-    <#if end&gt;contestRank.totalPage ><#assign start=start-(end-contestRank.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=contestRank.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==contestRank.pageNumber>active</#if>"><a
-      href="contest/rank/${cid!}?p=${x}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">${x}</a></li>
-    </#list> </#if> <#if contestRank.pageNumber<contestRank.totalPage>
-    <li><a href="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">Next</a></li>
-    </#if>
-    <li class="<#if contestRank.pageNumber&gt;=contestRank.totalPage>disabled</#if>"><a
-      href="contest/rank/${cid!}?p=${contestRank.totalPage}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>">&gt;&gt;</a></li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}/" />
 </div>
 
 <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
