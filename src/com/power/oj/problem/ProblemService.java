@@ -14,6 +14,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.service.VisitCountService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
@@ -35,7 +36,24 @@ public class ProblemService
   {
     return dao.findByPid(pid, userService.isAdmin());
   }
-  
+
+  public ProblemModel findProblemForShow(Integer pid)
+  {
+    ProblemModel problemModel = dao.findByPid(pid, userService.isAdmin());
+    
+    int sample_input_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
+      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
+    problemModel.put("sample_input_rows", sample_input_rows);
+    
+    int sample_output_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
+      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
+    problemModel.put("sample_output_rows", sample_output_rows);
+    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
+
+    return problemModel;
+  }
   public int getNextPid(Integer pid)
   {
     return dao.getNextPid(pid, userService.isAdmin());

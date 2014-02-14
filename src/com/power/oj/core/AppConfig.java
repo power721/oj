@@ -24,6 +24,7 @@ import com.jfinal.render.FreeMarkerRender;
 import com.power.oj.admin.AdminController;
 import com.power.oj.api.FriendApiController;
 import com.power.oj.api.MailApiController;
+import com.power.oj.api.ProblemApiController;
 import com.power.oj.api.UserApiController;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
@@ -99,6 +100,7 @@ public class AppConfig extends JFinalConfig
     me.add("/solution", SolutionController.class);
     me.add("/user", UserController.class);
     me.add("/api/mail", MailApiController.class, "/mail/");
+    me.add("/api/problem", ProblemApiController.class, "/problem/");
     me.add("/api/user", UserApiController.class, "/user/");
     me.add("/api/friend", FriendApiController.class, "/user/");
 

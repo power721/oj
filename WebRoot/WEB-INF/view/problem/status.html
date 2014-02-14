@@ -95,11 +95,11 @@
       Best solutions of Problem <a href="problem/show/${pid!}" data-toggle="tooltip" title="${problem.title!}">${pid!}</a>
     </h4>
     <div class="pull-left ajax-loader">
-      <a url="problem/status/${pid!}" class="btn-link btn-info ajax-loader" type="a" data="id-null">All</a> 
+      <a url="api/problem/status/${pid!}" class="btn-link btn-info ajax-loader" type="a" data-pid="${pid}" data-id="-1">All</a> 
         <#if program_languages??>
         <#list program_languages.keySet() as key> 
-        <a url="problem/status/${pid!}?language=${key!}" class="btn-link btn-info ajax-loader" 
-          type="a" data="id-${key_index}">${program_languages.get(key)!}</a>
+        <a url="api/problem/status/${pid!}?language=${key!}" class="btn-link btn-info ajax-loader" 
+          type="a" data-pid="${pid}" data-id="${key_index}">${program_languages.get(key)!}</a>
       </#list>
       </#if>
     </div>
@@ -120,7 +120,18 @@
           <th>Submit Time</th>
         </tr>
       </thead>
-      <tbody id="problem-status-tbody"></tbody>
+      <tbody id="problem-status-tbody">
+        <tr id="problem-status-row" class="hidden">
+          <td class="id">[id]</td>
+          <td class="sid">[sid]</td>
+          <td class="user"><a href="user/profile/[name]">[name]</a></td>
+          <td class="time">[time] MS</td>
+          <td class="memory">[memory] KB</td>
+          <td class="language">[language]</td>
+          <td class="code_len">[len] B</td>
+          <td class="ctime">[ctime]</td>
+        </tr>
+      </tbody>
     </table>
     <div id="page" class="pagination pagination-centered ajax-loader"></div>
   </div>
@@ -137,6 +148,7 @@
       function problemStatus(url) {
           $.getJSON(url, function(data){
             var html = '';
+            var temp = $('#problem-status-row').html();
             var i;
             var solutionList = data.solutionList;
             var pageNumber = parseInt(solutionList.pageNumber);
@@ -148,7 +160,16 @@
               var language = solution.language;
               if (data.userID && (data.adminUser || data.userID==solution.uid))
                 language = '<a href="code/' + solution.sid + '" target="blank" title="show source code">' + solution.language + '</a>';
-              html += '<tr>' +
+              
+              html += temp.replace(/\[id\]/g, (parseInt(i)+1+(pageNumber-1)*pageSize))
+                      .replace(/\[sid\]/g, solution.sid)
+                      .replace(/\[name\]/g, solution.name)
+                      .replace(/\[time\]/g, solution.time || 0)
+                      .replace(/\[memory\]/g, solution.memory || 0)
+                      .replace(/\[language\]/g, language)
+                      .replace(/\[len\]/g, solution.code_len)
+                      .replace(/\[ctime\]/g, solution.ctime);
+              /*html += '<tr>' +
                 '<td class="id">' + (parseInt(i)+1+(pageNumber-1)*pageSize) + '</td>' +
                 '<td class="sid">' + solution.sid + '</td>' +
                 '<td class="user"><a href="user/profile/' + solution.name + '">' + solution.name + '</a></td>' +
@@ -157,7 +178,7 @@
                 '<td class="language">'+ language + '</td>' + 
                 '<td class="code_len">' + solution.code_len + 'B</td>' +
                 '<td class="ctime">' + solution.ctime + '</td>' +
-                '</tr>';
+                '</tr>';*/
             }
             
             $('#problem-status-tbody').html(html);
@@ -168,12 +189,12 @@
             var prev = '';
             if (pageNumber > 1)
             {
-              prev = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber-1) + data.query + '">Prev</a></li>';
+              prev = '<li><a class="btn-link" url="api/problem/status/' + data.pid + '?p=' + (pageNumber-1) + data.query + '">Prev</a></li>';
             }
             var next = '';
             if (pageNumber < totalPage)
             {
-              next = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber+1) + data.query + '">Next</a></li>';
+              next = '<li><a class="btn-link" url="api/problem/status/' + data.pid + '?p=' + (pageNumber+1) + data.query + '">Next</a></li>';
             }
 
             html = '<ul><li class="' + (pageNumber==1?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
@@ -198,7 +219,7 @@
               
             for(i=start; i<=end; ++i)
             {
-              html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+              html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="api/problem/status/' + data.pid +
               '?p=' + i + (pageSize!=pSize?('&s='+pageSize):'') + data.query + '">' + i + '</a></li>';
             }
 
@@ -213,10 +234,6 @@
             return;
           
             var url = '${baseUrl!}/' + $(this).attr("url");
-            if (url.indexOf('?') > 0)
-                url = url + '&ajax=1';
-            else
-                url = url + '?ajax=1';
             problemStatus(url);
         });
 
@@ -228,7 +245,7 @@
           clean:true
         });
         
-        var url = 'problem/status/${pid!}?ajax=1';
+        var url = 'api/problem/status/${pid!}';
         problemStatus(url);
     });
     </script>

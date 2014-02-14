@@ -8,17 +8,13 @@ import jodd.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
-import com.jfinal.aop.ClearInterceptor;
-import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.service.VisitCountService;
-import com.power.oj.user.UserService;
 
 public class ProblemController extends OjController
 {
@@ -45,7 +41,7 @@ public class ProblemController extends OjController
   public void show()
   {
     Integer pid = getParaToInt(0);
-    ProblemModel problemModel = problemService.findProblem(pid);
+    ProblemModel problemModel = problemService.findProblemForShow(pid);
     if (problemModel == null)
     {
       FlashMessage msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
@@ -53,17 +49,6 @@ public class ProblemController extends OjController
       return;
     }
     
-    int sample_input_rows = 1;
-    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
-      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
-    problemModel.put("sample_input_rows", sample_input_rows);
-    
-    int sample_output_rows = 1;
-    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
-      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
-    problemModel.put("sample_output_rows", sample_output_rows);
-    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
-
     setAttr("prevPid", problemService.getPrevPid(pid));
     setAttr("nextPid", problemService.getNextPid(pid));
     setAttr("tagList", problemService.getTags(pid));
@@ -86,26 +71,19 @@ public class ProblemController extends OjController
     }
 
     Integer pid = getParaToInt(0);
-    boolean ajax = getParaToBoolean("ajax", false);
-
-    if (!ajax)
+    ProblemModel problemModel = problemService.findProblem(pid);
+    if (problemModel == null)
     {
-      ProblemModel problemModel = problemService.findProblem(pid);
-      if (problemModel == null)
-      {
-        FlashMessage msg = new FlashMessage(getText("problem.status.null"), MessageType.ERROR, getText("message.error.title"));
-        redirect("/problem", msg);
-        return;
-      }
-
-      setAttr("problem", problemModel);
-      setAttr("resultList", problemService.getProblemStatus(pid));
-      setAttr("prevPid", problemService.getPrevPid(pid));
-      setAttr("nextPid", problemService.getNextPid(pid));
+      FlashMessage msg = new FlashMessage(getText("problem.status.null"), MessageType.ERROR, getText("message.error.title"));
+      redirect("/problem", msg);
+      return;
     }
 
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
+    setAttr("problem", problemModel);
+    setAttr("resultList", problemService.getProblemStatus(pid));
+    setAttr("prevPid", problemService.getPrevPid(pid));
+    setAttr("nextPid", problemService.getNextPid(pid));
+
     Integer language = getParaToInt("language");
     StringBuilder query = new StringBuilder();
     if (language != null)
@@ -118,17 +96,13 @@ public class ProblemController extends OjController
     setAttr("language", language);
     setAttr("pid", pid);
     
-    if (ajax)
-    {
-      setAttr("query", query.toString());
-      setAttr("solutionList", problemService.getProblemStatusPage(pageNumber, pageSize, language, pid));
-      renderJson(new String[]
-      { "pid", "userID", "adminUser", "pageSize", "language", "query", "program_languages", "solutionList" });
-      // render("ajax/status.html");
-    } else
-    {
-      setTitle(new StringBuilder(2).append(String.format(getText("problem.status.title"), pid)).toString());
-    }
+    setTitle(new StringBuilder(2).append(String.format(getText("problem.status.title"), pid)).toString());
+  }
+  
+  public void random()
+  {
+    Integer pid = problemService.getRandomPid();
+    redirect(new StringBuilder(2).append("/problem/show/").append(pid).toString());
   }
 
   public void search()
@@ -159,7 +133,7 @@ public class ProblemController extends OjController
       return;
     }
 
-    int pageNumber = getParaToInt("p", 1);
+    int pageNumber = getParaToInt(0, 1);
     int pageSize = getParaToInt("s", OjConfig.problemPageSize);
     String word = HtmlEncoder.text(getPara("word").trim());
     String scope = getPara("scope");
@@ -169,43 +143,6 @@ public class ProblemController extends OjController
     setAttr("scope", scope != null ? scope : "all");
     
     setTitle(new StringBuilder(2).append(getText("problem.search.title")).append(word).toString());
-  }
-
-  @ClearInterceptor(ClearLayer.ALL)
-  public void userInfo()
-  {
-    Integer pid = getParaToInt("pid");
-    Integer uid = UserService.me().getCurrentUid();
-    
-    if (uid == null)
-    {
-      renderNull();
-      return;
-    }
-
-    setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
-    setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
-    setAttr("userInfo", problemService.getUserInfo(pid, uid));
-    renderJson(new String[]
-    { "userInfo", "language_name", "result_type" });
-  }
-
-  @ClearInterceptor(ClearLayer.ALL)
-  public void userResult()
-  {
-    Integer pid = getParaToInt("pid");
-    Integer uid = UserService.me().getCurrentUid();
-    if (uid == null)
-    {
-      renderNull();
-      return;
-    }
-
-    Record userResult = problemService.getUserResult(pid, uid);
-    if (userResult != null && userResult.getInt("result") != null)
-      userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
-    
-    renderJson(userResult);
   }
 
   @RequiresPermissions("problem:submit")
