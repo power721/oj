@@ -24,24 +24,11 @@
       </div>
     </form>
   </div>
-  <ul>
-    <li class="<#if contestList.pageNumber==1>disabled</#if>"><a href="contest/?p=1<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">&lt;&lt;</a></li>
-    <#if contestList.pageNumber&gt;1>
-    <li><a href="contest/?p=${contestList.pageNumber-1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">Prev</a></li></#if> <#if contestList??>
-    <#assign start=contestList.pageNumber-3> <#assign end=contestList.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
-    end&gt;contestList.totalPage ><#assign start=start-(end-contestList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=contestList.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==contestList.pageNumber>active</#if>"><a href="contest/?p=${x}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">${x}</a></li>
-    </#list> </#if> <#if contestList.pageNumber<contestList.totalPage>
-    <li><a href="contest/?p=${contestList.pageNumber+1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">Next</a></li>
-    </#if>
-    <li class="<#if contestList.pageNumber&gt;=contestList.totalPage>disabled</#if>"><a
-      href="contest/?p=${contestList.totalPage}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">&gt;&gt;</a></li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="contest/" />
   <div class="pull-right">
-    <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span> <span class="badge badge-info">${contestList.totalRow}
-      Contests</span>
+    <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span> 
+    <span class="badge badge-info">${contestList.totalRow} Contests</span>
   </div>
 </div>
 

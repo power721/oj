@@ -2653,10 +2653,10 @@ $.ajaxSetup({
         })
     }();
     system.tv = function() {
-      if (user.online/* && system.url.search(/power-oj/) != -1*/) {
+      if (user.online /* && system.url.search(/power-oj/) != -1*/ ) {
         var check = function() {
           $.get('api/user/online', {
-            uid: user.uid,
+            uid: user.uid || 0,
             name: user.name
           })
         };

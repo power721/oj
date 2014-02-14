@@ -28,9 +28,9 @@ public class ProblemController extends OjController
   {
     int pageNumber = 1;
     if (isParaExists("p"))
-      pageNumber = getParaToInt("p");
+      pageNumber = getParaToInt("p", 1);
     else if (isParaExists(0))
-      pageNumber = getParaToInt(0);
+      pageNumber = getParaToInt(0, 1);
     else
       pageNumber = getCookieToInt("pageNumber", 1);
     int pageSize = getParaToInt("s", OjConfig.problemPageSize);
