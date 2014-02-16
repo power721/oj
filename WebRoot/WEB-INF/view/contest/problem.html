@@ -25,9 +25,14 @@
   <#if adminUser??><a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> <a href="#"
     class="btn btn-danger">Rejudge</a><br></#if> Time Limit:<span class="blue">${problem.time_limit!}MS</span> Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
   Total Submit:<a href="contest/status/${cid!}?id=${problem.id!}">${problem.submit!}</a> Accepted:<a href="contest/status/${cid!}?id=${problem.id!}&result=0">${problem.accept!}</a>
-  Page View:<span class="blue">${problem.view!}</span><br> <br> <#if cstatus?? && cstatus==1> [<a
-    href="contest/submit/${cid!}-${problem.id!}<#if userID??>?ajax=1</#if>"<#if userID??> data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>]
-  </#if> [<a href="problem/status/?cid=${cid!}&id=${problem.id!}">Status</a>] [<a href="#">Discuss</a>]
+  Page View:<span class="blue">${problem.view!}</span><br> <br> 
+  <#if cstatus?? && cstatus==1> 
+  <#if userID??>
+  <a href="contest/submit/${cid!}-${problem.id!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
+  </#if>
+  </#if> 
+  <a href="problem/status/?cid=${cid!}&id=${problem.id!}" class="btn btn-info">Status</a>
+  <a href="#" class="btn btn-info">Discuss</a>
 </div>
 
 <#if adminUser??>
@@ -174,9 +179,7 @@
     <h4>Source</h4>
   </div>
   <div class="content" id="source">
-    <pre>
-			<a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip" title="Search other problems">${problem.source!}</a>
-		</pre>
+    <pre><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip" title="Search other problems">${problem.source!}</a></pre>
   </div>
 </section>
 
@@ -200,8 +203,13 @@
 </#if>
 
 <div class="text-center">
-  <#if cstatus?? && cstatus==1> [<a href="contest/submit/${cid!}-${problem.id!}<#if userID??>?ajax=1</#if>"<#if userID??> data-toggle="modal"
-    data-target="#submitModal"</#if>>Submit</a>] </#if> [<a href="problem/status?cid=${cid!}&id=${problem.id!}">Status</a>] [<a href="#">Discuss</a>]
+  <#if cstatus?? && cstatus==1> 
+  <#if userID??>
+  <a href="contest/submit/${cid!}-${problem.id!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
+  </#if>
+  </#if> 
+  <a href="problem/status/?cid=${cid!}&id=${problem.id!}" class="btn btn-info">Status</a>
+  <a href="#" class="btn btn-info">Discuss</a>
 </div>
 
 </@layout>

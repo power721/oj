@@ -9,7 +9,6 @@ import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
-import com.power.oj.user.UserModel;
 
 public class SolutionService
 {
@@ -89,7 +88,7 @@ public class SolutionService
     }
     if (language > -1)
     {
-      sb.append(" AND language=?");
+      sb.append(" AND s.language=?");
       paras.add(language);
     }
     if (num > -1)
@@ -156,10 +155,8 @@ public class SolutionService
 
   public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
   {
-    Integer uid = 0;
-    String name = "";
-    String sql = "SELECT sid,uid,pid,result,time,memory,language,code_len,ctime";
-    StringBuilder sb = new StringBuilder("FROM solution WHERE result=0");
+    String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,code_len,s.ctime,l.name AS language";
+    StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();
 
@@ -175,37 +172,19 @@ public class SolutionService
     sb.append(" ORDER BY time,memory,code_len,sid");
     Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
-    for (SolutionModel solution : solutionList.getList())
-    {
-
-      uid = solution.getUid();
-      try
-      {
-        name = UserModel.dao.findById(uid, "name").get("name");
-      } catch (NullPointerException e)
-      {
-        name = "";
-      }
-      solution.put("name", name);
-
-      solution.set("language", OjConfig.language_name.get(solution.getInt("language")));
-    }
-
     return solutionList;
   }
 
   public Page<SolutionModel> getProblemStatusPageForContest(int pageNumber, int pageSize, int language, int cid, int num)
   {
-    int uid = 0;
-    String name = "";
-    String sql = "SELECT sid,uid,pid,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
-    StringBuilder sb = new StringBuilder("FROM solution WHERE result=0");
+    String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,code_len,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,l.name AS language";
+    StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();
 
     if (language > -1)
     {
-      sb.append(" AND language=?");
+      sb.append(" AND s.language=?");
       paras.add(language);
     }
 
@@ -217,16 +196,6 @@ public class SolutionService
 
     sb.append(" ORDER BY time,memory,code_len,sid");
     Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
-
-    for (SolutionModel solution : solutionList.getList())
-    {
-
-      uid = solution.getUid();
-      name = UserModel.dao.findById(uid, "name").get("name");
-      solution.put("name", name);
-
-      solution.set("language", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
-    }
 
     return solutionList;
   }

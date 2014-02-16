@@ -178,8 +178,8 @@ public class ContestController extends OjController
     setAttr("cid", cid);
     setAttr("contest", contestModle);
 
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
+    int pageNumber = getParaToInt(1, 1);
+    int pageSize = getParaToInt(2, OjConfig.statusPageSize);
     int result = getParaToInt("result", -1);
     int language = getParaToInt("language", -1);
     int num = -1;
@@ -195,7 +195,7 @@ public class ContestController extends OjController
       }
     }
     String userName = getPara("name");
-    StringBuilder query = new StringBuilder();
+    StringBuilder query = new StringBuilder().append("?cid=").append(cid);
 
     if (result > -1)
     {
@@ -255,8 +255,8 @@ public class ContestController extends OjController
       setAttr("problem", problemModel);
     }
 
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.statusPageSize);
     int language = getParaToInt("language", -1);
     StringBuilder query = new StringBuilder();
     if (language > -1)

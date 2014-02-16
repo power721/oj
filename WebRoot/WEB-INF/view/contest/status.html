@@ -30,7 +30,10 @@
       <button type="submit" class="btn">Go</button>
     </form>
   </div>
-
+  
+  <#include "../common/_paginate2.html" />
+  <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/status/${cid!}" urlParas="${query}" />
+  
   <div class="pull-right">
     <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span class="badge badge-info">${solutionList.totalRow}
       Records</span>
@@ -72,8 +75,7 @@
   </tbody>
 </table>
 <div class="pagination pagination-centered">
-  <#include "../common/_paginate.html" />
-  <@paginate currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/status/${cid!}/" />
+  
 </div>
 <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
 
