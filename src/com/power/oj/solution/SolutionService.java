@@ -200,4 +200,17 @@ public class SolutionService
     return solutionList;
   }
 
+  public List<SolutionModel> getProblemStatusForContest(Integer cid, Integer num)
+  {
+    List<SolutionModel> resultList = dao.find("SELECT result,COUNT(*) AS count FROM contest_solution WHERE cid=? AND num=? GROUP BY result", cid, num);
+    
+    for (SolutionModel record : resultList)
+    {
+      ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
+      record.put("longName", resultType.getLongName());
+      record.put("name", resultType.getName());
+    }
+    
+    return resultList;
+  }
 }

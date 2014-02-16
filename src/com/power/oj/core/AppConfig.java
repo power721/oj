@@ -147,7 +147,7 @@ public class AppConfig extends JFinalConfig
    */
   public void configInterceptor(Interceptors me)
   {
-    if (OjConfig.getDevMode())
+    //if (OjConfig.getDevMode())
       me.add(new DebugInterceptor());
     me.add(new BaseURLInterceptor());
     me.add(new I18NInterceptor());

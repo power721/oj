@@ -1,12 +1,22 @@
 package com.power.oj.contest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.conn.HttpHostConnectException;
+
 import jodd.util.StringUtil;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
+import com.alibaba.fastjson.JSONObject;
+import com.jfinal.kit.JsonKit;
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
@@ -15,9 +25,11 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserService;
+import com.power.oj.util.Tool;
 
 public class ContestService
 {
+  private static final Logger log = Logger.getLogger(ContestService.class);
   private static final ContestModel dao = ContestModel.dao;
   private static final ContestService me = new ContestService();
   
@@ -27,7 +39,7 @@ public class ContestService
     return me;
   }
 
-  public Page<ContestModel> getPage(int pageNumber, int pageSize, int type, int status)
+  public Page<ContestModel> getPage(int pageNumber, int pageSize, Integer type, Integer status)
   {
     List<Object> paras = new ArrayList<Object>();
     String sql = "SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t";
@@ -87,7 +99,7 @@ public class ContestService
     return ContestList;
   }
 
-  public Page<Record> getContestRank(int pageNumber, int pageSize, int cid)
+  public Page<Record> getContestRank(int pageNumber, int pageSize, Integer cid)
   {
     String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY accepts DESC,penalty";
     Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realname", sql, cid);
@@ -95,7 +107,7 @@ public class ContestService
     return userRank;
   }
   
-  public ContestModel getContest(int cid)
+  public ContestModel getContest(Integer cid)
   {
     ContestModel contestModle = dao.findFirst(
         "SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=? LIMIT 1",
@@ -103,7 +115,11 @@ public class ContestService
     return contestModle;
   }
 
-  public String getContestTitle(int cid)
+  public ContestModel getContestById(Integer cid)
+  {
+    return dao.findById(cid);
+  }
+  public String getContestTitle(Integer cid)
   {
     ContestModel contestModle = dao.findFirst("SELECT title FROM contest WHERE cid=? LIMIT 1", cid);
     if (contestModle != null)
@@ -111,7 +127,7 @@ public class ContestService
     return null;
   }
 
-  public List<Record> getContestProblems(int cid, int uid)
+  public List<Record> getContestProblems(Integer cid, Integer uid)
   {
     String sql = "SELECT * FROM contest_problem WHERE cid=? ORDER BY num";
     List<Record> contestProblems;
@@ -132,7 +148,7 @@ public class ContestService
     return contestProblems;
   }
 
-  public long getProblemCount(int cid)
+  public long getProblemCount(Integer cid)
   {
     Record record = Db.findFirst("SELECT COUNT(pid) AS count FROM contest_problem WHERE cid=? LIMIT 1", cid);
     if (record != null)
@@ -140,7 +156,7 @@ public class ContestService
     return 0L;
   }
 
-  public ProblemModel getProblem(int cid, int num)
+  public ProblemModel getProblem(Integer cid, Integer num)
   {
     Record record = Db.findFirst("SELECT pid,title,accept,submit FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
     if (record == null)
@@ -172,7 +188,7 @@ public class ContestService
     return problem;
   }
 
-  public int getPid(int cid, int num)
+  public Integer getPid(Integer cid, Integer num)
   {
     Record record = Db.findFirst("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
     if (record == null)
@@ -199,7 +215,92 @@ public class ContestService
     return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
   }
   
-  public int getContestStatus(int cid)
+  public String getRecentContest()
+  {
+    String json = null;
+      List<ContestkendoSchedulerTask> contests = new ArrayList<ContestkendoSchedulerTask>();
+      String html = null;
+      try
+      {
+        html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+      } catch(HttpHostConnectException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.info(e.getLocalizedMessage());
+      }
+      
+      if (html == null)
+      {
+        try
+        {
+          Tool.getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
+        } catch(HttpHostConnectException e)
+        {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.info(e.getLocalizedMessage());
+        }
+      }
+      if (html == null)
+      {
+        return null;
+      }
+
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      long timeStamp = 0;
+
+      JSONArray jsonArray;
+      try
+      {
+        jsonArray = JSON.parseArray(html);
+      } catch (JSONException e)
+      {
+        try
+        {
+          html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+        } catch(HttpHostConnectException e1)
+        {
+          if (OjConfig.getDevMode())
+            e1.printStackTrace();
+          log.info(e1.getLocalizedMessage());
+        }
+        jsonArray = JSON.parseArray(html);
+      }
+
+      for (int i = 0; i < jsonArray.size(); ++i)
+      {
+        JSONObject data = jsonArray.getJSONObject(i);
+        ContestkendoSchedulerTask contest = new ContestkendoSchedulerTask();
+        try
+        {
+          timeStamp = sdf.parse(data.getString("start_time")).getTime();
+        } catch (ParseException e)
+        {
+          timeStamp = 0;
+          log.warn(e.getLocalizedMessage());
+        }
+        String start = "/Date(" + timeStamp + ")/";
+        String end = "/Date(" + (timeStamp + 18000000) + ")/";
+        String link = data.getString("link");
+        String title = data.getString("oj") + " -- " + data.getString("name");
+
+        contest.setTaskId(data.getString("id"));
+        contest.setOj(data.getString("oj"));
+        contest.setTitle(title);
+        contest.setUrl(link);
+        contest.setDescription(link);
+        contest.setStart(start);
+        contest.setEnd(end);
+
+        contests.add(contest);
+      }
+      json = JsonKit.listToJson(contests, 2);
+    
+    return json;
+  }
+  
+  public int getContestStatus(Integer cid)
   {
     ContestModel contestModle = dao.findFirst("SELECT start_time,end_time FROM contest WHERE cid=? LIMIT 1", cid);
     if (contestModle == null)
@@ -216,7 +317,7 @@ public class ContestService
     return  ContestModel.Running;
   }
 
-  public List<Record> getContestStatistics(int cid)
+  public List<Record> getContestStatistics(Integer cid)
   {
     StringBuilder sb = new StringBuilder("SELECT ");
     for (LanguageModel language : OjConfig.program_languages)
@@ -239,7 +340,7 @@ public class ContestService
     return statistics;
   }
 
-  public boolean buildRank(int cid)
+  public boolean buildRank(Integer cid)
   {
     Db.update("DELETE FROM board WHERE cid=?", cid);
     ContestModel contestModle = getContest(cid);
@@ -342,17 +443,17 @@ public class ContestService
     return true;
   }
 
-  public boolean isContestFinished(int cid)
+  public boolean isContestFinished(Integer cid)
   {
     return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND end_time<UNIX_TIMESTAMP() LIMIT 1", cid) != null;
   }
 
-  public boolean isContestHasPassword(int cid)
+  public boolean isContestHasPassword(Integer cid)
   {
     return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND type=3 LIMIT 1", cid) != null;
   }
 
-  public boolean checkContestPassword(int cid, String password)
+  public boolean checkContestPassword(Integer cid, String password)
   {
     return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND pass=? AND type=3 LIMIT 1", cid, password) != null;
   }

@@ -53,7 +53,7 @@
 </div>
 
 <script type="text/javascript" language="javascript">
-        var timeDiff = ${ctime!} - new Date().valueOf();
+        var timeDiff = ${serverTime!}*1000 - new Date().valueOf();
         
         function updateTime() {
             $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
