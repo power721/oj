@@ -1,40 +1,54 @@
-<#include "../common/_layout.html" /> <@layout>
+<#include "../common/_layout.html" />
+<@layout>
 
 <script type="text/javascript">
     $(document).ready(function() {
-    	var prevpage="${baseUrl}/problem/show/${prevPid!}"
-      var nextpage="${baseUrl}/problem/show/${nextPid!}"
+    	var prevpage = "${baseUrl}/problem/show/${prevPid!}";
+      var nextpage = "${baseUrl}/problem/show/${nextPid!}";
       $(document).keydown(function(event) {
-        <#if prevPid!=problem.pid>if(event.keyCode==37)window.location=prevpage;</#if>
-        <#if nextPid!=problem.pid>if(event.keyCode==39)window.location=nextpage;</#if>
+        <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
       });
     });
 </script>
 
 <ul class="pager">
-  <li class="previous <#if prevPid==problem.pid>disabled</#if>"><a
-    href="problem/show/${prevPid!}">&lt;&lt;Prev</a></li>
-  <li><a href="problem/search" title="Try another problem.">I feel lucky!</a></li>
-  <li class="next <#if nextPid==problem.pid>disabled</#if>"><a href="problem/show/${nextPid!}">Next&gt;&gt;</a></li>
+  <li class="previous <#if prevPid==problem.pid>disabled</#if>">
+    <a href="problem/show/${prevPid!}" title="Show previous problem.">&lt;&lt;Prev</a>
+  </li>
+  <li>
+  <a href="problem/random" title="Try another problem.">I feel lucky!</a>
+  </li>
+  <li class="next <#if nextPid==problem.pid>disabled</#if>">
+  <a href="problem/show/${nextPid!}" title="Show next problem.">Next&gt;&gt;</a>
+  </li>
 </ul>
 
 <div class="text-center">
   <h2>
     <#if userResult??>
     <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>" />
-    </#if><span class="black">${problem.pid!}:</span> <#if problem.status==false>
-    <del></#if>${problem.title!}<#if problem.status==false></del>
     </#if>
+    <span class="black pts">${problem.pid!0}:</span> 
+    <#if problem.status==false><del></#if>
+    <span class="title">${problem.title!}</span>
+    <#if problem.status==false></del></#if>
     <!--<span class="label label-important">SPJ</span>-->
   </h2>
-  <#if adminUser??><a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal"
-    data-target="#editModal" class="btn btn-primary">Edit</a> <a href="#" class="btn btn-danger">Rejudge</a><br></#if>
-  Time Limit:<span class="blue">${problem.time_limit!}MS</span> Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
-  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> Accepted:<a
-    href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> Page View:<span class="blue">${problem.view!}</span><br>
-  <br> [<a href="problem/submit/${problem.pid!}<#if userID??>?ajax=1</#if>"<#if userID??>
-    data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>] [<a
-    href="problem/status/${problem.pid!}">Status</a>] [<a href="#">Discuss</a>]
+  <#if adminUser??>
+  <div class="problem-admin">
+    <a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> 
+    <a href="#" class="btn btn-danger">Rejudge</a>
+  </div>
+  </#if>
+  Time Limit:<span class="blue">${problem.time_limit!}MS</span> 
+  Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
+  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> 
+  Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> 
+  Page View:<span class="blue">${problem.view!}</span><br><br> 
+  <#if userID??>[<a href="problem/submit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#submitModal">Submit</a>]</#if>
+  [<a href="problem/status/${problem.pid!}">Status</a>] 
+  [<a href="#">Discuss</a>]
 </div>
 
 <#if adminUser??>
@@ -43,8 +57,8 @@
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="editModalLabel">
-        Edit Problem ${problem.pid!}:<a href="problem/edit/${problem.pid!}"
-          title="Edit in another page" data-toggle="tooltip" data-placement="bottom">${problem.title!}</a>
+        Edit Problem ${problem.pid!}:
+        <a href="problem/edit/${problem.pid!}" title="Edit in another page" data-toggle="tooltip" data-placement="bottom">${problem.title!}</a>
       </h3>
     </div>
     <div class="modal-body">
@@ -57,7 +71,8 @@
     </div>
   </form>
 </div>
-</#if> <#if userID??>
+</#if> 
+<#if userID??>
 <div class="modal hide fade problemModal" id="submitModal">
   <form class="" id="submitForm" action="solution/save" method="post">
     <div class="modal-header">
@@ -68,7 +83,11 @@
       </h3>
     </div>
     <div class="modal-body">
-      <a href="problem/submit/${problem.pid!}" class="btn btn-primary">Submit</a>
+      <!--<a href="problem/submit/${problem.pid!}" class="btn btn-primary">Submit</a>-->
+      <div class="alert alert-error">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      Sorry, youd don't have permission to submit solution.
+      </div>
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn btn-primary">Save</button>
@@ -199,17 +218,17 @@
 </section>
 </#if> <#if adminUser??>
 <form class="form-inline" action="problem/tag" method="post">
-  <input type="hidden" name="op" value="add"> <input type="hidden" name="pid"
-    value="${problem.pid!}"> <input type="text" class="input-small" name="tag"
-    placeholder="Add a tag">
+  <input type="hidden" name="op" value="add"> 
+  <input type="hidden" name="pid" value="${problem.pid!}"> 
+  <input type="text" class="input-small" name="tag" placeholder="Add a tag">
   <button type="submit" class="btn">Add</button>
 </form>
 </#if>
 
 <div class="text-center">
-  [<a href="problem/submit/${problem.pid!}<#if userID??>?ajax=1</#if>"<#if userID??>
-    data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>] [<a
-    href="problem/status/${problem.pid!}">Status</a>] [<a href="#">Discuss</a>]
+  <#if userID??>[<a href="problem/submit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#submitModal">Submit</a>]</#if> 
+  [<a href="problem/status/${problem.pid!}">Status</a>] 
+  [<a href="#">Discuss</a>]
 </div>
 
 <#if userResult??>

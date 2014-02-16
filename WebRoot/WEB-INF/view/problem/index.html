@@ -2,8 +2,8 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        var prevpage="problem/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
-        var nextpage="problem/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=50>&s=${problemList.pageSize}</#if>"
+        var prevpage="problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+        var nextpage="problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
         $(document).keydown(function(event) {
             <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
             <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
@@ -57,6 +57,12 @@
     </#list> </#if>
   </tbody>
 </table>
+
+<#if (problemList.list.size()>=pageSize/2)>
+<div class="pagination pagination-centered">
+  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/" />
+</div>
+</#if>
 
 <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
 
