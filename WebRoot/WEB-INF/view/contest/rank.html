@@ -16,8 +16,8 @@
     </script>
 
 <div class="pagination pagination-centered">
-  <#include "../common/_paginate.html" />
-  <@paginate currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}/" />
+  <#include "../common/_paginate2.html" />
+  <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
   <div class="pull-right">
     <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span> 
     <span class="badge badge-info">${contestRank.totalRow} Users</span>
@@ -82,7 +82,7 @@
 <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
 
 <script type="text/javascript">
-    var ws = null;
+    /*var ws = null;
     function startServer() {
       if(ws != null)
           return;
@@ -123,6 +123,6 @@
       };
     }
 
-    startServer();
+    startServer();*/
   </script>
 </#if> </@layout>

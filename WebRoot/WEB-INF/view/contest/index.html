@@ -4,8 +4,8 @@
     $(document).ready(function(){
         document.onkeydown=nextpage
         document.onkeydown=nextpage
-        var prevpage="contest/?p=${contestList.pageNumber-1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>"
-        var nextpage="contest/?p=${contestList.pageNumber+1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>"
+        var prevpage="contest/${contestList.pageNumber-1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
+        var nextpage="contest/${contestList.pageNumber+1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
         function nextpage(event)
         {
             event=event?event:(window.event?window.event:null);

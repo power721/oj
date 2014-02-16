@@ -1,7 +1,7 @@
 package com.power.oj.solution;
 
 import com.jfinal.plugin.activerecord.Model;
-import com.power.oj.contest.ContestModel;
+import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 public class SolutionModel extends Model<SolutionModel>
@@ -23,7 +23,7 @@ public class SolutionModel extends Model<SolutionModel>
     long ctime = OjConfig.timeStamp;
     if (get("cid") != null)
     {
-      int pid = ContestModel.dao.getPid(getInt("cid"), getInt("num"));
+      int pid = ContestService.me().getPid(getInt("cid"), getInt("num"));
       set("pid", pid);
     }
     this.set("ctime", ctime).set("result", ResultType.WAIT).set("code_len", this.getStr("source").length());

@@ -38,16 +38,18 @@ public class ContestController extends OjController
 {
   private static final Logger log = Logger.getLogger(ContestController.class);
   private static final SolutionService solutionService = SolutionService.me();
+  private static final ContestService contestService = ContestService.me();
 
   public void index()
   {
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.contestPageSize);
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.contestPageSize);
     int type = getParaToInt("type", -1);
     int status = getParaToInt("status", -1);
 
-    Page<ContestModel> contestList = ContestModel.dao.getPage(pageNumber, pageSize, type, status);
+    Page<ContestModel> contestList = contestService.getPage(pageNumber, pageSize, type, status);
     setAttr("contestList", contestList);
+    setAttr("pageSize", OjConfig.contestPageSize);
 
     setTitle(getText("contest.index.title"));
   }
@@ -59,7 +61,7 @@ public class ContestController extends OjController
     int uid = 0;
     if (getAttrForInt(OjConstants.USER_ID) != null)
       uid = getAttrForInt(OjConstants.USER_ID);
-    ContestModel contestModle = ContestModel.dao.getContest(cid);
+    ContestModel contestModle = contestService.getContest(cid);
     if (contestModle == null)
     {
       log.warn(new StringBuilder(2).append("Cannot find this contest: ").append(cid).toString());
@@ -67,7 +69,7 @@ public class ContestController extends OjController
       redirect("/contest", msg);
       return;
     }
-    List<Record> contestProblems = ContestModel.dao.getContestProblems(cid, uid);
+    List<Record> contestProblems = contestService.getContestProblems(cid, uid);
 
     long ctime = OjConfig.timeStamp;
     int start_time = contestModle.getInt("start_time");
@@ -96,7 +98,7 @@ public class ContestController extends OjController
     char id = problem_id.charAt(0);
     int num = id - 'A';
 
-    ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
+    ProblemModel problemModel = contestService.getProblem(cid, num);
     if (problemModel == null)
     {
       log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
@@ -110,9 +112,9 @@ public class ContestController extends OjController
 
     setAttr("problem", problemModel);
     setAttr("cid", cid);
-    setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
+    setAttr("cstatus", contestService.getContestStatus(cid));
 
-    List<Record> contestProblems = ContestModel.dao.getContestProblems(cid, 0);
+    List<Record> contestProblems = contestService.getContestProblems(cid, 0);
     setAttr("contestProblems", contestProblems);
 
     setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
@@ -127,14 +129,14 @@ public class ContestController extends OjController
     int num = id - 'A';
     boolean ajax = getParaToBoolean("ajax", false);
 
-    if (ContestModel.dao.isContestFinished(cid))
+    if (contestService.isContestFinished(cid))
     {
       FlashMessage msg = new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
-    ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
+    ProblemModel problemModel = contestService.getProblem(cid, num);
     if (problemModel == null)
     {
       log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
@@ -158,13 +160,13 @@ public class ContestController extends OjController
   public void rank()
   {
     int cid = getParaToInt(0);
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.contestRankPageSize);
+    int pageNumber = getParaToInt(1, 1);
+    int pageSize = getParaToInt(2, OjConfig.contestRankPageSize);
     
     setAttr("cid", cid);
-    setAttr("contestRank", ContestModel.dao.getContestRank(pageNumber, pageSize, cid));
-    setAttr("contestProblems", ContestModel.dao.getContestProblems(cid, 0));
-    setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
+    setAttr("contestRank", contestService.getContestRank(pageNumber, pageSize, cid));
+    setAttr("contestProblems", contestService.getContestProblems(cid, 0));
+    setAttr("cstatus", contestService.getContestStatus(cid));
 
     setTitle(new StringBuilder(2).append(getText("contest.rank.title")).append(cid).toString());
   }
@@ -232,7 +234,7 @@ public class ContestController extends OjController
     int cid = getParaToInt("cid");
     char id = getPara("id").charAt(0);
     int num = id - 'A';
-    ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
+    ProblemModel problemModel = contestService.getProblem(cid, num);
     boolean ajax = getParaToBoolean("ajax", false);
 
     if (!ajax)
@@ -285,7 +287,7 @@ public class ContestController extends OjController
     int cid = getParaToInt(0);
     
     setAttr("cid", cid);
-    List<Record> statistics = ContestModel.dao.getContestStatistics(cid);
+    List<Record> statistics = contestService.getContestStatistics(cid);
     setAttr("statistics", statistics);
 
     List<String> resultName = new ArrayList<String>();
@@ -403,7 +405,7 @@ public class ContestController extends OjController
     int cid = getParaToInt("cid");
     String password = getPara("password");
 
-    if (ContestModel.dao.checkContestPassword(cid, password))
+    if (contestService.checkContestPassword(cid, password))
     {
       String token_name = new StringBuilder("cid-").append(cid).toString();
       String token_token = CryptUtils.encrypt(password, token_name);
@@ -475,7 +477,7 @@ public class ContestController extends OjController
   public void buildRank()
   {
     int cid = getParaToInt(0);
-    ContestModel.dao.buildRank(cid);
+    contestService.buildRank(cid);
 
     redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new FlashMessage(getText("contest.buildRank.success")));
   }

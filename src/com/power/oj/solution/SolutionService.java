@@ -162,7 +162,7 @@ public class SolutionService
 
     if (language != null)
     {
-      sb.append(" AND language=?");
+      sb.append(" AND s.language=?");
       paras.add(language);
     }
 

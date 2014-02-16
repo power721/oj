@@ -13,6 +13,7 @@ public class ContestPasswordInterceptor implements Interceptor
 {
 
   private static final Logger log = Logger.getLogger(ContestPasswordInterceptor.class);
+  private static final ContestService contestService = ContestService.me();
       
   @Override
   public void intercept(ActionInvocation ai)
@@ -31,7 +32,7 @@ public class ContestPasswordInterceptor implements Interceptor
     else if (controller.getParaToInt("cid") != null)
       cid = controller.getParaToInt("cid");
 
-    if (!ContestModel.dao.isContestHasPassword(cid))
+    if (!contestService.isContestHasPassword(cid))
     {
       ai.invoke();
       return;
@@ -42,7 +43,7 @@ public class ContestPasswordInterceptor implements Interceptor
     try
     {
       token_token = CryptUtils.decrypt(controller.getSessionAttr(token_name).toString(), token_name);
-      if (ContestModel.dao.checkContestPassword(cid, token_token))
+      if (contestService.checkContestPassword(cid, token_token))
       {
         ai.invoke();
         return;
@@ -54,7 +55,7 @@ public class ContestPasswordInterceptor implements Interceptor
    
     controller.keepPara(OjConstants.PAGE_TITLE);
 
-    controller.setAttr("title", ContestModel.dao.getContestTitle(cid));
+    controller.setAttr("title", contestService.getContestTitle(cid));
     controller.setAttr("cid", cid);
 
     controller.render("password.html");

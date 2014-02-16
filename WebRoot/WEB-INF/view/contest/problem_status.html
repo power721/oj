@@ -87,11 +87,15 @@
     <h4>
       Best solutions of Problem <a href="contest/problem/${cid!}-${id}" data-toggle="tooltip" title="${problem.title!}">${cid!}-${id}</a>
     </h4>
-    <div class="pull-left ajax-loader">
+    <div class="pull-left btn-group ajax-loader">
       <a url="contest/problem_status/?cid=${cid!}&id=${id!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
-        class="btn-link btn-info ajax-loader<#if !language?? || language==-1> active</#if>">All</a> <#if program_languages??> <#list program_languages as
-      Language> <a url="contest/problem_status/?cid=${cid!}&id=${id!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>&language=${Language.id!}"
-        class="btn-link btn-info ajax-loader<#if language?? && language==Language.id> active</#if>" type="a">${Language.name!}</a> </#list> </#if>
+        class="btn btn-warning ajax-loader<#if !language?? || language==-1> active</#if>">All</a> 
+        <#if program_languages??> 
+        <#list program_languages as Language> 
+        <a url="contest/problem_status/?cid=${cid!}&id=${id!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>&language=${Language.id!}"
+        class="btn btn-success ajax-loader<#if language?? && language==Language.id> active</#if>" type="a">${Language.name!}</a> 
+        </#list> 
+        </#if>
     </div>
     <div class="pull-right">
       <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span class="badge badge-info">${solutionList.totalRow}

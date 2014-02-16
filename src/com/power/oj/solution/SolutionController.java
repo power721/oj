@@ -8,8 +8,8 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
-import com.power.oj.contest.ContestModel;
 import com.power.oj.contest.ContestRankWebSocket;
+import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -103,7 +103,7 @@ public class SolutionController extends OjController
     if (cid > 0)
     {
       int num = solutionModel.getInt("num");
-      problemTitle = ContestModel.dao.getProblemTitle(cid, num);
+      problemTitle = ContestService.me().getProblemTitle(cid, num);
       setAttr("alpha", (char) (num + 'A'));
       setAttr("cid", cid);
     } else
