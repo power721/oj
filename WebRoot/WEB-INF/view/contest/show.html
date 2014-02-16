@@ -3,8 +3,16 @@
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
-    <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
-    <span>Current System Time</span>: <span class="time" id="current"></span> <span>Contest Status</span>: <span class="${status!}">${status!}</span><br>
+    <#if adminUser??>
+    <div class="contest-admin">
+      <a href="contest/edit/${contest.cid!}" class="btn btn-primary">Edit</a> 
+      <a href="contest/show/${contest.cid!}" class="btn btn-primary">Manage</a>
+    </div>
+    </#if>
+    <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> 
+    <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
+    <span>Current System Time</span>: <span class="time" id="current"></span> 
+    <span>Contest Status</span>: <span class="${status!}">${status!}</span><br>
   </div>
 </div>
 <div class="row text-center">
@@ -28,10 +36,12 @@
       <tbody>
         <#if contestProblems??> <#list contestProblems as Problem>
         <tr>
-          <td><#if Problem.status??><i class="<#if Problem.status==0>oj-tick<#else>oj-delete</#if>"></i></#if>
+          <td><#if Problem.status??><i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i></#if>
           </td>
-          <td><#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a> </#if><a href="contest/problem/${contest.cid!}-${Problem.id!}"
-            data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a></td>
+          <td>
+            <#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></#if>
+            <a href="contest/problem/${contest.cid!}-${Problem.id!}" data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a>
+          </td>
           <td><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
           <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}&result=0">${Problem.accept!}</a></td>
           <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}">${Problem.submit!}</a></td>

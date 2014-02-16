@@ -27,7 +27,7 @@
         <option value="-1">Language</option> <#if program_languages??> <#list program_languages as Language>
         <option value="${Language.id!}"<#if language?? && language==Language.id>selected</#if>>${Language.name!}</option> </#list> </#if>
       </select>
-      <button type="submit" class="btn">Go</button>
+      <button type="submit" class="btn btn-info">Go</button>
     </form>
   </div>
   
