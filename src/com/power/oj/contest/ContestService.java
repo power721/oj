@@ -14,6 +14,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.user.UserService;
 
 public class ContestService
 {
@@ -158,6 +159,16 @@ public class ContestService
     problem.put("id", (char) (num + 'A'));
     problem.put("num", num);
 
+    int sample_input_rows = 1;
+    if (StringUtil.isNotBlank(problem.getStr("sample_input")))
+      sample_input_rows = StringUtil.count(problem.getStr("sample_input"), '\n') + 1;
+    problem.put("sample_input_rows", sample_input_rows);
+    
+    int sample_output_rows = 1;
+    if (StringUtil.isNotBlank(problem.getStr("sample_output")))
+      sample_output_rows = StringUtil.count(problem.getStr("sample_output"), '\n') + 1;
+    problem.put("sample_output_rows", sample_output_rows);
+    
     return problem;
   }
 
@@ -179,6 +190,15 @@ public class ContestService
     return record.get("title");
   }
 
+  public Integer getUserResult(Integer cid, Integer num)
+  {
+    Integer uid = UserService.me().getCurrentUid();
+    if (uid == null)
+      return null;
+    
+    return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
+  }
+  
   public int getContestStatus(int cid)
   {
     ContestModel contestModle = dao.findFirst("SELECT start_time,end_time FROM contest WHERE cid=? LIMIT 1", cid);

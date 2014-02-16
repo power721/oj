@@ -93,10 +93,10 @@ public class ContestController extends OjController
   @Before(ContestPasswordInterceptor.class)
   public void problem()
   {
-    int cid = getParaToInt(0);
+    Integer cid = getParaToInt(0);
     String problem_id = getPara(1);
     char id = problem_id.charAt(0);
-    int num = id - 'A';
+    Integer num = id - 'A';
 
     ProblemModel problemModel = contestService.getProblem(cid, num);
     if (problemModel == null)
@@ -107,11 +107,9 @@ public class ContestController extends OjController
       return;
     }
 
-    problemModel.put("sample_input_rows", StringUtil.count((String) problemModel.get("sample_input", ""), '\n') + 1);
-    problemModel.put("sample_output_rows", StringUtil.count((String) problemModel.get("sample_output", ""), '\n') + 1);
-
     setAttr("problem", problemModel);
     setAttr("cid", cid);
+    setAttr("userResult", contestService.getUserResult(cid, num));
     setAttr("cstatus", contestService.getContestStatus(cid));
 
     List<Record> contestProblems = contestService.getContestProblems(cid, 0);
