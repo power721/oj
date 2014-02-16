@@ -28,5 +28,5 @@ public class ContestModel extends Model<ContestModel>
 
     return this.save();
   }
-
+  
 }

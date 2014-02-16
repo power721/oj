@@ -339,6 +339,22 @@ public class ContestService
 
     return statistics;
   }
+  
+  public boolean updateContest(ContestModel contestModel)
+  {
+    if (contestModel.get("freeze") == null)
+    {
+      contestModel.set("freeze", 0);
+    }
+    
+    if (contestModel.getInt("type") == 3 && StringUtil.isNotBlank(contestModel.getStr("pass")))
+    {
+      contestModel.set("pass", contestModel.get("pass"));
+    }
+    contestModel.set("mtime", OjConfig.timeStamp);
+    
+    return contestModel.update();
+  }
 
   public boolean buildRank(Integer cid)
   {

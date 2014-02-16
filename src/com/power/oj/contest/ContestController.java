@@ -71,6 +71,7 @@ public class ContestController extends OjController
     else if (end_time < serverTime)
       status = getText("contest.status.finished");
 
+    setAttr("cid", cid);
     setAttr("contest", contestModle);
     setAttr("contestProblems", contestService.getContestProblems(cid, uid));
     setAttr("status", status);
@@ -321,14 +322,36 @@ public class ContestController extends OjController
   @RequiresPermissions("contest:edit")
   public void edit()
   {
-    renderText("TODO");
+    Integer cid = getParaToInt(0);
+    ContestModel contestModle = contestService.getContest(cid);
+    
+    setAttr("cid", cid);
+    setAttr("contest", contestModle);
+    
+    setTitle(getText("contest.edit.title"));
   }
 
   @Before(POST.class)
   @RequiresPermissions("contest:edit")
   public void update()
   {
-    renderText("TODO");
+    String start_time = getPara("start_time");
+    String end_time = getPara("end_time");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    ContestModel contestModel = getModel(ContestModel.class, "contest");
+    
+    try
+    {
+      contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
+      contestModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
+    } catch (ParseException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+    }
+    
+    contestService.updateContest(contestModel);
+    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
 
   @RequiresPermissions("contest:add")
