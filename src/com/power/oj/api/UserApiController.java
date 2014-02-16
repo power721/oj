@@ -15,7 +15,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.mail.MailService;
-import com.power.oj.solution.SolutionModel;
+import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
@@ -245,7 +245,7 @@ public class UserApiController extends OjController
     Integer language = getParaToInt("languageId", -1);
     Integer uid = userService.getCurrentUid();
     
-    renderJson(SolutionModel.dao.getPage(pageNumber, pageSize, result, language, uid));
+    renderJson(SolutionService.me().getPage(pageNumber, pageSize, result, language, uid));
   }
   
 }

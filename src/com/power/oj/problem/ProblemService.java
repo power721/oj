@@ -163,11 +163,6 @@ public class ProblemService
     return resultList;
   }
   
-  public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
-  {
-    return SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
-  }
-  
   public Page<ProblemModel> searchProblem(int pageNumber, int pageSize, String scope, String word)
   {
     Page<ProblemModel> problemList = null;

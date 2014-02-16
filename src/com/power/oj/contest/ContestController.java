@@ -30,12 +30,14 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.solution.SolutionService;
 import com.power.oj.util.CryptUtils;
 import com.power.oj.util.Tool;
 
 public class ContestController extends OjController
 {
   private static final Logger log = Logger.getLogger(ContestController.class);
+  private static final SolutionService solutionService = SolutionService.me();
 
   public void index()
   {
@@ -212,7 +214,7 @@ public class ContestController extends OjController
       query.append("&name=").append(userName);
     }
 
-    setAttr("solutionList", SolutionModel.dao.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
+    setAttr("solutionList", solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
     setAttr("result", result);
@@ -261,7 +263,7 @@ public class ContestController extends OjController
     {
       query.append("&language=").append(language);
     }
-    Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
+    Page<SolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("solutionList", solutionList);

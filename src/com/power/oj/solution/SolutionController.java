@@ -26,6 +26,7 @@ public class SolutionController extends OjController
 {
   
   private static final UserService userService = UserService.me();
+  private static final SolutionService solutionService = SolutionService.me();
   
   @ActionKey("/status")
   public void index()
@@ -57,8 +58,7 @@ public class SolutionController extends OjController
       query.append("&name=").append(userName);
     }
 
-    
-    setAttr("solutionList", SolutionModel.dao.getPage(pageNumber, pageSize, result, language, pid, userName));
+    setAttr("solutionList", solutionService.getPage(pageNumber, pageSize, result, language, pid, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
     setAttr("pageSize", OjConfig.statusPageSize);
@@ -77,7 +77,7 @@ public class SolutionController extends OjController
   {
     int sid = getParaToInt(0);
     boolean isAdmin = userService.isAdmin();
-    SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=? LIMIT 1", sid);
+    SolutionModel solutionModel = solutionService.findSolution(sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
     int uid = solutionModel.getUid();
     int loginUid = getAttrForInt(OjConstants.USER_ID);
@@ -92,12 +92,14 @@ public class SolutionController extends OjController
     {
       String error = solutionModel.getStr("error");
       if (error != null)
+      {
         solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
+        // TODO replace "/"
+      }
     }
 
     String problemTitle = "";
     int cid = solutionModel.getInt("cid");
-    System.out.println(cid);
     if (cid > 0)
     {
       int num = solutionModel.getInt("num");

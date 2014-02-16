@@ -8,6 +8,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.problem.ProblemService;
+import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
@@ -79,7 +80,7 @@ public class ProblemApiController extends OjController
     setAttr("pid", pid);
     
     setAttr("query", query.toString());
-    setAttr("solutionList", problemService.getProblemStatusPage(pageNumber, pageSize, language, pid));
+    setAttr("solutionList", SolutionService.me().getProblemStatusPage(pageNumber, pageSize, language, pid));
     renderJson(new String[]{ "pid", "userID", "adminUser", "pageSize", "language", "query", "program_languages", "solutionList" });
   }
   
