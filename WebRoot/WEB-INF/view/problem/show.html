@@ -234,7 +234,7 @@
 <#if userResult??>
 <script type="text/javascript">
     $(document).ready(function() {
-    	$.getJSON('problem/userInfo?pid=' + ${problem.pid}, function(data) {
+    	$.getJSON('api/problem/userInfo?pid=' + ${problem.pid}, function(data) {
     		  if (data.userInfo)
     			  {
               for (result in data.userInfo)

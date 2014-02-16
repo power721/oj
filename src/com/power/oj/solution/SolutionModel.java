@@ -40,7 +40,7 @@ public class SolutionModel extends Model<SolutionModel>
     }
     if (language > -1)
     {
-      sb.append(" AND language=?");
+      sb.append(" AND s.language=?");
       paras.add(language);
     }
     if (pid > 0)

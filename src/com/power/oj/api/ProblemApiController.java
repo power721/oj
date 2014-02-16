@@ -54,6 +54,7 @@ public class ProblemApiController extends OjController
     renderJson(userResult);
   }
 
+  @ClearInterceptor(ClearLayer.ALL)
   public void status()
   {
     /*if (!isParaExists(0))

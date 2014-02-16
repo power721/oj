@@ -30,15 +30,15 @@ public class SolutionController extends OjController
   @ActionKey("/status")
   public void index()
   {
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.statusPageSize);
     int result = getParaToInt("result", -1);
     int language = getParaToInt("language", -1);
     int pid = 0;
     if (StringUtil.isNotBlank(getPara("pid")))
       pid = getParaToInt("pid", 0);
     String userName = getPara("name");
-    StringBuilder query = new StringBuilder();
+    StringBuilder query = new StringBuilder().append("?p=").append(pageNumber);
 
     if (result > -1)
     {
@@ -61,6 +61,7 @@ public class SolutionController extends OjController
     setAttr("solutionList", SolutionModel.dao.getPage(pageNumber, pageSize, result, language, pid, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
+    setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("result", result);
     setAttr("language", language);
     setAttr("pid", getPara("pid"));
