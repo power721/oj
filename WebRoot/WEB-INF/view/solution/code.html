@@ -13,7 +13,7 @@
     <#else> 
     <a href="problem/show/${solution.pid!}">${solution.pid!} (${problemTitle!})</a> 
     </#if>
-    <span class="green">User</span>:<a href="user/profile/${submitUser.name!}">${submitUser.name!}</a> <br> 
+    <span class="green">User</span>:<a href="user/profile/${(submitUser.name)!"Guest"}">${(submitUser.name)!"Guest"}</a> <br> 
     <span class="green">Memory</span>:${solution.memory!}K <span class="green">Time</span>:${solution.time!}MS <br> 
     <span class="green">Language</span>:${language!}
     <span class="green">Result</span>:<span id="${resultName!}">${resultLongName!}</span> <br>

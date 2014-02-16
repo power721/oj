@@ -157,7 +157,7 @@ public class SolutionModel extends Model<SolutionModel>
   {
     Integer uid = 0;
     String name = "";
-    String sql = "SELECT sid,uid,pid,result,time,memory,language,code_len,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
+    String sql = "SELECT sid,uid,pid,result,time,memory,language,code_len,ctime";
     StringBuilder sb = new StringBuilder("FROM solution WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();

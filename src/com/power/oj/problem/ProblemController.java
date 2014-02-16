@@ -23,9 +23,7 @@ public class ProblemController extends OjController
   public void index()
   {
     int pageNumber = 1;
-    if (isParaExists("p"))
-      pageNumber = getParaToInt("p", 1);
-    else if (isParaExists(0))
+    if (isParaExists(0))
       pageNumber = getParaToInt(0, 1);
     else
       pageNumber = getCookieToInt("pageNumber", 1);
@@ -88,7 +86,7 @@ public class ProblemController extends OjController
     StringBuilder query = new StringBuilder();
     if (language != null)
     {
-      query.append("&language=").append(language);
+      query.append("?language=").append(language);
     }
     
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
