@@ -9,6 +9,7 @@
       <th>AC</th>
       <th>Submit</th>
       <th>Date</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
@@ -28,11 +29,32 @@
         "sAjaxSource": "${baseUrl!}/api/admin/problemList",
         'sAjaxDataProp' : "list", // 服务端返回数据的json节点
         "aoColumns": [
-            { "mData": "pid" },
-            { "mData": "title" },
-            { "mData": "accept" },
-            { "mData": "submit" },
-            { "mData": "ctime" }
+            { "mData": "pid",
+              "mRender": function (data, type, full) {
+                return '<a href="admin/problem/' + full.pid + '">' + data + '</a>';
+              }
+            },
+            { "mData": "title",
+              "mRender": function (data, type, full) {
+                return '<a href="problem/show/' + full.pid + '" target="_blank">' + data + '</a>';
+              }
+            },
+            { "mData": "accept",
+              "mRender": function (data, type, full) {
+                return '<a href="status/?pid=' + full.pid + '&result=0" target="_blank">' + data + '</a>';
+              }
+            },
+            { "mData": "submit",
+              "mRender": function (data, type, full) {
+                return '<a href="status/?pid=' + full.pid + '" target="_blank">' + data + '</a>';
+              }
+            },
+            { "mData": "ctime" },
+            { "mData": null,
+              "mRender": function (data, type, full) {
+                return '<button class="btn btn-warning">Delete</button>';
+              }
+            }
         ],
         "oLanguage": {
            "sUrl": "assets/DataTables-1.9.4/zh_CN.json"

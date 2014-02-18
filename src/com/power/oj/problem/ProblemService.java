@@ -123,7 +123,8 @@ public class ProblemService
     StringBuilder sb = new StringBuilder().append("FROM problem WHERE 1=1");
     if (StringUtil.isNotEmpty(sSearch))
     {
-      sb.append(" AND title LIKE ?");
+      sb.append(" AND (pid LIKE ? OR title LIKE ?)");
+      param.add(new StringBuilder(3).append(sSearch).append("%").toString());
       param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
     }
     sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", pid");
