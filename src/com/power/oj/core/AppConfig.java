@@ -31,13 +31,13 @@ import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
 import com.power.oj.core.controller.MainController;
 import com.power.oj.core.controller.UeditorController;
+import com.power.oj.core.handler.BaseUrlHandler;
 import com.power.oj.core.handler.UrlFilterHandler;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
-import com.power.oj.core.interceptor.BaseURLInterceptor;
 import com.power.oj.core.interceptor.FlashMessageInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
 import com.power.oj.core.interceptor.I18NInterceptor;
-import com.power.oj.core.interceptor.DebugInterceptor;
+import com.power.oj.core.interceptor.TimingInterceptor;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
@@ -147,9 +147,7 @@ public class AppConfig extends JFinalConfig
    */
   public void configInterceptor(Interceptors me)
   {
-    //if (OjConfig.getDevMode())
-      me.add(new DebugInterceptor());
-    me.add(new BaseURLInterceptor());
+    me.add(new TimingInterceptor());
     me.add(new I18NInterceptor());
     me.add(new GlobalInterceptor());
     me.add(new FlashMessageInterceptor());
@@ -166,6 +164,7 @@ public class AppConfig extends JFinalConfig
    */
   public void configHandler(Handlers me)
   {
+    me.add(new BaseUrlHandler());
     me.add(new UrlFilterHandler());
     //me.add(new ContextPathHandler(OjConstants.BASE_URL));
     me.add(new DruidStatViewHandler("/druid"));

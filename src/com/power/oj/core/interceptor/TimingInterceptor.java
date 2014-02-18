@@ -5,7 +5,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.power.oj.core.OjConfig;
 
-public class DebugInterceptor implements Interceptor
+public class TimingInterceptor implements Interceptor
 {
 
   @Override
