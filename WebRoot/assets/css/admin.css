@@ -25,3 +25,12 @@ a.nav-header {
 .footer a, .x {
 	color:#f0920a;
 }
+
+.problem textarea,.solution textarea, .contest textarea,textarea.auto-width {
+  width: auto;
+  overflow:visible;
+}
+  
+.problem .input-append,.contest .input-append {
+  display: block
+}

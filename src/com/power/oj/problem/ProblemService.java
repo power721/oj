@@ -116,6 +116,16 @@ public class ProblemService
     return problemList;
   }
 
+  public Page<ProblemModel> getProblemPageDataTables(int pageNumber, int pageSize)
+  {
+    String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
+    String from = "FROM problem ORDER BY pid";
+
+    Page<ProblemModel> problemList = dao.paginate(pageNumber, pageSize, sql, from);
+    
+    return problemList;
+  }
+
   public int getPageNumber(Integer pid, int pageSize)
   {
     long pageNumber = 0;

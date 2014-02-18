@@ -74,53 +74,53 @@
     <a class="nav-header" data-toggle="collapse" href="#dashboard-menu"> 
       <i class="icon-file"> </i> 管理
     </a>
-    <ul id="dashboard-menu" class="nav nav-list collapse in">
+    <ul id="dashboard-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin">in</#if>">
       <li><a href="admin"> 首页 </a></li>
       <li><a href="admin/info"> OJ详情 </a></li>
     </ul>
     <a class="nav-header" data-toggle="collapse" href="#accounts-menu"> <i class="icon-user"> 
     </i> 用户管理 <span class="label label-info"> +3 </span>
     </a>
-    <ul id="accounts-menu" class="nav nav-list collapse ">
+    <ul id="accounts-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin/user">in</#if>">
       <li><a href="admin/user"> 用户中心 </a></li>
       <li><a href="admin/user/list"> 用户列表 </a></li>
-      <li><a href="user/online"> 在线列表 </a></li>
+      <li><a href="admin/user/online"> 在线列表 </a></li>
       <li><a href="admin/user/role"> 角色管理 </a></li>
       <li><a href="admin/user/permission"> 权限管理 </a></li>
     </ul>
     <a class="nav-header collapsed" data-toggle="collapse" href="#problem-menu"> 
       <i class="icon-book"> </i> 题目管理 <i class="icon-chevron-up"> </i>
     </a>
-    <ul id="problem-menu" class="nav nav-list collapse ">
+    <ul id="problem-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin/problem">in</#if>">
       <li><a href="admin/problem"> 题目列表 </a></li>
-      <li><a href="problem/add"> 添加题目 </a></li>
+      <li><a href="admin/problem/add"> 添加题目 </a></li>
     </ul>
     <a class="nav-header collapsed" data-toggle="collapse" href="#contest-menu"> 
       <i class="icon-trophy"> </i> 比赛管理 
       <span class="label label-important"> +1 </span>
       <!--<i class="icon-chevron-up"> </i>-->
     </a>
-    <ul id="contest-menu" class="nav nav-list collapse ">
+    <ul id="contest-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin/contest">in</#if>">
       <li><a href="admin/contest"> 比赛列表 </a></li>
-      <li><a href="contest/add"> 添加比赛 </a></li>
+      <li><a href="admin/contest/add"> 添加比赛 </a></li>
     </ul>
     <a class="nav-header collapsed" data-toggle="collapse" href="#tags-menu"> 
       <i class="icon-tags"> </i> 标签管理 <i class="icon-chevron-up"> </i>
     </a>
-    <ul id="tags-menu" class="nav nav-list collapse ">
+    <ul id="tags-menu" class="nav nav-list collapse <#if actionKey?? && actionKey=="admin/tag">in</#if>">
       <li><a href="admin/tags"> 标签列表 </a></li>
     </ul>
     <a class="nav-header collapsed" data-toggle="collapse" href="#wechat-menu"> 
       <i class="icon-comment"> </i> 评论管理 <i class="icon-chevron-up"> </i>
     </a>
-    <ul id="wechat-menu" class="nav nav-list collapse ">
+    <ul id="wechat-menu" class="nav nav-list collapse <#if actionKey?? && actionKey=="admin/comment">in</#if>">
       <li><a href="admin/wechat"> 规则列表 </a></li>
       <li><a href="admin/wechat/leave_msgs"> 留言列表 </a></li>
     </ul>
     <a class="nav-header collapsed" data-toggle="collapse" href="#options-menu"> 
       <i class="icon-cog"> </i> 网站设置 <i class="icon-chevron-up"> </i>
     </a>
-    <ul id="options-menu" class="nav nav-list collapse ">
+    <ul id="options-menu" class="nav nav-list collapse <#if actionKey?? && actionKey=="admin/other">in</#if>">
       <li><a href="admin/options"> 网站信息 </a></li>
       <li><a href="admin/links"> 友链管理 </a></li>
     </ul>

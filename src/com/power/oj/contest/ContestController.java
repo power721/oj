@@ -12,7 +12,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -29,7 +28,6 @@ import com.power.oj.util.CryptUtils;
 
 public class ContestController extends OjController
 {
-  private static final Logger log = Logger.getLogger(ContestController.class);
   private static final SolutionService solutionService = SolutionService.me();
   private static final UserService userService = UserService.me();
   private static final ContestService contestService = ContestService.me();
