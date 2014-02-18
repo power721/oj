@@ -116,12 +116,19 @@ public class ProblemService
     return problemList;
   }
 
-  public Page<ProblemModel> getProblemPageDataTables(int pageNumber, int pageSize)
+  public Page<ProblemModel> getProblemPageDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
   {
+    List<Object> param = new ArrayList<Object>();
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
-    String from = "FROM problem ORDER BY pid";
+    StringBuilder sb = new StringBuilder().append("FROM problem WHERE 1=1");
+    if (StringUtil.isNotEmpty(sSearch))
+    {
+      sb.append(" AND title LIKE ?");
+      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+    }
+    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", pid");
 
-    Page<ProblemModel> problemList = dao.paginate(pageNumber, pageSize, sql, from);
+    Page<ProblemModel> problemList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
     
     return problemList;
   }

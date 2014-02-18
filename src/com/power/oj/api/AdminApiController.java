@@ -11,10 +11,15 @@ public class AdminApiController extends OjController
   
   public void problemList()
   {
-    int pageNumber = getParaToInt("pageNumber", 1);
-    int pageSize = getParaToInt("pageSize", OjConfig.problemPageSize);
+    int iDisplayStart = getParaToInt("iDisplayStart", 0);
+    int pageSize = getParaToInt("iDisplayLength", OjConfig.problemPageSize);
+    int pageNumber = iDisplayStart / pageSize + 1;
+    int iSortCol = getParaToInt("iSortCol_0", 0);
+    String sSortDir = getPara("sSortDir_0");
+    String sSortName = getPara("mDataProp_" + iSortCol);
+    String sSearch = getPara("sSearch");
     
-    renderJson(problemService.getProblemPageDataTables(pageNumber, pageSize));
+    renderJson(problemService.getProblemPageDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
   }
   
 }

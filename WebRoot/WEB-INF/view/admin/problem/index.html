@@ -21,16 +21,35 @@
 <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
 <script type="text/javascript" charset="utf-8">
-     var oTable = $('#problem-list').initDT({
+     var oTable = $('#problem-list').dataTable({
         "sPaginationType": "bootstrap",
+        "bServerSide": true,
+        "iDisplayLength": 25,
         "sAjaxSource": "${baseUrl!}/api/admin/problemList",
+        'sAjaxDataProp' : "list", // 服务端返回数据的json节点
         "aoColumns": [
             { "mData": "pid" },
             { "mData": "title" },
             { "mData": "accept" },
             { "mData": "submit" },
             { "mData": "ctime" }
-        ]
+        ],
+        "oLanguage": {
+           "sUrl": "assets/DataTables-1.9.4/zh_CN.json"
+        },
+        "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+          oSettings.jqXHR = $.ajax( {
+            "dataType": 'json',
+            "type": "POST",
+            "url": sSource,
+            "data": aoData,
+            "success": function(result) {
+                  result.iTotalRecords = result.totalRow;
+                  result.iTotalDisplayRecords = result.totalRow;
+                  fnCallback(result);
+                }
+          } );
+        }
     });
 </script>
 
