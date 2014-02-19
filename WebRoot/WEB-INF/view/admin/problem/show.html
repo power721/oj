@@ -22,27 +22,33 @@
 						
 						<div class="text-center">
 						  <h2>
-						    <span class="black pts">${problem.pid!0}:</span> 
+						    <span class="black pts"><a href="problem/show/${problem.pid!}" target="_blank">${problem.pid!}</a>:</span> 
 						    <#if problem.status==false><del></#if>
-						    <span class="title">${problem.title!}</span>
+						    <span class="title"><a href="#" id="title">${problem.title!}</a></span>
 						    <#if problem.status==false></del></#if>
 						    <!--<span class="label label-important">SPJ</span>-->
 						  </h2>
-						  <div class="problem-admin">
+						  <!--<div class="problem-admin">
 						    <a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> 
 						    <a href="#" class="btn btn-danger">Rejudge</a>
+						  </div>-->
+						  <div class="problem-info">
+						    <div>
+    						  Time Limit:<span class="blue"><a href="#" id="time_limit">${problem.time_limit!}</a> MS</span> 
+    						  Memory Limit:<span class="blue"><a href="#" id="memory_limit">${problem.memory_limit!}</a> KB</span>
+  						  </div>
+  						  <div>
+    						  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> 
+    						  Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> 
+    						  Page View:<span class="blue">${problem.view!}</span>
+  						  </div>
 						  </div>
-						  Time Limit:<span class="blue">${problem.time_limit!}MS</span> 
-						  Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
-						  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> 
-						  Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> 
-						  Page View:<span class="blue">${problem.view!}</span><br><br> 
 						  <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
 						  <a href="problem/status/${problem.pid!}" class="btn btn-info" target="_blank">Status</a>
 						  <a href="#" class="btn btn-info" target="_blank">Discuss</a>
 						</div>
 						
-						<div class="modal hide fade problemModal" id="editModal">
+						<!--<div class="modal hide fade problemModal" id="editModal">
 						  <form class="" action="problem/update" id="editPorblemForm" method="post">
 						    <div class="modal-header">
 						      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
@@ -60,7 +66,7 @@
 						      <button class="btn" data-dismiss="modal">Cancel</button>
 						    </div>
 						  </form>
-						</div>
+						</div>-->
 						<div class="modal hide fade problemModal" id="submitModal">
 						  <form class="" id="submitForm" action="solution/save" method="post">
 						    <div class="modal-header">
@@ -85,100 +91,84 @@
 						  </form>
 						</div>
 
-						<section id="description">
+						<section id="problem-description">
 						  <div class="page-header">
 						    <h4>Description</h4>
 						  </div>
-						  <div class="problem-content" id="description">
-						    <pre>${problem.description!}</pre>
+						  <div class="problem-content" id="problem-description">
+						    <pre><a href="#" id="description">${problem.description!}</a></pre>
 						  </div>
 						</section>
 						
-						<section id="input">
+						<section id="problem-input">
 						  <div class="page-header">
 						    <h4>Input</h4>
 						  </div>
-						  <div class="problem-content" id="input">
-						    <pre>${problem.input!}</pre>
+						  <div class="problem-content" id="problem-input">
+						    <pre><a href="#" id="input">${problem.input!}</a></pre>
 						  </div>
 						</section>
 						
-						<section id="output">
+						<section id="problem-output">
 						  <div class="page-header">
 						    <h4>Output</h4>
 						  </div>
-						  <div class="problem-content" id="output">
-						    <pre>${problem.output!}</pre>
+						  <div class="problem-content" id="problem-output">
+						    <pre><a href="#" id="output">${problem.output!}</a></pre>
 						  </div>
 						</section>
 						
-						<section id="sample_input">
-						  <div class="tabbable problem-content" id="sample_input">
-						    <!-- Only required for left/right tabs -->
-						    <ul class="nav nav-tabs">
-						      <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
-						      <li><a href="#tab2" data-toggle="tab">Raw</a></li>
-						    </ul>
-						    <div class="tab-content">
-						      <div class="tab-pane active" id="tab1">
-						        <pre>${problem.sample_input!}</pre>
-						      </div>
-						      <div class="tab-pane" id="tab2">
-						        <textarea id="sample_input" class="auto-width" rows="${problem.sample_input_rows!12}"
-						          cols="185">${problem.sample_input!}</textarea>
-						      </div>
-						    </div>
+						<section id="problem-sample_input">
+						  <div class="page-header">
+                <h4>Sample Input</h4>
+              </div>
+						  <div class="problem-content" id="problem-sample_input">
+						    <pre><a href="#" id="sample_input">${problem.sample_input!}</a></pre>
 						  </div>
 						</section>
 						
-						<section id="sample_output">
-						  <div class="tabbable problem-content" id="sample_output">
-						    <!-- Only required for left/right tabs -->
-						    <ul class="nav nav-tabs">
-						      <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
-						      <li><a href="#tab4" data-toggle="tab">Raw</a></li>
-						    </ul>
-						    <div class="tab-content">
-						      <div class="tab-pane active" id="tab3">
-						        <pre>${problem.sample_output!}</pre>
-						      </div>
-						      <div class="tab-pane" id="tab4">
-						        <textarea id="sample_output" class="auto-width" rows="${problem.sample_output_rows!12}"
-						          cols="185">${problem.sample_output!}</textarea>
-						      </div>
-						    </div>
+						<section id="problem-sample_output">
+						  <div class="page-header">
+                <h4>Sample Output</h4>
+              </div>
+						  <div class="problem-content" id="problem-sample_output">    
+						    <pre><a href="#" id="sample_output">${problem.sample_output!}</a></pre>
 						  </div>
 						</section>
 						
 						<#if problem.hint?? && problem.hint!="">
-						<section id="hint">
+						<section id="problem-hint">
 						  <div class="page-header">
 						    <h4>Hint</h4>
 						  </div>
-						  <div class="problem-content" id="hint">
-						    <pre>${problem.hint!}</pre>
+						  <div class="problem-content" id="problem-hint">
+						    <pre><a href="#" id="hint">${problem.hint!}</a></pre>
 						  </div>
 						</section>
 						</#if>
 						
 						<#if problem.source?? && problem.source!="">
-						<section id="source">
+						<section id="problem-source">
 						  <div class="page-header">
 						    <h4>Source</h4>
 						  </div>
-						  <div class="problem-content" id="source">
-						    <pre><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip" title="Search other problems">${problem.source!}</a></pre>
+						  <div class="problem-content pre" id="problem-source">
+						    <a href="#" id="source">${problem.source!}</a>
 						  </div>
 						</section>
 						</#if>
 						<#if tagList??>
-						<section id="tag">
+						<section id="problem-tag">
 						  <div class="page-header">
 						    <h4>Tag</h4>
 						  </div>
-						  <div class="problem-content" id="tag">
-						    <pre><#list tagList as Tag><a href="problem/search?word=${Tag.tag!}&scope=tag" title="${Tag.name!}" data-toggle="tooltip">${Tag.tag!}</a> 
-						     </#list></pre>
+						  <div class="problem-content bootstrap-tagsinput pre" id="tag">
+						    <#list tagList as Tag>
+						    <span class="tag label label-info">
+						      ${Tag.tag!}
+						      <span data-role="remove"></span>
+						    </span>
+						    </#list>
 						  </div>
 						</section>
 						</#if>
@@ -189,15 +179,77 @@
 						  <input type="text" class="input-small" name="tag" placeholder="Add a tag">
 						  <button type="submit" class="btn btn-warning">Add</button>
 						</form>
-						<!--
-						<div class="text-center">
-						  <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
-						  <a href="problem/status/${problem.pid!}" class="btn btn-info" target="_blank">Status</a>
-						  <a href="#" class="btn btn-info" target="_blank">Discuss</a>
-						</div>
-            -->
+						
           </div>
         </div>
       </div>
     </div>
+            
+            <link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+            <script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
+            
+            <link href="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet" type="text/css"></link>  
+            <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.min.js"></script>  
+            <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"></script>
+            <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js"></script>
+            
+            <script type="text/javascript">
+              $(document).ready(function(){
+                var pid = ${problem.pid!};
+                var apiUrl = 'api/admin/updateProblem';
+                $.fn.editable.defaults.mode = 'inline';
+                $.fn.editable.defaults.url = apiUrl; 
+                  $('#title').editable({
+                    type: 'text',
+                    pk: pid,
+                    title: 'Change problem title'
+                  });
+                  $('#time_limit').editable({
+                    type: 'number',
+                    pk: pid,
+                    title: 'Change problem time limit'
+                  });
+                  $('#memory_limit').editable({
+                    type: 'number',
+                    pk: pid,
+                    title: 'Change problem time limit'
+                  });
+                  $('#description').editable({
+                    type: 'wysihtml5',
+                    pk: pid,
+                    title: 'Change problem description'
+                  });
+                  $('#input').editable({
+                    type: 'wysihtml5',
+                    pk: pid,
+                    title: 'Change problem input'
+                  });
+                  $('#output').editable({
+                    type: 'wysihtml5',
+                    pk: pid,
+                    title: 'Change problem output'
+                  });
+                  $('#sample_input').editable({
+                    type: 'textarea',
+                    pk: pid,
+                    title: 'Change problem sample input'
+                  });
+                  $('#sample_output').editable({
+                    type: 'textarea',
+                    pk: pid,
+                    title: 'Change problem sample output'
+                  });
+                  $('#hint').editable({
+                    type: 'wysihtml5',
+                    pk: pid,
+                    title: 'Change problem hint'
+                  });
+                  $('#source').editable({
+                    type: 'text',
+                    pk: pid,
+                    title: 'Change problem source'
+                  });
+                });
+            </script>
+            
 </@layout>

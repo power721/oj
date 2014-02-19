@@ -1,5 +1,6 @@
 package com.power.oj.api;
 
+import com.power.oj.admin.AdminService;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
@@ -8,6 +9,7 @@ import com.power.oj.user.UserService;
 
 public class AdminApiController extends OjController
 {
+  private static final AdminService adminService = AdminService.me();
   private static final UserService userService = UserService.me();
   private static final ProblemService problemService = ProblemService.me();
   private static final ContestService contestService = ContestService.me();
@@ -49,6 +51,22 @@ public class AdminApiController extends OjController
     String sSearch = getPara("sSearch");
     
     renderJson(contestService.getContestListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+  }
+  
+  public void updateProblem()
+  {
+    Integer pid = getParaToInt("pk");
+    String name = getPara("name");
+    String value = getPara("value");
+    
+    if (problemService.updateProblemByField(pid, name, value) > 0)
+    {
+      renderNull();
+    }
+    else
+    {
+      renderError(400);
+    }
   }
   
 }

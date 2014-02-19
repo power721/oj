@@ -31,7 +31,7 @@
 						<script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
 						<script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
 						<script type="text/javascript" charset="utf-8">
-						    var oTable = $('#problem-list').dataTable({
+						  var oTable = $('#problem-list').dataTable({
 						        "sPaginationType": "bootstrap",
 						        "bServerSide": true,
 						        "bStateSave": true,
@@ -70,6 +70,8 @@
 						              "mRender": function (data, type, full) {
 						                var action = '<button id="problem-edit" pid="' + full.pid 
 						                    + '" class="btn btn-success">Edit</button> '
+						                    + '<button id="problem-rejudge" pid="' + full.pid 
+                                + '" class="btn btn-danger">Rejudge</button> '
 						                    + '<button id="problem-toggle" pid="' + full.pid 
 						                    + '" class="btn btn-warning">' 
 						                    + (full.status ? 'Delete' : 'Resume')

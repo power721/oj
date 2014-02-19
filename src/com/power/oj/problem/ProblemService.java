@@ -41,6 +41,9 @@ public class ProblemService
   {
     ProblemModel problemModel = dao.findByPid(pid, userService.isAdmin());
     
+    if (problemModel == null)
+      return null;
+    
     int sample_input_rows = 1;
     if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
       sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
@@ -242,6 +245,23 @@ public class ProblemService
     FileUtil.mkdirs(dataDir);
     
     return true;
+  }
+  
+  public int updateProblemByField(Integer pid, String name, String value)
+  {
+    String[] fileds = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
+    if (StringUtil.equalsOne(name, fileds) == -1)
+    {
+      return -1;
+    }
+    
+    if (StringUtil.equalsOne(name, new String[]{"time_limit", "memory_limit", "status"}) != -1)
+    {
+      Integer intValue = Integer.parseInt(value);
+      return Db.update("UPDATE problem SET " + name + "=? WHERE pid=?", intValue, pid);
+    }
+    
+    return Db.update("UPDATE problem SET " + name + "=? WHERE pid=?", value, pid);
   }
   
   public boolean build(Integer pid)
