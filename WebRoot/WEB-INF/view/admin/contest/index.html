@@ -1,64 +1,77 @@
-<#include "../_layout.html" /> <@layout>
-
-<div class="pagination pagination-centered">
-  <div class="pull-left">
-    <form class="form-search" action="contest/search">
-      <div class="input-append">
-        <input type="text" class="input-medium search-query" name="word" placeholder="Search Contest">
-        <button type="submit" class="btn btn-info">Search</button>
+<#include "../_layout.html" />
+<@layout>
+    <div class="header">
+      <h1 class="page-title">比赛列表</h1>
+    </div>
+    <ul class="breadcrumb">
+      <li class="active">比赛管理</li>
+    </ul>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="well">
+          <div id="container">
+						<div class="pagination pagination-centered">
+						  <div class="pull-left">
+						    <form class="form-search" action="contest/search">
+						      <div class="input-append">
+						        <input type="text" class="input-medium search-query" name="word" placeholder="Search Contest">
+						        <button type="submit" class="btn btn-info">Search</button>
+						      </div>
+						    </form>
+						  </div>
+						  <#include "../../common/_paginate.html" />
+						  <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="contest/" />
+						  <div class="pull-right">
+						    <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span> 
+						    <span class="badge badge-info">${contestList.totalRow} Contests</span>
+						  </div>
+						</div>
+						
+						<table id="Contest-list" class="table table-hover table-condensed">
+						  <thead>
+						    <tr>
+						      <th>ID</th>
+						      <th>Title</th>
+						      <th>Start Time</th>
+						      <th>End Time</th>
+						      <th>Type</th>
+						      <th>Status</th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <#if contestList??> <#list contestList.list as Contest>
+						    <tr>
+						      <td><a href="contest/show/${Contest.cid!}">${Contest.cid!}</a></td>
+						      <td><a href="contest/show/${Contest.cid!}">${Contest.title!}</a></td>
+						      <td class="time">${Contest.start_time_t!}</td>
+						      <td class="time">${Contest.end_time_t!}</td>
+						      <td class="type-${Contest.type!}">${Contest.ctype!}</td>
+						      <td class="${Contest.cstatus!}">${Contest.cstatus!}</td>
+						    </tr>
+						    </#list> </#if>
+						  </tbody>
+						</table>
+						<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
+						
+						<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+						<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+						<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+						<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+						
+						<script type="text/javascript" charset="utf-8">
+						      $(document).ready(function() {
+						                
+						        $("#Contest-list").tablecloth({
+						          theme:"stats",
+						          condensed:true,
+						          sortable:true,
+						          striped:true,
+						          clean:true
+						        });
+						    });
+						</script>
+          </div>
+        </div>
       </div>
-    </form>
-  </div>
-  <#include "../../common/_paginate.html" />
-  <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="contest/" />
-  <div class="pull-right">
-    <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span> 
-    <span class="badge badge-info">${contestList.totalRow} Contests</span>
-  </div>
-</div>
-
-<table id="Contest-list" class="table table-hover table-condensed">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>Start Time</th>
-      <th>End Time</th>
-      <th>Type</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody>
-    <#if contestList??> <#list contestList.list as Contest>
-    <tr>
-      <td><a href="contest/show/${Contest.cid!}">${Contest.cid!}</a></td>
-      <td><a href="contest/show/${Contest.cid!}">${Contest.title!}</a></td>
-      <td class="time">${Contest.start_time_t!}</td>
-      <td class="time">${Contest.end_time_t!}</td>
-      <td class="type-${Contest.type!}">${Contest.ctype!}</td>
-      <td class="${Contest.cstatus!}">${Contest.cstatus!}</td>
-    </tr>
-    </#list> </#if>
-  </tbody>
-</table>
-<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
-
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#Contest-list").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
-    });
-    </script>
-
+    </div>
 </@layout>
