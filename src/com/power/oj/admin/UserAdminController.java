@@ -7,5 +7,8 @@ import com.power.oj.core.OjController;
 @RequiresPermissions("admin")
 public class UserAdminController extends OjController
 {
-
+  public void index()
+  {
+    
+  }
 }

@@ -592,6 +592,23 @@ public class UserService
     return dao.getUserRankList(pageNumber, pageSize);
   }
 
+  public Page<UserModel> getUserRankListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
+  {
+    List<Object> param = new ArrayList<Object>();
+    String sql = "SELECT uid,name,nick,realname,solved,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
+    StringBuilder sb = new StringBuilder().append("FROM user WHERE 1=1");
+
+    if (StringUtil.isNotEmpty(sSearch))
+    {
+      sb.append(" AND (name LIKE ? OR realname LIKE ?)");
+      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+    }
+    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", uid");
+
+    return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
+  }
+
   public boolean checkPassword(Integer uid, String password)
   {
     String stored_hash = dao.findById(uid, "pass").getStr("pass");
