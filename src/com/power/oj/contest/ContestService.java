@@ -39,7 +39,7 @@ public class ContestService
     return me;
   }
 
-  public Page<ContestModel> getPage(int pageNumber, int pageSize, Integer type, Integer status)
+  public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status)
   {
     List<Object> paras = new ArrayList<Object>();
     String sql = "SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t";
@@ -62,6 +62,66 @@ public class ContestService
     }
 
     sb.append(" ORDER BY cid DESC");
+
+    Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+
+    for (ContestModel contest : ContestList.getList())
+    {
+      long ctime = OjConfig.timeStamp;
+      int start_time = contest.getInt("start_time");
+      int end_time = contest.getInt("end_time");
+      String cstatus = "Running";
+
+      if (start_time > ctime)
+        cstatus = "Pending";
+      else if (end_time < ctime)
+        cstatus = "Finished";
+
+      contest.put("cstatus", cstatus);
+
+      String ctype = "Public";
+      if (contest.getInt("type") == 1)
+      {
+        ctype = "Private";
+      } else if (contest.getInt("type") == 2)
+      {
+        ctype = "Strict Private";
+      } else if (contest.getInt("type") == 3)
+      {
+        ctype = "Password";
+      } else if (contest.getInt("type") == 4)
+      {
+        ctype = "Test";
+      }
+      contest.put("ctype", ctype);
+    }
+
+    return ContestList;
+  }
+
+  public Page<ContestModel> getContestListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
+  {
+    List<Object> paras = new ArrayList<Object>();
+    String sql = "SELECT *";
+    StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
+    /*if (type > -1)
+    {
+      sb.append(" AND type=?");
+      paras.add(type);
+    }*/
+
+    if ("Running".equals(sSearch.toLowerCase()))
+    {
+      sb.append(" AND start_time>UNIX_TIMESTAMP()");
+    } else if ("Pending".equals(sSearch.toLowerCase()))
+    {
+      sb.append(" AND start_time<UNIX_TIMESTAMP() AND end_time>UNIX_TIMESTAMP()");
+    } else if ("Finished".equals(sSearch.toLowerCase()))
+    {
+      sb.append(" AND end_time<UNIX_TIMESTAMP()");
+    }
+
+    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", cid DESC");
 
     Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 

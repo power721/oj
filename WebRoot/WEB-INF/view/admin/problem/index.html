@@ -13,12 +13,12 @@
 						<table id="problem-list" class="table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0" width="100%">
 						  <thead>
 						    <tr>
-						      <th>ID</th>
-						      <th>Title</th>
-						      <th>AC</th>
-						      <th>Submit</th>
-						      <th>Date</th>
-						      <th>Action</th>
+						      <th width="5%">ID</th>
+						      <th width="45%">Title</th>
+						      <th width="5%">AC</th>
+						      <th width="5%">Submit</th>
+						      <th width="15%">Date</th>
+						      <th width="15%">Action</th>
 						    </tr>
 						  </thead>
 						  <tbody>
@@ -34,7 +34,9 @@
 						    var oTable = $('#problem-list').dataTable({
 						        "sPaginationType": "bootstrap",
 						        "bServerSide": true,
-						        "iDisplayLength": 25,
+						        "bStateSave": true,
+			              "aLengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+			              "iDisplayLength": 20,
 						        "sAjaxSource": "${baseUrl!}/api/admin/problemList",
 						        'sAjaxDataProp' : "list", // 服务端返回数据的json节点
 						        "aoColumns": [
@@ -58,7 +60,11 @@
 						                return '<a href="status/?pid=' + full.pid + '" target="_blank">' + data + '</a>';
 						              }
 						            },
-						            { "mData": "ctime" },
+						            { "mData": "ctime",
+				                  "mRender": function (data, type, full) {
+				                	  return parseTimestamp(data);
+				                   }
+						            },
 						            { "mData": null,
 						              "bSortable": false,
 						              "mRender": function (data, type, full) {

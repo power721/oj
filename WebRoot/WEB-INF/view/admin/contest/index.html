@@ -10,66 +10,89 @@
       <div class="row-fluid">
         <div class="well">
           <div id="container">
-						<div class="pagination pagination-centered">
-						  <div class="pull-left">
-						    <form class="form-search" action="contest/search">
-						      <div class="input-append">
-						        <input type="text" class="input-medium search-query" name="word" placeholder="Search Contest">
-						        <button type="submit" class="btn btn-info">Search</button>
-						      </div>
-						    </form>
-						  </div>
-						  <#include "../../common/_paginate.html" />
-						  <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="contest/" />
-						  <div class="pull-right">
-						    <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span> 
-						    <span class="badge badge-info">${contestList.totalRow} Contests</span>
-						  </div>
-						</div>
-						
-						<table id="Contest-list" class="table table-hover table-condensed">
+						<table id="contest-list" class="table table-hover table-condensed">
 						  <thead>
 						    <tr>
-						      <th>ID</th>
-						      <th>Title</th>
-						      <th>Start Time</th>
-						      <th>End Time</th>
-						      <th>Type</th>
-						      <th>Status</th>
+						      <th width="5%">ID</th>
+						      <th width="40%">Title</th>
+						      <th width="14%">Start Time</th>
+						      <th width="14%">End Time</th>
+						      <th width="5%">Type</th>
+						      <th width="5%">Status</th>
+						      <th width="17%">Action</th>
 						    </tr>
 						  </thead>
 						  <tbody>
-						    <#if contestList??> <#list contestList.list as Contest>
-						    <tr>
-						      <td><a href="contest/show/${Contest.cid!}">${Contest.cid!}</a></td>
-						      <td><a href="contest/show/${Contest.cid!}">${Contest.title!}</a></td>
-						      <td class="time">${Contest.start_time_t!}</td>
-						      <td class="time">${Contest.end_time_t!}</td>
-						      <td class="type-${Contest.type!}">${Contest.ctype!}</td>
-						      <td class="${Contest.cstatus!}">${Contest.cstatus!}</td>
-						    </tr>
-						    </#list> </#if>
 						  </tbody>
 						</table>
-						<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
 						
-						<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-						<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-						<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-						<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-						
-						<script type="text/javascript" charset="utf-8">
-						      $(document).ready(function() {
-						                
-						        $("#Contest-list").tablecloth({
-						          theme:"stats",
-						          condensed:true,
-						          sortable:true,
-						          striped:true,
-						          clean:true
-						        });
-						    });
-						</script>
+            <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
+            
+            <link href="assets/DataTables-1.9.4/media/css/jquery.dataTables.css" type="text/css" rel="stylesheet">
+            <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
+            <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
+            <script type="text/javascript" charset="utf-8">
+                var oTable = $('#contest-list').dataTable({
+                    "sPaginationType": "bootstrap",
+                    "bServerSide": true,
+                    "bStateSave": true,
+                    "aLengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+                    "iDisplayLength": 20,
+                    "sAjaxSource": "${baseUrl!}/api/admin/contestList",
+                    'sAjaxDataProp' : "list", // 服务端返回数据的json节点
+                    "aaSorting": [
+											[ 0, "desc" ]
+										],
+                    "aoColumns": [
+                        { "mData": "cid" },
+                        { "mData": "title",
+                          "mRender": function (data, type, full) {
+                            return '<a href="contest/show/' + full.cid + '" target="_blank">' + data + '</a>';
+                          }
+                        },
+                        { "mData": "start_time",
+                          "mRender": function (data, type, full) {
+                            return parseTimestamp(data);
+                          }
+                        },
+                        { "mData": "end_time",
+                          "mRender": function (data, type, full) {
+                            return parseTimestamp(data);
+                          }
+                        },
+                        { "mData": "ctype" },
+                        { "mData": "cstatus" },
+                        { "mData": null,
+                          "bSortable": false,
+                          "mRender": function (data, type, full) {
+                            var action = '<button id="contest-edit" cid="' + full.cid 
+                                + '" class="btn btn-success">Edit</button> '
+                                + '<button id="contest-toggle" cid="' + full.cid 
+                                + '" class="btn btn-warning">' 
+                                + (full.status ? 'Delete' : 'Resume')
+                                + '</button> ';
+                            return action;
+                          }
+                        }
+                    ],
+                    "oLanguage": {
+                       "sUrl": "assets/DataTables-1.9.4/zh_CN.json"
+                    },
+                    "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+                      oSettings.jqXHR = $.ajax( {
+                        "dataType": 'json',
+                        "type": "POST",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": function(result) {
+                              result.iTotalRecords = result.totalRow;
+                              result.iTotalDisplayRecords = result.totalRow;
+                              fnCallback(result);
+                            }
+                      } );
+                    }
+                });
+            </script>
           </div>
         </div>
       </div>

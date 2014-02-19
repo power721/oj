@@ -595,7 +595,7 @@ public class UserService
   public Page<UserModel> getUserRankListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
   {
     List<Object> param = new ArrayList<Object>();
-    String sql = "SELECT uid,name,nick,realname,solved,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
+    String sql = "SELECT *";
     StringBuilder sb = new StringBuilder().append("FROM user WHERE 1=1");
 
     if (StringUtil.isNotEmpty(sSearch))

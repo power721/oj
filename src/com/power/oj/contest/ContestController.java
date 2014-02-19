@@ -39,7 +39,7 @@ public class ContestController extends OjController
     Integer type = getParaToInt("type", -1);
     Integer status = getParaToInt("status", -1);
 
-    setAttr("contestList", contestService.getPage(pageNumber, pageSize, type, status));
+    setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status));
     setAttr("pageSize", OjConfig.contestPageSize);
 
     setTitle(getText("contest.index.title"));
