@@ -23,6 +23,25 @@ public class ProblemAdminController extends OjController
     setTitle(getText("problem.index.title"));
   }
 
+  public void show()
+  {
+    Integer pid = getParaToInt(0);
+    ProblemModel problemModel = problemService.findProblemForShow(pid);
+    if (problemModel == null)
+    {
+      FlashMessage msg = new FlashMessage(getText("problem.show.null"), MessageType.ERROR, getText("message.error.title"));
+      redirect("/admin/problem", msg);
+      return;
+    }
+    
+    setAttr("prevPid", problemService.getPrevPid(pid));
+    setAttr("nextPid", problemService.getNextPid(pid));
+    setAttr("tagList", problemService.getTags(pid));
+    setAttr("problem", problemModel);
+    
+    setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
+  }
+
   @RequiresPermissions("problem:add")
   public void add()
   {
@@ -33,7 +52,7 @@ public class ProblemAdminController extends OjController
   public void save()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-    String redirectURL = "/problem";
+    String redirectURL = "/admin/problem";
     
     try
     {
@@ -42,7 +61,7 @@ public class ProblemAdminController extends OjController
         FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
         setFlashMessage(msg);
       }
-      redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+      redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(problemModel.getInt("pid")).toString();
     } catch (IOException e)
     {
       if (OjConfig.getDevMode())
@@ -62,20 +81,13 @@ public class ProblemAdminController extends OjController
     if (!isParaExists(0))
     {
       FlashMessage msg = new FlashMessage(getText("problem.para.null"), MessageType.ERROR, getText("message.error.title"));
-      redirect("/problem", msg);
+      redirect("/admin/problem", msg);
       return;
     }
 
     Integer pid = getParaToInt(0);
-    boolean ajax = getParaToBoolean("ajax", false);
-    
     setAttr("problem", problemService.findProblem(pid));
     setTitle(new StringBuilder(2).append(getText("problem.edit.title")).append(pid).toString());
-
-    if (ajax)
-      render("ajax/edit.html");
-    else
-      render("edit.html");
   }
 
   @RequiresPermissions("problem:edit")
@@ -84,7 +96,7 @@ public class ProblemAdminController extends OjController
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
     problemModel.updateProblem();
 
-    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    String redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(problemModel.getInt("pid")).toString();
     redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
   }
 
@@ -92,7 +104,7 @@ public class ProblemAdminController extends OjController
   public void build()
   {
     Integer pid = getParaToInt(0);
-    String redirectURL = new StringBuilder(2).append("/problem/show/").append(pid).toString();
+    String redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(pid).toString();
     FlashMessage msg = new FlashMessage(getText("problem.build.success"));
     
     try

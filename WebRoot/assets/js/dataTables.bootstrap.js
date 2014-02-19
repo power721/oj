@@ -55,7 +55,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 		},
 
 		"fnUpdate": function ( oSettings, fnDraw ) {
-			var iListLength = 5;
+			var iListLength = 7;
 			var oPaging = oSettings.oInstance.fnPagingInfo();
 			var an = oSettings.aanFeatures.p;
 			var i, ien, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
