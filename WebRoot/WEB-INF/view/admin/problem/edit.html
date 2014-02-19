@@ -10,12 +10,12 @@
       <div class="row-fluid">
         <div class="well">
           <div id="container">
-						<form class="form-horizontal" id="editPorblemForm" action="problem/update" method="post">
+						<form class="form-horizontal" id="editPorblemForm" action="admin/problem/update" method="post">
 						  <input type="hidden" name="problem.pid" value="${problem.pid!}">
 						  <div class="control-group problem">
 						    <label class="control-label" for="inputPid">Problem ID</label>
 						    <div class="controls">
-						      <span class="input-mini uneditable-input"><a href="problem/show/${problem.pid!}">${problem.pid!}</a></span>
+						      <span class="input-mini uneditable-input"><a href="admin/problem/show/${problem.pid!}">${problem.pid!}</a></span>
 						      <!--<input class="input-mini uneditable-input" type="number" id="inputPid" name="problem.pid" value="${problem.pid!}" disabled>-->
 						    </div>
 						  </div>

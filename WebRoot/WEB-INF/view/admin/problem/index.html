@@ -40,12 +40,12 @@
 						        "aoColumns": [
 						            { "mData": "pid",
 						              "mRender": function (data, type, full) {
-						                return '<a href="admin/problem/show/' + full.pid + '">' + data + '</a>';
+						                return '<a href="problem/show/' + full.pid + '" target="_blank">' + data + '</a>';
 						              }
 						            },
 						            { "mData": "title",
 						              "mRender": function (data, type, full) {
-						                return '<a href="problem/show/' + full.pid + '" target="_blank">' + data + '</a>';
+						                return '<a href="admin/problem/show/' + full.pid + '">' + data + '</a>';
 						              }
 						            },
 						            { "mData": "accept",
@@ -66,8 +66,8 @@
 						            { "mData": null,
 						              "bSortable": false,
 						              "mRender": function (data, type, full) {
-						                var action = '<button id="problem-edit" pid="' + full.pid 
-						                    + '" class="btn btn-success">Edit</button> '
+						                var action = '<a href="admin/problem/edit/' + full.pid 
+						                    + '" class="btn btn-success">Edit</a> '
 						                    + '<button id="problem-rejudge" pid="' + full.pid 
                                 + '" class="btn btn-danger">Rejudge</button> '
 						                    + '<button id="problem-toggle" pid="' + full.pid 

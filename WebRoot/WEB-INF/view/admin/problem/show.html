@@ -34,18 +34,18 @@
 						  </div>-->
 						  <div class="problem-info">
 						    <div>
-    						  Time Limit:<span class="blue"><a href="#" id="time_limit">${problem.time_limit!}</a> MS</span> 
-    						  Memory Limit:<span class="blue"><a href="#" id="memory_limit">${problem.memory_limit!}</a> KB</span>
+    						  Time Limit:<a href="#" id="time_limit">${problem.time_limit!}</a> MS
+    						  Memory Limit:<a href="#" id="memory_limit">${problem.memory_limit!}</a> KB
   						  </div>
   						  <div>
-    						  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> 
-    						  Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> 
-    						  Page View:<span class="blue">${problem.view!}</span>
+    						  Total Submit:<a href="status?pid=${problem.pid!}" target="_blank">${problem.submit!}</a> 
+    						  Accepted:<a href="status?pid=${problem.pid!}&result=0" target="_blank">${problem.accept!}</a> 
+    						  Page View:<span class="pts">${problem.view!}</span>
   						  </div>
 						  </div>
 						  <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
 						  <a href="problem/status/${problem.pid!}" class="btn btn-info" target="_blank">Status</a>
-						  <a href="#" class="btn btn-info" target="_blank">Discuss</a>
+						  <a href="bbs/?pid=${problem.pid!}" class="btn btn-info" target="_blank">Discuss</a>
 						</div>
 						
 						<!--<div class="modal hide fade problemModal" id="editModal">
@@ -152,7 +152,7 @@
 						  <div class="page-header">
 						    <h4>Source</h4>
 						  </div>
-						  <div class="problem-content pre" id="problem-source">
+						  <div class="pre" id="problem-source">
 						    <a href="#" id="source">${problem.source!}</a>
 						  </div>
 						</section>
@@ -162,7 +162,7 @@
 						  <div class="page-header">
 						    <h4>Tag</h4>
 						  </div>
-						  <div class="problem-content bootstrap-tagsinput pre" id="tag">
+						  <div class="bootstrap-tagsinput pre" id="tag">
 						    <#list tagList as Tag>
 						    <span class="tag label label-info">
 						      ${Tag.tag!}
@@ -248,6 +248,13 @@
                     type: 'text',
                     pk: pid,
                     title: 'Change problem source'
+                  });
+                  
+                  var prevpage = "${baseUrl}/admin/problem/show/${prevPid!}";
+                  var nextpage = "${baseUrl}/admin/problem/show/${nextPid!}";
+                  $(document).keydown(function(event) {
+                    <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
+                    <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
                   });
                 });
             </script>
