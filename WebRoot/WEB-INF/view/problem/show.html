@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-    	var prevpage = "${baseUrl}/problem/show/${prevPid!}";
+      var prevpage = "${baseUrl}/problem/show/${prevPid!}";
       var nextpage = "${baseUrl}/problem/show/${nextPid!}";
       $(document).keydown(function(event) {
         <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
@@ -234,9 +234,9 @@
 <#if userResult??>
 <script type="text/javascript">
     $(document).ready(function() {
-    	$.getJSON('api/problem/userInfo?pid=' + ${problem.pid}, function(data) {
-    		  if (data.userInfo)
-    			  {
+      $.getJSON('api/problem/userInfo?pid=' + ${problem.pid}, function(data) {
+          if (data.userInfo)
+            {
               for (result in data.userInfo)
               {
                 

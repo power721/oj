@@ -94,22 +94,22 @@
         });
         
         $('.ueditor').click(function(){
-        	var id = $(this).attr('for');
-        	var method = $(this).attr('method');
-        	var ue = UE.getEditor(id);
-        	
-        	if (method == 'destroy')
-        	{
-        		ue.destroy();
-        		$(this).attr('method', 'create');
-        	}
-        	else
-        	{
-        		 ue.addListener('ready',function(){
+          var id = $(this).attr('for');
+          var method = $(this).attr('method');
+          var ue = UE.getEditor(id);
+          
+          if (method == 'destroy')
+          {
+            ue.destroy();
+            $(this).attr('method', 'create');
+          }
+          else
+          {
+             ue.addListener('ready',function(){
                this.focus()
              });
-        		 $(this).attr('method', 'destroy');
-        	}
+             $(this).attr('method', 'destroy');
+          }
         });
 </script>
 </@layout>

@@ -50,10 +50,10 @@
 </div>
 
 <script type="text/javascript">
-	function getCaptcha() {
-		$("img#captcha").attr("src", "${baseUrl!}/captcha?r=" + Math.random());
-		$(":input[name='captcha']").val("");
-	}
+  function getCaptcha() {
+    $("img#captcha").attr("src", "${baseUrl!}/captcha?r=" + Math.random());
+    $(":input[name='captcha']").val("");
+  }
 </script>
 
 </@layout>

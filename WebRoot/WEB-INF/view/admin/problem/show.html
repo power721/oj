@@ -185,96 +185,97 @@
       </div>
     </div>
             
-    <link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
-    <script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
-    
-    <link href="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet" type="text/css"></link>  
-    <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.min.js"></script>  
-    <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"></script>
-    <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js"></script>
-    
-    <script type="text/javascript">
-      $(document).ready(function(){
-        var pid = ${problem.pid!};
-        var apiUrl = 'api/admin/updateProblem';
-        $.fn.editable.defaults.mode = 'inline';
-        $.fn.editable.defaults.url = apiUrl; 
-          $('#title').editable({
-            type: 'text',
-            pk: pid,
-            title: 'Change problem title'
-          });
-          $('#time_limit').editable({
-            type: 'number',
-            pk: pid,
-            title: 'Change problem time limit',
-            validate: function(value) {
-              if($.trim(value) == '') {
-                return 'This field is required';
+    <@override name="scripts">
+      <link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+      <script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
+      
+      <link href="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet" type="text/css"></link>  
+      <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.min.js"></script>  
+      <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"></script>
+      <script src="assets/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js"></script>
+      
+      <script type="text/javascript">
+        $(document).ready(function(){
+          var pid = ${problem.pid!};
+          var apiUrl = 'api/admin/updateProblem';
+          $.fn.editable.defaults.mode = 'inline';
+          $.fn.editable.defaults.url = apiUrl; 
+            $('#title').editable({
+              type: 'text',
+              pk: pid,
+              title: 'Change problem title'
+            });
+            $('#time_limit').editable({
+              type: 'number',
+              pk: pid,
+              title: 'Change problem time limit',
+              validate: function(value) {
+                if($.trim(value) == '') {
+                  return 'This field is required';
+                }
+                var pattern = /^[\d]{3,6}$/;
+                if (!pattern.test(value)) {
+                  return "The value shoulbe be a number{3,6}";
+                }
               }
-              var pattern = /^[\d]{3,6}$/;
-              if (!pattern.test(value)) {
-                return "The value shoulbe be a number{3,6}";
+            });
+            $('#memory_limit').editable({
+              type: 'number',
+              pk: pid,
+              title: 'Change problem time limit',
+              validate: function(value) {
+                if($.trim(value) == '') {
+                  return 'This field is required';
+                }
+                var pattern = /^[\d]{3,6}$/;
+                if (!pattern.test(value)) {
+                  return "The value shoulbe be a number{3,6}";
+                }
               }
-            }
-          });
-          $('#memory_limit').editable({
-            type: 'number',
-            pk: pid,
-            title: 'Change problem time limit',
-            validate: function(value) {
-              if($.trim(value) == '') {
-                return 'This field is required';
-              }
-              var pattern = /^[\d]{3,6}$/;
-              if (!pattern.test(value)) {
-                return "The value shoulbe be a number{3,6}";
-              }
-            }
-          });
-          $('#description').editable({
-            type: 'wysihtml5',
-            pk: pid,
-            title: 'Change problem description'
-          });
-          $('#input').editable({
-            type: 'wysihtml5',
-            pk: pid,
-            title: 'Change problem input'
-          });
-          $('#output').editable({
-            type: 'wysihtml5',
-            pk: pid,
-            title: 'Change problem output'
-          });
-          $('#sample_input').editable({
-            type: 'textarea',
-            pk: pid,
-            title: 'Change problem sample input'
-          });
-          $('#sample_output').editable({
-            type: 'textarea',
-            pk: pid,
-            title: 'Change problem sample output'
-          });
-          $('#hint').editable({
-            type: 'wysihtml5',
-            pk: pid,
-            title: 'Change problem hint'
-          });
-          $('#source').editable({
-            type: 'text',
-            pk: pid,
-            title: 'Change problem source'
-          });
-          
-          var prevpage = "${baseUrl}/admin/problem/show/${prevPid!}";
-          var nextpage = "${baseUrl}/admin/problem/show/${nextPid!}";
-          $(document).keydown(function(event) {
-            <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
-            <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
-          });
-        });
-    </script>
+            });
+            $('#description').editable({
+              type: 'wysihtml5',
+              pk: pid,
+              title: 'Change problem description'
+            });
+            $('#input').editable({
+              type: 'wysihtml5',
+              pk: pid,
+              title: 'Change problem input'
+            });
+            $('#output').editable({
+              type: 'wysihtml5',
+              pk: pid,
+              title: 'Change problem output'
+            });
+            $('#sample_input').editable({
+              type: 'textarea',
+              pk: pid,
+              title: 'Change problem sample input'
+            });
+            $('#sample_output').editable({
+              type: 'textarea',
+              pk: pid,
+              title: 'Change problem sample output'
+            });
+            $('#hint').editable({
+              type: 'wysihtml5',
+              pk: pid,
+              title: 'Change problem hint'
+            });
+            $('#source').editable({
+              type: 'text',
+              pk: pid,
+              title: 'Change problem source'
+            });
             
+            var prevpage = "${baseUrl}/admin/problem/show/${prevPid!}";
+            var nextpage = "${baseUrl}/admin/problem/show/${nextPid!}";
+            $(document).keydown(function(event) {
+              <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
+              <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
+            });
+          });
+      </script>
+    </@override>
 </@layout>
