@@ -231,3 +231,6 @@ function getLocalTime(nS) {
     return tsDistance < 0 ? '刚刚' : Math.floor(tsDistance / 1000 / 60 / 60 / 24 / 365) > 0 ? longLongAgo : (dayAgo = tsDistance / 1000 / 60 / 60 / 24) > 3 ? (dt.getFullYear() != dtNow.getFullYear() ? longLongAgo : longAgo) : (dayAgo = (dtNow.getDay() - dt.getDay() + 7) % 7) > 2 ? longAgo : dayAgo > 1 ? '前天 ' + hrMin : (hrAgo = tsDistance / 1000 / 60 / 60) > 12 ? (dt.getDay() != dtNow.getDay() ? '昨天 ' : '今天 ') + hrMin : (hrAgo = Math.floor(tsDistance / 1000 / 60 / 60 % 60)) > 0 ? hrAgo + '小时前' : (minAgo = Math.floor(tsDistance / 1000 / 60 % 60)) > 0 ? minAgo + '分钟前' : (secAgo = Math.floor(tsDistance / 1000 % 60)) > 0 ? secAgo + '秒前' : '刚刚'
   }
 })(jQuery);
+try {
+  console.log("Welcome to PowerOJ, have fun!");
+} catch (f) {};

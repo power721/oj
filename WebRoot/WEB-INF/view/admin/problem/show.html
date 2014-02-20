@@ -207,12 +207,30 @@
           $('#time_limit').editable({
             type: 'number',
             pk: pid,
-            title: 'Change problem time limit'
+            title: 'Change problem time limit',
+            validate: function(value) {
+              if($.trim(value) == '') {
+                return 'This field is required';
+              }
+              var pattern = /^[\d]{3,6}$/;
+              if (!pattern.test(value)) {
+                return "The value shoulbe be a number{3,6}";
+              }
+            }
           });
           $('#memory_limit').editable({
             type: 'number',
             pk: pid,
-            title: 'Change problem time limit'
+            title: 'Change problem time limit',
+            validate: function(value) {
+              if($.trim(value) == '') {
+                return 'This field is required';
+              }
+              var pattern = /^[\d]{3,6}$/;
+              if (!pattern.test(value)) {
+                return "The value shoulbe be a number{3,6}";
+              }
+            }
           });
           $('#description').editable({
             type: 'wysihtml5',

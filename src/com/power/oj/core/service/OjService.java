@@ -65,6 +65,11 @@ public class OjService
     
     return roleList;
   }
+
+  public List<Record> getRoleList()
+  {
+    return Db.find("SELECT * FROM role ORDER BY id");
+  }
   
   public List<Record> getRolePermission(int rid)
   {
@@ -72,6 +77,11 @@ public class OjService
     List<Record> permissionList = Db.find(sql,rid);
     
     return permissionList;
+  }
+
+  public List<Record> getPermissionList()
+  {
+    return Db.find("SELECT * FROM permission ORDER BY id");
   }
   
   public List<Record> tagList()
