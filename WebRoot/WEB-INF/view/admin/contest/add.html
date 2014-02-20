@@ -1,5 +1,4 @@
-<#include "../_layout.html" />
-<@layout>
+<@override name="content">
     <div class="header">
       <h1 class="page-title">添加比赛</h1>
     </div>
@@ -70,6 +69,7 @@
         </div>
       </div>
     </div>
+</@override>
   
     <@override name="scripts">
       <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
@@ -128,4 +128,4 @@
           }
         </script>
       </@override>
-</@layout>
+<@extends name="../_layout.html"></@extends>

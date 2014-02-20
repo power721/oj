@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
     <div class="header">
       <h1 class="page-title">系统信息</h1>
     </div>
@@ -62,4 +62,5 @@
         </div>
       </div>
     </div>
-</@layout>
+  </@override>
+<@extends name="../_layout.html"></@extends>

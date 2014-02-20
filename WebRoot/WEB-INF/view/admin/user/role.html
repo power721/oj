@@ -1,5 +1,4 @@
-<#include "../_layout.html" />
-<@layout>
+<@override name="content">
     <div class="header">
       <h1 class="page-title">用户角色</h1>
     </div>
@@ -29,7 +28,9 @@
         </div>
       </div>
     </div>
+</@override>
     
+    <@override name="scripts">
     <link href="assets/DataTables-1.9.4/media/css/jquery.dataTables.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
@@ -100,4 +101,5 @@
             }
         });
     </script>
-</@layout>
+  </@override>
+<@extends name="../_layout.html"></@extends>

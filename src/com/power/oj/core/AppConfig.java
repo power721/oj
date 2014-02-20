@@ -61,6 +61,9 @@ import com.power.oj.user.UserController;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserInterceptor;
 import com.power.oj.user.UserModel;
+import com.power.oj.util.freemarker.BlockDirective;
+import com.power.oj.util.freemarker.ExtendsDirective;
+import com.power.oj.util.freemarker.OverrideDirective;
 
 public class AppConfig extends JFinalConfig
 {
@@ -76,6 +79,10 @@ public class AppConfig extends JFinalConfig
     loadPropertyFile("oj.properties");
 
     FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
+    FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
+    FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
+    FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
+    
     me.setDevMode(getPropertyToBoolean("devMode", false));
     baseViewPath = "/WEB-INF/view";
     me.setBaseViewPath(baseViewPath);

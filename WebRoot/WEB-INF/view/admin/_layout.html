@@ -1,4 +1,3 @@
-<#macro layout>
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -118,7 +117,7 @@
   <!-- main content
     ================================================== -->
   <div class="content">
-    <#nested>
+    <@block name="content"></@block>
   </div>
 
       <!-- Footer
@@ -156,4 +155,3 @@
       
 </body>
 </html>
-</#macro>

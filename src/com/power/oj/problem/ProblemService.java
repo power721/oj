@@ -249,8 +249,9 @@ public class ProblemService
   
   public int updateProblemByField(Integer pid, String name, String value)
   {
-    String[] fileds = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
-    if (StringUtil.equalsOne(name, fileds) == -1)
+    // TODO store tags in problem table
+    String[] fields = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
+    if (StringUtil.equalsOne(name, fields) == -1)
     {
       return -1;
     }

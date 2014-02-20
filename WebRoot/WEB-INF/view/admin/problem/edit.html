@@ -1,5 +1,4 @@
-<#include "../_layout.html" />
-<@layout>
+<@override name="content">
     <div class="header">
       <h1 class="page-title">编辑题目</h1>
     </div>
@@ -97,6 +96,7 @@
         </div>
       </div>
     </div>
+</@override>
     
     <@override name="scripts">
       <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
@@ -129,4 +129,4 @@
               });
       </script>
     </@override>
-</@layout>
+<@extends name="../_layout.html"></@extends>
