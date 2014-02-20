@@ -191,7 +191,7 @@ public class ContestService
   {
     String sql = "SELECT * FROM contest_problem WHERE cid=? ORDER BY num";
     List<Record> contestProblems;
-    if (uid > 0)
+    if (uid!=null && uid > 0)
     {
       sql = "SELECT cp.pid,cp.num,cp.accept,cp.submit,title,status FROM contest_problem cp LEFT OUTER JOIN (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
       contestProblems = Db.find(sql, uid, cid, cid);
