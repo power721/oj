@@ -5,6 +5,7 @@ import java.util.Map;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
+import com.power.oj.core.service.SessionService;
 
 public class QQLoginApiController extends OjController
 {
@@ -71,6 +72,6 @@ public class QQLoginApiController extends OjController
     {
       log.error(e.getLocalizedMessage());
     }
-    redirect("/admin");
+    redirect(SessionService.me().getLastAccessURL());
   }
 }
