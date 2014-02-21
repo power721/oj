@@ -256,13 +256,14 @@ public class ProblemService
       return -1;
     }
     
+    long mtime = OjConfig.timeStamp;
     if (StringUtil.equalsOne(name, new String[]{"time_limit", "memory_limit", "status"}) != -1)
     {
       Integer intValue = Integer.parseInt(value);
-      return Db.update("UPDATE problem SET " + name + "=? WHERE pid=?", intValue, pid);
+      return Db.update("UPDATE problem SET " + name + "=?,mtime=? WHERE pid=?", intValue, mtime, pid);
     }
     
-    return Db.update("UPDATE problem SET " + name + "=? WHERE pid=?", value, pid);
+    return Db.update("UPDATE problem SET " + name + "=?,mtime=? WHERE pid=?", value, mtime, pid);
   }
   
   public boolean build(Integer pid)
