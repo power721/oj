@@ -30,6 +30,8 @@ import com.power.oj.api.FriendApiController;
 import com.power.oj.api.MailApiController;
 import com.power.oj.api.ProblemApiController;
 import com.power.oj.api.UserApiController;
+import com.power.oj.api.oauth.QQLoginApiController;
+import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
@@ -115,6 +117,7 @@ public class AppConfig extends JFinalConfig
     me.add("/solution", SolutionController.class);
     me.add("/user", UserController.class);
     me.add("/api/admin", AdminApiController.class, "/admin/");
+    me.add("/api/oauth/qq", QQLoginApiController.class, "/admin/");
     me.add("/api/mail", MailApiController.class, "/mail/");
     me.add("/api/problem", ProblemApiController.class, "/problem/");
     me.add("/api/user", UserApiController.class, "/user/");
@@ -149,6 +152,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("mail", MailModel.class);
     arp.addMapping("mail_content", MailContentModel.class);
     arp.addMapping("program_language", LanguageModel.class);
+    arp.addMapping("web_login", WebLoginModel.class);
     arp.addMapping("variable", VariableModel.class);
     me.add(arp);
 

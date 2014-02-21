@@ -25,7 +25,7 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserService;
-import com.power.oj.util.Tool;
+import com.power.oj.util.HttpUtil;
 
 public class ContestService
 {
@@ -282,7 +282,7 @@ public class ContestService
       String html = null;
       try
       {
-        html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+        html = HttpUtil.doGet("http://contests.acmicpc.info/contests.json");
       } catch(HttpHostConnectException e)
       {
         if (OjConfig.getDevMode())
@@ -294,7 +294,7 @@ public class ContestService
       {
         try
         {
-          Tool.getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
+          html = HttpUtil.doGet("http://acm.nankai.edu.cn/contests.json");
         } catch(HttpHostConnectException e)
         {
           if (OjConfig.getDevMode())
@@ -318,7 +318,7 @@ public class ContestService
       {
         try
         {
-          html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
+          html = HttpUtil.doGet("http://contests.acmicpc.info/contests.json");
         } catch(HttpHostConnectException e1)
         {
           if (OjConfig.getDevMode())

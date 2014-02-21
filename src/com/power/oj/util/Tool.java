@@ -1,6 +1,5 @@
 package com.power.oj.util;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -15,14 +14,6 @@ import jodd.mail.SmtpServer;
 import jodd.util.MimeTypes;
 import jodd.util.StringTemplateParser;
 import jodd.util.StringTemplateParser.MacroResolver;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.jfinal.kit.StringKit;
 import com.jfinal.log.Logger;
@@ -69,48 +60,6 @@ public class Tool
     }
 
     return request.getRemoteAddr();
-  }
-
-  /**
-   * Get the html content by url.
-   * 
-   * @param url
-   *          the string of url.
-   * @return the string of html content.
-   */
-  public static String getHtmlByUrl(String url) throws HttpHostConnectException
-  {
-    String html = null;
-
-    HttpClient httpclient = new DefaultHttpClient();
-    try
-    {
-      HttpGet httpget = new HttpGet(url);
-      log.info("executing request " + httpget.getURI());
-
-      // Create a response handler
-      ResponseHandler<String> responseHandler = new BasicResponseHandler();
-      html = httpclient.execute(httpget, responseHandler);
-
-    } catch (ClientProtocolException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.warn(e.getLocalizedMessage());
-    } catch (IOException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.warn(e.getLocalizedMessage());
-    } finally
-    {
-      // When HttpClient instance is no longer needed,
-      // shut down the connection manager to ensure
-      // immediate deallocation of all system resources
-      httpclient.getConnectionManager().shutdown();
-    }
-
-    return html;
   }
 
   /**

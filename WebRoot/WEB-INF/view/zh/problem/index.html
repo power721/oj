@@ -225,35 +225,46 @@
     </span>
   </div><!-- #area-unfixed-pic -->
 </div><!-- #area-mainer-right -->
-                    
-<!--<script type="text/javascript" src="assets/js/placeholders.min.js"></script>-->
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-        var prevpage="problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
-        var nextpage="problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
-        $(document).keydown(function(event) {
-            <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
-            <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
-        });
-        
-        <#if userName??>
-        $('td.pid').each(function(i) {
-          var result = $(this).prev('.result');
-          $.getJSON('problem/userResult?pid=' + $(this).text(), function(data) {
-            if (data.result)
-            {
-              if (data.result.id)
-                result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
-              else
-                result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
-            }
-          });
-        });
-        </#if>
-    });
-    </script>
-
 </@override>
+
 <@override name="scripts">
+  <!--<script type="text/javascript" src="assets/js/placeholders.min.js"></script>-->
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      var prevpage="problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+      var nextpage="problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+      $(document).keydown(function(event) {
+          <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
+          <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
+      });
+      
+      $("#problem-list").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:true,
+        striped:true,
+        clean:true
+      });
+
+      <#if userName??>
+      $('td.pid').each(function(i) {
+        var result = $(this).prev('.result');
+        $.getJSON('api/problem/userResult?pid=' + $(this).text(), function(data) {
+          if (data.result)
+          {
+            if (data.result.id)
+              result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
+            else
+              result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
+          }
+        });
+      });
+      </#if>
+  });
+  </script>
 </@override>
 <@extends name="../common/_layout.html" />
