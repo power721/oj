@@ -987,6 +987,26 @@ INSERT INTO `variable` (`id`, `cid`, `name`, `value`, `boolean_value`, `int_valu
 INSERT INTO `variable` (`id`, `cid`, `name`, `value`, `boolean_value`, `int_value`, `text_value`, `type`, `description`) VALUES ('14', null, 'enable_archive', null, '1', null, null, 'boolean', null);
 
 -- ----------------------------
+-- Table structure for `web_login`
+-- ----------------------------
+DROP TABLE IF EXISTS `web_login`;
+CREATE TABLE `web_login` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `open_id` varchar(64) NOT NULL,
+  `uid` int(9) DEFAULT NULL,
+  `nick` varchar(64) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `type` varchar(64) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of web_login
+-- ----------------------------
+
+-- ----------------------------
 -- Auto increment value for `announce`
 -- ----------------------------
 ALTER TABLE `announce` AUTO_INCREMENT=1000;
