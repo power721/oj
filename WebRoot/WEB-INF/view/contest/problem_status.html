@@ -1,60 +1,4 @@
 <@override name="content">
-<script src="assets/Highcharts/js/highcharts.js"></script>
-<script src="assets/Highcharts/js/modules/exporting.js"></script>
-<script type="text/javascript">
-        $(function () {
-            var chart;
-
-            $(document).ready(function () {
-                
-                // Build the chart
-                $('#container').highcharts({
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false
-                    },
-                    title: {
-                        text: '<a href="${baseUrl!}/contest/problem/${cid!}-${id}" title="view the problem">Problem ${cid!}-${id} Statistics</a>'
-                    },
-              subtitle: {
-                  text: 'Power OJ'
-              },
-                    tooltip: {
-                       
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: false
-                            },
-                            showInLegend: true
-                        }
-                    },
-                    series: [{
-                        type: 'pie',
-                        name: 'Count',
-                        data: [
-                            <#if resultList??>
-                            <#list resultList as Result>
-                            {
-                                name: '${Result.longName!}',
-                                color: $('td#${Result.name!}').css('color'),
-                                y: ${Result.count!}
-                            },
-                            </#list>
-                            </#if>
-                            
-                        ]
-                    }]
-                });
-            });
-            
-        });
-    </script>
-
 <div class="row" id="problem-status">
   <div class="span4">
     <h4>Statistics</h4>
@@ -137,35 +81,83 @@
     </div>
   </div>
 </div>
+</@override>
 
+<@override name="scripts">
 <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<script src="assets/Highcharts/js/highcharts.js"></script>
+<script src="assets/Highcharts/js/modules/exporting.js"></script>
+<script type="text/javascript">
+  $(function () {
+    var chart;
+    $(document).ready(function () {
+        // Build the chart
+        $('#container').highcharts({
+          chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+          },
+          title: {
+            text: '<a href="${baseUrl!}/contest/problem/${cid!}-${id}" title="view the problem">Problem ${cid!}-${id} Statistics</a>'
+          },
+          subtitle: {
+            text: 'Power OJ'
+          },
+          tooltip: {
+          },
+          plotOptions: {
+            pie: {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                  enabled: false
+              },
+              showInLegend: true
+            }
+          },
+          series: [{
+              type: 'pie',
+              name: 'Count',
+              data: [
+                <#if resultList??>
+                <#list resultList as Result>
+                {
+                    name: '${Result.longName!}',
+                    color: $('td#${Result.name!}').css('color'),
+                    y: ${Result.count!}
+                },
+                </#list>
+                </#if>
+              ]
+          }]
+      });
+    });
+  });
+</script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-
-        $("table#problem-status").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
-
-        $('div.ajax-loader a').click(function() {
-            var url = '${baseUrl!}/'+$(this).attr("url");
-            if(url.indexOf('?')>0)
-                url = url+'&ajax=1';
-            else
-                url = url+'?ajax=1';
-            $('div#ajax-container').load(url);
-        });
+  $(document).ready(function () {
+    $("table#problem-status").tablecloth({
+      theme:"stats",
+      condensed:true,
+      sortable:true,
+      striped:true,
+      clean:true
     });
-    </script>
 
-</@override>
-<@override name="scripts">
+    $('div.ajax-loader a').click(function() {
+        var url = '${baseUrl!}/'+$(this).attr("url");
+        if(url.indexOf('?')>0)
+            url = url+'&ajax=1';
+        else
+            url = url+'?ajax=1';
+        $('div#ajax-container').load(url);
+    });
+  });
+</script>
 </@override>
 <@extends name="_layout.html" />

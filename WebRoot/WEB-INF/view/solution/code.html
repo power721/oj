@@ -1,9 +1,4 @@
-<#if alpha??> 
-<#include "../contest/_layout.html" /> 
-<#else> 
-<#include "../common/_layout.html" /> 
-</#if> 
-<@layout>
+<@override name="content">
 <div class="row">
   <div class="span4 offset4" id="source-code">
     <span class="green">Problem<#if alpha?? && adminUser??>(<a href="problem/show/${solution.pid!}">${solution.pid!}</a>)</#if>
@@ -67,49 +62,47 @@
   </form>
 </div>
 </#if>
-
-<link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shCore.css' />
-<link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shThemeDefault.css' />
-<script src='assets/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
-<script src='assets/js/jquery.zclip.min.js' type='text/javascript'></script>
-<#if brush=='cpp'>
-<script src='assets/syntaxhighlighter/scripts/shBrushCpp.js' type='text/javascript'></script>
-</#if> <#if brush=='java'>
-<script src='assets/syntaxhighlighter/scripts/shBrushJava.js' type='text/javascript'></script>
-</#if> <#if brush=='pascal'>
-<script src='assets/syntaxhighlighter/scripts/shBrushDelphi.js' type='text/javascript'></script>
-</#if> <#if brush=='python'>
-<script src='assets/syntaxhighlighter/scripts/shBrushPython.js' type='text/javascript'></script>
-</#if> <#if brush=='xml'>
-<script src='assets/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
-</#if>
-
-<link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
-<script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
-
-<script language='javascript' type='text/javascript'>
-        $(document).ready(function(){
-
-            $('a#copy-description').zclip({
-                path:'${baseUrl!}/assets/js/ZeroClipboard.swf',
-                copy:$('textarea#source').text(),
-                afterCopy:function(){
-                    $(this).attr("class", "btn btn-success");
-                    $.pnotify({
-                        title: 'Copy Success',
-                        text: 'You can paste the code anywhere now.',
-                        history: false,
-                        type: 'success'
-                    });
-                    //$("span#message").text("Copy success!");
-                }
-            });
-        });
-
-        SyntaxHighlighter.config.tagName = 'textarea';
-        SyntaxHighlighter.all();
-    </script>
-</@layout>
-<@override name="scripts">
 </@override>
-<@extends name="../contest/_layout.html" /> <@extends name="../common/_layout.html" />
+
+<@override name="scripts">
+  <link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shCore.css' />
+  <link type='text/css' rel='stylesheet' href='assets/syntaxhighlighter/styles/shThemeDefault.css' />
+  <script src='assets/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
+  <script src='assets/js/jquery.zclip.min.js' type='text/javascript'></script>
+  <#if brush=='cpp'><script src='assets/syntaxhighlighter/scripts/shBrushCpp.js' type='text/javascript'></script></#if>
+  <#if brush=='java'><script src='assets/syntaxhighlighter/scripts/shBrushJava.js' type='text/javascript'></script></#if>
+  <#if brush=='pascal'><script src='assets/syntaxhighlighter/scripts/shBrushDelphi.js' type='text/javascript'></script></#if>
+  <#if brush=='python'><script src='assets/syntaxhighlighter/scripts/shBrushPython.js' type='text/javascript'></script></#if>
+  <#if brush=='xml'><script src='assets/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script></#if>
+  
+  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+  <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
+
+  <script language='javascript' type='text/javascript'>
+    $(document).ready(function(){
+        $('a#copy-description').zclip({
+            path:'${baseUrl!}/assets/js/ZeroClipboard.swf',
+            copy:$('textarea#source').text(),
+            afterCopy:function(){
+                $(this).attr("class", "btn btn-success");
+                $.pnotify({
+                    title: 'Copy Success',
+                    text: 'You can paste the code anywhere now.',
+                    history: false,
+                    type: 'success'
+                });
+                //$("span#message").text("Copy success!");
+            }
+        });
+    });
+
+    SyntaxHighlighter.config.tagName = 'textarea';
+    SyntaxHighlighter.all();
+  </script>
+</@override>
+
+<#if alpha??>
+<@extends name="../contest/_layout.html" />
+<#else>
+<@extends name="../common/_layout.html" />
+</#if>

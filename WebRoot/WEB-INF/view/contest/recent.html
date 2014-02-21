@@ -1,13 +1,13 @@
 <@override name="content">
+<div id="scheduler"></div>
+</@override>
 
+<@override name="scripts">
 <link href="assets/kendo-ui/styles/kendo.common.min.css" rel="stylesheet" />
 <link href="assets/kendo-ui/styles/kendo.default.min.css" rel="stylesheet" />
 <script src="assets/kendo-ui/js/jquery.min.js"></script>
 <script src="assets/kendo-ui/js/kendo.web.min.js"></script>
-
-<div id="scheduler"></div>
-
-<script>
+<script type="text/javascript" charset="utf-8">
     $(function() {
       $("#scheduler").kendoScheduler({
           date: new Date(),
@@ -75,27 +75,23 @@
               }*/
           },
           resources: [
-              {
-                  field: "OJname",
-                  title: "OJ",
-                  dataSource: [
-                      { text: "BNU", value: "BNU", color: "#f8a398" },
-                      { text: "CSU", value: "CSU", color: "#95aa98" },
-                      { text: "HDU", value: "HDU", color: "#51a0ed" },
-                      { text: "UVA", value: "UVA", color: "#56ca85" },
-                      { text: "Codeforces", value: "Codeforces", color: "#00ca85" },
-                      { text: "HUNNU", value: "HUNNU", color: "#442585" },
-                      { text: "Topcoder", value: "Topcoder", color: "#9925aa" },
-                      { text: "SYSU", value: "SYSU", color: "#FF5555" },
-                  ]
-              }
+            {
+              field: "OJname",
+              title: "OJ",
+              dataSource: [
+                  { text: "BNU", value: "BNU", color: "#f8a398" },
+                  { text: "CSU", value: "CSU", color: "#95aa98" },
+                  { text: "HDU", value: "HDU", color: "#51a0ed" },
+                  { text: "UVA", value: "UVA", color: "#56ca85" },
+                  { text: "Codeforces", value: "Codeforces", color: "#00ca85" },
+                  { text: "HUNNU", value: "HUNNU", color: "#442585" },
+                  { text: "Topcoder", value: "Topcoder", color: "#9925aa" },
+                  { text: "SYSU", value: "SYSU", color: "#FF5555" },
+              ]
+            }
           ]
       });
-
   });
 </script>
-
-</@override>
-<@override name="scripts">
 </@override>
 <@extends name="../common/_layout.html" />

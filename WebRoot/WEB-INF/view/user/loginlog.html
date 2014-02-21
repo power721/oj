@@ -35,31 +35,29 @@
     </#if>
   </tbody>
 </table>
-
-<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
-
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $('.timestamp').each(function() {
-          $(this).html(getLocalTime($(this).attr('data')));
-        });
-        
-        $("#user-log").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:false,
-          striped:true,
-          clean:true
-        });
-    });
-    </script>
-
 </@override>
+
 <@override name="scripts">
+  <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
+
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('.timestamp').each(function() {
+        $(this).html(getLocalTime($(this).attr('data')));
+      });
+      
+      $("#user-log").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:false,
+        striped:true,
+        clean:true
+      });
+  });
+  </script>
 </@override>
 <@extends name="../common/_layout.html" />

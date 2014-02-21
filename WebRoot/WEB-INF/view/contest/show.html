@@ -1,5 +1,4 @@
 <@override name="content">
-
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
@@ -51,36 +50,31 @@
     </table>
   </div>
 </div>
+</@override>
 
-<script type="text/javascript" language="javascript">
-        var timeDiff = ${serverTime!}*1000 - new Date().valueOf();
-        
-        function updateTime() {
-            $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-    </script>
-
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<@override name="scripts">
+<link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#problem-list").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
+  $(document).ready(function() {
+    var timeDiff = ${serverTime!}*1000 - new Date().valueOf();
+    function updateTime() {
+      $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+            
+    $("#problem-list").tablecloth({
+      theme:"stats",
+      condensed:true,
+      sortable:true,
+      striped:true,
+      clean:true
     });
-    </script>
-
-</@override>
-<@override name="scripts">
+});
+</script>
 </@override>
 <@extends name="_layout.html" />

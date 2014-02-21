@@ -1,17 +1,4 @@
-
 <@override name="content">
-
-<script type="text/javascript">
-    $(document).ready(function() {
-      var prevpage = "${baseUrl}/problem/show/${prevPid!}";
-      var nextpage = "${baseUrl}/problem/show/${nextPid!}";
-      $(document).keydown(function(event) {
-        <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
-        <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
-      });
-    });
-</script>
-
 <ul class="pager">
   <li class="previous <#if prevPid==problem.pid>disabled</#if>">
     <a href="problem/show/${prevPid!}" title="Show previous problem.">&lt;&lt;Prev</a>
@@ -230,33 +217,41 @@
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
   <a href="#" class="btn btn-info">Discuss</a>
 </div>
+</@override>
 
-<#if userResult??>
-<script type="text/javascript">
+<@override name="scripts">
+  <script type="text/javascript">
     $(document).ready(function() {
-      $.getJSON('api/problem/userInfo?pid=' + ${problem.pid}, function(data) {
-          if (data.userInfo)
-            {
-              for (result in data.userInfo)
-              {
-                
-              }
-            }
-          });
+      var prevpage = "${baseUrl}/problem/show/${prevPid!}";
+      var nextpage = "${baseUrl}/problem/show/${nextPid!}";
+      $(document).keydown(function(event) {
+        <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
+      });
     });
-</script>
+  </script>
+
+  <#if userResult??>
+  <script type="text/javascript">
+      $(document).ready(function() {
+        $.getJSON('api/problem/userInfo?pid=' + ${problem.pid}, function(data) {
+            if (data.userInfo)
+              {
+                for (result in data.userInfo)
+                {
+                  
+                }
+              }
+            });
+      });
+  </script>
 </#if>
 
 <#if enableDict??>
-<script src="http://dict.cn/hc/" type="text/javascript"></script>
-<script type="text/javascript">
-  dictInit();
-</script>
+  <script src="http://dict.cn/hc/" type="text/javascript"></script>
+  <script type="text/javascript">
+    dictInit();
+  </script>
 </#if>
-
-<!--</div>
-</div>-->
-</@override>
-<@override name="scripts">
 </@override>
 <@extends name="../common/_layout.html" />

@@ -1,64 +1,4 @@
 <@override name="content">
-<script src="assets/Highcharts/js/highcharts.js"></script>
-<script src="assets/Highcharts/js/modules/exporting.js"></script>
-
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-
-<script type="text/javascript">
-
-    (function($){ // encapsulate jQuery
-    $(function () {
-            $('#container').highcharts({
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: '<a href="contest/show/${cid}">Contest Statistics ${cid}</a> -- PowerOJ'
-                },
-                xAxis: {
-                    categories: [<#list statistics as st>'${st.id}',</#list>]
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: 'Total Submit'
-                    }
-                },
-                legend: {
-                    backgroundColor: '#FFFFFF',
-                    reversed: true
-                },
-                plotOptions: {
-                    series: {
-                        stacking: 'normal'
-                    }
-                },
-                series: [
-                            <#list resultName as name>
-                            {
-                                name: '${name}',
-                                color: $('th#${name!}').css('color'),
-                                stack: 'result',
-                                data: [<#list statistics as st>${st["${name}"]}<#if st_index<statistics?size-1>,</#if></#list>]
-                            },
-                            </#list>
-                            <#list languageList as language>
-                            {
-                                name: '${language.name}',
-                                stack: 'language',
-                                data: [<#list statistics as st>${st["${language.ext}"]}<#if st_index<statistics?size-1>,</#if></#list>]
-                            }<#if language_index<languageList?size-1>,</#if>
-                            </#list>
-                        ]
-            });
-        });
-        
-    })(jQuery);
-    </script>
-
 <table id="contest-statistics" class="table table-condensed table-bordered table-hover">
   <thead>
     <tr>
@@ -82,21 +22,77 @@
 </table>
 
 <div id="container" style="min-width: 750px; min-height: 550px; margin: 0 auto"></div>
+</@override>
+
+<@override name="scripts">
+<script src="assets/Highcharts/js/highcharts.js"></script>
+<script src="assets/Highcharts/js/modules/exporting.js"></script>
+
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#contest-statistics").tablecloth({
-          theme:"stats",
-          sortable:true,
-          condensed:true,
-          striped:true,
-          clean:true
-        });
+  (function($){ // encapsulate jQuery
+    $(function () {
+      $('#container').highcharts({
+          chart: {
+            type: 'column'
+          },
+          title: {
+            text: '<a href="contest/show/${cid}">Contest Statistics ${cid}</a> -- PowerOJ'
+          },
+          xAxis: {
+            categories: [<#list statistics as st>'${st.id}',</#list>]
+          },
+          yAxis: {
+            min: 0,
+            title: {
+                text: 'Total Submit'
+            }
+          },
+          legend: {
+            backgroundColor: '#FFFFFF',
+            reversed: true
+          },
+          plotOptions: {
+            series: {
+              stacking: 'normal'
+            }
+          },
+          series: [
+                    <#list resultName as name>
+                    {
+                      name: '${name}',
+                      color: $('th#${name!}').css('color'),
+                      stack: 'result',
+                      data: [<#list statistics as st>${st["${name}"]}<#if st_index<statistics?size-1>,</#if></#list>]
+                    },
+                    </#list>
+                    <#list languageList as language>
+                    {
+                      name: '${language.name}',
+                      stack: 'language',
+                      data: [<#list statistics as st>${st["${language.ext}"]}<#if st_index<statistics?size-1>,</#if></#list>]
+                    }<#if language_index<languageList?size-1>,</#if>
+                    </#list>
+                  ]
+      });
     });
-    </script>
+  })(jQuery);
+</script>
 
-</@override>
-<@override name="scripts">
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    $("#contest-statistics").tablecloth({
+      theme:"stats",
+      sortable:true,
+      condensed:true,
+      striped:true,
+      clean:true
+    });
+  });
+</script>
 </@override>
 <@extends name="_layout.html" />

@@ -58,24 +58,29 @@
             </li>
           </ul>
           <ul class="nav pull-right">
-            <#if userName??>
-            <li class="dropdown active"><a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${userName!"user"}
-                <b class="caret"></b></a>
+          <#if userName??>
+            <li class="dropdown active">
+            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${userName!"user"}<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="user/profile/${userName!}">Profile</a></li>
-                <li><a href="mail">Mail</a></li>
+                <li><a href="user/#area=splash">Profile</a></li>
+                <li><a href="user/#area=mail">Mail</a></li>
                 <li><a href="user/loginlog">Login Log</a></li>
                 <li class="divider"></li>
                 <li class="nav-header">Admin</li>
-                <li><a href="user/edit">Edit</a></li>
+                <li><a href="user/#area=profile">Edit</a></li>
                 <li><a href="user/archive">Archive</a></li>
-              </ul></li>
-            <li class="active"><a href="logout"><i class="icon-off"></i>Logout</a></li> <#else>
-            <li class="<#if actionKey?? && actionKey=="login">active</#if>"> <a href="#" data-toggle="modal" data-target="#loginModal"><i
-                class="icon-user"></i>Login</a>
+                <#if adminUser??><li><a href="admin">Admin</a></li></#if>
+              </ul>
             </li>
-            <li class="<#if actionKey?? && actionKey=="signup">active</#if>"> <a href="signup"><i class="icon-star"></i>Signup</a>
-            </li> </#if>
+            <li class="active"><a href="logout"><i class="icon-off"></i>Logout</a></li>
+          <#else>
+            <li class="<#if actionKey?? && actionKey=="login">active</#if>">
+              <a href="#" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
+              <a href="signup"><i class="icon-star"></i>Signup</a>
+            </li>
+          </#if>
           </ul>
         </div>
       </div>

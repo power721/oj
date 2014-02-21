@@ -50,26 +50,24 @@
     </tbody>
   </table>
 </div>
-
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-
-<script type="text/javascript" charset="utf-8">
-  $(document).ready(function() {
-
-    $("#user-list").tablecloth({
-      theme : "stats",
-      condensed : true,
-      sortable : true,
-      striped : true,
-      clean : true
-    });
-  });
-</script>
-
 </@override>
+
 <@override name="scripts">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $("#user-list").tablecloth({
+        theme : "stats",
+        condensed : true,
+        sortable : true,
+        striped : true,
+        clean : true
+      });
+    });
+  </script>
 </@override>
 <@extends name="../common/_layout.html" />

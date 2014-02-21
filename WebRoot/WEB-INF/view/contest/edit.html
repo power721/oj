@@ -57,8 +57,9 @@
     </div>
   </div>
 </form>
+</@override>
 
-
+<@override name="scripts">
 <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
 <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
 
@@ -115,7 +116,5 @@
            return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");      
         }
     </script>
-</@override>
-<@override name="scripts">
 </@override>
 <@extends name="../contest/_layout.html" />

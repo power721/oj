@@ -1,62 +1,60 @@
-
 <@override name="content">
-<div id="login-box" class="row">
-  <div class="span5 offset3">
-    <form class="form-horizontal" action="user/recover" method="post">
-      <div class="control-group">
-        <div class="controls">
-          <span class="help-block"> We will send mail to your mailbox <br> and help you recover your account.
-          </span>
-        </div>
-      </div>
-      <div class="control-group">
-        <label class="control-label" for="inputAccount">Account</label>
-        <div class="controls">
-          <div class="input-prepend">
-            <span class="add-on"><i class="icon-user"></i></span>
-            <input type="text" id="inputAccount" name="name" value="${name!}" placeholder="User name" required>
+  <div id="login-box" class="row">
+    <div class="span5 offset3">
+      <form class="form-horizontal" action="user/recover" method="post">
+        <div class="control-group">
+          <div class="controls">
+            <span class="help-block"> We will send mail to your mailbox <br> and help you recover your account.
+            </span>
           </div>
         </div>
-      </div>
-      <div class="control-group <#if emailMsg??>error</#if>">
-        <label class="control-label" for="inputEmail">Email</label>
-        <div class="controls">
-          <div class="input-prepend">
-            <span class="add-on"><i class="icon-envelope"></i> </span>
-            <input type="email" id="inputEmail" name="email" value="${email!}" placeholder="Email" required>
+        <div class="control-group">
+          <label class="control-label" for="inputAccount">Account</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-user"></i></span>
+              <input type="text" id="inputAccount" name="name" value="${name!}" placeholder="User name" required>
+            </div>
           </div>
-          <p class="text-error">${emailMsg!}</p>
         </div>
-      </div>
-      <div class="control-group <#if captchaMsg??>error</#if>">
-        <label class="control-label" for="inputCaptcha">Captcha</label>
-        <div class="controls">
-          <div class="input-prepend">
-            <span class="add-on"><i class="icon-check"></i></span>
-            <input type="text" minlength="6" maxlength="6" id="inputCaptcha" class="input-small" name="captcha" required>
-            <span id="captcha"><a id="captcha" onclick="getCaptcha();" href="javascript:;" title="click to change another one"><img id="captcha"
-                src="captcha" /></a></span>
+        <div class="control-group <#if emailMsg??>error</#if>">
+          <label class="control-label" for="inputEmail">Email</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-envelope"></i> </span>
+              <input type="email" id="inputEmail" name="email" value="${email!}" placeholder="Email" required>
+            </div>
+            <p class="text-error">${emailMsg!}</p>
           </div>
-          <p class="text-error">${captchaMsg!}</p>
         </div>
-      </div>
-      <div class="control-group">
-        <div class="controls">
-          <input type="submit" class="btn btn-success" value="Send">
+        <div class="control-group <#if captchaMsg??>error</#if>">
+          <label class="control-label" for="inputCaptcha">Captcha</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-check"></i></span>
+              <input type="text" minlength="6" maxlength="6" id="inputCaptcha" class="input-small" name="captcha" required>
+              <span id="captcha"><a id="captcha" onclick="getCaptcha();" href="javascript:;" title="click to change another one"><img id="captcha"
+                  src="captcha" /></a></span>
+            </div>
+            <p class="text-error">${captchaMsg!}</p>
+          </div>
         </div>
-      </div>
-    </form>
+        <div class="control-group">
+          <div class="controls">
+            <input type="submit" class="btn btn-success" value="Send">
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
-
-<script type="text/javascript">
-  function getCaptcha() {
-    $("img#captcha").attr("src", "${baseUrl!}/captcha?r=" + Math.random());
-    $(":input[name='captcha']").val("");
-  }
-</script>
-
 </@override>
+
 <@override name="scripts">
+  <script type="text/javascript">
+    function getCaptcha() {
+      $("img#captcha").attr("src", "${baseUrl!}/captcha?r=" + Math.random());
+      $(":input[name='captcha']").val("");
+    }
+  </script>
 </@override>
 <@extends name="../common/_layout.html" />

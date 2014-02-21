@@ -1,20 +1,4 @@
 <@override name="content">
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        document.onkeydown=nextpage
-        document.onkeydown=nextpage
-        var prevpage="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>"
-        var nextpage="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>"
-        function nextpage(event)
-        {
-            event=event?event:(window.event?window.event:null);
-            <#if contestRank.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
-            <#if contestRank.pageNumber<contestRank.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-        }
-        });
-    </script>
-
 <div class="pagination pagination-centered">
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
@@ -60,28 +44,38 @@
   <#include "../common/_paginate.html" />
   <@paginate currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}/" />
 </div>
+</@override>
 
+<@override name="scripts">
 <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#contest-rank").tablecloth({
-          theme:"stats",
-          condensed:true,
-          striped:true,
-          clean:true
-        });
+  $(document).ready(function() {
+    document.onkeydown=nextpage
+    var prevpage="contest/rank/${cid!}?p=${contestRank.pageNumber-1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>"
+    var nextpage="contest/rank/${cid!}?p=${contestRank.pageNumber+1}<#if contestRank.pageSize!=50>&s=${contestRank.pageSize}</#if>"
+    function nextpage(event)
+    {
+      event=event?event:(window.event?window.event:null);
+      <#if contestRank.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
+      <#if contestRank.pageNumber<contestRank.totalPage>if(event.keyCode==39)location=nextpage;</#if>
+    }
+
+    $("#contest-rank").tablecloth({
+      theme:"stats",
+      condensed:true,
+      striped:true,
+      clean:true
     });
-    </script>
+  });
+</script>
 
 <#if adminUser??>
-<link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
-<script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
-
-<script type="text/javascript">
+  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+  <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
+  <script type="text/javascript">
     /*var ws = null;
     function startServer() {
       if(ws != null)
@@ -125,7 +119,6 @@
 
     startServer();*/
   </script>
-</#if></@override>
-<@override name="scripts">
+</#if>
 </@override>
 <@extends name="_layout.html" />

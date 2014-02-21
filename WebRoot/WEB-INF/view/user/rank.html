@@ -1,16 +1,4 @@
 <@override name="content">
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        var prevpage="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-        var nextpage="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-        $(document).keydown(function(event) {
-            <#if userList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
-            <#if userList.pageNumber<userList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-        });
-      });
-    </script>
-
 <div class="pagination pagination-centered">
   <div class="pull-left">
     <form class="form-search" action="user/search">
@@ -52,28 +40,33 @@
     </#list> </#if>
   </tbody>
 </table>
-
-<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
-
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#user-rank").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
-    });
-    </script>
-
 </@override>
+
 <@override name="scripts">
+  <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
+
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      var prevpage="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+      var nextpage="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+      $(document).keydown(function(event) {
+          <#if userList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
+          <#if userList.pageNumber<userList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
+      });
+              
+      $("#user-rank").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:true,
+        striped:true,
+        clean:true
+      });
+  });
+  </script>
 </@override>
 <@extends name="../common/_layout.html" />
