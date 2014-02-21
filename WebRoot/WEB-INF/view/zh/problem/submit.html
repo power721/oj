@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <form class="form-horizontal" id="submitForm" action="solution/save" method="post">
   <div class="control-group solution">
     <label class="control-label" for="inputPid">Problem ID</label>
@@ -54,4 +54,7 @@
       $("#submitForm").validate();
     });
   </script>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

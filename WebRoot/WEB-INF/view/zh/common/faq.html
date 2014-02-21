@@ -1,4 +1,4 @@
-﻿<#include "../common/_layout.html" /> <@layout>
+﻿<@override name="content">
 <div class="oj-page">
 
 
@@ -304,4 +304,7 @@ for s in sys.stdin:
 <script src='assets/syntaxhighlighter/scripts/shBrushPython.js' type='text/javascript'></script>
 <script src='assets/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
 <script language='javascript' type='text/javascript'>SyntaxHighlighter.all();</script>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

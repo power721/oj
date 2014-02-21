@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <form class="form-horizontal" action="contest/save" method="post">
   <div class="control-group contest <#if titleMsg??>error</#if>">
     <label class="control-label" for="inputTitle">Title</label>
@@ -112,4 +112,7 @@
            return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");      
         }
     </script>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

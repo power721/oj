@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <h1 class="text-center 401">401 Unauthorized</h1>
 
 <div id="login-box" class="row">
@@ -45,4 +45,7 @@
     </form>
   </div>
 </div>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <form class="form-horizontal" action="problem/save" method="post">
   <div class="control-group problem <#if titleMsg??>error</#if>">
     <label class="control-label" for="inputTitle">Title</label>
@@ -72,4 +72,7 @@
     </div>
   </div>
 </form>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

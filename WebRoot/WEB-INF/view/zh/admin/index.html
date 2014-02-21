@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
 
 <table id="system-info" class="table table-hover table-condensed">
   <thead>
@@ -50,4 +50,7 @@
   </tbody>
 </table>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

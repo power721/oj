@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <div class="page-header">
   <h3>
     <#if userName?? && userName==user.name> 
@@ -80,4 +80,7 @@
     </div>
   </div>
 </div>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

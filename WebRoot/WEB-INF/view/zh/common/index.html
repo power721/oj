@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <table border=0 align=center>
   <tr>
     <td>
@@ -71,4 +71,7 @@ OJ使用的相关帮助请参见
 读写创建文件及调用其它程序等操作将会被系统忽略。
 <br>
 <br>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

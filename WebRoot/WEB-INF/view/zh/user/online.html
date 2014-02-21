@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <div class="text-center">
   <h2>${userList?size} User(s) Online</h2>
   <span class="badge badge-info">${loginUserNum!0} logined and ${userList?size-loginUserNum} guests</span>
@@ -55,4 +55,7 @@
     });
     </script>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

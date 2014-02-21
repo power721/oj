@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <script src='http://git.oschina.net/power/oj/widget_preview'></script>
 <ul>
   <li>Dec 22, 2012
@@ -62,4 +62,7 @@
     </ul>
   </li>
 </ul>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

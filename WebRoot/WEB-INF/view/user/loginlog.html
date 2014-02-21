@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 
 <div class="pagination pagination-centered">
   <#include "../common/_paginate.html" />
@@ -59,4 +59,7 @@
     });
     </script>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

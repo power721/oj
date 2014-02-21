@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
 <script src="assets/Highcharts/js/highcharts.js"></script>
 <script src="assets/Highcharts/js/modules/exporting.js"></script>
 <script type="text/javascript">
@@ -178,4 +178,7 @@
     });
     </script>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

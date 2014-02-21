@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -92,4 +92,7 @@
 </div>
 <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

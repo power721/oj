@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -153,4 +153,7 @@
 
     startServer();
   </script>
-</#if> </@layout>
+</#if></@override>
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

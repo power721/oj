@@ -1,5 +1,5 @@
-<#include "../common/_layout.html" />
-<@layout>
+
+<@override name="content">
 
 <script type="text/javascript">
     $(document).ready(function() {
@@ -256,4 +256,7 @@
 
 <!--</div>
 </div>-->
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

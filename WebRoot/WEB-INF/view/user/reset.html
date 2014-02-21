@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <div id="login-box" class="row">
   <div class="span5 offset3">
     <form class="form-horizontal" action="user/resetPassword" method="post">
@@ -35,4 +35,7 @@
     </form>
   </div>
 </div>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
 
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
@@ -70,4 +70,7 @@
     });
     </script>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

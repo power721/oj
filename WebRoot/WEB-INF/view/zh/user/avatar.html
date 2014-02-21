@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 
 <script type="text/javascript" src="assets/jquery.imgareaselect/scripts/jquery.imgareaselect.pack.js"></script>
 <link href="assets/jquery.imgareaselect/css/imgareaselect-animated.css" rel="Stylesheet" type="text/css" />
@@ -88,4 +88,7 @@
 </form>
 </div>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

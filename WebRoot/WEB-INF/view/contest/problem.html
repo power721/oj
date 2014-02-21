@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
 
 <div class="row">
   <div class="span6 offset4 text-center">
@@ -212,4 +212,7 @@
   <a href="#" class="btn btn-info">Discuss</a>
 </div>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

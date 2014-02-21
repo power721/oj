@@ -1,5 +1,5 @@
-<#include "../common/_layout.html" />
-<@layout> 
+
+<@override name="content"> 
 <#if msg??>
 <div class="row">
   <div class="span5 offset4">
@@ -92,4 +92,7 @@
   });
 </script>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

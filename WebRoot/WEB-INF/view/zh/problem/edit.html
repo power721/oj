@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <form class="form-horizontal" id="editPorblemForm" action="problem/update" method="post">
   <input type="hidden" name="problem.pid" value="${problem.pid!}">
   <div class="control-group problem">
@@ -112,4 +112,7 @@
           }
         });
 </script>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

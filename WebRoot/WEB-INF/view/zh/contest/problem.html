@@ -1,4 +1,4 @@
-<#include "_layout.html" /> <@layout>
+<@override name="content">
 
 <div class="row">
   <div class="span6 offset4 text-center">
@@ -204,4 +204,7 @@
     data-target="#submitModal"</#if>>Submit</a>] </#if> [<a href="problem/status?cid=${cid!}&id=${problem.id!}">Status</a>] [<a href="#">Discuss</a>]
 </div>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

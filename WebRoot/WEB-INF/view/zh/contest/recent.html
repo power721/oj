@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 
 <link href="assets/kendo-ui/styles/kendo.common.min.css" rel="stylesheet" />
 <link href="assets/kendo-ui/styles/kendo.default.min.css" rel="stylesheet" />
@@ -95,4 +95,7 @@
   });
 </script>
 
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

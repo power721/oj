@@ -1,4 +1,3 @@
-<#macro layout>
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -15,9 +14,7 @@
 <link href="assets/css/oj.css" type="text/css" rel="stylesheet">
 <link href="assets/css/oj-icons.css" type="text/css" rel="stylesheet">
 
-<#if extCss??> <#list extCss as css>
-<link href="${css}" type="text/css" rel="stylesheet">
-</#list> </#if>
+<@block name="styles"></@block>
 
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
@@ -117,7 +114,8 @@
             </div>
           </div>
         </div>
-        </#if> <#nested>
+        </#if>
+        <@block name="content"></@block>
       </div>
     </div>
     <!-- row -->
@@ -204,11 +202,7 @@
   <!-- Placed at the end of the document so the pages load faster -->
 
   <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
-
-  <#if extJs??> <#list extJs as js>
-  <script type="text/javascript" src="${js}"></script>
-  </#list> </#if>
+  <@block name="scripts"></@block>
 
 </body>
 </html>
-</#macro>

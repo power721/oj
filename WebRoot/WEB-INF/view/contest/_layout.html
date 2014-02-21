@@ -1,4 +1,3 @@
-<#macro layout>
 <!DOCTYPE HTML>
 <html lang="en" class="no-js">
 <head>
@@ -9,41 +8,31 @@
 <base href="${baseUrl!}/" />
 <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
 
-<!-- styles -->
+<!-- ============================== styles ============================== -->
 <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="assets/css/oj.css" type="text/css" rel="stylesheet">
 <link href="assets/css/oj-icons.css" type="text/css" rel="stylesheet">
 
-<#if extCss??> <#list extCss as css>
-<link href="${css}" type="text/css" rel="stylesheet">
-</#list> </#if>
-
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-    <script src="assets/js/html5shiv.js"></script>
-  <![endif]-->
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="assets/js/oj.js"></script>
+<@block name="styles"></@block>
 
 <#if gaAccount??>
 <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '${gaAccount}']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '${gaAccount}']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 </#if>
 </head>
 
 <body>
 
-  <!-- Navbar
-    ================================================== -->
+  <!-- ============================== Navbar ============================== -->
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
@@ -101,8 +90,7 @@
     </div>
   </header>
 
-  <!-- main content
-    ================================================== -->
+  <!-- ======================= main content ======================= -->
   <div class="container">
     <div class="row">
       <div class="span12">
@@ -117,7 +105,8 @@
             </div>
           </div>
         </div>
-        </#if> <#nested>
+        </#if> 
+        <@block name="content"></@block>
       </div>
     </div>
     <!-- row -->
@@ -180,8 +169,7 @@
   </div>
   </#if>
 
-  <!-- Footer
-    ================================================== -->
+  <!-- ========================= Footer ========================= -->
   <footer class="footer">
     <div class="container">
       <div class="copyright">
@@ -199,16 +187,17 @@
     </div>
   </footer>
 
-  <!-- javascript
-    ================================================== -->
+  <!-- ======================= javascript ======================= -->
   <!-- Placed at the end of the document so the pages load faster -->
-
-  <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
-
-  <#if extJs??> <#list extJs as js>
-  <script type="text/javascript" src="${js}"></script>
-  </#list> </#if>
+	<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="assets/js/oj.js"></script>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+  <![endif]-->
+	
+  <@block name="scripts"></@block>
 
 </body>
 </html>
-</#macro>
