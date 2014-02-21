@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" class="no-js">
 <head>
+<meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
@@ -8,49 +9,47 @@
 <base href="${baseUrl!}/" />
 <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!} Admin</title>
 
-<!-- styles -->
+<!-- ============================== styles ============================== -->
 <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="assets/css/admin.css" type="text/css" rel="stylesheet">
-
-<link rel="stylesheet" type="text/css" href="assets/font-awesome/css/font-awesome.min.css">
+<link href="assets/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet">
 <!--[if lt IE 8]>
-  <link rel="stylesheet" type="text/css" href="assets/font-awesome/css/font-awesome-ie7.min.css">
+  <link href="assets/font-awesome/css/font-awesome-ie7.min.css" type="text/css" rel="stylesheet">
 <![endif]-->
 
 <@block name="styles"></@block>
 
 <#if gaAccount??>
 <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '${gaAccount}']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '${gaAccount}']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
 </#if>
 </head>
 
 <body>
-
-  <!-- Navbar
-    ================================================== -->
+  <!-- ============================== Navbar ============================== -->
   <div class="navbar">
     <div class="navbar-inner">
       <ul class="nav pull-right">
         <li id="fat-menu" class="dropdown">
           <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"> 
             <i class="icon-user"> </i> ${userName} <i class="icon-caret-down"> </i>
-        </a>
+          </a>
           <ul class="dropdown-menu">
             <li><a tabindex="-1" href="user" target="_blank"> 用户中心 </a></li>
             <li class="divider"></li>
             <li class="divider visible-phone"></li>
             <li><a tabindex="-1" href="logout"> 退出 </a></li>
-          </ul></li>
+          </ul>
+        </li>
       </ul>
       <a class="brand" href="./"> 
         <span class="first"> 
@@ -85,8 +84,11 @@
     </ul>
     <a class="nav-header collapsed" data-toggle="collapse" href="#contest-menu"> 
       <i class="icon-trophy"> </i> 比赛管理 
-      <span class="label label-important"> +1 </span>
-      <!--<i class="icon-chevron-up"> </i>-->
+      <#if currentContest??>
+      <span class="label label-important"> +${currentContest} </span>
+      <#else>
+      <i class="icon-chevron-up"> </i>
+      </#if>
     </a>
     <ul id="contest-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin/contest">in</#if>">
       <li><a href="admin/contest"> 比赛列表 </a></li>
@@ -114,44 +116,48 @@
     </ul>
   </div>
   
-  <!-- main content
-    ================================================== -->
+  <!-- ======================= main content ======================= -->
   <div class="content">
     <@block name="content"></@block>
   </div>
 
-      <!-- Footer
-    ================================================== -->
-      <footer class="footer">
-        <div class="container">
-          <div class="#copyright">
-            ©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="balnk">PowerOJ Rev.20131229</a>
-          </div>
-          <ul class="footer-links">
-            <li><a href="http://git.oschina.net/power/oj" target="balnk">Source</a></li>
-            <li class="muted">&middot;</li>
-            <li><a href="faq">F.A.Q</a></li>
-            <li class="muted">&middot;</li>
-            <li><a href="contact">Contact</a></li>
-            <li class="muted">&middot;</li>
-            <li><a href="changelog">Changelog</a></li>
-          </ul>
-        </div>
-      </footer>
+  <!-- ========================= Footer ========================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="#copyright">
+        ©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="_balnk"><#include '/version.ftl'/></a>
+      </div>
+      <ul class="footer-links">
+        <li><a href="http://git.oschina.net/power/oj" target="_balnk">Source</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="contact">Contact</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="changelog">Changelog</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="faq">F.A.Q</a></li>
+      </ul>
+    </div>
+  </footer>
 
-      <!-- javascript
-    ================================================== -->
-      <!-- Placed at the end of the document so the pages load faster -->
+  <!-- ======================= javascript ======================= -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/js/oj.js"></script>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+  <![endif]-->
   
-      <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
-      <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
-      <script type="text/javascript" src="assets/js/oj.js"></script>
-      <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-      <!--[if lt IE 9]>
-          <script src="assets/js/html5shiv.js"></script>
-      <![endif]-->
-      
-      <@block name="scripts"></@block>
-      
+  <@block name="scripts"></@block>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.nav-list a').each(function() {
+        if ($(this).attr('href') == '${actionKey!}') {
+          $(this).addClass('x');
+        }
+      });
+    });
+  </script>
 </body>
 </html>

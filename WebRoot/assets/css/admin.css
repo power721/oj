@@ -534,6 +534,10 @@ a.block-heading:hover,.block-heading a:hover {
 	background: #262626;
 }
 
+.sidebar-nav .nav-list>li>a.x {
+	color: #f0920a;
+}
+	
 .sidebar-nav .nav-list>li>a {
 	color: #ddd;
 	text-shadow: none;
