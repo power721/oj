@@ -519,6 +519,11 @@ public class ContestService
     return true;
   }
 
+  public boolean isContestPending(Integer cid)
+  {
+    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND start_time>UNIX_TIMESTAMP() LIMIT 1", cid) != null;
+  }
+
   public boolean isContestFinished(Integer cid)
   {
     return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND end_time<UNIX_TIMESTAMP() LIMIT 1", cid) != null;

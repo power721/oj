@@ -18,7 +18,6 @@ public class ContestPasswordInterceptor implements Interceptor
   @Override
   public void intercept(ActionInvocation ai)
   {
-    
     Controller controller = ai.getController();
     if (ShiroKit.hasPermission("contest:view:password"))
     {

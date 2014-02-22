@@ -11,6 +11,7 @@ import jodd.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
@@ -26,12 +27,14 @@ import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
 
+@Before({ContestInterceptor.class, ContestPasswordInterceptor.class})
 public class ContestController extends OjController
 {
   private static final SolutionService solutionService = SolutionService.me();
   private static final UserService userService = UserService.me();
   private static final ContestService contestService = ContestService.me();
 
+  @ClearInterceptor
   public void index()
   {
     int pageNumber = getParaToInt(0, 1);
@@ -45,7 +48,6 @@ public class ContestController extends OjController
     setTitle(getText("contest.index.title"));
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void show()
   {
     Integer cid = getParaToInt(0);
@@ -78,7 +80,6 @@ public class ContestController extends OjController
     setTitle(new StringBuilder(2).append(getText("contest.show.title")).append(cid).toString());
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void problem()
   {
     Integer cid = getParaToInt(0);
@@ -103,7 +104,6 @@ public class ContestController extends OjController
     setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void submit()
   {
     Integer cid = getParaToInt(0);
@@ -138,7 +138,6 @@ public class ContestController extends OjController
       render("submit.html");
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void rank()
   {
     Integer cid = getParaToInt(0);
@@ -154,7 +153,6 @@ public class ContestController extends OjController
     setTitle(new StringBuilder(2).append(getText("contest.rank.title")).append(cid).toString());
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void status()
   {
     Integer cid = getParaToInt(0);
@@ -208,7 +206,6 @@ public class ContestController extends OjController
     setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"),cid)).toString());
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void problem_status()
   {
     Integer cid = getParaToInt("cid");
@@ -255,7 +252,6 @@ public class ContestController extends OjController
       render("problem_status.html");
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void statistics()
   {
     Integer cid = getParaToInt(0);
@@ -277,6 +273,7 @@ public class ContestController extends OjController
     setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());
   }
 
+  @ClearInterceptor
   public void recent_contest()
   {
     String json = getSessionAttr("contests.json");
@@ -290,12 +287,14 @@ public class ContestController extends OjController
     renderJson(json);
   }
 
+  @ClearInterceptor
   public void recent()
   {
     setTitle(getText("contest.recent.title"));
   }
 
-  @Before(POST.class)
+  @ClearInterceptor
+  @Before({ContestInterceptor.class, POST.class})
   public void password()
   {
     Integer cid = getParaToInt("cid");
