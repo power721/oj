@@ -329,13 +329,6 @@ public class UserController extends OjController
     redirect("/login", msg);
   }
   
-  @ActionKey("/bind")
-  @RequiresGuest
-  public void bindUser()
-  {
-    
-  }
-
   @Before(POST.class)
   @RequiresGuest
   public void bind()

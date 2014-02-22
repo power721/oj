@@ -64,7 +64,7 @@ public class QQLoginApiController extends OjController
         setAttr("type", type);
         setAttr("nickname", nickname);
         setAttr("avatar", avatar);
-        redirect("/bind");
+        redirect("/api/user/bind");
         return;
       }
       

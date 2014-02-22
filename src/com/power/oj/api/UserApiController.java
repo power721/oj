@@ -2,6 +2,8 @@ package com.power.oj.api;
 
 import java.io.File;
 
+import org.apache.shiro.authz.annotation.RequiresGuest;
+
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 
@@ -35,6 +37,13 @@ public class UserApiController extends OjController
     setAttr(OjConstants.USER, userModel);
     
     render("ajax/splash.html");
+  }
+
+  @ClearInterceptor
+  @RequiresGuest
+  public void bind()
+  {
+    render("bind.html");
   }
 
   public void profile()
