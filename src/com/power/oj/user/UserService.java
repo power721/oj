@@ -82,10 +82,10 @@ public class UserService
     return true;
   }
   
-  public boolean login(UserModel userModel, boolean rememberMe)
+  public boolean autoLogin(UserModel userModel, boolean rememberMe)
   {
     String name = userModel.getStr("name");
-    String password = userModel.getStr("password");
+    String password = userModel.getStr("pass");
     Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);

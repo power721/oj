@@ -7,6 +7,8 @@ import org.apache.shiro.authz.annotation.RequiresGuest;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.FlashMessage;
+import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
@@ -75,13 +77,14 @@ public class QQLoginApiController extends OjController
       if (status)
       {
         UserModel userModel = UserModel.dao.findById(webLogin.getInt(WebLoginModel.UID));
-        userService.login(userModel, false);
+        userService.autoLogin(userModel, false);
       }
     } catch (Exception e)
     {
       if (OjConfig.getDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
+      setFlashMessage(new FlashMessage(getText("user.signin.error"), MessageType.ERROR, getText("message.error.title")));
     }
     redirect(SessionService.me().getLastAccessURL());
   }
