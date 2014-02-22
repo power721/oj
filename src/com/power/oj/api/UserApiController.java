@@ -12,6 +12,7 @@ import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.upload.UploadFile;
+import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -40,12 +41,37 @@ public class UserApiController extends OjController
   }
 
   @ClearInterceptor
+  @Before(POST.class)
   @RequiresGuest
   public void bind()
   {
-    render("bind.html");
+    String email = getPara("email");
+    Integer webId = getParaToInt("id");
+    WebLoginModel webLogin = WebLoginModel.dao.findById(webId);
+    
+    if (webLogin == null)
+    {
+      renderJson("status", "error");
+      return;
+    }
+    
+    UserModel userModel = userService.getUserByEmail(email);
+    if (userModel == null)
+    {
+      userModel = userService.signup(email, webLogin);
+    }
+    
+    webLogin.set(WebLoginModel.UID, userModel.getUid());
+    webLogin.set(WebLoginModel.STATUS, true); // change after email verified?
+    if (webLogin.update())
+    {
+      // TODO send verify mail
+      renderJson("status", "ok");
+      return;
+    }
+    renderJson("status", "error");
   }
-
+  
   public void profile()
   {
     UserModel userModel = getAttr(OjConstants.USER);

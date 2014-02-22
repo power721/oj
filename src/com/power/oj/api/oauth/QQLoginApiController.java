@@ -57,13 +57,13 @@ public class QQLoginApiController extends OjController
       {
         if (null == webLogin.getInt(WebLoginModel.UID))
         {
-          setAttr("nouser", true);
+          setSessionAttr("nouser", true);
         }
         
-        setAttr("id", webLogin.getInt(WebLoginModel.ID));
-        setAttr("type", type);
-        setAttr("nickname", nickname);
-        setAttr("avatar", avatar);
+        setSessionAttr("id", webLogin.getInt(WebLoginModel.ID));
+        setSessionAttr("type", type);
+        setSessionAttr("nickname", nickname);
+        setSessionAttr("avatar", avatar);
         redirect("/api/user/bind");
         return;
       }
