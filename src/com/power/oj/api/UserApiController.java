@@ -1,7 +1,6 @@
 package com.power.oj.api;
 
 import java.io.File;
-
 import org.apache.shiro.authz.annotation.RequiresGuest;
 
 import jodd.util.BCrypt;
@@ -56,16 +55,26 @@ public class UserApiController extends OjController
     }
     
     UserModel userModel = userService.getUserByEmail(email);
+    // TODO data from old OJ contains duplicate emails
     if (userModel == null)
     {
-      userModel = userService.signup(email, webLogin);
+      try
+      {
+        userModel = userService.signup(email, webLogin);
+      } catch (Exception e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        renderJson("status", "mail_error");
+        return;
+      }
     }
     
     webLogin.set(WebLoginModel.UID, userModel.getUid());
     webLogin.set(WebLoginModel.STATUS, true); // change after email verified?
     if (webLogin.update())
     {
-      // TODO send verify mail
       renderJson("status", "ok");
       return;
     }
@@ -189,7 +198,7 @@ public class UserApiController extends OjController
         return;
       }
       
-      userModel.set("email", newEmail).set("email_verified", 0);
+      userModel.set("email", newEmail).set("email_verified", false);
       if (userModel.update())
       {
         renderJson("{\"success\":true}");

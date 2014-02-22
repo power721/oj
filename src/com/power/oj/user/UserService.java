@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -30,6 +31,7 @@ import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.shiro.ShiroKit;
@@ -179,17 +181,19 @@ public class UserService
    * user signup
    * @param userModel
    * @return
+   * @throws Exception 
    */
-  public boolean signup(UserModel userModel)
+  public boolean signup(UserModel userModel) throws Exception
   {
     String name = HtmlEncoder.text(userModel.getStr("name"));
     String password = BCrypt.hashpw(userModel.getStr("pass"), BCrypt.gensalt());
     String email = userModel.getStr("email");
+    String token = UUID.randomUUID().toString();
     
     long ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
     newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email).set("ctime", ctime);
-    //newUser.set("atime", ctime).set("mtime", ctime);
+    newUser.set("token", token).set("mtime", OjConfig.timeStamp);
     
     if (newUser.save())
     {
@@ -200,23 +204,27 @@ public class UserService
       userExt.set("uid", uid).save();
       //password = userModel.getStr("pass");
       //return login(name, password, false);
+      
+      OjService.me().sendVerifyEmail(name, email, token);
       return true;
     }
     
     return false;
   }
   
-  public UserModel signup(String email, WebLoginModel webLogin)
+  public UserModel signup(String email, WebLoginModel webLogin) throws Exception
   {
     String name = email;
     String pass = Tool.randomPassword(9);
     String password = BCrypt.hashpw(pass, BCrypt.gensalt());
     String avatar = webLogin.getStr("avatar");
+    String token = UUID.randomUUID().toString();
     long ctime = OjConfig.timeStamp;
     
     UserModel newUser = new UserModel();
     newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email);
     newUser.set("nick", webLogin.get("nick")).set("avatar", avatar).set("ctime", ctime);
+    newUser.set("token", token).set("mtime", OjConfig.timeStamp);
     
     if (newUser.save())
     {
@@ -226,6 +234,8 @@ public class UserService
       UserExtModel userExt = new UserExtModel();
       userExt.set("uid", uid).save();
     }
+    newUser.set("password", pass);
+    OjService.me().sendVerifyEmail(name, email, token);
     
     return newUser;
   }
@@ -356,7 +366,26 @@ public class UserService
     
     return false;
   }
-
+  
+  public boolean verifyEmail(String name, String token)
+  {
+    UserModel userModel = dao.getUserByName(name);
+    
+    if (userModel != null && token != null && token.equals(userModel.getStr("token")) && !userModel.getBoolean("email_verified"))
+    {
+      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.VERIFY_EMAIL_EXPIRES_TIME)
+      {
+        return userModel.set("token", null).set("email_verified", true).update();
+      }
+      else
+      {
+        userModel.set("token", null).update();
+      }
+    }
+    
+    return false;
+  }
+  
   /**
    * upload and resize user avatar.
    * @param file file of the avatar.

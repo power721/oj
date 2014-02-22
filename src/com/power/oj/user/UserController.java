@@ -267,6 +267,11 @@ public class UserController extends OjController
   @RequiresGuest
   public void forget()
   {
+    if (!OjService.me().checkEmailConf())
+    {
+      FlashMessage msg = new FlashMessage(getText("conf.email.error"), MessageType.ERROR, getText("message.error.title"));
+      redirect(sessionService.getLastAccessURL(), msg);
+    }
     setTitle(getText("user.forget.title"));
   }
   
@@ -327,6 +332,20 @@ public class UserController extends OjController
     FlashMessage msg = new FlashMessage(getText("user.resetPassword.success"));
     redirect("/login", msg);
   }
+  
+  public void verify()
+  {
+    String name = getPara("name");
+    String token = getPara("token");
+    
+    if (userService.verifyEmail(name, token))
+    {
+      setFlashMessage(new FlashMessage(getText("user.verify.success")));
+      redirect("/login");
+    }
+    
+    renderError(404);
+  }
 
   @RequiresGuest
   public void bind()
@@ -346,15 +365,24 @@ public class UserController extends OjController
   public void save()
   {
     UserModel userModel = getModel(UserModel.class, "user");
-
-    if (userService.signup(userModel))
+    
+    try
     {
-      setCookie("oj_username", userModel.getStr("name"), OjConstants.COOKIE_AGE);
-      setFlashMessage(new FlashMessage(getText("user.save.success")));
-    }
-    else
+      if (userService.signup(userModel))
+      {
+        setCookie("oj_username", userModel.getStr("name"), OjConstants.COOKIE_AGE);
+        setFlashMessage(new FlashMessage(getText("user.save.success")));
+      }
+      else
+      {
+        // TODO
+      }
+    } catch (Exception e)
     {
-      // TODO
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+      setFlashMessage(new FlashMessage(getText("user.save.error")));
     }
 
     redirect("/login");

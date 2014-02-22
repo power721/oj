@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
+import com.jfinal.core.Controller;
+import com.power.oj.core.OjConstants;
 
 public class SessionInterceptor implements Interceptor
 {
@@ -13,14 +15,23 @@ public class SessionInterceptor implements Interceptor
   @Override
   public void intercept(ActionInvocation ai)
   {
-    ai.invoke();
-    HttpSession session = ai.getController().getSession();
+    Controller controller = ai.getController();
+    HttpSession session = controller.getSession();
     Enumeration<String> sessionKeys = session.getAttributeNames();
     while (sessionKeys.hasMoreElements())
     {
       String key = sessionKeys.nextElement();
       Object value = session.getAttribute(key);
-      ai.getController().setAttr(key, value);
+      controller.setAttr(key, value);
     }
+
+    if (controller.getSessionAttr(OjConstants.MSG) != null)
+    {
+      controller.removeSessionAttr(OjConstants.MSG);
+      controller.removeSessionAttr(OjConstants.MSG_TYPE);
+      controller.removeSessionAttr(OjConstants.MSG_TITLE);
+    }
+    
+    ai.invoke();
   }
 }

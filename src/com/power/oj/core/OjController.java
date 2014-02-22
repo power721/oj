@@ -1,5 +1,9 @@
 package com.power.oj.core;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.Cookie;
 
 import com.jfinal.core.Controller;
@@ -8,6 +12,7 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.interceptor.FlashMessageInterceptor;
 import com.power.oj.user.UserInterceptor;
 import com.power.oj.user.UserModel;
+import com.power.oj.util.freemarker.FreemarkerKit;
 
 /**
  * Base Controller provides some common methods.
@@ -49,6 +54,25 @@ public class OjController extends Controller
   {
     setFlashMessage(msg);
     redirect(url, withQueryString);
+  }
+
+  /**
+   * 渲染视图为字符串
+   * 
+   * @param view
+   *          视图模版
+   * @return 视图渲染后的字符串
+   */
+  protected String renderTpl(String view)
+  {
+    final Enumeration<String> attrs = getAttrNames();
+    final Map<String, Object> root = new HashMap<String, Object>();
+    while (attrs.hasMoreElements())
+    {
+      String attrName = attrs.nextElement();
+      root.put(attrName, getAttr(attrName));
+    }
+    return FreemarkerKit.processString(view, root);
   }
 
   /**
