@@ -1,6 +1,7 @@
 package com.power.oj.api;
 
 import java.io.File;
+
 import org.apache.shiro.authz.annotation.RequiresGuest;
 
 import jodd.util.BCrypt;
@@ -198,14 +199,22 @@ public class UserApiController extends OjController
         return;
       }
       
-      userModel.set("email", newEmail).set("email_verified", false);
-      if (userModel.update())
+      try
       {
-        renderJson("{\"success\":true}");
-      }
-      else
+        if (userService.updateEmail(userModel, newEmail))
+        {
+          renderJson("{\"success\":true}");
+        }
+        else
+        {
+          renderJson("{\"success\":false, \"result\":\"Update email failed.\"}");
+        }
+      } catch (Exception e)
       {
-        renderJson("{\"success\":false, \"result\":\"Update email failed.\"}");
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        renderJson("{\"success\":false, \"result\":\"Send verify email failed.\"}");
       }
     }
     else

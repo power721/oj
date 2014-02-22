@@ -18,7 +18,7 @@ import com.power.oj.core.service.SessionService;
 public class AccessLogInterceptor implements Interceptor
 {
   private String skipActions[] =
-  { "/problem/userResult", "/login", "/logout", "/signup", "/captcha", "/code", "/user/bind", "/user/info", "/user/archive", "/user/forget", "/user/reset", "/user/recover" };
+  { "/problem/userResult", "/login", "/logout", "/signup", "/captcha", "/code", "/user/bind", "/user/info", "/user/archive", "/user/forget", "/user/reset", "/user/recover", "/user/verify" };
 
   @Override
   public void intercept(ActionInvocation ai)

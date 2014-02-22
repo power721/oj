@@ -293,6 +293,18 @@ public class UserService
     loginLog.set("name", name).set("ip", ip).set("ctime", OjConfig.timeStamp).set("success", success);
     return Db.save("loginlog", loginLog);
   }
+  
+  public boolean updateEmail(UserModel userModel, String email) throws Exception
+  {
+    String name = userModel.getStr("name");
+    String token = UUID.randomUUID().toString();
+    
+    userModel.set("email", email).set("email_verified", false);
+    userModel.set("token", token).set("mtime", OjConfig.timeStamp);
+    OjService.me().sendVerifyEmail(name, email, token);
+    
+    return userModel.update();
+  }
 
   /**
    * Build user statistics.
@@ -375,7 +387,9 @@ public class UserService
     {
       if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.VERIFY_EMAIL_EXPIRES_TIME)
       {
-        return userModel.set("token", null).set("email_verified", true).update();
+        log.info(String.valueOf(OjConfig.timeStamp - userModel.getInt("mtime")));
+        userModel.set("token", null).set("email_verified", true).update();
+        return true;
       }
       else
       {

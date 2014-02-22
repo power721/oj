@@ -340,8 +340,10 @@ public class UserController extends OjController
     
     if (userService.verifyEmail(name, token))
     {
+      String redirectUrl = ShiroKit.isUser() ? sessionService.getLastAccessURL() : "/login";
       setFlashMessage(new FlashMessage(getText("user.verify.success")));
-      redirect("/login");
+      redirect(redirectUrl);
+      return;
     }
     
     renderError(404);

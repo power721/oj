@@ -2,6 +2,8 @@ package com.power.oj.api.oauth;
 
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.RequiresGuest;
+
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
@@ -14,6 +16,7 @@ public class QQLoginApiController extends OjController
   private static final Logger log = Logger.getLogger(QQLoginApiController.class);
   private static final UserService userService = UserService.me();
 
+  @RequiresGuest
   public void index()
   {
     try
@@ -29,6 +32,7 @@ public class QQLoginApiController extends OjController
     }
   }
 
+  @RequiresGuest
   public void callback()
   {
     try
