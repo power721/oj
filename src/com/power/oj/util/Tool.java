@@ -2,6 +2,7 @@ package com.power.oj.util;
 
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +29,10 @@ import com.power.oj.core.OjConfig;
 public class Tool
 {
   private final static Logger log = Logger.getLogger(Tool.class);
+  
+  private static final char[] CHAR_STR =
+  { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
   /**
    * 
@@ -147,6 +152,16 @@ public class Tool
     cal.set(Calendar.MINUTE, 0);
     cal.set(Calendar.MILLISECOND, 0);
     return (int) (cal.getTimeInMillis() / 1000);
+  }
+
+  public static String randomPassword(int count)
+  {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < count; i++)
+    {
+      sb.append(CHAR_STR[new Random().nextInt(36)]);
+    }
+    return sb.toString();
   }
 
 }

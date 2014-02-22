@@ -15,7 +15,7 @@ public class WebLoginModel extends Model<WebLoginModel>
   public static final String TABLE_NAME = "wwb_login";
   public static final String ID = "id";
   public static final String OPENID = "open_id";
-  public static final String UID = "UID";
+  public static final String UID = "uid";
   public static final String CTIME = "ctime";
   public static final String NICK = "nick";
   public static final String AVATAR = "avatar";

@@ -1,0 +1,32 @@
+<@override name="content">
+<div id="bind-box" class="row">
+  <div class="span5 offset3">
+    <div class="row-fluid">
+      <div class="dialog">
+        <div class="block">
+          <p class="block-heading">
+            <img src="${avatar!}">
+            您好：${nickname!}，来自${type!}的朋友！
+          </p>
+          <div class="block-body">
+            <form action="/user/bind" method="post">
+              <label>
+                <#if nouser??>请绑定您的邮箱帐号：<#else>请使用邮箱激活帐号：</#if>
+              </label>
+              <input class="span12" name="email" value="" original-title="推荐使用网易或QQ邮箱，&lt;br /&gt;部分邮箱可能收不到邮件！"
+              required="required" type="email">
+              <input name="id" value="${id!1}" required="required" type="hidden">
+              <input class="btn btn-primary pull-right" value="确认" type="submit">
+              <div class="clearfix">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

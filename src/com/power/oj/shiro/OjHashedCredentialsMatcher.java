@@ -15,7 +15,14 @@ public class OjHashedCredentialsMatcher extends HashedCredentialsMatcher
     if (authenticationToken instanceof UsernamePasswordToken)
     {
       UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-      return BCrypt.checkpw(new String(token.getPassword()), info.getCredentials().toString());
+      String password = new String(token.getPassword());
+      String hashedPassword = info.getCredentials().toString();
+      
+      if (password == hashedPassword)
+      {
+        return true;
+      }
+      return BCrypt.checkpw(password, hashedPassword);
     }
 
     return false;

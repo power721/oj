@@ -26,6 +26,7 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -57,6 +58,32 @@ public class UserService
    */
   public boolean login(String name, String password, boolean rememberMe)
   {
+    Subject currentUser = ShiroKit.getSubject();
+    UsernamePasswordToken token = new UsernamePasswordToken(name, password);
+    token.setRememberMe(rememberMe);
+
+    try
+    {
+      currentUser.login(token);
+
+      updateLogin(name, true);
+      SessionService.me().updateLogin();
+    } catch (AuthenticationException e)
+    {
+      updateLogin(name, false);
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.warn("User signin failed.");
+      return false;
+    }
+
+    return true;
+  }
+  
+  public boolean login(UserModel userModel, boolean rememberMe)
+  {
+    String name = userModel.getStr("name");
+    String password = userModel.getStr("password");
     Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
@@ -177,6 +204,30 @@ public class UserService
     }
     
     return false;
+  }
+  
+  public UserModel signup(String email, WebLoginModel webLogin)
+  {
+    String name = email;
+    String pass = Tool.randomPassword(9);
+    String password = BCrypt.hashpw(pass, BCrypt.gensalt());
+    String avatar = webLogin.getStr("avatar");
+    long ctime = OjConfig.timeStamp;
+    
+    UserModel newUser = new UserModel();
+    newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email);
+    newUser.set("nick", webLogin.get("nick")).set("avatar", avatar).set("ctime", ctime);
+    
+    if (newUser.save())
+    {
+      int uid = newUser.getUid();
+      Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
+      
+      UserExtModel userExt = new UserExtModel();
+      userExt.set("uid", uid).save();
+    }
+    
+    return newUser;
   }
   
   /**
@@ -565,6 +616,11 @@ public class UserService
       return userModel.getUid();
     }
     return null;
+  }
+
+  public UserModel getUserByEmail(String email)
+  {
+    return dao.getUserByEmail(email);
   }
 
   public UserModel getUserByNameAndEmail(String name, String email)

@@ -117,11 +117,11 @@ public class AppConfig extends JFinalConfig
     me.add("/solution", SolutionController.class);
     me.add("/user", UserController.class);
     me.add("/api/admin", AdminApiController.class, "/admin/");
-    me.add("/api/oauth/qq", QQLoginApiController.class, "/admin/");
     me.add("/api/mail", MailApiController.class, "/mail/");
     me.add("/api/problem", ProblemApiController.class, "/problem/");
     me.add("/api/user", UserApiController.class, "/user/");
     me.add("/api/friend", FriendApiController.class, "/user/");
+    me.add("/api/oauth/qq", QQLoginApiController.class, "/user/");
 
     log.debug("configRoute finished.");
   }
