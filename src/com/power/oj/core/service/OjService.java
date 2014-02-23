@@ -60,18 +60,25 @@ public class OjService
     return true;
   }
 
-  public boolean sendVerifyEmail(String name, String email, String token, String password) throws MailException
+  public boolean sendVerifyEmail(String name, String email, String token) throws MailException
   {
-    String adminEmail = OjConfig.get("adminEmail");
-    
     Map<String, Object> paras = new HashMap<String, Object>();
     paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
     paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
     paras.put("name", name);
     paras.put("token", token);
-    paras.put("password", password);
     paras.put("ctime", OjConfig.timeStamp);
     paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+
+    sendVerifyEmail(name, email, paras);
+    
+    log.info("Account recovery email send to user " + name);
+    return true;
+  }
+
+  public boolean sendVerifyEmail(String name, String email, Map<String, Object> paras) throws MailException
+  {
+    String adminEmail = OjConfig.get("adminEmail");
     
     String html = FreemarkerKit.processString("tpl/verifyEmail.html", paras);
     EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);

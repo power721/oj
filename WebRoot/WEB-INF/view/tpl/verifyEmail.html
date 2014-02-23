@@ -9,7 +9,7 @@
       </h2>
     </div>
     <div style="padding: 30px 40px 40px;">
-      尊敬的${name!用户}：<br>
+      尊敬的<#if name??>${name}<#else>${nick}</#if>：<br>
           您好，感谢您使用 ${siteTitle!PowerOJ}
       <br>
       <br>

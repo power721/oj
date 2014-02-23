@@ -7,7 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -205,7 +207,7 @@ public class UserService
       //password = userModel.getStr("pass");
       //return login(name, password, false);
       
-      OjService.me().sendVerifyEmail(name, email, token, null);
+      OjService.me().sendVerifyEmail(name, email, token);
       return true;
     }
     
@@ -236,7 +238,16 @@ public class UserService
       UserExtModel userExt = new UserExtModel();
       userExt.set("uid", uid).save();
     }
-    OjService.me().sendVerifyEmail(name, email, token, pass);
+    Map<String, Object> paras = new HashMap<String, Object>();
+    paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+    paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+    paras.put("nick", webLogin.get("nick"));
+    paras.put("token", token);
+    paras.put("password", password);
+    paras.put("ctime", OjConfig.timeStamp);
+    paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+    
+    OjService.me().sendVerifyEmail(name, email, paras);
     
     return newUser;
   }
@@ -302,7 +313,7 @@ public class UserService
     
     userModel.set("email", email).set("email_verified", false);
     userModel.set("token", token).set("mtime", OjConfig.timeStamp);
-    OjService.me().sendVerifyEmail(name, email, token, null);
+    OjService.me().sendVerifyEmail(name, email, token);
     
     return userModel.update();
   }
