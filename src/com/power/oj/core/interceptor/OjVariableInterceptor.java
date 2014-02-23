@@ -21,6 +21,7 @@ public class OjVariableInterceptor implements Interceptor
     controller.setAttr("cdn", OjConfig.get("cdn"));
     controller.setAttr("icpRecord", OjConfig.get("icp_record"));
     controller.setAttr("version", OjConfig.get("version", "20140221"));
+    controller.setAttr("oj_style", controller.getCookie("oj_style", "original"));
   }
 
 }

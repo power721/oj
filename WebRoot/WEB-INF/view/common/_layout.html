@@ -11,8 +11,9 @@
 <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
 
 <!-- ============================== styles ============================== -->
-<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/bootstrap/theme/bootstrap.${oj_style}.min.css" rel="stylesheet">
 <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="assets/select2-3.4.5/select2.css" rel="stylesheet">
 <link href="assets/css/oj.css" type="text/css" rel="stylesheet">
 
 <@block name="styles"></@block>
@@ -45,8 +46,8 @@
           <ul class="nav">
             <li class="<#if actionKey?? && actionKey=="">active</#if>"> <a href="./"><i class="icon-home"></i>Home</a>
             </li>
-            <li class="<#if controllerKey?? && controllerKey=="bbs">active</#if>"> <a href="bbs"><i class="icon-comment"></i>Web Board</a>
-            </li>
+            <!-- <li class="<#if controllerKey?? && controllerKey=="bbs">active</#if>"> <a href="bbs"><i class="icon-comment"></i>Web Board</a>
+            </li> -->
             <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>"> <a href="problem"><i class="icon-list"></i>Problems</a>
             </li>
             <li class="<#if actionKey?? && actionKey=="status">active</#if>"> <a href="status"><i class="icon-check"></i>Status</a>
@@ -90,12 +91,11 @@
 
   <!-- Masthead
   ================================================== -->
-  <header class="jumbotron subhead" id="overview">
+  <header class="jumbotron subhead" id="overview" style="height: 103px;">
     <div class="container">
-      <h2>Power OJ</h2>
     </div>
   </header>
-
+  
   <!-- ======================= main content ======================= -->
   <div class="main container">
     <div class="row">
@@ -196,12 +196,37 @@
         <li><a href="changelog">Changelog</a></li>
       </ul>
     </div>
+    <form class="form-inline">
+      <label class="select">
+        Select Style: <select class="input-medium" id="selstyle">
+          <option value="cerulean">Cerulean</option>
+          <option value="cyborg">Cyborg</option>
+          <option value="cosmo">Cosmo</option>
+          <option value="amelia">Amelia</option>
+          <option value="simplex">Simplex</option>
+          <option value="spacelab">Spacelab</option>
+          <option value="spruce">Spruce</option>
+          <option value="superhero">Superhero</option>
+          <option value="united">United</option>
+          <option value="journal">Journal</option>
+          <option value="readable">Readable</option>
+          <option value="slate">Slate</option>
+          <option value="darkening">Darkening</option>
+          <option value="original">Original</option>
+          <option value="metro">Metro</option>
+          <option value="geo">Geo</option>
+        </select>
+      </label>
+      <!-- <label class="checkbox"> <input type="checkbox" id="selwidth" <?= $_COOKIE[$config["cookie_prefix"]."fluid_width"]==true?"checked":"" ?> />Fluid Width?</label> -->
+    </form>
   </footer>
 
   <!-- ======================= javascript ======================= -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.cookie.js"></script>
   <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/select2-3.4.5/select2.min.js"></script>
   <script type="text/javascript" src="assets/js/oj.js"></script>
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -209,7 +234,7 @@
   <![endif]-->
   
   <@block name="scripts"></@block>
-
+        
   <#if dev??>
   <section id="dev">
     <div id="page_trace_close" style="display:none;text-align:right;height:15px;position:absolute;top:10px;right:12px;cursor: pointer;"><img style="vertical-align:top;" src="data:image/gif;base64,R0lGODlhDwAPAJEAAAAAAAMDA////wAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MUQxMjc1MUJCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MUQxMjc1MUNCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxRDEyNzUxOUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxRDEyNzUxQUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAAAAAAALAAAAAAPAA8AAAIdjI6JZqotoJPR1fnsgRR3C2jZl3Ai9aWZZooV+RQAOw==" /></div>
@@ -238,6 +263,12 @@
           $('#debug').show();
           $('#page_trace_close').show();
         });
+        
+        $("#selstyle").val($.cookie("oj_style")==null?"original":$.cookie("oj_style"));
+        $("#selstyle").change(function() {
+          $.cookie("oj_style", $(this).val());
+          window.location.reload();
+        })
       });
     </script>
   </section>

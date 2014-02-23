@@ -1,21 +1,12 @@
-a {
-    color: #1A5CC8;
-    text-decoration: none;
-}
-a:hover {
-    color: orange;
-    text-decoration: underline;
-}
 a.cureent {
 	color: black;
 }
+
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle.admin {
     color: red;
     font-weight: bold;
 }
-h2 {
-    color: blue;
-}
+
 .green {
     color: green;
 }
@@ -40,14 +31,6 @@ h2 {
 
 .left {
   float: left;	
-}
-
-body {
-    background-image: url("../images/background.jpg");
-    font-size:15px;
-}
-body > .navbar {
-    font-size: 13px;
 }
 
 .main {
