@@ -31,6 +31,7 @@ import com.power.oj.api.MailApiController;
 import com.power.oj.api.ProblemApiController;
 import com.power.oj.api.UserApiController;
 import com.power.oj.api.oauth.QQLoginApiController;
+import com.power.oj.api.oauth.SinaLoginApiController;
 import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.bbs.BBSController;
 import com.power.oj.contest.ContestController;
@@ -123,6 +124,7 @@ public class AppConfig extends JFinalConfig
     me.add("/api/user", UserApiController.class, "/user/");
     me.add("/api/friend", FriendApiController.class, "/user/");
     me.add("/api/oauth/qq", QQLoginApiController.class, "/user/");
+    me.add("/api/oauth/sina", SinaLoginApiController.class, "/user/");
 
     log.debug("configRoute finished.");
   }
