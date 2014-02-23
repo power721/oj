@@ -42,12 +42,12 @@ public class UserModel extends Model<UserModel>
 
   public UserModel getUserByEmail(String email)
   {
-    return findFirst("SELECT * FROM user WHERE reg_email=? LIMIT 1", email);
+    return findFirst("SELECT * FROM user WHERE email=? LIMIT 1", email);
   }
 
   public UserModel getUserByNameAndEmail(String name, String email)
   {
-    return findFirst("SELECT * FROM user WHERE name=? AND reg_email=? LIMIT 1", name, email);
+    return findFirst("SELECT * FROM user WHERE name=? AND email=? LIMIT 1", name, email);
   }
 
   public UserModel getUserInfoByName(String name)
@@ -107,7 +107,7 @@ public class UserModel extends Model<UserModel>
 */
   public boolean containsEmailExceptThis(Integer uid, String email)
   {
-    return findFirst("SELECT email FROM user WHERE reg_email=? AND uid!=? LIMIT 1", email, uid) != null;
+    return findFirst("SELECT email FROM user WHERE email=? AND uid!=? LIMIT 1", email, uid) != null;
   }
 
   public boolean containsUsernameExceptThis(Integer uid, String username)
