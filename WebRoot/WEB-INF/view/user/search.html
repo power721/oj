@@ -16,7 +16,7 @@
     </form>
   </div>
   <#include "../common/_paginate.html" />
-  <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="user/search/" />
+  <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="user/search/" urlParas="${query}" />
   <div class="pull-right">
     <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span>
     <span class="badge badge-info">${userList.totalRow} Users</span>
