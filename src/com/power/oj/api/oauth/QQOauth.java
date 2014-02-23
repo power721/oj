@@ -46,7 +46,7 @@ public class QQOauth extends Oauth
     params.put("redirect_uri", getRedirectUri());
     // access_token=FE04************************CCE2&expires_in=7776000
     String token = TokenUtil.getAccessToken(super.doGet(TOKEN_URL, params));
-    log.error(token);
+    log.info(token);
     return token;
   }
 
@@ -56,7 +56,7 @@ public class QQOauth extends Oauth
     params.put("access_token", accessToken);
     // callback( {"client_id":"YOUR_APPID","openid":"YOUR_OPENID"} );
     String openid = TokenUtil.getOpenId(super.doGet(TOKEN_INFO_URL, params));
-    log.error(openid);
+    log.info(openid);
     return openid;
   }
 
@@ -69,7 +69,7 @@ public class QQOauth extends Oauth
     params.put("format", "json");
     // // {"ret":0,"msg":"","nickname":"YOUR_NICK_NAME",...}
     String userinfo = super.doGet(USER_INFO_URL, params);
-    log.error(userinfo);
+    log.info(userinfo);
     return userinfo;
   }
 
