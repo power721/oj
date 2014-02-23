@@ -32,7 +32,7 @@ public class Tool
   
   private static final char[] CHAR_STR =
   { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', '<', '>', '/' };
 
   /**
    * 
@@ -153,7 +153,7 @@ public class Tool
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < count; i++)
     {
-      sb.append(CHAR_STR[new Random().nextInt(36)]);
+      sb.append(CHAR_STR[new Random().nextInt(CHAR_STR.length)]);
     }
     return sb.toString();
   }

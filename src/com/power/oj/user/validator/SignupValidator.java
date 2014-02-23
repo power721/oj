@@ -71,7 +71,7 @@ public class SignupValidator extends Validator
     if (StringUtil.equalsOne(name, reservedNames) != -1)
       return false;
 
-    if (name.startsWith("team"))
+    if (name.startsWith("team") || name.startsWith("qq") || name.startsWith("sina"))
       return false;
 
     return true;

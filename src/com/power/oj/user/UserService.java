@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -258,25 +259,27 @@ public class UserService
       webLogin.set(WebLoginModel.STATUS, true).update();
       
       int uid = newUser.getUid();
-      name = webLogin.getStr("type") + uid;
+      Calendar cal = Calendar.getInstance();
+      name = new StringBuilder(3).append(webLogin.getStr("type")).append(cal.get(Calendar.YEAR)).append(uid).toString();
       newUser.set("name", name).update();
       
       Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
       
       UserExtModel userExt = new UserExtModel();
       userExt.set("uid", uid).save();
+      
+      Map<String, Object> paras = new HashMap<String, Object>();
+      paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+      paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+      paras.put("nick", webLogin.get("nick"));
+      paras.put("name", name);
+      paras.put("token", token);
+      paras.put("password", pass);
+      paras.put("ctime", OjConfig.timeStamp);
+      paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+      
+      OjService.me().sendVerifyEmail(name, email, paras);
     }
-    Map<String, Object> paras = new HashMap<String, Object>();
-    paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
-    paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
-    paras.put("nick", webLogin.get("nick"));
-    paras.put("name", name);
-    paras.put("token", token);
-    paras.put("password", pass);
-    paras.put("ctime", OjConfig.timeStamp);
-    paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
-    
-    OjService.me().sendVerifyEmail(name, email, paras);
     
     return newUser;
   }
