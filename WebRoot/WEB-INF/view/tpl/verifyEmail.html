@@ -10,7 +10,7 @@
     </div>
     <div style="padding: 30px 40px 40px;">
       尊敬的<#if nick??>${nick}<#else>${name}</#if>：<br>
-          您好，感谢您使用 ${siteTitle!PowerOJ}
+          您好，感谢您使用 ${siteTitle!PowerOJ}。
       <br>
       <br>
        这是一封认证邮件，请点击此链接以完成邮箱验证：<br>
@@ -23,6 +23,8 @@
       上述链接${expires!60}分钟内有效。如果激活链接失效，请您登录网站 <a href="${baseUrl!}">${siteTitle!PowerOJ}</a> 重新申请认证。 
       <#if password??>
       <br>
+      <br>
+      您的用户名是：<span style="background-color: rgb(195, 214, 155);">${name}</span>。
       <br>
       您的临时密码是：<span style="background-color: rgb(195, 214, 155);">${password}</span>, 请尽快修改密码。
       </#if>
