@@ -60,7 +60,7 @@ public class UserService
    * @param rememberMe ture if remember user.
    * @return true if login successfully, otherwise false.
    */
-  public boolean login(String name, String password, boolean rememberMe)
+  public boolean login(OjController controller, String name, String password, boolean rememberMe)
   {
     Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
@@ -72,6 +72,19 @@ public class UserService
 
       updateLogin(name, true);
       SessionService.me().updateLogin();
+      
+      UserModel userModel = getCurrentUser();
+      String avatar = userModel.getStr("avatar");
+      controller.setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      controller.setCookie("oj_username", name, OjConstants.COOKIE_AGE);
+      if (StringUtil.isNotBlank(avatar))
+      {
+        controller.setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
+      if (isAdmin())
+      {
+        controller.setCookie("oj_time", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      }
     } catch (AuthenticationException e)
     {
       updateLogin(name, false);
@@ -84,10 +97,11 @@ public class UserService
     return true;
   }
   
-  public boolean autoLogin(UserModel userModel, boolean rememberMe)
+  public boolean autoLogin(OjController controller, UserModel userModel, boolean rememberMe)
   {
     String name = userModel.getStr("name");
     String password = userModel.getStr("pass");
+    String avatar = userModel.getStr("avatar");
     Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
@@ -98,6 +112,17 @@ public class UserService
 
       updateLogin(name, true);
       SessionService.me().updateLogin();
+      
+      controller.setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      controller.setCookie("oj_username", name, OjConstants.COOKIE_AGE);
+      if (StringUtil.isNotBlank(avatar))
+      {
+        controller.setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
+      if (isAdmin())
+      {
+        controller.setCookie("oj_time", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      }
     } catch (AuthenticationException e)
     {
       updateLogin(name, false);
@@ -248,7 +273,6 @@ public class UserService
     paras.put("ctime", OjConfig.timeStamp);
     paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
     
-    autoLogin(newUser, false);
     OjService.me().sendVerifyEmail(name, email, paras);
     
     return newUser;
@@ -408,10 +432,6 @@ public class UserService
         log.info(String.valueOf(OjConfig.timeStamp - userModel.getInt("mtime")));
         userModel.set("token", null).set("email_verified", true).update();
         
-        if (ShiroKit.isGuest())
-        {
-          autoLogin(userModel, false);
-        }
         return true;
       }
       else

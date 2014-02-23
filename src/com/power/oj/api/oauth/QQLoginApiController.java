@@ -77,7 +77,7 @@ public class QQLoginApiController extends OjController
       //if (status)
       {
         UserModel userModel = UserModel.dao.findById(webLogin.getInt(WebLoginModel.UID));
-        if (!userService.autoLogin(userModel, false))
+        if (!userService.autoLogin(this, userModel, false))
         {
           setFlashMessage(new FlashMessage("Auto login failed, please inform admin!", MessageType.ERROR, getText("message.error.title")));
         }

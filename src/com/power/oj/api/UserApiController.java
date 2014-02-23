@@ -291,11 +291,8 @@ public class UserApiController extends OjController
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    if (userService.login(username, password, rememberMe))
+    if (userService.login(this, username, password, rememberMe))
     {
-      UserModel userModel = userService.getCurrentUser();
-      setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
-      setCookie("oj_username", username, OjConstants.COOKIE_AGE);
       renderJson("{\"success\":true}");
     }
     else

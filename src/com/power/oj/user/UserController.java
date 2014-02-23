@@ -148,20 +148,8 @@ public class UserController extends OjController
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    if (userService.login(name, password, rememberMe))
+    if (userService.login(this, name, password, rememberMe))
     {
-      UserModel userModel = userService.getCurrentUser();
-      String avatar = userModel.getStr("avatar");
-      setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
-      setCookie("oj_username", name, OjConstants.COOKIE_AGE);
-      if (StringUtil.isNotBlank(avatar))
-      {
-        setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
-      }
-      if (userService.isAdmin())
-      {
-        setCookie("oj_time", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
-      }
       redirect(sessionService.getLastAccessURL());
       return;
     }
