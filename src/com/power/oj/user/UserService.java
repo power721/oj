@@ -236,7 +236,6 @@ public class UserService
       UserExtModel userExt = new UserExtModel();
       userExt.set("uid", uid).save();
     }
-    newUser.set("password", pass);
     OjService.me().sendVerifyEmail(name, email, token);
     
     return newUser;
