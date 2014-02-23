@@ -299,7 +299,11 @@ public class UserService
     if (success)
     {
       UserModel userModel = getCurrentUser();
-      userModel.set("token", null).set("login", OjConfig.timeStamp).set("login_ip", ip).update();
+      if (userModel.getBoolean("email_verified"))
+      {
+        userModel.set("token", null); // resetPassword token
+      }
+      userModel.set("login", OjConfig.timeStamp).set("login_ip", ip).update();
       
       loginLog.set("uid", userModel.getUid());
     }
@@ -364,7 +368,7 @@ public class UserService
   {
     UserModel userModel = dao.getUserByName(name);
     
-    userModel.set("token", null).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
+    userModel.set("token", null).set("email_verified", true).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
     return userModel.update();
   }
   
@@ -418,6 +422,11 @@ public class UserService
       }
     }
     
+    if (OjConfig.getDevMode())
+    {
+      log.info(name + " " + token);
+      log.info(userModel.toString());
+    }
     log.info("token invlidate");
     return false;
   }
