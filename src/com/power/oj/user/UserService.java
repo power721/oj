@@ -258,6 +258,9 @@ public class UserService
       webLogin.set(WebLoginModel.STATUS, true).update();
       
       int uid = newUser.getUid();
+      name = webLogin.getStr("type") + uid;
+      newUser.set("name", name).update();
+      
       Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
       
       UserExtModel userExt = new UserExtModel();
