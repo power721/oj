@@ -99,7 +99,7 @@ public class Tool
    *          EmailMessage of email body.
    * @throws Exception
    */
-  public static void sendEmail(String from, String to, String subject, EmailMessage content) throws Exception
+  public static void sendEmail(String from, String to, String subject, EmailMessage content) throws MailException
   {
     Email email = new Email();
 
@@ -119,12 +119,6 @@ public class Tool
       session.open();
       session.sendMail(email);
       log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
-    } catch (MailException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-      throw new Exception("Configuration for SMTP mail is incorrect.");
     } finally
     {
       session.close();

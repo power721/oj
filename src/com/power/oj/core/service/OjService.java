@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import jodd.mail.EmailMessage;
+import jodd.mail.MailException;
 import jodd.util.MimeTypes;
 
 import com.jfinal.log.Logger;
@@ -59,12 +60,10 @@ public class OjService
     return true;
   }
 
-  public boolean sendVerifyEmail(String name, String email, String token) throws Exception
+  public boolean sendVerifyEmail(String name, String email, String token) throws MailException
   {
     String adminEmail = OjConfig.get("adminEmail");
-    if (adminEmail == null)
-      throw new Exception("Admin Email not set!");
-
+    
     Map<String, Object> paras = new HashMap<String, Object>();
     paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
     paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
@@ -82,12 +81,10 @@ public class OjService
     return true;
   }
 
-  public boolean sendResetPasswordEmail(String name, String email, String token) throws Exception
+  public boolean sendResetPasswordEmail(String name, String email, String token) throws MailException
   {
     String adminEmail = OjConfig.get("adminEmail");
-    if (adminEmail == null)
-      throw new Exception("Admin Email not set!");
-
+    
     Map<String, Object> paras = new HashMap<String, Object>();
     paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
     paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);

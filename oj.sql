@@ -903,7 +903,7 @@ CREATE TABLE `user` (
   `comefrom` varchar(35) DEFAULT NULL,
   `online` int(9) NOT NULL DEFAULT '0',
   `share` tinyint(1) NOT NULL DEFAULT '0',
-  `avatar` varchar(64) DEFAULT NULL COMMENT 'user avatar path',
+  `avatar` varchar(255) DEFAULT NULL COMMENT 'user avatar path',
   `sign` varchar(255) DEFAULT NULL,
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT 'Whether the user is active(1) or blocked(0).',
   `token` varchar(255) DEFAULT NULL,

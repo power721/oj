@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.apache.shiro.authz.annotation.RequiresGuest;
 
+import jodd.mail.MailException;
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 
@@ -62,12 +63,19 @@ public class UserApiController extends OjController
       try
       {
         userModel = userService.signup(email, webLogin);
-      } catch (Exception e)
+      } catch (MailException e)
       {
         if (OjConfig.getDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         renderJson("status", "mail_error");
+        return;
+      } catch (Exception e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        renderJson("status", "signup_error");
         return;
       }
     }
