@@ -40,12 +40,11 @@ public class SinaLoginApiController extends OjController
     try
     {
       SinaOauth sina = new SinaOauth();
-      String userInfo = sina.getUserInfoByCode(getPara("code"));
+      Map<String, String> userInfo = sina.getUserInfoByCode(getPara("code"));
       String type = "Sina";
-      renderText(userInfo);
-      /*String openid = userInfo.get("openid");
-      String nickname = userInfo.get("nickname");
-      String avatar = userInfo.get("figureurl_2");
+      String openid = userInfo.get("openid");
+      String nickname = userInfo.get("name");
+      String avatar = userInfo.get("avatar_hd");
       WebLoginModel webLogin = WebLoginModel.dao.findByOpenID(openid, type);
       
       if (null == webLogin)
@@ -82,7 +81,7 @@ public class SinaLoginApiController extends OjController
         {
           setFlashMessage(new FlashMessage("Auto login failed, please inform admin!", MessageType.ERROR, getText("message.error.title")));
         }
-      }*/
+      }
     } catch (Exception e)
     {
       if (OjConfig.getDevMode())

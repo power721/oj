@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.power.oj.core.OjConfig;
 import com.power.oj.util.TokenUtil;
 
@@ -58,10 +59,13 @@ public class SinaOauth extends Oauth
     return super.doGet(USER_INFO_URL, params);
   }
 
-  public String getUserInfoByCode(String code) throws IOException
+  @SuppressWarnings("unchecked")
+  public Map<String, String> getUserInfoByCode(String code) throws IOException
   {
     String accessToken = getTokenByCode(code);
     String uid = getTokenInfo(accessToken);
-    return getUserInfo(accessToken, uid);
+    Map<String, String> dataMap = JSON.parseObject(getUserInfo(accessToken, uid), Map.class);
+    dataMap.put("openid", uid);
+    return dataMap;
   }
 }
