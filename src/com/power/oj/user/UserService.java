@@ -205,7 +205,7 @@ public class UserService
       //password = userModel.getStr("pass");
       //return login(name, password, false);
       
-      OjService.me().sendVerifyEmail(name, email, token);
+      OjService.me().sendVerifyEmail(name, email, token, null);
       return true;
     }
     
@@ -236,7 +236,7 @@ public class UserService
       UserExtModel userExt = new UserExtModel();
       userExt.set("uid", uid).save();
     }
-    OjService.me().sendVerifyEmail(name, email, token);
+    OjService.me().sendVerifyEmail(name, email, token, pass);
     
     return newUser;
   }
@@ -302,7 +302,7 @@ public class UserService
     
     userModel.set("email", email).set("email_verified", false);
     userModel.set("token", token).set("mtime", OjConfig.timeStamp);
-    OjService.me().sendVerifyEmail(name, email, token);
+    OjService.me().sendVerifyEmail(name, email, token, null);
     
     return userModel.update();
   }

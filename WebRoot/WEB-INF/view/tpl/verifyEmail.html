@@ -21,6 +21,11 @@
       如果链接不能点击，请复制地址到浏览器，然后直接打开。
       <br>
       上述链接${expires!60}分钟内有效。如果激活链接失效，请您登录网站 <a href="${baseUrl!}">${siteTitle!PowerOJ}</a> 重新申请认证。 
+      <#if password??>
+      <br>
+      <br>
+      您的临时密码是：<span style="">${password}</span>, 请尽快修改密码。
+      </#if>
       <br>
       <br>
       <span style="float:right">${siteTitle!PowerOJ}</span>

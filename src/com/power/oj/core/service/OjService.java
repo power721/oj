@@ -60,7 +60,7 @@ public class OjService
     return true;
   }
 
-  public boolean sendVerifyEmail(String name, String email, String token) throws MailException
+  public boolean sendVerifyEmail(String name, String email, String token, String password) throws MailException
   {
     String adminEmail = OjConfig.get("adminEmail");
     
@@ -69,6 +69,7 @@ public class OjService
     paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
     paras.put("name", name);
     paras.put("token", token);
+    paras.put("password", password);
     paras.put("ctime", OjConfig.timeStamp);
     paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
     
