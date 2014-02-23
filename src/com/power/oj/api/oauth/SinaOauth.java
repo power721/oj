@@ -14,7 +14,7 @@ public class SinaOauth extends Oauth
   private static final String TOKEN_URL = "https://api.weibo.com/oauth2/access_token";
   private static final String TOKEN_INFO_URL = "https://api.weibo.com/oauth2/get_token_info";
   private static final String USER_INFO_URL = "https://api.weibo.com/2/users/show.json";
-  private static final String REDIRECT_URI = "api/oauth/sina";
+  private static final String REDIRECT_URI = "api/oauth/sina/callback";
 
   public SinaOauth()
   {

@@ -17,7 +17,7 @@ public class QQOauth extends Oauth
   private static final String TOKEN_URL = "https://graph.qq.com/oauth2.0/token";
   private static final String TOKEN_INFO_URL = "https://graph.qq.com/oauth2.0/me";
   private static final String USER_INFO_URL = "https://graph.qq.com/user/get_user_info";
-  private static final String REDIRECT_URI = "api/oauth/qq";
+  private static final String REDIRECT_URI = "api/oauth/qq/callback";
   
   public QQOauth()
   {
