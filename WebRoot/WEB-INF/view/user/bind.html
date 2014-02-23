@@ -64,6 +64,9 @@
             } else if (data.status == 'mail_error') {
               dialog.title('提示！');
               dialog.content('邮件发送失败，请重试！').lock().time(2000);
+            } else if (data.status == 'mail_exist') {
+              dialog.title('提示！');
+              dialog.content('邮箱已经被其他用户绑定，请更换重试！').lock().time(2000);
             } else {
               dialog.content('请尝试重新登陆！').lock().time(1000);
               setTimeout(function() {

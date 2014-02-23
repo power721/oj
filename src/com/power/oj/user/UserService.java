@@ -228,6 +228,8 @@ public class UserService
     
     if (newUser.save())
     {
+      webLogin.set(WebLoginModel.STATUS, true).update();
+      
       int uid = newUser.getUid();
       Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
       

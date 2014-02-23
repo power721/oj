@@ -71,6 +71,11 @@ public class UserApiController extends OjController
         return;
       }
     }
+    else
+    {
+      renderJson("status", "mail_exist");
+      return;
+    }
     
     webLogin.set(WebLoginModel.UID, userModel.getUid());
     webLogin.set(WebLoginModel.STATUS, true); // change after email verified?
