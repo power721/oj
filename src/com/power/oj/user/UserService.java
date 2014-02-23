@@ -403,15 +403,22 @@ public class UserService
       {
         log.info(String.valueOf(OjConfig.timeStamp - userModel.getInt("mtime")));
         userModel.set("token", null).set("email_verified", true).update();
-        autoLogin(userModel, false);
+        
+        if (ShiroKit.isGuest())
+        {
+          autoLogin(userModel, false);
+        }
         return true;
       }
       else
       {
         userModel.set("token", null).update();
+        log.info("token expires");
+        return false;
       }
     }
     
+    log.info("token invlidate");
     return false;
   }
   
