@@ -74,7 +74,7 @@ public class QQLoginApiController extends OjController
         return;
       }
       
-      if (status)
+      //if (status)
       {
         UserModel userModel = UserModel.dao.findById(webLogin.getInt(WebLoginModel.UID));
         userService.autoLogin(userModel, false);

@@ -9,7 +9,7 @@ import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.power.oj.core.OjConstants;
 
-public class SessionInterceptor implements Interceptor
+public class SessionAttrInterceptor implements Interceptor
 {
 
   @Override

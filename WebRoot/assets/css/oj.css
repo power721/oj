@@ -38,6 +38,10 @@ h2 {
 	color: black
 }
 
+.left {
+  float: left;	
+}
+
 body {
     background-image: url("../images/background.jpg");
     font-size:15px;
