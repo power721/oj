@@ -272,6 +272,7 @@ public class UserService
       paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
       paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
       paras.put("nick", webLogin.get("nick"));
+      paras.put("type", webLogin.get("type"));
       paras.put("name", name);
       paras.put("token", token);
       paras.put("password", pass);
