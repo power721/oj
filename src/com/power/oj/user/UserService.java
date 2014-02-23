@@ -242,11 +242,13 @@ public class UserService
     paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
     paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
     paras.put("nick", webLogin.get("nick"));
+    paras.put("name", name);
     paras.put("token", token);
-    paras.put("password", password);
+    paras.put("password", pass);
     paras.put("ctime", OjConfig.timeStamp);
     paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
     
+    autoLogin(newUser, false);
     OjService.me().sendVerifyEmail(name, email, paras);
     
     return newUser;
@@ -401,6 +403,7 @@ public class UserService
       {
         log.info(String.valueOf(OjConfig.timeStamp - userModel.getInt("mtime")));
         userModel.set("token", null).set("email_verified", true).update();
+        autoLogin(userModel, false);
         return true;
       }
       else

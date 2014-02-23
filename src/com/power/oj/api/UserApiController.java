@@ -89,6 +89,7 @@ public class UserApiController extends OjController
     webLogin.set(WebLoginModel.STATUS, true); // change after email verified?
     if (webLogin.update())
     {
+      
       renderJson("status", "ok");
       return;
     }
