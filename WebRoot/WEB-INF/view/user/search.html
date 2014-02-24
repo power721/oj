@@ -60,6 +60,7 @@
 
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
+      <#if oj_style != "slate">
       $("#user-list").tablecloth({
         theme : "stats",
         condensed : true,
@@ -67,6 +68,7 @@
         striped : true,
         clean : true
       });
+      </#if>
     });
   </script>
 </@override>

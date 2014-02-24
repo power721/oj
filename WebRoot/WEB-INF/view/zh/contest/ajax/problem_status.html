@@ -73,6 +73,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        <#if oj_style != "slate">
         $("table#problem-status").tablecloth({
           theme:"stats",
           condensed:true,
@@ -80,6 +81,7 @@
           striped:true,
           clean:true
         });
+        </#if>
 
         $('div.ajax-loader a').click(function() {
             var url = '${baseUrl!}/'+$(this).attr("url");

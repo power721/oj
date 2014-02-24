@@ -67,6 +67,7 @@
         <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
       });
 
+      <#if oj_style != "slate">
       $("#problem-list").tablecloth({
         theme:"stats",
         condensed:true,
@@ -74,6 +75,7 @@
         striped:true,
         clean:true
       });
+      </#if>
 
       <#if userName??>
       $('td.pid').each(function(i) {

@@ -1,4 +1,4 @@
-<@override name="content">
+<@override name="contest_content">
 <div class="pagination pagination-centered">
   <div class="pull-left">
     <form class="form-search" action="contest/search">
@@ -62,6 +62,7 @@
             <#if contestList.pageNumber<contestList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
         }
                 
+        <#if oj_style != "slate">
         $("#Contest-list").tablecloth({
           theme:"stats",
           condensed:true,
@@ -69,6 +70,7 @@
           striped:true,
           clean:true
         });
+        </#if>
     });
     </script>
 </@override>

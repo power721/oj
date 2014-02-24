@@ -1,4 +1,4 @@
-<@override name="content">
+<@override name="contest_content">
 <table id="contest-statistics" class="table table-condensed table-bordered table-hover">
   <thead>
     <tr>
@@ -85,6 +85,7 @@
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
+    <#if oj_style != "slate">
     $("#contest-statistics").tablecloth({
       theme:"stats",
       sortable:true,
@@ -92,6 +93,7 @@
       striped:true,
       clean:true
     });
+    </#if>
   });
 </script>
 </@override>

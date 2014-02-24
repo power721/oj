@@ -1,4 +1,4 @@
-<@override name="content">
+<@override name="contest_content">
 <div class="pagination pagination-centered">
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
@@ -63,12 +63,14 @@
       <#if contestRank.pageNumber<contestRank.totalPage>if(event.keyCode==39)location=nextpage;</#if>
     }
 
+    <#if oj_style != "slate">
     $("#contest-rank").tablecloth({
       theme:"stats",
       condensed:true,
       striped:true,
       clean:true
     });
+    </#if>
   });
 </script>
 

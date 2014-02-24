@@ -46,6 +46,7 @@
         $(this).html(getLocalTime($(this).attr('data')));
       });
       
+      <#if oj_style != "slate">
       $("#onlineuser").tablecloth({
         theme:"stats",
         condensed:true,
@@ -53,6 +54,7 @@
         striped:true,
         clean:true
       });
+      </#if>
   });
   </script>
 </@override>

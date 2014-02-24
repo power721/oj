@@ -35,7 +35,7 @@
 <body>
 
   <!-- ============================== Navbar ============================== -->
-  <div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="navbar navbar-fixed-top" id="oj-navbar">
     <div class="navbar-inner">
       <div class="container">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -74,7 +74,7 @@
                 <#if adminUser??><li><a href="admin">Admin</a></li></#if>
               </ul>
             </li>
-            <li class="active"><a href="logout"><i class="icon-off"></i>Logout</a></li>
+            <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
           <#else>
             <li class="<#if actionKey?? && actionKey=="login">active</#if>">
               <a href="#" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
@@ -214,7 +214,6 @@
           <option value="darkening">Darkening</option>
           <option value="original">Original</option>
           <option value="metro">Metro</option>
-          <option value="geo">Geo</option>
         </select>
       </label>
       <!-- <label class="checkbox"> <input type="checkbox" id="selwidth" <?= $_COOKIE[$config["cookie_prefix"]."fluid_width"]==true?"checked":"" ?> />Fluid Width?</label> -->
@@ -256,21 +255,6 @@
     </#list>
     </table>
     </div>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $('#page_trace_open').click(function() {
-          $(this).hide();
-          $('#debug').show();
-          $('#page_trace_close').show();
-        });
-        
-        $("#selstyle").val($.cookie("oj_style")==null?"original":$.cookie("oj_style"));
-        $("#selstyle").change(function() {
-          $.cookie("oj_style", $(this).val());
-          window.location.reload();
-        })
-      });
-    </script>
   </section>
   </#if>
 

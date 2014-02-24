@@ -1,15 +1,31 @@
-<@override name="content">
+<@override name="contest_content">
 <div class="pagination pagination-centered">
   <div class="form-inline">
     <form class="form-search" action="contest/status/${cid!}">
-      <input type="text" class="input-small" name="id" value="${id!}" placeholder="Problem ID">
       <input type="text" class="input-small" name="name" value="${name!}" placeholder="User Name">
-      <select class="input-small" id="inputResult" name="result">
-        <option value="-1">Result</option> <#if judge_result??> <#list judge_result as Result>
-        <option value="${Result.id!}"<#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option> </#list> </#if>
-      </select> <select class="input-medium" id="inputLanguage" name="language">
-        <option value="-1">Language</option> <#if program_languages??> <#list program_languages as Language>
-        <option value="${Language.id!}"<#if language?? && language==Language.id>selected</#if>>${Language.name!}</option> </#list> </#if>
+      <select class="input-medium" id="inputProblem" name="pid">
+      <option value="">Problem</option>
+      <#if contestProblems??>
+      <#list contestProblems as Problem>
+      <option value="${Problem.id!}"<#if pid?? && pid==Problem.id>selected</#if>>${Problem.id!}. ${Problem.title!}</option> 
+      </#list>
+      </#if>
+      </select>
+      <select class="input-medium" id="inputResult" name="result">
+        <option value="-1">Result</option>
+        <#if judge_result??>
+        <#list judge_result as Result>
+        <option value="${Result.id!}"<#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option> 
+        </#list> 
+        </#if>
+      </select>
+      <select class="input-medium" id="inputLanguage" name="language">
+        <option value="-1">Language</option> 
+        <#if program_languages??> 
+        <#list program_languages as Language>
+        <option value="${Language.id!}"<#if language?? && language==Language.id>selected</#if>>${Language.name!}</option> 
+        </#list> 
+        </#if>
       </select>
       <button type="submit" class="btn btn-info">Go</button>
     </form>
@@ -17,7 +33,6 @@
   
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/status/${cid!}" urlParas="${query}" />
-  
   <div class="pull-right">
     <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span class="badge badge-info">${solutionList.totalRow}
       Records</span>
@@ -64,7 +79,6 @@
 
 <@override name="scripts">
 <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
-
 <script type="text/javascript">
 $(document).ready(function(){
     document.onkeydown=nextpage;

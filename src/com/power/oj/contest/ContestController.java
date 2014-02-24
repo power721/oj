@@ -162,14 +162,14 @@ public class ContestController extends OjController
     Integer language = getParaToInt("language", -1);
     Integer num = -1;
 
-    if (StringUtil.isNotBlank(getPara("id")))
+    if (StringUtil.isNotBlank(getPara("pid")))
     {
       try
       {
-        num = getParaToInt("id");
+        num = getParaToInt("pid");
       } catch (Exception e)
       {
-        num = getPara("id").toUpperCase().charAt(0) - 'A';
+        num = getPara("pid").toUpperCase().charAt(0) - 'A';
       }
     }
     String userName = getPara("name");
@@ -185,7 +185,7 @@ public class ContestController extends OjController
     }
     if (num > -1)
     {
-      query.append("&id=").append(getPara("id"));
+      query.append("&pid=").append(getPara("pid"));
     }
     if (StringUtil.isNotBlank(userName))
     {
@@ -194,12 +194,13 @@ public class ContestController extends OjController
 
     setAttr("cid", cid);
     setAttr("contest", contestService.getContestById(cid));
+    setAttr("contestProblems", contestService.getContestProblems(cid, 0));
     setAttr("solutionList", solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
     setAttr("result", result);
     setAttr("language", language);
-    setAttr("id", getPara("id"));
+    setAttr("pid", getPara("pid"));
     setAttr("name", userName);
     setAttr("query", query.toString());
 

@@ -1,4 +1,4 @@
-<@override name="content">
+<@override name="contest_content">
 <div class="row" id="problem-status">
   <div class="span4">
     <h4>Statistics</h4>
@@ -141,6 +141,7 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+    <#if oj_style != "slate">
     $("table#problem-status").tablecloth({
       theme:"stats",
       condensed:true,
@@ -148,6 +149,7 @@
       striped:true,
       clean:true
     });
+    </#if>
 
     $('div.ajax-loader a').click(function() {
         var url = '${baseUrl!}/'+$(this).attr("url");

@@ -1,4 +1,4 @@
-<@override name="content">
+<@override name="contest_content">
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
@@ -67,6 +67,7 @@
     updateTime();
     setInterval(updateTime, 1000);
             
+    <#if oj_style != "slate">
     $("#problem-list").tablecloth({
       theme:"stats",
       condensed:true,
@@ -74,6 +75,7 @@
       striped:true,
       clean:true
     });
+    </#if>
 });
 </script>
 </@override>

@@ -236,6 +236,7 @@
           problemStatus(url);
       });
 
+      <#if oj_style != "slate">
       $("table#problem-status").tablecloth({
         theme:"stats",
         condensed:true,
@@ -243,6 +244,7 @@
         striped:true,
         clean:true
       });
+      </#if>
       
       var url = 'api/problem/status/${pid!}';
       problemStatus(url);

@@ -59,6 +59,7 @@
           <#if userList.pageNumber<userList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
       });
               
+      <#if oj_style != "slate">
       $("#user-rank").tablecloth({
         theme:"stats",
         condensed:true,
@@ -66,6 +67,7 @@
         striped:true,
         clean:true
       });
+      </#if>
   });
   </script>
 </@override>
