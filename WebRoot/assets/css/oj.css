@@ -44,7 +44,6 @@ a.cureent {
 }
 
 .footer {
-    border-top: 1px solid #E5E5E5;
     margin-top: 70px;
     padding: 30px 0;
     text-align: center;
@@ -62,11 +61,6 @@ a.cureent {
 
 .profile dl {
     margin-bottom: 15px;
-}
-
-.content pre {
-	font-size:15px;
-	background-color:transparent
 }
 
 .problem textarea,.solution textarea, .contest textarea,textarea.auto-width {
