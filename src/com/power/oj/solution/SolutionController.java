@@ -80,7 +80,7 @@ public class SolutionController extends OjController
     SolutionModel solutionModel = solutionService.findSolution(sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
     int uid = solutionModel.getUid();
-    int loginUid = getAttrForInt(OjConstants.USER_ID);
+    int loginUid = userService.getCurrentUid();
     if (uid != loginUid && !isAdmin)
     {
       FlashMessage msg = new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
