@@ -63,9 +63,9 @@
             </li>
           </ul>
           <ul class="nav pull-right">
-          <#if userName??>
+          <#if user.name??>
             <li class="dropdown active">
-            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${userName!"user"}<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${user.name!"user"}<b class="caret"></b></a>
               <ul class="dropdown-menu">
                 <li><a href="user/#area=splash">Profile</a></li>
                 <li><a href="user/#area=mail">Mail</a></li>
@@ -122,7 +122,7 @@
   </div>
   <!-- container -->
 
-  <#if !userID??>
+  <#if !user.uid??>
   <div class="modal hide fade userModal" id="loginModal">
     <form class="form-horizontal" action="user/signin" method="post">
       <div class="modal-header">

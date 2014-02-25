@@ -65,16 +65,19 @@ $(document).ready(function() {
     $('#page_trace_close').show();
   });
   
-  $("#selstyle").val($.cookie("oj_style")==null?"original":$.cookie("oj_style"));
-  $("#selstyle").change(function() {
-    $.cookie("oj_style", $(this).val(), { expires: 7, path: '/' });
-    window.location.reload();
-  });
-  $("#selwidth").change(function() {
-    if ($(this).prop("checked")) $.cookie("oj_fluid_width",true, { expires: 7, path: '/' });
-    else $.removeCookie("oj_fluid_width", { path: '/' });
-    window.location.reload();
-  });
+  if ($.cookie) {
+    $("#selstyle").val($.cookie("oj_style")==null?"original":$.cookie("oj_style"));
+    $("#selstyle").change(function() {
+      $.cookie("oj_style", $(this).val(), { expires: 7, path: '/' });
+      window.location.reload();
+    });
+    $("#selwidth").change(function() {
+      if ($(this).prop("checked")) $.cookie("oj_fluid_width",true, { expires: 7, path: '/' });
+      else $.removeCookie("oj_fluid_width", { path: '/' });
+      window.location.reload();
+    });
+  }
+
   if (config.globe.navbarFixedTop) {
     $("#oj-navbar").addClass("navbar-fixed-top");
   }

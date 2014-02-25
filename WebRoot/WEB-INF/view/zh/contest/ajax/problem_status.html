@@ -33,8 +33,8 @@
       <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
       <td class="time">${solution.time!0} MS</td>
       <td class="memory">${solution.memory!0} KB</td>
-      <td class="language"><#if userID?? &&(adminUser?? || userID==solution.uid)><a href="code/${solution.sid!}" target="_blank" title="show source code"></#if>
-          ${solution.language!} <#if userID?? &&(adminUser?? || userID==solution.uid)></a></#if>
+      <td class="language"><#if user.uid?? &&(adminUser?? || user.uid==solution.uid)><a href="code/${solution.sid!}" target="_blank" title="show source code"></#if>
+          ${solution.language!} <#if user.uid?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
       </td>
       <td class="code_len">${solution.code_len!}B</td>
       <td class="ctime">${solution.ctime!}</td>

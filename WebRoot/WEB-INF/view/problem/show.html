@@ -33,7 +33,7 @@
   Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> 
   Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> 
   Page View:<span class="blue">${problem.view!}</span><br><br> 
-  <#if userID??><a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a></#if>
+  <#if user.uid??><a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a></#if>
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
   <a href="#" class="btn btn-info">Discuss</a>
 </div>
@@ -59,7 +59,7 @@
   </form>
 </div>
 </#if> 
-<#if userID??>
+<#if user.uid??>
 <div class="modal hide fade problemModal" id="submitModal">
   <form class="" id="submitForm" action="solution/save" method="post">
     <div class="modal-header">
@@ -213,7 +213,7 @@
 </#if>
 
 <div class="text-center">
-  <#if userID??><a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a></#if>
+  <#if user.uid??><a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a></#if>
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
   <a href="#" class="btn btn-info">Discuss</a>
 </div>

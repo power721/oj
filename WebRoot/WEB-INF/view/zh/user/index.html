@@ -125,8 +125,8 @@
             <div id="area-main-left" class="l">
               <div id="block-user-left">
                 <div class="d">
-                  <a href="user/profile/${userName}" target="_blank" class="name">
-                    ${userName}
+                  <a href="user/profile/${user.name}" target="_blank" class="name">
+                    ${user.name}
                   </a>
                 </div>
                 <div class="l">
@@ -137,7 +137,7 @@
                   </a>
                 </div>
                 <div class="r">
-                  <!--<span class="label label-important">UID: ${userID}</span>
+                  <!--<span class="label label-important">UID: ${user.uid}</span>
                   <span class="label label-info">Level: ${user.level}</span>-->
                   <#if user.isCheckin??>
                   <button id="btn-sign-user" data-checked="1" class="btn success">

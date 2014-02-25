@@ -67,11 +67,11 @@
             </li>
           </ul>
           <ul class="nav pull-right">
-            <#if userName??>
-            <li class="dropdown active"><a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${userName!"user"}
+            <#if user.name??>
+            <li class="dropdown active"><a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${user.name!"user"}
                 <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="user/profile/${userName!}">Profile</a></li>
+                <li><a href="user/profile/${user.name!}">Profile</a></li>
                 <li><a href="mail">Mail</a></li>
                 <li><a href="user/loginlog">Login Log</a></li>
                 <li class="divider"></li>
@@ -122,7 +122,7 @@
   </div>
   <!-- container -->
 
-  <#if !userID??>
+  <#if !user.uid??>
   <div class="modal hide fade userModal" id="loginModal">
     <form class="form-horizontal" action="user/signin" method="post">
       <div class="modal-header">

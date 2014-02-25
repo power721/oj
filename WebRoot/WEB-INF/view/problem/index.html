@@ -79,7 +79,7 @@
       });
       </#if>
 
-      <#if userName??>
+      <#if user.name??>
       $('td.pid').each(function(i) {
         var result = $(this).prev('.result');
         $.getJSON('api/problem/userResult?pid=' + $(this).text(), function(data) {

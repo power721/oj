@@ -146,7 +146,7 @@
             for(i in solutionList.list) {
               var solution = data.solutionList.list[i];
               var language = solution.language;
-              if (data.userID && (data.adminUser || data.userID==solution.uid))
+              if (data.user.uid && (data.adminUser || data.user.uid==solution.uid))
                 language = '<a href="code/' + solution.sid + '" target="_blank" title="show source code">' + solution.language + '</a>';
               html += '<tr>' +
                 '<td class="id">' + (parseInt(i)+1+(pageNumber-1)*pageSize) + '</td>' +
