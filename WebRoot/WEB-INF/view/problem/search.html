@@ -16,7 +16,7 @@
     </form>
   </div>
   <#include "../common/_paginate.html" />
-  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" urlParas="${query}" />
+  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" urlParas="${query!}" />
   <div class="pull-right">
     <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> <span class="badge badge-info">${problemList.totalRow}
       Problems</span>
@@ -80,7 +80,7 @@
       <#if userName??>
       $('td.pid').each(function(i) {
         var result = $(this).prev('.result');
-        $.getJSON('problem/userResult?pid=' + $(this).text(), function(data) {
+        $.getJSON('api/problem/userResult?pid=' + $(this).text(), function(data) {
           if (data.result)
           {
             if (data.result.id)

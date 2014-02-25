@@ -70,6 +70,11 @@ $(document).ready(function() {
     $.cookie("oj_style", $(this).val(), { expires: 7, path: '/' });
     window.location.reload();
   });
+  $("#selwidth").change(function() {
+    if ($(this).prop("checked")) $.cookie("oj_fluid_width",true, { expires: 7, path: '/' });
+    else $.removeCookie("oj_fluid_width", { path: '/' });
+    window.location.reload();
+  });
   if (config.globe.navbarFixedTop) {
     $("#oj-navbar").addClass("navbar-fixed-top");
   }

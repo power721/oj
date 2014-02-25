@@ -1,4 +1,54 @@
-<!--style-->
+<@override name="content">
+<div id="block-title-banner">
+    <p>设置</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Setting</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+
+<div class="block">
+    <div class="mainer">
+        <p class="alert alert-info">
+            配置信息存储于用户本地，清空浏览器数据将会导致配置信息丢失。
+        </p>
+    </div>
+</div>
+
+<div id="area-first"></div>
+
+<div class="block">
+    <div class="mainer">
+        <p class="alert alert-info">
+            部分选项需重新载入后生效。
+        </p>
+    </div>
+</div>
+
+<div id="temp-unit-setting" class="hidden">
+    <div class="unit" data-title="[title]" data-value="[value]" data-key="[key]">
+        <div class="l">
+            <p class="title">[title]
+            </p>
+            <span class="hint-hover" data-title="[desc]"><i class="icon grey icon-question-sign"></i>详细</span>
+        </div>
+        <div class="r">
+            <div class="switch [active]">
+                <p>是<b></b>否</p>
+
+                <div></div>
+            </div>
+            <span class="clearfix"></span></div>
+        <span class="clearfix"></span>
+    </div>
+</div>
+</@override>
+<@override name="styles">
 <style>
     #area-first .mainer {
         padding: 8px;
@@ -49,61 +99,8 @@
         margin-right: 2px;
     }
 </style>
-<!--style-->
-
-<!--html-->
-<div id="block-title-banner">
-    <p>设置</p>
-
-    <div>
-        <a href="user">PowerOJ</a>
-        <span class="d">Setting</span>
-    </div>
-    <span class="clearfix"></span>
-</div>
-<div id="block-banner-right" class="block banner">
-    <i class="location"></i>
-</div>
-
-<div class="block">
-    <div class="mainer">
-        <p class="alert alert-info">
-            配置信息存储于用户本地，清空浏览器数据将会导致配置信息丢失。
-        </p>
-    </div>
-</div>
-
-<div id="area-first"></div>
-
-<div class="block">
-    <div class="mainer">
-        <p class="alert alert-info">
-            部分选项需重新载入后生效。
-        </p>
-    </div>
-</div>
-
-<div id="temp-unit-setting" class="hidden">
-    <div class="unit" data-title="[title]" data-value="[value]" data-key="[key]">
-        <div class="l">
-            <p class="title">[title]
-            </p>
-            <span class="hint-hover" data-title="[desc]"><i class="icon grey icon-question-sign"></i>详细</span>
-        </div>
-        <div class="r">
-            <div class="switch [active]">
-                <p>是<b></b>否</p>
-
-                <div></div>
-            </div>
-            <span class="clearfix"></span></div>
-        <span class="clearfix"></span>
-    </div>
-</div>
-
-<!--html-->
-
-<!--script-->
+</@override>
+<@override name="scripts">
 <script>
     system.tv = function () {
         //set handle
@@ -259,4 +256,5 @@
         ;
     }();
 </script>
-<!--script-->
+</@override>
+<@extends name="../common/_layout.html" />

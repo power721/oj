@@ -86,6 +86,11 @@ public class UserController extends OjController
     setTitle(getText("user.profile.title"));
   }
   
+  public void option()
+  {
+    
+  }
+  
   @RequiresUser
   public void loginlog()
   {

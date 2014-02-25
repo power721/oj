@@ -38,9 +38,11 @@
   <!-- ============================== Navbar ============================== -->
   <div class="navbar navbar-fixed-top" id="oj-navbar">
     <div class="navbar-inner">
-      <div class="container">
+      <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span>
         </button>
         <a class="brand" href="./">PowerOJ</a>
         <div class="nav-collapse collapse">
@@ -98,7 +100,7 @@
   </header>
   
   <!-- ======================= main content ======================= -->
-  <div class="main container">
+  <div class="main <#if oj_fluid_width??>container-fluid<#else>container</#if>">
     <div class="row">
       <div class="span12">
         <#if msg??>
@@ -199,7 +201,8 @@
     </div>
     <form class="form-inline">
       <label class="select">
-        Select Style: <select class="input-medium" id="selstyle">
+        Select Style: <select class="input-small" id="selstyle">
+          <option value="original">Original</option>
           <option value="cerulean">Cerulean</option>
           <option value="cyborg">Cyborg</option>
           <option value="cosmo">Cosmo</option>
@@ -214,11 +217,11 @@
           <option value="readable">Readable</option>
           <option value="slate">Slate</option>
           <option value="darkening">Darkening</option>
-          <option value="original">Original</option>
+          <option value="todc">Google</option>
           <option value="metro">Metro</option>
         </select>
       </label>
-      <!-- <label class="checkbox"> <input type="checkbox" id="selwidth" <?= $_COOKIE[$config["cookie_prefix"]."fluid_width"]==true?"checked":"" ?> />Fluid Width?</label> -->
+      <label class="checkbox"> <input type="checkbox" id="selwidth" <#if oj_fluid_width??>checked</#if> >Fluid Width?</label>
     </form>
   </footer>
 
