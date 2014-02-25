@@ -57,6 +57,12 @@ public class ProblemService
 
     return problemModel;
   }
+  
+  public Long getProblemsNumber()
+  {
+    return Db.queryLong("SELECT COUNT(*) FROM problem WHERE status=1");
+  }
+  
   public int getNextPid(Integer pid)
   {
     return dao.getNextPid(pid, userService.isAdmin());
