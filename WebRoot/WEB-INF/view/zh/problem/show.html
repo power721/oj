@@ -32,7 +32,7 @@
   Time Limit:<span class="blue">${problem.time_limit!}MS</span> Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
   Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> Accepted:<a
     href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> Page View:<span class="blue">${problem.view!}</span><br>
-  <br> [<a href="problem/submit/${problem.pid!}<#if user.uid??>?ajax=1</#if>"<#if user.uid??>
+  <br> [<a href="problem/submit/${problem.pid!}<#if user??>?ajax=1</#if>"<#if user??>
     data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>] [<a
     href="problem/status/${problem.pid!}">Status</a>] [<a href="#">Discuss</a>]
 </div>
@@ -57,7 +57,7 @@
     </div>
   </form>
 </div>
-</#if> <#if user.uid??>
+</#if> <#if user??>
 <div class="modal hide fade problemModal" id="submitModal">
   <form class="" id="submitForm" action="solution/save" method="post">
     <div class="modal-header">
@@ -207,7 +207,7 @@
 </#if>
 
 <div class="text-center">
-  [<a href="problem/submit/${problem.pid!}<#if user.uid??>?ajax=1</#if>"<#if user.uid??>
+  [<a href="problem/submit/${problem.pid!}<#if user??>?ajax=1</#if>"<#if user??>
     data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>] [<a
     href="problem/status/${problem.pid!}">Status</a>] [<a href="#">Discuss</a>]
 </div>

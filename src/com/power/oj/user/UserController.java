@@ -81,7 +81,7 @@ public class UserController extends OjController
       return;
     }
    
-    setAttr(OjConstants.USER, userModel);
+    setAttr("userModel", userModel);
     
     setTitle(getText("user.profile.title"));
   }
