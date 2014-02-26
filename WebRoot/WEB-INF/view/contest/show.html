@@ -66,15 +66,13 @@
     var start_time = ${contest.start_time!0} * 1000;
     var end_time = ${contest.end_time!0} * 1000;
     var during_time = end_time - start_time;
-    var current_time = new Date().valueOf();
-    var timeDiff = ${serverTime!}*1000 - new Date().valueOf();
+    var current_time = ${serverTime!}*1000;
     function updateProgress() {
-      current_time = new Date().valueOf() + timeDiff;
+      current_time+=1000;
       var percent = (current_time - start_time) / during_time * 100;
       $('#contest-bar').css('width', percent + '%');
-      $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
     }
-    updateProgress();
     setInterval(updateProgress, 1000);
     
     if (current_time >= start_time && current_time <= end_time) {
