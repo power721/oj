@@ -50,28 +50,27 @@
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-        document.onkeydown=nextpage
-        document.onkeydown=nextpage
-        var prevpage="contest/${contestList.pageNumber-1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
-        var nextpage="contest/${contestList.pageNumber+1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
-        function nextpage(event)
-        {
-            event=event?event:(window.event?window.event:null);
-            <#if contestList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
-            <#if contestList.pageNumber<contestList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-        }
-                
-        <#if oj_style != "slate">
-        $("#Contest-list").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
-        </#if>
+  $(document).ready(function() {
+    document.onkeydown=nextpage;
+    var prevpage="contest/${contestList.pageNumber-1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
+    var nextpage="contest/${contestList.pageNumber+1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
+    function nextpage(event)
+    {
+        event=event?event:(window.event?window.event:null);
+        <#if contestList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
+        <#if contestList.pageNumber<contestList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
+    }
+            
+    <#if oj_style != "slate">
+    $("#Contest-list").tablecloth({
+      theme:"stats",
+      condensed:true,
+      sortable:true,
+      striped:true,
+      clean:true
     });
-    </script>
+    </#if>
+  });
+</script>
 </@override>
-<@extends name="../common/_layout.html" />
+<@extends name="_layout.html" />

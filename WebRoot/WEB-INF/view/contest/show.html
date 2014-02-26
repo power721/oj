@@ -1,4 +1,7 @@
 <@override name="contest_content">
+<div class="progress" id="contest-progress">
+  <div class="bar" id="contest-bar"></div>
+</div>
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
@@ -60,13 +63,24 @@
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
+    var start_time = ${contest.start_time!0} * 1000;
+    var end_time = ${contest.end_time!0} * 1000;
+    var during_time = end_time - start_time;
+    var current_time = new Date().valueOf();
     var timeDiff = ${serverTime!}*1000 - new Date().valueOf();
-    function updateTime() {
+    function updateProgress() {
+      current_time = new Date().valueOf() + timeDiff;
+      var percent = (current_time - start_time) / during_time * 100;
+      $('#contest-bar').css('width', percent + '%');
       $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
     }
-    updateTime();
-    setInterval(updateTime, 1000);
-            
+    updateProgress();
+    setInterval(updateProgress, 1000);
+    
+    if (current_time >= start_time && current_time <= end_time) {
+      $('#contest-progress').addClass('progress-danger progress-striped active');
+    }
+    
     <#if oj_style != "slate">
     $("#problem-list").tablecloth({
       theme:"stats",
