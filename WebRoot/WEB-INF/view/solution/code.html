@@ -42,7 +42,7 @@
     <pre class="error">${solution.system_error!}</pre>
   </div>
 </div>
-</#if> <#if !alpha?? && user.uid??>
+</#if> <#if !alpha?? && user??>
 <div class="modal hide fade problemModal" id="submitModal">
   <form class="" action="solution/save" method="post">
     <div class="modal-header">

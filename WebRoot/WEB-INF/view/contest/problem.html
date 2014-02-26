@@ -27,7 +27,7 @@
   Total Submit:<a href="contest/status/${cid!}?id=${problem.id!}">${problem.submit!}</a> Accepted:<a href="contest/status/${cid!}?id=${problem.id!}&result=0">${problem.accept!}</a>
   Page View:<span class="blue">${problem.view!}</span><br> <br> 
   <#if cstatus?? && cstatus==1> 
-  <#if user.uid??>
+  <#if user??>
   <a href="contest/submit/${cid!}-${problem.id!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
   </#if>
   </#if> 
@@ -54,7 +54,7 @@
     </div>
   </form>
 </div>
-</#if> <#if user.uid??>
+</#if> <#if user??>
 <div class="modal hide fade problemModal" id="submitModal">
   <form class="" id="submitForm" action="solution/save" method="post">
     <div class="modal-header">
@@ -204,7 +204,7 @@
 
 <div class="text-center">
   <#if cstatus?? && cstatus==1> 
-  <#if user.uid??>
+  <#if user??>
   <a href="contest/submit/${cid!}-${problem.id!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
   </#if>
   </#if> 

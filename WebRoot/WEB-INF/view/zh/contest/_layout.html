@@ -67,7 +67,7 @@
             </li>
           </ul>
           <ul class="nav pull-right">
-            <#if user.name??>
+            <#if user??>
             <li class="dropdown active"><a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${user.name!"user"}
                 <b class="caret"></b></a>
               <ul class="dropdown-menu">
@@ -122,7 +122,7 @@
   </div>
   <!-- container -->
 
-  <#if !user.uid??>
+  <#if !user??>
   <div class="modal hide fade userModal" id="loginModal">
     <form class="form-horizontal" action="user/signin" method="post">
       <div class="modal-header">
