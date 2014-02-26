@@ -14,7 +14,7 @@
     <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> 
     <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
     <span>Current System Time</span>: <span class="time" id="current"></span> 
-    <span>Contest Status</span>: <span class="${status!}">${status!}</span><br>
+    <span>Contest Status</span>: <span class="status ${status!}">${status!}</span><br>
   </div>
 </div>
 <div class="row text-center">
@@ -38,15 +38,15 @@
       <tbody>
         <#if contestProblems??> <#list contestProblems as Problem>
         <tr>
-          <td><#if Problem.status??><i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i></#if>
+          <td class="result"><#if Problem.status??><i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i></#if>
           </td>
-          <td>
+          <td class="pid">
             <#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></#if>
             <a href="contest/problem/${contest.cid!}-${Problem.id!}" data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a>
           </td>
-          <td><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
-          <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}&result=0">${Problem.accept!}</a></td>
-          <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}">${Problem.submit!}</a></td>
+          <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
+          <td class="accept"><a href="contest/status/${contest.cid!}?id=${Problem.id!}&result=0">${Problem.accept!}</a></td>
+          <td class="submit"><a href="contest/status/${contest.cid!}?id=${Problem.id!}">${Problem.submit!}</a></td>
         </tr>
         </#list> </#if>
       </tbody>
@@ -69,8 +69,10 @@
     var current_time = ${serverTime!}*1000;
     function updateProgress() {
       current_time+=1000;
-      var percent = (current_time - start_time) / during_time * 100;
-      $('#contest-bar').css('width', percent + '%');
+      if (current_time >= start_time && current_time <= end_time) {
+        var percent = (current_time - start_time) / during_time * 100;
+        $('#contest-bar').css('width', percent.toFixed(2) + '%');
+      }
       $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
     }
     setInterval(updateProgress, 1000);
