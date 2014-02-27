@@ -1,7 +1,7 @@
 <@override name="content">
 <form class="form-horizontal" action="notice/save" method="post">
   <div class="control-group notice <#if titleMsg??>error</#if>">
-    <label class="control-label" for="inputTitle">Title</label>
+    <label class="ueditor control-label" for="inputTitle">Title</label>
     <div class="controls">
       <textarea id="inputTitle" name="notice.title" rows="1" cols="120" required></textarea>
       <p class="text-error">${titleMsg!}</p>
@@ -22,7 +22,7 @@
     </div>
   </div>
   <div class="control-group notice">
-    <label class="control-label" for="inputContent">Content</label>
+    <label class="ueditor control-label" for="inputContent">Content</label>
     <div class="controls">
       <textarea id="inputContent" name="notice.content" rows="13" cols="120" required></textarea>
     </div>
@@ -36,6 +36,10 @@
 </form>
 </@override>
 <@override name="scripts">
+  <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
+  <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.config.js"></script>
+  <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.all.min.js"></script>
+  
   <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
   <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
 
@@ -76,6 +80,33 @@
     function getLocalTime(time) {     
        return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");      
     }
+  </script>
+  
+  <script type="text/javascript">  
+    //实例化编辑器
+    var ue = UE.getEditor('inputContent');
+    ue.addListener('ready',function(){
+      this.focus()
+    });
+    
+    $('.ueditor').click(function(){
+      var id = $(this).attr('for');
+      var method = $(this).attr('method');
+      var ue = UE.getEditor(id);
+      
+      if (method == 'destroy')
+      {
+        ue.destroy();
+        $(this).attr('method', 'create');
+      }
+      else
+      {
+       ue.addListener('ready',function(){
+        this.focus()
+       });
+       $(this).attr('method', 'destroy');
+      }
+    });
   </script>
 </@override>
 <@extends name="../common/_layout.html" />
