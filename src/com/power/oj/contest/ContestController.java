@@ -210,7 +210,7 @@ public class ContestController extends OjController
   public void problem_status()
   {
     Integer cid = getParaToInt("cid");
-    char id = getPara("id", "A").toUpperCase().charAt(0);
+    char id = getPara("pid", "A").toUpperCase().charAt(0);
     Integer num = id - 'A';
     ProblemModel problemModel = contestService.getProblem(cid, num);
     boolean ajax = getParaToBoolean("ajax", false);

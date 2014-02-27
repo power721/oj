@@ -17,7 +17,7 @@
       <th width="5%">Solved</th>
       <th width="10%">Penalty</th> <#list contestProblems as Problem>
       <th><a href="contest/problem/${cid!}-${Problem.id}" data-toggle="tooltip" title="${Problem.title}"><strong>${Problem.id}</strong></a><br> <a
-        href="contest/status/${cid!}?id=${Problem.id}&result=0">${Problem.accept}</a>/ <a href="contest/status/${cid!}?id=${Problem.id}">${Problem.submit}</a></th>
+        href="contest/status/${cid!}?pid=${Problem.id}&result=0">${Problem.accept}</a>/ <a href="contest/status/${cid!}?pid=${Problem.id}">${Problem.submit}</a></th>
       </#list>
     </tr>
   </thead>

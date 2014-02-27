@@ -13,7 +13,7 @@
     <tr>
       <td class="text-center"><a href="contest/problem/${cid}-${st.id!}">${st.id!}</a></td> <#list resultName as name> <#assign val=st["${name}"]>
       <td>${val}</td> </#list>
-      <td class="text-center"><a href="contest/status/${cid!}?id=${st.id!}">${st.total!}</a></td> <#list languageList as language> <#assign
+      <td class="text-center"><a href="contest/status/${cid!}?pid=${st.id!}">${st.total!}</a></td> <#list languageList as language> <#assign
       val=st["${language.ext}"]>
       <td>${val}</td> </#list>
     </tr>

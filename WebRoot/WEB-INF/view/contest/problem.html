@@ -24,14 +24,14 @@
   </h2>
   <#if adminUser??><a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> <a href="#"
     class="btn btn-danger">Rejudge</a><br></#if> Time Limit:<span class="blue">${problem.time_limit!}MS</span> Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
-  Total Submit:<a href="contest/status/${cid!}?id=${problem.id!}">${problem.submit!}</a> Accepted:<a href="contest/status/${cid!}?id=${problem.id!}&result=0">${problem.accept!}</a>
+  Total Submit:<a href="contest/status/${cid!}?pid=${problem.id!}">${problem.submit!}</a> Accepted:<a href="contest/status/${cid!}?pid=${problem.id!}&result=0">${problem.accept!}</a>
   Page View:<span class="blue">${problem.view!}</span><br> <br> 
   <#if cstatus?? && cstatus==1> 
   <#if user??>
   <a href="contest/submit/${cid!}-${problem.id!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
   </#if>
   </#if> 
-  <a href="problem/status/?cid=${cid!}&id=${problem.id!}" class="btn btn-info">Status</a>
+  <a href="problem/status/?cid=${cid!}&pid=${problem.id!}" class="btn btn-info">Status</a>
   <a href="#" class="btn btn-info">Discuss</a>
 </div>
 
@@ -208,7 +208,7 @@
   <a href="contest/submit/${cid!}-${problem.id!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
   </#if>
   </#if> 
-  <a href="problem/status/?cid=${cid!}&id=${problem.id!}" class="btn btn-info">Status</a>
+  <a href="problem/status/?cid=${cid!}&pid=${problem.id!}" class="btn btn-info">Status</a>
   <a href="#" class="btn btn-info">Discuss</a>
 </div>
 
