@@ -35,7 +35,8 @@ public class OjConfig
   public static int friendPageSize = 10;
   public static int statusPageSize = 20;
   public static int mailGroupPageSize = 10;
-  public static int mailPageSize = 25;
+  public static int mailPageSize = 20;
+  public static int noticePageSize = 20;
 
   public static long timeStamp;
   public static long startInterceptorTime;

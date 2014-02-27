@@ -419,6 +419,31 @@ AUTO_INCREMENT=1
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `notice`
+-- ----------------------------
+DROP TABLE IF EXISTS `notice`;
+CREATE TABLE `notice` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `editor` int(9) DEFAULT NULL,
+  `cid` int(9) DEFAULT NULL,
+  `title` varchar(512) NOT NULL,
+  `start_time` int(11) NOT NULL,
+  `end_time` int(11) NOT NULL,
+  `content` text,
+  `atime` int(11) DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  `mtime` int(11) DEFAULT NULL,
+  `view` int(9) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of notice
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `problem`
 -- ----------------------------
 DROP TABLE IF EXISTS `problem`;

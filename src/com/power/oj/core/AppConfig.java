@@ -53,6 +53,8 @@ import com.power.oj.core.model.VariableModel;
 import com.power.oj.mail.MailContentModel;
 import com.power.oj.mail.MailController;
 import com.power.oj.mail.MailModel;
+import com.power.oj.notice.NoticeController;
+import com.power.oj.notice.NoticeModel;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.VisitCountService;
@@ -115,6 +117,7 @@ public class AppConfig extends JFinalConfig
     me.add("/bbs", BBSController.class);
     me.add("/contest", ContestController.class);
     me.add("/mail", MailController.class);
+    me.add("/notice", NoticeController.class);
     me.add("/problem", ProblemController.class);
     me.add("/solution", SolutionController.class);
     me.add("/user", UserController.class);
@@ -148,6 +151,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("user_ext", "uid", UserExtModel.class);
     arp.addMapping("friend", FriendModel.class);
     arp.addMapping("friend_group", FriendGroupModel.class);
+    arp.addMapping("notice", NoticeModel.class);
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);

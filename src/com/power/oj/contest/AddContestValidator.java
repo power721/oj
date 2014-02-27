@@ -24,6 +24,8 @@ public class AddContestValidator extends Validator
     {
       validateRequired("contest.pass", "passMsg", c.getText("contest.add.validate.pass"));
     }
+    
+    // TODO validate time
   }
 
 }
