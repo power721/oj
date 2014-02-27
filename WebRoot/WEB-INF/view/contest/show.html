@@ -1,6 +1,6 @@
 <@override name="contest_content">
 <div class="progress" id="contest-progress">
-  <div class="bar" id="contest-bar"></div>
+  <div class="bar" id="contest-bar" style="width:<#if serverTime &gt; contest.end_time>100%</#if>"></div>
 </div>
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
@@ -36,7 +36,8 @@
         </tr>
       </thead>
       <tbody>
-        <#if contestProblems??> <#list contestProblems as Problem>
+        <#if contestProblems??> 
+        <#list contestProblems as Problem>
         <tr>
           <td class="result"><#if Problem.status??><i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i></#if>
           </td>
@@ -48,7 +49,8 @@
           <td class="accept"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}&result=0">${Problem.accept!}</a></td>
           <td class="submit"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}">${Problem.submit!}</a></td>
         </tr>
-        </#list> </#if>
+        </#list> 
+        </#if>
       </tbody>
     </table>
   </div>
