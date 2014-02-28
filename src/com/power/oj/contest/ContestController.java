@@ -27,7 +27,7 @@ import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
 
-@Before({ContestInterceptor.class, ContestPasswordInterceptor.class})
+@Before({ContestPasswordInterceptor.class, ContestInterceptor.class})
 public class ContestController extends OjController
 {
   private static final SolutionService solutionService = SolutionService.me();

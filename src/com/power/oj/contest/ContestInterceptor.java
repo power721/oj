@@ -34,22 +34,10 @@ public class ContestInterceptor implements Interceptor
     
     if (!ShiroKit.hasPermission("contest:view"))
     {
-      Integer uid = userService.getCurrentUid();
-      if (contestModle.isStrictPrivate() || contestModle.isTest())
+      if (!checkAccess(contestModle))
       {
-        if (uid == null || !contestService.isUserInContest(uid, cid))
-        {
-          controller.renderError(401);
-          return;
-        }
-      } 
-      else if (contestModle.isPrivate() && !contestModle.isFinished())
-      {
-        if (uid == null || !contestService.isUserInContest(uid, cid))
-        {
-          controller.renderError(401);
-          return;
-        }
+        controller.renderError(403);
+        return;
       }
       
       if (contestModle.isPending())
@@ -62,4 +50,26 @@ public class ContestInterceptor implements Interceptor
     ai.invoke();
   }
 
+  private boolean checkAccess(ContestModel contestModle)
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer cid = contestModle.getInt("cid");
+    if (contestModle.isStrictPrivate() || contestModle.isTest())
+    {
+      if (uid == null || !contestService.isUserInContest(uid, cid))
+      {
+        return false;
+      }
+    } 
+    else if (contestModle.isPrivate() && !contestModle.isFinished())
+    {
+      if (uid == null || !contestService.isUserInContest(uid, cid))
+      {
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
 }

@@ -5,6 +5,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.util.CryptUtils;
@@ -30,38 +31,60 @@ public class ContestPasswordInterceptor implements Interceptor
       cid = controller.getParaToInt(0);
     else if (controller.getParaToInt("cid") != null)
       cid = controller.getParaToInt("cid");
-
-    if (!contestService.isContestHasPassword(cid))
+    
+    ContestModel contestModle = controller.getAttr("contest");
+    if (contestModle == null)
+    {
+      contestModle = contestService.getContest(cid);
+    }
+    if (contestModle == null)
+    {
+      controller.renderError(404);
+      return;
+    }
+    
+    if (checkPassword(controller, contestModle))
     {
       ai.invoke();
       return;
     }
-
-    String token_name = new StringBuilder("cid-").append(cid).toString();
-    String token_token = "";
-    String token = controller.getSessionAttr(token_name);
-    if (token != null)
-    {
-      try
-      {
-        token_token = CryptUtils.decrypt(token, token_name);
-        if (contestService.checkContestPassword(cid, token_token))
-        {
-          ai.invoke();
-          return;
-        }
-      } catch (Exception e)
-      {
-        log.error(e.getMessage());
-      }
-    }
-   
+    
     controller.keepPara(OjConstants.PAGE_TITLE);
 
-    controller.setAttr("title", contestService.getContestTitle(cid));
+    controller.setAttr("title", contestModle.get("title"));
     controller.setAttr("cid", cid);
 
     controller.render("password.html");
   }
 
+  public boolean checkPassword(Controller controller, ContestModel contestModle)
+  {
+    if (!contestModle.hasPassword())
+    {
+      return true;
+    }
+
+    Integer cid = contestModle.getInt("cid");
+    String token_name = new StringBuilder("cid-").append(cid).toString();
+    String token = controller.getSessionAttr(token_name);
+    if (token != null)
+    {
+      try
+      {
+        token = CryptUtils.decrypt(token, token_name);
+        if (contestModle.checkPassword(token))
+        {
+          return true;
+        }
+      } catch (Exception e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getMessage());
+      }
+    }
+   
+    return false;
+  }
+  
 }
