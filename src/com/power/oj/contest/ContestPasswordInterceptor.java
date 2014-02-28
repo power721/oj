@@ -39,17 +39,21 @@ public class ContestPasswordInterceptor implements Interceptor
 
     String token_name = new StringBuilder("cid-").append(cid).toString();
     String token_token = "";
-    try
+    String token = controller.getSessionAttr(token_name);
+    if (token != null)
     {
-      token_token = CryptUtils.decrypt(controller.getSessionAttr(token_name).toString(), token_name);
-      if (contestService.checkContestPassword(cid, token_token))
+      try
       {
-        ai.invoke();
-        return;
+        token_token = CryptUtils.decrypt(token, token_name);
+        if (contestService.checkContestPassword(cid, token_token))
+        {
+          ai.invoke();
+          return;
+        }
+      } catch (Exception e)
+      {
+        log.error(e.getMessage());
       }
-    } catch (Exception e)
-    {
-      log.error(e.getMessage());
     }
    
     controller.keepPara(OjConstants.PAGE_TITLE);

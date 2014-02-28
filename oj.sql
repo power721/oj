@@ -242,6 +242,22 @@ AUTO_INCREMENT=1
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `contest_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `contest_user`;
+CREATE TABLE `contest_user` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `cid` int(9) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of contest_user
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `freeze_board`
 -- ----------------------------
 DROP TABLE IF EXISTS `freeze_board`;

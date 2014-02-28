@@ -21,6 +21,8 @@ public class TimingInterceptor implements Interceptor
 
     long invokeTime = System.currentTimeMillis() - OjConfig.startInterceptorTime;
     controller.setAttr("invokeTime", invokeTime);
+    controller.setAttr("serverTime", OjConfig.timeStamp);
+    
     System.out.println(new StringBuilder(4).append(actionKey).append(" Action Invoke Time: ")
         .append(invokeTime).append(" milliseconds").toString());
   }

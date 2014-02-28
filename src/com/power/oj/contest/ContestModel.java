@@ -29,4 +29,44 @@ public class ContestModel extends Model<ContestModel>
     return this.save();
   }
   
+  public boolean isPending()
+  {
+    return getInt("start_time") > OjConfig.timeStamp;
+  }
+  
+  public boolean isFinished()
+  {
+    return getInt("end_time") < OjConfig.timeStamp;
+  }
+  
+  public boolean isRunning()
+  {
+    return !isPending() && !isFinished();
+  }
+
+  public boolean isPrivate()
+  {
+    return getInt("type") == 1;
+  }
+
+  public boolean isStrictPrivate()
+  {
+    return getInt("type") == 2;
+  }
+
+  public boolean hasPassword()
+  {
+    return getInt("type") == 3;
+  }
+
+  public boolean isTest()
+  {
+    return getInt("type") == 4;
+  }
+  
+  public boolean checkPassword(String password)
+  {
+    return hasPassword() && get("pass").equals(password);
+  }
+
 }

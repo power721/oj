@@ -49,6 +49,7 @@ public class ContestService
       sb.append(" AND type=?");
       paras.add(type);
     }
+    // TODO only admin and attendee can see test contest
 
     if (status == 0)
     {
@@ -273,6 +274,11 @@ public class ContestService
       return null;
     
     return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
+  }
+  
+  public boolean isUserInContest(Integer uid, Integer cid)
+  {
+    return Db.queryInt("SELECT uid FROM contest_user WHERE uid=? AND cid=?", uid, cid) != null;
   }
   
   public String getRecentContest()

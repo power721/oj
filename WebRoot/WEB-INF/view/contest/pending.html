@@ -1,0 +1,23 @@
+<@override name="content">
+<h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
+<div class="row text-center">
+  <div clas="span4 offset4">
+    <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> 
+    <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
+    <span>Current System Time</span>: <span class="time" id="current"></span> 
+  </div>
+</div>
+</@override>
+<@override name="scripts">
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    var current_time = ${serverTime!}*1000;
+    function updateTime() {
+      current_time+=1000;
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+    }
+    setInterval(updateTime, 1000);
+});
+</script>
+</@override>
+<@extends name="../common/_layout.html" />

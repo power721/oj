@@ -71,11 +71,9 @@ public class ContestController extends OjController
     else if (end_time < serverTime)
       status = getText("contest.status.finished");
 
-    setAttr("cid", cid);
     setAttr("contest", contestModle);
     setAttr("contestProblems", contestService.getContestProblems(cid, uid));
     setAttr("status", status);
-    setAttr("serverTime", serverTime);
 
     setTitle(new StringBuilder(2).append(getText("contest.show.title")).append(cid).toString());
   }
@@ -95,7 +93,6 @@ public class ContestController extends OjController
       return;
     }
 
-    setAttr("cid", cid);
     setAttr("problem", problemModel);
     setAttr("userResult", contestService.getUserResult(cid, num));
     setAttr("cstatus", contestService.getContestStatus(cid));
@@ -127,7 +124,6 @@ public class ContestController extends OjController
       return;
     }
 
-    setAttr("cid", cid);
     setAttr("problem", problemModel);
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     
@@ -144,7 +140,6 @@ public class ContestController extends OjController
     int pageNumber = getParaToInt(1, 1);
     int pageSize = getParaToInt(2, OjConfig.contestRankPageSize);
     
-    setAttr("cid", cid);
     setAttr("pageSize", OjConfig.contestRankPageSize);
     setAttr("contestRank", contestService.getContestRank(pageNumber, pageSize, cid));
     setAttr("contestProblems", contestService.getContestProblems(cid, 0));
@@ -192,8 +187,7 @@ public class ContestController extends OjController
       query.append("&name=").append(userName);
     }
 
-    setAttr("cid", cid);
-    setAttr("contest", contestService.getContestById(cid));
+    //setAttr("contest", contestService.getContestById(cid));
     setAttr("contestProblems", contestService.getContestProblems(cid, 0));
     setAttr("solutionList", solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
@@ -243,7 +237,6 @@ public class ContestController extends OjController
     setAttr("language", language);
     setAttr("query", query.toString());
     setAttr("pageSize", OjConfig.statusPageSize);
-    setAttr("cid", cid);
     setAttr("id", id);
 
     setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"), cid, id)).toString());
@@ -266,7 +259,6 @@ public class ContestController extends OjController
     }
     resultName.add("Others");
     
-    setAttr("cid", cid);
     setAttr("resultName", resultName);
     setAttr("languageList", OjConfig.program_languages);
     setAttr("statistics", contestService.getContestStatistics(cid));
@@ -317,18 +309,14 @@ public class ContestController extends OjController
     redirect(SessionService.me().getLastAccessURL(), msg);
   }
 
+  @ClearInterceptor
   @RequiresPermissions("contest:edit")
   public void edit()
   {
-    Integer cid = getParaToInt(0);
-    ContestModel contestModle = contestService.getContest(cid);
-    
-    setAttr("cid", cid);
-    setAttr("contest", contestModle);
-    
     setTitle(getText("contest.edit.title"));
   }
 
+  @ClearInterceptor
   @Before(POST.class)
   @RequiresPermissions("contest:edit")
   public void update()
@@ -352,6 +340,7 @@ public class ContestController extends OjController
     redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
 
+  @ClearInterceptor
   @RequiresPermissions("contest:add")
   public void add()
   {
@@ -363,6 +352,7 @@ public class ContestController extends OjController
     setTitle(getText("contest.add.title"));
   }
 
+  @ClearInterceptor
   @Before(POST.class)
   @RequiresPermissions("contest:add")
   public void save()
@@ -389,6 +379,7 @@ public class ContestController extends OjController
     redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
 
+  @ClearInterceptor
   @RequiresPermissions("contest:build")
   public void buildRank()
   {
