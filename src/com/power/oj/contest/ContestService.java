@@ -408,16 +408,22 @@ public class ContestService
   
   public boolean updateContest(ContestModel contestModel)
   {
+    ContestModel newContest = dao.findById(contestModel.get("cid"));
     if (contestModel.get("freeze") == null)
     {
-      contestModel.set("freeze", 0);
+      newContest.set("freeze", 0);
     }
     
     if (contestModel.getInt("type") == 3 && StringUtil.isNotBlank(contestModel.getStr("pass")))
     {
-      contestModel.set("pass", contestModel.get("pass"));
+      newContest.set("pass", contestModel.get("pass"));
     }
-    contestModel.set("mtime", OjConfig.timeStamp);
+    newContest.set("title", contestModel.get("title"));
+    newContest.set("description", contestModel.get("description"));
+    newContest.set("start_time", contestModel.get("start_time"));
+    newContest.set("end_time", contestModel.get("end_time"));
+    newContest.set("type", contestModel.get("type"));
+    newContest.set("mtime", OjConfig.timeStamp);
     
     return contestModel.update();
   }

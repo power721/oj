@@ -42,6 +42,9 @@ public class ContestPasswordInterceptor implements Interceptor
       controller.renderError(404);
       return;
     }
+
+    controller.setAttr("cid", cid);
+    controller.setAttr("contest", contestModle);
     
     if (checkPassword(controller, contestModle))
     {

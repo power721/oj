@@ -53,12 +53,10 @@ public class ContestController extends OjController
     Integer cid = getParaToInt(0);
     Integer uid = userService.getCurrentUid();
     
-    ContestModel contestModle = contestService.getContest(cid);
+    ContestModel contestModle = getAttr("contest");
     if (contestModle == null)
     {
-      FlashMessage msg = new FlashMessage(getText("contest.show.null"), MessageType.ERROR, getText("message.error.title"));
-      redirect("/contest", msg);
-      return;
+      contestModle = contestService.getContest(cid);
     }
     
     long serverTime = OjConfig.timeStamp;
@@ -309,7 +307,6 @@ public class ContestController extends OjController
     redirect(SessionService.me().getLastAccessURL(), msg);
   }
 
-  @ClearInterceptor
   @RequiresPermissions("contest:edit")
   public void edit()
   {

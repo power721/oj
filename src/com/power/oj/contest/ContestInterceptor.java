@@ -21,8 +21,11 @@ public class ContestInterceptor implements Interceptor
     else if (controller.getParaToInt("cid") != null)
       cid = controller.getParaToInt("cid");
     
-    ContestModel contestModle = contestService.getContest(cid);
-    
+    ContestModel contestModle = controller.getAttr("contest");
+    if (contestModle == null)
+    {
+      contestModle = contestService.getContest(cid);
+    }
     if (contestModle == null)
     {
       controller.renderError(404);
