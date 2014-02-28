@@ -25,7 +25,7 @@ public class NoticeService
   
   public List<NoticeModel> getNoticeList()
   {
-    return dao.find("SELECT title FROM notice WHERE start_time<=UNIX_TIMESTAMP() AND end_time>=UNIX_TIMESTAMP() AND status=1 ORDER BY id DESC");
+    return dao.find("SELECT id,title FROM notice WHERE start_time<=UNIX_TIMESTAMP() AND end_time>=UNIX_TIMESTAMP() AND status=1 ORDER BY id DESC");
   }
   
   public Page<NoticeModel> getNoticePage(int pageNumber, int pageSize)

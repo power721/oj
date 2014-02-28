@@ -44,6 +44,9 @@ var config = {
 
 $(document).ready(function() {
   $('li.disabled a').removeAttr('href');
+  
+  $("marquee").css("margin-top", $("#oj-navbar").height()+5);
+  /*$("#marqueepos").css("height", $("marquee").height()+$("#oj-navbar").height()-70);*/
 
   $('td.user a').each(function() {
     var that = $(this);

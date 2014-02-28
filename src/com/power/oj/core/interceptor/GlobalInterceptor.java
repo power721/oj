@@ -5,6 +5,7 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.power.oj.core.OjConstants;
+import com.power.oj.notice.NoticeService;
 
 /**
  * Global interceptor<br>
@@ -28,7 +29,9 @@ public class GlobalInterceptor implements Interceptor
     
     String methodName = ai.getMethodName();
     controller.setAttr(OjConstants.METHOD_NAME, methodName);
-
+    
+    controller.setAttr("noticeList", NoticeService.me().getNoticeList());
+    
     ai.invoke();
 
   }
