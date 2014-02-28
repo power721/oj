@@ -23,7 +23,7 @@
       <th>Title</th>
       <th>Start Time</th>
       <th>End Time</th>
-      <th>Type</th>
+      <th>Access</th>
       <th>Status</th>
     </tr>
   </thead>
@@ -34,7 +34,7 @@
       <td><a href="contest/show/${Contest.cid!}">${Contest.title!}</a></td>
       <td class="time">${Contest.start_time_t!}</td>
       <td class="time">${Contest.end_time_t!}</td>
-      <td class="type-${Contest.type!}">${Contest.ctype!}</td>
+      <td class="${Contest.ctype!} type-${Contest.type!}">${Contest.ctype!}</td>
       <td class="${Contest.cstatus!}">${Contest.cstatus!}</td>
     </tr>
     </#list> </#if>

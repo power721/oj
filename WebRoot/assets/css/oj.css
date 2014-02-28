@@ -150,15 +150,15 @@ div#source-code {
 }
 
 .Pending {
-	color: green;
+	color: green !important;
 }
 
 .Running {
-	color: red;
+	color: red !important;
 }
 	
 .Finished {
-	color: blue;
+	color: blue !important;
 }
 
 span.time {
@@ -206,7 +206,7 @@ table#contest-rank td.wa4 {
 }
 
 table#contest-rank td.fb {
-	background-color:#005599;
+	background-color:#007F00 !important;
 	color:#FFF;
 }
 
