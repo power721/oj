@@ -83,6 +83,10 @@ a.cureent {
 	margin: -50px 0 0 -450px;
 }
 
+.modal-body textarea {
+	width: 98%;
+}
+
 #notice-content {
 	margin: 20px;
 	min-height: 450px;

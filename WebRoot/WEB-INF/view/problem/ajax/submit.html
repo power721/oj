@@ -18,7 +18,7 @@
 <div class="control-group solution">
   <label class="control-label" for="inputSource">Source Code</label>
   <div class="controls">
-    <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="120" required>${(solution.source)!}</textarea>
+    <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="100" required>${(solution.source)!}</textarea>
   </div>
 </div>
 
@@ -28,16 +28,4 @@
     $().ready(function() {
       $("#submitForm").validate();
     });
-  </script>
-
-<noscript>
-  <base href="${baseUrl!}/" />
-  <link href="assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-  <div class="span5 offset4">
-    <div class="alert alert-error">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <h4>Your Browser disabled JavaScript!</h4>
-      <a href="problem/submit/${problem.pid!}">click here to Submit</a>
-    </div>
-  </div>
-  <noscript>
+</script>
