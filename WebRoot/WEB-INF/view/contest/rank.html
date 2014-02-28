@@ -41,8 +41,8 @@
 </table>
 
 <div class="pagination pagination-centered">
-  <#include "../common/_paginate.html" />
-  <@paginate currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}/" />
+  <#include "../common/_paginate2.html" />
+  <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
 </div>
 </@override>
 
