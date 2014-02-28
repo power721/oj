@@ -15,33 +15,6 @@ Date: 2013-12-13 20:26:35
 
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
--- Table structure for `announce`
--- ----------------------------
-DROP TABLE IF EXISTS `announce`;
-CREATE TABLE `announce` (
-`id`  int(9) NOT NULL AUTO_INCREMENT ,
-`uid`  int(9) NOT NULL ,
-`title`  varchar(355) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`start_time`  datetime NULL DEFAULT NULL ,
-`end_time`  datetime NULL DEFAULT NULL ,
-`content`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`atime`  int(11) NULL DEFAULT NULL ,
-`ctime`  int(11) NULL DEFAULT NULL ,
-`mtime`  int(11) NULL DEFAULT NULL ,
-`status`  tinyint(1) NOT NULL DEFAULT 1 ,
-PRIMARY KEY (`id`)
-)
-ENGINE=InnoDB
-DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=1000
-
-;
-
--- ----------------------------
--- Records of announce
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `board`
 -- ----------------------------
 DROP TABLE IF EXISTS `board`;
@@ -114,6 +87,103 @@ AUTO_INCREMENT=1
 -- ----------------------------
 -- Records of board
 -- ----------------------------
+-- ----------------------------
+-- Table structure for `category`
+-- ----------------------------
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `parent` int(9) NOT NULL DEFAULT '0',
+  `name` varchar(2048) NOT NULL,
+  `zh` varchar(2048) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of category
+-- ----------------------------
+INSERT INTO `category` VALUES ('1', '0', 'Graph Theory', '图论');
+INSERT INTO `category` VALUES ('2', '1', '2-SAT', '2-SAT');
+INSERT INTO `category` VALUES ('3', '1', 'Articulation/Bridge/Biconnected Component', '连通性');
+INSERT INTO `category` VALUES ('4', '1', 'Cycles/Topological Sorting/Strongly Connected Component', '环/拓扑/强连通');
+INSERT INTO `category` VALUES ('5', '1', 'Shortest Path', '最短路径');
+INSERT INTO `category` VALUES ('6', '5', 'Bellman Ford/SPFA', 'Bellman Ford/SPFA');
+INSERT INTO `category` VALUES ('7', '5', 'Dijkstra/Floyd Warshall', 'Dijkstra/Floyd Warshall');
+INSERT INTO `category` VALUES ('8', '1', 'Euler Trail/Circuit', '欧拉路径/欧拉回路');
+INSERT INTO `category` VALUES ('9', '1', 'Heavy-Light Decomposition', '动态树');
+INSERT INTO `category` VALUES ('10', '1', 'Minimum Spanning Tree', '最小生成树');
+INSERT INTO `category` VALUES ('11', '1', 'Directed Minimum Spanning Tree', '有向最小生成树');
+INSERT INTO `category` VALUES ('12', '1', 'Stable Marriage Problem', '稳定婚姻匹配问题');
+INSERT INTO `category` VALUES ('13', '1', 'Trees', '树');
+INSERT INTO `category` VALUES ('14', '1', 'Flow/Matching', '流/匹配');
+INSERT INTO `category` VALUES ('15', '14', 'Graph Matching', '一般图匹配');
+INSERT INTO `category` VALUES ('16', '15', 'Bipartite Matching', '2分图匹配');
+INSERT INTO `category` VALUES ('17', '15', 'Hopcroft–Karp Bipartite Matching', 'HK匹配');
+INSERT INTO `category` VALUES ('18', '15', 'Weighted Bipartite Matching/Hungarian Algorithm', '加权图匹配/匈牙利算法');
+INSERT INTO `category` VALUES ('19', '14', 'Flow', '流');
+INSERT INTO `category` VALUES ('20', '19', 'Max Flow/Min Cut', '最大流/最小割');
+INSERT INTO `category` VALUES ('21', '19', 'Min Cost Max Flow', '最小费用最大流');
+INSERT INTO `category` VALUES ('22', '0', 'DFS-like', '搜索');
+INSERT INTO `category` VALUES ('23', '22', 'Backtracking with Pruning/Branch and Bound', '回溯剪枝/分枝界限法\r\n');
+INSERT INTO `category` VALUES ('24', '22', 'Basic Recursion', '递归');
+INSERT INTO `category` VALUES ('25', '22', 'IDA* Search', '迭代加深搜索');
+INSERT INTO `category` VALUES ('26', '22', 'Parsing/Grammar', '语法分析');
+INSERT INTO `category` VALUES ('27', '22', 'Breadth First Search/Depth First Search', '广度/深度优先搜索');
+INSERT INTO `category` VALUES ('28', '22', 'Advanced Search Techniques', '高级搜索技术');
+INSERT INTO `category` VALUES ('29', '28', 'Binary Search/Bisection', '二分搜索');
+INSERT INTO `category` VALUES ('30', '28', 'Ternary Search', '三叉树搜索');
+INSERT INTO `category` VALUES ('31', '0', 'Geometry', '几何');
+INSERT INTO `category` VALUES ('32', '32', 'Basic Geometry', '简单几何');
+INSERT INTO `category` VALUES ('33', '32', 'Computational Geometry', '计算几何');
+INSERT INTO `category` VALUES ('34', '32', 'Convex Hull', '凸包');
+INSERT INTO `category` VALUES ('35', '32', 'Pick\'s Theorem', '皮克定理');
+INSERT INTO `category` VALUES ('36', '0', 'Game Theory', '博弈论');
+INSERT INTO `category` VALUES ('37', '36', 'Green Hackenbush/Colon Principle/Fusion Principle', 'Green Hackenbush/Colon Principle/Fusion Principle');
+INSERT INTO `category` VALUES ('38', '36', 'Nim', 'Nim');
+INSERT INTO `category` VALUES ('39', '36', 'Sprague-Grundy Number', 'SG值');
+INSERT INTO `category` VALUES ('40', '0', 'Matrix', '矩阵');
+INSERT INTO `category` VALUES ('41', '41', 'Gaussian Elimination', '高斯消元');
+INSERT INTO `category` VALUES ('42', '41', 'Matrix Exponentiation', '矩阵求幂');
+INSERT INTO `category` VALUES ('43', '0', 'Data Structures', '数据结构');
+INSERT INTO `category` VALUES ('44', '43', 'Basic Data Structures', '简单数据结构');
+INSERT INTO `category` VALUES ('45', '43', 'Binary Indexed Tree', '树状数组');
+INSERT INTO `category` VALUES ('46', '43', 'Binary Search Tree', '二叉搜索树');
+INSERT INTO `category` VALUES ('47', '43', 'Hashing', '哈希');
+INSERT INTO `category` VALUES ('48', '43', 'Orthogonal Range Search', '正交范围搜索');
+INSERT INTO `category` VALUES ('49', '43', 'Range Minimum Query/Lowest Common Ancestor', 'RMQ/LCA');
+INSERT INTO `category` VALUES ('50', '43', 'Segment Tree/Interval Tree', '线段树/区间树');
+INSERT INTO `category` VALUES ('51', '43', 'Trie Tree', '字典树');
+INSERT INTO `category` VALUES ('52', '43', 'Sorting', '排序');
+INSERT INTO `category` VALUES ('53', '43', 'Disjoint Set', '并查集');
+INSERT INTO `category` VALUES ('54', '0', 'String', '字符串');
+INSERT INTO `category` VALUES ('55', '54', 'Aho Corasick', 'AC自动机');
+INSERT INTO `category` VALUES ('56', '54', 'Knuth-Morris-Pratt', 'KMP匹配');
+INSERT INTO `category` VALUES ('57', '54', 'Suffix Array/Suffix Tree', '后缀数组/后缀树');
+INSERT INTO `category` VALUES ('58', '0', 'Math', '数学');
+INSERT INTO `category` VALUES ('59', '58', 'Basic Math', '基础数学');
+INSERT INTO `category` VALUES ('60', '58', 'Big Integer Arithmetic', '高精度');
+INSERT INTO `category` VALUES ('61', '58', 'Number Theory', '数论');
+INSERT INTO `category` VALUES ('62', '61', 'Chinese Remainder Theorem', '中国同余定理');
+INSERT INTO `category` VALUES ('64', '61', 'Inclusion/Exclusion', '容斥');
+INSERT INTO `category` VALUES ('65', '61', 'Modular Arithmetic', '模运算');
+INSERT INTO `category` VALUES ('66', '58', 'Combinatorics', '组合数学');
+INSERT INTO `category` VALUES ('67', '66', 'Group Theory/Burnside\'s lemma', '集团理论/伯恩赛德引理');
+INSERT INTO `category` VALUES ('68', '66', 'Counting', '计数');
+INSERT INTO `category` VALUES ('69', '58', 'Probability/Expected Value', '概率/期望');
+INSERT INTO `category` VALUES ('70', '0', 'Others', '其它');
+INSERT INTO `category` VALUES ('71', '71', 'Tricky', '技巧');
+INSERT INTO `category` VALUES ('72', '71', 'Hardest', '困难');
+INSERT INTO `category` VALUES ('73', '71', 'Unusual', '罕见');
+INSERT INTO `category` VALUES ('74', '71', 'Brute Force', '暴力');
+INSERT INTO `category` VALUES ('75', '71', 'Implementation', '实现');
+INSERT INTO `category` VALUES ('76', '71', 'Constructive Algorithms', '构造算法');
+INSERT INTO `category` VALUES ('77', '71', 'Two Pointer', '');
+INSERT INTO `category` VALUES ('78', '71', 'Bitmask', '位掩码');
+INSERT INTO `category` VALUES ('79', '71', 'Beginner', '入门');
+INSERT INTO `category` VALUES ('80', '71', 'Discrete Logarithm/Shank\'s Baby-step Giant-step Algorithm', '离散对数/');
+INSERT INTO `category` VALUES ('81', '71', 'Greedy', '贪心');
+INSERT INTO `category` VALUES ('82', '71', 'Divide and Conquer', '分治');
+INSERT INTO `category` VALUES ('83', '0', 'Dynamic Programming', '动态规划');
 
 -- ----------------------------
 -- Table structure for `contest`
@@ -486,6 +556,22 @@ AUTO_INCREMENT=1000
 
 -- ----------------------------
 -- Records of problem
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `problem_category`
+-- ----------------------------
+DROP TABLE IF EXISTS `problem_category`;
+CREATE TABLE `problem_category` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `pid` int(9) NOT NULL,
+  `cid` int(9) NOT NULL,
+  `weight` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of problem_category
 -- ----------------------------
 
 -- ----------------------------
