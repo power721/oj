@@ -352,7 +352,14 @@ public class UserController extends OjController
   @RequiresGuest
   public void signup()
   {
+    boolean ajax = getParaToBoolean("ajax", false);
+    
     setTitle(getText("user.signup.title"));
+    
+    if (ajax)
+      render("ajax/signup.html");
+    else
+      render("signup.html");
   }
   
   @Before({POST.class, SignupValidator.class})

@@ -83,10 +83,10 @@
             <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
           <#else>
             <li class="<#if actionKey?? && actionKey=="login">active</#if>">
-              <a href="#" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+              <a href="#" data-toggle="modal" id="login" data-target="#loginModal"><i class="icon-user"></i>Login</a>
             </li>
             <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
-              <a href="signup"><i class="icon-star"></i>Signup</a>
+              <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal"><i class="icon-star"></i>Signup</a>
             </li>
           </#if>
           </ul>
@@ -137,7 +137,7 @@
       <div class="modal-body">
         <div class="control-group">
           <div class="controls">
-            <span class="help-block">Don't have an account? <a href="signup">Sign up here</a>
+            <span class="help-block">Don't have an account? <a href="signup" class="toSignup">Sign up here</a>
             </span>
           </div>
         </div>
@@ -180,6 +180,26 @@
         </a>
         </#if>
         <button type="submit" class="btn btn-primary">Login</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="modal hide fade userModal" id="signupModal">
+    <form class="" action="user/save" id="signupForm" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+        <h3 id="signupModalLabel">
+          Signup:
+          <a href="signup" title="Signup in another page" data-toggle="tooltip" data-placement="bottom">Create a account</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <a href="signup" class="btn btn-primary">Signup</a>
+      </div>
+      <div class="modal-footer">
+        <a href="login" class="btn btn-info pull-left toLogin">Login</a>
+        <button type="submit" class="btn btn-primary">Signup</button>
         <button class="btn" data-dismiss="modal">Cancel</button>
       </div>
     </form>

@@ -47,6 +47,18 @@ $(document).ready(function() {
   
   $("marquee").css("margin-top", $("#oj-navbar").height()+5);
   /*$("#marqueepos").css("height", $("marquee").height()+$("#oj-navbar").height()-70);*/
+  
+  $('.toLogin').click(function() {
+	  $('#signupModal').modal("hide");
+	  $('#loginModal').modal("show");
+	  return false;
+  });
+
+  $('.toSignup').click(function() {
+	  $('#loginModal').modal("hide");
+	  $('#signup').trigger("click");
+	  return false;
+  });
 
   $('td.user a').each(function() {
     var that = $(this);
