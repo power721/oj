@@ -1,12 +1,13 @@
 <@override name="content">
 <div class="pagination pagination-centered">
   <div class="pull-left">
-    <form class="form-search" action="contest/search">
+    <#if adminUser??><a href="contest/add" class="btn btn-info">Add a contest</a></#if>
+    <!-- <form class="form-search" action="contest/search">
       <div class="input-append">
         <input type="text" class="input-medium search-query" name="word" placeholder="Search Contest">
         <button type="submit" class="btn btn-info">Search</button>
       </div>
-    </form>
+    </form> -->
   </div>
   <#include "../common/_paginate.html" />
   <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="contest/" />

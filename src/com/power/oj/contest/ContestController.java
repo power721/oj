@@ -310,7 +310,14 @@ public class ContestController extends OjController
   @RequiresPermissions("contest:edit")
   public void edit()
   {
+    boolean ajax = getParaToBoolean("ajax", false);
+    
     setTitle(getText("contest.edit.title"));
+
+    if (ajax)
+      render("ajax/edit.html");
+    else
+      render("edit.html");
   }
 
   @ClearInterceptor

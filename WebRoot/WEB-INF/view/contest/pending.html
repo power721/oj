@@ -32,7 +32,7 @@
     * 请用encodeURIComponent对内容和时间进行编码。
     */ 
   var __qqClockShare = {
-     content: "比赛 ${contest.cid!}: ${contest.title!} 即将开始。",
+     content: "<#if user??>Hi ${user.name}, </#if>比赛 ${contest.cid!}: ${contest.title!} 即将开始。",
      time: new Date(${contest.start_time!0}*1000).format("yyyy-MM-dd hh:mm"),
      advance: 5,
      url: "${baseUrl}/contest/show/${contest.cid!}",
