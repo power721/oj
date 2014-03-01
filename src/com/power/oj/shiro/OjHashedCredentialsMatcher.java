@@ -30,7 +30,7 @@ public class OjHashedCredentialsMatcher extends HashedCredentialsMatcher
         log.info(hashedPassword);
       }
       
-      if (hashedPassword.equals(hashedPassword))
+      if (hashedPassword.equals(password))
       {
         return true;
       }
