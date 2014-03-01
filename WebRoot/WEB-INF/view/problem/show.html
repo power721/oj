@@ -33,7 +33,7 @@
   Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> 
   Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> 
   Page View:<span class="blue">${problem.view!}</span><br><br> 
-  <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
+  <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
   <a href="#" class="btn btn-info">Discuss</a>
 </div>
@@ -213,7 +213,7 @@
 </#if>
 
 <div class="text-center">
-  <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
+  <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
   <a href="#" class="btn btn-info">Discuss</a>
 </div>
