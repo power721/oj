@@ -39,4 +39,26 @@ public class ContestApiController extends OjController
     }
   }
   
+  @RequiresPermissions("contest:removeProblem")
+  public void deleteProblem()
+  {
+    Integer cid = getParaToInt("cid");
+    Integer pid = getParaToInt("pid");
+    
+    int result = contestService.deleteProblem(cid, pid);
+    
+    if (result > 0)
+    {
+      renderJson("{\"success\":true}");
+    }
+    else if (result == -1)
+    {
+      renderJson("{\"success\":false, \"result\":\"Cannot delete problem.\"}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"result\":\"Delete problem failed.\"}");
+    }
+  }
+  
 }

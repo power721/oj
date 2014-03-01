@@ -28,16 +28,17 @@
       <tbody>
         <#if contestProblems??>
         <#list contestProblems as Problem>
-        <tr>
+        <tr class="problem">
           <td><i class="icon-resize-vertical"></i><span class="id"></span></td>
           <td class="pid">
             <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
           </td>
           <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
-          <td class="admin"><button class="btn btn-danger admin" pid="${Problem.pid!}">Delete</button></td>
+          <td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger delete" pid="${Problem.pid!}">Delete</button></#if></td>
         </tr>
         </#list>
         </#if>
+        <#if serverTime<contest.end_time>
         <tr>
           <form class="form-inline" id="addProblem" action="api/contest/addProblem" method="post">
           <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
@@ -46,6 +47,7 @@
           <td><button type="submit" class="btn btn-success">Add</button></td>
           </form>
         </tr>
+        </#if>
       </tbody>
     </table>
   </div>
@@ -114,29 +116,72 @@
       clean:true
     });
     </#if>
-  });
 
-  $(function() {
-    $('#addProblem').submit(function() {
-      $.post($(this).attr("action"), $('#addProblem').serialize(),
-        function(data) {
-          if (data.success) {
-            /*dialog.content('Add problem to contest.').lock().time(1);
-            setTimeout(function() {
-              window.location.reload();
-            },
-            1000);*/
-            window.location.reload();
-          }
-          else
-          {
-            $.dialog({
-              content: data.result,
-              time: 1.5
+    $(function() {
+      $('#addProblem').submit(function() {
+        var that = $(this);
+        var cid = $('input[name=cid]').val();
+        var pid = $('input[name=pid]').val();
+        var title = $('input[name=title]').val();
+        $.post($(this).attr("action"), $('#addProblem').serialize(),
+          function(data) {
+            if (data.success) {
+              var html = '<tr class="problem">' +
+                        '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>' +
+                        '<td class="pid">' +
+                        '<a href="problem/show/' + pid + '">' + pid + '</a>' +
+                        '</td>' +
+                        '<td class="title"><a href="contest/problem/' + cid + '-' + pid + '">' + title + '</a></td>' +
+                        '<td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger delete" pid="' + pid + '">Delete</button></#if></td>' +
+                        '</tr>';
+              that.parent().before(html);
+              updateId();
+              $.dialog({
+                content: 'Problem add.',
+                time: 1
+              });
+            }
+            else
+            {
+              $.dialog({
+                content: data.result,
+                time: 1.5
+              });
+            }
+          });
+        return false;
+      });
+      $('.admin').delegate("button", "click", function() {
+        var that = $(this);
+        $.dialog({
+          title: 'Delete problem from contest',
+          content: 'Are you sure?',
+          cancelVal: 'Cancel',
+          cancel: true,
+          okVal: 'Delete',
+          ok: function() {
+            $.post('api/contest/deleteProblem', {cid:${contest.cid!}, pid:that.attr('pid')}, function(data) {
+              if (data.success) {
+                  that.parent().parent().remove();
+                  updateId();
+                  $.dialog({
+                    content: 'Problem removed.',
+                    time: 1
+                  });
+                }
+                else
+                {
+                  $.dialog({
+                    content: data.result,
+                    time: 1.5
+                  });
+                }
             });
+            this.close();
+            return false;
           }
         });
-      return false;
+      });
     });
   });
 </script>

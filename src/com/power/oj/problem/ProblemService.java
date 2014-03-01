@@ -120,7 +120,7 @@ public class ProblemService
       return null;
     }
     
-    ProblemModel problemModel = dao.findById(pid);
+    ProblemModel problemModel = dao.findByPid(pid, false);
     if (problemModel == null)
     {
       return null;

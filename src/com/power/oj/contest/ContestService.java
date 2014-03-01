@@ -430,7 +430,7 @@ public class ContestService
   
   public int addProblem(Integer cid, Integer pid, String title)
   {
-    if(Db.queryInt("SELECT pid FROM problem WHERE pid=?", pid) == null)
+    if(Db.queryInt("SELECT pid FROM problem WHERE pid=? AND status=1", pid) == null)
     {
       return -3;
     }
@@ -444,7 +444,7 @@ public class ContestService
     {
       num = 0L;
     }
-    if (num > 26)
+    if (num >= 26)
     {
       return -2;
     }
@@ -463,7 +463,23 @@ public class ContestService
 
   public int deleteProblem(Integer cid, Integer pid)
   {
-    return Db.update("DELETE FROM contest_problem WHERE cid=? AND pid=?", cid, pid);
+    if (!isContestPending(cid))
+    {
+      return -1;
+    }
+    List<Record> problems = Db.find("SELECT * FROM contest_problem WHERE cid=? ORDER BY num", cid);
+    int result = Db.update("DELETE FROM contest_problem WHERE cid=?", cid);
+    int i = 0;
+    for (Record problem : problems)
+    {
+      if (!pid.equals(problem.getInt("pid")))
+      {
+        problem.set("num", i++);
+        Db.save("contest_problem", problem);
+      }
+    }
+    
+    return result;
   }
   
   public boolean buildRank(Integer cid)
