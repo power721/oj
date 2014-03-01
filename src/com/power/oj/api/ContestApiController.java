@@ -29,6 +29,10 @@ public class ContestApiController extends OjController
     {
       renderJson("{\"success\":false, \"result\":\"Too many problems in this contest.\"}");
     }
+    else if(result == -3)
+    {
+      renderJson("{\"success\":false, \"result\":\"This problem does not exist.\"}");
+    }
     else
     {
       renderJson("{\"success\":false, \"result\":\"Add problem failed.\"}");

@@ -118,19 +118,22 @@
 
   $(function() {
     $('#addProblem').submit(function() {
-      var dialog = $.dialog();
       $.post($(this).attr("action"), $('#addProblem').serialize(),
         function(data) {
           if (data.success) {
-            dialog.content('Add problem to contest.').lock().time(1000);
+            /*dialog.content('Add problem to contest.').lock().time(1);
             setTimeout(function() {
               window.location.reload();
             },
-            1000);
+            1000);*/
+            window.location.reload();
           }
           else
           {
-            dialog.content(data.result).lock().time(1000);
+            $.dialog({
+              content: data.result,
+              time: 1.5
+            });
           }
         });
       return false;

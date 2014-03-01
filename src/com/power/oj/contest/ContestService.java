@@ -430,10 +430,15 @@ public class ContestService
   
   public int addProblem(Integer cid, Integer pid, String title)
   {
+    if(Db.queryInt("SELECT pid FROM problem WHERE pid=?", pid) == null)
+    {
+      return -3;
+    }
     if (Db.queryInt("SELECT id FROM contest_problem WHERE cid=? AND pid=?", cid, pid) != null)
     {
       return -1;
     }
+    
     Long num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
     if (num == null)
     {
