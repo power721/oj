@@ -28,7 +28,7 @@
       <tbody>
         <#if contestProblems??>
         <#list contestProblems as Problem>
-        <tr class="problem">
+        <tr class="problem" pid="${Problem.pid!}" num="">
           <td><i class="icon-resize-vertical"></i><span class="id"></span></td>
           <td class="pid">
             <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
@@ -44,7 +44,8 @@
           <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
           <td><input type="number" name="pid" class="input-small" placeholder="Problem ID" required></td>
           <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
-          <td><button type="submit" class="btn btn-success">Add</button></td>
+          <td>
+            <button type="submit" class="btn btn-success">Add</button> <#if serverTime<contest.start_time><a class="btn btn-info hidden" id="reorder">Save</a></#if></td>
           </form>
         </tr>
         </#if>
@@ -94,6 +95,7 @@
     function updateId() {
       $("#problem-list tbody tr").each(function(i, e) {
           var newId = String.fromCharCode(65+i);
+          $(e).attr('num', i);
           $(e).children().children('.id').html(newId);
         });
     }
@@ -103,6 +105,7 @@
       connectWith: "tr",
       stop: function(e, info) {
         info.item.after(info.item.parents('tr'));
+        $('#reorder').removeClass('hidden');
         updateId();
       }
     }).disableSelection();
@@ -126,7 +129,7 @@
         $.post($(this).attr("action"), $('#addProblem').serialize(),
           function(data) {
             if (data.success) {
-              var html = '<tr class="problem">' +
+              var html = '<tr class="problem" pid="' + pid + '">' +
                         '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>' +
                         '<td class="pid">' +
                         '<a href="problem/show/' + pid + '">' + pid + '</a>' +
@@ -150,6 +153,28 @@
             }
           });
         return false;
+      });
+      $('#reorder').click(function() {
+        var data = {cid:${contest.cid!}, pid:''};
+        $("#problem-list tbody tr.problem").each(function(i, e) {
+          data.pid += $(e).attr('pid')+',';
+        });
+        data.pid = data.pid.substring(0, data.pid.length-1);
+        $.post('api/contest/reorderProblem', data, function(data) {
+          if (data.success) {
+              $.dialog({
+                content: 'Reorder problem success.',
+                time: 1
+              });
+            }
+            else
+            {
+              $.dialog({
+                content: data.result,
+                time: 1.5
+              });
+            }
+          });
       });
       $('.admin').delegate("button", "click", function() {
         var that = $(this);

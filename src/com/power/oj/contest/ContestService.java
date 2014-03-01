@@ -430,6 +430,11 @@ public class ContestService
   
   public int addProblem(Integer cid, Integer pid, String title)
   {
+    if (!isContestFinished(cid))
+    {
+      return -4;
+    }
+    
     if(Db.queryInt("SELECT pid FROM problem WHERE pid=? AND status=1", pid) == null)
     {
       return -3;
@@ -467,6 +472,7 @@ public class ContestService
     {
       return -1;
     }
+    
     List<Record> problems = Db.find("SELECT * FROM contest_problem WHERE cid=? ORDER BY num", cid);
     int result = Db.update("DELETE FROM contest_problem WHERE cid=?", cid);
     int i = 0;
@@ -479,6 +485,24 @@ public class ContestService
       }
     }
     
+    return result;
+  }
+  
+  public int reorderProblem(Integer cid, String str)
+  {
+    if (!isContestPending(cid))
+    {
+      return -1;
+    }
+    
+    int result = 0;
+    int i = 0;
+    String[] pids = str.split(",");
+    for (String s_pid : pids)
+    {
+      Integer pid = Integer.parseInt(s_pid);
+      result += Db.update("UPDATE contest_problem SET num=? WHERE cid=? AND pid=?", i++, cid, pid);
+    }
     return result;
   }
   

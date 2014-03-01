@@ -61,4 +61,20 @@ public class ContestApiController extends OjController
     }
   }
   
+  @RequiresPermissions("contest:addProblem")
+  public void reorderProblem()
+  {
+    Integer cid = getParaToInt("cid");
+    String pid = getPara("pid");
+    
+    if (contestService.reorderProblem(cid, pid) > 0)
+    {
+      renderJson("{\"success\":true}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"result\":\"Unknown error!\"}");
+    }
+  }
+  
 }
