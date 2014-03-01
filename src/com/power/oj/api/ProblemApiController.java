@@ -84,4 +84,13 @@ public class ProblemApiController extends OjController
     renderJson(new String[]{ "pid", "userID", "adminUser", "pageSize", "language", "query", "program_languages", "solutionList" });
   }
   
+  @ClearInterceptor(ClearLayer.ALL)
+  public void getProblemField()
+  {
+    Integer pid = getParaToInt("pid");
+    String name = getPara("name");
+
+    renderJson("result", problemService.getProblemField(pid, name));
+  }
+  
 }

@@ -427,7 +427,40 @@ public class ContestService
     
     return contestModel.update();
   }
+  
+  public int addProblem(Integer cid, Integer pid, String title)
+  {
+    if (Db.queryInt("SELECT id FROM contest_problem WHERE cid=? AND pid=?", cid, pid) != null)
+    {
+      return -1;
+    }
+    Long num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
+    if (num == null)
+    {
+      num = 0L;
+    }
+    if (num > 26)
+    {
+      return -2;
+    }
+    Record record = new Record();
+    record.set("cid", cid);
+    record.set("pid", pid);
+    record.set("title", title);
+    record.set("num", num);
+    
+    if (Db.save("contest_problem", record))
+    {
+      return 0;
+    }
+    return 1;
+  }
 
+  public int deleteProblem(Integer cid, Integer pid)
+  {
+    return Db.update("DELETE FROM contest_problem WHERE cid=? AND pid=?", cid, pid);
+  }
+  
   public boolean buildRank(Integer cid)
   {
     Db.update("DELETE FROM board WHERE cid=?", cid);

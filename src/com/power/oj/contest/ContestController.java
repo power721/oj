@@ -382,6 +382,35 @@ public class ContestController extends OjController
 
     redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
+  
+  @RequiresPermissions("contest:add")
+  public void admin()
+  {
+    Integer cid = getParaToInt(0);
+    Integer uid = userService.getCurrentUid();
+    
+    ContestModel contestModle = getAttr("contest");
+    if (contestModle == null)
+    {
+      contestModle = contestService.getContest(cid);
+    }
+    
+    long serverTime = OjConfig.timeStamp;
+    int start_time = contestModle.getInt("start_time");
+    int end_time = contestModle.getInt("end_time");
+    String status = getText("contest.status.running");
+
+    if (start_time > serverTime)
+      status = getText("contest.status.pending");
+    else if (end_time < serverTime)
+      status = getText("contest.status.finished");
+
+    setAttr("contest", contestModle);
+    setAttr("contestProblems", contestService.getContestProblems(cid, uid));
+    setAttr("status", status);
+
+    //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());
+  }
 
   @ClearInterceptor
   @RequiresPermissions("contest:build")

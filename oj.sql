@@ -230,7 +230,8 @@ CREATE TABLE `contest_problem` (
 `submit` int(9) NOT NULL DEFAULT '0',
 `first_blood` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
 `first_blood_time` int(9) NOT NULL DEFAULT '-1' COMMENT 'first time(minutes) solved this problem',
-PRIMARY KEY (`id`)
+PRIMARY KEY (`id`),
+UNIQUE KEY `problem` (`cid`,`pid`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci

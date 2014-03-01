@@ -112,6 +112,23 @@ public class ProblemService
     return dao.getUserResult(pid, uid);
   }
   
+  public <T> T getProblemField(Integer pid, String name)
+  {
+    String[] fields = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
+    if (StringUtil.equalsOne(name, fields) == -1)
+    {
+      return null;
+    }
+    
+    ProblemModel problemModel = dao.findById(pid);
+    if (problemModel == null)
+    {
+      return null;
+    }
+        
+    return problemModel.get(name);
+  }
+  
   public Page<ProblemModel> getProblemPage(int pageNumber, int pageSize)
   {
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";

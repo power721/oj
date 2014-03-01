@@ -1,0 +1,141 @@
+<@override name="contest_content">
+<h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
+<div class="row text-center">
+  <div clas="span4 offset4">
+    <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> 
+    <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
+    <span>Current System Time</span>: <span class="time" id="current">${contest.start_time_t!}</span> 
+    <span>Contest Status</span>: <span class="status ${status!}">${status!}</span><br>
+  </div>
+</div>
+<div class="row text-center">
+  <div clas="span4 offset4">
+    <p>${contest.description!}</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span8 offset2">
+    <table id="problem-list" class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Problem</th>
+          <th>Title</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <#if contestProblems??>
+        <#list contestProblems as Problem>
+        <tr>
+          <td><i class="icon-resize-vertical"></i><span class="id"></span></td>
+          <td class="pid">
+            <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
+          </td>
+          <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
+          <td class="admin"><button class="btn btn-danger admin" pid="${Problem.pid!}">Delete</button></td>
+        </tr>
+        </#list>
+        </#if>
+        <tr>
+          <form class="form-inline" id="addProblem" action="api/contest/addProblem" method="post">
+          <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
+          <td><input type="number" name="pid" class="input-small" placeholder="Problem ID" required></td>
+          <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
+          <td><button type="submit" class="btn btn-success">Add</button></td>
+          </form>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</@override>
+
+<@override name="styles">
+  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+</@override>
+<@override name="scripts">
+<link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+<script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function() {
+    var current_time = ${serverTime!}*1000;
+    function updateTime() {
+      current_time+=1000;
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+    }
+    setInterval(updateTime, 1000);
+    
+    function getProblemTitle() {
+      $.get("api/problem/getProblemField", { name: "title", pid: this.value },
+        function(data) {
+          $("input[name='title']").val(data.result);  
+        });
+    }
+    $("input[name='pid']").change(getProblemTitle).keyup(getProblemTitle);
+    
+    // Return a helper with preserved width of cells
+    var fixHelper = function(e, ui) {
+      ui.children().each(function() {
+        $(this).width($(this).width());
+      });
+      return ui;
+    };
+    
+    function updateId() {
+      $("#problem-list tbody tr").each(function(i, e) {
+          var newId = String.fromCharCode(65+i);
+          $(e).children().children('.id').html(newId);
+        });
+    }
+    updateId();
+    $("#problem-list tbody").sortable({
+      helper: fixHelper,
+      connectWith: "tr",
+      stop: function(e, info) {
+        info.item.after(info.item.parents('tr'));
+        updateId();
+      }
+    }).disableSelection();
+  
+    <#if oj_style != "slate">
+    $("#problem-list").tablecloth({
+      theme:"stats",
+      condensed:true,
+      sortable:false,
+      striped:true,
+      clean:true
+    });
+    </#if>
+  });
+
+  $(function() {
+    $('#addProblem').submit(function() {
+      var dialog = $.dialog();
+      $.post($(this).attr("action"), $('#addProblem').serialize(),
+        function(data) {
+          if (data.success) {
+            dialog.content('Add problem to contest.').lock().time(1000);
+            setTimeout(function() {
+              window.location.reload();
+            },
+            1000);
+          }
+          else
+          {
+            dialog.content(data.result).lock().time(1000);
+          }
+        });
+      return false;
+    });
+  });
+</script>
+</@override>
+<@extends name="_layout.html" />
