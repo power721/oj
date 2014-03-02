@@ -380,14 +380,13 @@ public class ContestController extends OjController
     }
     contestModel.saveContest();
 
-    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
+    redirect(new StringBuilder(2).append("/contest/admin/").append(contestModel.getInt("cid")).toString());
   }
   
-  @RequiresPermissions("contest:add")
+  @RequiresPermissions("contest:addProblem")
   public void admin()
   {
     Integer cid = getParaToInt(0);
-    Integer uid = userService.getCurrentUid();
     
     ContestModel contestModle = getAttr("contest");
     if (contestModle == null)
@@ -406,7 +405,35 @@ public class ContestController extends OjController
       status = getText("contest.status.finished");
 
     setAttr("contest", contestModle);
-    setAttr("contestProblems", contestService.getContestProblems(cid, uid));
+    setAttr("contestProblems", contestService.getContestProblems(cid, null));
+    setAttr("status", status);
+
+    //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());
+  }
+  
+  @RequiresPermissions("contest:addUser")
+  public void adminUser()
+  {
+    Integer cid = getParaToInt(0);
+    
+    ContestModel contestModle = getAttr("contest");
+    if (contestModle == null)
+    {
+      contestModle = contestService.getContest(cid);
+    }
+    
+    long serverTime = OjConfig.timeStamp;
+    int start_time = contestModle.getInt("start_time");
+    int end_time = contestModle.getInt("end_time");
+    String status = getText("contest.status.running");
+
+    if (start_time > serverTime)
+      status = getText("contest.status.pending");
+    else if (end_time < serverTime)
+      status = getText("contest.status.finished");
+
+    setAttr("contest", contestModle);
+    setAttr("contestUsers", contestService.getContestUsers(cid));
     setAttr("status", status);
 
     //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());

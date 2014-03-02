@@ -25,6 +25,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
 
@@ -112,13 +113,13 @@ public class ContestService
       paras.add(type);
     }*/
 
-    if ("Running".equals(sSearch.toLowerCase()))
+    if ("running".equals(sSearch.toLowerCase()))
     {
       sb.append(" AND start_time>UNIX_TIMESTAMP()");
-    } else if ("Pending".equals(sSearch.toLowerCase()))
+    } else if ("pending".equals(sSearch.toLowerCase()))
     {
       sb.append(" AND start_time<UNIX_TIMESTAMP() AND end_time>UNIX_TIMESTAMP()");
-    } else if ("Finished".equals(sSearch.toLowerCase()))
+    } else if ("finished".equals(sSearch.toLowerCase()))
     {
       sb.append(" AND end_time<UNIX_TIMESTAMP()");
     }
@@ -177,16 +178,9 @@ public class ContestService
     return contestModle;
   }
 
-  public ContestModel getContestById(Integer cid)
-  {
-    return dao.findById(cid);
-  }
   public String getContestTitle(Integer cid)
   {
-    ContestModel contestModle = dao.findFirst("SELECT title FROM contest WHERE cid=? LIMIT 1", cid);
-    if (contestModle != null)
-      return contestModle.get("title");
-    return null;
+    return Db.queryStr("SELECT title FROM contest WHERE cid=? LIMIT 1", cid);
   }
 
   public List<Record> getContestProblems(Integer cid, Integer uid)
@@ -209,25 +203,18 @@ public class ContestService
 
     return contestProblems;
   }
-
-  public long getProblemCount(Integer cid)
-  {
-    Record record = Db.findFirst("SELECT COUNT(pid) AS count FROM contest_problem WHERE cid=? LIMIT 1", cid);
-    if (record != null)
-      return record.getLong("count");
-    return 0L;
-  }
-
+  
   public ProblemModel getProblem(Integer cid, Integer num)
   {
     Record record = Db.findFirst("SELECT pid,title,accept,submit FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
     if (record == null)
       return null;
 
-    int pid = record.getInt("pid");
-    ProblemModel problem = ProblemModel.dao.findById(pid);
+    Integer pid = record.getInt("pid");
+    ProblemModel problem = ProblemService.me().findProblemForShow(pid);
     if (problem == null)
       return null;
+    
     String title = record.getStr("title");
     if (StringUtil.isNotBlank(title))
       problem.set("title", title);
@@ -237,35 +224,27 @@ public class ContestService
     problem.put("id", (char) (num + 'A'));
     problem.put("num", num);
 
-    int sample_input_rows = 1;
-    if (StringUtil.isNotBlank(problem.getStr("sample_input")))
-      sample_input_rows = StringUtil.count(problem.getStr("sample_input"), '\n') + 1;
-    problem.put("sample_input_rows", sample_input_rows);
-    
-    int sample_output_rows = 1;
-    if (StringUtil.isNotBlank(problem.getStr("sample_output")))
-      sample_output_rows = StringUtil.count(problem.getStr("sample_output"), '\n') + 1;
-    problem.put("sample_output_rows", sample_output_rows);
-    
     return problem;
   }
 
   public Integer getPid(Integer cid, Integer num)
   {
-    Record record = Db.findFirst("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
-    if (record == null)
-      return 0;
-
-    return record.getInt("pid");
+    return Db.queryInt("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
   }
 
   public String getProblemTitle(int cid, int num)
   {
-    Record record = Db.findFirst("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
-    if (record == null)
-      return null;
+    return Db.queryStr("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
+  }
 
-    return record.get("title");
+  public List<Record> getContestUsers(Integer cid)
+  {
+    return Db.find("SELECT * FROM contest_user WHERE cid=?", cid);
+  }
+
+  public boolean isUserInContest(Integer uid, Integer cid)
+  {
+    return Db.queryInt("SELECT uid FROM contest_user WHERE uid=? AND cid=? LIMIT 1", uid, cid) != null;
   }
 
   public Integer getUserResult(Integer cid, Integer num)
@@ -275,11 +254,6 @@ public class ContestService
       return null;
     
     return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
-  }
-  
-  public boolean isUserInContest(Integer uid, Integer cid)
-  {
-    return Db.queryInt("SELECT uid FROM contest_user WHERE uid=? AND cid=?", uid, cid) != null;
   }
   
   public String getRecentContest()
@@ -440,6 +414,7 @@ public class ContestService
     {
       return 3;
     }
+    
     if (Db.queryInt("SELECT id FROM contest_problem WHERE cid=? AND pid=?", cid, pid) != null)
     {
       return 2;
@@ -454,6 +429,7 @@ public class ContestService
     {
       return 1;
     }
+    
     Record record = new Record();
     record.set("cid", cid);
     record.set("pid", pid);
@@ -601,7 +577,7 @@ public class ContestService
           .append(values.toString()).append(")");
       Db.update(sb.toString(), paras.toArray());
     }
-    for (int i = 0; i < 26; ++i)
+    for (int i = 0; i < OjConstants.MAX_PROBLEMS_IN_CONTEST; ++i)
     {
       Db.update("UPDATE contest_problem SET first_blood=?,first_blood_time=?,accept=?,submit=? WHERE cid=? AND num=?", firstBoold[i], firstBooldTime[i],
           accept[i], submit[i], cid, i);

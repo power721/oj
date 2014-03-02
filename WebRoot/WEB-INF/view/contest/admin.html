@@ -100,6 +100,7 @@
         });
     }
     updateId();
+    <#if serverTime<contest.start_time>
     $("#problem-list tbody").sortable({
       helper: fixHelper,
       connectWith: "tr",
@@ -109,6 +110,7 @@
         updateId();
       }
     }).disableSelection();
+    </#if>
   
     <#if oj_style != "slate">
     $("#problem-list").tablecloth({
