@@ -203,6 +203,17 @@ public class ContestService
 
     return contestProblems;
   }
+
+  public List<Record> getContestProblems(Integer cid)
+  {
+    List<Record> contestProblems = Db.find("SELECT p.*,cp.title,cp.num FROM contest_problem cp LEFT JOIN problem p ON p.pid=cp.pid WHERE cid=? ORDER BY num", cid);
+    for (Record problem : contestProblems)
+    {
+      problem.set("id", (char) (problem.getInt("num") + 'A'));
+    }
+
+    return contestProblems;
+  }
   
   public ProblemModel getProblem(Integer cid, Integer num)
   {

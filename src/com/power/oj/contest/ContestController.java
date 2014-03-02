@@ -79,7 +79,12 @@ public class ContestController extends OjController
   public void problem()
   {
     Integer cid = getParaToInt(0);
-    String problem_id = getPara(1, "A");
+    String problem_id = getPara(1);
+    if (problem_id == null)
+    {
+      forwardAction("/contest/allProblems/" + cid);
+      return;
+    }
     char id = problem_id.toUpperCase().charAt(0);
     Integer num = id - 'A';
 
@@ -94,9 +99,15 @@ public class ContestController extends OjController
     setAttr("problem", problemModel);
     setAttr("userResult", contestService.getUserResult(cid, num));
     setAttr("cstatus", contestService.getContestStatus(cid));
-    setAttr("contestProblems", contestService.getContestProblems(cid, 0));
+    setAttr("contestProblems", contestService.getContestProblems(cid, null));
 
     setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
+  }
+  
+  public void allProblems()
+  {
+    Integer cid = getParaToInt(0);
+    setAttr("contestProblems", contestService.getContestProblems(cid));
   }
 
   public void submit()

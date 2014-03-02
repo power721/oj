@@ -140,6 +140,10 @@ public class Judge extends Thread
         solutionModel.update();
       }
     }
+    else
+    {
+      log.warn("Compile failed!");
+    }
 
     return success;
   }
