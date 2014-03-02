@@ -21,12 +21,12 @@ public class ContestApiController extends OjController
   }
   
   @RequiresPermissions("contest:removeProblem")
-  public void deleteProblem()
+  public void removeProblem()
   {
     Integer cid = getParaToInt("cid");
     Integer pid = getParaToInt("pid");
     
-    int result = contestService.deleteProblem(cid, pid);
+    int result = contestService.removeProblem(cid, pid);
     
     if (result > 0)
     {
@@ -56,6 +56,28 @@ public class ContestApiController extends OjController
     {
       renderJson("{\"success\":false, \"result\":\"Unknown error!\"}");
     }
+  }
+
+  @RequiresPermissions("contest:addUser")
+  public void addUser()
+  {
+    Integer cid = getParaToInt("cid");
+    Integer uid = getParaToInt("uid");
+    //String name = getPara("name");
+    int result = contestService.addUser(cid, uid);
+    
+    renderJson("result", result);
+  }
+  
+  @RequiresPermissions("contest:addUser")
+  public void removeUser()
+  {
+    Integer cid = getParaToInt("cid");
+    Integer uid = getParaToInt("uid");
+    
+    int result = contestService.removeUser(cid, uid);
+    
+    renderJson("result", result);
   }
   
 }

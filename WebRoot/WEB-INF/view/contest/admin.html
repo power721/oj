@@ -2,6 +2,11 @@
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
+    <#if contest.type&gt;1>
+    <div class="contest-admin">
+      <a href="contest/adminUser/${contest.cid!}" class="btn btn-primary">Manage Users</a>
+    </div>
+    </#if>
     <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> 
     <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
     <span>Current System Time</span>: <span class="time" id="current">${contest.start_time_t!}</span> 
@@ -28,13 +33,13 @@
       <tbody>
         <#if contestProblems??>
         <#list contestProblems as Problem>
-        <tr class="problem" pid="${Problem.pid!}" num="">
+        <tr class="problem" pid="${Problem.pid!}">
           <td><i class="icon-resize-vertical"></i><span class="id"></span></td>
           <td class="pid">
             <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
           </td>
           <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
-          <td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger delete" pid="${Problem.pid!}">Delete</button></#if></td>
+          <td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button></#if></td>
         </tr>
         </#list>
         </#if>
@@ -77,7 +82,7 @@
     setInterval(updateTime, 1000);
     
     function getProblemTitle() {
-      $.get("api/problem/getProblemField", { name: "title", pid: this.value },
+      $.get("api/problem/getField", { name: "title", pid: this.value },
         function(data) {
           $("input[name='title']").val(data.result);  
         });
@@ -95,7 +100,6 @@
     function updateId() {
       $("#problem-list tbody tr").each(function(i, e) {
           var newId = String.fromCharCode(65+i);
-          $(e).attr('num', i);
           $(e).children().children('.id').html(newId);
         });
     }
@@ -139,14 +143,10 @@
                           '<a href="problem/show/' + pid + '">' + pid + '</a>' +
                           '</td>' +
                           '<td class="title"><a href="contest/problem/' + cid + '-' + pid + '">' + title + '</a></td>' +
-                          '<td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger delete" pid="' + pid + '">Delete</button></#if></td>' +
+                          '<td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
                           '</tr>';
                 that.parent().before(html);
                 updateId();
-                /*$.dialog({
-                  content: 'Problem add.',
-                  time: 1
-                });*/
                 break;
               case 1:
                 $.dialog({
@@ -204,16 +204,16 @@
             }
           });
       });
-      $('.admin').delegate("button", "click", function() {
+      $('table').on('click', '.remove', function() {
         var that = $(this);
         $.dialog({
-          title: 'Delete problem from contest',
+          title: 'Remove problem from contest',
           content: 'Are you sure?',
           cancelVal: 'Cancel',
           cancel: true,
-          okVal: 'Delete',
+          okVal: 'Remove',
           ok: function() {
-            $.post('api/contest/deleteProblem', {cid:${contest.cid!}, pid:that.attr('pid')}, function(data) {
+            $.post('api/contest/removeProblem', {cid:${contest.cid!}, pid:that.attr('pid')}, function(data) {
               if (data.success) {
                   that.parent().parent().remove();
                   updateId();

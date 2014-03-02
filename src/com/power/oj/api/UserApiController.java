@@ -10,6 +10,7 @@ import jodd.util.HtmlEncoder;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
 import com.jfinal.upload.UploadFile;
@@ -310,6 +311,23 @@ public class UserApiController extends OjController
     Integer uid = userService.getCurrentUid();
     
     renderJson(SolutionService.me().getPage(pageNumber, pageSize, result, language, uid));
+  }
+
+  @ClearInterceptor(ClearLayer.ALL)
+  public void getField()
+  {
+    Integer uid = getParaToInt("uid");
+    String name = getPara("name");
+
+    renderJson("result", userService.getUserField(uid, name));
+  }
+  
+  @ClearInterceptor(ClearLayer.ALL)
+  public void getUid()
+  {
+    String name = getPara("name");
+    
+    renderJson("result", userService.getUidByName(name));
   }
   
 }

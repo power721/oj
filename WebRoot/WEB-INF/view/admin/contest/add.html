@@ -50,9 +50,9 @@
                 <div class="controls">
                   <select name="contest.type" id="inputType">
                     <option value="0">Public</option>
-                    <option value="1">Private</option>
-                    <option value="2">Strict Private</option>
-                    <option value="3">Password</option>
+                    <option value="1">Password</option>
+                    <option value="2">Private</option>
+                    <option value="3">Strict Private</option>
                     <option value="4">Test</option>
                   </select>
                 </div>
@@ -87,7 +87,7 @@
           $(document).ready(function(){
               $("#inputType").change(function() {
                   var val = $(this).val();
-                  if(val == 3) {
+                  if(val == 1) {
                       $("div#password").show();
                       $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.pass" placeholder="Password" required>');
                   }

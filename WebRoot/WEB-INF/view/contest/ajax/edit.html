@@ -32,9 +32,9 @@
     <div class="controls">
       <select name="contest.type" id="inputType">
         <option value="0" <#if contest.type==0> selected</#if>>Public</option>
-        <option value="1" <#if contest.type==1> selected</#if>>Private</option>
-        <option value="2" <#if contest.type==2> selected</#if>>Strict Private</option>
-        <option value="3" <#if contest.type==3> selected</#if>>Password</option>
+        <option value="1" <#if contest.type==1> selected</#if>>Password</option>
+        <option value="2" <#if contest.type==2> selected</#if>>Private</option>
+        <option value="3" <#if contest.type==3> selected</#if>>Strict Private</option>
         <option value="4" <#if contest.type==4> selected</#if>>Test</option>
       </select>
     </div>
@@ -61,7 +61,7 @@
   $(document).ready(function(){
       $("#inputType").change(function() {
           var val = $(this).val();
-          if(val == 3) {
+          if(val == 1) {
               $("div#password").show();
               $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.pass" placeholder="Current password is: ${contest.pass!}">');
           }

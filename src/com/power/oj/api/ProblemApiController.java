@@ -85,7 +85,7 @@ public class ProblemApiController extends OjController
   }
   
   @ClearInterceptor(ClearLayer.ALL)
-  public void getProblemField()
+  public void getField()
   {
     Integer pid = getParaToInt("pid");
     String name = getPara("name");

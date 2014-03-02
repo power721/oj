@@ -792,4 +792,15 @@ public class UserService
     return dao.containsEmailExceptThis(uid, email);
   }
 
+  public Object getUserField(Integer uid, String name)
+  {
+    UserModel userModel = dao.getUserInfoByUid(uid);
+    if (userModel == null)
+    {
+      return null;
+    }
+        
+    return userModel.get(name);
+  }
+
 }

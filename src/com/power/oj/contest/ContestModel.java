@@ -44,17 +44,17 @@ public class ContestModel extends Model<ContestModel>
     return !isPending() && !isFinished();
   }
 
-  public boolean isPrivate()
+  public boolean hasPassword()
   {
     return getInt("type") == 1;
   }
 
-  public boolean isStrictPrivate()
+  public boolean isPrivate()
   {
     return getInt("type") == 2;
   }
 
-  public boolean hasPassword()
+  public boolean isStrictPrivate()
   {
     return getInt("type") == 3;
   }

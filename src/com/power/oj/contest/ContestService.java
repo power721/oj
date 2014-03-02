@@ -85,13 +85,13 @@ public class ContestService
       String ctype = "Public";
       if (contest.getInt("type") == 1)
       {
-        ctype = "Private";
+        ctype = "Password";
       } else if (contest.getInt("type") == 2)
       {
-        ctype = "Strict Private";
+        ctype = "Private";
       } else if (contest.getInt("type") == 3)
       {
-        ctype = "Password";
+        ctype = "Strict Private";
       } else if (contest.getInt("type") == 4)
       {
         ctype = "Test";
@@ -145,13 +145,13 @@ public class ContestService
       String ctype = "Public";
       if (contest.getInt("type") == 1)
       {
-        ctype = "Private";
+        ctype = "Password";
       } else if (contest.getInt("type") == 2)
       {
-        ctype = "Strict Private";
+        ctype = "Private";
       } else if (contest.getInt("type") == 3)
       {
-        ctype = "Password";
+        ctype = "Strict Private";
       } else if (contest.getInt("type") == 4)
       {
         ctype = "Test";
@@ -239,7 +239,7 @@ public class ContestService
 
   public List<Record> getContestUsers(Integer cid)
   {
-    return Db.find("SELECT * FROM contest_user WHERE cid=?", cid);
+    return Db.find("SELECT c.*,u.name,u.realname,u.nick FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
   }
 
   public boolean isUserInContest(Integer uid, Integer cid)
@@ -443,23 +443,21 @@ public class ContestService
     return -1;
   }
 
-  public int deleteProblem(Integer cid, Integer pid)
+  public int removeProblem(Integer cid, Integer pid)
   {
     if (!isContestPending(cid))
     {
       return -1;
     }
     
-    List<Record> problems = Db.find("SELECT * FROM contest_problem WHERE cid=? ORDER BY num", cid);
-    int result = Db.update("DELETE FROM contest_problem WHERE cid=?", cid);
-    int i = 0;
+    int num = Db.queryInt("SELECT num FROM contest_problem WHERE cid=? AND pid=?", cid, pid);
+    int result = Db.update("DELETE FROM contest_problem WHERE cid=? AND pid=?", cid, pid);
+    List<Record> problems = Db.find("SELECT * FROM contest_problem WHERE cid=? AND num>? ORDER BY num", cid, num);
+    
     for (Record problem : problems)
     {
-      if (!pid.equals(problem.getInt("pid")))
-      {
-        problem.set("num", i++);
-        Db.save("contest_problem", problem);
-      }
+      problem.set("num", num++);
+      Db.update("contest_problem", problem);
     }
     
     return result;
@@ -481,6 +479,40 @@ public class ContestService
       result += Db.update("UPDATE contest_problem SET num=? WHERE cid=? AND pid=?", i++, cid, pid);
     }
     return result;
+  }
+  
+  public int addUser(Integer cid, Integer uid)
+  {
+    if (isContestFinished(cid))
+    {
+      return 4;
+    }
+    
+    if(Db.queryInt("SELECT uid FROM user WHERE uid=? AND status=1", uid) == null)
+    {
+      return 3;
+    }
+    
+    if (Db.queryInt("SELECT id FROM contest_user WHERE cid=? AND uid=?", cid, uid) != null)
+    {
+      return 2;
+    }
+
+    Record record = new Record();
+    record.set("cid", cid);
+    record.set("uid", uid);
+    record.set("ctime", OjConfig.timeStamp);
+    
+    if (Db.save("contest_user", record))
+    {
+      return 0;
+    }
+    return 1;
+  }
+
+  public int removeUser(Integer cid, Integer uid)
+  {
+    return Db.update("DELETE FROM contest_user WHERE cid=? AND uid=?", cid, uid);
   }
   
   public boolean buildRank(Integer cid)
@@ -598,12 +630,12 @@ public class ContestService
 
   public boolean isContestHasPassword(Integer cid)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND type=3 LIMIT 1", cid) != null;
+    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND type=1 LIMIT 1", cid) != null;
   }
 
   public boolean checkContestPassword(Integer cid, String password)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND pass=? AND type=3 LIMIT 1", cid, password) != null;
+    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND pass=? AND type=1 LIMIT 1", cid, password) != null;
   }
 
   public class UserInfo
