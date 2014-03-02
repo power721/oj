@@ -229,12 +229,12 @@ public class ContestService
 
   public Integer getPid(Integer cid, Integer num)
   {
-    return Db.queryInt("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
+    return Db.queryInt("SELECT pid FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
   }
 
   public String getProblemTitle(int cid, int num)
   {
-    return Db.queryStr("SELECT pid,title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
+    return Db.queryStr("SELECT title FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
   }
 
   public List<Record> getContestUsers(Integer cid)
