@@ -21,6 +21,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
@@ -430,18 +431,18 @@ public class ContestService
   
   public int addProblem(Integer cid, Integer pid, String title)
   {
-    if (!isContestFinished(cid))
+    if (isContestFinished(cid))
     {
-      return -4;
+      return 4;
     }
     
     if(Db.queryInt("SELECT pid FROM problem WHERE pid=? AND status=1", pid) == null)
     {
-      return -3;
+      return 3;
     }
     if (Db.queryInt("SELECT id FROM contest_problem WHERE cid=? AND pid=?", cid, pid) != null)
     {
-      return -1;
+      return 2;
     }
     
     Long num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
@@ -449,9 +450,9 @@ public class ContestService
     {
       num = 0L;
     }
-    if (num >= 26)
+    if (num >= OjConstants.MAX_PROBLEMS_IN_CONTEST)
     {
-      return -2;
+      return 1;
     }
     Record record = new Record();
     record.set("cid", cid);
@@ -463,7 +464,7 @@ public class ContestService
     {
       return 0;
     }
-    return 1;
+    return -1;
   }
 
   public int deleteProblem(Integer cid, Integer pid)
