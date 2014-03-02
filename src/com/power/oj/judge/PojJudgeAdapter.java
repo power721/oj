@@ -11,27 +11,26 @@ import java.util.List;
 
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
-import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
-import com.power.oj.contest.ContestRankWebSocket;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.contest.ContestModel;
+import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.util.Tool;
 
-public class Judge extends Thread
+public class PojJudgeAdapter extends Thread implements JudgeAdapter
 {
-
-  public static int threads = 0;
-  public static Object mute = new Object();
+  private static final Logger log = Logger.getLogger(PojJudgeAdapter.class);
+  private static final ContestService contestService = ContestService.me();
   public static ArrayList<SolutionModel> judgeList = new ArrayList<SolutionModel>();
-  public static final String DATA_EXT_IN = ".in";
-  public static final String DATA_EXT_OUT = ".out";
-  private static final Logger log = Logger.getLogger(Judge.class);
 
-  public Judge()
+  public PojJudgeAdapter()
   {
     start();
   }
@@ -45,26 +44,29 @@ public class Judge extends Thread
       {
         if (judgeList.isEmpty())
         {
-          threads = threads > 0 ? threads - 1 : 0;
           return;
         }
-        log.info("Judge threads: " + threads);
+        log.info("Judge threads: " + judgeList.size());
         solutionModel = judgeList.get(0);
         judgeList.remove(0);
       }
-      synchronized (mute)
+      synchronized (JudgeAdapter.class)
       {
         try
         {
           if (Compile(solutionModel))
+          {
             RunProcess(solutionModel);
+          }
+          else
+          {
+            log.warn("Compile failed.");
+          }
         } catch (Exception e)
         {
           solutionModel.set("result", ResultType.SE).set("system_error", e.getMessage());
           solutionModel.update();
 
-          threads = threads > 0 ? threads - 1 : 0;
-          
           if (OjConfig.getDevMode())
             e.printStackTrace();
           log.error(e.getMessage());
@@ -76,8 +78,7 @@ public class Judge extends Thread
   public boolean Compile(SolutionModel solutionModel) throws IOException
   {
     log.info(solutionModel.getInt("sid") + " Start compiling...");
-    String workPath = OjConfig.get("work_path");
-    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(workPath)).append("\\").toString();
+    String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("work_path"))).append(File.separator).toString();
     // workPath = FileNameUtil.separatorsToSystem(workPath); //Converts all
     // separators to the system separator.
     if (OjConfig.getBoolean("delete_tmp_file"))
@@ -93,17 +94,20 @@ public class Judge extends Thread
 
     File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid")).toString());
     FileUtil.mkdirs(workDir);
-    log.info("workDir: " + workDir.getAbsolutePath());
+    log.info("mkdirs workDir: " + workDir.getAbsolutePath());
 
     LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
-    File sourceFile = new File(new StringBuilder().append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("ext")).toString());
+    File sourceFile = new File(new StringBuilder(4).append(workDir.getAbsolutePath()).append(File.separator).append("Main.").append(language.getStr("ext")).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solutionModel.getStr("source"));
 
     String comShellName = OjConfig.get("compile_shell");
-    String compileCmdName = getCompileCmd(language.getStr("compile_cmd"), workDir.getAbsolutePath(), "Main", language.getStr("ext"));
+    String compileCmdName = Tool.getCompileCmd(language.getStr("compile_cmd"), workDir.getAbsolutePath(), "Main", language.getStr("ext"));
     log.info("compileCmd: " + compileCmdName);
 
+    /*
+     * execute compiler command
+     */
     Process compileProcess = Runtime.getRuntime().exec(comShellName);
     OutputStream comShellOutputStream = compileProcess.getOutputStream();
     comShellOutputStream.write(compileCmdName.getBytes());
@@ -114,12 +118,15 @@ public class Judge extends Thread
     StringBuilder sb = new StringBuilder();
     String errorOutput = "";
     while ((startTime + 10000L > System.currentTimeMillis()) && ((errorOutput = compileErrorBufferedReader.readLine()) != null))
+    {
       sb.append(errorOutput).append("\n");
+    }
     compileErrorBufferedReader.close();
 
+    int ret = 0;
     try
     {
-      compileProcess.waitFor();
+      ret = compileProcess.waitFor();
     } catch (InterruptedException e)
     {
       if (OjConfig.getDevMode())
@@ -127,13 +134,13 @@ public class Judge extends Thread
       log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
     }
 
-    File mainProgram = new File(new StringBuilder(3).append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("exe")).toString());
+    File mainProgram = new File(new StringBuilder(3).append(workDir.getAbsolutePath()).append(File.separator).append("Main.").append(language.getStr("exe")).toString());
     log.info(mainProgram.getAbsolutePath());
     boolean success = mainProgram.isFile();
 
     if (!success)
     {
-      synchronized (mute)
+      synchronized (JudgeAdapter.class)
       {
         // update DataBase
         solutionModel.set("result", ResultType.CE).set("time", 0).set("memory", 0).set("error", sb.toString());
@@ -142,7 +149,7 @@ public class Judge extends Thread
     }
     else
     {
-      log.warn("Compile failed!");
+      log.warn("Compile failed, return value: " + ret);
     }
 
     return success;
@@ -151,13 +158,16 @@ public class Judge extends Thread
   public boolean RunProcess(SolutionModel solutionModel) throws IOException, InterruptedException
   {
     log.info(solutionModel.getInt("sid") + " RunProcess...");
+    /*
+     * execute run command
+     */
     Process runProcess = Runtime.getRuntime().exec(OjConfig.get("run_shell"));
     OutputStream runProcessOutputStream = runProcess.getOutputStream();
     log.info("runProcess: " + OjConfig.get("run_shell"));
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(solutionModel.getInt("pid")).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append(File.separator).append(solutionModel.getInt("pid")).toString());
     if (!dataDir.isDirectory())
     {
-      String system_error = new StringBuilder(3).append("Data directory ").append(dataDir).append(" not exists.").toString();
+      String system_error = new StringBuilder(3).append("Data directory ").append(dataDir).append(" does not exist.").toString();
       solutionModel.set("result", ResultType.SE).set("system_error", system_error);
       solutionModel.update();
       log.error(system_error);
@@ -174,7 +184,7 @@ public class Judge extends Thread
       File in_file = arrayOfFile[i];
       if (!in_file.getName().toLowerCase().endsWith(DATA_EXT_IN))
         continue;
-      File out_file = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append("\\")
+      File out_file = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
           .append(in_file.getName().substring(0, in_file.getName().length() - DATA_EXT_IN.length())).append(DATA_EXT_OUT).toString());
       if (!out_file.isFile())
         continue;
@@ -195,7 +205,7 @@ public class Judge extends Thread
     log.info("caseTimeLimit: " + caseTimeLimit);
     log.info("memoryLimit: " + memoryLimit);
 
-    File workDir = new File(new StringBuilder(2).append(OjConfig.get("work_path")).append("\\").append(solutionModel.getInt("sid")).toString());
+    File workDir = new File(new StringBuilder(3).append(OjConfig.get("work_path")).append(File.separator).append(solutionModel.getInt("sid")).toString());
     String mainProgram = new StringBuilder(4).append(workDir.getAbsolutePath()).append("\\Main.").append(language.getStr("exe")).append("\n").toString();
     runProcessOutputStream.write(mainProgram.getBytes());
     runProcessOutputStream.write((workDir.getAbsolutePath() + "\n").getBytes());
@@ -205,11 +215,13 @@ public class Judge extends Thread
     runProcessOutputStream.write((numOfData + "\n").getBytes());
     log.info("data files: " + numOfData);
     if (numOfData < 1)
+    {
       log.warn("No data file for problem " + solutionModel.getInt("pid"));
-    for (int i = 0; i < inFiles.size(); ++i)
+    }
+    for (int i = 0; i < numOfData; ++i)
     {
       runProcessOutputStream.write((inFiles.get(i) + "\n").getBytes());
-      String userOutFile = new StringBuilder(4).append(workDir.getAbsolutePath()).append("\\").append(new File(outFiles.get(i)).getName()).append("\n").toString();
+      String userOutFile = new StringBuilder(4).append(workDir.getAbsolutePath()).append(File.separator).append(new File(outFiles.get(i)).getName()).append("\n").toString();
       runProcessOutputStream.write(userOutFile.getBytes());
       runProcessOutputStream.write((outFiles.get(i) + "\n").getBytes());
       log.info(inFiles.get(i));
@@ -254,33 +266,36 @@ public class Judge extends Thread
     }
     log.info("result: " + result + "  time: " + time + "  memory: " + memory);
 
-    synchronized (mute)
+    synchronized (JudgeAdapter.class)
     {
       Integer cid = solutionModel.getInt("cid");
+      int uid = solutionModel.getUid();
       if (cid != null && cid > 0)
       {
-        int uid = solutionModel.getUid();
+        // TODO move to contestService
         int num = solutionModel.getInt("num");
-        char c = (char) (num + 'A');
+        
+        Record contestProblem = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
+        if (contestProblem.getInt("first_blood") == 0)
+        {
+          ContestModel contestModle = contestService.getContest(cid);
+          int contestStartTime = contestModle.getInt("start_time");
+          contestProblem.set("first_blood", uid);
+          contestProblem.set("first_blood_time", (solutionModel.getInt("ctime") - contestStartTime) / 60);
+        }
+        contestProblem.set("accept", contestProblem.getInt("accept")+1);
+        /*char c = (char) (num + 'A');
         StringBuilder message = new StringBuilder().append("UID: ").append(uid).append(" Problem: ").append(c).append(" result: ").append(result).append("  time: ")
             .append(time).append("  memory: ").append(memory);
         // OjMessageInbound.broadcast(message.toString());
-        ContestRankWebSocket.broadcast(cid, message.toString());
+        ContestRankWebSocket.broadcast(cid, message.toString());*/
       }
       // update DataBase
+      Db.update("UPDATE user SET accept=accept+1 WHERE uid=?", uid);
+      // TODO update problem solved
       solutionModel.set("result", result).set("time", time).set("memory", memory);
       return solutionModel.update();
     }
   }
 
-  public String getCompileCmd(String compileCmd, String path, String name, String ext)
-  {
-    path = new StringBuilder(2).append(path).append("\\").toString();
-    compileCmd = StringUtil.replace(compileCmd, "%PATH%", path);
-    compileCmd = StringUtil.replace(compileCmd, "%NAME%", name);
-    compileCmd = StringUtil.replace(compileCmd, "%EXT%", ext);
-    compileCmd = new StringBuilder(2).append(compileCmd).append("\n").toString();
-
-    return compileCmd;
-  }
 }

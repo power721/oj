@@ -14,6 +14,7 @@ import jodd.mail.SimpleAuthenticator;
 import jodd.mail.SmtpServer;
 import jodd.util.MimeTypes;
 import jodd.util.StringTemplateParser;
+import jodd.util.StringUtil;
 import jodd.util.StringTemplateParser.MacroResolver;
 
 import com.jfinal.kit.StringKit;
@@ -158,4 +159,15 @@ public class Tool
     return sb.toString();
   }
 
+  public static String getCompileCmd(String compileCmd, String path, String name, String ext)
+  {
+    path = new StringBuilder(2).append(path).append("\\").toString();
+    compileCmd = StringUtil.replace(compileCmd, "%PATH%", path);
+    compileCmd = StringUtil.replace(compileCmd, "%NAME%", name);
+    compileCmd = StringUtil.replace(compileCmd, "%EXT%", ext);
+    compileCmd = new StringBuilder(2).append(compileCmd).append("\n").toString();
+
+    return compileCmd;
+  }
+  
 }

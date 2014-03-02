@@ -556,6 +556,11 @@ public class ContestService
       ctime = solution.getInt("ctime");
       userInfo = (UserInfo) userRank.get(uid);
       penalty = (ctime - contestStartTime) / 60;
+      if (result == ResultType.AC && firstBoold[num] == 0)
+      {
+        firstBoold[num] = uid;
+        firstBooldTime[num] = penalty;
+      }
       if (userInfo == null)
       {
         userInfo = new UserInfo(uid);
@@ -583,11 +588,6 @@ public class ContestService
         {
           ++userInfo.waTime[num];
         }
-      }
-      if (result == ResultType.AC && firstBoold[num] == 0)
-      {
-        firstBoold[num] = uid;
-        firstBooldTime[num] = penalty;
       }
     }
 

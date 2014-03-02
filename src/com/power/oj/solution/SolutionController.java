@@ -8,7 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
-import com.power.oj.contest.ContestRankWebSocket;
+import com.jfinal.plugin.activerecord.Db;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -17,8 +17,9 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
-import com.power.oj.judge.Judge;
+import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
@@ -148,19 +149,11 @@ public class SolutionController extends OjController
     SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
     solutionModel.set("uid", userModel.getUid());
     String url = "/status";
-    if (solutionModel.get("cid") != null)
-    {
-      int cid = solutionModel.getInt("cid");
-      if (cid > 0)
-      {
-        url = "/contest/status/" + cid;
-        ContestRankWebSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") + ": " + solutionModel.getUid());
-      }
-    }
 
     if (solutionModel.addSolution())
     {
-      ProblemModel problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
+      Integer pid = solutionModel.getInt("pid");
+      ProblemModel problemModel = ProblemService.me().findProblem(pid);
       if (problemModel == null)
       {
         FlashMessage msg = new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title"));
@@ -171,15 +164,23 @@ public class SolutionController extends OjController
       problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime).update();
       
       userModel.set("submit", userModel.getInt("submit") + 1).update();
-
-      synchronized (Judge.judgeList)
+      
+      if (solutionModel.get("cid") != null)
       {
-        Judge.judgeList.add(solutionModel);
-        if (Judge.threads < 1)
+        Integer cid = solutionModel.getInt("cid");
+        if (cid > 0)
         {
-          Judge.threads += 1;
+          Db.update("UPDATE contest_problem SET submit=submit+1 WHERE cid=? AND pid=?", cid, pid);
+        }
+      }
+      
+      synchronized (PojJudgeAdapter.judgeList)
+      {
+        PojJudgeAdapter.judgeList.add(solutionModel);
+        if (PojJudgeAdapter.judgeList.size() < 1)
+        {
           @SuppressWarnings("unused")
-          Judge judge = new Judge();
+          PojJudgeAdapter judge = new PojJudgeAdapter();
         }
       }
       System.out.println(solutionModel.getInt("sid"));
