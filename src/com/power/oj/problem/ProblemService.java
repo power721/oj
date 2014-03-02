@@ -57,6 +57,27 @@ public class ProblemService
 
     return problemModel;
   }
+
+  public ProblemModel findProblemForContest(Integer pid)
+  {
+    ProblemModel problemModel = dao.findById(pid);
+    
+    if (problemModel == null)
+      return null;
+    
+    int sample_input_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
+      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
+    problemModel.put("sample_input_rows", sample_input_rows);
+    
+    int sample_output_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
+      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
+    problemModel.put("sample_output_rows", sample_output_rows);
+    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
+
+    return problemModel;
+  }
   
   public Long getProblemsNumber()
   {

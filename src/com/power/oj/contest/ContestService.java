@@ -211,7 +211,7 @@ public class ContestService
       return null;
 
     Integer pid = record.getInt("pid");
-    ProblemModel problem = ProblemService.me().findProblemForShow(pid);
+    ProblemModel problem = ProblemService.me().findProblemForContest(pid);
     if (problem == null)
       return null;
     
@@ -221,6 +221,8 @@ public class ContestService
 
     problem.set("accept", record.get("accept"));
     problem.set("submit", record.get("submit"));
+    problem.set("submit_user", Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=?", cid, num));
+    problem.set("solved", Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE result=0 AND cid=? AND num=?", cid, num));
     problem.put("id", (char) (num + 'A'));
     problem.put("num", num);
 
