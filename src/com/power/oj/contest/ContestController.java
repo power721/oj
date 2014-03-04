@@ -279,7 +279,7 @@ public class ContestController extends OjController
   public void recent_contest()
   {
     String json = getSessionAttr("contests.json");
-    //if (json == null)
+    if (json == null)
     {
       // TODO cache for everyone
       json = contestService.getRecentContest();
