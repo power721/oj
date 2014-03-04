@@ -1,6 +1,7 @@
 <@override name="content">
 <div class="pagination pagination-centered">
   <div class="pull-left">
+    <a href="contest/recent" class="btn btn-success">Recent Contests</a>
     <#if adminUser??><a href="contest/add" class="btn btn-info">Add a contest</a></#if>
     <!-- <form class="form-search" action="contest/search">
       <div class="input-append">
@@ -29,7 +30,8 @@
     </tr>
   </thead>
   <tbody>
-    <#if contestList??> <#list contestList.list as Contest>
+    <#if contestList??> 
+    <#list contestList.list as Contest>
     <tr>
       <td><a href="contest/show/${Contest.cid!}">${Contest.cid!}</a></td>
       <td><a href="contest/show/${Contest.cid!}">${Contest.title!}</a></td>
@@ -38,7 +40,8 @@
       <td class="${Contest.ctype!} type-${Contest.type!}">${Contest.ctype!}</td>
       <td class="${Contest.cstatus!}">${Contest.cstatus!}</td>
     </tr>
-    </#list> </#if>
+    </#list> 
+    </#if>
   </tbody>
 </table>
 </@override>

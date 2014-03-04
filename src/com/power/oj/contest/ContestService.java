@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.conn.HttpHostConnectException;
-
+import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
+import org.apache.http.conn.HttpHostConnectException;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -336,7 +336,7 @@ public class ContestService
         }
         String start = "/Date(" + timeStamp + ")/";
         String end = "/Date(" + (timeStamp + 18000000) + ")/";
-        String link = data.getString("link");
+        String link = HtmlDecoder.decode(data.getString("link"));
         String title = data.getString("oj") + " -- " + data.getString("name");
 
         contest.setTaskId(data.getString("id"));
