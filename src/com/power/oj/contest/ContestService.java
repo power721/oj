@@ -269,6 +269,20 @@ public class ContestService
     return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
   }
   
+  public List<Record> getPrivateClarifyList(Integer cid, Integer uid)
+  {
+    if (UserService.me().isAdmin())
+    {
+      return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=0", cid);
+    }
+    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND c.uid=? AND public=0", cid, uid);
+  }
+  
+  public List<Record> getPublicClarifyList(Integer cid)
+  {
+    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=1", cid);
+  }
+  
   public String getRecentContest()
   {
     String json = null;

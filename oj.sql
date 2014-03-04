@@ -218,6 +218,27 @@ AUTO_INCREMENT=1000
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `contest_clarify`
+-- ----------------------------
+DROP TABLE IF EXISTS `contest_clarify`;
+CREATE TABLE `contest_clarify` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `cid` int(9) NOT NULL,
+  `uid` int(9) NOT NULL,
+  `question` text NOT NULL,
+  `reply` text NOT NULL,
+  `public` tinyint(1) NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL,
+  `atime` int(11) DEFAULT NULL COMMENT 'answer timestamp',
+  `mtime` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of contest_clarify
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `contest_problem`
 -- ----------------------------
 DROP TABLE IF EXISTS `contest_problem`;

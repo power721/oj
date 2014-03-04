@@ -1,5 +1,5 @@
 <@override name="contest_content">
-<#if contest.report?? && serverTime &gt; contest.end_time>
+<#if contest.report?? && (serverTime > contest.end_time)>
 <pre>${contest.report!}</pre>
 <#else>
 <p class="alert alert-warning">This contest is not over yet, please come back later :)</p>

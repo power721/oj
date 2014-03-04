@@ -1,0 +1,27 @@
+<@override name="contest_content">
+<div>
+<#if privateClarifyList?? && (privateClarifyList?size > 0)>
+<h4>Private Message</h4>
+<#list privateClarifyList as clarify>
+  <span class="name">${clarify.name!}</span>: <pre class="question">${clarify.question!}</pre>
+  <span class="name">Administrator</span>: <pre class="reply">${clarify.reply!}</pre>
+</#list>
+</#if>
+</div>
+<div>
+<#if publicClarifyList?? && (publicClarifyList?size > 0)>
+<h4>Public Message</h4>
+<#list publicClarifyList as clarify>
+  <span class="name">${clarify.name!}</span>: <pre class="question">${clarify.question!}</pre>
+  <span class="name">Administrator</span>: <pre class="reply">${clarify.reply}</pre>
+</#list>
+</#if>
+</div>
+<div class="text-center">
+  <button class="btn btn-primary" id="newquestion">Post New Question</button>
+</div>
+</@override>
+
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

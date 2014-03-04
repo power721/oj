@@ -275,6 +275,15 @@ public class ContestController extends OjController
     setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());
   }
   
+  public void clarify()
+  {
+    Integer cid = getParaToInt(0);
+    Integer uid = userService.getCurrentUid();
+    
+    setAttr("privateClarifyList", contestService.getPrivateClarifyList(cid, uid));
+    setAttr("publicClarifyList", contestService.getPublicClarifyList(cid));
+  }
+  
   public void report()
   {
     
