@@ -82,10 +82,18 @@
     setInterval(updateTime, 1000);
     
     function getProblemTitle() {
-      $.get("api/problem/getField", { name: "title", pid: this.value },
-        function(data) {
-          $("input[name='title']").val(data.result);  
-        });
+      var pid = this.value;
+      if (pid >= 1000)
+      {
+        $.get("api/problem/getField", { name: "title", pid: this.value },
+          function(data) {
+            $("input[name='title']").val(data.result);
+          });
+      }
+      else
+      {
+        $("input[name='title']").val('');
+      }
     }
     $("input[name='pid']").change(getProblemTitle).keyup(getProblemTitle);
     

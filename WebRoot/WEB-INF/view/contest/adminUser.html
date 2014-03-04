@@ -78,17 +78,33 @@
     setInterval(updateTime, 1000);
     
     function getUserName() {
-      $.get("api/user/getField", { name: "name", uid: this.value },
-        function(data) {
-          $("input[name='name']").val(data.result);  
-        });
+      var uid = this.value;
+      if (uid >= 1000)
+      {
+        $.get("api/user/getField", { name: "name", uid: this.value },
+          function(data) {
+            $("input[name='name']").val(data.result);
+          });
+       }
+       esle
+       {
+        $("input[name='name']").val('');
+       }
     }
     $("input[name='uid']").change(getUserName).keyup(getUserName);
     $("input[name='name']").keyup(function() {
-      $.get("api/user/getUid", { name: this.value },
-        function(data) {
-          $("input[name='uid']").val(data.result);  
-        });
+      var name = this.value;
+      if (name.length >= 5) // 'root' always has permission
+      {
+        $.get("api/user/getUid", { name: this.value },
+          function(data) {
+            $("input[name='uid']").val(data.result);
+          });
+      }
+      else
+      {
+        $("input[name='uid']").val('');
+      }
     });
     
     <#if oj_style != "slate">
