@@ -53,15 +53,15 @@ public class ContestController extends OjController
     Integer cid = getParaToInt(0);
     Integer uid = userService.getCurrentUid();
     
-    ContestModel contestModle = getAttr("contest");
-    if (contestModle == null)
+    ContestModel contestModel = getAttr("contest");
+    if (contestModel == null)
     {
-      contestModle = contestService.getContest(cid);
+      contestModel = contestService.getContest(cid);
     }
     
     long serverTime = OjConfig.timeStamp;
-    int start_time = contestModle.getInt("start_time");
-    int end_time = contestModle.getInt("end_time");
+    int start_time = contestModel.getInt("start_time");
+    int end_time = contestModel.getInt("end_time");
     String status = getText("contest.status.running");
 
     if (start_time > serverTime)
@@ -69,7 +69,7 @@ public class ContestController extends OjController
     else if (end_time < serverTime)
       status = getText("contest.status.finished");
 
-    setAttr("contest", contestModle);
+    setAttr("contest", contestModel);
     setAttr("contestProblems", contestService.getContestProblems(cid, uid));
     setAttr("status", status);
 
@@ -274,6 +274,11 @@ public class ContestController extends OjController
 
     setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());
   }
+  
+  public void report()
+  {
+    
+  }
 
   @ClearInterceptor
   public void recent_contest()
@@ -399,15 +404,15 @@ public class ContestController extends OjController
   {
     Integer cid = getParaToInt(0);
     
-    ContestModel contestModle = getAttr("contest");
-    if (contestModle == null)
+    ContestModel contestModel = getAttr("contest");
+    if (contestModel == null)
     {
-      contestModle = contestService.getContest(cid);
+      contestModel = contestService.getContest(cid);
     }
     
     long serverTime = OjConfig.timeStamp;
-    int start_time = contestModle.getInt("start_time");
-    int end_time = contestModle.getInt("end_time");
+    int start_time = contestModel.getInt("start_time");
+    int end_time = contestModel.getInt("end_time");
     String status = getText("contest.status.running");
 
     if (start_time > serverTime)
@@ -415,7 +420,7 @@ public class ContestController extends OjController
     else if (end_time < serverTime)
       status = getText("contest.status.finished");
 
-    setAttr("contest", contestModle);
+    setAttr("contest", contestModel);
     setAttr("contestProblems", contestService.getContestProblems(cid, null));
     setAttr("status", status);
 
@@ -427,15 +432,15 @@ public class ContestController extends OjController
   {
     Integer cid = getParaToInt(0);
     
-    ContestModel contestModle = getAttr("contest");
-    if (contestModle == null)
+    ContestModel contestModel = getAttr("contest");
+    if (contestModel == null)
     {
-      contestModle = contestService.getContest(cid);
+      contestModel = contestService.getContest(cid);
     }
     
     long serverTime = OjConfig.timeStamp;
-    int start_time = contestModle.getInt("start_time");
-    int end_time = contestModle.getInt("end_time");
+    int start_time = contestModel.getInt("start_time");
+    int end_time = contestModel.getInt("end_time");
     String status = getText("contest.status.running");
 
     if (start_time > serverTime)
@@ -443,7 +448,7 @@ public class ContestController extends OjController
     else if (end_time < serverTime)
       status = getText("contest.status.finished");
 
-    setAttr("contest", contestModle);
+    setAttr("contest", contestModel);
     setAttr("contestUsers", contestService.getContestUsers(cid));
     setAttr("status", status);
 

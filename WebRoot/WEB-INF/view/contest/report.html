@@ -1,0 +1,11 @@
+<@override name="contest_content">
+<#if serverTime &gt; contest.end_time && contest.report??>
+<pre>${contest.report!}</pre>
+<#else>
+Please come back after contest finished.
+</#if>
+</@override>
+
+<@override name="scripts">
+</@override>
+<@extends name="_layout.html" />

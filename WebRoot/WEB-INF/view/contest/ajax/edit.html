@@ -24,7 +24,13 @@
   <div class="control-group contest">
     <label class="control-label" for="inputDescription">Description</label>
     <div class="controls">
-      <textarea id="inputDescription" name="contest.description" rows="13" cols="120">${contest.description!}</textarea>
+      <textarea id="inputDescription" name="contest.description" rows="5" cols="120">${contest.description!}</textarea>
+    </div>
+  </div>
+  <div class="control-group contest">
+    <label class="control-label" for="inputReport">Report</label>
+    <div class="controls">
+      <textarea id="inputReport" name="contest.report" rows="10" cols="120">${contest.report!}</textarea>
     </div>
   </div>
   <div class="control-group contest">
@@ -63,7 +69,7 @@
           var val = $(this).val();
           if(val == 1) {
               $("div#password").show();
-              $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.pass" placeholder="Current password is: ${contest.pass!}">');
+              $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.pass" placeholder="<#if contest.pass??>Current password is: ${contest.pass!}<#else>Password</#if>">');
           }
           else {
             $("div#contest-password").html('');

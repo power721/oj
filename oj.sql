@@ -197,6 +197,7 @@ CREATE TABLE `contest` (
 `start_time`  int(11) NULL DEFAULT 0 ,
 `end_time`  int(11) NULL DEFAULT 0 ,
 `description`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`report`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `type`  tinyint(4) NOT NULL DEFAULT 0 ,
 `pass`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `freeze`  tinyint(4) NOT NULL DEFAULT 0 ,

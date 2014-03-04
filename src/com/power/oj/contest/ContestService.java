@@ -402,12 +402,20 @@ public class ContestService
       newContest.set("freeze", 0);
     }
     
-    if (contestModel.getInt("type") == 3 && StringUtil.isNotBlank(contestModel.getStr("pass")))
+    if (contestModel.getInt("type") == ContestModel.TYPE_Password)
     {
-      newContest.set("pass", contestModel.get("pass"));
+      if (StringUtil.isNotBlank(contestModel.getStr("pass")))
+      {
+        newContest.set("pass", contestModel.get("pass"));
+      }
+      else if (newContest.getInt("type") != ContestModel.TYPE_Password)
+      {
+        return false;
+      }
     }
     newContest.set("title", contestModel.get("title"));
     newContest.set("description", contestModel.get("description"));
+    newContest.set("report", contestModel.get("report"));
     newContest.set("start_time", contestModel.get("start_time"));
     newContest.set("end_time", contestModel.get("end_time"));
     newContest.set("type", contestModel.get("type"));
