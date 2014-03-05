@@ -280,8 +280,17 @@ public class ContestController extends OjController
     Integer cid = getParaToInt(0);
     Integer uid = userService.getCurrentUid();
     
-    setAttr("privateClarifyList", contestService.getPrivateClarifyList(cid, uid));
-    setAttr("publicClarifyList", contestService.getPublicClarifyList(cid));
+    if (userService.isAdmin())
+    {
+      setAttr("clarifyList", contestService.getClarifyList(cid));
+      render("adminClarify.html");
+    }
+    else
+    {
+      setAttr("privateClarifyList", contestService.getPrivateClarifyList(cid, uid));
+      setAttr("publicClarifyList", contestService.getPublicClarifyList(cid));
+      render("clarify.html");
+    }
   }
   
   public void report()

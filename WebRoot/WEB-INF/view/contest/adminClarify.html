@@ -1,24 +1,20 @@
 <@override name="contest_content">
 <div>
-<#if privateClarifyList?? && (privateClarifyList?size > 0)>
-<h4>Private Message</h4>
-<#list privateClarifyList as clarify>
+<#if clarifyList?? && (clarifyList?size > 0)>
+<#list clarifyList as clarify>
   <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> post at 
-  <span class="timestamp" data="${clarify.ctime}"></span> <pre class="question">${clarify.question!}</pre>
-  <span class="name">Administrator</span> reply at 
-  <span class="timestamp" data="${clarify.atime!0}"></span> <pre class="reply">${clarify.reply!}</pre>
-  <hr>
-</#list>
-</#if>
-</div>
-<div>
-<#if publicClarifyList?? && (publicClarifyList?size > 0)>
-<h4>Public Message</h4>
-<#list publicClarifyList as clarify>
-  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> post at 
-  <span class="timestamp" data="${clarify.ctime}"></span> <pre class="question">${clarify.question!}</pre>
-  <span class="name">Administrator</span> reply at 
-  <span class="timestamp" data="${clarify.atime!0}"></span> <pre class="reply">${clarify.reply!}</pre>
+  <span class="timestamp" data="${clarify.ctime}"></span>
+  <pre class="question">${clarify.question!}</pre>
+  <form class="clarform" method="post" action="api/contest/updateClarify">
+    <span class="name">Administrator</span> reply at 
+    <span class="timestamp" data="${clarify.atime!0}"></span>
+    <textarea name="reply" class="input-block-level">${clarify.reply!}</textarea>
+    <label class="radio inline"><input name="ispublic" type="radio" value="1" <#if clarify.public>checked</#if>> Public </label>
+    <label class="radio inline"><input name="ispublic" type="radio" value="0" <#if !clarify.public>checked</#if>> Private </label>
+    <input name="id" type="hidden" value="${clarify.id}">
+    <input name="cid" type="hidden" value="${cid}">
+    <input type="submit" class="btn btn-primary" value="Answer">
+  </form>
   <hr>
 </#list>
 </#if>
@@ -60,20 +56,37 @@
   <script type="text/javascript" charset="utf-8">
     $(function() {
       $('#postModal').submit(function() {
-          var dialog = $.dialog();
-          $.post($(this).attr("action"), $('#postModal').serialize(),
+        var dialog = $.dialog();
+        $.post($(this).attr("action"), $('#postModal').serialize(),
+        function(data) {
+          if (data.success) {
+            dialog.content('Ok, please wait admin reply.').lock().time(2);
+            setTimeout(function() {
+              window.location.reload();
+            },
+            2000);
+          } else {
+            $.dialog({
+              content: data.result || 'Post question failed!',
+              time: 1.5
+            });
+          }
+        });
+        return false;
+      });
+      $('.clarform').submit(function() {
+        var dialog = $.dialog();
+        var that = $(this);
+        $.post($(this).attr("action"), that.serialize(),
           function(data) {
             if (data.success) {
-              dialog.content('Ok, please wait admin reply.').lock().time(2);
-              setTimeout(function() {
-                window.location.reload();
-              },
-              2000);
+              dialog.content('Success.').lock().time(1.5);
+              
             } else {
               $.dialog({
-                  content: data.result || 'Post question failed!',
-                  time: 1.5
-                });
+                content: data.result || 'Update clarify failed!',
+                time: 1.5
+              });
             }
           });
         return false;

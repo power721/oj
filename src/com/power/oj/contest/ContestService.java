@@ -270,12 +270,14 @@ public class ContestService
     return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
   }
   
+  public List<Record> getClarifyList(Integer cid)
+  {
+    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? ORDER BY id DESC", cid);
+  }
+  
+  
   public List<Record> getPrivateClarifyList(Integer cid, Integer uid)
   {
-    if (userService.isAdmin())
-    {
-      return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=0", cid);
-    }
     return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND c.uid=? AND public=0", cid, uid);
   }
   
@@ -286,15 +288,33 @@ public class ContestService
   
   public boolean addClarify(Integer cid, String question)
   {
-    Integer uid = userService.getCurrentUid();
     Record clarify = new Record();
     
     clarify.set("cid", cid);
-    clarify.set("uid", uid);
+    clarify.set("uid", userService.getCurrentUid());
     clarify.set("question", question);
     clarify.set("ctime", OjConfig.timeStamp);
    
     return Db.save("contest_clarify", clarify);
+  }
+  
+  public boolean updateClarify(Integer id, String reply, boolean isPublic)
+  {
+    Record clarify = Db.findById("contest_clarify", id);
+    
+    if (StringUtil.isNotBlank(clarify.getStr("reply")))
+    {
+      clarify.set("mtime", OjConfig.timeStamp);
+    }
+    else
+    {
+      clarify.set("admin", userService.getCurrentUid());
+    }
+    clarify.set("reply", reply);
+    clarify.set("public", isPublic);
+    clarify.set("atime", OjConfig.timeStamp);
+    
+    return Db.update("contest_clarify", clarify);
   }
   
   public String getRecentContest()

@@ -9,7 +9,7 @@
             您好：${nickname!}，来自${type!}的朋友！
           </p>
           <div class="block-body">
-            <form action="api/user/bind" method="post">
+            <form id="bind" action="api/user/bind" method="post">
               <label>
                 <#if nouser??>请绑定您的邮箱帐号：<#else>请使用邮箱激活帐号：</#if>
               </label>
@@ -43,11 +43,11 @@
       html: true
     });
     $(function() {
-      $('form').submit(function() {
+      $('#bind').submit(function() {
         var email = $('input[name="email"]').val();
         if (/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(email)) {
           var dialog = $.dialog();
-          $.post($(this).attr("action"), $('form').serialize(),
+          $.post($(this).attr("action"), $('#bind').serialize(),
           function(data) {
             if (data.status == 'ok') {
               dialog.content('邮箱发送成功，请进入邮箱按提示完成绑定！').lock().time(2);

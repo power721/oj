@@ -45,6 +45,11 @@ var config = {
 $(document).ready(function() {
   $('li.disabled a').removeAttr('href');
   
+  $('.timestamp').each( function() {
+      var that = $(this);
+      that.html(parseTimestamp(that.attr('data')));
+    });
+  
   $("marquee").css("margin-top", $("#oj-navbar").height()+5);
   /*$("#marqueepos").css("height", $("marquee").height()+$("#oj-navbar").height()-70);*/
   

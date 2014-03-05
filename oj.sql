@@ -225,6 +225,7 @@ CREATE TABLE `contest_clarify` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `cid` int(9) NOT NULL,
   `uid` int(9) NOT NULL,
+  `admin` int(9) DEFAULT NULL,
   `question` text NOT NULL,
   `reply` text DEFAULT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '0',

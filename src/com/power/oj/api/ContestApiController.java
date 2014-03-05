@@ -90,4 +90,14 @@ public class ContestApiController extends OjController
     renderJson("success", contestService.addClarify(cid, question));
   }
   
+  public void updateClarify()
+  {
+    //Integer cid = getParaToInt("cid");
+    Integer id = getParaToInt("id");
+    boolean isPublic = getParaToBoolean("ispublic");
+    String reply = getPara("reply");
+    
+    renderJson("success", contestService.updateClarify(id, reply, isPublic));
+  }
+  
 }
