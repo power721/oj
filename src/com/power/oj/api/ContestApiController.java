@@ -2,9 +2,11 @@ package com.power.oj.api;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
+import com.jfinal.aop.Before;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjController;
 
+@Before(GuestInterceptor.class)
 public class ContestApiController extends OjController
 {
   private static final ContestService contestService = ContestService.me();
@@ -78,6 +80,14 @@ public class ContestApiController extends OjController
     int result = contestService.removeUser(cid, uid);
     
     renderJson("result", result);
+  }
+  
+  public void postQuestion()
+  {
+    Integer cid = getParaToInt("cid");
+    String question = getPara("question");
+    
+    renderJson("success", contestService.addClarify(cid, question));
   }
   
 }

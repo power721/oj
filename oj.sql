@@ -226,7 +226,7 @@ CREATE TABLE `contest_clarify` (
   `cid` int(9) NOT NULL,
   `uid` int(9) NOT NULL,
   `question` text NOT NULL,
-  `reply` text NOT NULL,
+  `reply` text DEFAULT NULL,
   `public` tinyint(1) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   `atime` int(11) DEFAULT NULL COMMENT 'answer timestamp',

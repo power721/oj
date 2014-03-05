@@ -4,7 +4,7 @@
 </div>
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
-  <div clas="span4 offset4">
+  <div class="span4 offset4">
     <#if adminUser??>
     <div class="contest-admin">
       <a href="contest/edit/${contest.cid!}?ajax=1" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Edit</a> 
@@ -80,7 +80,7 @@
 </@override>
 
 <@override name="scripts">
-<link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet">
+<link href="assets/tablecloth/css/tablecloth.css" type="text/css" rel="stylesheet">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>

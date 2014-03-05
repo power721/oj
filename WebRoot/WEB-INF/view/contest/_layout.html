@@ -3,7 +3,7 @@
     <li class="<#if actionKey=="contest/show">active</#if>">
       <a href="contest/show/${cid}">Information</a>
     </li>
-    <li class="<#if methodName=="problem">active</#if>" name="0">
+    <li class="<#if methodName=="problem">active</#if>">
       <a href="contest/problem/${cid}-A">Problems</a>
     </li>
     <li class="<#if methodName=="rank">active</#if>">
@@ -23,10 +23,8 @@
       <a href="contest/report/${cid}">Report</a>
     </li>
     </#if>
-    <div class="pull-right btn-group">
-      <a class="btn btn-info" id="cset_a">Settings</a>
-      <a class="btn btn-info" id="contest-clone">Clone</a>
-    </div>
+    <a class="btn btn-info pull-right" id="cset_a">Settings</a>
+    <a class="btn btn-info pull-right" id="contest-clone">Clone</a>
 </ul>
 <div id="contest_content">
   <@block name="contest_content"></@block>

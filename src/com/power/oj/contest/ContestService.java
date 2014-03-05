@@ -34,6 +34,7 @@ public class ContestService
   private static final Logger log = Logger.getLogger(ContestService.class);
   private static final ContestModel dao = ContestModel.dao;
   private static final ContestService me = new ContestService();
+  private static final UserService userService = UserService.me();
   
   private ContestService() {}
   public static ContestService me()
@@ -262,7 +263,7 @@ public class ContestService
 
   public Integer getUserResult(Integer cid, Integer num)
   {
-    Integer uid = UserService.me().getCurrentUid();
+    Integer uid = userService.getCurrentUid();
     if (uid == null)
       return null;
     
@@ -271,7 +272,7 @@ public class ContestService
   
   public List<Record> getPrivateClarifyList(Integer cid, Integer uid)
   {
-    if (UserService.me().isAdmin())
+    if (userService.isAdmin())
     {
       return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=0", cid);
     }
@@ -281,6 +282,19 @@ public class ContestService
   public List<Record> getPublicClarifyList(Integer cid)
   {
     return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=1", cid);
+  }
+  
+  public boolean addClarify(Integer cid, String question)
+  {
+    Integer uid = userService.getCurrentUid();
+    Record clarify = new Record();
+    
+    clarify.set("cid", cid);
+    clarify.set("uid", uid);
+    clarify.set("question", question);
+    clarify.set("ctime", OjConfig.timeStamp);
+   
+    return Db.save("contest_clarify", clarify);
   }
   
   public String getRecentContest()

@@ -83,7 +83,7 @@
             <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
           <#else>
             <li class="<#if actionKey?? && actionKey=="login">active</#if>">
-              <a href="#" data-toggle="modal" id="login" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+              <a href="#" id="login" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
             </li>
             <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
               <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal"><i class="icon-star"></i>Signup</a>

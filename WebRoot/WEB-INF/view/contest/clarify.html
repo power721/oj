@@ -5,6 +5,7 @@
 <#list privateClarifyList as clarify>
   <span class="name">${clarify.name!}</span>: <pre class="question">${clarify.question!}</pre>
   <span class="name">Administrator</span>: <pre class="reply">${clarify.reply!}</pre>
+  <hr>
 </#list>
 </#if>
 </div>
@@ -14,14 +15,66 @@
 <#list publicClarifyList as clarify>
   <span class="name">${clarify.name!}</span>: <pre class="question">${clarify.question!}</pre>
   <span class="name">Administrator</span>: <pre class="reply">${clarify.reply}</pre>
+  <hr>
 </#list>
 </#if>
 </div>
 <div class="text-center">
-  <button class="btn btn-primary" id="newquestion">Post New Question</button>
+  <button class="btn btn-primary" id="newQuestion" data-toggle="modal" data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post New Question</button>
 </div>
+
+  <#if user??>
+  <div class="modal hide fade contestModal" id="postModal">
+    <form class="form-horizontal" action="api/contest/postQuestion" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="postModalLabel">
+          <a href="contest/post/${cid!}" title="Post in another page" data-toggle="tooltip" data-placement="bottom">Post New Question</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="cid" value="${cid!}">
+        <textarea name="question" rows="10"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  </#if>
+</@override>
+
+<@override name="styles">
+  <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
+  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
 </@override>
 
 <@override name="scripts">
+  <script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+  <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(function() {
+      $('form').submit(function() {
+          var dialog = $.dialog();
+          $.post($(this).attr("action"), $('form').serialize(),
+          function(data) {
+            if (data.success) {
+              dialog.content('Ok, please wait admin reply.').lock().time(2);
+              setTimeout(function() {
+                window.location.reload();
+              },
+              2000);
+            } else {
+              $.dialog({
+                  content: data.result || 'Post question failed!',
+                  time: 1.5
+                });
+            }
+          });
+        return false;
+      });
+    });
+ </script>
 </@override>
 <@extends name="_layout.html" />
