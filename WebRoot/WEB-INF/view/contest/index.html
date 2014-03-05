@@ -47,13 +47,13 @@
 </@override>
 
 <@override name="scripts">
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet">
 <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   $(document).ready(function() {
     document.onkeydown=nextpage;
     var prevpage="contest/${contestList.pageNumber-1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
