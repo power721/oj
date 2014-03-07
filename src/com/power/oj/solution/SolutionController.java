@@ -17,6 +17,7 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
+import com.power.oj.judge.JudgeAdapter;
 import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
@@ -145,11 +146,11 @@ public class SolutionController extends OjController
   @RequiresPermissions("problem:submit")//code:add
   public void save()
   {
-    UserModel userModel = getAttr(OjConstants.USER);
     SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
-    solutionModel.set("uid", userModel.getUid());
+    solutionModel.set("uid", userService.getCurrentUid());
     String url = "/status";
 
+    // TODO move to SolutionService
     if (solutionModel.addSolution())
     {
       Integer pid = solutionModel.getInt("pid");
@@ -160,35 +161,35 @@ public class SolutionController extends OjController
         redirect(url, msg);
         return;
       }
-      long stime = OjConfig.timeStamp;
-      problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime).update();
       
+      UserModel userModel = userService.getCurrentUser();
       userModel.set("submit", userModel.getInt("submit") + 1).update();
       
-      if (solutionModel.get("cid") != null)
+      Integer cid = solutionModel.getInt("cid");
+      if (cid != null && cid > 0)
       {
-        Integer cid = solutionModel.getInt("cid");
-        if (cid > 0)
-        {
           Db.update("UPDATE contest_problem SET submit=submit+1 WHERE cid=? AND pid=?", cid, pid);
-        }
+      }
+      else
+      {
+        long stime = OjConfig.timeStamp;
+        // TODO update submit_user?
+        problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime).update();
       }
       
-      synchronized (PojJudgeAdapter.judgeList)
+      synchronized (JudgeAdapter.class)
       {
-        PojJudgeAdapter.judgeList.add(solutionModel);
-        if (PojJudgeAdapter.judgeList.size() < 1)
+        JudgeAdapter.addSolution(solutionModel);
+        if (JudgeAdapter.size() < 1)
         {
-          @SuppressWarnings("unused")
-          PojJudgeAdapter judge = new PojJudgeAdapter();
+          JudgeAdapter judge = new PojJudgeAdapter();
+          judge.start();
         }
       }
       System.out.println(solutionModel.getInt("sid"));
     } else
     {
-      FlashMessage msg = new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title"));
-      redirect(url, msg);
-      return;
+      setFlashMessage(new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
     }
 
     redirect(url);
