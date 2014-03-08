@@ -79,6 +79,10 @@ public class OjService
   public boolean sendVerifyEmail(String name, String email, Map<String, Object> paras) throws MailException
   {
     String adminEmail = OjConfig.get("adminEmail");
+    if (adminEmail == null)
+    {
+      return false;
+    }
     
     String html = FreemarkerKit.processString("tpl/verifyEmail.html", paras);
     EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);

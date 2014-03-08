@@ -213,6 +213,7 @@ public abstract class JudgeAdapter extends Thread
         board.set("cid", cid);
         board.set("uid", uid);
         Db.save("board", board);
+        board = Db.findById("board", board.get("id"));
       }
       Integer wrongSubmits = board.getInt(c + "_WrongSubmits");
       
@@ -220,7 +221,7 @@ public abstract class JudgeAdapter extends Thread
       {
         Record contestProblem = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
         ContestModel contestModle = contestService.getContest(cid);
-        Long contestStartTime = contestModle.getLong("start_time");
+        Integer contestStartTime = contestModle.getInt("start_time");
         
         if (contestProblem.getInt("first_blood") == 0)
         {
@@ -233,9 +234,10 @@ public abstract class JudgeAdapter extends Thread
         Integer acTime = board.getInt(c + "_time");
         if (acTime == null || acTime == 0)
         {
-          board.set(c+"_time", submitTime);
+          acTime = (int) ((submitTime - contestStartTime) / 60);
+          board.set(c+"_time", acTime);
           board.set("solved", board.getInt("solved")+1);
-          board.set("penalty", (submitTime - contestStartTime) / 60 + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMIT);
+          board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMIT);
         }
       }
       else

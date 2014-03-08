@@ -1159,11 +1159,6 @@ CREATE TABLE `web_login` (
 -- ----------------------------
 
 -- ----------------------------
--- Auto increment value for `announce`
--- ----------------------------
-ALTER TABLE `announce` AUTO_INCREMENT=1000;
-
--- ----------------------------
 -- Auto increment value for `board`
 -- ----------------------------
 ALTER TABLE `board` AUTO_INCREMENT=1;
