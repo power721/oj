@@ -59,12 +59,14 @@
     <tr>
       <td class="sid">${solution.sid!}</td>
       <td class="user"><a href="user/profile/${(solution.name)!}" data-toggle="tooltip" title="${(solution.nick)!}">${(solution.name)!}</a></td>
-      <td class="problem"><a href="contest/problem/${cid}-${solution.alpha!}">${cid}-${solution.alpha!}</a></td>
-      <td class="result" id="${solution.resultName!}">${solution.resultLongName!}</td>
+      <td class="problem"><a href="contest/problem/${cid}-${solution.alpha!}">${solution.alpha!}</a></td>
+      <td class="result" id="${solution.resultName!}"><i class="btn">${solution.resultLongName!}</i></td>
       <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
       <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
-      <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="code/${solution.sid!}?cid=${cid}" target="_blank"
-        title="show source code"></#if> ${solution.language!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
+      <td class="language">
+      <#if user?? &&(adminUser?? || user.uid==solution.uid)>
+        <a href="code/${solution.sid!}?cid=${cid}" target="_blank" title="show source code">${solution.language!}</a><#else> ${solution.language!}
+      </#if>
       </td>
       <td class="code_len">${solution.code_len!}B</td>
       <td class="ctime">${solution.ctime!}</td>
@@ -79,7 +81,7 @@
 
 <@override name="scripts">
 <script type="text/javascript">
-$(document).ready(function(){
+  $(document).ready(function(){
     document.onkeydown=nextpage;
     var prevpage="contest/status/${cid!}?p=${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
     var nextpage="contest/status/${cid!}?p=${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
@@ -89,7 +91,23 @@ $(document).ready(function(){
       <#if (solutionList.pageNumber>1)>if(event.keyCode==37)location=prevpage;</#if>
       <#if solutionList.pageNumber<solutionList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
     }
+    
+    $('.result i').each(function() {
+    	var resultName = $(this).parent().attr('id');
+    	var btnClass = 'btn-warning';
+    	if (resultName == 'AC')
+    		btnClass = 'btn-success';
+    	if (resultName == 'PE')
+    		btnClass = 'btn-info';
+    	else if (resultName == 'WA')
+    		btnClass = 'btn-danger';
+    	else if (resultName == 'VE' || resultName == 'SE')
+    		btnClass = 'btn-inverse';
+    	else if (resultName == 'Wait')
+    		btnClass = '';
+    	$(this).addClass(btnClass);
     });
+  });
 </script>
 </@override>
 <@extends name="_layout.html" />
