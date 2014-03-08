@@ -95,10 +95,10 @@ public class OjConfig
     judge_result = new ArrayList<ResultType>();
     judge_result.add(new ResultType(ResultType.AC, "AC", "Accepted"));
     judge_result.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
+    judge_result.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
     judge_result.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
     judge_result.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
     judge_result.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
-    judge_result.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
     judge_result.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
     judge_result.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
     judge_result.add(new ResultType(ResultType.SE, "SE", "System Error"));

@@ -6,10 +6,14 @@
     <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
     <span>Current System Time</span>: <span class="time" id="current">${contest.start_time_t!}</span>
     <span id="reminder"></span>
+    <div class="countdown"></div>
   </div>
 </div>
 </@override>
 <@override name="scripts">
+<link href="assets/jcountdown/jcountdown.css" type="text/css" rel="stylesheet">
+<script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
+<script src="assets/jcountdown/jquery.jcountdown.min.js"></script>
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
     var current_time = ${serverTime!}*1000;
@@ -18,6 +22,29 @@
       $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
     }
     setInterval(updateTime, 1000);
+    
+    var startTimeText = new Date(${contest.start_time}*1e3).format("yyyy/MM/dd hh:mm:ss");
+    var dayNumber = Math.floor(${contest.start_time-serverTime}/3600/24);
+    dayNumber = dayNumber ? dayNumber.toString().length : 0;
+    $('.countdown').jCountdown({
+      timeText: startTimeText,
+      timeZone: 8,
+      style: "metal",
+      color: "black",
+      width: 0,
+      textGroupSpace: 15,
+      textSpace: 0,
+      reflection: !1,
+      reflectionOpacity: 10,
+      reflectionBlur: 0,
+      dayTextNumber: dayNumber,
+      displayDay: dayNumber>0,
+      displayHour: !0,
+      displayMinute: !0,
+      displaySecond: !0,
+      displayLabel: !0,
+      onFinish: function() { window.location.reload(); }
+    });
 });
 </script>
 <script type="text/javascript">

@@ -153,6 +153,10 @@ div#source-code {
 	text-align: center
 }
 
+.countdown {
+  margin: 20px	
+}
+
 .Pending {
 	color: green !important;
 }
