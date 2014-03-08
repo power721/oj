@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.jfinal.core.JFinal;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.VariableModel;
@@ -30,7 +32,11 @@ public class OjConfig
   public static int contestRankPageSize = 50;
   public static int problemPageSize = 50;
   public static int userPageSize = 20;
+  public static int friendPageSize = 10;
   public static int statusPageSize = 20;
+  public static int mailGroupPageSize = 10;
+  public static int mailPageSize = 20;
+  public static int noticePageSize = 20;
 
   public static long timeStamp;
   public static long startInterceptorTime;
@@ -41,6 +47,7 @@ public class OjConfig
   public static HashMap<Integer, String> language_name;
   public static HashMap<Integer, ResultType> result_type;
   public static List<ResultType> judge_result;
+  public static List<Integer> level;
 
   public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
 
@@ -61,8 +68,8 @@ public class OjConfig
 
     uploadPath = FileKit.parsePath(get("uploadPath", "upload/"));
     downloadPath = FileKit.parsePath(get("downloadPath", "download/"));
-    userAvatarPath = FileKit.parsePath(get("userAvatarPath", "assets/images/user/"));
-    problemImagePath = FileKit.parsePath(get("problemImagePath", "assets/images/problem/"));
+    userAvatarPath = FileKit.parsePath(get("userAvatarPath", "upload/image/user/"));
+    problemImagePath = FileKit.parsePath(get("problemImagePath", "upload/image/problem/"));
     
     contestPageSize = getInt("contestPageSize", 20);
     contestRankPageSize = getInt("contestRankPageSize", 50);
@@ -106,6 +113,16 @@ public class OjConfig
     }
   }
 
+  public static void loadLevel()
+  {
+    level = new ArrayList<Integer>();
+    List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
+    for (Record record : levels)
+    {
+      level.add(record.getInt("exp"));
+    }
+  }
+  
   /*
    * get OJ variable from DB cache
    */

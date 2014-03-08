@@ -20,10 +20,12 @@ public class AddContestValidator extends Validator
   protected void validate(Controller c)
   {
     int type = c.getParaToInt("contest.type");
-    if (type == 3)
+    if (type == ContestModel.TYPE_Password)
     {
       validateRequired("contest.pass", "passMsg", c.getText("contest.add.validate.pass"));
     }
+    
+    // TODO validate time
   }
 
 }

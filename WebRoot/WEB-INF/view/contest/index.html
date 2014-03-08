@@ -1,47 +1,20 @@
-<#include "../common/_layout.html" /> <@layout>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        document.onkeydown=nextpage
-        document.onkeydown=nextpage
-        var prevpage="contest/?p=${contestList.pageNumber-1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>"
-        var nextpage="contest/?p=${contestList.pageNumber+1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>"
-        function nextpage(event)
-        {
-            event=event?event:(window.event?window.event:null);
-            <#if contestList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
-            <#if contestList.pageNumber<contestList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-        }
-        });
-    </script>
-
+<@override name="content">
 <div class="pagination pagination-centered">
   <div class="pull-left">
-    <form class="form-search" action="contest/search">
+    <a href="contest/recent" class="btn btn-success">Recent Contests</a>
+    <#if adminUser??><a href="contest/add" class="btn btn-info">Add a contest</a></#if>
+    <!-- <form class="form-search" action="contest/search">
       <div class="input-append">
         <input type="text" class="input-medium search-query" name="word" placeholder="Search Contest">
-        <button type="submit" class="btn">Search</button>
+        <button type="submit" class="btn btn-info">Search</button>
       </div>
-    </form>
+    </form> -->
   </div>
-  <ul>
-    <li class="<#if contestList.pageNumber==1>disabled</#if>"><a href="contest/?p=1<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">&lt;&lt;</a></li>
-    <#if contestList.pageNumber&gt;1>
-    <li><a href="contest/?p=${contestList.pageNumber-1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">Prev</a></li></#if> <#if contestList??>
-    <#assign start=contestList.pageNumber-3> <#assign end=contestList.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
-    end&gt;contestList.totalPage ><#assign start=start-(end-contestList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=contestList.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==contestList.pageNumber>active</#if>"><a href="contest/?p=${x}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">${x}</a></li>
-    </#list> </#if> <#if contestList.pageNumber<contestList.totalPage>
-    <li><a href="contest/?p=${contestList.pageNumber+1}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">Next</a></li>
-    </#if>
-    <li class="<#if contestList.pageNumber&gt;=contestList.totalPage>disabled</#if>"><a
-      href="contest/?p=${contestList.totalPage}<#if contestList.pageSize!=20>&s=${contestList.pageSize}</#if>">&gt;&gt;</a></li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="contest/" />
   <div class="pull-right">
-    <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span> <span class="badge badge-info">${contestList.totalRow}
-      Contests</span>
+    <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span> 
+    <span class="badge badge-info">${contestList.totalRow} Contests</span>
   </div>
 </div>
 
@@ -52,41 +25,56 @@
       <th>Title</th>
       <th>Start Time</th>
       <th>End Time</th>
-      <th>Type</th>
+      <th>Access</th>
       <th>Status</th>
     </tr>
   </thead>
   <tbody>
-    <#if contestList??> <#list contestList.list as Contest>
+    <#if contestList??> 
+    <#list contestList.list as Contest>
     <tr>
-      <td>${Contest.cid!}</td>
+      <td><a href="contest/show/${Contest.cid!}">${Contest.cid!}</a></td>
       <td><a href="contest/show/${Contest.cid!}">${Contest.title!}</a></td>
-      <td>${Contest.start_time_t!}</td>
-      <td>${Contest.end_time_t!}</td>
-      <td class="type-${Contest.type!}">${Contest.ctype!}</td>
+      <td class="time">${Contest.start_time_t!}</td>
+      <td class="time">${Contest.end_time_t!}</td>
+      <td class="${Contest.ctype!} type-${Contest.type!}">${Contest.ctype!}</td>
       <td class="${Contest.cstatus!}">${Contest.cstatus!}</td>
     </tr>
-    </#list> </#if>
+    </#list> 
+    </#if>
   </tbody>
 </table>
-<script type="text/javascript" src="assets/js/placeholder.js"></script>
+</@override>
 
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<@override name="scripts">
+<link href="assets/tablecloth/css/tablecloth.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="assets/js/placeholders.min.js"></script>
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#Contest-list").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
+<script type="text/javascript">
+  $(document).ready(function() {
+    document.onkeydown=nextpage;
+    var prevpage="contest/${contestList.pageNumber-1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
+    var nextpage="contest/${contestList.pageNumber+1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
+    function nextpage(event)
+    {
+        event=event?event:(window.event?window.event:null);
+        <#if contestList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
+        <#if contestList.pageNumber<contestList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
+    }
+            
+    <#if oj_style != "slate">
+    $("#Contest-list").tablecloth({
+      theme:"stats",
+      condensed:true,
+      sortable:true,
+      striped:true,
+      clean:true
     });
-    </script>
-
-</@layout>
+    </#if>
+  });
+</script>
+</@override>
+<@extends name="_layout.html" />

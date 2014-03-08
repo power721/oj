@@ -46,8 +46,14 @@ public class UserController extends OjController
   private static final UserService userService = UserService.me();
   private static final SessionService sessionService = SessionService.me();
   
+  @RequiresUser
   public void index()
   {
+    UserModel userModel = userService.getCurrentUserExt();
+    userService.isCheckin(userModel);
+    
+    setAttr(OjConstants.USER, userModel);
+    
     setTitle(getText("user.index.title"));
   }
 
@@ -75,9 +81,14 @@ public class UserController extends OjController
       return;
     }
    
-    setAttr(OjConstants.USER, userModel);
+    setAttr("userModel", userModel);
     
     setTitle(getText("user.profile.title"));
+  }
+  
+  public void option()
+  {
+    
   }
   
   @RequiresUser
@@ -89,32 +100,6 @@ public class UserController extends OjController
     setAttr("pageSize", OjConfig.userPageSize);
     setAttr("logs", userService.getLoginlog(pageNumber, pageSize));
     setTitle(getText("user.loginlog.title"));
-  }
-
-  public void info()
-  {
-    int uid = 0;
-    String name = "";
-    UserModel userModel = null;
-
-    if (isParaExists("uid"))
-    {
-      uid = getParaToInt("uid");
-      userModel = userService.getUserInfoByUid(uid);
-    } else if (isParaExists("name"))
-    {
-      name = getPara("name");
-      userModel = userService.getUserInfoByName(name);
-    }
-
-    if (userModel == null)
-    {
-      renderJson("{error:true}");
-    } else
-    {
-      userModel.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
-      renderJson(userModel);
-    }
   }
 
   public void search()
@@ -168,7 +153,7 @@ public class UserController extends OjController
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    if (userService.login(name, password, rememberMe))
+    if (userService.login(this, name, password, rememberMe))
     {
       redirect(sessionService.getLastAccessURL());
       return;
@@ -188,8 +173,10 @@ public class UserController extends OjController
   public void logout()
   {
     String lastAccessURL = sessionService.getLastAccessURL();
+    if (isParaExists("t"))
+      lastAccessURL = getPara("t");
     
-    userService.logout();
+    userService.logout(this);
 
     redirect(lastAccessURL);
   }
@@ -273,6 +260,11 @@ public class UserController extends OjController
   @RequiresGuest
   public void forget()
   {
+    if (!OjService.me().checkEmailConf())
+    {
+      FlashMessage msg = new FlashMessage(getText("conf.email.error"), MessageType.ERROR, getText("message.error.title"));
+      redirect(sessionService.getLastAccessURL(), msg);
+    }
     setTitle(getText("user.forget.title"));
   }
   
@@ -333,12 +325,41 @@ public class UserController extends OjController
     FlashMessage msg = new FlashMessage(getText("user.resetPassword.success"));
     redirect("/login", msg);
   }
+  
+  public void verify()
+  {
+    String name = getPara("name");
+    String token = getPara("token");
+    
+    if (userService.verifyEmail(name, token))
+    {
+      String redirectUrl = ShiroKit.isUser() ? sessionService.getLastAccessURL() : "/login";
+      setFlashMessage(new FlashMessage(getText("user.verify.success")));
+      redirect(redirectUrl);
+      return;
+    }
+    
+    renderError(404);
+  }
+
+  @RequiresGuest
+  public void bind()
+  {
+    render("bind.html");
+  }
 
   @ActionKey("/signup")
   @RequiresGuest
   public void signup()
   {
+    boolean ajax = getParaToBoolean("ajax", false);
+    
     setTitle(getText("user.signup.title"));
+    
+    if (ajax)
+      render("ajax/signup.html");
+    else
+      render("signup.html");
   }
   
   @Before({POST.class, SignupValidator.class})
@@ -346,10 +367,27 @@ public class UserController extends OjController
   public void save()
   {
     UserModel userModel = getModel(UserModel.class, "user");
+    
+    try
+    {
+      if (userService.signup(userModel))
+      {
+        setCookie("oj_username", userModel.getStr("name"), OjConstants.COOKIE_AGE);
+        setFlashMessage(new FlashMessage(getText("user.save.success")));
+      }
+      else
+      {
+        // TODO
+      }
+    } catch (Exception e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+      setFlashMessage(new FlashMessage(getText("user.save.error")));
+    }
 
-    userService.signup(userModel);
-
-    redirect("/user/edit", new FlashMessage(getText("user.save.success")));
+    redirect("/login");
   }
 
   @RequiresAuthentication

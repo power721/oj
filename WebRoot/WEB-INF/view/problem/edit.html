@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <form class="form-horizontal" id="editPorblemForm" action="problem/update" method="post">
   <input type="hidden" name="problem.pid" value="${problem.pid!}">
   <div class="control-group problem">
@@ -82,34 +82,37 @@
     </div>
   </div>
 </form>
+</@override>
 
+<@override name="scripts">
 <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
 <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.all.min.js"></script>
 <script type="text/javascript">  
-        //实例化编辑器
-        var ue = UE.getEditor('inputDescription');
-        ue.addListener('ready',function(){
-            this.focus()
-        });
-        
-        $('.ueditor').click(function(){
-        	var id = $(this).attr('for');
-        	var method = $(this).attr('method');
-        	var ue = UE.getEditor(id);
-        	
-        	if (method == 'destroy')
-        	{
-        		ue.destroy();
-        		$(this).attr('method', 'create');
-        	}
-        	else
-        	{
-        		 ue.addListener('ready',function(){
-               this.focus()
-             });
-        		 $(this).attr('method', 'destroy');
-        	}
-        });
+  //实例化编辑器
+  var ue = UE.getEditor('inputDescription');
+  ue.addListener('ready',function(){
+    this.focus()
+  });
+  
+  $('.ueditor').click(function(){
+    var id = $(this).attr('for');
+    var method = $(this).attr('method');
+    var ue = UE.getEditor(id);
+    
+    if (method == 'destroy')
+    {
+      ue.destroy();
+      $(this).attr('method', 'create');
+    }
+    else
+    {
+     ue.addListener('ready',function(){
+      this.focus()
+     });
+     $(this).attr('method', 'destroy');
+    }
+  });
 </script>
-</@layout>
+</@override>
+<@extends name="../common/_layout.html" />

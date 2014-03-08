@@ -42,9 +42,28 @@ public class UeditorController extends OjController
   {
     UploadFile file = getFile("upfile", "", 10 * 1024 * 1024, "UTF-8");
 
+    String rootPath = PathKit.getWebRootPath() + File.separator;
     String originalName = file.getOriginalFileName();
     String title = getPara("pictitle");
     String state = "SUCCESS";
+    String url = file.getFile().getAbsolutePath().replace(rootPath, "").replace("\\", "/");
+    System.out.println("originalName: " + originalName);
+    System.out.println("file: " + file.getFileName());
+    System.out.println(file.getFile().getAbsolutePath());
+
+    renderJson("{'original':'" + originalName + "','url':'" + url + "','title':'" + title + "','state':'" + state + "'}");
+  }
+  
+  @RequiresPermissions("image:upload")
+  public void uploadProblemImage()
+  {
+    UploadFile file = getFile("upfile", "", 10 * 1024 * 1024, "UTF-8");
+
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    String originalName = file.getOriginalFileName();
+    String title = getPara("pictitle");
+    String state = "SUCCESS";
+    String url = file.getFile().getAbsolutePath().replace(rootPath, "").replace("\\", "/");
     System.out.println("originalName: " + originalName);
     System.out.println("file: " + file.getFileName());
     System.out.println(file.getFile().getAbsolutePath());
@@ -55,6 +74,7 @@ public class UeditorController extends OjController
     try
     {
       FileUtil.moveFile(file.getFile(), imageFile);
+      url = imageFile.getAbsolutePath().replace(rootPath, "").replace("\\", "/");
     } catch (IOException e)
     {
       if (OjConfig.getDevMode())
@@ -63,7 +83,7 @@ public class UeditorController extends OjController
       state = "IO Exception";
     }
 
-    renderJson("{'original':'" + originalName + "','url':'" + imageFile.getName() + "','title':'" + title + "','state':'" + state + "'}");
+    renderJson("{'original':'" + originalName + "','url':'" + url + "','title':'" + title + "','state':'" + state + "'}");
   }
 
   @RequiresPermissions("image:upload")

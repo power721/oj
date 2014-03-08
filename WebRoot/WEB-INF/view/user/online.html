@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <div class="text-center">
   <h2>${userList?size} User(s) Online</h2>
   <span class="badge badge-info">${loginUserNum!0} logined and ${userList?size-loginUserNum} guests</span>
@@ -20,7 +20,7 @@
       <#if userList??> <#list userList as User>
       <tr>
         <td>${User_index+1}</td>
-        <td><#if User.name??><a href="user/profile/${User.name}" class="user" data="${User.uid}">${User.name}</a><#else>Guest</#if>
+        <td><#if user??><a href="user/profile/${User.name}" class="user" data="${User.uid}">${User.name}</a><#else>Guest</#if>
         </td>
         <td class="timestamp" data="${User.ctime!}"></td>
         <td class="timestamp" data="${User.last_activity!}"></td>
@@ -32,27 +32,30 @@
     </tbody>
   </table>
 </div>
+</@override>
 
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<@override name="scripts">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-    	  $('.timestamp').each(function() {
-    		  $(this).html(getLocalTime($(this).attr('data')));
-    	  });
-    	  
-        $("#onlineuser").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
-    });
-    </script>
-
-</@layout>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('.timestamp').each(function() {
+        $(this).html(getLocalTime($(this).attr('data')));
+      });
+      
+      <#if oj_style != "slate">
+      $("#onlineuser").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:true,
+        striped:true,
+        clean:true
+      });
+      </#if>
+  });
+  </script>
+</@override>
+<@extends name="../common/_layout.html" />

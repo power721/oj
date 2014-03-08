@@ -1,0 +1,101 @@
+<@override name="content">
+
+<link href="assets/kendo-ui/styles/kendo.common.min.css" rel="stylesheet" />
+<link href="assets/kendo-ui/styles/kendo.default.min.css" rel="stylesheet" />
+<script src="assets/kendo-ui/js/jquery.min.js"></script>
+<script src="assets/kendo-ui/js/kendo.web.min.js"></script>
+
+<div id="scheduler"></div>
+
+<script>
+    $(function() {
+      $("#scheduler").kendoScheduler({
+          date: new Date(),
+          startTime: new Date(),
+          height: 600,
+          views: [
+              "day",
+              "week",
+              "month",
+              { type: "agenda", selected: true },
+          ],
+          editable: false,
+          //timezone: "Asia/Chongqing",
+          dataSource: {
+              //batch: true,
+              transport: {
+                  read: {
+                      url: "contest/recent_contest",
+                      dataType: "json"
+                  },
+                  /*update: {
+                      url: "http://demos.kendoui.com/service/tasks/update",
+                      dataType: "jsonp"
+                  },
+                  create: {
+                      url: "http://demos.kendoui.com/service/tasks/create",
+                      dataType: "jsonp"
+                  },
+                  destroy: {
+                      url: "http://demos.kendoui.com/service/tasks/destroy",
+                      dataType: "jsonp"
+                  },
+                  parameterMap: function(options, operation) {
+                      if (operation !== "read" && options.models) {
+                          return {models: kendo.stringify(options.models)};
+                      }
+                  }*/
+              },
+              schema: {
+                  model: {
+                      id: "taskId",
+                      fields: {
+                          taskId: { from: "taskID", type: "number" },
+                          title: { from: "title", defaultValue: "No title", validation: { required: true } },
+                          url: {from: "url"},
+                          start: { type: "date", from: "start" },
+                          end: { type: "date", from: "end" },
+                          startTimezone: { from: "startTimezone" },
+                          endTimezone: { from: "endTimezone" },
+                          description: { from: "description" },
+                          recurrenceId: { from: "recurrenceId" },
+                          recurrenceRule: { from: "recurrenceRule" },
+                          recurrenceException: { from: "recurrenceException" },
+                          OJname: { from: "oj"},
+                          isAllDay: { type: "boolean", from: "allDay" }
+                      }
+                  }
+              },
+              /*filter: {
+                  logic: "or",
+                  filters: [
+                      { field: "ownerId", operator: "eq", value: 1 },
+                      { field: "ownerId", operator: "eq", value: 2 }
+                  ]
+              }*/
+          },
+          resources: [
+              {
+                  field: "OJname",
+                  title: "OJ",
+                  dataSource: [
+                      { text: "BNU", value: "BNU", color: "#f8a398" },
+                      { text: "CSU", value: "CSU", color: "#95aa98" },
+                      { text: "HDU", value: "HDU", color: "#51a0ed" },
+                      { text: "UVA", value: "UVA", color: "#56ca85" },
+                      { text: "Codeforces", value: "Codeforces", color: "#00ca85" },
+                      { text: "HUNNU", value: "HUNNU", color: "#442585" },
+                      { text: "Topcoder", value: "Topcoder", color: "#9925aa" },
+                      { text: "SYSU", value: "SYSU", color: "#FF5555" },
+                  ]
+              }
+          ]
+      });
+
+  });
+</script>
+
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

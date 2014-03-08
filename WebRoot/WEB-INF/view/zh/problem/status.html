@@ -1,0 +1,239 @@
+
+<@override name="content">
+<script src="assets/Highcharts/js/highcharts.js"></script>
+<script src="assets/Highcharts/js/modules/exporting.js"></script>
+<script type="text/javascript">
+    'use strict';
+      $(document).ready(function () {
+        var chart;
+
+          var prevpage="${baseUrl}/problem/status/${prevPid!}"
+          var nextpage="${baseUrl}/problem/status/${nextPid!}"
+          $(document).keydown(function(event) {
+            <#if prevPid!=pid>if(event.keyCode==37)window.location=prevpage;</#if>
+            <#if nextPid!=pid>if(event.keyCode==39)window.location=nextpage;</#if>
+          });
+          
+          // Build the chart
+          $('#container').highcharts({
+              chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false
+              },
+              title: {
+                text: '<a href="${baseUrl!}/problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
+              },
+              subtitle: {
+                text: 'Power OJ'
+              },
+              tooltip: {
+                 
+              },
+              plotOptions: {
+                pie: {
+                  allowPointSelect: true,
+                  cursor: 'pointer',
+                  dataLabels: {
+                    enabled: false
+                  },
+                  showInLegend: true
+                }
+              },
+              series: [{
+                type: 'pie',
+                name: 'Count',
+                data: [
+                  <#if resultList??>
+                  <#list resultList as Result>
+                  {
+                    name: '${Result.longName!}',
+                    color: $('td#${Result.name!}').css('color'),
+                    y: ${Result.count!}
+                  },
+                  </#list>
+                  </#if>
+                ]
+            }]
+        });
+      });
+            
+    </script>
+
+<div class="row" id="problem-status">
+  <div class="span4">
+    <h4>Statistics</h4>
+    <table id="problem-status" class="table table-hover table-condensed table-bordered">
+      <tbody>
+        <tr>
+          <td>Total Submissions</td>
+          <td><a href="status?pid=${pid!}">${problem.submit!}</a></td>
+        </tr>
+        <tr>
+          <td>Users (Submitted)</td>
+          <td>${problem.submit_user}</td>
+        </tr>
+        <tr>
+          <td>Users (Solved)</td>
+          <td>${problem.solved}</td>
+        </tr>
+        <#if resultList??>
+        <#list resultList as Result>
+        <tr>
+          <td id="${Result.name!}">${Result.longName!}</td>
+          <td><a href="status?pid=${pid!}&result=${Result.result!}">${Result.count!}</a></td>
+        </tr>
+        </#list>
+        </#if>
+      </tbody>
+    </table>
+    <div id="container" style="min-width: 350px; height: 350px; margin: 0 auto"></div>
+  </div>
+
+  <div class="span8" id="ajax-container">
+    <h4>
+      Best solutions of Problem <a href="problem/show/${pid!}" data-toggle="tooltip" title="${problem.title!}">${pid!}</a>
+    </h4>
+    <div class="pull-left ajax-loader">
+      <a url="problem/status/${pid!}" class="btn-link btn-info ajax-loader" type="a" data="id-null">All</a> 
+        <#if program_languages??>
+        <#list program_languages.keySet() as key> 
+        <a url="problem/status/${pid!}?language=${key!}" class="btn-link btn-info ajax-loader" 
+          type="a" data="id-${key_index}">${program_languages.get(key)!}</a>
+      </#list>
+      </#if>
+    </div>
+    <div class="pull-right">
+      <span id="pages" class="badge badge-info"></span>
+      <span id="records" class="badge badge-info"></span>
+    </div>
+    <table id="problem-status" class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Run ID</th>
+          <th>User</th>
+          <th>Time</th>
+          <th>Memory</th>
+          <th>Language</th>
+          <th>Code Length</th>
+          <th>Submit Time</th>
+        </tr>
+      </thead>
+      <tbody id="problem-status-tbody"></tbody>
+    </table>
+    <div id="page" class="pagination pagination-centered ajax-loader"></div>
+  </div>
+</div>
+
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+      function problemStatus(url) {
+          $.getJSON(url, function(data){
+            var html = '';
+            var i;
+            var solutionList = data.solutionList;
+            var pageNumber = parseInt(solutionList.pageNumber);
+            var pageSize = parseInt(solutionList.pageSize);
+            var pSize = parseInt(pageSize);
+            var totalPage = parseInt(solutionList.totalPage);
+            for(i in solutionList.list) {
+              var solution = data.solutionList.list[i];
+              var language = solution.language;
+              if (data.user.uid && (data.adminUser || data.user.uid==solution.uid))
+                language = '<a href="code/' + solution.sid + '" target="_blank" title="show source code">' + solution.language + '</a>';
+              html += '<tr>' +
+                '<td class="id">' + (parseInt(i)+1+(pageNumber-1)*pageSize) + '</td>' +
+                '<td class="sid">' + solution.sid + '</td>' +
+                '<td class="user"><a href="user/profile/' + solution.name + '">' + solution.name + '</a></td>' +
+                '<td class="time">' + solution.time + 'MS</td>' +
+                '<td class="memory">' + solution.memory + 'KB</td>' +
+                '<td class="language">'+ language + '</td>' + 
+                '<td class="code_len">' + solution.code_len + 'B</td>' +
+                '<td class="ctime">' + solution.ctime + '</td>' +
+                '</tr>';
+            }
+            
+            $('#problem-status-tbody').html(html);
+            $('span#pages').html(pageNumber + '/' + totalPage + ' Pages');
+            $('span#records').html(solutionList.totalRow + ' Records');
+            $('a.ajax-loader').removeClass('active');
+            $('a.ajax-loader[data=id-'+data.language+']').addClass('active');
+            var prev = '';
+            if (pageNumber > 1)
+            {
+              prev = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber-1) + data.query + '">Prev</a></li>';
+            }
+            var next = '';
+            if (pageNumber < totalPage)
+            {
+              next = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber+1) + data.query + '">Next</a></li>';
+            }
+
+            html = '<ul><li class="' + (pageNumber==1?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+            '?p=1' + (pageSize!=pSize?'&s='+pageSize:'') + data.query + '">&lt;&lt;</a></li>' + prev;
+
+            var start = pageNumber-3;
+            var end = pageNumber+3;
+            if (start < 1)
+            {
+              end = end-start+1;
+              start = 1;
+            }
+            if (end > totalPage)
+            {
+              start=start-(end-totalPage)-1;
+              if (start < 1)
+                start = 1;
+              end = totalPage;
+            }
+            if (end < start)
+              end = start;
+              
+            for(i=start; i<=end; ++i)
+            {
+              html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+              '?p=' + i + (pageSize!=pSize?('&s='+pageSize):'') + data.query + '">' + i + '</a></li>';
+            }
+
+            html += next + '<li class="' + (pageNumber==totalPage?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
+            '?p=' + totalPage + (pageSize!=pSize?('&s='+pageSize):'') + data.query + '">&gt;&gt;</a></li></ul>';
+            $('div#page').html(html);
+          });
+      }
+      
+        $('div.ajax-loader').delegate('a', 'click', function() {
+          if ($(this).parent().hasClass('disabled'))
+            return;
+          
+            var url = '${baseUrl!}/' + $(this).attr("url");
+            if (url.indexOf('?') > 0)
+                url = url + '&ajax=1';
+            else
+                url = url + '?ajax=1';
+            problemStatus(url);
+        });
+
+        $("table#problem-status").tablecloth({
+          theme:"stats",
+          condensed:true,
+          sortable:true,
+          striped:true,
+          clean:true
+        });
+        
+        var url = 'problem/status/${pid!}?ajax=1';
+        problemStatus(url);
+    });
+    </script>
+
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

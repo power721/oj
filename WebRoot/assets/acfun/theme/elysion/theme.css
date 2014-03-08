@@ -1,0 +1,54 @@
+#stage {
+    background: #fff url(image/bg-stage.jpg) center 32px repeat-x scroll;
+}
+
+#block-main {
+    background: url(image/bg-main.png) center top repeat-y;
+}
+
+#header {
+    height: 108px;
+}
+
+#header-inner {
+    z-index: 1;
+}
+
+#logo-home-member {
+    width: 233px;
+    height: 67px;
+    left: 0;
+    top: auto;
+    bottom: 16px;
+    background: url(image/img-logo.png) left top no-repeat;
+}
+
+#block-title-banner {
+    display: none;
+}
+
+#block-user-left .area-extra .space {
+    background-color: #1c6a72;
+}
+
+#block-user-left .area-extra a:hover {
+    background-color: #418389;
+}
+
+#block-user-left .desc {
+    color: #36b1c0;
+}
+
+#block-user-left .divider {
+    border-top: 1px dashed #025058;
+    border-bottom: 1px dashed #1c6a72;
+}
+
+.part-guide-left .mainer a.active {
+    color: #bdd863;
+}
+
+/*night*/
+#stage.time-night {
+    background: #101012 url(image/bg-stage-night.jpg) center 32px repeat-x scroll;
+}

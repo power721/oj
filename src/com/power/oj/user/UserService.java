@@ -5,8 +5,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -25,13 +30,16 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.util.FileKit;
+import com.power.oj.util.Tool;
 
 public class UserService
 {
@@ -45,7 +53,7 @@ public class UserService
   {
     return me;
   }
-
+  
   /**
    * User login with name and password.
    * @param name user name.
@@ -53,7 +61,7 @@ public class UserService
    * @param rememberMe ture if remember user.
    * @return true if login successfully, otherwise false.
    */
-  public boolean login(String name, String password, boolean rememberMe)
+  public boolean login(OjController controller, String name, String password, boolean rememberMe)
   {
     Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
@@ -65,6 +73,19 @@ public class UserService
 
       updateLogin(name, true);
       SessionService.me().updateLogin();
+      
+      UserModel userModel = getCurrentUser();
+      String avatar = userModel.getStr("avatar");
+      controller.setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      controller.setCookie("oj_username", name, OjConstants.COOKIE_AGE);
+      if (StringUtil.isNotBlank(avatar))
+      {
+        controller.setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
+      if (isAdmin())
+      {
+        controller.setCookie("oj_time", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      }
     } catch (AuthenticationException e)
     {
       updateLogin(name, false);
@@ -76,50 +97,192 @@ public class UserService
 
     return true;
   }
+  
+  public boolean autoLogin(OjController controller, UserModel userModel, boolean rememberMe)
+  {
+    String name = userModel.getStr("name");
+    String password = userModel.getStr("pass");
+    String avatar = userModel.getStr("avatar");
+    Subject currentUser = ShiroKit.getSubject();
+    UsernamePasswordToken token = new UsernamePasswordToken(name, password);
+    token.setRememberMe(rememberMe);
 
+    try
+    {
+      currentUser.login(token);
+
+      updateLogin(name, true);
+      SessionService.me().updateLogin();
+      
+      controller.setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      controller.setCookie("oj_username", name, OjConstants.COOKIE_AGE);
+      if (StringUtil.isNotBlank(avatar))
+      {
+        controller.setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
+      if (isAdmin())
+      {
+        controller.setCookie("oj_time", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      }
+    } catch (AuthenticationException e)
+    {
+      updateLogin(name, false);
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.warn("User signin failed.");
+      return false;
+    }
+
+    return true;
+  }
+  
+  public void addExp(UserExtModel userExtModel, int incExp)
+  {
+    int exp = userExtModel.getInt("exp") + incExp;
+    int credit = userExtModel.getInt("credit") + incExp;
+    int level = Arrays.binarySearch(OjConfig.level.toArray(), exp);
+    level = level<0 ? -level : level+2;
+    
+    userExtModel.set("credit", credit).set("exp", exp).set("level", level);
+  }
+  
+  public int checkin(UserExtModel userExtModel)
+  {
+    int timestamp = Tool.getDayTimestamp();
+    int checkin = userExtModel.getInt("checkin");
+    int checkinTimes = userExtModel.getInt("checkin_times");
+    int level = userExtModel.getInt("level");
+    
+    if (checkin < timestamp)
+    {
+      checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
+      int incExp = Math.min(checkinTimes, level);
+      int totalCheckin = userExtModel.getInt("total_checkin") + 1;
+      
+      addExp(userExtModel, incExp);
+      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).set("total_checkin", totalCheckin).update();
+      return incExp;
+    }
+    
+    return 0;
+  }
+  
+  public boolean isCheckin(UserModel userModel)
+  {
+    int checkin = userModel.getInt("checkin");
+    
+    if (checkin < Tool.getDayTimestamp())
+    {
+      return false;
+    }
+    else
+    {
+      userModel.put("isCheckin", checkin);
+      return true;
+    }
+  }
+  
   /**
    * User logout in Shiro session.
    */
-  public void logout()
+  public void logout(OjController controller)
   {
-    Subject currentUser = ShiroKit.getSubject();
-    // TODO: calculate online time in minutes
-    /*UserModel userModel = getCurrentUser();
+    UserModel userModel = getCurrentUser();
     if (userModel != null)
     {
-      userModel.update();
-    }*/
+      int online = userModel.getInt("online");
+      int login = userModel.getInt("login");
+      
+      log.info("online: " + online + " login: " + login + " current: " + OjConfig.timeStamp);
+      online += (OjConfig.timeStamp - login) / 60;
+      userModel.set("online", online).update();
+    }
+    
+    controller.removeCookie("auth_key");
+    controller.removeCookie("oj_userimg");
+    controller.removeCookie("oj_time");
 
-    currentUser.logout();
+    ShiroKit.getSubject().logout();
   }
   
   /**
    * user signup
    * @param userModel
    * @return
+   * @throws Exception 
    */
-  public boolean signup(UserModel userModel)
+  public boolean signup(UserModel userModel) throws Exception
   {
     String name = HtmlEncoder.text(userModel.getStr("name"));
     String password = BCrypt.hashpw(userModel.getStr("pass"), BCrypt.gensalt());
     String email = userModel.getStr("email");
+    String token = UUID.randomUUID().toString();
     
     long ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
-    newUser.set("name", name).set("pass", password).set("email", email).set("ctime", ctime);
-    //newUser.set("atime", ctime).set("mtime", ctime);
+    newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email).set("ctime", ctime);
+    newUser.set("token", token).set("mtime", OjConfig.timeStamp);
     
     if (newUser.save())
     {
-      //int uid = userModel.getUid();
-     
-      //Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM roles WHERE name='user'", uid);
+      int uid = newUser.getUid();
+      Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
       
-      password = userModel.getStr("pass");
-      return login(name, password, false);
+      UserExtModel userExt = new UserExtModel();
+      userExt.set("uid", uid).save();
+      //password = userModel.getStr("pass");
+      //return login(name, password, false);
+      
+      OjService.me().sendVerifyEmail(name, email, token);
+      return true;
     }
     
     return false;
+  }
+  
+  public UserModel signup(String email, WebLoginModel webLogin) throws Exception
+  {
+    String name = email;
+    String pass = Tool.randomPassword(9);
+    String password = BCrypt.hashpw(pass, BCrypt.gensalt());
+    String avatar = webLogin.getStr("avatar");
+    String token = UUID.randomUUID().toString();
+    long ctime = OjConfig.timeStamp;
+    
+    UserModel newUser = new UserModel();
+    newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email);
+    newUser.set("nick", webLogin.get("nick")).set("avatar", avatar).set("ctime", ctime);
+    newUser.set("token", token).set("mtime", OjConfig.timeStamp);
+    
+    if (newUser.save())
+    {
+      webLogin.set(WebLoginModel.STATUS, true).update();
+      
+      int uid = newUser.getUid();
+      Calendar cal = Calendar.getInstance();
+      name = new StringBuilder(3).append(webLogin.getStr("type")).append(cal.get(Calendar.YEAR)).append(uid).toString();
+      newUser.set("name", name).update();
+      
+      Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
+      
+      UserExtModel userExt = new UserExtModel();
+      userExt.set("uid", uid).save();
+      
+      Map<String, Object> paras = new HashMap<String, Object>();
+      paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+      paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+      paras.put("nick", webLogin.get("nick"));
+      paras.put("type", webLogin.get("type"));
+      paras.put("name", name);
+      paras.put("token", token);
+      paras.put("password", pass);
+      paras.put("ctime", OjConfig.timeStamp);
+      paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+      
+      OjService.me().sendVerifyEmail(name, email, paras);
+    }
+    
+    return newUser;
   }
   
   /**
@@ -147,7 +310,7 @@ public class UserService
     newUser.set("phone", HtmlEncoder.text(userModel.getStr("phone")));
     newUser.set("gender", HtmlEncoder.text(userModel.getStr("gender")));
     newUser.set("language", userModel.getInt("language"));
-    newUser.set("qq", userModel.getLong("qq"));
+    newUser.set("qq", userModel.getStr("qq"));
     newUser.set("mtime", OjConfig.timeStamp);
     
     return newUser.update();
@@ -167,13 +330,29 @@ public class UserService
     if (success)
     {
       UserModel userModel = getCurrentUser();
-      userModel.set("token", null).set("login", OjConfig.timeStamp).set("login_ip", ip).update();
+      if (userModel.getBoolean("email_verified"))
+      {
+        userModel.set("token", null); // resetPassword token
+      }
+      userModel.set("login", OjConfig.timeStamp).set("login_ip", ip).update();
       
       loginLog.set("uid", userModel.getUid());
     }
     
     loginLog.set("name", name).set("ip", ip).set("ctime", OjConfig.timeStamp).set("success", success);
     return Db.save("loginlog", loginLog);
+  }
+  
+  public boolean updateEmail(UserModel userModel, String email) throws Exception
+  {
+    String name = userModel.getStr("name");
+    String token = UUID.randomUUID().toString();
+    
+    userModel.set("email", email).set("email_verified", false);
+    userModel.set("token", token).set("mtime", OjConfig.timeStamp);
+    OjService.me().sendVerifyEmail(name, email, token);
+    
+    return userModel.update();
   }
 
   /**
@@ -220,7 +399,7 @@ public class UserService
   {
     UserModel userModel = dao.getUserByName(name);
     
-    userModel.set("token", null).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
+    userModel.set("token", null).set("email_verified", true).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
     return userModel.update();
   }
   
@@ -248,7 +427,37 @@ public class UserService
     
     return false;
   }
-
+  
+  public boolean verifyEmail(String name, String token)
+  {
+    UserModel userModel = dao.getUserByName(name);
+    
+    if (userModel != null && token != null && token.equals(userModel.getStr("token")) && !userModel.getBoolean("email_verified"))
+    {
+      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.VERIFY_EMAIL_EXPIRES_TIME)
+      {
+        log.info(String.valueOf(OjConfig.timeStamp - userModel.getInt("mtime")));
+        userModel.set("token", null).set("email_verified", true).update();
+        
+        return true;
+      }
+      else
+      {
+        userModel.set("token", null).update();
+        log.info("token expires");
+        return false;
+      }
+    }
+    
+    if (OjConfig.getDevMode())
+    {
+      log.info(name + " " + token);
+      log.info(userModel.toString());
+    }
+    log.info("token invlidate");
+    return false;
+  }
+  
   /**
    * upload and resize user avatar.
    * @param file file of the avatar.
@@ -291,9 +500,28 @@ public class UserService
 
     imageScale.resizeFix(srcFile, destFile, OjConstants.AVATAR_WIDTH, OjConstants.AVATAR_HEIGHT, x1, y1, cutWidth, catHeight);
     FileUtil.delete(srcFile);
-    userModel.set("avatar", destFileName.replace(rootPath, "")).update();
+    destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
+    userModel.set("avatar", destFileName).update();
   }
-
+  
+  public String saveAvatar(File srcFile) throws Exception
+  {
+    UserModel userModel = getCurrentUser();
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    String srcFileName = srcFile.getAbsolutePath();
+    String ext = FileKit.getFileType(srcFileName);
+    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userModel.getUid()).append(ext).toString();
+    
+    File destFile = new File(destFileName);
+    
+    FileUtil.moveFile(srcFile, destFile);
+    
+    destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
+    userModel.set("avatar", destFileName).update();
+    
+    return destFileName;
+  }
+  
   /**
    * Search user by key word in scope.
    * @param scope "all", "name", "nick", "school", "email".
@@ -447,7 +675,29 @@ public class UserService
   {
     return getUserByUid(getCurrentUid());
   }
-
+  
+  public UserModel getCurrentUserExt()
+  {
+    UserModel userModel = dao.getUserExt(getCurrentUid());
+    int exp = userModel.getInt("exp");
+    int level = userModel.getInt("level");
+    int lastExp = 0;
+    if (level > 1)
+    {
+      lastExp = OjConfig.level.get(level-2);
+    }
+    int nextExp = (1<<31) - 1;
+    if (level - 1 < OjConfig.level.size())
+    {
+      nextExp = OjConfig.level.get(level-1);
+    }
+    
+    userModel.put("nextExp", nextExp);
+    userModel.put("percent", (int)((exp-lastExp)/(double)(nextExp-lastExp) * 100));
+    
+    return userModel;
+  }
+  
   public UserModel getUserByUid(Integer uid)
   {
     return dao.findById(uid);
@@ -456,6 +706,22 @@ public class UserService
   public UserModel getUserByName(String name)
   {
     return dao.getUserByName(name);
+  }
+
+  public Integer getUidByName(String name)
+  {
+    UserModel userModel = getUserByName(name);
+    
+    if (userModel != null)
+    {
+      return userModel.getUid();
+    }
+    return null;
+  }
+
+  public UserModel getUserByEmail(String email)
+  {
+    return dao.getUserByEmail(email);
   }
 
   public UserModel getUserByNameAndEmail(String name, String email)
@@ -483,6 +749,23 @@ public class UserService
     return dao.getUserRankList(pageNumber, pageSize);
   }
 
+  public Page<UserModel> getUserRankListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
+  {
+    List<Object> param = new ArrayList<Object>();
+    String sql = "SELECT *";
+    StringBuilder sb = new StringBuilder().append("FROM user WHERE 1=1");
+
+    if (StringUtil.isNotEmpty(sSearch))
+    {
+      sb.append(" AND (name LIKE ? OR realname LIKE ?)");
+      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+    }
+    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", uid");
+
+    return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
+  }
+
   public boolean checkPassword(Integer uid, String password)
   {
     String stored_hash = dao.findById(uid, "pass").getStr("pass");
@@ -502,6 +785,22 @@ public class UserService
   public boolean isAdmin()
   {
     return ShiroKit.hasPermission("admin");
+  }
+
+  public boolean containsEmailExceptThis(Integer uid, String email)
+  {
+    return dao.containsEmailExceptThis(uid, email);
+  }
+
+  public Object getUserField(Integer uid, String name)
+  {
+    UserModel userModel = dao.getUserInfoByUid(uid);
+    if (userModel == null)
+    {
+      return null;
+    }
+        
+    return userModel.get(name);
   }
 
 }

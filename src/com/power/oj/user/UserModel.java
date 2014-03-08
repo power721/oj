@@ -30,6 +30,11 @@ public class UserModel extends Model<UserModel>
     return uid;
   }
 
+  public UserModel getUserExt(Integer uid)
+  {
+    return findFirst("SELECT * FROM user u LEFT JOIN user_ext ue ON u.uid=ue.uid WHERE u.uid=? LIMIT 1", uid);
+  }
+  
   public UserModel getUserByName(String name)
   {
     return findFirst("SELECT * FROM user WHERE name=? LIMIT 1", name);
@@ -47,12 +52,12 @@ public class UserModel extends Model<UserModel>
 
   public UserModel getUserInfoByName(String name)
   {
-    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,solved,login,ctime FROM user WHERE name=? LIMIT 1", name);
+    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,share,gender,submit,solved,login,ctime,sign,comefrom FROM user WHERE name=? LIMIT 1", name);
   }
 
   public UserModel getUserInfoByUid(Integer uid)
   {
-    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,level,credit,share,gender,submit,solved,login,ctime FROM user WHERE uid=? LIMIT 1", uid);
+    return findFirst("SELECT uid,name,nick,avatar,school,blog,online,share,gender,submit,solved,login,ctime,sign,comefrom FROM user WHERE uid=? LIMIT 1", uid);
   }
 
   public int getUserRank(Integer uid)

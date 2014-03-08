@@ -28,9 +28,9 @@ public class OjAuthorizingRealm extends AuthorizingRealm
   private static final Logger log = Logger.getLogger(OjAuthorizingRealm.class);
   
   @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection printcipals)
+  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
   {
-    Integer uid = (Integer) printcipals.fromRealm(getName()).iterator().next();
+    Integer uid = (Integer) principals.fromRealm(getName()).iterator().next();
 
     if (uid != null)
     {

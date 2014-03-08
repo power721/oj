@@ -1,0 +1,500 @@
+<!--style-->
+<style>
+.result {
+    margin: 10px;
+    font-size: 16px;
+}
+
+.result-name {
+    margin: 10px;
+}
+
+#block-first .banner .more {
+    overflow: visible;
+    margin: 0 8px 0 0;
+    padding: 0;
+}
+
+#block-first .banner .more:hover {
+    background: none;
+    box-shadow: none;
+}
+
+#block-first .mainer {
+    padding: 8px;
+}
+
+#block-first .unit .l {
+    width: 120px;
+    padding: 0 0 0 40px;
+}
+
+#block-first .unit .r {
+    width: 620px;
+}
+
+#block-first .subtitle {
+    margin: 4px 0;
+    height: 24px;
+    line-height: 24px;
+    font-size: 13px;
+    padding: 0 4px;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: #c66;
+    color: #fff;
+    display: inline-block;
+    *display: inline;
+    cursor: default;
+}
+
+#block-first .item {
+    position: relative;
+    overflow: hidden;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.no-rgba #block-first .item {
+    border-color: #ccc;
+}
+
+#block-first .inner {
+    position: relative;
+}
+
+#block-first .item .l {
+    position: relative;
+}
+
+#block-first .item .r {
+    position: relative;
+    width: 540px;
+}
+
+#block-first .item .block-title {
+    margin: 10px auto 0;
+}
+
+#block-first .item .channel {
+    background-color: #c66;
+    position: static;
+    display: inline-block;
+    *display: inline;
+    margin: 0 4px 4px 0;
+    padding: 0 4px;
+}
+
+#block-first .item .title {
+    color: #08c;
+    font-size: 14px;
+}
+
+#block-first .item .info {
+    color: #999;
+    margin: 4px auto 0;
+}
+
+#block-first .item .desc {
+    color: #666;
+    margin: 4px auto 0;
+}
+
+#block-first .item .info .pts {
+  color: #666;
+}
+
+#block-first .item .block-manage {
+    position: absolute;
+    left: auto;
+    top: auto;
+    right: -128px;
+    bottom: 8px;
+    transition: 0.2s all ease 0.2s;
+}
+
+#block-first .item:hover .block-manage {
+    right: 8px;
+}
+
+#block-first .area-tag {
+    display: inline-block;
+    *display: inline;
+    border-top: 1px dashed #ddd;
+    margin: 8px 0 16px;
+    padding: 8px 16px 0 0;
+    color: #999;
+    font-size: 12px;
+}
+
+#block-first .area-tag a {
+    margin: 0 8px 8px 0;
+    color: #369;
+}
+
+#block-first .btn-history-delete {
+    float: right;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #999;
+    background-color: #eee;
+    padding: 0 8px;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-family: "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
+    margin: 4px;
+}
+
+#block-first .btn-history-delete:hover {
+    color: #fff;
+    background-color: #c33;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+#block-first .removed {
+    text-align: center;
+    line-height: 8;
+    color: #999;
+}
+
+#block-first .hint-list-index {
+    position: absolute;
+    left: auto;
+    top: auto;
+    right: 12px;
+    bottom: 0px;
+    font-size: 64px;
+    line-height: 64px;
+    height: 64px;
+    width: auto;
+    text-align: right;
+    color: #eee;
+    z-index: 0;
+    letter-spacing: -0.1em;
+    cursor: default;
+}
+
+#block-first .area-pager {
+    padding: 0;
+    margin: 8px auto;
+}
+
+#block-first .item .area-cont {
+    width: auto;
+    height: auto;
+    margin: 8px 10px;
+    padding: 8px;
+    background-color: #ffe;
+    color: #333;
+    display: none;
+    border: 1px solid #dddddd;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #b7b7b7;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+#block-first .item-comms .area-cont {
+    display: block;
+}
+
+#list-channel-submission {
+    margin: 8px auto 16px;
+    padding: 0 0 16px;
+    border-bottom: 1px dashed #ddd;
+}
+
+#AC {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+#WA {
+  font-weight: bold;
+}
+
+#CE {
+  color: #8bbc21;
+}
+
+#TLE {
+  color: #ff9900;
+}
+
+#MLE {
+  color: #0692ff;
+}
+
+#RE {
+  color: #bb338f;
+}
+
+#OLE {
+  color: #999999;
+}
+
+#PE {
+  color: #ff03fa;
+}
+
+#SE,#Others {
+  color: #492970;
+}
+
+#Wait {
+  color: green;
+}
+
+</style>
+<!--style-->
+
+<!--html-->
+<div id="block-title-banner">
+    <p>提交记录</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Submissions</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="temp-item-submission" class="hidden">
+    <div class="item block" data-sid="[sid]">
+        <div class="inner">
+            <p class="hint-list-index">[index]</p>
+
+            <div class="l">
+                <p class="result">
+                  <a target="_blank" href="code/[sid]" class="result" id="[result]" title="查看代码">[result]</a>
+                </p>
+                <p class="result-name">[resultName]</p>
+            </div>
+            <div class="r">
+                <p class="block-title">
+                    <a href="problem/show/[pid]" class="title" title="Problem [pid]: [title]"
+                       target="_blank">[pid]: [title]</a>
+                </p>
+
+                <div class="info">
+                    
+                    &nbsp;&nbsp;/&nbsp;&nbsp;提交于
+                    <span class="time">[date]</span><br>
+                    &nbsp;&nbsp;/&nbsp;&nbsp;运行时间:
+                    <span class="pts">[time] ms</span>
+                    &nbsp;&nbsp;运行内存:
+                    <span class="pts">[memory] KB</span>
+                    &nbsp;&nbsp;程序语言:
+                    <span class="language pts">[language]</span>
+                    &nbsp;&nbsp;代码长度:
+                    <span class="pts">[len] B</span>
+                </div>
+            </div>
+            
+            <span class="clearfix"></span>
+        </div>
+    </div>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+
+        <div id="list-channel-submission">
+            <div class="l">
+                <button class="btn" data-rid="-1">
+                    <i class="icon white icon-list"></i>所有结果
+                </button>
+            </div>
+            <div class="r">
+                <button class="btn" data-rid="0">
+                    AC
+                </button>
+                <button class="btn" data-rid="1">
+                    PE
+                </button>
+                <button class="btn" data-rid="2">
+                    TLE
+                </button>
+                <button class="btn" data-rid="3">
+                    MLE
+                </button>
+                <button class="btn" data-rid="4">
+                    WA
+                </button>
+                <button class="btn" data-rid="5">
+                    RE
+                </button>
+                <button class="btn" data-rid="6">
+                    OLE
+                </button>
+                <button class="btn" data-rid="7">
+                    CE
+                </button>
+                <button class="btn" data-rid="98">
+                    SE
+                </button>
+                <button class="btn" data-rid="99">
+                    VE
+                </button>
+                <button class="btn" data-rid="10000">
+                    WAIT
+                </button>
+            </div>
+            <span class="clearfix"></span>
+        </div>
+        <div id="list-submission"></div>
+
+    </div>
+</div>
+<!--html-->
+
+<!--script-->
+<script>
+    system.tv = function () {
+        //set handle
+        var block = $('#block-first');
+        var mainer = block.find('div.mainer').eq(0);
+        var list = $('#list-submission');
+        //function
+        var showList = function (param) {
+            //inner func
+            var func = {
+                size: param.size || 10,
+                page: param.page || 1,
+                rid: param.rid || 0
+            };
+            //port
+            if (system.port.getsubmissionList) {
+                system.port.getsubmissionList.abort();
+            }
+            ;
+            system.port.getsubmissionList = $.get('api/user/getSubmissions', {
+                size: func.size,
+                page: func.page,
+                resultId: func.rid
+            })
+                    .done(function (data) {
+                        if (data.pageNumber) {
+                            //
+                            if (data.list.length) {
+                                //
+                                var temp = $('#temp-item-submission').html();
+                                var html = '';
+                                for (var i = 0, l = data.list.length; i < l; i++) {
+                                    var a = data.list[i];
+                                    html += temp
+                                            .replace(/\[sid\]/g, a.sid)
+                                            .replace(/\[rid\]/g, a.result)
+                                            .replace(/\[result\]/g, a.resultName)
+                                            .replace(/\[resultName\]/g, a.resultLongName)
+                                            .replace(/\[language\]/g, a.language)
+                                            .replace(/\[time\]/g, a.time || 0)
+                                            .replace(/\[memory\]/g, a.memory || 0)
+                                            .replace(/\[len\]/g, a.code_len)
+                                            .replace(/\[date\]/g, $.parseTime(a.ctime*1e3))
+                                            .replace(/\[pid\]/g, a.pid)
+                                            .replace(/\[title\]/g, a.title)
+                                            .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)
+                                    ;
+                                    //pager
+                                    var pager = $.makePager({
+                                        num: data.pageNumber,
+                                        count: data.totalRow,
+                                        size: data.pageSize,
+                                        addon: true
+                                    });
+                                    //insert dom
+                                    list.html(pager + html + pager)
+                                            .find('a.name')
+                                            .card();
+                                    //scroll
+                                    $('#stage').scrollOnto(0);
+                                }
+                                ;
+                            } else {
+                                $.info('info::尚未有任何提交记录。');
+                                html = '<p class="alert">尚未有任何提交记录。</p>';
+                                list.html(html);
+                            }
+                            ;
+                        } else {
+                            $.info('error::' + data.result);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        $.info('error::获取提交记录失败。请于稍后重试。');
+                    });
+        };
+        //bind action
+        list
+            //pager
+                .delegate('span.pager:not(.active)', 'click', function () {
+                    //
+                    showList({
+                        page: $(this).data().page,
+                        rid: list.data().rid
+                    });
+                })
+                .delegate('input.ipt-pager', 'focus', function () {
+                    $(this).select();
+                })
+                .delegate('input.ipt-pager', 'keyup', function () {
+                    //set handle
+                    var ipt = $(this);
+                    //check length
+                    var len = $.trim(ipt.val()).length;
+                    var width = len ? (32 + (len - 1) * 8) : 32;
+                    width = width > 240 ? 240 : width;
+                    ipt
+                            .css({
+                                width: width
+                            });
+                })
+                .delegate('input.ipt-pager', 'keydown', function (e) {
+                    //set handle
+                    var ipt = $(this);
+                    var btn = ipt.siblings('button.btn-pager').eq(0);
+                    //check key.which
+                    if (e.which == 13) {
+                        //enter
+                        btn.click();
+                    } else if ($.inArray(e.which, [8, 35, 36, 37, 39, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105]) == -1) {
+                        return false;
+                    }
+                    ;
+                })
+                .delegate('button.btn-pager', 'click', function () {
+                    //
+                    var btn = $(this);
+                    var ipt = btn.siblings('input.ipt-pager').eq(0);
+                    var n = parseInt(ipt.val()) || 1;
+                    n = n < 1 ? 1 : n;
+                    n = n > ipt.data()['max'] ? ipt.data()['max'] : n;
+                    showList({
+                        page: n,
+                        rid: list.data().rid
+                    });
+                })
+        ;
+        $('#list-channel-submission')
+                .delegate('button:not(.active)', 'click', function () {
+                    //set handle
+                    var btn = $(this);
+                    $('#list-channel-submission')
+                            .find('button.active')
+                            .removeClass('active primary');
+                    btn.addClass('active primary');
+                    list.data().rid = btn.data().rid;
+                    showList({
+                        page: 1,
+                        rid: btn.data().rid
+                    });
+                })
+                .find('button').eq(0)
+                .click()
+        ;
+    }();
+</script>
+<!--script-->

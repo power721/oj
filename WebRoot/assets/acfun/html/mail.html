@@ -1,0 +1,708 @@
+<style>
+  .abs{position:absolute;display:block}#block-second .banner .more{overflow:visible;margin:0
+  8px 0 0;padding:4px 0 0;border:none}#block-second .banner .more:hover{background:none;box-shadow:none}#block-second
+  .banner .hint{color:#999;font-size:12px}#block-second .banner .name{color:#c33;font-size:100%}#block-second
+  .mainer{padding:0}#block-second .unit .l{width:120px;padding:0 0 0 40px}#block-second
+  .unit .r{width:620px}#tab-drift-mail{position:absolute;display:block;background:#08c;color:#fff;width:32px;height:96px;right:-32px;top:8px;box-shadow:inset
+  1px 0 2px rgba(0,0,0,0.3),0 1px 2px rgba(0,0,0,0.3);border-radius:0 2px
+  2px 0;text-align:center;font-size:14px;line-height:1.4;transition:right
+  ease .2s .2s}#tab-drift-mail:hover{right:-32px}#block-main-mail{width:100%;height:auto;margin:0;padding:0;position:relative;overflow:hidden}#btn-tool-mail{min-width:0;*width:auto;padding:0}#btn-tool-mail
+  .menu{min-width:180px}#btn-tool-mail .icon{margin:0 4px}#area-left-mail{width:25%;height:auto;position:relative}#area-contact-mail{height:540px;border-bottom:1px
+  solid #eee}#area-contact-mail .item{border-bottom:1px solid #eee;display:block;position:relative;cursor:pointer;overflow:hidden;background-color:#fff}#area-contact-mail
+  .item:hover{background-color:#fafafa}#area-contact-mail .item:hover .btn-delete-mail{display:inline}#area-contact-mail
+  .item.active{background-color:#f9f9f9}#area-contact-mail .item.active .name{color:#c00}#area-contact-mail
+  .item.unreaded .cont{color:#08c}#area-contact-mail .item .l{margin:0;padding:8px
+  4px 8px 8px;text-align:right;width:auto;height:auto;overflow:hidden}#area-contact-mail
+  .item .r{margin:0;padding:8px 8px 8px 0;text-align:left;width:128px;height:auto;overflow:hidden}#area-contact-mail
+  .item .name{font-size:13px;height:16px;line-height:16px;margin:0;padding:0;display:block;position:relative;overflow:hidden}#area-contact-mail
+  .item .name .icon{margin:2px 2px 0 0}#area-contact-mail .item .avatar{width:30px;height:30px}#area-contact-mail
+  .item .cont{font-size:13px;height:16px;line-height:16px;margin:0;padding:0;color:#666;overflow:hidden}#area-contact-mail
+  .item .time{font-size:12px;color:#798;float:right}#area-contact-mail .item
+  .from{font-size:12px;color:#999}#area-contact-mail .item .btn-delete-mail{float:right;color:#c33;display:none}#area-pager-mail{border-top:1px
+  solid #fff;width:100%;height:32px;line-height:32px;position:relative;display:block}#area-pager-mail
+  .area-pager{margin:0;padding:0 2px;overflow:visible}#area-pager-mail .pager{min-width:24px;height:24px;line-height:24px;margin-top:3px}#area-pager-mail
+  .hint{display:none}#area-right-mail{width:75%;_width:74.9%;height:auto;position:relative}#area-mails-mail{overflow-y:auto;overflow-x:hidden;border-right:1px
+  solid #eee;background-color:#fff;max-height:540px;width:100%;position:relative}#area-mails-mail
+  .item{margin:8px auto}#area-mails-mail .item.to .l{padding:0 16px 0 0;float:right;text-align:left}#area-mails-mail
+  .item.to .r{padding:0 0 0 16px;float:left;text-align:right}#area-mails-mail
+  .item.to .cont{background-color:#fbfaf2;border-color:1px solid #e1dfd0}#area-mails-mail
+  .item.to .subtail{border-color:#e1dfd0;border-top:8px solid transparent;border-bottom:8px
+  solid transparent;border-right:8px solid transparent;top:16px;left:auto;right:-17px}#area-mails-mail
+  .item.to .tail{border-color:#fbfaf2;border-top:8px solid transparent;border-bottom:8px
+  solid transparent;border-right:8px solid transparent;top:16px;left:100%}#area-mails-mail
+  .item.to .btn-report-mail{display:none}#area-mails-mail .item .l{padding:0
+  0 0 16px;width:auto}#area-mails-mail .item .r{padding:0 16px 0 0;width:420px;*width:410px}#area-mails-mail
+  .item .btn{display:inline-block;_display:inline;float:none;margin:0 0 4px}#area-mails-mail
+  .avatar{width:60px;height:60px}#area-mails-mail .name{font-size:13px;height:16px;line-height:16px;margin:0;padding:0}#area-mails-mail
+  .cont{display:inline-block;_display:inline;font-size:13px;line-height:1.4;color:#333;background-color:#f2f8fb;position:relative;margin:0;padding:8px;border:1px
+  solid #e1e9ed;border-radius:4px;max-width:100%;*width:auto;text-align:left;box-shadow:0
+  1px 1px rgba(0,0,0,0.05);word-wrap:break-word}#area-mails-mail .cont:hover
+  .area-tool-mail{z-index:0}#area-mails-mail .cont .thumb{display:inline-block;_display:inline;float:none;margin:0
+  4px;width:auto;height:auto}#area-mails-mail .cont .thumb img{display:block;float:none;max-width:360px;max-height:270px;background:transparent
+  url(http://static.acfun.tv/dotnet/20130217/style/image/bg-trans.png) left
+  top repeat;box-shadow:0 1px 3px rgba(0,0,0,0.3);border-radius:2px}#area-mails-mail
+  .cont .emotion{max-width:80px;max-height:80px;*width:auto;*height:auto}#area-mails-mail
+  .time{font-size:12px;color:#798;margin:4px 0 4px 16px;text-align:right}#area-mails-mail
+  .tail{position:absolute;display:block;border:8px solid #f2f8fb;border-top:8px
+  solid transparent;border-bottom:8px solid transparent;border-left:8px solid
+  transparent;content:"";display:inline-block;*display:none;top:16px;left:-16px}#area-mails-mail
+  .subtail{position:absolute;display:block;border:10px solid #e1e9ed;border-top:8px
+  solid transparent;border-bottom:8px solid transparent;border-left:8px solid
+  transparent;content:"";display:inline-block;*display:none;top:16px;left:-18px}#area-mails-mail
+  .btn-more-mail{display:block;position:relative;background-color:#f9f9f9;color:#999;height:auto;font-size:13px;text-align:center;border:1px
+  dashed #ccc;margin:16px 8px;padding:4px 1%;cursor:pointer}#area-mails-mail
+  .divider{height:1px;margin:16px 8px;border-bottom:1px dashed #ccc}#area-mails-mail
+  .area-tool-mail{margin:0 2px 0 0;position:relative;z-index:-1}#area-mails-mail
+  .area-tool-mail a{color:#c33}#area-editor-mail{width:100%;height:auto;position:relative;background:#fff;margin:0;padding:0;left:0;top:0;border-right:1px
+  solid #eee;overflow:hidden}#area-tool-mail{border-top:1px solid #fff;width:100%;height:32px;line-height:32px;position:relative;margin:0;padding:2px
+  2px 0}.edui-editor{border:none !important;border-bottom:1px solid #eee
+  !important;box-shadow:none !important}
+</style>
+<div id="block-title-banner">
+  <p>
+    私信
+  </p>
+  <div>
+    <a href="user">
+      PowerOJ
+    </a>
+    <span class="d">
+      Mail
+    </span>
+  </div>
+  <span class="clerafix">
+  </span>
+</div>
+<div id="block-banner-right" class="block banner">
+  <i class="location">
+  </i>
+</div>
+<div id="temp-left-mail" class="hidden">
+  <div data-uid="[uid]" data-gid="[gid]" data-p2p="[p2p]" data-name="[name]"
+  class="item [read]">
+    <div class="l">
+      <a ref="user/profile/[name]" target="_blank" class="thumb">
+        <img data-uid="[uid]" [avatar] class="avatar" />
+      </a>
+    </div>
+    <div class="r">
+      <p class="name">
+        [star][name] :
+        <span class="time">
+          [time]
+        </span>
+      </p>
+      <p class="cont">
+        [cont]
+        <a title="删除联系人" class="btn-delete-mail">
+          [删除]
+        </a>
+      </p>
+    </div>
+    <span class="clearfix">
+    </span>
+  </div>
+</div>
+<div id="temp-right-mail" class="hidden">
+  <div data-mid="[mid]" class="item [from]">
+    <div class="l">
+      <a href="user/profile/[name]" target="_blank" class="thumb">
+        <img [avatar] class="avatar" />
+      </a>
+    </div>
+    <div class="r">
+      <div class="cont">
+        [cont]
+        <p class="time">
+          <span class="area-tool-mail">
+            <a title="举报信息" class="btn-report-mail">
+              [举报]
+            </a>
+            <a title="删除信息" class="btn-delete-mail">
+              [删除]
+            </a>
+          </span>
+          [time]
+        </p>
+        <div class="subtail">
+        </div>
+        <div class="tail">
+        </div>
+      </div>
+    </div>
+    <span class="clearfix">
+    </span>
+  </div>
+</div>
+<div id="block-first" class="block">
+  <div class="mainer">
+    <p class="alert">
+      <span class="r">
+        <a id="btn-drift-mail" class="btn primary">
+          <i class="icon white icon-heart">
+          </i>
+          捡漂流瓶
+        </a>
+        <a id="btn-newdrift-mail" href="user/#area=drift-new" class="btn primary">
+          <i class="icon white icon-share">
+          </i>
+          丢漂流瓶
+        </a>
+      </span>
+      我们重新定义了私信系统，以使您能够更方便的同朋友们沟通与交流。
+      <br/>
+      同时，您也可以通过新的漂流瓶系统来邂逅和结识陌生人。
+    </p>
+    <p class="alert warning">
+      当被不良信息骚扰时，您可以举报发信者，或通过“写信”按钮右侧菜单将发信者纳入您的私信黑名单中。
+      <br/>
+      同时，您也可以通过配置右侧菜单中“设定陌生人信息策略”选项，以拒收所有来自陌生人的私信。
+    </p>
+  </div>
+</div>
+<div id="block-second" class="block">
+  <div class="banner">
+    <div class="tab fixed">
+      私信
+    </div>
+    <div class="tab more">
+      <div id="btn-new-mail" title="发送新邮件" class="btn mini primary">
+        <i class="icon white icon-envelope">
+        </i>
+        写信
+      </div>
+      <div id="btn-tool-mail" class="btn mini primary dropdown">
+        <i class="icon white icon-chevron-down">
+        </i>
+        <ul class="menu">
+          <li id="btn-ban-mail">
+            <i class="icon icon-ban-circle">
+            </i>
+            屏蔽当前联系人
+          </li>
+          <li id="btn-manage-mail">
+            <i class="icon icon-list">
+            </i>
+            管理屏蔽列表
+          </li>
+          <li id="btn-config-mail">
+            <i class="icon icon-wrench">
+            </i>
+            设定陌生人信息策略
+          </li>
+          <li id="btn-delAllMails-mail">
+            <i class="icon icon-warning-sign">
+            </i>
+            清空收件箱
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="mainer">
+    <div id="block-main-mail">
+      <div id="area-right-mail" class="l">
+        <div id="area-mails-mail">
+        </div>
+        <div id="area-editor-mail" class="form">
+          <script id="editor-cont-mail" type="text/plain">
+          </script>
+          <div id="area-tool-mail">
+            <div class="l">
+              <button id="btn-refresh-mail" class="btn mini primary">
+                <i class="icon white icon-refresh">
+                </i>
+                刷新
+              </button>
+            </div>
+            <div class="r">
+              <button id="btn-reply-mail" class="btn mini success do">
+                <i class="icon white icon-ok-circle">
+                </i>
+                发送信息
+              </button>
+            </div>
+            <span class="clearfix">
+            </span>
+          </div>
+        </div>
+      </div>
+      <div id="area-left-mail" class="r">
+        <div id="area-contact-mail">
+        </div>
+        <div id="area-pager-mail">
+        </div>
+      </div>
+      <span class="clearfix">
+      </span>
+    </div>
+  </div>
+</div>
+<script>
+  system.tv = function() {
+    "use strict";
+    var block = $("#block-second");
+    var showLeft = function(page, callback) {
+      if (system.port.getGroups) {
+        system.port.getGroups.abort()
+      }
+      system.port.getGroups = $.get("api/mail/getGroups", {
+        page: page
+      }).done(function(data) {
+        if ( !! data.pageNumber) {
+          var area = $("#area-contact-mail");
+          var temp = $("#temp-left-mail").html();
+          var a = data.list;
+          if (!a.length) {
+            $.info("info::当前尚未有任何联系人。");
+            $("#btn-new-mail").info("info::当前尚未有任何联系人。单击这里发送新信息。")
+          }
+          var html = "";
+          for (var i = 0,
+          l = a.length; i < l; i++) {
+            if (a[i]) {
+              a[i] = $.parseJson(a[i]);
+              html += temp.replace(/\[avatar\]/g, 'src="' + (a[i].avatar || "assets/images/user/default.png") + '"').replace(/\[name\]/g, $.parseSafe(a[i].peeruser)).replace(/\[time\]/g, $.parseTime(a[i].ctime*1e3).replace(/[\s\(].*/g, "")).replace(/\[uid\]/g, a[i].peer).replace(/\[gid\]/g, a[i].id).replace(/\[cont\]/g, $.trim(a[i].content).length > 6 ? $.trim(a[i].content).substr(0, 5) + "...": $.trim(a[i].content)).replace(/\[p2p\]/g, (a[i].user + '-' + a[i].peer)).replace(/\[read\]/g, a[i].status ? "readed": "unreaded").replace(/\[star\]/g, /*parseInt(data.isFriendList[i])*/0 !== 0 ? '<i class="icon grey icon-heart"></i>': "")
+            }
+          }
+          area.data({
+            page: page
+          }).html(html).find("div.item").eq(0).click();
+          $("#area-pager-mail").html($.makePager({
+            num: data.pageNumber,
+            count: data.totalRow,
+            size: 10,
+            "long": 2
+          }));
+          area.find("img.avatar").card("left");
+          if ($.isFunction(callback)) {
+            callback()
+          }
+        } else {
+          $.info("error::" + data.result)
+        }
+      }).fail(function() {
+        $.info("error::获取私信失败。请于稍后重试。")
+      })
+    };
+    var showRight = function(param, callback) {
+      if (system.port.getMailGroups) {
+        system.port.getMailGroups.abort()
+      }
+      system.port.getMailGroups = $.get("api/mail/getMails", {
+        page: param.page,
+        gid: param.gid,
+        p2p: param.p2p
+      }).done(function(data) {
+        if ( !! data.totalRow) {
+          var area = $("#area-mails-mail");
+          var temp = $("#temp-right-mail").html();
+          var a = data.list;
+          if (!a.length) {
+            $.info("info::当前尚未有任何信息。")
+          }
+          var avatar = $("#area-contact-mail").find("div.item").filter(".active").eq(0).find("img.avatar").eq(0).attr("src");
+          var html = "";
+          for (var i = a.length - 1; i >= 0; i--) {
+            a[i] = $.parseJson(a[i]);
+            html += temp.replace(/\[avatar\]/g, 'src="' + (a[i].fromuser != user.name ? avatar: user.avatar) + '"').replace(/\[name\]/g, a[i].fromuser).replace(/\[time\]/g, $.parseTime(a[i].ctime*1e3)).replace(/\[uid\]/g, a[i].from).replace(/\[mid\]/g, a[i].id).replace(/\[cont\]/g, $.parseGet({
+              text: a[i].content,
+              showImage: true
+            })).replace(/\[from\]/g, a[i].fromuser != user.name ? "to": "from")
+          }
+          var objLeft = $("#area-contact-mail").find("div.active").eq(0);
+          block.find("div.fixed").eq(0).html('私信<span class="hint">/ 正与 <a class="name" href="user/profile/' + objLeft.data().name + '" target="_blank">' + objLeft.data().name + "</a> 通信中</a>");
+          if (data.pageNumber * data.pageSize < data.totalRow) {
+            html = '<div class="btn-more-mail">单击以显示更多内容</div>' + html
+          }
+          area.data({
+            uid: objLeft.data().uid,
+            page: param.page,
+            p2p: param.p2p,
+            gid: objLeft.data().gid
+          });
+          if ( !! param.type) {
+            area.prepend(html).scrollTop(area.find("p.divider").eq(0).position().top)
+          } else {
+            area.html(html);
+            window.setTimeout(function() {
+              area.scrollTop(65535)
+            },
+            200)
+          }
+          window.clearTimeout(system.timer.unreadedMailsCheck);
+          system.timer.unreadedMailsCheck = window.setTimeout(function() {
+            unreadedMailsCheck(5)
+          },
+          5e3);
+          $.isFunction(callback) && callback()
+        } else {
+          $.info("info::当前尚未有任何信息。")
+        }
+      }).fail(function() {
+        $.info("error::获取私信失败。请于稍后重试。")
+      })
+    };
+    var titleNotice = function(param) {
+      if (param) {
+        if (system.timer.titleNotice) {
+          window.clearInterval(system.timer.titleNotice)
+        }
+        system.gate.titleNotice = 1;
+        system.timer.titleNotice = window.setInterval(function() {
+          if (system.gate.titleNotice) {
+            system.gate.titleNotice = system.gate.titleNotice < 4 ? system.gate.titleNotice + 1 : 1;
+            var h = ["New!", "-", "--", "---"][system.gate.titleNotice - 1];
+            document.title = "(" + h + ")" + document.title.toString().replace(/\(.*?\)/, "")
+          } else {
+            window.clearInterval(system.timer.titleNotice);
+            document.title = document.title.toString().replace(/\(.*?\)/, "")
+          }
+        },
+        500)
+      } else {
+        system.gate.titleNotice = 0
+      }
+    };
+    var unreadedMailsCheck = function(param) {
+      var interval = param;
+      interval = interval > 120 ? 120 : interval;
+      if (system.hash.area == "mail") {
+        if (system.port.unreadedMailsCheck) {
+          system.port.unreadedMailsCheck.abort()
+        }
+        system.port.unreadedMailsCheck = $.get("api/mail/isHaveUnreaded", {
+          p2p: $("#area-mails-mail").data().p2p,
+          gid: $("#area-mails-mail").data().gid
+        }).done(function(data) {
+          if (data.success) {
+            var btn = $("#btn-refresh-mail");
+            btn.addClass("disabled").attr({
+              disabled: "disabled"
+            });
+            window.setTimeout(function() {
+              btn.removeAttr("disabled").removeClass("disabled")
+            },
+            1e3);
+            if (data.result > 0) {
+              showRight({
+                page: 1,
+                gid: $("#area-mails-mail").data().gid,
+                p2p: $("#area-mails-mail").data().p2p
+              });
+              titleNotice(true);
+              $("#block-second").off().one("mousemove",
+              function() {
+                titleNotice(false)
+              })
+            } else {
+              window.clearTimeout(system.timer.unreadedMailsCheck);
+              system.timer.unreadedMailsCheck = window.setTimeout(function() {
+                unreadedMailsCheck(1 + interval)
+              },
+              interval * 1e3)
+            }
+          }
+        }).fail(function() {})
+      }
+    };
+    $("#btn-drift-mail").click(function() {
+      var btn = $(this);
+      if (system.port.getDrift) {
+        system.port.getDrift.abort()
+      }
+      system.port.getDrift = $.get("api/mail/getDrift").done(function(data) {
+        if (data.success) {
+          var text = "success::已捡起了一个漂流瓶。今日尚能捡起" + (5 - data.result) + "个漂流瓶。";
+          $.info(text);
+          btn.info(text);
+          showLeft(1)
+        } else {
+          var text = "info::" + data.result;
+          $.info(text);
+          btn.info(text)
+        }
+      }).fail(function() {
+        var text = "error::同服务器通信失败。请于稍后重试。";
+        $.info(text);
+        btn.info(text)
+      })
+    });
+    $("#btn-new-mail").click(function() {
+      self.location.href = self.location.href.replace(/\#.*/, "") + "#area=mail-new"
+    });
+    $("#btn-refresh-mail").click(function() {
+      var btn = $(this);
+      if (!btn.hasClass("disabled")) {
+        btn.addClass("disabled");
+        window.setTimeout(function() {
+          btn.removeClass("disabled")
+        },
+        2e3);
+        showLeft($("#area-contact-mail").data().page)
+      }
+    });
+    $("#btn-ban-mail").click(function() {
+      var btn = $(this);
+      var obj = $("#area-contact-mail");
+      var o = obj.find("div.active");
+      if (o.length) {
+        o = o.eq(0);
+        $.ensure({
+          obj: btn,
+          text: "是否将[" + o.data().name + "]加入屏蔽列表？",
+          curtain: true,
+          callback: function() {
+            $.post("api/mail/newBanlistItem", {
+              username: o.data().name,
+              userId: o.data().uid
+            }).done(function(data) {
+              if ( !! data.success) {
+                $.info("success::一位联系人已被屏蔽。");
+                $.post("api/mail/deleteGroup", {
+                  p2p: o.data().p2p,
+                  mailGroupId: o.data().gid
+                }).done(function(data) {
+                  if ( !! data.success) {
+                    $.info("success::一位联系人已删除。");
+                    showLeft($("#area-contact-mail").data().page || 1)
+                  } else {
+                    $.info("error::" + data.result)
+                  }
+                }).fail(function() {
+                  $.info("error::同服务器通信失败。请于稍后重试。")
+                })
+              } else {
+                $.info("error::" + data.result)
+              }
+            }).fail(function() {
+              $.info("error::同服务器通信失败。请于稍后重试。")
+            })
+          }
+        })
+      } else {
+        $.info("info::当前尚未有任何联系人。")
+      }
+    });
+    $("#btn-manage-mail").click(function() {
+      $(this).unfold({
+        src: "children/win-forbid-mail",
+        id: "win-forbid-mail",
+        "class": "win-children",
+        title: "管理屏蔽列表",
+        icon: "list",
+        width: 480,
+        height: "auto"
+      })
+    });
+    $("#btn-config-mail").click(function() {
+      $(this).unfold({
+        src: "children/win-config-mail",
+        id: "win-config-mail",
+        "class": "win-children",
+        title: "设定陌生人信息策略",
+        icon: "wrench",
+        width: 480,
+        height: "auto"
+      })
+    });
+    $("#btn-delAllMails-mail").click(function() {
+      var btn = $(this);
+      $("#btn-tool-mail").mouseleave();
+      btn.ensure({
+        curtain: true,
+        text: "是否确定清空收件箱？<br/>请注意，该操作将不可逆的清除所有联系人及通信内容。",
+        callback: function() {
+          $.post("api/mail/delAllMails").done(function(data) {
+            if (data.success) {
+              var text = "success::收件箱清空成功。";
+              $.info(text);
+              m.refreshPart()
+            } else {
+              var text = "warning::" + data.result;
+              $.info(text)
+            }
+          }).fail(function() {
+            var text = "error::同服务器通信失败。请于稍后重试";
+            $.info(text)
+          })
+        }
+      })
+    });
+    $("#btn-reply-mail").click(function() {
+      var btn = $(this);
+      if (!btn.hasClass("disabled")) {
+        btn.addClass("disabled");
+        window.setTimeout(function() {
+          btn.removeClass("disabled")
+        },
+        2e3);
+        var area = $("#area-mails-mail");
+        var cont = editor.getContentTxt();
+        if (cont.length > 0 || editor.getContent().search(/<img/) != -1) {
+          if (system.port.newMail) {
+            system.port.newMail.abort()
+          }
+          system.port.newMail = $.post("api/mail/newMail", {
+            userId: area.data().uid,
+            p2p: area.data().p2p,
+            gid: area.data().gid,
+            content: $.parsePost(editor.getContent())
+          }).done(function(data) {
+            if ( !! data.success) {
+              $.info("success::私信发送成功。");
+              editor.setContent("");
+              showLeft(1);
+              titleNotice(false)
+            } else {
+              $.info("error::" + data.result);
+              btn.info({
+                type: "error",
+                text: data.result,
+                direction: "x"
+              })
+            }
+          }).fail(function() {
+            $.info("error::同服务器通信失败。请于稍后重试。");
+            btn.info({
+              type: "error",
+              text: "同服务器通信失败。请于稍后重试。",
+              direction: "x"
+            })
+          })
+        } else {
+          var text = "warning::信息应包含至少一个字符。";
+          $.info(text);
+          $("#editor-cont-mail").info({
+            text: text,
+            direction: "y"
+          })
+        }
+      }
+    });
+    $("#area-contact-mail").delegate("div.item", "click",
+    function() {
+      var obj = $(this);
+      obj.addClass("active").removeClass("unreaded").siblings("div.active").removeClass("active");
+      showRight({
+        page: 1,
+        gid: obj.data().gid,
+        p2p: obj.data().p2p
+      })
+    }).delegate("a.btn-delete-mail", "click",
+    function() {
+      var btn = $(this);
+      var obj = btn.closest("div.item");
+      $.ensure({
+        obj: btn,
+        text: "是否确定删除联系人[" + obj.data().name + "]？",
+        curtain: true,
+        callback: function() {
+          $.post("api/mail/deleteGroup", {
+            p2p: obj.data().p2p,
+            mailGroupId: obj.data().gid
+          }).done(function(data) {
+            if ( !! data.success) {
+              $.info("success::联系人[" + obj.data().name + "]已删除。");
+              showLeft($("#area-contact-mail").data().page || 1)
+            } else {
+              $.info("error::" + data.result)
+            }
+          }).fail(function() {
+            $.info("error::同服务器通信失败。请于稍后重试。")
+          })
+        }
+      })
+    });
+    $("#area-mails-mail").delegate("div.cont a.thumb", "click",
+    function(e) {
+      e.preventDefault();
+      $(this).call("img")
+    }).delegate("div.btn-more-mail", "click",
+    function() {
+      var area = $("#area-mails-mail");
+      var obj = $(this);
+      obj.after('<p class="divider"></p>').remove();
+      showRight({
+        type: "add",
+        page: 1 + parseInt(area.data().page),
+        gid: area.data().gid,
+        p2p: area.data().p2p
+      })
+    }).delegate("a.btn-report-mail", "click",
+    function() {
+      var btn = $(this);
+      var obj = btn.closest("div.item");
+      $.ensure({
+        obj: btn,
+        text: "是否确定举报信息？",
+        curtain: true,
+        callback: function() {
+          var elem = $("#area-contact-mail").children("div.active");
+          var url = "report#" + "name=" + elem.data().name + ";from=user" + ";type=私信" + ";desc=私信内容违反相关规定" + ";proof=mid-" + obj.data().mid + " " + $.trim(obj.find("div.cont").text()).replace(/[\r\n\s]/g, "").replace(/举报.*/, " ").substr(0, 50);
+          url = encodeURI(url);
+          window.open(url)
+        }
+      })
+    }).delegate("a.btn-delete-mail", "click",
+    function() {
+      var btn = $(this);
+      var obj = btn.closest("div.item");
+      $.ensure({
+        obj: btn,
+        text: "是否确定删除信息？",
+        curtain: true,
+        callback: function() {
+          $.post("api/mail/deleteMail", {
+            p2p: $("#area-mails-mail").data().p2p,
+            mailId: obj.data().mid
+          }).done(function(data) {
+            if ( !! data.success) {
+              $.info("success::一条私信已删除。");
+              obj.stop().animate({
+                opacity: 0
+              },
+              500,
+              function() {
+                obj.remove()
+              })
+            } else {
+              $.info("error::" + data.result)
+            }
+          }).fail(function() {
+            $.info("error::同服务器通信失败。请于稍后重试。")
+          })
+        }
+      })
+    });
+    $.setEditorConfig({
+      toolbars: [["bold", "italic", "underline", "strikethrough", "|", "forecolor", "fontsize", "|", "emotion", "insertimage", "spechars", "|", "link", "unlink"]],
+      initialFrameWidth: $("#area-mails-mail").width(),
+      initialFrameHeight: 120,
+      autoHeightEnabled: false,
+      pasteplain: true,
+      funcCtrlEnter: function() {
+        $("#btn-reply-mail").click()
+      }
+    });
+    var editor = new UE.ui.Editor;
+    editor.ready(function() {
+      window.setTimeout(function() {
+        var height = $("#area-left-mail").height() - $("#area-editor-mail").height();
+        height = height < 346 ? 346 : height;
+        $("#area-mails-mail").css({
+          height: height
+        }).scrollTop(65535)
+      },
+      200)
+    });
+    editor.render("editor-cont-mail");
+    $("#btn-tool-mail").setup();
+    $("#area-pager-mail").delegate("span.pager:not(.here)", "click",
+    function() {
+      showLeft($(this).data().page)
+    });
+    showLeft(1);
+    $("#hint-unReadMail-guide").addClass("hidden")
+  } ();
+</script>

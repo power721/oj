@@ -1,0 +1,166 @@
+<style>
+    #win-regroup-following .unit .l {
+        width: 75px;
+        text-align: right;
+    }
+
+    #win-regroup-following .unit .r {
+        width: 355px;
+    }
+
+    #win-regroup-following .hint {
+        color: #999;
+        font-size: 12px;
+        margin: 8px 0;
+    }
+</style>
+<div id="temp-item-follow" class="hidden">
+    <option value="[gid]">[name]([count])</option>
+</div>
+<div class="unit">
+    <div class="l">
+        <p class="subtitle">选择分组</p>
+    </div>
+    <div class="r">
+        <select id="ipt-group-regroup"></select>
+
+        <p class="hint">
+            请选择分组。
+        </p>
+    </div>
+    <span class="clearfix"></span>
+</div>
+
+<div class="unit-tool">
+    <div class="l">
+        <button id="btn-do-follow" class="btn success">
+            <i class="icon white icon-ok-circle"></i>提交修改
+        </button>
+    </div>
+    <div class="r"></div>
+    <span class="clearfix"></span>
+</div>
+<script>
+    system.tv = function () {
+        //set handle
+        var win = $('#win-regroup-following');
+        var mainer = win.find('div.mainer').eq(0);
+        var ipt = $('#ipt-group-regroup');
+        var btn = $('#btn-do-follow');
+        //
+        system.tv = function () {
+            //set handle
+            var temp = $('#temp-item-follow').html();
+            if (system.port.getGroup) {
+                system.port.getGroup.abort();
+            }
+            ;
+            system.port.getGroup = $.get('api/friend/getGroupList')
+                    .done(function (data) {
+                        var html = '';
+                        if (data.success) {
+                            //
+                            for (var i = 0, l = data.groupList.length; i < l; i++) {
+                                var a = data.groupList[i];
+                                html += temp
+                                        .replace(/\[gid\]/g, a.id)
+                                        .replace(/\[count\]/g, a.count || 0)
+                                        .replace(/\[name\]/g, $.parseSafe(a.name || "非法分组"))
+                                ;
+                            }
+                            ;
+                            ipt.html(html);
+                        } else {
+                            $.info('error::' + data.result);
+                            var html = '<p class="alert alert-error">' + data.result + '</p>'
+                            mainer
+                                    .html(html);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        $.info('error::获取关注分组失败。请于稍后重试。');
+                        var html = '<p class="alert alert-error">获取关注分组失败。请于稍后重试。</p>'
+                        mainer
+                                .html(html);
+                    });
+        }();
+        //do
+        btn.click(function () {
+            //
+            if (!btn.hasClass('disabled')) {
+                btn.addClass('disabled');
+                window.setTimeout(function () {
+                    btn.removeClass('disabled');
+                }, 1000);
+                //check target group
+                if (ipt.val() != $('#list-group-following').find('div.active').eq(0).parent().data().gid) {
+                    //try to abort
+                    if (system.port.changeGroup) {
+                        system.port.changeGroup.abort();
+                    }
+                    ;
+                    system.port.changeGroup = $.post('api/friend/changeFollowingByGroup', {
+                        followingUid: win.data().uid.join(','),
+                        groupId: win.data().gids.join(','),
+                        targetGid: ipt.val()
+                    })
+                            .done(function (data) {
+                                if (data.success) {
+                                    //set handle
+                                    var text = '向[' + $.trim(ipt.find('option:selected').text().replace(/\(.*/, '')) + ']中移动' + win.data().uid.length + '名用户成功。';
+                                    $.info(text);
+                                    //callback
+                                    if ($.isFunction(win.data().callback)) {
+                                        win.data().callback();
+                                    }
+                                    ;
+                                    //refresh
+                                    //m.refreshPart();
+                                    /*system.tv = function () {
+                                        //set handle
+                                        var list = $('#list-group-following');
+                                        var singer = list.find('div.active').not('#btn-all-following').eq(0);
+                                        var listener = list.find('div.item').filter('[data-gid="' + ipt.val() + '"]').children('div.btn-group-following');
+                                        if (singer.length) {
+                                            var text = $.trim(singer.text());
+                                            var name = text.replace(/\(\d+?\)/, '');
+                                            var count = parseInt(text.replace(/.*\(/, '').replace(/\)/, ''));
+                                            singer
+                                                    .text(name + '(' + (count - win.data().uid.length) + ')');
+                                        }
+                                        ;
+                                        if (listener.length) {
+                                            var text = $.trim(listener.text());
+                                            var name = text.replace(/\(\d+?\)/, '');
+                                            var count = parseInt(text.replace(/.*\(/, '').replace(/\)/, ''));
+                                            listener
+                                                    .text(name + '(' + (count + win.data().uid.length) + ')');
+                                        }
+                                        ;
+                                    }();*/
+                                    //close
+                                    $('#curtain').click();
+                                } else {
+                                    $.info('error::' + data.result);
+                                }
+                                ;
+                            })
+                            .fail(function () {
+                                var text = '向[' + $.trim(ipt.find('option:selected').text().replace(/\(.*/, '')) + ']中移动' + win.data().uid.length + '名用户失败。请于稍后重试。';
+                                $.info('error::' + text);
+                            });
+                } else {
+                    $.info('error::用户已位于当前分组内。');
+                    ipt.info({
+                        text: '用户已位于当前分组内。',
+                        direction: 'top'
+                    });
+                }
+                ;
+                //
+            }
+            ;
+        });
+    }();
+</script>

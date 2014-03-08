@@ -1,0 +1,106 @@
+<@override name="styles">
+<link href="assets/DataTables-1.9.4/media/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet">
+</@override>
+<@override name="content">
+    <div class="header">
+      <h1 class="page-title">比赛列表</h1>
+    </div>
+    <ul class="breadcrumb">
+      <li>
+        <a href="admin">首页</a>
+        <span class="divider">/</span>
+      </li>
+      <li class="active">比赛管理</li>
+    </ul>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="well">
+          <div id="container">
+            <table id="contest-list" class="table table-hover table-striped cf basetable dataTable">
+              <thead>
+                <tr>
+                  <th width="5%">ID</th>
+                  <th width="40%">Title</th>
+                  <th width="14%">Start Time</th>
+                  <th width="14%">End Time</th>
+                  <th width="5%">Type</th>
+                  <th width="5%">Status</th>
+                  <th width="17%">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+   </@override>
+    
+    <@override name="scripts">
+      <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
+      <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
+      <script type="text/javascript" charset="utf-8">
+          var oTable = $('#contest-list').dataTable({
+              "sPaginationType": "bootstrap",
+              "bServerSide": true,
+              "bStateSave": true,
+              "aLengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
+              "iDisplayLength": 20,
+              "sAjaxSource": "${baseUrl!}/api/admin/contestList",
+              'sAjaxDataProp' : "list", // 服务端返回数据的json节点
+              "aaSorting": [
+                [ 0, "desc" ]
+              ],
+              "aoColumns": [
+                  { "mData": "cid" },
+                  { "mData": "title",
+                    "mRender": function (data, type, full) {
+                      return '<a href="contest/show/' + full.cid + '" target="_blank">' + data + '</a>';
+                    }
+                  },
+                  { "mData": "start_time",
+                    "mRender": function (data, type, full) {
+                      return parseTimestamp(data);
+                    }
+                  },
+                  { "mData": "end_time",
+                    "mRender": function (data, type, full) {
+                      return parseTimestamp(data);
+                    }
+                  },
+                  { "mData": "ctype" },
+                  { "mData": "cstatus" },
+                  { "mData": null,
+                    "bSortable": false,
+                    "mRender": function (data, type, full) {
+                      var action = '<button id="contest-edit" cid="' + full.cid 
+                          + '" class="btn btn-success">Edit</button> '
+                          + '<button id="contest-toggle" cid="' + full.cid 
+                          + '" class="btn btn-warning">' 
+                          + (full.status ? 'Delete' : 'Resume')
+                          + '</button> ';
+                      return action;
+                    }
+                  }
+              ],
+              "oLanguage": {
+                 "sUrl": "assets/DataTables-1.9.4/zh_CN.json"
+              },
+              "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
+                oSettings.jqXHR = $.ajax( {
+                  "dataType": 'json',
+                  "type": "POST",
+                  "url": sSource,
+                  "data": aoData,
+                  "success": function(result) {
+                        result.iTotalRecords = result.totalRow;
+                        result.iTotalDisplayRecords = result.totalRow;
+                        fnCallback(result);
+                      }
+                } );
+              }
+          });
+      </script>
+   </@override>
+<@extends name="../_layout.html"></@extends>

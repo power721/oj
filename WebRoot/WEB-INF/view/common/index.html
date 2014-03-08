@@ -1,74 +1,51 @@
-<#include "../common/_layout.html" /> <@layout>
-<table border=0 align=center>
-  <tr>
-    <td>
-      <center>
-        <h1>
-          <font color=blue>西南科技大学ACM-ICPC程序设计竞赛</font>
-        </h1>
-      </center>
-      <p>&nbsp;&nbsp;Problem Set is the place where you can find large amount of problems from different programming contests. Online Judge System allows
-        you to test your solution for every problem.</p>
-      <p>
-        &nbsp;&nbsp;First of all, read carefully <a href=faq.htm target=_blank>Frequently Asked Questions</a>.<br> &nbsp;&nbsp;Then, choose <a
-          href=problemlist>problem</a>, solve it and <a href=submitpage>submit</a> it.
-      </p>
-      <p>
-        &nbsp;&nbsp;If you want to publish your problems or setup your own online contest, just <a href=mailto:null>write us</a><br>
-      </p>
-    </td>
-    <td></td>
-  </tr>
-</table>
-
-OJ使用的相关帮助请参见
-<A href="faq.htm">F.A.Q.</A>
-<BR>
-&nbsp;&nbsp;你可以在
-<A href="problemlist"><B>题库</B></A>
-找到练习题目并
-<A href="submitpage"><B>提交</B></A>
-代码通过本系统测试你的解答。
-<BR>
-&nbsp;&nbsp;如果有什么疑问或建议请联系
-<A href="sendpage?to=root">管理员</A>
-。
-<BR>
-&nbsp;&nbsp;题目数量：1217
-<BR>
-<pre></pre>
-<BR>
-&nbsp;&nbsp;
-<A href="../gongju/link.html"><B><U><FONT color=red>OJ大全</FONT></U></B></A>
-<BR>
-&nbsp;&nbsp;
-<A href="../gongju"><B><U><FONT color=red>资料下载</FONT></U></B></A>
-<BR>
-&nbsp;&nbsp;
-<A href="ACShare"><B><U><FONT color=red>AC共享计划</FONT></U></B></A>
-<BR>
-&nbsp;&nbsp;
-<B>PowerOJ测试，如果遇到问题请联系<A href="mailto:power721@163.com">管理员</A>。
-</B>
-<BR>
-<P>&nbsp;&nbsp;Problem Set is the place where you can find large amount of problems from different programming contests. Online Judge System allows you to
-  test your solution for every problem.</P>
-<P>
-  &nbsp;&nbsp;First of all, read carefully <A href="faq.htm" target=_blank>Frequently Asked Questions</A>.<BR>&nbsp;&nbsp;Then, choose <A
-    href="problemlist">problem</A>, solve it and <A href="submitpage">submit</A> it.
-</P>
-<P>
-  &nbsp;&nbsp;If you want to publish your problems or setup your own online contest, just <A href="mailto:swust_acm@163.com">write us</A><BR>
-</P>
-<a name="io"></a>
-<div class="faq_content_Q">
-  <font color="#FF8040"><b>Q</b></font>：我的程序要在哪里输入和输出数据？
+<@override name="content">
+<div class="hero-unit">
+<h1>
+  Welcome to PowerOJ 2.0!
+</h1>
+<p>
+IE 7+, Opera 11+, Safari 5+, Firefox 5+ and Chrome 14+ are <span class="badge badge-important"><b>REQUIRED</b></span> 
+according to <a href="https://github.com/twitter/bootstrap/wiki/browser-Compatibility" target='_blank'>bootstrap compatibility page</a>.<br>
+If you have none of them, click <a href='http://www.oj.swust.edu.cn/oj/' target='_blank'>here</a> for the original PowerOJ.<br>
+Enjoy and have fun!
+</p>
 </div>
-<font color="green"><b>A</b></font>
-：你的程序必须从stdin（基本输入）读入数据并且从stdout（基本输出）输出数据. 例如，你使用C语言的话，使用scanf输入数据，使用printf输出数据，使用C++语言的话，还可以使用cin和cout读入输出数据。
+
+<div>
+<p>
+  PowerOJ is a online judge for <abbr title="ACM International Collegiate Programming Contest">ACM-ICPC</abbr> or <abbr title="Olympiad in Informatics">OI</abbr>. 
+  Online Judge is a web service which can compile user's source code and run in limition. <br>
+  Judge use predefined data files as stdin and get user's stdout as files, compare with the standard output data to judge the user's solution.
+</p>
+<p>
+  First of all, read carefully <a href="faq" target="_blank">Frequently asked Questions</a>.<br> 
+  Then, choose <a href="problem">problem</a>, solve it and submit it.
+</p>
+<p>
+  If you want to publish your problems or setup your own online contest, just <a href="user/#area=mail-new;username=root">write us</a><br>
+</p>
+</div>
+  <abbr title="Online Judge">OJ</abbr>使用的相关帮助请参见
+<a href="faq">F.A.Q.</a>
 <br>
-<!--请注意，你不能进行任何文件的读写操作，否则会返回错误&quot;<font color=#b8860b>Runtime Error</font>&quot;或者&quot;<font color=#b8860b>Wrong Answer</font>&quot;。-->
-读写创建文件及调用其它程序等操作将会被系统忽略。
+  你可以在<a href="problem"><b>题库</b></a>找到练习题目并
+  提交代码通过本系统测试你的解答。
+<br>
+  如果有什么疑问或建议请联系<a href="user/#area=mail-new;username=root">管理员</a>。
+<br>
+  题目数量：${problemsNumber!0}
 <br>
 <br>
-</@layout>
+  <a href="http://www.oj.swust.edu.cn/gongju/link.html" target="_blank"><b><U><span class="red">OJ大全</span></U></b></a>
+<br>
+  <a href="http://www.oj.swust.edu.cn/gongju" target="_blank"><b><U><span class="red">资料下载</span></U></b></a>
+<br>
+  <a href="http://www.oj.swust.edu.cn/oj/aCShare" target="_blank"><b><U><span class="red">aC共享计划</span></U></b></a>
+<br>
+  <b>PowerOJ测试，如果遇到问题请联系<a href="mailto:power721@163.com">管理员</a>。
+</b>
+<br>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

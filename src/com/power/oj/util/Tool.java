@@ -1,7 +1,8 @@
 package com.power.oj.util;
 
-import java.io.IOException;
+import java.util.Calendar;
 import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,13 +15,6 @@ import jodd.mail.SmtpServer;
 import jodd.util.MimeTypes;
 import jodd.util.StringTemplateParser;
 import jodd.util.StringTemplateParser.MacroResolver;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.jfinal.kit.StringKit;
 import com.jfinal.log.Logger;
@@ -35,6 +29,10 @@ import com.power.oj.core.OjConfig;
 public class Tool
 {
   private final static Logger log = Logger.getLogger(Tool.class);
+  
+  private static final char[] CHAR_STR =
+  { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '+', '<', '>', '/' };
 
   /**
    * 
@@ -70,48 +68,6 @@ public class Tool
   }
 
   /**
-   * Get the html content by url.
-   * 
-   * @param url
-   *          the string of url.
-   * @return the string of html content.
-   */
-  public static String getHtmlByUrl(String url)
-  {
-    String html = null;
-
-    HttpClient httpclient = new DefaultHttpClient();
-    try
-    {
-      HttpGet httpget = new HttpGet(url);
-      log.info("executing request " + httpget.getURI());
-
-      // Create a response handler
-      ResponseHandler<String> responseHandler = new BasicResponseHandler();
-      html = httpclient.execute(httpget, responseHandler);
-
-    } catch (ClientProtocolException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.warn(e.getLocalizedMessage());
-    } catch (IOException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.warn(e.getLocalizedMessage());
-    } finally
-    {
-      // When HttpClient instance is no longer needed,
-      // shut down the connection manager to ensure
-      // immediate deallocation of all system resources
-      httpclient.getConnectionManager().shutdown();
-    }
-
-    return html;
-  }
-
-  /**
    * Send Email with string content.
    * 
    * @param from
@@ -143,7 +99,7 @@ public class Tool
    *          EmailMessage of email body.
    * @throws Exception
    */
-  public static void sendEmail(String from, String to, String subject, EmailMessage content) throws Exception
+  public static void sendEmail(String from, String to, String subject, EmailMessage content) throws MailException
   {
     Email email = new Email();
 
@@ -163,12 +119,6 @@ public class Tool
       session.open();
       session.sendMail(email);
       log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
-    } catch (MailException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-      throw new Exception("Configuration for SMTP mail is incorrect.");
     } finally
     {
       session.close();
@@ -186,6 +136,26 @@ public class Tool
     });
 
     return result;
+  }
+
+  public static int getDayTimestamp()
+  {
+    Calendar cal = Calendar.getInstance();
+    cal.set(Calendar.HOUR_OF_DAY, 0);
+    cal.set(Calendar.SECOND, 0);
+    cal.set(Calendar.MINUTE, 0);
+    cal.set(Calendar.MILLISECOND, 0);
+    return (int) (cal.getTimeInMillis() / 1000);
+  }
+
+  public static String randomPassword(int count)
+  {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < count; i++)
+    {
+      sb.append(CHAR_STR[new Random().nextInt(CHAR_STR.length)]);
+    }
+    return sb.toString();
   }
 
 }

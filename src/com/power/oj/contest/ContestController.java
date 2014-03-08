@@ -10,16 +10,10 @@ import jodd.util.StringUtil;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.kit.JsonKit;
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -29,112 +23,111 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.solution.SolutionService;
+import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
-import com.power.oj.util.Tool;
 
+@Before({ContestPasswordInterceptor.class, ContestInterceptor.class})
 public class ContestController extends OjController
 {
-  private static final Logger log = Logger.getLogger(ContestController.class);
+  private static final SolutionService solutionService = SolutionService.me();
+  private static final UserService userService = UserService.me();
+  private static final ContestService contestService = ContestService.me();
 
+  @ClearInterceptor
   public void index()
   {
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.contestPageSize);
-    int type = getParaToInt("type", -1);
-    int status = getParaToInt("status", -1);
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.contestPageSize);
+    Integer type = getParaToInt("type", -1);
+    Integer status = getParaToInt("status", -1);
 
-    Page<ContestModel> contestList = ContestModel.dao.getPage(pageNumber, pageSize, type, status);
-    setAttr("contestList", contestList);
+    setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status));
+    setAttr("pageSize", OjConfig.contestPageSize);
 
     setTitle(getText("contest.index.title"));
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void show()
   {
-    int cid = getParaToInt(0);
-    int uid = 0;
-    if (getAttrForInt(OjConstants.USER_ID) != null)
-      uid = getAttrForInt(OjConstants.USER_ID);
-    ContestModel contestModle = ContestModel.dao.getContest(cid);
-    if (contestModle == null)
+    Integer cid = getParaToInt(0);
+    Integer uid = userService.getCurrentUid();
+    
+    ContestModel contestModel = getAttr("contest");
+    if (contestModel == null)
     {
-      log.warn(new StringBuilder(2).append("Cannot find this contest: ").append(cid).toString());
-      FlashMessage msg = new FlashMessage(getText("contest.show.null"), MessageType.ERROR, getText("message.error.title"));
-      redirect("/contest", msg);
-      return;
+      contestModel = contestService.getContest(cid);
     }
-    List<Record> contestProblems = ContestModel.dao.getContestProblems(cid, uid);
-
-    long ctime = OjConfig.timeStamp;
-    int start_time = contestModle.getInt("start_time");
-    int end_time = contestModle.getInt("end_time");
+    
+    long serverTime = OjConfig.timeStamp;
+    int start_time = contestModel.getInt("start_time");
+    int end_time = contestModel.getInt("end_time");
     String status = getText("contest.status.running");
 
-    if (start_time > ctime)
+    if (start_time > serverTime)
       status = getText("contest.status.pending");
-    else if (end_time < ctime)
+    else if (end_time < serverTime)
       status = getText("contest.status.finished");
 
-    setAttr("cid", cid);
-    setAttr("contest", contestModle);
-    setAttr("contestProblems", contestProblems);
+    setAttr("contest", contestModel);
+    setAttr("contestProblems", contestService.getContestProblems(cid, uid));
     setAttr("status", status);
-    setAttr("ctime", ctime * 1000L);
 
     setTitle(new StringBuilder(2).append(getText("contest.show.title")).append(cid).toString());
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void problem()
   {
-    int cid = getParaToInt(0);
+    Integer cid = getParaToInt(0);
     String problem_id = getPara(1);
-    char id = problem_id.charAt(0);
-    int num = id - 'A';
+    if (problem_id == null)
+    {
+      forwardAction("/contest/allProblems/" + cid);
+      return;
+    }
+    char id = problem_id.toUpperCase().charAt(0);
+    Integer num = id - 'A';
 
-    ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
+    ProblemModel problemModel = contestService.getProblem(cid, num);
     if (problemModel == null)
     {
-      log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
       FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
-    problemModel.put("sample_input_rows", StringUtil.count((String) problemModel.get("sample_input", ""), '\n') + 1);
-    problemModel.put("sample_output_rows", StringUtil.count((String) problemModel.get("sample_output", ""), '\n') + 1);
-
     setAttr("problem", problemModel);
-    setAttr("cid", cid);
-    setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
-
-    List<Record> contestProblems = ContestModel.dao.getContestProblems(cid, 0);
-    setAttr("contestProblems", contestProblems);
+    setAttr("userResult", contestService.getUserResult(cid, num));
+    setAttr("cstatus", contestService.getContestStatus(cid));
+    setAttr("contestProblems", contestService.getContestProblems(cid, null));
 
     setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
   }
+  
+  public void allProblems()
+  {
+    Integer cid = getParaToInt(0);
+    setAttr("contestProblems", contestService.getContestProblems(cid));
+  }
 
-  @Before(ContestPasswordInterceptor.class)
   public void submit()
   {
-    int cid = getParaToInt(0);
-    String problem_id = getPara(1);
-    char id = problem_id.charAt(0);
-    int num = id - 'A';
+    Integer cid = getParaToInt(0);
+    String problem_id = getPara(1, "A");
+    char id = problem_id.toUpperCase().charAt(0);
+    Integer num = id - 'A';
     boolean ajax = getParaToBoolean("ajax", false);
 
-    if (ContestModel.dao.isContestFinished(cid))
+    if (contestService.isContestFinished(cid))
     {
       FlashMessage msg = new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
     }
 
-    ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
+    ProblemModel problemModel = contestService.getProblem(cid, num);
     if (problemModel == null)
     {
-      log.warn(new StringBuilder(4).append("Cannot find this contest problem: ").append(cid).append("-").append(id).toString());
       FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
@@ -142,7 +135,6 @@ public class ContestController extends OjController
 
     setAttr("problem", problemModel);
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
-    setAttr("cid", cid);
     
     setTitle(new StringBuilder(6).append(getText("contest.problem.title")).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
     if (ajax)
@@ -151,48 +143,41 @@ public class ContestController extends OjController
       render("submit.html");
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void rank()
   {
-    int cid = getParaToInt(0);
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.contestRankPageSize);
+    Integer cid = getParaToInt(0);
+    int pageNumber = getParaToInt(1, 1);
+    int pageSize = getParaToInt(2, OjConfig.contestRankPageSize);
     
-    setAttr("cid", cid);
-    setAttr("contestRank", ContestModel.dao.getContestRank(pageNumber, pageSize, cid));
-    setAttr("contestProblems", ContestModel.dao.getContestProblems(cid, 0));
-    setAttr("cstatus", ContestModel.dao.getContestStatus(cid));
+    setAttr("pageSize", OjConfig.contestRankPageSize);
+    setAttr("contestRank", contestService.getContestRank(pageNumber, pageSize, cid));
+    setAttr("contestProblems", contestService.getContestProblems(cid, 0));
+    setAttr("cstatus", contestService.getContestStatus(cid));
 
     setTitle(new StringBuilder(2).append(getText("contest.rank.title")).append(cid).toString());
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void status()
   {
-    int cid = getParaToInt(0);
-    ContestModel contestModle = ContestModel.dao.findById(cid);
-    
-    setAttr("cid", cid);
-    setAttr("contest", contestModle);
+    Integer cid = getParaToInt(0);
+    int pageNumber = getParaToInt(1, 1);
+    int pageSize = getParaToInt(2, OjConfig.statusPageSize);
+    Integer result = getParaToInt("result", -1);
+    Integer language = getParaToInt("language", -1);
+    Integer num = -1;
 
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
-    int result = getParaToInt("result", -1);
-    int language = getParaToInt("language", -1);
-    int num = -1;
-
-    if (StringUtil.isNotBlank(getPara("id")))
+    if (StringUtil.isNotBlank(getPara("pid")))
     {
       try
       {
-        num = getParaToInt("id");
+        num = getParaToInt("pid");
       } catch (Exception e)
       {
-        num = getPara("id").charAt(0) - 'A';
+        num = getPara("pid").toUpperCase().charAt(0) - 'A';
       }
     }
     String userName = getPara("name");
-    StringBuilder query = new StringBuilder();
+    StringBuilder query = new StringBuilder().append("?cid=").append(cid);
 
     if (result > -1)
     {
@@ -204,32 +189,33 @@ public class ContestController extends OjController
     }
     if (num > -1)
     {
-      query.append("&id=").append(getPara("id"));
+      query.append("&pid=").append(getPara("pid"));
     }
     if (StringUtil.isNotBlank(userName))
     {
       query.append("&name=").append(userName);
     }
 
-    setAttr("solutionList", SolutionModel.dao.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
+    //setAttr("contest", contestService.getContestById(cid));
+    setAttr("contestProblems", contestService.getContestProblems(cid, 0));
+    setAttr("solutionList", solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
     setAttr("result", result);
     setAttr("language", language);
-    setAttr("id", getPara("id"));
+    setAttr("pid", getPara("pid"));
     setAttr("name", userName);
     setAttr("query", query.toString());
 
     setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"),cid)).toString());
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void problem_status()
   {
-    int cid = getParaToInt("cid");
-    char id = getPara("id").charAt(0);
-    int num = id - 'A';
-    ProblemModel problemModel = ContestModel.dao.getProblem(cid, num);
+    Integer cid = getParaToInt("cid");
+    char id = getPara("pid", "A").toUpperCase().charAt(0);
+    Integer num = id - 'A';
+    ProblemModel problemModel = contestService.getProblem(cid, num);
     boolean ajax = getParaToBoolean("ajax", false);
 
     if (!ajax)
@@ -241,32 +227,25 @@ public class ContestController extends OjController
         return;
       }
 
-      List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM contest_solution WHERE cid=? AND num=? GROUP BY result", cid, num);
-      for (SolutionModel record : resultList)
-      {
-        ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
-        record.put("longName", resultType.getLongName());
-        record.put("name", resultType.getName());
-      }
-      setAttr("resultList", resultList);
+      setAttr("resultList", solutionService.getProblemStatusForContest(cid, num));
       setAttr("problem", problemModel);
     }
 
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
-    int language = getParaToInt("language", -1);
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.statusPageSize);
+    Integer language = getParaToInt("language", -1);
     StringBuilder query = new StringBuilder();
     if (language > -1)
     {
       query.append("&language=").append(language);
     }
-    Page<SolutionModel> solutionList = SolutionModel.dao.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
+    Page<SolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("solutionList", solutionList);
     setAttr("language", language);
     setAttr("query", query.toString());
-    setAttr("cid", cid);
+    setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("id", id);
 
     setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"), cid, id)).toString());
@@ -276,16 +255,11 @@ public class ContestController extends OjController
       render("problem_status.html");
   }
 
-  @Before(ContestPasswordInterceptor.class)
   public void statistics()
   {
-    int cid = getParaToInt(0);
-    
-    setAttr("cid", cid);
-    List<Record> statistics = ContestModel.dao.getContestStatistics(cid);
-    setAttr("statistics", statistics);
-
+    Integer cid = getParaToInt(0);
     List<String> resultName = new ArrayList<String>();
+    
     for (ResultType resultType : OjConfig.judge_result)
     {
       if (resultType.getId() > 9)
@@ -293,92 +267,68 @@ public class ContestController extends OjController
       resultName.add(resultType.getName());
     }
     resultName.add("Others");
+    
     setAttr("resultName", resultName);
     setAttr("languageList", OjConfig.program_languages);
+    setAttr("statistics", contestService.getContestStatistics(cid));
 
     setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());
   }
+  
+  public void clarify()
+  {
+    Integer cid = getParaToInt(0);
+    Integer uid = userService.getCurrentUid();
+    
+    if (userService.isAdmin())
+    {
+      setAttr("clarifyList", contestService.getClarifyList(cid));
+      render("adminClarify.html");
+    }
+    else
+    {
+      setAttr("privateClarifyList", contestService.getPrivateClarifyList(cid, uid));
+      setAttr("publicClarifyList", contestService.getPublicClarifyList(cid));
+      render("clarify.html");
+    }
+  }
+  
+  public void report()
+  {
+    
+  }
 
+  @ClearInterceptor
   public void recent_contest()
   {
     String json = getSessionAttr("contests.json");
     if (json == null)
     {
-      List<ContestkendoSchedulerTask> contests = new ArrayList<ContestkendoSchedulerTask>();
-      String html = Tool.getHtmlByUrl("http://acm.nankai.edu.cn/contests.json");
-      if (html == null)
-      {
-        html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
-      }
-      if (html == null)
-      {
-        renderJson("{\"error\":network error}");
-        return;
-      }
-
-      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-      long timeStamp = 0;
-
-      JSONArray jsonArray;
-      try
-      {
-        jsonArray = JSON.parseArray(html);
-      } catch (JSONException e)
-      {
-        html = Tool.getHtmlByUrl("http://contests.acmicpc.info/contests.json");
-        jsonArray = JSON.parseArray(html);
-      }
-
-      for (int i = 0; i < jsonArray.size(); ++i)
-      {
-        JSONObject data = jsonArray.getJSONObject(i);
-        ContestkendoSchedulerTask contest = new ContestkendoSchedulerTask();
-        try
-        {
-          timeStamp = sdf.parse(data.getString("start_time")).getTime();
-        } catch (ParseException e)
-        {
-          timeStamp = 0;
-          log.warn(e.getLocalizedMessage());
-        }
-        String start = "/Date(" + timeStamp + ")/";
-        String end = "/Date(" + (timeStamp + 18000000) + ")/";
-        String link = data.getString("link");
-        String title = data.getString("oj") + " -- " + data.getString("name");
-
-        contest.setTaskId(data.getString("id"));
-        contest.setOj(data.getString("oj"));
-        contest.setTitle(title);
-        contest.setUrl(link);
-        contest.setDescription(link);
-        contest.setStart(start);
-        contest.setEnd(end);
-
-        contests.add(contest);
-      }
-      json = JsonKit.listToJson(contests, 2);
+      // TODO cache for everyone
+      json = contestService.getRecentContest();
       setSessionAttr("contests.json", json);
     }
 
     renderJson(json);
   }
 
+  @ClearInterceptor
   public void recent()
   {
     setTitle(getText("contest.recent.title"));
   }
 
-  @Before(POST.class)
+  @ClearInterceptor
+  @Before({ContestInterceptor.class, POST.class})
   public void password()
   {
-    int cid = getParaToInt("cid");
+    Integer cid = getParaToInt("cid");
     String password = getPara("password");
 
-    if (ContestModel.dao.checkContestPassword(cid, password))
+    if (contestService.checkContestPassword(cid, password))
     {
       String token_name = new StringBuilder("cid-").append(cid).toString();
       String token_token = CryptUtils.encrypt(password, token_name);
-      log.info(token_token);
       setSessionAttr(token_name, token_token);
       redirect(SessionService.me().getLastAccessURL());
       return;
@@ -394,28 +344,53 @@ public class ContestController extends OjController
   @RequiresPermissions("contest:edit")
   public void edit()
   {
-    renderText("TODO");
+    boolean ajax = getParaToBoolean("ajax", false);
+    
+    setTitle(getText("contest.edit.title"));
+
+    if (ajax)
+      render("ajax/edit.html");
+    else
+      render("edit.html");
   }
 
+  @ClearInterceptor
   @Before(POST.class)
   @RequiresPermissions("contest:edit")
   public void update()
   {
-    renderText("TODO");
+    String start_time = getPara("start_time");
+    String end_time = getPara("end_time");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    ContestModel contestModel = getModel(ContestModel.class, "contest");
+    
+    try
+    {
+      contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
+      contestModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
+    } catch (ParseException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+    }
+    
+    contestService.updateContest(contestModel);
+    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
 
+  @ClearInterceptor
   @RequiresPermissions("contest:add")
   public void add()
   {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    long ctime = System.currentTimeMillis() + 3600000;
+    long ctime = OjConfig.startInterceptorTime + 3600000;
     setAttr("start_time", sdf.format(new Date(ctime)));
     setAttr("end_time", sdf.format(new Date(ctime + 18000000)));
-    System.out.println(getAttr("end_time"));
-
+    
     setTitle(getText("contest.add.title"));
   }
 
+  @ClearInterceptor
   @Before(POST.class)
   @RequiresPermissions("contest:add")
   public void save()
@@ -425,28 +400,85 @@ public class ContestController extends OjController
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     ContestModel contestModel = getModel(ContestModel.class, "contest");
-    contestModel.set("uid", getAttr(OjConstants.USER_ID));
+    contestModel.set("uid", userService.getCurrentUid());
     try
     {
       contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
       contestModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
-      System.out.println(contestModel.get("end_time"));
+      log.info(contestModel.get("end_time").toString());
     } catch (ParseException e)
     {
-      // TODO Auto-generated catch block
-      // e.printStackTrace();
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
     contestModel.saveContest();
 
-    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
+    redirect(new StringBuilder(2).append("/contest/admin/").append(contestModel.getInt("cid")).toString());
+  }
+  
+  @RequiresPermissions("contest:addProblem")
+  public void admin()
+  {
+    Integer cid = getParaToInt(0);
+    
+    ContestModel contestModel = getAttr("contest");
+    if (contestModel == null)
+    {
+      contestModel = contestService.getContest(cid);
+    }
+    
+    long serverTime = OjConfig.timeStamp;
+    int start_time = contestModel.getInt("start_time");
+    int end_time = contestModel.getInt("end_time");
+    String status = getText("contest.status.running");
+
+    if (start_time > serverTime)
+      status = getText("contest.status.pending");
+    else if (end_time < serverTime)
+      status = getText("contest.status.finished");
+
+    setAttr("contest", contestModel);
+    setAttr("contestProblems", contestService.getContestProblems(cid, null));
+    setAttr("status", status);
+
+    //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());
+  }
+  
+  @RequiresPermissions("contest:addUser")
+  public void adminUser()
+  {
+    Integer cid = getParaToInt(0);
+    
+    ContestModel contestModel = getAttr("contest");
+    if (contestModel == null)
+    {
+      contestModel = contestService.getContest(cid);
+    }
+    
+    long serverTime = OjConfig.timeStamp;
+    int start_time = contestModel.getInt("start_time");
+    int end_time = contestModel.getInt("end_time");
+    String status = getText("contest.status.running");
+
+    if (start_time > serverTime)
+      status = getText("contest.status.pending");
+    else if (end_time < serverTime)
+      status = getText("contest.status.finished");
+
+    setAttr("contest", contestModel);
+    setAttr("contestUsers", contestService.getContestUsers(cid));
+    setAttr("status", status);
+
+    //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());
   }
 
+  @ClearInterceptor
   @RequiresPermissions("contest:build")
   public void buildRank()
   {
-    int cid = getParaToInt(0);
-    ContestModel.dao.buildRank(cid);
+    Integer cid = getParaToInt(0);
+    contestService.buildRank(cid);
 
     redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new FlashMessage(getText("contest.buildRank.success")));
   }

@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <div class="row pagination pagination-centered">
   <div class="pull-left">
     <form class="form-search" action="user/search">
@@ -11,47 +11,12 @@
           <option value="school"<#if scope=="school">selected</#if>>School</option>
           <option value="email"<#if scope=="email">selected</#if>>Email</option>
         </select>
-        <button type="submit" class="btn">Search</button>
+        <button type="submit" class="btn btn-info">Search</button>
       </div>
     </form>
   </div>
-  <ul>
-    <li class="<#if userList.pageNumber==1>disabled</#if>">
-      <a href="user/search/1<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">&lt;&lt;</a>
-    </li>
-    <#if userList.pageNumber&gt;1>
-    <li>
-      <a href="user/search/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">Prev</a>
-    </li></#if> <#if userList??> 
-    <#assign start=userList.pageNumber-3>
-    <#assign end=userList.pageNumber+3>
-    <#if start<1>
-    <#assign end=end-start+1>
-    <#assign start=1>
-    </#if>
-    <#if end&gt;userList.totalPage >
-    <#assign start=start-(end-userList.totalPage)-1>
-      <#if start<1><#assign start=1></#if>
-    <#assign end=userList.totalPage>
-    </#if>
-    <#if end<start>
-    <#assign end=start>
-    </#if> 
-    <#list start..end as x>
-    <li class="<#if x==userList.pageNumber>active</#if>">
-      <a href="user/search/${x}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">${x}</a>
-    </li>
-    </#list>
-    </#if>
-    <#if userList.pageNumber<userList.totalPage>
-    <li>
-      <a href="user/search/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">Next</a>
-    </li>
-    </#if>
-    <li class="<#if userList.pageNumber&gt;=userList.totalPage>disabled</#if>">
-      <a href="user/search/${userList.totalPage}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">&gt;&gt;</a>
-    </li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="user/search/" urlParas="${query!}" />
   <div class="pull-right">
     <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span>
     <span class="badge badge-info">${userList.totalRow} Users</span>
@@ -85,23 +50,26 @@
     </tbody>
   </table>
 </div>
+</@override>
 
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<@override name="scripts">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-<script type="text/javascript" charset="utf-8">
-	$(document).ready(function() {
-
-		$("#user-list").tablecloth({
-			theme : "stats",
-			condensed : true,
-			sortable : true,
-			striped : true,
-			clean : true
-		});
-	});
-</script>
-
-</@layout>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      <#if oj_style != "slate">
+      $("#user-list").tablecloth({
+        theme : "stats",
+        condensed : true,
+        sortable : true,
+        striped : true,
+        clean : true
+      });
+      </#if>
+    });
+  </script>
+</@override>
+<@extends name="../common/_layout.html" />

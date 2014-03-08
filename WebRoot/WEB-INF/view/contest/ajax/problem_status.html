@@ -2,11 +2,15 @@
 <h4>
   Best solutions of Problem <a href="contest/problem/${cid!}-${id}">${cid!}-${id}</a>
 </h4>
-<div class="pull-left ajax-loader">
-  <a url="problem/status/?cid=${cid!}&id=${id!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
-    class="btn-link btn-info ajax-loader<#if !language?? || language==-1> active</#if>">All</a> <#if program_languages??> <#list program_languages as Language>
-  <a url="problem/status/?cid=${cid!}&id=${id!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>&language=${Language.id!}"
-    class="btn-link btn-info ajax-loader<#if language?? && language==Language.id> active</#if>" type="a">${Language.name!}</a> </#list> </#if>
+<div class="pull-left btn-group ajax-loader">
+  <a url="contest/problem_status/?cid=${cid!}&pid=${id!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+    class="btn ajax-loader<#if !language?? || language==-1> active btn-warning<#else> btn-success</#if>">All</a> 
+    <#if program_languages??> 
+    <#list program_languages as Language>
+    <a url="contest/problem_status/?cid=${cid!}&pid=${id!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>&language=${Language.id!}"
+      class="btn ajax-loader<#if language?? && language==Language.id> active btn-warning<#else> btn-success</#if>" type="a">${Language.name!}</a> 
+    </#list> 
+    </#if>
 </div>
 <div class="pull-right">
   <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span class="badge badge-info">${solutionList.totalRow}
@@ -33,8 +37,8 @@
       <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
       <td class="time">${solution.time!0} MS</td>
       <td class="memory">${solution.memory!0} KB</td>
-      <td class="language"><#if userID?? &&(adminUser?? || userID==solution.uid)><a href="code/${solution.sid!}" target="blank" title="show source code"></#if>
-          ${solution.language!} <#if userID?? &&(adminUser?? || userID==solution.uid)></a></#if>
+      <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="code/${solution.sid!}" target="_blank" title="show source code"></#if>
+          ${solution.language!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
       </td>
       <td class="code_len">${solution.code_len!}B</td>
       <td class="ctime">${solution.ctime!}</td>
@@ -43,25 +47,8 @@
   </tbody>
 </table>
 <div class="pagination pagination-centered ajax-loader">
-  <ul>
-    <li class="<#if solutionList.pageNumber==1>disabled</#if>"><a class="btn-link"
-      url="problem/status/?cid=${cid!}&id=${id!}&p=1<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&lt;&lt;</a></li>
-    <#if solutionList.pageNumber&gt;1>
-    <li><a class="btn-link"
-      url="problem/status/?cid=${cid!}&id=${id!}&p=${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">Prev</a></li></#if>
-    <#if solutionList??> <#assign start=solutionList.pageNumber-3> <#assign end=solutionList.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign
-    start=1></#if> <#if end&gt;solutionList.totalPage ><#assign start=start-(end-solutionList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=solutionList.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==solutionList.pageNumber>active</#if>"><a class="btn-link"
-      url="problem/status/?cid=${cid!}&id=${id!}&p=${x}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">${x}</a></li>
-    </#list> </#if> <#if solutionList.pageNumber<solutionList.totalPage>
-    <li><a class="btn-link"
-      url="problem/status/?cid=${cid!}&id=${id!}&p=${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">Next</a></li>
-    </#if>
-    <li class="<#if solutionList.pageNumber&gt;=solutionList.totalPage>disabled</#if>"><a class="btn-link"
-      url="problem/status/?cid=${cid!}&id=${id!}&p=${solutionList.totalPage}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if><#if query??>${query}</#if>">&gt;&gt;</a></li>
-  </ul>
+  <#include "../../common/_paginate.html" />
+  <@paginate currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/problem_status/" urlParas="?cid=${cid!}&id=${id!}${query!}" />
 </div>
 </div>
 </div>
@@ -73,6 +60,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        <#if oj_style != "slate">
         $("table#problem-status").tablecloth({
           theme:"stats",
           condensed:true,
@@ -80,6 +68,7 @@
           striped:true,
           clean:true
         });
+        </#if>
 
         $('div.ajax-loader a').click(function() {
             var url = '${baseUrl!}/'+$(this).attr("url");

@@ -1,4 +1,4 @@
-﻿<#include "../common/_layout.html" /> <@layout>
+﻿<@override name="content">
 <div class="page">
 
 
@@ -6,7 +6,7 @@
     <div class="box">
       <div class="faq">
         <div class="faq_title">
-          <img width="32px" height="32px" src="images/search.gif" /><b> Frequently Asked Questions</b>
+          <img width="32px" height="32px" src="assets/images/search.gif" /><b> Frequently Asked Questions</b>
         </div>
         <div class="faq_content">
           <br> <br> <a name=io></a>
@@ -221,7 +221,7 @@ int main()
 {
   int a, b;
   while (cin &gt;&gt; a &gt;&gt; b) 
-	cout &lt;&lt; a+b &lt;&lt; endl;
+  cout &lt;&lt; a+b &lt;&lt; endl;
   return 0;
 }
 </pre>
@@ -240,7 +240,7 @@ int main()
 }
 </pre>
           </div>
-          <a href="http://www.freepascal.org/docs-html/ref/ref.html" target="blank">PASCAL</a>语言：
+          <a href="http://www.freepascal.org/docs-html/ref/ref.html" target="_blank">PASCAL</a>语言：
           <div class="data">
             <pre class="brush: delphi">
 var
@@ -253,7 +253,7 @@ begin
 end.
 </pre>
           </div>
-          <a href="http://docs.oracle.com/javase/6/docs/api/" target="blank">Java</a>语言：
+          <a href="http://docs.oracle.com/javase/6/docs/api/" target="_blank">Java</a>语言：
           <div class="data">
             <pre class="brush: java">
 import java.io.*;
@@ -261,21 +261,21 @@ import java.util.*;
 
 public class Main
 {
-	public static void main(String[] args)
-	{
-		Scanner cin = new Scanner(new BufferedInputStream(System.in));
-		int a, b;
-		while (cin.hasNext())
-		{
-			a = cin.nextInt();
-			b = cin.nextInt();
-			System.out.println(a+b);
-		}
-	}
+  public static void main(String[] args)
+  {
+    Scanner cin = new Scanner(new BufferedInputStream(System.in));
+    int a, b;
+    while (cin.hasNext())
+    {
+      a = cin.nextInt();
+      b = cin.nextInt();
+      System.out.println(a+b);
+    }
+  }
 }
 </pre>
           </div>
-          <a href="http://docs.python.org/2/tutorial/" target="blank">Python</a>语言：
+          <a href="http://docs.python.org/2/tutorial/" target="_blank">Python</a>语言：
           <div class="data">
             <pre class="brush: python">
 import sys
@@ -294,7 +294,9 @@ for s in sys.stdin:
 
 </div>
 <!-- center -->
+</@override>
 
+<@override name="scripts">
 <link href="assets/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
 <link href="assets/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
 <script src='assets/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
@@ -304,4 +306,5 @@ for s in sys.stdin:
 <script src='assets/syntaxhighlighter/scripts/shBrushPython.js' type='text/javascript'></script>
 <script src='assets/syntaxhighlighter/scripts/shBrushXml.js' type='text/javascript'></script>
 <script language='javascript' type='text/javascript'>SyntaxHighlighter.all();</script>
-</@layout>
+</@override>
+<@extends name="../common/_layout.html" />

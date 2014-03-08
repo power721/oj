@@ -1,14 +1,24 @@
-<#include "_layout.html" /> <@layout>
-
+<@override name="contest_content">
+<div class="progress" id="contest-progress">
+  <div class="bar" id="contest-bar" style="width:<#if serverTime &gt; contest.end_time>100%</#if>"></div>
+</div>
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
-  <div clas="span4 offset4">
-    <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
-    <span>Current System Time</span>: <span class="time" id="current"></span> <span>Contest Status</span>: <span class="${status!}">${status!}</span><br>
+  <div class="span6 offset3">
+    <#if adminUser??>
+    <div class="contest-admin">
+      <a href="contest/edit/${contest.cid!}?ajax=1" class="btn btn-primary" data-toggle="modal" data-target="#editModal">Edit</a> 
+      <a href="contest/admin/${contest.cid!}" class="btn btn-primary">Manage</a>
+    </div>
+    </#if>
+    <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> 
+    <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
+    <span>Current System Time</span>: <span class="time" id="current">${contest.start_time_t!}</span> 
+    <span>Contest Status</span>: <span class="status ${status!}">${status!}</span><br>
   </div>
 </div>
 <div class="row text-center">
-  <div clas="span4 offset4">
+  <div clas="span6 offset3">
     <p>${contest.description!}</p>
   </div>
 </div>
@@ -26,48 +36,85 @@
         </tr>
       </thead>
       <tbody>
-        <#if contestProblems??> <#list contestProblems as Problem>
+        <#if contestProblems??> 
+        <#list contestProblems as Problem>
         <tr>
-          <td><#if Problem.status??><i class="<#if Problem.status==0>oj-tick<#else>oj-delete</#if>"></i></#if>
+          <td class="result"><#if Problem.status??><i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i></#if>
           </td>
-          <td><#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a> </#if><a href="contest/problem/${contest.cid!}-${Problem.id!}"
-            data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a></td>
-          <td><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
-          <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}&result=0">${Problem.accept!}</a></td>
-          <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}">${Problem.submit!}</a></td>
+          <td class="pid">
+            <#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></#if>
+            <a href="contest/problem/${contest.cid!}-${Problem.id!}" data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a>
+          </td>
+          <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
+          <td class="accept"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}&result=0">${Problem.accept!}</a></td>
+          <td class="submit"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}">${Problem.submit!}</a></td>
         </tr>
-        </#list> </#if>
+        </#list> 
+        </#if>
       </tbody>
     </table>
   </div>
 </div>
 
-<script type="text/javascript" language="javascript">
-        var timeDiff = ${ctime!} - new Date().valueOf();
-        
-        function updateTime() {
-            $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-    </script>
+<#if adminUser??>
+<div class="modal hide fade contestModal" id="editModal">
+  <form class="" action="contest/update" id="editContestForm" method="post">
+    <div class="modal-header">
+      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+      <h3 id="editModalLabel">
+        Edit contest ${contest.cid!}:
+        <a href="contest/edit/${contest.cid!}" title="Edit in another page" data-toggle="tooltip" data-placement="bottom">${contest.title!}</a>
+      </h3>
+    </div>
+    <div class="modal-body">
+      <a href="contest/edit/${contest.cid!}" class="btn btn-primary">Edit</a>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+      <button class="btn" data-dismiss="modal">Cancel</button>
+    </div>
+  </form>
+</div>
+</#if>
+</@override>
 
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<@override name="scripts">
+<link href="assets/tablecloth/css/tablecloth.css" type="text/css" rel="stylesheet">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#problem-list").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
+  $(document).ready(function() {
+    var start_time = ${contest.start_time!0} * 1000;
+    var end_time = ${contest.end_time!0} * 1000;
+    var during_time = end_time - start_time;
+    var current_time = ${serverTime!}*1000;
+    function updateProgress() {
+      current_time+=1000;
+      if (current_time >= start_time && current_time <= end_time) {
+        var percent = (current_time - start_time) / during_time * 100;
+        $('#contest-bar').css('width', percent.toFixed(2) + '%');
+      }
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+    }
+    setInterval(updateProgress, 1000);
+    
+    if (current_time >= start_time && current_time <= end_time) {
+      $('#contest-progress').addClass('progress-danger progress-striped active');
+    }
+    
+    <#if oj_style != "slate">
+    $("#problem-list").tablecloth({
+      theme:"stats",
+      condensed:true,
+      sortable:true,
+      striped:true,
+      clean:true
     });
-    </script>
-
-</@layout>
+    </#if>
+});
+</script>
+</@override>
+<@extends name="_layout.html" />

@@ -8,8 +8,8 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
-import com.power.oj.contest.ContestModel;
-import com.power.oj.contest.ContestRankWebSocket;
+import com.jfinal.plugin.activerecord.Db;
+import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -17,27 +17,31 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
-import com.power.oj.judge.Judge;
+import com.power.oj.judge.JudgeAdapter;
+import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.problem.ProblemService;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
 public class SolutionController extends OjController
 {
   
   private static final UserService userService = UserService.me();
+  private static final SolutionService solutionService = SolutionService.me();
   
   @ActionKey("/status")
   public void index()
   {
-    int pageNumber = getParaToInt("p", 1);
-    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.statusPageSize);
     int result = getParaToInt("result", -1);
     int language = getParaToInt("language", -1);
     int pid = 0;
     if (StringUtil.isNotBlank(getPara("pid")))
       pid = getParaToInt("pid", 0);
     String userName = getPara("name");
-    StringBuilder query = new StringBuilder();
+    StringBuilder query = new StringBuilder().append("?p=").append(pageNumber);
 
     if (result > -1)
     {
@@ -56,10 +60,10 @@ public class SolutionController extends OjController
       query.append("&name=").append(userName);
     }
 
-    
-    setAttr("solutionList", SolutionModel.dao.getPage(pageNumber, pageSize, result, language, pid, userName));
+    setAttr("solutionList", solutionService.getPage(pageNumber, pageSize, result, language, pid, userName));
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
+    setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("result", result);
     setAttr("language", language);
     setAttr("pid", getPara("pid"));
@@ -75,10 +79,10 @@ public class SolutionController extends OjController
   {
     int sid = getParaToInt(0);
     boolean isAdmin = userService.isAdmin();
-    SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution WHERE sid=? LIMIT 1", sid);
+    SolutionModel solutionModel = solutionService.findSolution(sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
     int uid = solutionModel.getUid();
-    int loginUid = getAttrForInt(OjConstants.USER_ID);
+    int loginUid = userService.getCurrentUid();
     if (uid != loginUid && !isAdmin)
     {
       FlashMessage msg = new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
@@ -90,16 +94,18 @@ public class SolutionController extends OjController
     {
       String error = solutionModel.getStr("error");
       if (error != null)
+      {
         solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
+        // TODO replace "/"
+      }
     }
 
     String problemTitle = "";
     int cid = solutionModel.getInt("cid");
-    System.out.println(cid);
     if (cid > 0)
     {
       int num = solutionModel.getInt("num");
-      problemTitle = ContestModel.dao.getProblemTitle(cid, num);
+      problemTitle = ContestService.me().getProblemTitle(cid, num);
       setAttr("alpha", (char) (num + 'A'));
       setAttr("cid", cid);
     } else
@@ -141,47 +147,57 @@ public class SolutionController extends OjController
   public void save()
   {
     SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
-    solutionModel.set("uid", getAttrForInt(OjConstants.USER_ID));
+    solutionModel.set("uid", userService.getCurrentUid());
+    Integer cid = solutionModel.getInt("cid");
     String url = "/status";
-    if (solutionModel.get("cid") != null)
+    
+    if (cid != null && cid > 0)
     {
-      int cid = solutionModel.getInt("cid");
-      if (cid > 0)
-      {
-        url = "/contest/status/" + cid;
-        ContestRankWebSocket.broadcast(cid, cid + "-" + solutionModel.getInt("num") + ": " + solutionModel.getUid());
-      }
+      url = new StringBuilder(2).append("/contest/status/").append(cid).toString();
     }
-
+    
+    // TODO move to SolutionService
     if (solutionModel.addSolution())
     {
-      ProblemModel problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
+      Integer pid = solutionModel.getInt("pid");
+      ProblemModel problemModel = ProblemService.me().findProblem(pid);
       if (problemModel == null)
       {
         FlashMessage msg = new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title"));
         redirect(url, msg);
         return;
       }
-      long stime = OjConfig.timeStamp;
-      problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime);
-      problemModel.update();
-
-      synchronized (Judge.judgeList)
+      
+      UserModel userModel = userService.getCurrentUser();
+      userModel.set("submit", userModel.getInt("submit") + 1).update();
+      
+      
+      if (cid != null && cid > 0)
       {
-        Judge.judgeList.add(solutionModel);
-        if (Judge.threads < 1)
+          Db.update("UPDATE contest_problem SET submit=submit+1 WHERE cid=? AND pid=?", cid, pid);
+      }
+      else
+      {
+        long stime = OjConfig.timeStamp;
+        // TODO update submit_user?
+        problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime).update();
+      }
+      
+      synchronized (JudgeAdapter.class)
+      {
+        JudgeAdapter.addSolution(solutionModel);
+        log.info("JudgeAdapter.addSolution");
+        if (JudgeAdapter.size() <= 1)
         {
-          Judge.threads += 1;
-          @SuppressWarnings("unused")
-          Judge judge = new Judge();
+          JudgeAdapter judge = new PojJudgeAdapter();
+          judge.start();
+          log.info("judge.start()");
         }
       }
       System.out.println(solutionModel.getInt("sid"));
     } else
     {
-      FlashMessage msg = new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title"));
-      redirect(url, msg);
-      return;
+      setFlashMessage(new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
     }
 
     redirect(url);

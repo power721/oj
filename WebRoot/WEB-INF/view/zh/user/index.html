@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
+<meta name="author" content="power721">
+<base href="${baseUrl!}/" />
+<title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
+
+<!-- styles -->
+<link rel="stylesheet" href="assets/acfun/core.0.0.10.css">
+<link rel="stylesheet" href="assets/acfun/style.css">
+<!--<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="assets/css/oj.css" type="text/css" rel="stylesheet">
+-->
+
+<#if extCss??> <#list extCss as css>
+<link href="${css}" type="text/css" rel="stylesheet">
+</#list> </#if>
+
+<script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
+
+<#if gaAccount??>
+<script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', '${gaAccount}']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+</script>
+</#if>
+</head>
+  
+  <body>
+    <div id="stage" class="location-member">
+      <div id="area-info">
+      </div>
+      <div id="area-window">
+        <div id="win-info" class="win">
+          <div class="mainer">
+          </div>
+        </div>
+        <div id="win-hint" class="win win-hint">
+          <div class="mainer">
+          </div>
+          <div class="tail">
+          </div>
+        </div>
+      </div>
+      <div id="guide-space">
+      </div>
+      <div id="guide">
+        <div id="guide-inner">
+          <div class="l">
+            <a href="./" title="PowerOJ Home">
+              PowerOJ
+            </a>
+            <!--<a href="problem/random" title="随便看看" target="_blank">
+              随便看看
+            </a>
+            <a href="http://tu.acfun.tv/" title="欢乐戒撸壁纸涂鸦" target="_blank">
+              欢乐图
+            </a>
+            <a href="http://h.acfun.tv/" title="绅士出没注意" target="_blank">
+              匿名版
+            </a>-->
+          </div>
+          <div class="r">
+            <a href="logout?t=/">
+              退出登录
+            </a>
+            <!--<a href="user/#area=push">
+              <div id="hint-newPush-guide" class="hidden">
+              </div>
+              推送
+            </a>
+            <a href="user/#area=followers">
+              <div id="hint-newFollowed-guide" class="hidden">
+              </div>
+              听众
+            </a>-->
+            <a href="user/#area=mention">
+              <div id="hint-mention-guide" class="hidden">
+              </div>
+              召唤
+            </a>
+            <a href="user/#area=mail">
+              <div id="hint-unReadMail-guide" class="hidden">
+              </div>
+              私信
+            </a>
+            <a href="user/#area=favourite">
+              收藏夹
+            </a>
+            <a href="user/#area=setting">
+              设置
+            </a>
+          </div>
+          <span class="clearfix">
+          </span>
+        </div>
+      </div>
+      <div id="header">
+        <div id="header-inner" class="inner">
+          <!--<a id="logo-home-member" href="./" title="认真你就输了">
+          </a>-->
+          <div id="block-message-header" class="block hidden">
+            <div class="mainer">
+            </div>
+          </div>
+        </div>
+        <div id="btn-top-shortcut" title="返回顶部" onclick="$('#stage').scrollOnto();"
+        class="hidden">
+        </div>
+      </div>
+      <div id="mainer">
+        <div id="mainer-inner">
+          <div id="block-main">
+            <div id="area-main-left" class="l">
+              <div id="block-user-left">
+                <div class="d">
+                  <a href="user/profile/${user.name}" target="_blank" class="name">
+                    ${user.name}
+                  </a>
+                </div>
+                <div class="l">
+                  <a href="user/#area=profile" class="thumb">
+                  <img class="avatar pull-left img-polaroid media-object"
+        onerror="this.onerror=null;this.src='assets/images/user/default.png'" 
+        src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>" width="75" height="75" class="avatar" />
+                  </a>
+                </div>
+                <div class="r">
+                  <!--<span class="label label-important">UID: ${user.uid}</span>
+                  <span class="label label-info">Level: ${user.level}</span>-->
+                  <#if user.isCheckin??>
+                  <button id="btn-sign-user" data-checked="1" class="btn success">
+                    <i class="icon white icon-ok-sign">
+                    </i>
+                    已签到
+                  </button>
+                  <#else>
+                  <button id="btn-sign-user" data-checked="0" class="btn primary">
+                    <i class="icon white icon-ok-sign">
+                    </i>
+                    未签到
+                  </button>
+                  </#if>
+                  <p title="当前总经验值：${user.exp!0} / 下一级所需总经验值：${user.nextExp!200}" class="level" id="user-level" data-credit="${user.credit!0}">
+                    <span style="width:${user.percent!0}%;" class="a">
+                    </span>
+                    <span class="b">
+                      Lv.${user.level!1}
+                    </span>
+                  </p>
+                </div>
+                <span class="clearfix">
+                </span>
+                <div class="area-extra">
+                  <div class="space">
+                  </div>
+                  <a href="user/#area=submission">
+                    <span class="pts">
+                      ?
+                    </span>
+                    <span class="hint">
+                      提交
+                    </span>
+                  </a>
+                  <a href="user/#area=following">
+                    <span class="pts">
+                      ?
+                    </span>
+                    <span class="hint">
+                      收听
+                    </span>
+                  </a>
+                  <a href="user/#area=followers">
+                    <span class="pts">
+                      ?
+                    </span>
+                    <span class="hint">
+                      听众
+                    </span>
+                  </a>
+                  <span class="clearfix">
+                  </span>
+                </div>
+                <p title="点击以修改签名" class="desc">
+                  ${user.sign!"这个人很懒，什么都没有写..."}
+                </p>
+                <p class="divider">
+                </p>
+              </div>
+              <div id="list-guide-left">
+                <div id="part-common-left" class="part-guide-left">
+                  <div class="banner">
+                    <a href="user/#area=splash" class="tab fixed">
+                      <i class="icon white icon-home">
+                      </i>
+                      综合
+                    </a>
+                    <p class="tab more">
+                      <i class="icon white icon-minus">
+                      </i>
+                    </p>
+                  </div>
+                  <div class="mainer">
+                    <a href="user/#area=splash" class="tab">
+                      欢迎
+                    </a>
+                    <a href="user/#area=profile" class="tab">
+                      编辑资料
+                    </a>
+                  </div>
+                </div>
+                <div id="part-favourite-left" class="part-guide-left">
+                  <div class="banner">
+                    <a href="user/#area=favourite" class="tab fixed">
+                      <i class="icon white icon-folder-open">
+                      </i>
+                      收藏夹
+                    </a>
+                    <p class="tab more">
+                      <i class="icon white icon-minus">
+                      </i>
+                    </p>
+                  </div>
+                  <div class="mainer">
+                    <a href="user/#area=submission" class="tab">
+                      提交记录
+                    </a>
+                    <a href="user/#area=favourite" class="tab">
+                      题目收藏
+                    </a>
+                    <a href="user/#area=favourite-album" class="tab">
+                      比赛收藏
+                    </a>
+                  </div>
+                </div>
+                <div id="part-sociality-left" class="part-guide-left">
+                  <div class="banner">
+                    <a href="user/#area=push" class="tab fixed">
+                      <i class="icon white icon-user">
+                      </i>
+                      圈子
+                    </a>
+                    <p class="tab more">
+                      <i class="icon white icon-minus">
+                      </i>
+                    </p>
+                  </div>
+                  <div class="mainer">
+                    <a href="user/#area=push" class="tab">
+                      内容推送
+                    </a>
+                    <a href="user/#area=mention" class="tab">
+                      提到我的
+                    </a>
+                    <a href="user/#area=following" class="tab">
+                      我关注的
+                    </a>
+                    <a href="user/#area=followers" class="tab">
+                      关注我的
+                    </a>
+                  </div>
+                </div>
+                <div id="part-post-left" class="part-guide-left">
+                  <div class="banner">
+                    <a href="user/#area=post-history" class="tab fixed">
+                      <i class="icon white icon-edit">
+                      </i>
+                      投稿
+                    </a>
+                    <p class="tab more">
+                      <i class="icon white icon-minus">
+                      </i>
+                    </p>
+                  </div>
+                  <div class="mainer">
+                    <a href="user/#area=post-history" class="tab">
+                      过往投稿
+                    </a>
+                    <a href="user/#area=post-simple" class="tab">
+                      快捷投稿
+                    </a>
+                    <a href="user/#area=post-video" class="tab">
+                      题目投稿
+                    </a>
+                    <a href="user/#area=post-article" class="tab">
+                      文章投稿
+                    </a>
+                    <a href="user/#area=post-manage" class="tab">
+                      题目管理
+                    </a>
+                  </div>
+                </div>
+                <div id="part-function-left" class="part-guide-left">
+                  <div class="banner">
+                    <a href="user/#area=mail" class="tab fixed">
+                      <i class="icon white icon-wrench">
+                      </i>
+                      功能
+                    </a>
+                    <p class="tab more">
+                      <i class="icon white icon-minus">
+                      </i>
+                    </p>
+                  </div>
+                  <div class="mainer">
+                    <a href="user/#area=mail" class="tab">
+                      私信
+                    </a>
+                    <a href="user/#area=history" class="tab">
+                      历史
+                    </a>
+                    <a href="user/#area=theme" class="tab">
+                      主题
+                    </a>
+                    <!--<a href="user/#area=app-center" class="tab">
+                      应用中心
+                    </a>-->
+                    <a href="user/#area=setting" class="tab">
+                      设置
+                    </a>
+                  </div>
+                </div>
+                <div id="part-function-left" class="part-guide-left admin">
+                  <div class="banner">
+                    <a href="user/#area=mail" class="tab fixed">
+                      <i class="icon white icon-off">
+                      </i>
+                      管理
+                    </a>
+                    <p class="tab more">
+                      <i class="icon white icon-minus">
+                      </i>
+                    </p>
+                  </div>
+                  <div class="mainer">
+                    <a href="user/#area=admin" class="tab">
+                      管理
+                    </a>
+                    <a href="user/#area=lab" class="tab">
+                      实验室
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="area-main-right" class="r">
+              <div id="area-cont-right">
+              </div>
+            </div>
+            <span class="clearfix">
+            </span>
+          </div>
+        </div>
+      </div>
+      <span class="clearfix">
+      </span>
+      
+      <div id="footer">
+        <div id="footer-inner">
+          <div class="a">
+            <p class="l">
+              SWUST ACM-ICPC
+            </p>
+            <p class="r">
+              <a href="about" target="_blank">
+                关于PowerOJ
+              </a>
+              &nbsp;/&nbsp;
+              <a href="faq" target="_blank">
+                帮助手册
+              </a>
+              &nbsp;/&nbsp;
+              <a href="changelog" target="_blank">
+                更新历史
+              </a>
+              <!--&nbsp;/&nbsp;&nbsp;官方微博:
+              <a href="http://e.weibo.com/danmushipin" target="_blank">
+                新浪微博
+              </a>
+              |
+              <a href="http://t.qq.com/AcFun-tv" target="_blank">
+                腾讯微博
+              </a>-->
+            </p>
+            <span class="clearfix">
+            </span>
+          </div>
+          <div class="b">
+            <p class="l">
+              Copyright © 2012-2014 PowerOJ. 保留所有权利&nbsp;&nbsp;/&nbsp;
+              <a href="term" target="_blank">
+                使用条款
+              </a>
+              &nbsp;/&nbsp;
+              <a href="contact" target="_blank">
+                联系我们
+              </a>
+            </p>
+            <p class="r">
+              <!--本站不提供任何视听上传服务，所有内容均来自视频分享站点所提供的公开引用资源-->
+            </p>
+            <span class="clearfix">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+      <script src="assets/acfun/json2.js">
+      </script>
+    <![endif]-->
+    <script src="assets/acfun/prefix.js"></script>
+    <script src="assets/acfun/jquery.hashchange.min.js"></script>
+    <script src="assets/acfun/core.js"></script>
+    <script>
+      system.path = "${baseUrl!}/assets";
+      system.date = Math.round(new Date().getTime()/1000);
+      system.location = 'location-member';
+      window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
+    </script>
+    <script src="assets/acfun/swfobject.js"></script>
+    <script type="text/javascript" src="assets/acfun/editor_config.js"></script>
+    <script type="text/javascript" src="assets/ueditor/ueditor.all.min.js"></script>
+    
+    <link rel="stylesheet" href="assets/ueditor/themes/default/css/ueditor.css">
+    <script src="assets/acfun/ubb.min.js"></script>
+    <script src="assets/acfun/script.js"></script>
+  </body>
+
+</html>

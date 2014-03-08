@@ -1,16 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-        var prevpage="problem/search/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}"
-        var nextpage="problem/search/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}"
-        $(document).keydown(function(event) {
-            <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
-            <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
-        });
-      });
-    </script>
-
+<@override name="content">
 <div class="pagination pagination-centered">
   <div class="pull-left">
     <form class="form-search" action="problem/search">
@@ -23,25 +11,12 @@
           <option value="tag"<#if scope=="tag">selected</#if>>Tag</option>
           <option value="content"<#if scope=="content">selected</#if>>Content</option>
         </select>
-        <button type="submit" class="btn">Search</button>
+        <button type="submit" class="btn btn-info">Search</button>
       </div>
     </form>
   </div>
-  <ul>
-    <li class="<#if problemList.pageNumber==1>disabled</#if>"><a href="problem/search/?p=1<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">&lt;&lt;</a></li>
-    <#if problemList.pageNumber&gt;1>
-    <li><a href="problem/search/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">Prev</a></li></#if> <#if problemList??>
-    <#assign start=problemList.pageNumber-4> <#assign end=problemList.pageNumber+4> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
-    end&gt;problemList.totalPage ><#assign start=start-(end-problemList.totalPage)-1><#if start<1><#assign start=1></#if><#assign
-    end=problemList.totalPage></#if> <#if end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==problemList.pageNumber>active</#if>"><a href="problem/search/?p=${x}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">${x}</a></li>
-    </#list> </#if> <#if problemList.pageNumber<problemList.totalPage>
-    <li><a href="problem/search/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">Next</a></li>
-    </#if>
-    <li class="<#if problemList.pageNumber&gt;=problemList.totalPage>disabled</#if>"><a
-      href="problem/search/?p=${problemList.totalPage}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}">&gt;&gt;</a></li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" urlParas="${query!}" />
   <div class="pull-right">
     <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> <span class="badge badge-info">${problemList.totalRow}
       Problems</span>
@@ -74,40 +49,49 @@
       </#list> </#if>
     </tbody>
   </table>
+</@override>
 
-<script type="text/javascript" src="assets/js/placeholder.js"></script>
+<@override name="scripts">
+  <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      var prevpage="problem/search/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}"
+      var nextpage="problem/search/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}"
+      $(document).keydown(function(event) {
+        <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
+        <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
+      });
 
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#problem-list").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
+      <#if oj_style != "slate">
+      $("#problem-list").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:true,
+        striped:true,
+        clean:true
+      });
+      </#if>
+
+      <#if user??>
+      $('td.pid').each(function(i) {
+        var result = $(this).prev('.result');
+        $.getJSON('api/problem/userResult?pid=' + $(this).text(), function(data) {
+          if (data.result)
+          {
+            if (data.result.id)
+              result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
+            else
+              result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
+          }
         });
-
-        <#if userName??>
-        $('td.pid').each(function(i) {
-          var result = $(this).prev('.result');
-          $.getJSON('problem/userResult?pid=' + $(this).text(), function(data) {
-            if (data.result)
-            {
-              if (data.result.id)
-                result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
-              else
-                result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
-            }
-          });
-        });
-        </#if>
-    });
-    </script>
-
-</@layout>
+      });
+      </#if>
+  });
+  </script>
+</@override>
+<@extends name="../common/_layout.html" />
