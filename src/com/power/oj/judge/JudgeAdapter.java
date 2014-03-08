@@ -132,8 +132,8 @@ public abstract class JudgeAdapter extends Thread
     }
     log.info("dataDir: " + dataDir.getAbsolutePath());
     
-    List<String> inFiles = new ArrayList<String>();
-    List<String> outFiles = new ArrayList<String>();
+    inFiles = new ArrayList<String>();
+    outFiles = new ArrayList<String>();
     File[] arrayOfFile = dataDir.listFiles();
 
     for (int i = 0; i < arrayOfFile.length; i++)
