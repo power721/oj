@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import jodd.io.FileNameUtil;
+import jodd.io.FileUtil;
 import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
@@ -16,6 +17,7 @@ import com.power.oj.contest.ContestModel;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.model.LanguageModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
@@ -26,7 +28,6 @@ public abstract class JudgeAdapter extends Thread
   public static final String DATA_EXT_IN = ".in";
   public static final String DATA_EXT_OUT = ".out";
   public static final String sourceFileName = "Main";
-  public static SolutionModel solutionModel;
   
   protected final Logger log = Logger.getLogger(getClass());
   protected static final String workPath;
@@ -34,6 +35,10 @@ public abstract class JudgeAdapter extends Thread
   protected static final UserService userService = UserService.me();
   protected static final ProblemService problemService = ProblemService.me();
   protected static ConcurrentLinkedQueue<SolutionModel> judgeList = new ConcurrentLinkedQueue<SolutionModel>();
+  protected SolutionModel solutionModel;
+  protected ProblemModel problemModel;
+  protected LanguageModel language;
+  protected String workDirPath;
   
   protected List<String> inFiles = new ArrayList<String>();
   protected List<String> outFiles = new ArrayList<String>();
@@ -57,39 +62,59 @@ public abstract class JudgeAdapter extends Thread
   public void run()
   {
     log.info("JudgeAdapter run()");
-    if (judgeList.isEmpty())
+    while (!judgeList.isEmpty())
     {
-      return;
-    }
-    log.info("Judge threads: " + judgeList.size());
-    solutionModel = judgeList.poll();
-    synchronized (JudgeAdapter.class)
-    {
-      try
+      log.info("Judge threads: " + judgeList.size());
+      solutionModel = judgeList.poll();
+      synchronized (JudgeAdapter.class)
       {
-        if (Compile())
+        try
         {
-          RunProcess();
-        }
-        else
+          prepare();
+          if (Compile())
+          {
+            RunProcess();
+          }
+          else
+          {
+            log.warn("Compile failed.");
+          }
+        } catch (Exception e)
         {
-          log.warn("Compile failed.");
+          updateSystemError(e.getLocalizedMessage());
+          
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.error(e.getLocalizedMessage());
         }
-      } catch (Exception e)
-      {
-        solutionModel.set("result", ResultType.SE).set("system_error", e.getMessage());
-        solutionModel.update();
-
-        if (OjConfig.getDevMode())
-          e.printStackTrace();
-        log.error(e.getMessage());
       }
     }
+  }
+  
+  protected void prepare() throws IOException
+  {
+    language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
+    problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
+    
+    if (OjConfig.getBoolean("delete_tmp_file"))
+    {
+      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid") - 2).toString());
+      if (prevWorkDir.isDirectory())
+      {
+        FileUtil.deleteDir(prevWorkDir);
+        log.info("Delete previous work directory " + prevWorkDir.getAbsolutePath());
+      }
+    }
+    
+    File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid")).toString());
+    FileUtil.mkdirs(workDir);
+    workDirPath = workDir.getAbsolutePath();
+    log.info("mkdirs workDir: " + workDirPath);
   }
 
   protected String getCompileCmd(String compileCmd, String path, String name, String ext)
   {
-    path = new StringBuilder(2).append(path).append("\\").toString();
+    path = new StringBuilder(2).append(path).append(File.separator).toString();
     compileCmd = StringUtil.replace(compileCmd, "%PATH%", path);
     compileCmd = StringUtil.replace(compileCmd, "%NAME%", name);
     compileCmd = StringUtil.replace(compileCmd, "%EXT%", ext);
@@ -98,16 +123,12 @@ public abstract class JudgeAdapter extends Thread
     return compileCmd;
   }
   
-  protected boolean getDataFiles()
+  protected int getDataFiles() throws IOException
   {
     File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append(File.separator).append(solutionModel.getInt("pid")).toString());
     if (!dataDir.isDirectory())
     {
-      String system_error = new StringBuilder(3).append("Data directory ").append(dataDir).append(" does not exist.").toString();
-      solutionModel.set("result", ResultType.SE).set("system_error", system_error);
-      solutionModel.update();
-      log.error(system_error);
-      return false;
+      throw new IOException("Data files does not exist.");
     }
     log.info("dataDir: " + dataDir.getAbsolutePath());
     
@@ -123,17 +144,26 @@ public abstract class JudgeAdapter extends Thread
       File out_file = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
           .append(in_file.getName().substring(0, in_file.getName().length() - DATA_EXT_IN.length())).append(DATA_EXT_OUT).toString());
       if (!out_file.isFile())
+      {
+        log.warn("Output file for input file does not exist: " + in_file.getAbsolutePath());
         continue;
+      }
       inFiles.add(in_file.getAbsolutePath());
       outFiles.add(out_file.getAbsolutePath());
     }
     
-    return true;
+    return inFiles.size();
   }
   
-  protected boolean updateError(int result, String error)
+  protected boolean updateCompileError(String error)
   {
-    solutionModel.set("result", result).set("time", 0).set("memory", 0).set("error", error);
+    solutionModel.set("result", ResultType.CE).set("error", error);
+    return solutionModel.update();
+  }
+
+  protected boolean updateSystemError(String error)
+  {
+    solutionModel.set("result", ResultType.SE).set("system_error", error);
     return solutionModel.update();
   }
   

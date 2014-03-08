@@ -11,8 +11,6 @@ import jodd.io.FileUtil;
 
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.LanguageModel;
-import com.power.oj.problem.ProblemModel;
 
 public class PojJudgeAdapter extends JudgeAdapter
 {
@@ -20,22 +18,6 @@ public class PojJudgeAdapter extends JudgeAdapter
   public boolean Compile() throws IOException
   {
     log.info(solutionModel.getInt("sid") + " Start compiling...");
-    if (OjConfig.getBoolean("delete_tmp_file"))
-    {
-      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid") - 2).toString());
-      if (prevWorkDir.isDirectory())
-      {
-        FileUtil.deleteDir(prevWorkDir);
-        log.info("Delete previous work directory " + prevWorkDir.getAbsolutePath());
-      }
-    }
-
-    File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid")).toString());
-    FileUtil.mkdirs(workDir);
-    String workDirPath = workDir.getAbsolutePath();
-    log.info("mkdirs workDir: " + workDirPath);
-
-    LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
     File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getStr("ext")).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solutionModel.getStr("source"));
@@ -79,10 +61,7 @@ public class PojJudgeAdapter extends JudgeAdapter
 
     if (!success)
     {
-      synchronized (JudgeAdapter.class)
-      {
-        updateError(ResultType.CE, sb.toString());
-      }
+      updateCompileError(sb.toString());
     }
     else
     {
@@ -102,14 +81,8 @@ public class PojJudgeAdapter extends JudgeAdapter
     OutputStream runProcessOutputStream = runProcess.getOutputStream();
     log.info("runProcess: " + OjConfig.get("run_shell"));
 
-    if (!getDataFiles())
-    {
-      throw new IOException("Data files does not exist.");
-    }
-    int numOfData = inFiles.size();
+    int numOfData = getDataFiles();
 
-    LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
-    ProblemModel problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
     long timeLimit = problemModel.getInt("time_limit") * language.getInt("time_factor") + numOfData * language.getInt("ext_time");
     long caseTimeLimit = problemModel.getInt("time_limit") * language.getInt("time_factor") + language.getInt("ext_time");
     runProcessOutputStream.write((timeLimit + "\n").getBytes());
@@ -121,8 +94,6 @@ public class PojJudgeAdapter extends JudgeAdapter
     log.info("caseTimeLimit: " + caseTimeLimit);
     log.info("memoryLimit: " + memoryLimit);
 
-    File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid")).toString());
-    String workDirPath = workDir.getAbsolutePath();
     String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getStr("exe")).append("\n").toString();
     runProcessOutputStream.write(mainProgram.getBytes());
     runProcessOutputStream.write((workDirPath + "\n").getBytes());
