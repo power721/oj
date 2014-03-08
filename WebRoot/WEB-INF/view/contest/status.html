@@ -1,7 +1,7 @@
 <@override name="contest_content">
 <div class="pagination pagination-centered">
   <div class="form-inline">
-    <form class="form-search" action="contest/status/${cid!}">
+    <form class="form-search" action="contest/status/${cid!}" method="post">
       <input type="text" class="input-small" name="name" value="${name!}" placeholder="User Name">
       <select class="input-medium" id="inputProblem" name="pid">
       <option value="">Problem</option>

@@ -5,7 +5,7 @@
   <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> post at 
   <span class="timestamp" data="${clarify.ctime}"></span>
   <pre class="question">${clarify.question!}</pre>
-  <form class="clarform" method="post" action="api/contest/updateClarify">
+  <form class="clarform" action="api/contest/updateClarify" method="post">
     <span class="name">Administrator</span> reply at 
     <span class="timestamp" data="${clarify.atime!0}"></span>
     <textarea name="reply" class="input-block-level">${clarify.reply!}</textarea>
