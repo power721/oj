@@ -181,7 +181,7 @@ public class SolutionController extends OjController
       {
         JudgeAdapter.addSolution(solutionModel);
         log.info("JudgeAdapter.addSolution: " + solutionModel);
-        if (JudgeAdapter.size() < 1)
+        if (JudgeAdapter.size() <= 1)
         {
           JudgeAdapter judge = new PojJudgeAdapter();
           judge.start();
