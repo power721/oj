@@ -207,6 +207,13 @@ public abstract class JudgeAdapter extends Thread
       Long submitTime = solutionModel.getLong("ctime");
       char c = (char) (num + 'A');
       Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
+      if (board == null)
+      {
+        board = new Record();
+        board.set("cid", cid);
+        board.set("uid", uid);
+        Db.save("board", board);
+      }
       Integer wrongSubmits = board.getInt(c + "_WrongSubmits");
       
       if (solutionModel.getInt("result") == ResultType.AC)
