@@ -43,40 +43,48 @@ public abstract class JudgeAdapter extends Thread
     workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("work_path"))).append(File.separator).toString();
   }
   
+  public JudgeAdapter()
+  {
+    super();
+    log.info("JudgeAdapter()");
+    run();
+  }
+  
   protected abstract boolean Compile() throws IOException;
   
   protected abstract boolean RunProcess() throws IOException, InterruptedException;
 
   public void run()
   {
-      if (judgeList.isEmpty())
+    log.info("JudgeAdapter run()");
+    if (judgeList.isEmpty())
+    {
+      return;
+    }
+    log.info("Judge threads: " + judgeList.size());
+    solutionModel = judgeList.poll();
+    synchronized (JudgeAdapter.class)
+    {
+      try
       {
-        return;
-      }
-      log.info("Judge threads: " + judgeList.size());
-      solutionModel = judgeList.poll();
-      synchronized (JudgeAdapter.class)
-      {
-        try
+        if (Compile())
         {
-          if (Compile())
-          {
-            RunProcess();
-          }
-          else
-          {
-            log.warn("Compile failed.");
-          }
-        } catch (Exception e)
-        {
-          solutionModel.set("result", ResultType.SE).set("system_error", e.getMessage());
-          solutionModel.update();
-
-          if (OjConfig.getDevMode())
-            e.printStackTrace();
-          log.error(e.getMessage());
+          RunProcess();
         }
+        else
+        {
+          log.warn("Compile failed.");
+        }
+      } catch (Exception e)
+      {
+        solutionModel.set("result", ResultType.SE).set("system_error", e.getMessage());
+        solutionModel.update();
+
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getMessage());
       }
+    }
   }
 
   protected String getCompileCmd(String compileCmd, String path, String name, String ext)
