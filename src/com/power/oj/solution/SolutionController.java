@@ -148,8 +148,14 @@ public class SolutionController extends OjController
   {
     SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
     solutionModel.set("uid", userService.getCurrentUid());
+    Integer cid = solutionModel.getInt("cid");
     String url = "/status";
-
+    
+    if (cid != null && cid > 0)
+    {
+      url = new StringBuilder(2).append("/contest/status/").append(cid).toString();
+    }
+    
     // TODO move to SolutionService
     if (solutionModel.addSolution())
     {
@@ -165,7 +171,7 @@ public class SolutionController extends OjController
       UserModel userModel = userService.getCurrentUser();
       userModel.set("submit", userModel.getInt("submit") + 1).update();
       
-      Integer cid = solutionModel.getInt("cid");
+      
       if (cid != null && cid > 0)
       {
           Db.update("UPDATE contest_problem SET submit=submit+1 WHERE cid=? AND pid=?", cid, pid);
