@@ -1,6 +1,6 @@
 <@override name="contest_content">
 <div class="progress" id="contest-progress">
-  <div class="bar" id="contest-bar" style="width:<#if serverTime &gt; contest.end_time>100%</#if>"></div>
+  <div class="bar" id="contest-bar" style="width:<#if (serverTime > contest.end_time)>100%</#if>"></div>
 </div>
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">

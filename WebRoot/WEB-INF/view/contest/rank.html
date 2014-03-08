@@ -33,7 +33,7 @@
       <td>${User.penalty!}</td> <#list contestProblems as Problem> <#assign ac=User["${Problem.id}_time"]> <#assign wa=User["${Problem.id}_WrongSubmits"]>
       <td
         class="<#if ac==0 && wa!=0>wa wa${(wa/5)?int}</#if><#if ac!=0 && wa==0>ac</#if><#if ac!=0 && wa!=0>ac1</#if><#if Problem.first_blood == User.uid> fb</#if>"><#--
-        允许多个First Boold： Problem.first_blood_time == ac --> <#if ac&gt;0>${ac}<#if wa&gt;0><br></#if></#if><#if wa&gt;0>(-${wa})</#if>
+        允许多个First Boold： Problem.first_blood_time == ac --> <#if (ac>0)>${ac}<#if (wa>0)><br></#if></#if><#if (wa>0)>(-${wa})</#if>
       </td> </#list>
     </tr>
     </#list> </#if>
@@ -59,7 +59,7 @@
     function nextpage(event)
     {
       event=event?event:(window.event?window.event:null);
-      <#if contestRank.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
+      <#if (contestRank.pageNumber>1)>if(event.keyCode==37)location=prevpage;</#if>
       <#if contestRank.pageNumber<contestRank.totalPage>if(event.keyCode==39)location=nextpage;</#if>
     }
 

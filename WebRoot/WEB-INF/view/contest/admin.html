@@ -2,7 +2,7 @@
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
-    <#if contest.type &gt; 1>
+    <#if (contest.type > 1)>
     <div class="contest-admin">
       <a href="contest/adminUser/${contest.cid!}" class="btn btn-primary">Manage Users</a>
     </div>

@@ -67,7 +67,7 @@
       var prevpage = "status/${solutionList.pageNumber-1}${query!}";
       var nextpage = "status/${solutionList.pageNumber+1}${query!}";
       $(document).keydown(function(event) {
-        <#if solutionList.pageNumber&gt;1>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if solutionList.pageNumber<solutionList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>
       });
     });

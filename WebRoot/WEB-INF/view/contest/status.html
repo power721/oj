@@ -86,7 +86,7 @@ $(document).ready(function(){
     function nextpage(event)
     {
       event=event?event:(window.event?window.event:null);
-      <#if solutionList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
+      <#if (solutionList.pageNumber>1)>if(event.keyCode==37)location=prevpage;</#if>
       <#if solutionList.pageNumber<solutionList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
     }
     });

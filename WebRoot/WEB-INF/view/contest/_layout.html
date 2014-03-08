@@ -18,7 +18,7 @@
     <li class="<#if methodName=="clarify">active</#if>">
       <a href="contest/clarify/${cid}">Clarify</a>
     </li>
-    <#if serverTime &gt; contest.end_time && contest.report??>
+    <#if (serverTime > contest.end_time) && contest.report??>
     <li class="<#if methodName=="report">active</#if>">
       <a href="contest/report/${cid}">Report</a>
     </li>
