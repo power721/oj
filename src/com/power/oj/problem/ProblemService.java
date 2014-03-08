@@ -125,7 +125,8 @@ public class ProblemService
     if (uid == null)
       return null;
     
-    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+    // TODO split contest_solution 
+    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND cid=0 LIMIT 1", uid, pid);
   }
   
   public Record getUserResult(Integer pid, Integer uid)

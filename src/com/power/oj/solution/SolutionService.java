@@ -24,7 +24,7 @@ public class SolutionService
   public Page<SolutionModel> getPage(int pageNumber, int pageSize, int result, int language, int pid, String userName)
   {
     String sql = "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,code_len,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime,u.name";
-    StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid WHERE 1=1");
+    StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid WHERE cid=0 ");
 
     List<Object> paras = new ArrayList<Object>();
     if (result > -1)

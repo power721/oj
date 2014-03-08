@@ -126,7 +126,7 @@ public class ProblemModel extends Model<ProblemModel>
 
   public Record getUserResult(Integer pid, Integer uid)
   {
-    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND cid=0 LIMIT 1", uid, pid);
     return record;
   }
 

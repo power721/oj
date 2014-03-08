@@ -17,7 +17,6 @@ public class ProblemApiController extends OjController
   private static final ProblemService problemService = ProblemService.me();
   
   @ClearInterceptor(ClearLayer.ALL)
-  @Before(GuestInterceptor.class)
   public void userInfo()
   {
     Integer pid = getParaToInt("pid");
@@ -37,7 +36,6 @@ public class ProblemApiController extends OjController
   }
 
   @ClearInterceptor(ClearLayer.ALL)
-  @Before(GuestInterceptor.class)
   public void userResult()
   {
     Integer pid = getParaToInt("pid");
