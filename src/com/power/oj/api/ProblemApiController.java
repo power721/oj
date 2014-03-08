@@ -77,11 +77,13 @@ public class ProblemApiController extends OjController
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("language", language);
+    setAttr("user", UserService.me().getCurrentUser());
+    setAttr("adminUser", UserService.me().isAdmin());
     setAttr("pid", pid);
     
     setAttr("query", query.toString());
     setAttr("solutionList", SolutionService.me().getProblemStatusPage(pageNumber, pageSize, language, pid));
-    renderJson(new String[]{ "pid", "userID", "adminUser", "pageSize", "language", "query", "program_languages", "solutionList" });
+    renderJson(new String[]{ "pid", "user", "adminUser", "pageSize", "language", "query", "program_languages", "solutionList" });
   }
   
   @ClearInterceptor(ClearLayer.ALL)

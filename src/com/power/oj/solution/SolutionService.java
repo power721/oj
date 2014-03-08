@@ -155,6 +155,7 @@ public class SolutionService
 
   public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
   {
+    // TODO check user permission for view source code
     String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,code_len,s.ctime,l.name AS language";
     StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=0");
 
