@@ -204,7 +204,7 @@ public abstract class JudgeAdapter extends Thread
     {
       Integer uid = solutionModel.getUid();
       Integer num = solutionModel.getInt("num");
-      Integer submitTime = solutionModel.getInt("ctime");
+      Long submitTime = solutionModel.getLong("ctime");
       char c = (char) (num + 'A');
       Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
       Integer wrongSubmits = board.getInt(c + "WrongSubmits");
@@ -213,7 +213,7 @@ public abstract class JudgeAdapter extends Thread
       {
         Record contestProblem = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
         ContestModel contestModle = contestService.getContest(cid);
-        Integer contestStartTime = contestModle.getInt("start_time");
+        Long contestStartTime = contestModle.getLong("start_time");
         
         if (contestProblem.getInt("first_blood") == 0)
         {
