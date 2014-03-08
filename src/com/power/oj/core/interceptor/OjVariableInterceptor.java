@@ -18,6 +18,7 @@ public class OjVariableInterceptor implements Interceptor
     controller.setAttr("enable_sina_login", OjConfig.getBoolean("enable_sina_login"));
     controller.setAttr("dev", OjConfig.getDevMode());
     controller.setAttr("gaAccount", OjConfig.get("gaAccount"));
+    controller.setAttr("domaiNname", OjConfig.get("domaiNname"));
     controller.setAttr("cdn", OjConfig.get("cdn"));
     controller.setAttr("icpRecord", OjConfig.get("icp_record"));
     controller.setAttr("version", OjConfig.get("version", "20140221"));
