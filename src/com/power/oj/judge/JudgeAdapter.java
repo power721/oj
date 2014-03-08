@@ -174,14 +174,25 @@ public abstract class JudgeAdapter extends Thread
     return solutionModel.update();
   }
   
-  protected int updateUser()
+  protected boolean updateUser()
   {
+    if (solutionModel.getInt("result") != ResultType.AC)
+    {
+      return false;
+    }
+    
     Integer uid = solutionModel.getUid();
-    return Db.update("UPDATE user SET accept=accept+1 WHERE uid=?", uid);
+    Db.update("UPDATE user SET accept=accept+1 WHERE uid=?", uid);
+    return true;
   }
 
   protected boolean updateProblem()
   {
+    if (solutionModel.getInt("result") != ResultType.AC)
+    {
+      return false;
+    }
+    
     Integer pid = solutionModel.getInt("pid");
     Integer sid = solutionModel.getInt("sid");
     Integer uid = solutionModel.getUid();
@@ -245,9 +256,10 @@ public abstract class JudgeAdapter extends Thread
         board.set(c+"_WrongSubmits", wrongSubmits+1);
       }
       
-      return Db.update("board", board);
+      Db.update("board", board);
+      return true;
     }
-    return true;
+    return false;
   }
 
   public static void addSolution(SolutionModel solutionModel)

@@ -153,12 +153,11 @@ public class PojJudgeAdapter extends JudgeAdapter
     synchronized (JudgeAdapter.class)
     {
       boolean ret = updateResult(result, time, memory);
-      if (solutionModel.getInt("result") == ResultType.AC)
+      updateUser();
+      if (!updateContest())
       {
-        updateUser();
         updateProblem();
       }
-      updateContest();
       
       return ret;
     }
