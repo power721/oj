@@ -278,12 +278,12 @@ public class ContestService
   
   public List<Record> getPrivateClarifyList(Integer cid, Integer uid)
   {
-    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND c.uid=? AND public=0", cid, uid);
+    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND c.uid=? AND public=0 ORDER BY id DESC", cid, uid);
   }
   
   public List<Record> getPublicClarifyList(Integer cid)
   {
-    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=1", cid);
+    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=1 ORDER BY id DESC", cid);
   }
   
   public boolean addClarify(Integer cid, String question)

@@ -31,7 +31,7 @@
 
   <#if user??>
   <div class="modal hide fade contestModal" id="postModal">
-    <form class="form-horizontal" action="api/contest/postQuestion" method="post">
+    <form class="form-horizontal" id="postForm" action="api/contest/postQuestion" method="post">
       <div class="modal-header">
         <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h3 id="postModalLabel">
@@ -61,12 +61,11 @@
   <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
   <script type="text/javascript" charset="utf-8">
     $(function() {
-      $('#postModal').submit(function() {
-          var dialog = $.dialog();
-          $.post($(this).attr("action"), $('#postModal').serialize(),
+      $('#postForm').submit(function() {
+          $.post($(this).attr("action"), $('#postForm').serialize(),
           function(data) {
             if (data.success) {
-              dialog.content('Ok, please wait admin reply.').lock().time(2);
+              $.dialog().content('Ok, please wait admin reply.').lock().time(2);
               setTimeout(function() {
                 window.location.reload();
               },
