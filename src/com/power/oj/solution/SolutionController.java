@@ -180,7 +180,7 @@ public class SolutionController extends OjController
       synchronized (JudgeAdapter.class)
       {
         JudgeAdapter.addSolution(solutionModel);
-        log.info("JudgeAdapter.addSolution: " + solutionModel);
+        log.info("JudgeAdapter.addSolution");
         if (JudgeAdapter.size() <= 1)
         {
           JudgeAdapter judge = new PojJudgeAdapter();

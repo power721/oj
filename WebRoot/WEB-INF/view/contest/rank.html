@@ -29,7 +29,7 @@
       </td>
       <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realname??>data-toggle="tooltip" title="${(User.realname)!}"</#if>>${User.name!}</a></td>
       <td class="user">${User.nick!}</td>
-      <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.accepts!}</a></td>
+      <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
       <td>${User.penalty!}</td> <#list contestProblems as Problem> <#assign ac=User["${Problem.id}_time"]> <#assign wa=User["${Problem.id}_WrongSubmits"]>
       <td
         class="<#if ac==0 && wa!=0>wa wa${(wa/5)?int}</#if><#if ac!=0 && wa==0>ac</#if><#if ac!=0 && wa!=0>ac1</#if><#if Problem.first_blood == User.uid> fb</#if>"><#--

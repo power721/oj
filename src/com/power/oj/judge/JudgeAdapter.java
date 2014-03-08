@@ -187,7 +187,7 @@ public abstract class JudgeAdapter extends Thread
     ProblemModel problemModel = ProblemService.me().findProblem(pid);
     
     problemModel.set("accept", problemModel.getInt("accept")+1);
-    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid!=? AND result=?", pid, uid, sid, ResultType.AC);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
       problemModel.set("solved", problemModel.getInt("solved")+1);
@@ -203,16 +203,24 @@ public abstract class JudgeAdapter extends Thread
     {
       // TODO move to contestService
       // TODO update board
-      Record contestProblem = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, solutionModel.getInt("num"));
-      if (contestProblem.getInt("first_blood") == 0)
+      Integer num = solutionModel.getInt("num");
+      if (solutionModel.getInt("result") == ResultType.AC)
       {
-        ContestModel contestModle = contestService.getContest(cid);
-        int contestStartTime = contestModle.getInt("start_time");
-        contestProblem.set("first_blood", solutionModel.getUid());
-        contestProblem.set("first_blood_time", (solutionModel.getInt("ctime") - contestStartTime) / 60);
+        Record contestProblem = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
+        if (contestProblem.getInt("first_blood") == 0)
+        {
+          ContestModel contestModle = contestService.getContest(cid);
+          int contestStartTime = contestModle.getInt("start_time");
+          contestProblem.set("first_blood", solutionModel.getUid());
+          contestProblem.set("first_blood_time", (solutionModel.getInt("ctime") - contestStartTime) / 60);
+        }
+        contestProblem.set("accept", contestProblem.getInt("accept")+1);
+        return Db.update("contest_problem", contestProblem);
       }
-      contestProblem.set("accept", contestProblem.getInt("accept")+1);
-      return Db.update("contest_problem", contestProblem);
+      else
+      {
+        
+      }
     }
     return true;
   }

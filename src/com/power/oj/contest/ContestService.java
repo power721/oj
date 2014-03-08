@@ -165,7 +165,7 @@ public class ContestService
 
   public Page<Record> getContestRank(int pageNumber, int pageSize, Integer cid)
   {
-    String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY accepts DESC,penalty";
+    String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY solved DESC,penalty";
     Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realname", sql, cid);
     
     return userRank;
@@ -622,7 +622,7 @@ public class ContestService
         userInfo = new UserInfo(uid);
         if (result == ResultType.AC)
         {
-          ++userInfo.accepts;
+          ++userInfo.solved;
           ++accept[num];
           userInfo.acTime[num] = penalty;
           userInfo.penalty += penalty;
@@ -635,7 +635,7 @@ public class ContestService
       {
         if (result == ResultType.AC)
         {
-          ++userInfo.accepts;
+          ++userInfo.solved;
           ++accept[num];
           userInfo.acTime[num] = penalty;
           penalty += userInfo.waTime[num] * 20;
@@ -653,7 +653,7 @@ public class ContestService
       List<Object> paras = new ArrayList<Object>();
       paras.add(cid);
       paras.add(userInfo.uid);
-      paras.add(userInfo.accepts);
+      paras.add(userInfo.solved);
       paras.add(userInfo.penalty);
       StringBuilder fields = new StringBuilder();
       StringBuilder values = new StringBuilder();
@@ -674,7 +674,7 @@ public class ContestService
           values.append(",?");
         }
       }
-      StringBuilder sb = new StringBuilder(5).append("INSERT INTO board (cid,uid,accepts,penalty").append(fields.toString()).append(") VALUES (?,?,?,?")
+      StringBuilder sb = new StringBuilder(5).append("INSERT INTO board (cid,uid,solved,penalty").append(fields.toString()).append(") VALUES (?,?,?,?")
           .append(values.toString()).append(")");
       Db.update(sb.toString(), paras.toArray());
     }
@@ -711,7 +711,7 @@ public class ContestService
   {
     public int cid;
     public int uid;
-    public int accepts = 0;
+    public int solved = 0;
     public int penalty = 0;
     public int acTime[] = new int[26];
     public int waTime[] = new int[26];

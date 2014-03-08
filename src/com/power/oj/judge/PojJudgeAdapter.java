@@ -157,8 +157,8 @@ public class PojJudgeAdapter extends JudgeAdapter
       {
         updateUser();
         updateProblem();
-        updateContest();
       }
+      updateContest();
       
       return ret;
     }
