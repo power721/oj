@@ -1,0 +1,737 @@
+<!--style-->
+<style>
+    #block-first .l {
+        text-align: right;
+        width: 64px;
+    }
+
+    #block-first .r {
+        text-align: left;
+        width: 610px;
+        position: relative;
+    }
+
+    #block-first .thumb {
+        margin: 2px 0 0 0;
+        position: relative;
+        transition: none;
+    }
+
+    #block-first .avatar {
+        width: 50px;
+        height: 50px;
+        position: relative;
+    }
+
+    #block-first .name {
+        display: inline-block;
+        *display: inline;
+        font-size: 14px;
+    }
+
+    #block-first .uid {
+        display: inline-block;
+        *display: inline;
+        font-size: 12px;
+        margin: 0 0 0 4px;
+        color: #999;
+    }
+
+    #block-first .sign {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.2;
+        margin: 4px 0;
+        width: 460px;
+    }
+
+    #block-first #list-following-following .info {
+        font-size: 12px;
+        color: #999;
+        line-height: 1.2;
+        margin: 4px auto;
+    }
+
+    #block-first .pts {
+        color: #006a92;
+        font-size: 12px;
+        margin: 0 1px;
+    }
+
+    #block-first .from {
+        color: #006a92;
+        font-size: 12px;
+        margin: 0 1px;
+    }
+
+    #block-first .subtitle {
+        margin: 4px 0;
+        height: 24px;
+        line-height: 24px;
+        font-size: 13px;
+        padding: 0 4px;
+        border-radius: 2px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        background-color: #c66;
+        color: #fff;
+        display: inline-block;
+        *display: inline;
+        cursor: default;
+    }
+
+    #list-group-following {
+        overflow: visible;
+        margin: 0 auto 16px;
+        padding: 0 0 16px;
+        border-bottom: 1px #ddd dashed;
+    }
+
+    #list-group-following .item {
+        display: inline-block;
+        *display: inline;
+        float: left;
+        margin: 4px 8px 0 0;
+    }
+
+    .btn-manage-following {
+        min-width: 0px;
+        *width: auto;
+        padding: 0;
+    }
+
+    .btn-manage-following .icon {
+        margin: 0 4px;
+    }
+
+    #list-following-following .item {
+        border-bottom: 1px dashed #ddd;
+        margin: 0 auto;
+        padding: 16px 0;
+        background-color: #fff;
+        position: relative;
+    }
+
+    .ui-selectable-helper {
+        position: absolute;
+        z-index: 255;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 0, 0, 0.1);
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        margin-top: 1px;
+    }
+
+    .no-rgba .ui-selectable-helper {
+        background-color: transparent;
+        border: 1px dashed #333;
+    }
+
+    #list-following-following .ui-selecting {
+        background-color: #f9f9f9;
+    }
+
+    #list-following-following .ui-selected {
+        background-color: #f0f9ff;
+    }
+
+    #block-first .area-tool-following {
+        position: absolute;
+        right: 8px;
+        top: 0;
+        font-size: 12px;
+        color: #999;
+    }
+
+    #item-tool-following {
+        position: absolute;
+        margin: 0;
+        padding: 0;
+        z-index: 128;
+        display: none;
+    }
+
+    #block-first .item .group {
+        color: #999;
+        display: inline-block;
+        *display: inline;
+        font-size: 12px;
+        margin: 0 0 0 4px;
+    }
+
+    #block-first .item .group span {
+        color: #798;
+    }
+
+    #block-first .hint-list-index {
+        position: absolute;
+        left: auto;
+        top: auto;
+        right: 8px;
+        bottom: 0;
+        font-size: 64px;
+        line-height: 64px;
+        height: 64px;
+        width: auto;
+        text-align: right;
+        color: #eee;
+        z-index: 0;
+        letter-spacing: -0.1em;
+        cursor: default;
+    }
+
+    #block-first .ui-selecting .hint-list-index, #block-first .ui-selected .hint-list-index {
+        color: #ccc;
+    }
+</style>
+<!--style-->
+
+<!--html -->
+<div id="block-title-banner">
+    <p>我关注的</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Following</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="temp-group-following" class="hidden">
+    <div class="item" data-gid="[gid]" data-count="[count]" data-name="[name]">
+        <div class="btn info mini btn-group-following">
+            [name]([count])
+        </div>
+        <div class="btn info mini btn-manage-following dropdown [hidden]">
+            <i class="icon white icon-chevron-down"></i>
+            <ul class="menu">
+                <li class="btn-rename-following"><i class="icon icon-edit"></i>重命名分组</li>
+                <li class="btn-delete-following"><i class="icon icon-remove-circle"></i>删除分组</li>
+            </ul>
+        </div>
+        <span class="clearfix"></span>
+    </div>
+</div>
+<div id="temp-item-following" class="hidden">
+    <div class="item" data-uid="[uid]" data-gid="[gid]" data-name="[name]">
+        <p class="hint-list-index">[index]</p>
+
+        <div class="l">
+            <a class="thumb" href="user/profile/[name]" target="_blank">
+                <img class="avatar" [avatar] data-uid="[uid]">
+            </a>
+        </div>
+        <div class="r">
+            <a class="name" href="user/profile/[name]" target="_blank">[name]</a><span
+                class="uid">(Uid:[uid])</span><span class="group">[group]</span>
+
+            <div class="sign">[sign]</div>
+            <div class="info">
+                [gender]来自<span class="from">[from]</span>&nbsp;&nbsp;/&nbsp;&nbsp;听众&nbsp;<span class="pts followeds">[followeds]</span>&nbsp;&nbsp;/&nbsp;&nbsp;关注&nbsp;<span
+                    class="pts">[followings]</span>&nbsp;&nbsp;/&nbsp;&nbsp;解决&nbsp;<span class="pts">[solved]</span>&nbsp;&nbsp;/&nbsp;&nbsp;提交&nbsp;<span class="pts">[submit]</span>
+            </div>
+            <div class="area-tool-following">
+                [isFriend]
+            </div>
+        </div>
+        <span class="clearfix"></span>
+    </div>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+
+        <p class="alert alert-info">
+            我们为关注列表增加了分组功能，以使您可以更快捷的管理您的关注。<br/>
+            同时，现在您可以通过订阅或取消分组来调整系统的内容推荐。
+        </p>
+
+        <div class="unit">
+            <div id="list-group-following">
+                <div class="item">
+                    <div id="btn-all-following" class="btn primary mini">
+                        <i class="icon white icon-list"></i>展示全部
+                    </div>
+                    <span class="clearfix"></span>
+                </div>
+                <div class="item">
+                    <div id="btn-add-following" class="btn primary mini">
+                        <i class="icon white icon-plus-sign"></i>添加分组
+                    </div>
+                    <span class="clearfix"></span>
+                </div>
+                <span class="clearfix"></span>
+            </div>
+        </div>
+
+        <div class="unit">
+            <div id="list-following-following"></div>
+            <div id="item-tool-following">
+                <button class="btn primary mini">
+                    <i class="icon white icon-edit"></i>变更分组
+                </button>
+                <button class="btn danger mini">
+                    <i class="icon white icon-remove-circle"></i>取消
+                </button>
+                <span class="clearfix"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!--html-->
+
+<!--script-->
+<script>
+system.tv = function () {
+    //set handle
+    var block = $('#block-first');
+    var mainer = block.find('div.mainer').eq(0);
+    //function
+    var disfollow = function (param, callback) {
+        //inner param
+        var func = {
+            username: (!!param.username ? '[' + param.username + ']' : '用户'),
+            uid: param.uid,
+            gid: param.gid || 1,
+            callback: callback
+        };
+        if (system.port.followUser) {
+            system.port.followUser.abort();
+        }
+        ;
+        system.port.followUser = $.post('api/friend/unfollow', {
+            uid: func.uid,
+            gid: func.gid
+        })
+                .done(function (data) {
+                    if (data.success) {
+                        var text = '取消关注' + func.username + '成功。';
+                        $.info(text);
+                        if ($.isFunction(func.callback)) {
+                            func.callback();
+                        }
+                        ;
+                    } else {
+                        $.info('error::' + data.result);
+                    }
+                    ;
+                })
+                .fail(function () {
+                    var text = '取消关注' + username + '失败。请于稍后重试。';
+                    $.info('error::' + text);
+                });
+    };
+    var showGroup = function () {
+        //set handle
+        var temp = $('#temp-group-following').html();
+        if (system.port.getGroup) {
+            system.port.getGroup.abort();
+        }
+        ;
+        system.port.getGroup = $.get('api/friend/getGroupList')
+                .done(function (data) {
+                    var html = '';
+                    if (data.success) {
+                        //
+                        for (var i = 0, l = data.groupList.length; i < l; i++) {
+                            var a = data.groupList[i];
+                            html += temp
+                                    .replace(/\[gid\]/g, a.id)
+                                    .replace(/\[count\]/g, a.count || 0)
+                                    .replace(/\[name\]/g, $.parseSafe(a.name || "非法分组"))
+                                    .replace(/\[hidden\]/g, a.id == 1 ? 'hidden' : '')
+                            ;
+                        }
+                        ;
+                        $('#btn-add-following').parent()
+                                .before(html);
+                        $('#list-group-following')
+                            //dropdown
+                                .find('div.dropdown')
+                                .setup();
+                        //
+                        $('#btn-all-following').click();
+                    } else {
+                        $.info('error::' + data.result);
+                        var html = '<p class="alert alert-error">' + data.result + '</p>';
+                        $('#list-following-following')
+                                .html(html);
+                    }
+                    ;
+                })
+                .fail(function () {
+                    $.info('error::获取关注分组失败。请于稍后重试。');
+                    var html = '<p class="alert alert-error">获取关注分组失败。请于稍后重试。</p>';
+                    $('#list-following-following')
+                            .html(html);
+                });
+    };
+    var showList = function (param) {
+        //set handle
+        var temp = $('#temp-item-following').html();
+        if (system.port.getFollowed) {
+            system.port.getFollowed.abort();
+        }
+        ;
+        system.port.getFollowed = $.get('api/friend/getFollowingList', {
+            isGroup: param.isGroup || 0,
+            gid: param.gid || 0,
+            page: param.page || 1,
+            size: param.size || 10
+        })
+                .done(function (data) {
+                    var html = '';
+                    if (data.pageNumber) {
+                        //
+                        if (data.list.length) {
+                            for (var i = 0, l = data.list.length; i < l; i++) {
+                                var a = data.list[i];
+                                html += temp
+                                        .replace(/\[uid\]/g, a.friend)
+                                        .replace(/\[gid\]/g, a.gid)
+                                        .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
+                                        .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
+                                        .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
+                                        .replace(/\[isFriend\]/g, (!a.isFriend ? '<i class="icon grey icon-star"></i>已关注，<a class="btn-disfollow-followed">取消</a>' : '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>'))
+                                        .replace(/\[followings\]/g, a.followingCount || 0)
+                                        .replace(/\[solved\]/g, a.solved || 0)
+                                        .replace(/\[submit\]/g, a.submit || 0)
+                                        .replace(/\[followeds\]/g, a.followedCount || 0)
+                                        .replace(/\[posts\]/g, a.userContributeCount || 0)
+                                        .replace(/\[favors\]/g, a.userContributeStow || 0)
+                                        .replace(/\[comms\]/g, a.userContributeComment || 0)
+                                        .replace(/\[views\]/g, a.userContributeView || 0)
+                                        .replace(/\[from\]/g, a.comefrom ? ($.parseSafe(a.comefrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
+                                        .replace(/\[gender\]/g, {'secret': 'TA', 'female': '她', 'male': '他'}[a.gender])
+                                        .replace(/\[group\]/g, !param.isGroup && a.groupName ? '/  <span style="color:' + $.parseColor(a.groupName) + ';">' + a.groupName + '</span>' : '')
+                                        .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)
+                                ;
+                            }
+                            ;
+                        } else {
+                            html = '<p class="alert alert-warning">分组为空。</p>';
+                        }
+                        ;
+                        var pager = $.makePager({
+                            count: data.totalRow,
+                            num: data.pageNumber,
+                            size: data.pageSize,
+                            addon: true
+                        });
+                        //
+                        var groupName = $('#list-group-following').find('div.btn.active').eq(0).parent().data().name || '所有关注';
+                        $('#list-following-following')
+                                .data({
+                                    gid: param.gid || 0,
+                                    name: groupName
+                                })
+                                .html('<p class="alert alert-info">[' + groupName + ']分组内共有' + data.totalRow + '名用户。<br />您可以在下方列表的项目上点击或拖曳(或按Ctrl键选中多个)，以对选中项目进行操作。</p>' + pager + html + pager)
+                                .find('a.name, img.avatar')
+                                .card();
+                        //
+                        $('#item-tool-following').find('button').eq(-1).click();
+                        //scroll
+                        $('#stage').scrollOnto(0);
+                    } else {
+                        $.info('error::' + data.result);
+                        var html = '<p class="alert alert-error">' + data.result + '</p>';
+                        $('#list-following-following')
+                                .html(html);
+                    }
+                    ;
+                })
+                .fail(function () {
+                    $.info('error::获取关注列表失败。请于稍后重试。');
+                    var html = '<p class="alert alert-error">获取关注列表失败。请于稍后重试。</p>';
+                    $('#list-following-following')
+                            .html(html);
+                });
+    };
+    //bind action
+    $('#btn-all-following')
+            .click(function () {
+                $('#list-group-following').find('div.btn-group-following.active').removeClass('active');
+                $(this).addClass('active');
+                showList({
+                    gid: -1,
+                    isGroup: 0,
+                    page: 1,
+                    size: 10
+                });
+            });
+    $('#btn-add-following')
+            .click(function () {
+                $(this).unfold({
+                    src: 'children/win-add-following', id: 'win-add-following', 'class': 'win-children', title: '添加分组', icon: 'plus-sign', width: 480, height: 'auto', callback: function () {
+                        $('#win-add-following').data({
+                            callback: function () {
+                                m.refreshPart();
+                            }
+                        });
+                    }
+                });
+            });
+
+    $('#list-group-following')
+        //rename
+            .delegate('li.btn-rename-following', 'click', function () {
+                var btn = $(this);
+                var gid = btn.closest('div.item').data().gid;
+                if (gid == 1) {
+                    return;
+                }
+                btn.unfold({
+                    src: 'children/win-rename-following', id: 'win-rename-following', 'class': 'win-children', title: '重命名分组', icon: 'edit', width: 480, height: 'auto', callback: function () {
+                        $('#win-rename-following').data({
+                            gid: gid,
+                            callback: function () {
+                                m.refreshPart();
+                            }
+                        });
+                    }
+                });
+            })
+        //delete
+            .delegate('li.btn-delete-following', 'click', function () {
+                var btn = $(this);
+                var obj = btn.closest('div.item');
+                var name = $.trim(obj.find('div.btn-group-following').eq(0).text().replace(/\(.*/, ''));
+                $.ensure({
+                    obj: btn,
+                    text: '是否确定删除分组[' + name + ']？',
+                    curtain: true,
+                    callback: function () {
+                        if (parseInt(obj.data().count) > 0) {
+                            $.info('不能删除非空分组。请先行移除分组内的所有用户。');
+                        } else {
+                            if (system.port.deleteGroup) {
+                                system.port.deleteGroup.abort();
+                            }
+                            ;
+                            system.port.deleteGroup = $.post('api/friend/deleteGroup', {
+                                gid: obj.data().gid
+                            })
+                                    .done(function (data) {
+                                        var html = '';
+                                        if (data.success) {
+                                            $.info('删除分组[' + name + ']成功。');
+                                            obj
+                                                    .stop()
+                                                    .animate({
+                                                        opacity: 0
+                                                    }, 200, function () {
+                                                        obj.remove();
+                                                    });
+                                        } else {
+                                            $.info('error::' + data.result);
+                                        }
+                                        ;
+                                    })
+                                    .fail(function () {
+                                        $.info('error::删除[' + name + ']失败。请于稍后重试。');
+                                    });
+                        }
+                        ;
+                    }
+                });
+            })
+        //change group
+            .delegate('div.btn-group-following', 'click', function () {
+                var btn = $(this);
+                var obj = btn.parent();
+                var list = obj.parent();
+                if (!btn.hasClass('active')) {
+                    list.find('div.btn-group-following.active')
+                            .add('#btn-all-following')
+                            .removeClass('active');
+                    btn.addClass('active');
+                    showList({
+                        gid: obj.data().gid,
+                        isGroup: 1,
+                        page: 1,
+                        size: 10
+                    });
+                }
+                ;
+            })
+    ;
+
+    //
+    $('#item-tool-following')
+            .find('button')
+            .eq(0)
+            .click(function () {
+                var btn = $(this);
+                var list = $('#list-following-following');
+                var items = list.find('div.ui-selected');
+                var uids = [];
+                var gids = [];
+                items.each(function () {
+                    uids.push($(this).data().uid);
+                    gids.push($(this).data().gid || 0);
+                });
+                btn.unfold({
+                    src: 'children/win-regroup-following', id: 'win-regroup-following', title: '变更分组', icon: 'edit', width: 480, height: 'auto', callback: function () {
+                        $('#win-regroup-following').data({
+                            uid: uids,
+                            gid: list.data().gid,
+                            gids: gids,
+                            callback: function () {
+                                m.refreshPart();
+                                /*items.remove();
+                                //close
+                                $('#item-tool-following').find('button').eq(-1)
+                                        .click();*/
+                            }
+                        });
+                    }
+                });
+            })
+            .end()
+            .eq(-1)
+            .click(function () {
+                $('#list-following-following').find('div.ui-selected')
+                        .removeClass('ui-selected');
+                var tool = $('#item-tool-following');
+                tool
+                        .stop()
+                        .animate({
+                            opacity: 0
+                        }, 200, function () {
+                            tool
+                                    .css({
+                                        display: 'none'
+                                    });
+                        });
+            });
+
+    $('#list-following-following')
+            .selectable({
+                //distance: 5,
+                filter: 'div.item',
+                stop: function () {
+                    //set handle
+                    var list = $('#list-following-following');
+                    var objs = list.find('div.ui-selected');
+                    if (objs.length) {
+                        //
+                        var obj = objs.eq(-1);
+                        var tool = $('#item-tool-following');
+                        tool
+                                .css({
+                                    left: obj.eq(-1).position().left + obj.width() - tool.width() - 4,
+                                    top: obj.eq(-1).position().top + obj.height() - 4,
+                                    opacity: 0,
+                                    display: 'block'
+                                })
+                                .stop()
+                                .animate({
+                                    opacity: 1
+                                }, 200);
+                    } else {
+                        var tool = $('#item-tool-following');
+                        tool
+                                .stop()
+                                .animate({
+                                    opacity: 0
+                                }, 200, function () {
+                                    tool
+                                            .css({
+                                                display: 'none'
+                                            });
+                                });
+                    }
+                    ;
+                }
+            })
+        //a
+            .delegate('a[href]', 'click', function () {
+                //
+                var a = $(this);
+                self.location.href = $(this).attr('href');
+            })
+        //follow
+            .delegate('button.btn-follow-followed', 'click', function () {
+                //set handle
+                var btn = $(this);
+                var obj = btn.closest('div.item');
+                followUser({
+                    type: 'follow',
+                    uid: obj.data().uid,
+                    username: obj.data().name
+                }, function () {
+                    //
+                    var html = '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>';
+                    var area = btn.closest('div.area-tool-followed');
+                    area
+                            .stop()
+                            .animate({
+                                opacity: 0
+                            }, 200, function () {
+                                area.html(html);
+                            })
+                            .animate({
+                                opacity: 1
+                            }, 200);
+                    var span = obj.find('span.followeds').eq(0);
+                    span.text(parseInt(span.text()) + 1);
+                });
+            })
+        //disfollow
+            .delegate('a.btn-disfollow-followed', 'click', function () {
+                //set handle
+                var btn = $(this);
+                var obj = btn.closest('div.item');
+                var tool = $('#item-tool-following');
+                $.ensure({
+                    obj: btn,
+                    text: '是否取消关注[' + obj.data().name + ']？',
+                    curtain: true,
+                    callback: function () {
+                        disfollow({
+                            uid: obj.data().uid,
+                            gid: obj.data().gid,
+                            username: obj.data().name
+                        }, function () {
+                            //
+                            obj
+                                    .stop()
+                                    .animate({
+                                        opacity: 0
+                                    }, 200, function () {
+                                        obj.remove();
+                                    });
+                        });
+                    }
+                });
+                //
+                obj.removeClass('ui-selected');
+                tool
+                        .stop()
+                        .animate({
+                            opacity: 0
+                        }, 200, function () {
+                            tool
+                                    .css({
+                                        display: 'none'
+                                    });
+                        });
+            })
+        //pager
+            .readyPager({
+                addon: true,
+                callback: function (n) {
+                    showList({
+                        isGroup: ($('#list-following-following').data().gid != -1 ? 1 : 0),
+                        gid: $('#list-following-following').data().gid,
+                        page: n,
+                        size: 10
+                    });
+                }
+            })
+    ;
+    //
+    showGroup();
+}();
+</script>
+<!--script-->

@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <div id="login-box" class="row">
   <div class="span5 offset3">
     <form class="form-horizontal" action="user/signin" method="post">
@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="control-group
-				<#if nameMsg??>error</#if>">
+        <#if nameMsg??>error</#if>">
         <label class="control-label" for="inputAccount">Account</label>
         <div class="controls">
           <div class="input-prepend">
@@ -41,6 +41,14 @@
         </div>
       </div>
     </form>
+    <#if enable_qq_login??>
+    <a class="left" href="api/oauth/qq">
+      <img src="assets/images/QQ_Connect_logo_7.png"/>
+    </a>
+    </#if>
   </div>
 </div>
-</@layout>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

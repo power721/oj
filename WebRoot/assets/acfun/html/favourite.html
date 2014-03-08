@@ -1,0 +1,529 @@
+<!--style-->
+<style>
+#block-first .banner .more {
+    overflow: visible;
+    margin: 0 8px 0 0;
+    padding: 0;
+}
+
+#block-first .banner .more:hover {
+    background: none;
+    box-shadow: none;
+}
+
+#block-first .mainer {
+    padding: 8px;
+}
+
+#block-first .unit .l {
+    width: 120px;
+    padding: 0 0 0 40px;
+}
+
+#block-first .unit .r {
+    width: 620px;
+}
+
+#block-first .subtitle {
+    margin: 4px 0;
+    height: 24px;
+    line-height: 24px;
+    font-size: 13px;
+    padding: 0 4px;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    background-color: #c66;
+    color: #fff;
+    display: inline-block;
+    *display: inline;
+    cursor: default;
+}
+
+#block-first .item {
+    position: relative;
+    overflow: hidden;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.no-rgba #block-first .item {
+    border-color: #ccc;
+}
+
+#block-first .inner {
+    position: relative;
+}
+
+#block-first .item .l {
+    position: relative;
+}
+
+#block-first .item .r {
+    position: relative;
+    width: 540px;
+}
+
+#block-first .item .thumb {
+    border: none;
+    background: none;
+    box-shadow: none;
+}
+
+#block-first .item .preview {
+    width: 120px;
+    height: 90px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+#block-first .item .avatar {
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+#block-first .item .thumb-preview {
+    margin: 8px 0 16px 8px;
+}
+
+#block-first .item .thumb-avatar {
+    position: absolute;
+    left: 96px;
+    top: 64px;
+}
+
+#block-first .item .block-title {
+    margin: 10px auto 0;
+}
+
+#block-first .item .channel {
+    background-color: #c66;
+    position: static;
+    display: inline-block;
+    *display: inline;
+    margin: 0 4px 4px 0;
+    padding: 0 4px;
+}
+
+#block-first .item .title {
+    color: #08c;
+    font-size: 14px;
+}
+
+#block-first .item .info {
+    color: #999;
+    margin: 4px auto 0;
+}
+
+#block-first .item .desc {
+    color: #666;
+    margin: 4px auto 0;
+}
+
+#block-first .item .block-manage {
+    position: absolute;
+    left: auto;
+    top: auto;
+    right: -128px;
+    bottom: 8px;
+    transition: 0.2s all ease 0.2s;
+}
+
+#block-first .item:hover .block-manage {
+    right: 8px;
+}
+
+#block-first .area-tag {
+    display: inline-block;
+    *display: inline;
+    border-top: 1px dashed #ddd;
+    margin: 8px 0 16px;
+    padding: 8px 16px 0 0;
+    color: #999;
+    font-size: 12px;
+}
+
+#block-first .area-tag a {
+    margin: 0 8px 8px 0;
+    color: #369;
+}
+
+#block-first .btn-history-delete {
+    float: right;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #999;
+    background-color: #eee;
+    padding: 0 8px;
+    border-radius: 2px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-family: "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
+    margin: 4px;
+}
+
+#block-first .btn-history-delete:hover {
+    color: #fff;
+    background-color: #c33;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+#block-first .removed {
+    text-align: center;
+    line-height: 8;
+    color: #999;
+}
+
+#block-first .hint-list-index {
+    position: absolute;
+    left: auto;
+    top: auto;
+    right: 12px;
+    bottom: 0px;
+    font-size: 64px;
+    line-height: 64px;
+    height: 64px;
+    width: auto;
+    text-align: right;
+    color: #eee;
+    z-index: 0;
+    letter-spacing: -0.1em;
+    cursor: default;
+}
+
+#block-first .area-pager {
+    padding: 0;
+    margin: 8px auto;
+}
+
+#block-first .item .area-cont {
+    width: auto;
+    height: auto;
+    margin: 8px 10px;
+    padding: 8px;
+    background-color: #ffe;
+    color: #333;
+    display: none;
+    border: 1px solid #dddddd;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #b7b7b7;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+#block-first .item-comms .area-cont {
+    display: block;
+}
+
+#list-channel-favourite {
+    margin: 8px auto 16px;
+    padding: 0 0 16px;
+    border-bottom: 1px dashed #ddd;
+}
+</style>
+<!--style-->
+
+<!--html-->
+<div id="block-title-banner">
+    <p>题目收藏</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Favourites of Contributions</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="temp-item-favourite" class="hidden">
+    <div class="item block" data-aid="[aid]">
+        <div class="inner">
+            <p class="hint-list-index">[index]</p>
+
+            <div class="l">
+                <a target="_blank" href="/v/ac[aid]" class="thumb thumb-preview">
+                    <img data-aid="[aid]" [preview] class="preview">
+                    <div class="cover"></div>
+                </a>
+                <a target="_blank" href="user/profile/[name]" class="thumb thumb-avatar"
+                   title="点击访问[[name]]的个人空间">
+                    <img data-uid="[uid]" [avatar] class="avatar">
+                </a>
+            </div>
+            <div class="r">
+                <p class="block-title">
+                    <a href="/v/list[cid]/index.htm" class="channel" title="点击访问[channel]频道"
+                       target="_blank">[channel]</a>
+                    <a data-aid="[aid]" target="_blank" href="/v/ac[aid]" class="title">[title]</a>
+                </p>
+
+                <div class="info">
+                    <a target="_blank" href="user/profile/[name]" class="name">[name]</a>
+                    &nbsp;&nbsp;/&nbsp;&nbsp;发布于
+                    <span class="time">[date]</span>
+                    &nbsp;&nbsp;/&nbsp;&nbsp;播放:
+                    <span class="views pts">[views]</span>
+                    &nbsp;&nbsp;评论:
+                    <span class="comments pts">[comments]</span>
+                    &nbsp;&nbsp;收藏:
+                    <span class="favors pts">[favors]</span>
+                </div>
+                <p class="desc">[desc]</p>
+
+                <div class="area-tag">[tags]</div>
+            </div>
+            <div class="block-manage">
+                <button title="删除收藏" class="btn danger mini btn-delete">
+                    <i class="icon white icon-remove-circle"></i>删除收藏
+                </button>
+            </div>
+            <span class="clearfix"></span>
+        </div>
+    </div>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+
+        <div id="list-channel-favourite">
+            <div class="l">
+                <button class="btn" data-cid="0">
+                    <i class="icon white icon-list"></i>所有分类
+                </button>
+            </div>
+            <div class="r">
+                <button class="btn" data-cid="1">
+                    简单
+                </button>
+                <button class="btn" data-cid="2">
+                    搜索
+                </button>
+                <button class="btn" data-cid="3">
+                    贪心
+                </button>
+                <button class="btn" data-cid="4">
+                    DP
+                </button>
+                <button class="btn" data-cid="5">
+                    图论
+                </button>
+                <button class="btn" data-cid="6">
+                    数论
+                </button>
+                <button class="btn" data-cid="7">
+                    数据结构
+                </button>
+                <button class="btn" data-cid="8">
+                    计算几何
+                </button>
+            </div>
+            <span class="clearfix"></span>
+        </div>
+        <div id="list-favourite-favourite"></div>
+
+    </div>
+</div>
+<!--html-->
+
+<!--script-->
+<script>
+    system.tv = function () {
+        //set handle
+        var block = $('#block-first');
+        var mainer = block.find('div.mainer').eq(0);
+        var list = $('#list-favourite-favourite');
+        //function
+        var showList = function (param) {
+            //inner func
+            var func = {
+                size: param.size || 10,
+                page: param.page || 1,
+                cid: param.cid || 0
+            };
+            //port
+            if (system.port.getFavouriteList) {
+                system.port.getFavouriteList.abort();
+            }
+            ;
+            system.port.getFavouriteList = $.get('api/user/collection', {
+                count: func.size,
+                pageNo: func.page,
+                channelId: func.cid
+            })
+                    .done(function (data) {
+                        if (data.success) {
+                            //
+                            if (data.contents.length) {
+                                //
+                                var temp = $('#temp-item-favourite').html();
+                                var html = '';
+                                for (var i = 0, l = data.contents.length; i < l; i++) {
+                                    var a = data.contents[i];
+                                    //set tags
+                                    var tag = '该视频暂无标签。';
+                                    if (a.tags && a.tags.length) {
+                                        tag = '';
+                                        var tags = a.tags.replace(/\s/g, '').split(',');
+                                        for (var j = 0, m = tags.length; j < m; j++) {
+                                            tag += '<a class="tag" href="search#query=' + encodeURI(tags[j]) + '" target="_blank">' + tags[j] + '</a>';
+                                        }
+                                        ;
+                                    }
+                                    ;
+                                    html += temp
+                                            .replace(/\[aid\]/g, a.aid)
+                                            .replace(/\[cid\]/g, a.channelId)
+                                            .replace(/\[preview\](?:\=\"\")?/g, 'src="' + a.titleImg + '"')
+                                            .replace(/\[uid\]/g, a.userId)
+                                            .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + a.avatar + '"')
+                                            .replace(/\[channel\]/g, $.parseChannel(a.channelId))
+                                            .replace(/\[title\]/g, a.title)
+                                            .replace(/\[name\]/g, a.username)
+                                            .replace(/\[date\]/g, $.parseTime(a.releaseDate))
+                                            .replace(/\[views\]/g, a.views)
+                                            .replace(/\[comments\]/g, a.comments)
+                                            .replace(/\[favors\]/g, a.stows)
+                                            .replace(/\[desc\]/g, $.parseSafe(a.description || '此视频暂无简介。'))
+                                            .replace(/\[tags\]/g, tag)
+                                            .replace(/\[index\]/g, data.page.totalCount - (data.page.pageNo - 1) * data.page.pageSize - i)
+                                    ;
+                                    //pager
+                                    var pager = $.makePager({
+                                        num: data.page.pageNo,
+                                        count: data.page.totalCount,
+                                        size: data.page.pageSize,
+                                        addon: true
+                                    });
+                                    //insert dom
+                                    list.html(pager + html + pager)
+                                            .find('a.name')
+                                            .card();
+                                    //scroll
+                                    $('#stage').scrollOnto(0);
+                                }
+                                ;
+                            } else {
+                                $.info('info::尚未有任何收藏项目。');
+                                html = '<p class="alert">尚未有任何收藏项目。</p>';
+                                list.html(html);
+                            }
+                            ;
+                        } else {
+                            $.info('error::' + data.result);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        $.info('error::获取收藏列表失败。请于稍后重试。');
+                    });
+        };
+        //bind action
+        list
+            //delete
+                .delegate('button.btn-delete', 'click', function () {
+                    //set handle
+                    var btn = $(this);
+                    var obj = btn.closest('div.item');
+                    //ensure
+                    $.ensure({
+                        obj: btn,
+                        text: '是否确定删除收藏项目？',
+                        curtain: true,
+                        callback: function () {
+                            //port
+                            if (system.port.deleteFavouriteItem) {
+                                system.port.deleteFavouriteItem.abort();
+                            }
+                            ;
+                            system.port.deleteFavouriteItem = $.post('api/user/collect', {
+                                operate: 0,
+                                cId: obj.data().aid
+                            })
+                                    .done(function (data) {
+                                        if (data.success) {
+                                            $.info('info::一条收藏项目已删除。');
+                                            obj
+                                                    .html('收藏项目已删除。')
+                                                    .addClass('removed');
+                                        } else {
+                                            $.info('error::' + data.result);
+                                        }
+                                        ;
+                                    })
+                                    .fail(function () {
+                                        $.info('error::获取收藏列表失败。请于稍后重试。');
+                                    });
+                        }
+                    });
+                })
+            //pager
+                .delegate('span.pager:not(.active)', 'click', function () {
+                    //
+                    showList({
+                        page: $(this).data().page,
+                        cid: list.data().cid
+                    });
+                })
+                .delegate('input.ipt-pager', 'focus', function () {
+                    $(this).select();
+                })
+                .delegate('input.ipt-pager', 'keyup', function () {
+                    //set handle
+                    var ipt = $(this);
+                    //check length
+                    var len = $.trim(ipt.val()).length;
+                    var width = len ? (32 + (len - 1) * 8) : 32;
+                    width = width > 240 ? 240 : width;
+                    ipt
+                            .css({
+                                width: width
+                            });
+                })
+                .delegate('input.ipt-pager', 'keydown', function (e) {
+                    //set handle
+                    var ipt = $(this);
+                    var btn = ipt.siblings('button.btn-pager').eq(0);
+                    //check key.which
+                    if (e.which == 13) {
+                        //enter
+                        btn.click();
+                    } else if ($.inArray(e.which, [8, 35, 36, 37, 39, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105]) == -1) {
+                        return false;
+                    }
+                    ;
+                })
+                .delegate('button.btn-pager', 'click', function () {
+                    //
+                    var btn = $(this);
+                    var ipt = btn.siblings('input.ipt-pager').eq(0);
+                    var n = parseInt(ipt.val()) || 1;
+                    n = n < 1 ? 1 : n;
+                    n = n > ipt.data()['max'] ? ipt.data()['max'] : n;
+                    showList({
+                        page: n,
+                        cid: list.data().cid
+                    });
+                })
+        ;
+        $('#list-channel-favourite')
+                .delegate('button:not(.active)', 'click', function () {
+                    //set handle
+                    var btn = $(this);
+                    $('#list-channel-favourite')
+                            .find('button.active')
+                            .removeClass('active primary');
+                    btn.addClass('active primary');
+                    list.data().cid = btn.data().cid;
+                    showList({
+                        page: 1,
+                        cid: btn.data().cid
+                    });
+                })
+                .find('button').eq(0)
+                .click()
+        ;
+    }();
+</script>
+<!--script-->

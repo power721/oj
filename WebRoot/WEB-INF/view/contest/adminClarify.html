@@ -1,0 +1,99 @@
+<@override name="contest_content">
+<div>
+<#if clarifyList?? && (clarifyList?size > 0)>
+<#list clarifyList as clarify>
+  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> post at 
+  <span class="timestamp" data="${clarify.ctime}"></span>
+  <pre class="question">${clarify.question!}</pre>
+  <form class="clarform" method="post" action="api/contest/updateClarify">
+    <span class="name">Administrator</span> reply at 
+    <span class="timestamp" data="${clarify.atime!0}"></span>
+    <textarea name="reply" class="input-block-level">${clarify.reply!}</textarea>
+    <label class="radio inline"><input name="ispublic" type="radio" value="1" <#if clarify.public>checked</#if>> Public </label>
+    <label class="radio inline"><input name="ispublic" type="radio" value="0" <#if !clarify.public>checked</#if>> Private </label>
+    <input name="id" type="hidden" value="${clarify.id}">
+    <input name="cid" type="hidden" value="${cid}">
+    <input type="submit" class="btn btn-primary" value="Answer">
+  </form>
+  <hr>
+</#list>
+</#if>
+</div>
+<#if serverTime<contest.end_time>
+<div class="text-center">
+  <button class="btn btn-primary" id="newQuestion" data-toggle="modal" data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post New Question</button>
+</div>
+</#if>
+
+  <#if user??>
+  <div class="modal hide fade contestModal" id="postModal">
+    <form class="form-horizontal" action="api/contest/postQuestion" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="postModalLabel">
+          <a href="contest/post/${cid!}" title="Post in another page" data-toggle="tooltip" data-placement="bottom">Post New Question</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" name="cid" value="${cid!}">
+        <textarea name="question" rows="10"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  </#if>
+</@override>
+
+<@override name="styles">
+  <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
+  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+</@override>
+
+<@override name="scripts">
+  <script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+  <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(function() {
+      $('#postModal').submit(function() {
+        var dialog = $.dialog();
+        $.post($(this).attr("action"), $('#postModal').serialize(),
+        function(data) {
+          if (data.success) {
+            dialog.content('Ok, please wait admin reply.').lock().time(2);
+            setTimeout(function() {
+              window.location.reload();
+            },
+            2000);
+          } else {
+            $.dialog({
+              content: data.result || 'Post question failed!',
+              time: 1.5
+            });
+          }
+        });
+        return false;
+      });
+      $('.clarform').submit(function() {
+        var dialog = $.dialog();
+        var that = $(this);
+        $.post($(this).attr("action"), that.serialize(),
+          function(data) {
+            if (data.success) {
+              dialog.content('Success.').lock().time(1.5);
+              
+            } else {
+              $.dialog({
+                content: data.result || 'Update clarify failed!',
+                time: 1.5
+              });
+            }
+          });
+        return false;
+      });
+    });
+ </script>
+</@override>
+<@extends name="_layout.html" />

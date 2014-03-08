@@ -18,7 +18,7 @@ import com.power.oj.core.service.SessionService;
 public class AccessLogInterceptor implements Interceptor
 {
   private String skipActions[] =
-  { "/problem/userResult", "/login", "/signup", "/captcha", "/code", "/user/info", "/user/archive", "/user/forget", "/user/reset" };
+  { "/problem/userResult", "/login", "/logout", "/signup", "/captcha", "/code", "/user/bind", "/user/info", "/user/archive", "/user/forget", "/user/reset", "/user/recover", "/user/verify" };
 
   @Override
   public void intercept(ActionInvocation ai)
@@ -41,7 +41,7 @@ public class AccessLogInterceptor implements Interceptor
       }
 
       String url = sb.toString();
-      if (url.indexOf("ajax=1") == -1)
+      if (url.indexOf("ajax=1") == -1 && url.indexOf("api/") == -1)
         SessionService.me().setLastAccessURL(url);
 
       SessionService.me().updateSession(session, url);

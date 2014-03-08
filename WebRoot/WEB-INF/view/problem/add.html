@@ -1,4 +1,4 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <form class="form-horizontal" action="problem/save" method="post">
   <div class="control-group problem <#if titleMsg??>error</#if>">
     <label class="control-label" for="inputTitle">Title</label>
@@ -22,19 +22,19 @@
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputDescription">Description</label>
+    <label class="ueditor control-label" for="inputDescription">Description</label>
     <div class="controls">
       <textarea id="inputDescription" name="problem.description" rows="13" cols="120"></textarea>
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputInput">Input</label>
+    <label class="ueditor control-label" for="inputInput">Input</label>
     <div class="controls">
       <textarea id="inputInput" name="problem.input" rows="9" cols="120"></textarea>
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputOutput">Output</label>
+    <label class="ueditor control-label" for="inputOutput">Output</label>
     <div class="controls">
       <textarea id="inputOutput" name="problem.output" rows="9" cols="120"></textarea>
     </div>
@@ -52,7 +52,7 @@
     </div>
   </div>
   <div class="control-group problem">
-    <label class="control-label" for="inputHint">Hint</label>
+    <label class="ueditor control-label" for="inputHint">Hint</label>
     <div class="controls">
       <textarea id="inputHint" name="problem.hint" rows="5" cols="120"></textarea>
     </div>
@@ -72,4 +72,37 @@
     </div>
   </div>
 </form>
-</@layout>
+</@override>
+
+<@override name="scripts">
+  <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
+  <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.config.js"></script>
+  <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.all.min.js"></script>
+  <script type="text/javascript">  
+    //实例化编辑器
+    var ue = UE.getEditor('inputDescription');
+    ue.addListener('ready',function(){
+        this.focus()
+    });
+    
+    $('.ueditor').click(function(){
+      var id = $(this).attr('for');
+      var method = $(this).attr('method');
+      var ue = UE.getEditor(id);
+      
+      if (method == 'destroy')
+      {
+        ue.destroy();
+        $(this).attr('method', 'create');
+      }
+      else
+      {
+       ue.addListener('ready',function(){
+        this.focus()
+       });
+       $(this).attr('method', 'destroy');
+      }
+    });
+  </script>
+</@override>
+<@extends name="../common/_layout.html" />

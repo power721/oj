@@ -26,9 +26,6 @@ public class UserInterceptor implements Interceptor
     {
       UserModel userModel = UserService.me().getCurrentUser();
       controller.setAttr(OjConstants.USER, userModel);
-      controller.setAttr(OjConstants.USER_ID, userModel.getUid());
-      controller.setAttr(OjConstants.USER_NAME, userModel.getStr("name"));
-      controller.setAttr(OjConstants.USER_EMAIL, userModel.getStr("email"));
     }
 
     ai.invoke();

@@ -1,0 +1,54 @@
+<style>
+    #block-first .unit-tool {
+        border-top: 1px dashed #ddd;
+        margin-top: 16px;
+        padding-top: 8px;
+    }
+</style>
+<div id="block-title-banner">
+    <p>错误</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Error</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div class="block banner" id="block-banner-right">
+    <p class="tab fixed">错误<span class="hint">Error</span></p>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+
+        <p class="alert alert-danger">
+            无法解析返回数据。<br>
+            该错误可能由网络阻塞或程序错误所引起。<br>
+            本页面将会在五秒钟后自动返回用户中心首页。
+        </p>
+
+        <div class="unit-tool">
+            <div class="l">
+                <a class="btn info" id="return">
+                    <i class="icon white icon-home"></i>立刻返回
+                </a>
+            </div>
+            <div class="r"></div>
+            <span class="clearfix"></span>
+        </div>
+
+    </div>
+</div>
+<script>
+    $('a#return').click(function() {
+        window.location.href = BaseURL + $('#list-guide-left').find('a').eq(0).attr('href');
+    });
+    
+    system.tv = function () {
+        window.setTimeout(function () {
+            if (system.hash.area == 'error') {
+                window.location.href = BaseURL + $('#list-guide-left').find('a').eq(0).attr('href');
+            }
+            ;
+        }, 5000);
+    }();
+</script>

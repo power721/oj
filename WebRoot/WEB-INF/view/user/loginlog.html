@@ -1,42 +1,8 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 
 <div class="pagination pagination-centered">
-  <ul>
-    <li class="<#if logs.pageNumber==1>disabled</#if>">
-    <a href="user/loginlog/1<#if logs.pageSize!=pageSize>-${logs.pageSize}</#if>">&lt;&lt;</a>
-    </li> 
-    <#if logs.pageNumber&gt;1>
-    <li>
-    <a href="user/loginlog/${logs.pageNumber-1}<#if logs.pageSize!=pageSize>-${logs.pageSize}</#if>">Prev</a>
-    </li>
-    </#if>
-    <#if logs??> 
-    <#assign start=logs.pageNumber-3> 
-    <#assign end=logs.pageNumber+3> 
-    <#if start<1><#assign end=end-start+1>
-    <#assign start=1>
-    </#if>
-    <#if end&gt;logs.totalPage >
-    <#assign start=start-(end-logs.totalPage)-1>
-    <#if start<1><#assign start=1></#if>
-    <#assign end=logs.totalPage>
-    </#if>
-    <#if end<start><#assign end=start></#if>
-    <#list start..end as x>
-    <li class="<#if x==logs.pageNumber>active</#if>">
-    <a href="user/loginlog/${x}<#if logs.pageSize!=pageSize>-${logs.pageSize}</#if>">${x}</a>
-    </li>
-    </#list>
-    </#if> 
-    <#if logs.pageNumber<logs.totalPage>
-    <li>
-    <a href="user/loginlog/${logs.pageNumber+1}<#if logs.pageSize!=pageSize>-${logs.pageSize}</#if>">Next</a>
-    </li>
-    </#if>
-    <li class="<#if logs.pageNumber&gt;=logs.totalPage>disabled</#if>">
-    <a href="user/loginlog/${logs.totalPage}<#if logs.pageSize!=pageSize>-${logs.pageSize}</#if>">&gt;&gt;</a>
-    </li>
-  </ul>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=logs.pageNumber totalPage=logs.totalPage actionUrl="user/loginlog/" />
   <div class="pull-right">
     <span class="badge badge-info">${logs.pageNumber}/${logs.totalPage} Pages</span> 
     <span class="badge badge-info">${logs.totalRow} Records</span>
@@ -69,28 +35,31 @@
     </#if>
   </tbody>
 </table>
+</@override>
 
-<script type="text/javascript" src="assets/js/placeholder.js"></script>
+<@override name="scripts">
+  <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
 
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-<script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $('.timestamp').each(function() {
-          $(this).html(getLocalTime($(this).attr('data')));
-        });
-        
-        $("#user-log").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:false,
-          striped:true,
-          clean:true
-        });
-    });
-    </script>
-
-</@layout>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('.timestamp').each(function() {
+        $(this).html(getLocalTime($(this).attr('data')));
+      });
+      
+      <#if oj_style != "slate">
+      $("#user-log").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:false,
+        striped:true,
+        clean:true
+      });
+      </#if>
+  });
+  </script>
+</@override>
+<@extends name="../common/_layout.html" />

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
+<meta name="author" content="power721">
+<title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
+<style>
+html {
+	height: 100%;
+}
+
+* {
+	margin: 5;
+	padding: 0;
+}
+
+body {
+	font-family: arial, sans-serif;
+	font-size: .80em;
+}
+
+p {
+	padding: 0 0 20px 0;
+	line-height: 1.7em;
+}
+
+img {
+	border: 0;
+}
+
+a {
+	text-decoration: underline;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0px;
+}
+
+table td,table th {
+	border: solid 1px black;
+	padding: 5px;
+}
+</style>
+</head>
+<body>
+
+  <div class="">
+    <#if contestProblems??>
+    <#list contestProblems as problem>
+    <center>
+      <h1>${problem.id!}: ${problem.title!}</h1>
+    </center>
+    <h2 style='margin-top: 10px'>Description</h2>
+    <p>${problem.description!}</p>
+    <h2 style='margin-top: 10px'>Input</h2>
+    <p>${problem.input!}</p>
+    <h2 style='margin-top: 10px'>Output</h2>
+    <p>${problem.output!}</p>
+    <h2 style='margin-top: 10px'>Sample Input</h2>
+    <pre>${problem.sample_input!}</pre>
+    <h2 style='margin-top: 10px'>Sample Output</h2>
+    <pre>${problem.sample_output!}</pre>
+    <#if problem.hint?? && problem.hint!="">
+    <h2 style='margin-top: 10px'>Hint</h2>
+    <p>${problem.hint!}</p>
+    </#if>
+    <div style="PAGE-BREAK-AFTER: always"></div>
+    </#list>
+    </#if>
+  </div>
+
+</body>
+</html>

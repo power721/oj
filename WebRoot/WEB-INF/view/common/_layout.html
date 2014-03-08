@@ -1,110 +1,114 @@
-<#macro layout>
 <!DOCTYPE HTML>
-<html lang="en">
+<html lang="en" class="no-js">
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
 <meta name="author" content="power721">
+<@block name="meta"></@block>
 <base href="${baseUrl!}/" />
 <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
 
-<!-- styles -->
+<!-- ============================== styles ============================== -->
 <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<#if oj_style?? && oj_style!="original"><link href="assets/bootstrap/theme/bootstrap.${oj_style}.min.css" rel="stylesheet"></#if>
 <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="assets/css/oj.css" type="text/css" rel="stylesheet">
 
-<#if extCss??> <#list extCss as css>
-<link href="${css}" type="text/css" rel="stylesheet">
-</#list> </#if>
-
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-    <script src="assets/js/html5shiv.js"></script>
-  <![endif]-->
-<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+<@block name="styles"></@block>
 
 <#if gaAccount??>
 <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', '${gaAccount}']);
-      _gaq.push(['_trackPageview']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', '${gaAccount}']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
 </script>
 </#if>
 </head>
 
 <body>
 
-  <!-- Navbar
-    ================================================== -->
-  <div class="navbar navbar-inverse navbar-fixed-top">
+  <!-- ============================== Navbar ============================== -->
+  <div class="navbar navbar-fixed-top" id="oj-navbar">
     <div class="navbar-inner">
-      <div class="container">
+      <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
         <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span>
         </button>
         <a class="brand" href="./">PowerOJ</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
-            <li class="<#if actionKey?? && actionKey=="">active</#if>"> <a href="./"><i class="icon-home"></i>Home</a>
+            <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>"> 
+              <a href="problem"><i class="icon-list"></i>Problems</a>
             </li>
-            <li class="<#if controllerKey?? && controllerKey=="bbs">active</#if>"> <a href="bbs"><i class="icon-comment"></i>Web Board</a>
+            <li class="<#if actionKey?? && actionKey=="status">active</#if>"> 
+              <a href="status"><i class="icon-check"></i>Status</a>
             </li>
-            <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>"> <a href="problem"><i class="icon-list"></i>Problems</a>
+            <li class="<#if actionKey?? && actionKey=="rank">active</#if>"> 
+              <a href="rank"><i class="icon-signal"></i>Ranklist</a>
             </li>
-            <li class="<#if actionKey?? && actionKey=="status">active</#if>"> <a href="status"><i class="icon-check"></i>Status</a>
+            <li class="<#if controllerKey?? && controllerKey=="contest">active</#if>"> 
+              <a href="contest"><i class="icon-fire"></i>Contest</a>
             </li>
-            <li class="<#if actionKey?? && actionKey=="rank">active</#if>"> <a href="rank"><i class="icon-signal"></i>Ranklist</a>
+            <li class="<#if controllerKey?? && controllerKey?? && controllerKey=="bbs">active</#if>"> 
+              <a href="bbs"><i class="icon-comment"></i>Discuss</a>
             </li>
-            <li class="<#if controllerKey?? && controllerKey=="contest">active</#if>"> <a href="contest"><i class="icon-fire"></i>Contest</a>
-            </li>
-            <li class="<#if actionKey?? && actionKey=="faq">active</#if>"> <a href="faq"><i class="icon-question-sign"></i>F.A.Qs</a>
+            <li class="<#if actionKey?? && actionKey=="faq">active</#if>"> 
+              <a href="faq"><i class="icon-question-sign"></i>F.A.Qs</a>
             </li>
           </ul>
           <ul class="nav pull-right">
-            <#if userName??>
-            <li class="dropdown active"><a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${userName!"user"}
-                <b class="caret"></b></a>
+          <#if user??>
+            <li class="dropdown active">
+            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${user.name!"user"}<b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="user/profile/${userName!}">Profile</a></li>
-                <li><a href="#">Mail</a></li>
+                <li><a href="user/#area=splash">Profile</a></li>
+                <li><a href="user/#area=mail">Mail</a></li>
                 <li><a href="user/loginlog">Login Log</a></li>
                 <li class="divider"></li>
                 <li class="nav-header">Admin</li>
-                <li><a href="user/edit">Edit</a></li>
+                <li><a href="user/#area=profile">Edit</a></li>
                 <li><a href="user/archive">Archive</a></li>
-              </ul></li>
-            <li class="active"><a href="logout"><i class="icon-off"></i>Logout</a></li> <#else>
-            <li class="<#if actionKey?? && actionKey=="login">active</#if>"> <a href="#" data-toggle="modal" data-target="#loginModal"><i
-                class="icon-user"></i>Login</a>
+                <#if adminUser??><li><a href="admin">Admin</a></li></#if>
+              </ul>
             </li>
-            <li class="<#if actionKey?? && actionKey=="signup">active</#if>"> <a href="signup"><i class="icon-star"></i>Signup</a>
-            </li> </#if>
+            <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
+          <#else>
+            <li class="<#if actionKey?? && actionKey=="login">active</#if>">
+              <a href="#" id="login" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
+              <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal"><i class="icon-star"></i>Signup</a>
+            </li>
+          </#if>
           </ul>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Masthead
-  ================================================== -->
-  <header class="jumbotron subhead" id="overview">
-    <div class="container">
-      <h2>Power OJ</h2>
-    </div>
-  </header>
-
-  <!-- main content
-    ================================================== -->
-  <div class="main container">
-    <div class="row">
+  <div class="marquee">
+    <marquee class="hidden-phone" direction="left" behavior="alternate" scrollamount="2" style="margin-top: 45px;">
+    <#if controllerKey?? && controllerKey != "notice" && noticeList??>
+    <#list noticeList as notice>
+      <p><a href="notice/show/${notice.id!}">${notice.title!}</a></p>
+    </#list>
+    </#if>
+    </marquee>
+  </div>
+  
+  <!-- ======================= main content ======================= -->
+  <div class="main <#if oj_fluid_width??>container-fluid<#else>container</#if>">
+    <div class="row-fluid">
       <div class="span12">
-
         <#if msg??>
         <div class="row">
           <div class="span5 offset4">
@@ -115,14 +119,13 @@
             </div>
           </div>
         </div>
-        </#if> <#nested>
-      </div>
-    </div>
-    <!-- row -->
-  </div>
-  <!-- container -->
+        </#if>
+        <@block name="content"></@block>
+      </div><!-- span -->
+    </div><!-- row -->
+  </div><!-- container -->
 
-  <#if !userID??>
+  <#if !user??>
   <div class="modal hide fade userModal" id="loginModal">
     <form class="form-horizontal" action="user/signin" method="post">
       <div class="modal-header">
@@ -134,12 +137,12 @@
       <div class="modal-body">
         <div class="control-group">
           <div class="controls">
-            <span class="help-block">Don't have an account? <a href="signup">Sign up here</a>
+            <span class="help-block">Don't have an account? <a href="signup" class="toSignup">Sign up here</a>
             </span>
           </div>
         </div>
         <div class="control-group
-		        <#if nameMsg??>error</#if>">
+            <#if nameMsg??>error</#if>">
           <label class="control-label" for="inputAccount">Account</label>
           <div class="controls">
             <div class="input-prepend">
@@ -171,19 +174,43 @@
         </div>
       </div>
       <div class="modal-footer">
+        <#if enable_qq_login??>
+        <a class="left" href="api/oauth/qq">
+          <img src="assets/images/QQ_Connect_logo_7.png" alt="QQ Login"/>
+        </a>
+        </#if>
         <button type="submit" class="btn btn-primary">Login</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="modal hide fade userModal" id="signupModal">
+    <form class="" action="user/save" id="signupForm" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+        <h3 id="signupModalLabel">
+          Signup:
+          <a href="signup" title="Signup in another page" data-toggle="tooltip" data-placement="bottom">Create a account</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <a href="signup" class="btn btn-primary">Signup</a>
+      </div>
+      <div class="modal-footer">
+        <a href="login" class="btn btn-info pull-left toLogin">Login</a>
+        <button type="submit" class="btn btn-primary">Signup</button>
         <button class="btn" data-dismiss="modal">Cancel</button>
       </div>
     </form>
   </div>
   </#if>
 
-  <!-- Footer
-    ================================================== -->
+  <!-- ========================= Footer ========================= -->
   <footer class="footer">
     <div class="container">
       <div class="copyright">
-        ©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="balnk">PowerOJ Rev.20131229</a>
+        ©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="balnk">PowerOJ Rev.${version!}</a>
       </div>
       <ul class="footer-links">
         <li><a href="http://git.oschina.net/power/oj" target="balnk">Source</a></li>
@@ -195,47 +222,68 @@
         <li><a href="changelog">Changelog</a></li>
       </ul>
     </div>
+    <form class="form-inline">
+      <label class="select">
+        Select Style: <select class="input-medium" id="selstyle">
+          <option value="original">Original</option>
+          <option value="amelia">Amelia</option>
+          <option value="cerulean">Cerulean</option>
+          <option value="cosmo">Cosmo</option>
+          <option value="cyborg">Cyborg</option>
+          <option value="darkening">Darkening</option>
+          <option value="flatly">Flatly</option>
+          <option value="journal">Journal</option>
+          <option value="metro">Metro</option>
+          <option value="readable">Readable</option>
+          <option value="simplex">Simplex</option>
+          <option value="slate">Slate</option>
+          <option value="spacelab">Spacelab</option>
+          <option value="spruce">Spruce</option>
+          <option value="superhero">Superhero</option>
+          <option value="todc">Google</option>
+          <option value="united">United</option>
+        </select>
+      </label>
+      <label class="checkbox"> <input type="checkbox" id="selwidth" <#if oj_fluid_width??>checked</#if> >Fluid Width?</label>
+    </form>
   </footer>
 
-  <!-- javascript
-    ================================================== -->
+  <!-- ======================= javascript ======================= -->
   <!-- Placed at the end of the document so the pages load faster -->
-
+  <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.cookie.js"></script>
   <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
   <script type="text/javascript" src="assets/js/oj.js"></script>
-  <#if extJs??> <#list extJs as js>
-  <script type="text/javascript" src="${js}"></script>
-  </#list> </#if>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+  <![endif]-->
   
-  <div id="page_trace_close" style="display:none;text-align:right;height:15px;position:absolute;top:10px;right:12px;cursor: pointer;"><img style="vertical-align:top;" src="data:image/gif;base64,R0lGODlhDwAPAJEAAAAAAAMDA////wAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MUQxMjc1MUJCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MUQxMjc1MUNCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxRDEyNzUxOUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxRDEyNzUxQUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAAAAAAALAAAAAAPAA8AAAIdjI6JZqotoJPR1fnsgRR3C2jZl3Ai9aWZZooV+RQAOw==" /></div>
-  </div>
-  <div id="page_trace_open" style="height:30px;float:right;text-align: right;overflow:hidden;position:fixed;bottom:0;right:0;color:#000;line-height:30px;cursor:pointer;">
-  <div style="background:#232323;color:#FFF;padding:0 6px;float:right;line-height:30px;font-size:14px">${invokeTime!0} ms</div>
-  </div>
-  <div id="debug" class="debug hide">
-  <table class="table table-hover table-condensed table-bordered">
-  <thead>
-    <tr>
-    <th>Key</th><th>Value</th>
-    </tr>
-  </thead>
-  <#list .data_model.keySet() as key>
-      <#if key?is_string && .data_model.get(key)?is_string>
-      <tr><td>${key}</td><td>${.data_model.get(key)}</td></tr>
-      </#if>
-  </#list>
-  </table>
-  </div>
-  <script type="text/javascript">
-  $(document).ready(function () {
-  	$('#page_trace_open').click(function() {
-  		$(this).hide();
-  		$('#debug').show();
-  		$('#page_trace_close').show();
-  	});
-  });
-  </script>
+  <@block name="scripts"></@block>
+  
+  <#if dev??>
+  <section id="dev">
+    <div id="page_trace_close" style="display:none;text-align:right;height:15px;position:absolute;top:10px;right:12px;cursor: pointer;"><img alt="" style="vertical-align:top;" src="data:image/gif;base64,R0lGODlhDwAPAJEAAAAAAAMDA////wAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MUQxMjc1MUJCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MUQxMjc1MUNCQUJDMTFFMTk0OUVGRjc3QzU4RURFNkEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxRDEyNzUxOUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxRDEyNzUxQUJBQkMxMUUxOTQ5RUZGNzdDNThFREU2QSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAAAAAAALAAAAAAPAA8AAAIdjI6JZqotoJPR1fnsgRR3C2jZl3Ai9aWZZooV+RQAOw==" />
+    </div>
+    <div id="page_trace_open" style="height:30px;float:right;text-align: right;overflow:hidden;position:fixed;bottom:0;right:0;color:#000;line-height:30px;cursor:pointer;">
+    <div style="background:#232323;color:#FFF;padding:0 6px;float:right;line-height:30px;font-size:14px">${invokeTime!0} ms</div>
+    </div>
+    <div id="debug" class="debug hide">
+    <table class="table table-hover table-condensed table-bordered">
+    <thead>
+      <tr>
+      <th>Key</th><th>Value</th>
+      </tr>
+    </thead>
+    <#list .data_model.keySet() as key>
+        <#if key?is_string && .data_model.get(key)?is_string>
+        <tr><td>${key}</td><td>${.data_model.get(key)}</td></tr>
+        </#if>
+    </#list>
+    </table>
+    </div>
+  </section>
+  </#if>
 
 </body>
 </html>
-</#macro>

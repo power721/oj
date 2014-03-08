@@ -1,0 +1,136 @@
+<style>
+    #win-follow-friend .unit .l {
+        width: 75px;
+        text-align: right;
+    }
+
+    #win-follow-friend .unit .r {
+        width: 355px;
+    }
+
+    #win-follow-friend .hint {
+        color: #999;
+        font-size: 12px;
+        margin: 8px 0;
+    }
+</style>
+<div id="temp-item-follow" class="hidden">
+    <option value="[gid]">[name]([count])</option>
+</div>
+<div class="unit">
+    <div class="l">
+        <p class="subtitle">选择分组</p>
+    </div>
+    <div class="r">
+        <select id="ipt-group-follow"></select>
+
+        <p class="hint">
+            请选择分组。<br/>
+            您添加关注的用户将出现在对应的组中。
+        </p>
+    </div>
+    <span class="clearfix"></span>
+</div>
+
+<div class="unit-tool">
+    <div class="l">
+        <button id="btn-do-follow" class="btn success">
+            <i class="icon white icon-ok-circle"></i>添加关注
+        </button>
+    </div>
+    <div class="r"></div>
+    <span class="clearfix"></span>
+</div>
+<script>
+    system.tv = function () {
+        //set handle
+        var win = $('#win-follow-friend');
+        var mainer = win.find('div.mainer').eq(0);
+        var ipt = $('#ipt-group-follow');
+        var btn = $('#btn-do-follow');
+        //
+        system.tv = function () {
+            //set handle
+            var temp = $('#temp-item-follow').html();
+            if (system.port.getGroup) {
+                system.port.getGroup.abort();
+            }
+            ;
+            system.port.getGroup = $.get('api/friend/getGroupList', {
+            })
+                    .done(function (data) {
+                        var html = '';
+                        if (data.success) {
+                            //
+                            for (var i = 0, l = data.groupList.length; i < l; i++) {
+                                var a = data.groupList[i];
+                                html += temp
+                                        .replace(/\[gid\]/g, a.id)
+                                        .replace(/\[count\]/g, a.count || 0)
+                                        .replace(/\[name\]/g, $.parseSafe(a.name || "非法分组"))
+                                ;
+                            }
+                            ;
+                            ipt.html(html);
+                        } else {
+                            $.info('error::' + data.result);
+                            win.info(data.result);
+                            var html = '<p class="alert alert-error">' + data.result + '</p>'
+                            mainer
+                                    .html(html);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        $.info('error::获取关注分组失败。请于稍后重试。');
+                        win.info('获取关注分组失败。请于稍后重试。');
+                        var html = '<p class="alert alert-error">获取关注分组失败。请于稍后重试。</p>'
+                        mainer
+                                .html(html);
+                    });
+        }();
+        //do
+        btn.click(function () {
+            //
+            if (!btn.hasClass('disabled')) {
+                btn.addClass('disabled');
+                window.setTimeout(function () {
+                    btn.removeClass('disabled');
+                }, 1000);
+                //
+                if (system.port.followUser) {
+                    system.port.followUser.abort();
+                }
+                ;
+                system.port.followUser = $.post('api/friend/follow', {
+                    username: win.data().name,
+                    uid: win.data().uid,
+                    gid: ipt.val()
+                })
+                        .done(function (data) {
+                            if (data.success) {
+                                var text = '向[' + $.trim(ipt.find('option:selected').text().replace(/\(.*/, '')) + ']中添加关注[' + win.data().name + ']成功。';
+                                $.info(text);
+                                //callback
+                                if ($.isFunction(win.data().callback)) {
+                                    win.data().callback();
+                                }
+                                ;
+                                //close
+                                $('#curtain').click();
+                            } else {
+                                $.info('error::' + data.result);
+                                win.info(data.result);
+                            }
+                            ;
+                        })
+                        .fail(function () {
+                            var text = '向[' + $.trim(ipt.find('option:selected').text().replace(/\(.*/, '')) + ']中添加关注[' + win.data().name + ']失败。请于稍后重试。';
+                            $.info('error::' + text);
+                            win.info(text);
+                        });
+            }
+            ;
+        });
+    }();
+</script>

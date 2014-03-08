@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" class="no-js">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="IE=edge" http-equiv="X-UA-Compatible">
+<meta name="copyright" content="Copyright (c) PowerOJ">
+<meta name="keywords" content="ACM ACM-ICPC OI OJ OnlineJudge Contest 算法 程序设计 在线评测">
+<meta name="description" content="Power Online Judge for ACM-ICPC">
+<meta name="author" content="power721">
+<base href="${baseUrl!}/" />
+<title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
+
+<link rel="stylesheet" href="assets/acfun/core.0.1.3.css">
+<link rel="stylesheet" href="assets/acfun/index/index.css?date=${date!20140212}">
+<link rel="stylesheet" href="assets/acfun/theme/default/theme.css?date=${date!20140212}">
+
+<@block name="styles"></@block>
+
+<script type="text/javascript">var BaseURL = "${baseUrl!}/";</script>
+<script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+
+</head>
+
+<body>
+  <div id="stage">
+    <div id="area-info"></div>
+    <div id="area-window">
+      <div id="win-info" class="win">
+        <div class="mainer"></div>
+      </div>
+      <div id="win-hint" class="win win-hint">
+        <div class="mainer"></div>
+        <div class="tail"></div>
+      </div>
+    </div>
+    <!--guide-->
+
+    <!--html-->
+    <div id="guide-space"></div>
+    <div id="guide">
+      <div id="guide-inner">
+        <div class="l a">
+          <a href="./" class="first"> Power <span class="x"> OJ </span></a> 
+          <a href="problem" data-channel="problem"> 题目 </a> 
+          <a href="status" data-channel="status"> 状态 </a> 
+          <a href="rank" data-channel="member"> 用户 </a> 
+          <a href="contest" data-channel="contest"> 竞赛 </a> 
+          <a href="bbs" data-channel="discuss"> 讨论 </a> 
+          <a href="faq" data-channel="help"> 帮助 </a> 
+          <a href="user" target="_blank" data-channel="extra" class="last"> 更多 </a> 
+          <span class="clearfix"> </span>
+        </div>
+        <div class="r">
+          <form id="area-search-guide" target="_blank" method="get" action="search" class="l">
+            <input name="query" type="text" value="搜索" autocomplete="off" x-webkit-speech class="ipt-search"> 
+            <input type="submit" value="" title="搜索" class="btn-search">
+            <ul class="menu menu-search"></ul>
+          </form>
+          <div class="before l hidden">
+            <a onclick="$(this).call('login');" class="first"> 登录 </a> 
+            <a onclick="$(this).call('reg');" class="last"> 注册 </a>
+          </div>
+          <div class="after l hidden">
+            <a id="btn-mail-guide" href="user/#area=mail" target="_blank" data-channel="mail" class="mail l"> 
+              <i class="icon white icon-envelope"> 消息 </i>
+              <p class="pts">0</p>
+            </a> 
+            <!--<a id="btn-post-guide" href="user/#area=post-simple" target="_blank" data-channel="post" class="post l"> 
+              <i class="icon white icon-upload"> 投稿 </i>
+            </a>-->
+            <div id="area-user-guide" data-channel="user" class="user l">
+              <a href="user/" target="_blank" class="thumb"> <img class="avatar"> </a>
+            </div>
+            <span class="clearfix"> </span>
+          </div>
+          <span class="clearfix"> </span>
+        </div>
+        <span class="clearfix"> </span>
+      </div>
+      <div id="sub-guide" class="hidden">
+        <div class="channel-problem">
+          <a href="problem"> 题目列表 </a> 
+          <a href="problem/search"> 题目搜索 </a> 
+          <a href="problem/random"> 随机题目 </a> 
+        </div>
+        <div class="channel-status">
+          <a href="status"> 提交列表 </a> 
+          <a href="statistic"> 提交统计 </a> 
+          <a href="user/#area=submission"> 我的提交 </a> 
+        </div>
+        <div class="channel-member">
+          <a href="rank"> 排名 </a> 
+          <a href="user"> 用户中心 </a> 
+          <a href="user/online"> 在线用户 </a> 
+        </div>
+        <div class="channel-contest">
+          <a href="contest"> 竞赛列表 </a> 
+          <a href="contest/recent"> 名校联赛 </a> 
+        </div>
+        <div class="channel-discuss">
+          <a href="bbs"> 讨论 </a> 
+          <a href="bbs"> 题目讨论 </a> 
+          <a href="bbs"> 算法讨论 </a>
+          <a href="notice"> 公告 </a>
+        </div>
+        <div class="channel-help">
+          <a href="faq"> F.A.Q </a> 
+          <a href="wiki"> 百科 </a> 
+          <a href="help"> 帮助 </a> 
+        </div>
+        <div class="channel-extra">
+          <a href="tag" target="_blank"> 标签 </a> 
+          <a href="about" target="_blank"> 关于 </a> 
+          <a href="sitemap" target="_blank"> 地图 </a>
+        </div>
+        
+        <div class="channel-mail right">
+          <a id="a-at-guide" href="user/#area=mention" target="_blank"> 提到我的 <span class="pts"> (0) </span> </a> 
+          <a id="a-at-guide" href="user/#area=push" target="_blank"> 推送 <span class="pts"> (0) </span> </a> 
+          <a id="a-at-guide" href="user/#area=followers" target="_blank"> 新听众 <span class="pts"> (0) </span> </a> 
+          <a id="a-at-guide" href="user/#area=mail" target="_blank"> 未读私信 <span class="pts"> (0) </span> </a>
+        </div>
+        <!--
+        <div class="channel-post right">
+          <a href="user/#area=post-simple" target="_blank"> 快捷投稿 </a> 
+          <a href="user/#area=post-video" target="_blank"> 视频投稿 </a> 
+          <a href="user/#area=post-wiki" target="_blank"> 文章投稿 </a>
+        </div>
+        -->
+        <div class="channel-user right">
+          <a href="user/#area=mail" target="_blank"> 私信 </a> 
+          <a href="user/#area=favourite" target="_blank"> 收藏夹 </a> 
+          <a href="user/#area=history" target="_blank"> 浏览历史 </a> 
+          <a id="a-logout-guide" href="logout"> 退出登录 </a>
+        </div>
+      </div>
+    </div>
+    <span class="clearfix"> </span>
+    
+    <div id="header">
+      <div id="header-inner" class="inner">
+        <a id="logo-home-user" href="./" title="PowerOJ"> </a>
+        <div id="block-title-banner">
+          <p>${title!}</p>
+          <div>
+            <a href="./"> PowerOJ </a> 
+            <span class="d"> ${title_en!} </span>
+          </div>
+          <span class="clearfix"> </span>
+        </div>
+      </div>
+      <div id="btn-top-shortcut" title="返回顶部" onclick="$('#stage').scrollOnto();" class="hidden">
+      </div>
+    </div>
+    
+    <div id="mainer">
+      <div id="mainer-inner">
+          <div id="container" class="block">
+            <@block name="content"></@block>
+          </div><!-- #container -->
+        </div><!-- #mainer-inner -->
+    </div><!-- #mainer -->
+    <span class="clearfix"> </span>
+    
+      <div id="footer">
+        <div id="footer-inner">
+          <div class="a">
+            <p class="l">
+              SWUST ACM-ICPC
+            </p>
+            <p class="r">
+              <a href="about" target="_blank">
+                关于PowerOJ
+              </a>
+              &nbsp;/&nbsp;
+              <a href="faq" target="_blank">
+                帮助手册
+              </a>
+              &nbsp;/&nbsp;
+              <a href="changelog" target="_blank">
+                更新历史
+              </a>
+              <!--&nbsp;/&nbsp;&nbsp;官方微博:
+              <a href="http://e.weibo.com/PowerOJ" target="_blank">
+                新浪微博
+              </a>
+              |
+              <a href="http://t.qq.com/PowerOJ" target="_blank">
+                腾讯微博
+              </a>-->
+            </p>
+            <span class="clearfix">
+            </span>
+          </div>
+          <div class="b">
+            <p class="l">
+              Copyright © 2012-2014 PowerOJ. 保留所有权利&nbsp;&nbsp;/&nbsp;
+              <a href="term" target="_blank">
+                使用条款
+              </a>
+              &nbsp;/&nbsp;
+              <a href="contact" target="_blank">
+                联系我们
+              </a>
+            </p>
+            <p class="r">
+              <!--本站不提供任何视听上传服务，所有内容均来自视频分享站点所提供的公开引用资源-->
+            </p>
+            <span class="clearfix">
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  
+  <!--[if lt IE 8]>
+    <script src="assets/acfun/json2.js"></script>
+  <![endif]-->
+  <script src="assets/acfun/prefix.js"></script>
+  <script src="assets/acfun/core.js"></script>
+  <script src="assets/acfun/ready.0.0.6.min.js"></script>
+  <script>
+    system.path = "${baseUrl!}/assets";
+    system.date = Math.round(new Date().getTime()/1000);
+  </script>
+  <script src="assets/acfun/ubb.min.js"></script>
+  <script src="assets/acfun/index/script.js"></script>
+  <@block name="scripts"></@block>
+  
+</body>
+</html>

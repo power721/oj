@@ -17,7 +17,6 @@ public class OjSessionListener implements SessionListener
     SessionService.me().deleteSession(session);
     
     log.info(session.toString());
-    log.info(session.getStartTimestamp().toString());
   }
 
   @Override
@@ -32,9 +31,8 @@ public class OjSessionListener implements SessionListener
   public void onStop(Session session)
   {
     SessionService.me().deleteSession(session);
-
+    
     log.info(session.toString());
-    log.info(session.getStartTimestamp().toString());
   }
 
 }

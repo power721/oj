@@ -1,0 +1,47 @@
+<p class="alert alert-info">
+  欢迎访问用户中心。<br />
+    该功能目前正在测试中。如果您有好的意见或建议，请<a target="_blank" href="feedback">[反馈]</a>给我们，这将有助于我们改善相关功能。
+</p>
+
+<div id="area-user-splash">
+  <div class="l">
+      <a href="user/#area=profile" class="thumb">
+          <img src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>" class="avatar" onerror="this.onerror=null;this.src='assets/images/user/default.png'">
+        </a>
+    </div>
+  <div class="r">
+      <a href="user/profile/${user.name}" class="name">${user.name}</a>
+        <span class="uid">Uid:${user.uid}</span>
+        
+        <p id="hint-unread-splash">
+          共有<span class="pts">0</span>次<a href="user/#area=mention">[召唤]</a>、<span class="pts">${user.unReadMail!0}</span>条<a href="user/#area=mail">[私信]</a>、<span class="pts">0</span>个<a href="user/#area=followers">[新听众]</a>和<span class="pts">0</span>条<a href="user/#area=push">[推送内容]</a>。
+        </p>
+        
+        <p class="level" title="当前总经验值：${user.exp!0} / 下一级所需总经验值：${user.nextExp!200}" data-credit="${user.credit!0}">
+            <span class="a" style="width:${user.percent!0}%;"></span>
+            <span class="b">Level.${user.level!1} - Exp: ${user.exp!0} / ${user.nextExp!200} - Per: ${user.percent!0}%</span>
+        </p>
+    </div>
+  <span class="clearfix"></span>
+</div>
+
+<ul id="list-info-splash" data-online="${user.online!0}">
+  <li class="a">用户在线时长<span class="pts" style="color:#f69;" id="online"></span>Mins</li>
+    <li class="b">用户的在线时长总和。</li>
+  <li class="a">解决问题数量<span class="pts" style="color:#798;">${user.solved}</span>Problems</li>
+    <li class="b">用户解决问题总和。<!--未审核、已退回与已删除的投稿数据不计入其中。--></li>
+  <li class="a">我的提交总数<span class="pts" style="color:#ca6;">${user.submit}</span>Submissions</li>
+    <li class="b">用户提交代码总和。<!--未审核、已退回与已删除的投稿不计入其中。--></li>
+  <!--<li class="a">投稿总收藏数<span class="pts" style="color:#696;">0</span>Favors</li>
+    <li class="b">当前所有有效投稿的收藏数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>
+  <li class="a">投稿总评论数<span class="pts" style="color:#69c;">0</span>Comms</li>
+    <li class="b">当前所有有效投稿的评论数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>-->
+</ul>
+
+<script type="text/javascript">
+$(document).ready(function () {
+  var timestamp = Math.round(new Date().getTime()/1000);
+  var online = Math.round(parseInt(${user.online}) + (timestamp - parseInt(${user.login})) / 60);
+  $('span#online').html(online);
+});
+</script>

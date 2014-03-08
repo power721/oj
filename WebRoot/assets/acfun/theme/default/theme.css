@@ -1,0 +1,33 @@
+#stage{
+    background:#f8f8f8 url(image/bg-stage.png) center 32px repeat-x scroll;
+}
+#block-main{
+    background:url(image/bg-main.png) center top repeat-y;
+}
+#header{
+    height:108px;
+}
+#logo-home-member{
+    width:205px; height:51px;
+    left:16px; top:auto; bottom:16px;
+    background:url(image/img-logo.png) left top no-repeat;
+}
+#block-title-banner, #block-title-banner a{
+    color:#c2c3c5;
+    text-shadow: none;
+}
+#block-user-left .area-extra .space{
+    background-color:#464a51;
+}
+#block-user-left .area-extra a:hover{
+    background-color:#65686e;
+}
+#block-user-left .desc{
+    color:#6d727b;
+}
+#block-user-left .divider{
+    border-top:1px dashed #2c3037; border-bottom:1px dashed #464a51;
+}
+.part-guide-left .mainer a.active{
+    color:#92c202;
+}

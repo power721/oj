@@ -13,6 +13,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
+import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
@@ -23,6 +24,7 @@ import com.power.oj.user.UserService;
 
 public class SessionService
 {
+  private static final Logger log = Logger.getLogger(SessionService.class);
   private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
   private static ConcurrentHashMap<String, Session> shiroSession = new ConcurrentHashMap<String, Session>();
   private static final SessionService me = new SessionService();
@@ -47,6 +49,10 @@ public class SessionService
     if (StringUtil.isBlank(lastAccessURL))
       lastAccessURL = "/";
     
+    if (OjConfig.getDevMode())
+    {
+      log.info(lastAccessURL);
+    }
     return lastAccessURL;
   }
 
@@ -74,6 +80,15 @@ public class SessionService
     int uid = userModel.getUid();
     String name = userModel.getStr("name");
     
+    SessionModel sessionModel = dao.findById(id);
+    sessionModel.set("uid", uid).set("name", name).update();
+    SessionService.me().putModel(id, sessionModel);
+  }
+
+  public void updateOnline(Integer uid, String name)
+  {
+    String id = (String) ShiroKit.getSubject().getSession().getId();
+   
     SessionModel sessionModel = dao.findById(id);
     sessionModel.set("uid", uid).set("name", name).update();
     SessionService.me().putModel(id, sessionModel);

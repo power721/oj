@@ -1,0 +1,347 @@
+<!--style-->
+<style>
+    #block-first .item {
+        border-bottom: 1px dashed #ddd;
+        margin: 0 auto;
+        padding: 16px 0;
+        position: relative;
+    }
+
+    #block-first .l {
+        text-align: right;
+        width: 64px;
+    }
+
+    #block-first .r {
+        text-align: left;
+        width: 610px;
+        position: relative;
+    }
+
+    #block-first .thumb {
+        margin: 2px 0 0 0;
+        position: relative;
+        transition: none;
+    }
+
+    #block-first .avatar {
+        width: 50px;
+        height: 50px;
+        position: relative;
+    }
+
+    #block-first .name {
+        display: inline-block;
+        *display: inline;
+        font-size: 14px;
+    }
+
+    #block-first .uid {
+        display: inline-block;
+        *display: inline;
+        font-size: 12px;
+        margin: 0 0 0 4px;
+        color: #999;
+    }
+
+    #block-first .sign {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.2;
+        margin: 4px 0;
+        width: 460px;
+    }
+
+    #block-first .info {
+        font-size: 12px;
+        color: #999;
+        line-height: 1.2;
+        margin: 4px auto;
+    }
+
+    #block-first .pts {
+        color: #006a92;
+        font-size: 12px;
+        margin: 0 1px;
+    }
+
+    #block-first .from {
+        color: #006a92;
+        font-size: 12px;
+        margin: 0 1px;
+    }
+
+    #block-first .area-tool-followed {
+        position: absolute;
+        right: 8px;
+        top: 0;
+        font-size: 12px;
+        color: #999;
+    }
+
+    #block-first .hint-list-index {
+        position: absolute;
+        left: auto;
+        top: auto;
+        right: 8px;
+        bottom: 0;
+        font-size: 64px;
+        line-height: 64px;
+        height: 64px;
+        width: auto;
+        text-align: right;
+        color: #eee;
+        z-index: 0;
+        letter-spacing: -0.1em;
+        cursor: default;
+    }
+</style>
+<!--style-->
+
+<!--html-->
+<div id="block-title-banner">
+    <p>关注我的</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Followers</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="temp-item-followed" class="hidden">
+    <div class="item" data-uid="[uid]" data-name="[name]" data-gid="[gid]">
+        <p class="hint-list-index">[index]</p>
+
+        <div class="l">
+            <a class="thumb" href="user/profile/[name]" target="_blank">
+                <img class="avatar" [avatar] data-uid="[uid]">
+            </a>
+        </div>
+        <div class="r">
+            <a class="name" href="user/profile/[name]" target="_blank">[name]</a><span
+                class="uid">(Uid:[uid])</span>
+
+            <div class="sign">[sign]</div>
+            <div class="info">
+                [gender]来自<span class="from">[from]</span>&nbsp;&nbsp;/&nbsp;&nbsp;听众&nbsp;<span class="pts followeds">[followeds]</span>&nbsp;&nbsp;/&nbsp;&nbsp;关注&nbsp;<span
+                    class="pts">[followings]</span>&nbsp;&nbsp;/&nbsp;&nbsp;投稿&nbsp;<span class="pts">[posts]</span>
+            </div>
+            <div class="area-tool-followed">
+                [isFriend]
+            </div>
+        </div>
+        <span class="clearfix"></span>
+    </div>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+
+        <div id="list-followed-followed"></div>
+
+    </div>
+</div>
+<!--html-->
+
+<!--script-->
+<script>
+    system.tv = function () {
+        //set handle
+        var block = $('#block-first');
+        var mainer = block.find('div.mainer').eq(0);
+        //function
+        var disfollow = function (param, callback) {
+            //inner param
+            var func = {
+                username: (!!param.username ? '[' + param.username + ']' : '用户'),
+                uid: param.uid,
+                gid: param.gid || 1,
+                callback: callback
+            };
+            if (system.port.followUser) {
+                system.port.followUser.abort();
+            }
+            ;
+            system.port.followUser = $.post('api/friend/unfollow', {
+                uid: func.uid,
+                gid: func.gid
+            })
+                    .done(function (data) {
+                        if (data.success) {
+                            var text = '取消关注' + func.username + '成功。';
+                            $.info(text);
+                            if ($.isFunction(func.callback)) {
+                                func.callback();
+                            }
+                            ;
+                        } else {
+                            $.info('error::' + data.result);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        var text = '取消关注' + username + '失败。请于稍后重试。';
+                        $.info('error::' + text);
+                    });
+        };
+        var showList = function (param) {
+            //set handle
+            var temp = $('#temp-item-followed').html();
+            if (system.port.getFollowed) {
+                system.port.getFollowed.abort();
+            }
+            ;
+            system.port.getFollowed = $.get('api/friend/getFollowedList', {
+                page: param.page || 1,
+                size: param.size || 10
+            })
+                    .done(function (data) {
+                        var html = '';
+                        if (data.pageNumber) {
+                            //
+                            if (data.list.length) {
+                                for (var i = 0, l = data.list.length; i < l; i++) {
+                                    var a = data.list[i];
+                                    html += temp
+                                            .replace(/\[uid\]/g, a.user)
+                                            .replace(/\[gid\]/g, a.gid)
+                                            .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
+                                            .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
+                                            .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
+                                            .replace(/\[isFriend\]/g, (!a.isFriend ? '<button class="btn-follow-followed btn primary mini"><i class="icon white icon-plus-sign"></i>关注</button>' : '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>'))
+                                            .replace(/\[followings\]/g, a.followingCount || 0)
+                                            .replace(/\[followeds\]/g, a.followedCount || 0)
+                                            .replace(/\[posts\]/g, a.userContributeCount || 0)
+                                            .replace(/\[favors\]/g, a.userContributeStow || 0)
+                                            .replace(/\[comms\]/g, a.userContributeComment || 0)
+                                            .replace(/\[views\]/g, a.userContributeView || 0)
+                                            .replace(/\[from\]/g, a.comefrom ? ($.parseSafe(a.comefrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
+                                            .replace(/\[gender\]/g, {'secret': 'TA', 'female': '她', 'male': '他'}[a.gender])
+                                            .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)
+                                    ;
+                                }
+                                ;
+                            } else {
+                                html = '<p class="alert alert-warning">尚未被任何人关注。</p>';
+                            }
+                            ;
+                            var pager = $.makePager({
+                                count: data.totalRow,
+                                num: data.pageNumber,
+                                size: data.pageSize,
+                                addon: true
+                            });
+                            $('#list-followed-followed')
+                                    .html('<p class="alert alert-info">这些人关注了我。</p>' + pager + html + pager)
+                                    .find('a.name, img.avatar')
+                                    .card();
+                            //scroll
+                            $('#stage').scrollOnto(0);
+                        } else {
+                            $.info('error::' + data.result);
+                            var html = '<p class="alert alert-error">' + data.result + '</p>';
+                            $('#list-followed-followed')
+                                    .html(html);
+                        }
+                        ;
+                    })
+                    .fail(function () {
+                        $.info('error::获取被关注列表失败。请于稍后重试。');
+                        var html = '<p class="alert alert-error">获取被关注列表失败。请于稍后重试。</p>';
+                        $('#list-followed-followed')
+                                .html(html);
+                    });
+        };
+        //bind action
+        $('#list-followed-followed')
+            //follow
+                .delegate('button.btn-follow-followed', 'click', function () {
+                    //set handle
+                    var btn = $(this);
+                    var obj = btn.closest('div.item');
+                    //
+                    btn.unfold({
+                        src: 'children/win-follow-friend', id: 'win-follow-friend', 'class': 'win-children', title: '添加关注', icon: 'user', width: 480, height: 'auto', callback: function () {
+                            $('#win-follow-friend')
+                                    .data({
+                                        uid: obj.attr('data-uid'),
+                                        name: obj.attr('data-name'),
+                                        callback: function () {
+                                            //
+                                            var html = '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>';
+                                            var area = btn.closest('div.area-tool-followed');
+                                            area
+                                                    .stop()
+                                                    .animate({
+                                                        opacity: 0
+                                                    }, 200, function () {
+                                                        area.html(html);
+                                                    })
+                                                    .animate({
+                                                        opacity: 1
+                                                    }, 200);
+                                            var span = obj.find('span.followeds').eq(0);
+                                            span.text(parseInt(span.text()) + 1);
+                                        }
+                                    });
+                        }
+                    });
+                })
+            //disfollow
+                .delegate('a.btn-disfollow-followed', 'click', function () {
+                    //set handle
+                    var btn = $(this);
+                    var obj = btn.closest('div.item');
+                    $.ensure({
+                        obj: btn,
+                        text: '是否取消关注[' + obj.data().name + ']？',
+                        curtain: true,
+                        callback: function () {
+                            var obj = btn.closest('div.item');
+                            disfollow({
+                                uid: obj.attr('data-uid'),
+                                gid: obj.attr('data-gid'),
+                                name: obj.attr('data-name')
+                            }, function () {
+                                //
+                                var html = '<button class="btn-follow-followed btn primary mini"><i class="icon white icon-plus-sign"></i>关注</button>';
+                                var area = btn.closest('div.area-tool-followed');
+                                area
+                                        .stop()
+                                        .animate({
+                                            opacity: 0
+                                        }, 200, function () {
+                                            area.html(html);
+                                        })
+                                        .animate({
+                                            opacity: 1
+                                        }, 200);
+                                var span = obj.find('span.followeds').eq(0);
+                                span.text(parseInt(span.text()) - 1);
+                            });
+                        }
+                    });
+                })
+            //pager
+                .readyPager({
+                    addon: true,
+                    callback: function (n) {
+                        showList({
+                            page: n,
+                            size: 10
+                        });
+                    }
+                })
+        ;
+        //
+        showList({
+            page: 1,
+            size: 10
+        });
+        //
+        $('#hint-newFollowed-guide').addClass('hidden');
+    }();
+</script>
+<!--script-->

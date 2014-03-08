@@ -1,0 +1,702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="com.power.oj.core.AppConfig" project="oj" 
+    file="/oj/src/com/power/oj/core/AppConfig.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="197" x="2513" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.power.oj.core.OjController" project="oj" 
+    file="/oj/src/com/power/oj/core/OjController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="254" x="7012" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.power.oj.core.OjConfig" project="oj" 
+    file="/oj/src/com/power/oj/core/OjConfig.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="585" width="200" x="7814" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="4" language="java" name="com.power.oj.core.OjConstants" project="oj" 
+    file="/oj/src/com/power/oj/core/OjConstants.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="567" width="185" x="3091" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="5" language="java" name="com.power.oj.core.bean.ResultType" project="oj" 
+    file="/oj/src/com/power/oj/core/bean/ResultType.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="459" width="160" x="7814" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="6" language="java" name="com.power.oj.core.bean.MessageType" project="oj" 
+    file="/oj/src/com/power/oj/core/bean/MessageType.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="147" x="8612" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="7" language="java" name="com.power.oj.core.bean.FlashMessage" project="oj" 
+    file="/oj/src/com/power/oj/core/bean/FlashMessage.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="261" width="233" x="8526" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.power.oj.core.handler.UrlFilterHandler" project="oj" 
+    file="/oj/src/com/power/oj/core/handler/UrlFilterHandler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="365" x="4336" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.power.oj.core.interceptor.FlashMessageInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/core/interceptor/FlashMessageInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="179" x="4117" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.power.oj.core.interceptor.BaseURLInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/core/interceptor/BaseURLInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="179" x="6598" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.power.oj.core.interceptor.I18NInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/core/interceptor/I18NInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="179" x="4940" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.power.oj.core.interceptor.AccessLogInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/core/interceptor/AccessLogInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="179" x="1534" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="com.power.oj.core.interceptor.GlobalInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/core/interceptor/GlobalInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="179" x="3898" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="14" language="java" name="com.power.oj.core.model.LanguageModel" project="oj" 
+    file="/oj/src/com/power/oj/core/model/LanguageModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="131" x="8014" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="com.power.oj.core.model.SessionModel" project="oj" 
+    file="/oj/src/com/power/oj/core/model/SessionModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="177" x="6770" y="1994"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="com.power.oj.core.model.VariableModel" project="oj" 
+    file="/oj/src/com/power/oj/core/model/VariableModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="131" x="7633" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="com.power.oj.core.service.SessionService" project="oj" 
+    file="/oj/src/com/power/oj/core/service/SessionService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="459" width="276" x="6770" y="1377"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="com.power.oj.core.service.OjService" project="oj" 
+    file="/oj/src/com/power/oj/core/service/OjService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="291" x="2750" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="com.power.oj.user.UserInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/user/UserInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="179" x="6171" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="com.power.oj.user.UserService" project="oj" 
+    file="/oj/src/com/power/oj/user/UserService.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="567" width="233" x="6487" y="1377"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="com.power.oj.user.UserModel" project="oj" 
+    file="/oj/src/com/power/oj/user/UserModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="351" width="295" x="6425" y="1994"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="com.power.oj.user.UserController" project="oj" 
+    file="/oj/src/com/power/oj/user/UserController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="477" width="132" x="6684" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="com.power.oj.user.validator.ResetPasswordValidator" project="oj" 
+    file="/oj/src/com/power/oj/user/validator/ResetPasswordValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="165" x="3693" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="com.power.oj.user.validator.RecoverAccountValidator" project="oj" 
+    file="/oj/src/com/power/oj/user/validator/RecoverAccountValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="168" x="6390" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="com.power.oj.user.validator.SignupValidator" project="oj" 
+    file="/oj/src/com/power/oj/user/validator/SignupValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="206" x="1753" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="26" language="java" name="com.power.oj.user.validator.LoginValidator" project="oj" 
+    file="/oj/src/com/power/oj/user/validator/LoginValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="159" x="57" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="27" language="java" name="com.power.oj.user.validator.UpdateUserValidator" project="oj" 
+    file="/oj/src/com/power/oj/user/validator/UpdateUserValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="159" x="5465" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="28" language="java" name="com.power.oj.core.controller.MainController" project="oj" 
+    file="/oj/src/com/power/oj/core/controller/MainController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="127" x="7012" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="29" language="java" name="com.power.oj.core.controller.UeditorController" project="oj" 
+    file="/oj/src/com/power/oj/core/controller/UeditorController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="127" x="7179" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="30" language="java" name="com.power.oj.util.CryptUtils" project="oj" 
+    file="/oj/src/com/power/oj/util/CryptUtils.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="161" x="1999" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="com.power.oj.util.FileKit" project="oj" 
+    file="/oj/src/com/power/oj/util/FileKit.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="333" width="223" x="5664" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="com.power.oj.util.Tool" project="oj" file="/oj/src/com/power/oj/util/Tool.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="189" width="266" x="5159" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="com.power.oj.admin.AdminController" project="oj" 
+    file="/oj/src/com/power/oj/admin/AdminController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="116" x="6856" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="34" language="java" name="com.power.oj.bbs.BBSController" project="oj" 
+    file="/oj/src/com/power/oj/bbs/BBSController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="104" x="7489" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="35" language="java" name="com.power.oj.contest.ContestModel.UserInfo" project="oj" 
+    file="/oj/src/com/power/oj/contest/ContestModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="99" x="8799" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="36" language="java" name="com.power.oj.contest.ContestRankWebSocket" project="oj" 
+    file="/oj/src/com/power/oj/contest/ContestRankWebSocket.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="225" width="163" x="256" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="37" language="java" name="com.power.oj.contest.AddContestValidator" project="oj" 
+    file="/oj/src/com/power/oj/contest/AddContestValidator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="159" x="4741" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="38" language="java" name="com.power.oj.contest.ContestModel" project="oj" 
+    file="/oj/src/com/power/oj/contest/ContestModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="531" width="233" x="8799" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="39" language="java" name="com.power.oj.contest.ContestPasswordInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/contest/ContestPasswordInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="189" x="469" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="40" language="java" name="com.power.oj.contest.ContestController" project="oj" 
+    file="/oj/src/com/power/oj/contest/ContestController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="387" width="131" x="6179" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="41" language="java" name="com.power.oj.contest.ContestkendoSchedulerTask" project="oj" 
+    file="/oj/src/com/power/oj/contest/ContestkendoSchedulerTask.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="783" width="204" x="5927" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="42" language="java" name="com.power.oj.judge.Judge" project="oj" 
+    file="/oj/src/com/power/oj/judge/Judge.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="243" width="259" x="8195" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="43" language="java" name="com.power.oj.mail.MailController" project="oj" 
+    file="/oj/src/com/power/oj/mail/MailController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="103" x="7346" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="44" language="java" name="com.power.oj.problem.ProblemController" project="oj" 
+    file="/oj/src/com/power/oj/problem/ProblemController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="333" width="128" x="6350" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="45" language="java" name="com.power.oj.problem.ProblemModel" project="oj" 
+    file="/oj/src/com/power/oj/problem/ProblemModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="369" width="263" x="2200" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="46" language="java" name="com.power.oj.solution.SolutionModel" project="oj" 
+    file="/oj/src/com/power/oj/solution/SolutionModel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="207" width="367" x="8195" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="47" language="java" name="com.power.oj.solution.SolutionController" project="oj" 
+    file="/oj/src/com/power/oj/solution/SolutionController.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="126" x="6518" y="860"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="48" language="java" name="com.power.oj.shiro.ShiroKit" project="oj" 
+    file="/oj/src/com/power/oj/shiro/ShiroKit.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="315" width="180" x="1314" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="49" language="java" name="com.power.oj.shiro.OjSessionListener" project="oj" 
+    file="/oj/src/com/power/oj/shiro/OjSessionListener.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="153" width="155" x="6817" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="50" language="java" name="com.power.oj.shiro.OjHashedCredentialsMatcher" project="oj" 
+    file="/oj/src/com/power/oj/shiro/OjHashedCredentialsMatcher.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="357" x="698" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="51" language="java" name="com.power.oj.shiro.OjAuthorizingRealm" project="oj" 
+    file="/oj/src/com/power/oj/shiro/OjAuthorizingRealm.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="171" width="337" x="3316" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="52" language="java" name="com.power.oj.shiro.ShiroInViewInterceptor" project="oj" 
+    file="/oj/src/com/power/oj/shiro/ShiroInViewInterceptor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="99" width="179" x="1095" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="53">    
+    <end type="SOURCE" refId="44" navigable="false">      
+      <attribute id="54" name="userService"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="56">    
+    <end type="SOURCE" refId="44"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="57">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="58" name="dao"/>      
+      <multiplicity id="59" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="60">    
+    <end type="SOURCE" refId="43"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="61">    
+    <end type="SOURCE" refId="28"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="62">    
+    <end type="SOURCE" refId="40"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="63">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="64" name="dao"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="46" navigable="false">      
+      <attribute id="67" name="dao"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="46" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="69">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="70" name="type"/>      
+      <multiplicity id="71" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="72">    
+    <end type="SOURCE" refId="45" navigable="false">      
+      <attribute id="73" name="dao"/>      
+      <multiplicity id="74" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="45" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="75">    
+    <end type="SOURCE" refId="47" navigable="false">      
+      <attribute id="76" name="userService"/>      
+      <multiplicity id="77" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="78">    
+    <end type="SOURCE" refId="29"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="79">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="80" name="dao"/>      
+      <multiplicity id="81" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="21" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="82">    
+    <end type="SOURCE" refId="36" navigable="false">      
+      <attribute id="83" name="connections"/>      
+      <multiplicity id="84" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="36" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="85">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="86" name="userService"/>      
+      <multiplicity id="87" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="88">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="89" name="program_languages"/>      
+      <multiplicity id="90" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="91">    
+    <end type="SOURCE" refId="22" navigable="false">      
+      <attribute id="92" name="sessionService"/>      
+      <multiplicity id="93" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="94">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="95" name="judge_result"/>      
+      <multiplicity id="96" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="97">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="98" name="dao"/>      
+      <multiplicity id="99" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="100">    
+    <end type="SOURCE" refId="42" navigable="false">      
+      <attribute id="101" name="judgeList"/>      
+      <multiplicity id="102" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="46" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="103">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="104" name="variable"/>      
+      <multiplicity id="105" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="106">    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="107">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="108" name="accessLog"/>      
+      <multiplicity id="109" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="110">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="35"/>  
+  </nesting>  
+  <association id="111">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="112" name="me"/>      
+      <multiplicity id="113" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="114">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="115">    
+    <end type="SOURCE" refId="38" navigable="false">      
+      <attribute id="116" name="dao"/>      
+      <multiplicity id="117" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="38" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="118">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="119" name="dao"/>      
+      <multiplicity id="120" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="121">    
+    <end type="SOURCE" refId="20" navigable="false">      
+      <attribute id="122" name="me"/>      
+      <multiplicity id="123" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="124">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="125">    
+    <end type="SOURCE" refId="47"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="126">    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="127" name="dao"/>      
+      <multiplicity id="128" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="129">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="130" name="me"/>      
+      <multiplicity id="131" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="18" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

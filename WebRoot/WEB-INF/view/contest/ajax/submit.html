@@ -5,9 +5,13 @@
 <div class="control-group">
   <label class="control-label" for="inputLanguage">Language</label>
   <div class="controls">
-    <select class="input-small" id="inputLanguage" name="solution.language"> <#if program_languages??> <#list program_languages as language>
+    <select class="input-small" id="inputLanguage" name="solution.language"> 
+    <#if program_languages??> 
+    <#list program_languages as language>
       <option value="${language.id!}"<#if (solution.language)??><#if solution.language==language.id>selected</#if><#else><#if
-        user.language==language.id>selected</#if></#if>>${language.name!}</option> </#list> </#if>
+        user.language==language.id>selected</#if></#if>>${language.name!}</option> 
+    </#list> 
+    </#if>
     </select>
   </div>
 </div>
@@ -23,4 +27,4 @@
     $().ready(function() {
       $("#submitForm").validate();
     });
-  </script>
+</script>

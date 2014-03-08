@@ -1,65 +1,4 @@
-<#include "../common/_layout.html" />
-<@layout>
-<script src="assets/Highcharts/js/highcharts.js"></script>
-<script src="assets/Highcharts/js/modules/exporting.js"></script>
-<script type="text/javascript">
-    'use strict';
-      $(document).ready(function () {
-        var chart;
-
-          var prevpage="${baseUrl}/problem/status/${prevPid!}"
-          var nextpage="${baseUrl}/problem/status/${nextPid!}"
-          $(document).keydown(function(event) {
-            <#if prevPid!=pid>if(event.keyCode==37)window.location=prevpage;</#if>
-            <#if nextPid!=pid>if(event.keyCode==39)window.location=nextpage;</#if>
-          });
-          
-          // Build the chart
-          $('#container').highcharts({
-              chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false
-              },
-              title: {
-                text: '<a href="${baseUrl!}/problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
-              },
-              subtitle: {
-                text: 'Power OJ'
-              },
-              tooltip: {
-                 
-              },
-              plotOptions: {
-                pie: {
-                  allowPointSelect: true,
-                  cursor: 'pointer',
-                  dataLabels: {
-                    enabled: false
-                  },
-                  showInLegend: true
-                }
-              },
-              series: [{
-                type: 'pie',
-                name: 'Count',
-                data: [
-                  <#if resultList??>
-                  <#list resultList as Result>
-                  {
-                    name: '${Result.longName!}',
-                    color: $('td#${Result.name!}').css('color'),
-                    y: ${Result.count!}
-                  },
-                  </#list>
-                  </#if>
-                ]
-            }]
-        });
-      });
-            
-    </script>
-
+<@override name="content">
 <div class="row" id="problem-status">
   <div class="span4">
     <h4>Statistics</h4>
@@ -94,12 +33,12 @@
     <h4>
       Best solutions of Problem <a href="problem/show/${pid!}" data-toggle="tooltip" title="${problem.title!}">${pid!}</a>
     </h4>
-    <div class="pull-left ajax-loader">
-      <a url="problem/status/${pid!}" class="btn-link btn-info ajax-loader" type="a" data="id-null">All</a> 
+    <div class="pull-left btn-group ajax-loader">
+      <a url="api/problem/status/${pid!}" class="btn btn-info ajax-loader" type="a" data-pid="${pid}" data-id="-1">All</a> 
         <#if program_languages??>
         <#list program_languages.keySet() as key> 
-        <a url="problem/status/${pid!}?language=${key!}" class="btn-link btn-info ajax-loader" 
-          type="a" data="id-${key_index}">${program_languages.get(key)!}</a>
+        <a url="api/problem/status/${pid!}?language=${key!}" class="btn btn-info ajax-loader" 
+          type="a" data-pid="${pid}" data-id="${key}">${program_languages.get(key)!}</a>
       </#list>
       </#if>
     </div>
@@ -120,117 +59,196 @@
           <th>Submit Time</th>
         </tr>
       </thead>
-      <tbody id="problem-status-tbody"></tbody>
+      <tbody id="problem-status-tbody">
+      </tbody>
     </table>
     <div id="page" class="pagination pagination-centered ajax-loader"></div>
   </div>
 </div>
 
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-<script src="assets/tablecloth/js/jquery.metadata.js"></script>
-<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<table class="hidden">
+  <tbody id="problem-status-row">
+    <tr>
+      <td class="id">[id]</td>
+      <td class="sid">[sid]</td>
+      <td class="user"><a href="user/profile/[name]">[name]</a></td>
+      <td class="time">[time] MS</td>
+      <td class="memory">[memory] KB</td>
+      <td class="language">[language]</td>
+      <td class="code_len">[len] B</td>
+      <td class="ctime">[ctime]</td>
+    </tr>
+  </tbody>
+</table>
+</@override>
 
-<script type="text/javascript">
-    $(document).ready(function () {
+<@override name="scripts">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  <script src="assets/Highcharts/js/highcharts.js"></script>
+  <script src="assets/Highcharts/js/modules/exporting.js"></script>
+  <script type="text/javascript">
+    'use strict';
+      $(document).ready(function () {
+        var chart;
+
+        var prevpage="${baseUrl}/problem/status/${prevPid!}"
+        var nextpage="${baseUrl}/problem/status/${nextPid!}"
+        $(document).keydown(function(event) {
+          <#if prevPid!=pid>if(event.keyCode==37)window.location=prevpage;</#if>
+          <#if nextPid!=pid>if(event.keyCode==39)window.location=nextpage;</#if>
+        });
         
+        // Build the chart
+        $('#container').highcharts({
+            chart: {
+              plotBackgroundColor: null,
+              plotBorderWidth: null,
+              plotShadow: false
+            },
+            title: {
+              text: '<a href="${baseUrl!}/problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
+            },
+            subtitle: {
+              text: 'Power OJ'
+            },
+            tooltip: {
+               
+            },
+            plotOptions: {
+              pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                  enabled: false
+                },
+                showInLegend: true
+              }
+            },
+            series: [{
+              type: 'pie',
+              name: 'Count',
+              data: [
+                <#if resultList??>
+                <#list resultList as Result>
+                {
+                  name: '${Result.longName!}',
+                  color: $('td#${Result.name!}').css('color'),
+                  y: ${Result.count!}
+                },
+                </#list>
+                </#if>
+              ]
+          }]
+      });
+    });
+  </script>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
       function problemStatus(url) {
-          $.getJSON(url, function(data){
-            var html = '';
-            var i;
-            var solutionList = data.solutionList;
-            var pageNumber = parseInt(solutionList.pageNumber);
-            var pageSize = parseInt(solutionList.pageSize);
-            var pSize = parseInt(pageSize);
-            var totalPage = parseInt(solutionList.totalPage);
-            for(i in solutionList.list) {
-              var solution = data.solutionList.list[i];
-              var language = solution.language;
-              if (data.userID && (data.adminUser || data.userID==solution.uid))
-                language = '<a href="code/' + solution.sid + '" target="blank" title="show source code">' + solution.language + '</a>';
-              html += '<tr>' +
-                '<td class="id">' + (parseInt(i)+1+(pageNumber-1)*pageSize) + '</td>' +
-                '<td class="sid">' + solution.sid + '</td>' +
-                '<td class="user"><a href="user/profile/' + solution.name + '">' + solution.name + '</a></td>' +
-                '<td class="time">' + solution.time + 'MS</td>' +
-                '<td class="memory">' + solution.memory + 'KB</td>' +
-                '<td class="language">'+ language + '</td>' + 
-                '<td class="code_len">' + solution.code_len + 'B</td>' +
-                '<td class="ctime">' + solution.ctime + '</td>' +
-                '</tr>';
-            }
+        $.getJSON(url, function(data){
+          var html = '';
+          var temp = $('#problem-status-row').html();
+          var solutionList = data.solutionList;
+          var pageNumber = parseInt(solutionList.pageNumber);
+          var pageSize = parseInt(solutionList.pageSize);
+          var pSize = parseInt(pageSize);
+          var totalPage = parseInt(solutionList.totalPage);
+          for(var i in solutionList.list) {
+            var solution = data.solutionList.list[i];
+            var language = solution.language;
+            if (data.user && data.user.uid && (data.adminUser || data.user.uid==solution.uid))
+              language = '<a href="code/' + solution.sid + '" target="_blank" title="show source code">' + solution.language + '</a>';
             
-            $('#problem-status-tbody').html(html);
-            $('span#pages').html(pageNumber + '/' + totalPage + ' Pages');
-            $('span#records').html(solutionList.totalRow + ' Records');
-            $('a.ajax-loader').removeClass('active');
-            $('a.ajax-loader[data=id-'+data.language+']').addClass('active');
-            var prev = '';
-            if (pageNumber > 1)
-            {
-              prev = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber-1) + data.query + '">Prev</a></li>';
-            }
-            var next = '';
-            if (pageNumber < totalPage)
-            {
-              next = '<li><a class="btn-link" url="problem/status/' + data.pid + '?p=' + (pageNumber+1) + data.query + '">Next</a></li>';
-            }
+            html += temp.replace(/\[id\]/g, (parseInt(i)+1+(pageNumber-1)*pageSize))
+                    .replace(/\[sid\]/g, solution.sid)
+                    .replace(/\[name\]/g, solution.name || "Guest")
+                    .replace(/\[time\]/g, solution.time || 0)
+                    .replace(/\[memory\]/g, solution.memory || 0)
+                    .replace(/\[language\]/g, language)
+                    .replace(/\[len\]/g, solution.code_len)
+                    .replace(/\[ctime\]/g, parseTimestamp(solution.ctime));
+          }
+          
+          $('#problem-status-tbody').html(html);
+          $('span#pages').html(pageNumber + '/' + totalPage + ' Pages');
+          $('span#records').html(solutionList.totalRow + ' Records');
+          $('a.ajax-loader').removeClass('active');
+          var language = data.language==null ? -1 : data.language;
+          $('a.ajax-loader[data-id='+language+']').addClass('active');
+          $('div#page').html(makeProblemStatusPage('api/problem/status/' + data.pid, pageNumber, totalPage, data.query));
+        });
+      }
 
-            html = '<ul><li class="' + (pageNumber==1?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
-            '?p=1' + (pageSize!=pSize?'&s='+pageSize:'') + data.query + '">&lt;&lt;</a></li>' + prev;
+      function makeProblemStatusPage(url, pageNumber, totalPage, query)
+      {
+        var prev = '';
+        var html = '';
+        if (pageNumber > 1)
+        {
+          prev = '<li><a class="btn-link" url="' + url + '?p=' + (pageNumber-1) + query + '">Prev</a></li>';
+        }
+        var next = '';
+        if (pageNumber < totalPage)
+        {
+          next = '<li><a class="btn-link" url="' + url + '?p=' + (pageNumber+1) + query + '">Next</a></li>';
+        }
 
-            var start = pageNumber-3;
-            var end = pageNumber+3;
-            if (start < 1)
-            {
-              end = end-start+1;
-              start = 1;
-            }
-            if (end > totalPage)
-            {
-              start=start-(end-totalPage)-1;
-              if (start < 1)
-                start = 1;
-              end = totalPage;
-            }
-            if (end < start)
-              end = start;
-              
-            for(i=start; i<=end; ++i)
-            {
-              html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
-              '?p=' + i + (pageSize!=pSize?('&s='+pageSize):'') + data.query + '">' + i + '</a></li>';
-            }
+        html = '<ul><li class="' + (pageNumber==1?'disabled':'') + '"><a class="btn-link" url="' + url +
+              '?p=1' + query + '">&lt;&lt;</a></li>' + prev;
 
-            html += next + '<li class="' + (pageNumber==totalPage?'disabled':'') + '"><a class="btn-link" url="problem/status/' + data.pid +
-            '?p=' + totalPage + (pageSize!=pSize?('&s='+pageSize):'') + data.query + '">&gt;&gt;</a></li></ul>';
-            $('div#page').html(html);
-          });
+        var start = pageNumber-3;
+        var end = pageNumber+3;
+        if (start < 1)
+        {
+          end = end-start+1;
+          start = 1;
+        }
+        if (end > totalPage)
+        {
+          start=start-(end-totalPage)-1;
+          if (start < 1)
+            start = 1;
+          end = totalPage;
+        }
+        if (end < start)
+          end = start;
+          
+        for(i=start; i<=end; ++i)
+        {
+          html += '<li class="' + (pageNumber==i?'disabled':'') + '"><a class="btn-link" url="' + url +
+          '?p=' + i + query + '">' + i + '</a></li>';
+        }
+
+        html += next + '<li class="' + (pageNumber>=totalPage?'disabled':'') + '"><a class="btn-link" url="' + url +
+              '?p=' + totalPage + query + '">&gt;&gt;</a></li></ul>';
+        return html;
       }
       
-        $('div.ajax-loader').delegate('a', 'click', function() {
-          if ($(this).parent().hasClass('disabled'))
-            return;
-          
-            var url = '${baseUrl!}/' + $(this).attr("url");
-            if (url.indexOf('?') > 0)
-                url = url + '&ajax=1';
-            else
-                url = url + '?ajax=1';
-            problemStatus(url);
-        });
-
-        $("table#problem-status").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
+      $('div.ajax-loader').delegate('a', 'click', function() {
+        if ($(this).parent().hasClass('disabled'))
+          return;
         
-        var url = 'problem/status/${pid!}?ajax=1';
-        problemStatus(url);
-    });
-    </script>
+          var url = '${baseUrl!}/' + $(this).attr("url");
+          problemStatus(url);
+      });
 
-</@layout>
+      <#if oj_style != "slate">
+      $("table#problem-status").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:false,
+        striped:true,
+        clean:true
+      });
+      </#if>
+      
+      var url = 'api/problem/status/${pid!}';
+      problemStatus(url);
+    });
+  </script>
+</@override>
+<@extends name="../common/_layout.html" />

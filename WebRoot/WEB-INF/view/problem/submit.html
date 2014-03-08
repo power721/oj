@@ -1,12 +1,6 @@
-<#include "../common/_layout.html" /> <@layout>
+<@override name="content">
 <form class="form-horizontal" id="submitForm" action="solution/save" method="post">
-  <div class="control-group solution">
-    <label class="control-label" for="inputPid">Problem ID</label>
-    <div class="controls">
-      <!--<span class="input-mini uneditable-input"><a href="problem/show/${problem.pid!}">${problem.pid!}</a></span>-->
-      <input class="input-small" type="number" id="inputPid" name="solution.pid" value="${problem.pid!}">
-    </div>
-  </div>
+  <input class="input-small" type="hidden" id="inputPid" name="solution.pid" value="${problem.pid!}">
   <div class="control-group solution">
     <label class="control-label" for="inputTitle">Title</label>
     <div class="controls">
@@ -47,11 +41,14 @@
     </div>
   </div>
 </form>
+</@override>
 
-<script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
-<script type="text/javascript">   
-		$().ready(function() {
-			$("#submitForm").validate();
-		});
-	</script>
-</@layout>
+<@override name="scripts">
+  <script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
+  <script type="text/javascript">   
+    $().ready(function() {
+      $("#submitForm").validate();
+    });
+  </script>
+</@override>
+<@extends name="../common/_layout.html" />

@@ -6,6 +6,7 @@ import com.jfinal.ext.render.CaptchaRender;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.OjService;
+import com.power.oj.problem.ProblemService;
 
 /**
  * The controller for some common pages.
@@ -21,6 +22,7 @@ public class MainController extends OjController
    */
   public void index()
   {
+    setAttr("problemsNumber", ProblemService.me().getProblemsNumber());
     setTitle(getText("page.index.title"));
   }
 

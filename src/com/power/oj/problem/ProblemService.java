@@ -14,6 +14,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.service.VisitCountService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
@@ -34,6 +35,53 @@ public class ProblemService
   public ProblemModel findProblem(Integer pid)
   {
     return dao.findByPid(pid, userService.isAdmin());
+  }
+
+  public ProblemModel findProblemForShow(Integer pid)
+  {
+    ProblemModel problemModel = dao.findByPid(pid, userService.isAdmin());
+    
+    if (problemModel == null)
+      return null;
+    
+    int sample_input_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
+      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
+    problemModel.put("sample_input_rows", sample_input_rows);
+    
+    int sample_output_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
+      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
+    problemModel.put("sample_output_rows", sample_output_rows);
+    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
+
+    return problemModel;
+  }
+
+  public ProblemModel findProblemForContest(Integer pid)
+  {
+    ProblemModel problemModel = dao.findById(pid);
+    
+    if (problemModel == null)
+      return null;
+    
+    int sample_input_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
+      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
+    problemModel.put("sample_input_rows", sample_input_rows);
+    
+    int sample_output_rows = 1;
+    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
+      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
+    problemModel.put("sample_output_rows", sample_output_rows);
+    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
+
+    return problemModel;
+  }
+  
+  public Long getProblemsNumber()
+  {
+    return Db.queryLong("SELECT COUNT(*) FROM problem WHERE status=1");
   }
   
   public int getNextPid(Integer pid)
@@ -85,6 +133,23 @@ public class ProblemService
     return dao.getUserResult(pid, uid);
   }
   
+  public <T> T getProblemField(Integer pid, String name)
+  {
+    String[] fields = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
+    if (StringUtil.equalsOne(name, fields) == -1)
+    {
+      return null;
+    }
+    
+    ProblemModel problemModel = dao.findByPid(pid, false);
+    if (problemModel == null)
+    {
+      return null;
+    }
+        
+    return problemModel.get(name);
+  }
+  
   public Page<ProblemModel> getProblemPage(int pageNumber, int pageSize)
   {
     String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
@@ -94,6 +159,24 @@ public class ProblemService
     sb.append(" ORDER BY pid");
 
     Page<ProblemModel> problemList = dao.paginate(pageNumber, pageSize, sql, sb.toString());
+    
+    return problemList;
+  }
+
+  public Page<ProblemModel> getProblemPageDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
+  {
+    List<Object> param = new ArrayList<Object>();
+    String sql = "SELECT pid,title,source,accept,submit,ctime,status";
+    StringBuilder sb = new StringBuilder().append("FROM problem WHERE 1=1");
+    if (StringUtil.isNotEmpty(sSearch))
+    {
+      sb.append(" AND (pid LIKE ? OR title LIKE ?)");
+      param.add(new StringBuilder(3).append(sSearch).append("%").toString());
+      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+    }
+    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", pid");
+
+    Page<ProblemModel> problemList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
     
     return problemList;
   }
@@ -143,11 +226,6 @@ public class ProblemService
     }
     
     return resultList;
-  }
-  
-  public Page<SolutionModel> getProblemStatusPage(int pageNumber, int pageSize, Integer language, Integer pid)
-  {
-    return SolutionModel.dao.getProblemStatusPage(pageNumber, pageSize, language, pid);
   }
   
   public Page<ProblemModel> searchProblem(int pageNumber, int pageSize, String scope, String word)
@@ -211,6 +289,25 @@ public class ProblemService
     FileUtil.mkdirs(dataDir);
     
     return true;
+  }
+  
+  public int updateProblemByField(Integer pid, String name, String value)
+  {
+    // TODO store tags in problem table
+    String[] fields = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
+    if (StringUtil.equalsOne(name, fields) == -1)
+    {
+      return -1;
+    }
+    
+    long mtime = OjConfig.timeStamp;
+    if (StringUtil.equalsOne(name, new String[]{"time_limit", "memory_limit", "status"}) != -1)
+    {
+      Integer intValue = Integer.parseInt(value);
+      return Db.update("UPDATE problem SET " + name + "=?,mtime=? WHERE pid=?", intValue, mtime, pid);
+    }
+    
+    return Db.update("UPDATE problem SET " + name + "=?,mtime=? WHERE pid=?", value, mtime, pid);
   }
   
   public boolean build(Integer pid)

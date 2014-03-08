@@ -1,0 +1,32 @@
+#stage{
+    background:#0B0505 url(image/bg-stage.png) center 32px repeat-x scroll;
+}
+#block-main{
+    background:url(image/bg-main.png) center top repeat-y;
+}
+#header{
+    height:108px;
+}
+#logo-home-member{
+    width:230px; height:88px;
+    left:0; top:8px;
+    background:url(image/img-logo.png) left top no-repeat;
+}
+#block-title-banner{
+    display:none;
+}
+#block-user-left .area-extra .space{
+    background-color:#7b3e3b;
+}
+#block-user-left .area-extra a:hover{
+    background-color:#915e5c;
+}
+#block-user-left .desc{
+    color:#a56353;
+}
+#block-user-left .divider{
+    border-top:1px dashed #612421; border-bottom:1px dashed #7b3e3b;
+}
+.part-guide-left .mainer a.active{
+    color:#E68D40;
+}

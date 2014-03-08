@@ -1,15 +1,20 @@
 package com.power.oj.core.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jodd.mail.EmailMessage;
+import jodd.mail.MailException;
 import jodd.util.MimeTypes;
 
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.util.Tool;
+import com.power.oj.util.freemarker.FreemarkerKit;
 
 public class OjService
 {
@@ -37,20 +42,71 @@ public class OjService
   {
     OjConfig.initJudgeResult();
   }
+  
+  public boolean checkEmailConf()
+  {
+    if (OjConfig.get("adminEmail") == null)
+    {
+      return false;
+    }
+    
+    String emailServer = OjConfig.get("emailServer");
+    String emailUser = OjConfig.get("emailUser");
+    String emailPass = OjConfig.get("emailPass");
+    if (emailServer == null || emailUser == null || emailPass == null)
+    {
+      return false;
+    }
+    return true;
+  }
 
-  public boolean sendResetPasswordEmail(String name, String email, String token) throws Exception
+  public boolean sendVerifyEmail(String name, String email, String token) throws MailException
+  {
+    Map<String, Object> paras = new HashMap<String, Object>();
+    paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+    paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+    paras.put("name", name);
+    paras.put("token", token);
+    paras.put("ctime", OjConfig.timeStamp);
+    paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+
+    sendVerifyEmail(name, email, paras);
+    
+    log.info("Account recovery email send to user " + name);
+    return true;
+  }
+
+  public boolean sendVerifyEmail(String name, String email, Map<String, Object> paras) throws MailException
   {
     String adminEmail = OjConfig.get("adminEmail");
     if (adminEmail == null)
-      throw new Exception("Admin Email not set!");
+    {
+      return false;
+    }
+    
+    String html = FreemarkerKit.processString("tpl/verifyEmail.html", paras);
+    EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
+    
+    Tool.sendEmail(adminEmail, email, "Confirm PowerOJ account!", htmlMessage);
+    
+    log.info("Account recovery email send to user " + name);
+    return true;
+  }
 
-    String resetUrl = new StringBuilder(7).append(OjConfig.baseUrl).append( "/user/reset?name=").append(name).append("&token=").append(token).append("&t=").append(OjConfig.timeStamp).toString();
-    EmailMessage htmlMessage = new EmailMessage(
-        "<html><META http-equiv=Content-Type content=\"text/html; charset=utf-8\">" +
-        "<body><h2>Reset your account!</h2><br><div><p>" +
-        "To reset your password, click on the link below (or copy and paste the URL into your browser):<br>" +
-        "<a href=\"" + resetUrl + "\" target=\"blank\">" + resetUrl + "</a></p></div></body></html>",
-        MimeTypes.MIME_TEXT_HTML);
+  public boolean sendResetPasswordEmail(String name, String email, String token) throws MailException
+  {
+    String adminEmail = OjConfig.get("adminEmail");
+    
+    Map<String, Object> paras = new HashMap<String, Object>();
+    paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+    paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+    paras.put("name", name);
+    paras.put("token", token);
+    paras.put("ctime", OjConfig.timeStamp);
+    paras.put("expires", OjConstants.RESET_PASSWORD_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+    
+    String html = FreemarkerKit.processString("/tpl/resetEmail.html", paras);
+    EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
     
     Tool.sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
     
@@ -60,10 +116,15 @@ public class OjService
 
   public List<Record> getUserRoles(int uid)
   {
-    String sql = "SELECT r.name AS role, r.id AS rid FROM roles r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
+    String sql = "SELECT r.name AS role, r.id AS rid FROM role r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
     List<Record> roleList = Db.find(sql, uid);
     
     return roleList;
+  }
+
+  public List<Record> getRoleList()
+  {
+    return Db.find("SELECT * FROM role ORDER BY id");
   }
   
   public List<Record> getRolePermission(int rid)
@@ -72,6 +133,11 @@ public class OjService
     List<Record> permissionList = Db.find(sql,rid);
     
     return permissionList;
+  }
+
+  public List<Record> getPermissionList()
+  {
+    return Db.find("SELECT * FROM permission ORDER BY id");
   }
   
   public List<Record> tagList()

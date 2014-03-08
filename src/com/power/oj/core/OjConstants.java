@@ -11,8 +11,13 @@ public interface OjConstants
   /*
    * These contants are used in general.
    */
+  long MINUTE_IN_MILLISECONDS = 60 * 1000;
   long SESSION_EXPIRES_TIME = 15 * 60 * 1000;
   long RESET_PASSWORD_EXPIRES_TIME = 30 * 60 * 1000;
+  long VERIFY_EMAIL_EXPIRES_TIME = 60 * 60 * 1000;
+  long DAY_TIMESTAMP = 24 * 60 * 60 * 1000;
+  int MAX_PROBLEMS_IN_CONTEST = 26;
+  int PENALTY_FOR_WRONG_SUBMIT = 20;
   int AVATAR_WIDTH = 100;
   int AVATAR_HEIGHT = 100;
   int USERNAME_MIN_LENGTH = 5;

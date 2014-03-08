@@ -1,0 +1,93 @@
+<style>
+
+</style>
+<div id="block-title-banner">
+    <p>管理</p>
+
+    <div>
+        <a href="user">PowerOJ</a>
+        <span class="d">Administration</span>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+    <i class="location"></i>
+</div>
+<div id="block-first" class="block">
+    <div class="mainer">
+
+        <p class="alert alert-info">
+            该模块仅针对管理员开放。
+        </p>
+
+    </div>
+</div>
+<div id="temp-admin-member" class="hidden">
+    <p class="alert alert-info">
+        请确保谨慎操作。
+    </p>
+
+    <div class="l">
+        <a href="admin" class="btn primary" target="_blank">
+            <i class="icon white icon-list"></i>反馈信息池
+        </a>
+        <a href="admin" class="btn primary" target="_blank">
+            <i class="icon white icon-list"></i>举报信息池
+        </a>
+    </div>
+    <div class="r">
+        <a id="btn-manager-danmaku" class="btn primary" target="_blank">
+            <i class="icon white icon-edit"></i>评论管理
+        </a>
+        <a href="admin" class="btn primary" target="_blank">
+            <i class="icon white icon-edit"></i>管理后台
+        </a>
+    </div>
+    <span class="clearfix"></span>
+</div>
+<script>
+    system.tv = function () {
+        //set handle
+        var block = $('#block-first');
+        var mainer = block.find('div.mainer').eq(0);
+        //check role
+        if (m.isAdmin()) {
+            var html = $('#temp-admin-member').html();
+            //insert dom
+            mainer.html(html);
+            //bind action
+            $('#btn-manager-danmaku').click(function () {
+                //set handle
+                var btn = $(this);
+                //
+                btn.unfold({
+                    src: 'children/win-manager-danmaku',
+                    id: 'win-manager-danmaku',
+                    'class': 'win-children',
+                    title: '弹幕管理',
+                    icon: 'edit',
+                    width: 1120,
+                    height: 'auto'
+                });
+                //
+            });
+            //
+            $('#btn-manager-cw').click(function () {
+                //set handle
+                var btn = $(this);
+                //
+                btn.unfold({
+                    src: 'children/win-manager-cw',
+                    id: 'win-manager-cw',
+                    'class': 'win-children',
+                    title: '弹幕管理',
+                    icon: 'edit',
+                    width: 1120,
+                    height: 'auto'
+                });
+                //
+            });
+        }
+        ;
+    }();
+</script>
