@@ -62,9 +62,6 @@ public class PojJudgeAdapter extends JudgeAdapter
     if (!success)
     {
       updateCompileError(sb.toString());
-    }
-    else
-    {
       log.warn("Compile failed, return value: " + ret);
     }
 
@@ -108,11 +105,11 @@ public class PojJudgeAdapter extends JudgeAdapter
     for (int i = 0; i < numOfData; ++i)
     {
       runProcessOutputStream.write((inFiles.get(i) + "\n").getBytes());
+      log.info(inFiles.get(i));
       String userOutFile = new StringBuilder(4).append(workDirPath).append(File.separator).append(new File(outFiles.get(i)).getName()).append("\n").toString();
       runProcessOutputStream.write(userOutFile.getBytes());
-      runProcessOutputStream.write((outFiles.get(i) + "\n").getBytes());
-      log.info(inFiles.get(i));
       log.info(userOutFile);
+      runProcessOutputStream.write((outFiles.get(i) + "\n").getBytes());
       log.info(outFiles.get(i));
     }
     runProcessOutputStream.flush();

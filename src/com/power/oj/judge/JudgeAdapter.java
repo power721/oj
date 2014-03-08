@@ -52,7 +52,7 @@ public abstract class JudgeAdapter extends Thread
   {
     super();
     log.info("JudgeAdapter()");
-    run();
+    //run();
   }
   
   protected abstract boolean Compile() throws IOException;
