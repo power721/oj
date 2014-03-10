@@ -43,14 +43,14 @@
   <link href="assets/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet" type="text/css"></link>
   <script src="assets/bootstrap-wysihtml5/lib/wysihtml5-0.3.0.min.js"></script>  
   <script src="assets/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.min.js"></script>
-  <script src="assets/bootstrap-wysihtml5/src/locales/bootstrap-wysihtml5.zh-CN.js"></script>
-      
+     
   <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
   <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
 
   <script type="text/javascript">
     $('#inputContent').wysihtml5({
-     locale: "zh-CN"
+      html: true,
+      color: true
     });
 
     $('#startTime').datetimepicker({
