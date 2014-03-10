@@ -24,7 +24,7 @@ import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
-public abstract class JudgeAdapter extends Thread
+public abstract class JudgeAdapter implements Runnable
 {
   public static final String DATA_EXT_IN = ".in";
   public static final String DATA_EXT_OUT = ".out";
@@ -46,14 +46,13 @@ public abstract class JudgeAdapter extends Thread
   
   static
   {
+    // TODO move to OjConfig
     workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("work_path"))).append(File.separator).toString();
   }
   
   public JudgeAdapter()
   {
     super();
-    log.info("JudgeAdapter()");
-    //run();
   }
   
   protected abstract boolean Compile() throws IOException;

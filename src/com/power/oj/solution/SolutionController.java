@@ -190,7 +190,7 @@ public class SolutionController extends OjController
         if (JudgeAdapter.size() <= 1)
         {
           JudgeAdapter judge = new PojJudgeAdapter();
-          judge.start();
+          new Thread(judge).start();
           log.info("judge.start()");
         }
       }
