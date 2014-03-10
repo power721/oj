@@ -40,14 +40,19 @@
 </form>
 </@override>
 <@override name="scripts">
-  <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
-  <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.config.js"></script>
-  <script type="text/javascript" charset="utf-8" src="assets/ueditor/ueditor.all.min.js"></script>
-  
+  <link href="assets/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet" type="text/css"></link>
+  <script src="assets/bootstrap-wysihtml5/lib/wysihtml5-0.3.0.min.js"></script>  
+  <script src="assets/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.min.js"></script>
+  <script src="assets/bootstrap-wysihtml5/src/locales/bootstrap-wysihtml5.zh-CN.js"></script>
+      
   <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
   <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
 
   <script type="text/javascript">
+    $('#inputContent').wysihtml5({
+     locale: "zh-CN"
+    });
+
     $('#startTime').datetimepicker({
         format: "yyyy-mm-dd hh:ii",
         autoclose: true,
@@ -84,33 +89,6 @@
     function getLocalTime(time) {     
        return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");      
     }
-  </script>
-  
-  <script type="text/javascript">  
-    //实例化编辑器
-    var ue = UE.getEditor('inputContent');
-    ue.addListener('ready',function(){
-      this.focus()
-    });
-    
-    $('.ueditor').click(function(){
-      var id = $(this).attr('for');
-      var method = $(this).attr('method');
-      var ue = UE.getEditor(id);
-      
-      if (method == 'destroy')
-      {
-        ue.destroy();
-        $(this).attr('method', 'create');
-      }
-      else
-      {
-       ue.addListener('ready',function(){
-        this.focus()
-       });
-       $(this).attr('method', 'destroy');
-      }
-    });
   </script>
 </@override>
 <@extends name="../common/_layout.html" />
