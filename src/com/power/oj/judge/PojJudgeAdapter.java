@@ -11,6 +11,8 @@ import jodd.io.FileUtil;
 
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.solution.SolutionModel;
+import com.power.oj.solution.SolutionService;
 
 public class PojJudgeAdapter extends JudgeAdapter
 {
@@ -160,6 +162,23 @@ public class PojJudgeAdapter extends JudgeAdapter
       }
       
       return ret;
+    }
+  }
+  
+  public static void main(String[] args)
+  {
+    for (int i = 1000; i < 1010; ++i)
+    {
+      SolutionModel solutionModel = SolutionService.me().findSolution(i);
+      //synchronized (JudgeAdapter.class)
+      {
+        JudgeAdapter.addSolution(solutionModel);
+        if (JudgeAdapter.size() <= 1)
+        {
+          JudgeAdapter judge = new PojJudgeAdapter();
+          new Thread(judge).start();
+        }
+      }
     }
   }
 
