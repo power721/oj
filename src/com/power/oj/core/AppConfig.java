@@ -2,6 +2,8 @@ package com.power.oj.core;
 
 import java.util.Locale;
 
+import jodd.util.SystemUtil;
+
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Constants;
@@ -139,7 +141,18 @@ public class AppConfig extends JFinalConfig
    */
   public void configPlugin(Plugins me)
   {
-    DruidPlugin dp = new DruidPlugin(getProperty("jdbcUrl"), getProperty("user"), getProperty("password").trim());
+    DruidPlugin dp = null;
+    if (isBaeMode())
+    {
+      dp = new DruidPlugin(getProperty("bae.jdbcUrl"), getProperty("bae.user"), getProperty("bae.password").trim());
+    }
+    else
+    {
+      dp = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"), getProperty("dev.password").trim());
+    }
+    dp.setTestWhileIdle(true);
+    dp.setTestOnBorrow(true);
+    dp.setTestOnReturn(true);
     dp.addFilter(new StatFilter());
     WallFilter wall = new WallFilter();
     wall.setDbType("mysql");
@@ -224,7 +237,12 @@ public class AppConfig extends JFinalConfig
   {
     return baseViewPath;
   }
-  
+
+  private boolean isBaeMode()
+  {
+      return "/home/bae".equals(SystemUtil.getUserHome());
+  }
+
   /**
    * 建议使用 JFinal 手册推荐的方式启动项目 运行此 main 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此
    * 使用内置的Jetty容器， 基于Tomcat开发，需要将jetty.jar删除
