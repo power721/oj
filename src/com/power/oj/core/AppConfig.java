@@ -139,7 +139,10 @@ public class AppConfig extends JFinalConfig
    */
   public void configPlugin(Plugins me)
   {
-    DruidPlugin dp = new DruidPlugin(getProperty("jdbcUrl"), getProperty("user"), getProperty("password").trim());
+    DruidPlugin dp = new DruidPlugin(getProperty("bae.jdbcUrl"), getProperty("bae.user"), getProperty("bae.password").trim());
+    dp.setTestWhileIdle(true); 
+    dp.setTestOnBorrow(true);
+    dp.setTestOnReturn(true);
     dp.addFilter(new StatFilter());
     WallFilter wall = new WallFilter();
     wall.setDbType("mysql");
