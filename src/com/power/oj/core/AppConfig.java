@@ -222,9 +222,7 @@ public class AppConfig extends JFinalConfig
   public void afterJFinalStart()
   {
     OjConfig.initJudgeResult();
-    OjConfig.loadLanguage();
-    OjConfig.loadVariable();
-    OjConfig.loadLevel();
+    OjConfig.loadConfig();
     
     I18N.init("ojText", Locale.ENGLISH, null);
     VisitCountService.start();

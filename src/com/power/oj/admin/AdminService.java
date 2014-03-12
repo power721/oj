@@ -69,4 +69,15 @@ public class AdminService
     return ojInfo;
   }
   
+  public void reloadConfig(String type)
+  {
+    switch(type)
+    {
+      case "all":OjConfig.loadConfig();break;
+      case "var":OjConfig.loadVariable();break;
+      case "lang":OjConfig.loadLanguage();break;
+      case "level":OjConfig.loadLevel();break;
+    }
+  }
+  
 }

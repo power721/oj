@@ -49,11 +49,18 @@ public class OjConfig
   public static List<ResultType> judge_result;
   public static List<Integer> level;
 
-  public static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
+  private static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
 
   public static boolean getDevMode()
   {
     return JFinal.me().getConstants().getDevMode();
+  }
+  
+  public static void loadConfig()
+  {
+    loadVariable();
+    loadLanguage();
+    loadLevel();
   }
   
   public static void loadVariable()
@@ -89,6 +96,16 @@ public class OjConfig
       language_name.put(Language.getInt("id"), Language.getStr("name"));
     }
   }
+
+  public static void loadLevel()
+  {
+    level = new ArrayList<Integer>();
+    List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
+    for (Record record : levels)
+    {
+      level.add(record.getInt("exp"));
+    }
+  }
   
   public static void initJudgeResult()
   {
@@ -113,16 +130,6 @@ public class OjConfig
     }
   }
 
-  public static void loadLevel()
-  {
-    level = new ArrayList<Integer>();
-    List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
-    for (Record record : levels)
-    {
-      level.add(record.getInt("exp"));
-    }
-  }
-  
   /*
    * get OJ variable from DB cache
    */
