@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.AppConfig;
 import com.power.oj.core.OjConfig;
 
@@ -73,11 +74,33 @@ public class AdminService
   {
     switch(type)
     {
-      case "all":OjConfig.loadConfig();break;
       case "var":OjConfig.loadVariable();break;
       case "lang":OjConfig.loadLanguage();break;
       case "level":OjConfig.loadLevel();break;
+      default:OjConfig.loadConfig();
     }
+  }
+  
+  public int updateConfig(String name, String value, String type)
+  {
+    Record record = Db.findFirst("SELECT * FROM variable WHERE name=?", name);
+    
+    if (record == null)
+    {
+      return -1;
+    }
+    
+    switch (type)
+    {
+      case "string":record.set("value", value);break;
+      case "boolean":record.set("boolean_value", value);break;
+      case "int":record.set("int_value", value);break;
+      case "text":record.set("text_value", value);break;
+      default:return -2;
+    }
+    record.set("type", type);
+    
+    return Db.update("variable", record) ? 0 : 1;
   }
   
 }

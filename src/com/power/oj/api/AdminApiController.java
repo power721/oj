@@ -71,4 +71,21 @@ public class AdminApiController extends OjController
     }
   }
   
+  public void updateConfig()
+  {
+    String name = getPara("name");
+    String value = getPara("value");
+    String type = getPara("type", "string");
+    int result = adminService.updateConfig(name, value, type);
+    
+    if (result == 0)
+    {
+      renderJson("success:true");
+    }
+    else
+    {
+      renderJson("success:false, result:" + result);
+    }
+  }
+  
 }

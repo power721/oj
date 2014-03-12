@@ -26,7 +26,7 @@
                 </tr>
                 <tr>
                   <td>Sit Title</td>
-                  <td>${siteTitle!}</td>
+                  <td><a href="#" id="siteTitle">${siteTitle!}</a></td>
                 </tr>
                 <tr>
                   <td>Web Root</td>
@@ -38,46 +38,46 @@
                 </tr>
                 <tr>
                   <td>Problem Image Path</td>
-                  <td>${problemImagePath!}</td>
+                  <td><a href="#" id="problemImagePath">${problemImagePath!}</a></td>
                 </tr>
                 <tr>
                   <td>User Avatar Path</td>
-                  <td>${userAvatarPath!}</td>
+                  <td><a href="#" id="userAvatarPath">${userAvatarPath!}</a></td>
                 </tr>
                 <tr>
                   <td>Download Path</td>
-                  <td>${downloadPath!}</td>
+                  <td><a href="#" id="downloadPath">${downloadPath!}</a></td>
                 </tr>
                 <tr>
                   <td>Upload Path</td>
-                  <td>${uploadPath!}</td>
+                  <td><a href="#" id="uploadPath">${uploadPath!}</a></td>
                 </tr>
                 <tr class="info">
                   <td colspan="2">&nbsp;&nbsp;</td>
                 </tr>
                 <tr>
                   <td>Work Path</td>
-                  <td>${workPath!}</td>
+                  <td><a href="#" id="workPath">${workPath!}</a></td>
                 </tr>
                 <tr>
                   <td>Data Directory</td>
-                  <td>${dataPath!}</td>
-                </tr>
-                <tr>
-                  <td>Run Binary</td>
-                  <td>${runShell!}</td>
+                  <td><a href="#" id="dataPath">${dataPath!}</a></td>
                 </tr>
                 <tr>
                   <td>Compiler Binary</td>
-                  <td>${compilerShell!}</td>
+                  <td><a href="#" id="compilerShell">${compilerShell!}</a></td>
+                </tr>
+                <tr>
+                  <td>Run Binary</td>
+                  <td><a href="#" id="runShell">${runShell!}</a></td>
                 </tr>
                 <tr>
                   <td>Debug File</td>
-                  <td>${debugFile!}</td>
+                  <td><a href="#" id="debugFile">${debugFile!}</a></td>
                 </tr>
                 <tr>
                   <td>Error File</td>
-                  <td>${errorFile!}</td>
+                  <td><a href="#" id="errorFile">${errorFile!}</a></td>
                 </tr>
               </tbody>
             </table>
@@ -86,4 +86,82 @@
       </div>
     </div>
  </@override>
+<@override name="scripts">
+  <link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+  <script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+      var apiUrl = 'api/admin/updateConfig';
+      $.fn.editable.defaults.mode = 'inline';
+      $.fn.editable.defaults.url = apiUrl; 
+        $('#siteTitle').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change site title'
+        });
+        $('#problemImagePath').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change problem image path'
+        });
+        $('#userAvatarPath').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change user avatar path'
+        });
+        $('#downloadPath').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change download path'
+        });
+        $('#uploadPath').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change upload path'
+        });
+        $('#workPath').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change judge work directory'
+        });
+        $('#dataPath').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change judge data path'
+        });
+        $('#compilerShell').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change POJ judge compiler path'
+        });
+        $('#runShell').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change POJ judge executor path'
+        });
+        $('#debugFile').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change POJ judge debug file path'
+        });
+        $('#errorFile').editable({
+          type: 'text',
+          pk: 0,
+          params: {type:'string'},
+          title: 'Change POJ judge error file path'
+        });
+      });
+  </script>
+</@override>
 <@extends name="_layout.html"></@extends>
