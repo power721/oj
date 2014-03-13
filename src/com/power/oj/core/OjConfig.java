@@ -42,6 +42,7 @@ public class OjConfig
   public static long startInterceptorTime;
   public static long startGlobalHandlerTime;
 
+  public static boolean variableChanged = false;
   public static List<LanguageModel> program_languages;
   public static HashMap<Integer, LanguageModel> language_type;
   public static HashMap<Integer, String> language_name;
@@ -50,6 +51,7 @@ public class OjConfig
   public static List<Integer> level;
 
   private static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
+  // TODO use enChahe
 
   public static boolean getDevMode()
   {
@@ -83,6 +85,7 @@ public class OjConfig
     problemPageSize = getInt("problemPageSize", 50);
     userPageSize = getInt("userPageSize", 20);
     statusPageSize = getInt("statusPageSize", 20);
+    variableChanged = false;
   }
   
   public static void loadLanguage()
