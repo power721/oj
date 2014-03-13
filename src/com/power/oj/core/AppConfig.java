@@ -53,6 +53,7 @@ import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.discussion.DiscussionController;
+import com.power.oj.discussion.DiscussionModel;
 import com.power.oj.mail.MailContentModel;
 import com.power.oj.mail.MailController;
 import com.power.oj.mail.MailModel;
@@ -166,6 +167,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("user_ext", "uid", UserExtModel.class);
     arp.addMapping("friend", FriendModel.class);
     arp.addMapping("friend_group", FriendGroupModel.class);
+    arp.addMapping("discussion", DiscussionModel.class);
     arp.addMapping("notice", NoticeModel.class);
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);

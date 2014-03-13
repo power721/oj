@@ -283,6 +283,29 @@ CREATE TABLE `contest_user` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `discussion`
+-- ----------------------------
+DROP TABLE IF EXISTS `discussion`;
+CREATE TABLE `discussion` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `pid` int(9) NOT NULL DEFAULT '0',
+  `quoteId` int(9) NOT NULL DEFAULT '0',
+  `threadId` int(9) NOT NULL DEFAULT '0',
+  `title` varchar(255) DEFAULT NULL,
+  `content` text,
+  `atime` int(11) NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL DEFAULT '0',
+  `mtime` int(11) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of discussion
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `freeze_board`
 -- ----------------------------
 DROP TABLE IF EXISTS `freeze_board`;
@@ -498,35 +521,6 @@ CREATE TABLE `mail_content` (
 
 -- ----------------------------
 -- Records of mail_content
--- ----------------------------
-
--- ----------------------------
--- Table structure for `message`
--- ----------------------------
-DROP TABLE IF EXISTS `message`;
-CREATE TABLE `message` (
-`id`  int(9) NOT NULL AUTO_INCREMENT ,
-`uid`  int(9) NOT NULL ,
-`pid`  int(9) NOT NULL DEFAULT 0 ,
-`cid`  int(9) NOT NULL DEFAULT 0 ,
-`reply`  int(9) NULL DEFAULT NULL ,
-`thread`  int(9) NOT NULL ,
-`title`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-`content`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`atime`  int(11) NOT NULL ,
-`ctime`  int(11) NOT NULL ,
-`mtime`  int(11) NOT NULL ,
-`status`  tinyint(1) NOT NULL DEFAULT 1 ,
-PRIMARY KEY (`id`)
-)
-ENGINE=InnoDB
-DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=1
-
-;
-
--- ----------------------------
--- Records of message
 -- ----------------------------
 
 -- ----------------------------
