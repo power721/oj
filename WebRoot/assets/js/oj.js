@@ -583,6 +583,8 @@ Date.prototype.format = function(format) {
 };
 
 function parseTimestamp(nS) {
+  if (!nS || nS == null || nS == "")
+	  return "";
   return new Date(parseInt(nS) * 1000).format("yyyy-MM-dd hh:mm:ss");
 }
 

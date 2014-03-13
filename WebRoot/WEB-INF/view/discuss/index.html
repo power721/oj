@@ -1,4 +1,68 @@
-<@override name="content"></@override>
+<@override name="content">
+
+<div class="pagination pagination-centered">
+  <div class="pull-left">
+    <a href="discuss/add" class="btn btn-primary">Post new topic</a> 
+  </div>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=topicList.pageNumber totalPage=topicList.totalPage actionUrl="notice/" />
+  <div class="pull-right">
+    <span class="badge badge-info">${topicList.pageNumber}/${topicList.totalPage} Pages</span> 
+    <span class="badge badge-info">${topicList.totalRow} Records</span>
+  </div>
+</div>
+
+<table id="topic-list" class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th width="10%">Problem</th>
+      <th width="50%">Title</th>
+      <th width="10%">Author</th>
+      <th width="10%">Post Time</th>
+      <th width="10%">Last Reply</th>
+      <th width="10%">Reply</th>
+    </tr>
+  </thead>
+  <tbody>
+    <#if topicList??> 
+    <#list topicList.list as topic>
+      <tr>
+        <td><#if (topic.pid?? && topic.pid>0) ><a href="problem/show/${topic.pid!}">${topic.pid!}</#if></a></td>
+        <td class="title"><a href="discuss/show/${topic.id!}">${topic.title!}</a></td>
+        <td class="user"><a href="user/profile/${topic.name!}">${topic.name!}</a></td>
+        <td class="timestamp" data="${topic.ctime!}"></td>
+        <td class="timestamp" data="${topic.last!}"></td>
+        <td class="pts"">${topic.reply!}</td>
+      </tr>
+    </#list>
+    </#if>
+  </tbody>
+</table>
+</@override>
+
 <@override name="scripts">
+  
+  <#if oj_style != "slate">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('.timestamp').each( function() {
+        var that = $(this);
+        that.html(parseTimestamp(that.attr('data')));
+      });
+      
+      $("#topic-list").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:false,
+        striped:true,
+        clean:true
+      });
+    });
+  </script>
+</#if>
 </@override>
 <@extends name="../common/_layout.html" />

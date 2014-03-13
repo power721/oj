@@ -187,6 +187,25 @@ INSERT INTO `category` VALUES ('82', '71', 'Divide and Conquer', '分治');
 INSERT INTO `category` VALUES ('83', '0', 'Dynamic Programming', '动态规划');
 
 -- ----------------------------
+-- Table structure for `comment`
+-- ----------------------------
+DROP TABLE IF EXISTS `comment`;
+CREATE TABLE `comment` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `threadId` int(9) NOT NULL,
+  `quoteId` int(9) DEFAULT NULL,
+  `content` text NOT NULL,
+  `ip` varchar(64) DEFAULT NULL,
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of comment
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `contest`
 -- ----------------------------
 DROP TABLE IF EXISTS `contest`;
@@ -280,29 +299,6 @@ CREATE TABLE `contest_user` (
 
 -- ----------------------------
 -- Records of contest_user
--- ----------------------------
-
--- ----------------------------
--- Table structure for `discussion`
--- ----------------------------
-DROP TABLE IF EXISTS `discussion`;
-CREATE TABLE `discussion` (
-  `id` int(9) NOT NULL AUTO_INCREMENT,
-  `uid` int(9) NOT NULL,
-  `pid` int(9) NOT NULL DEFAULT '0',
-  `quoteId` int(9) NOT NULL DEFAULT '0',
-  `threadId` int(9) NOT NULL DEFAULT '0',
-  `title` varchar(255) DEFAULT NULL,
-  `content` text,
-  `atime` int(11) NOT NULL DEFAULT '0',
-  `ctime` int(11) NOT NULL DEFAULT '0',
-  `mtime` int(11) NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of discussion
 -- ----------------------------
 
 -- ----------------------------
@@ -772,6 +768,27 @@ AUTO_INCREMENT=1
 
 -- ----------------------------
 -- Records of team
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `topic`
+-- ----------------------------
+DROP TABLE IF EXISTS `topic`;
+CREATE TABLE `topic` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `pid` int(9) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `content` text,
+  `atime` int(11) NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL DEFAULT '0',
+  `mtime` int(11) NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of topic
 -- ----------------------------
 
 -- ----------------------------
