@@ -1,16 +1,25 @@
 package com.power.oj.util.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class TableModel
 {
+  private boolean model = false;
   private String packageName;
   private String tableName;
   private String modelName;
-  private HashMap<String, String> columnsNames;
   private ArrayList<Column> columns;
+
+  public boolean isModel()
+  {
+    return model;
+  }
+
+  public void setModel(boolean model)
+  {
+    this.model = model;
+  }
 
   public String getPackageName()
   {
@@ -39,32 +48,28 @@ public class TableModel
 
   public void setModelName(String tableName)
   {
-    modelName = new StringBuilder().append(convert(tableName)).append("Model").toString();
-    System.out.println("Table Name: " + modelName);
+    StringBuilder sb = new StringBuilder();
+    sb.append(convert(tableName));
+    if (model)
+      sb.append("Model");
+    modelName = sb.toString();
+    System.out.println("Table Name: " + tableName + "  Model Name: " + modelName);
   }
 
-  public HashMap<String, String> getColumnsNames()
-  {
-    return columnsNames;
-  }
-  
   public ArrayList<Column> getColumns()
   {
     return columns;
   }
-
-  public void setColumnsNames(List<String> columnsNames)
+  
+  public void setColumns(List<String> columnsNames)
   {
-    this.columnsNames = new HashMap<String, String>();
     columns = new ArrayList<Column>();
     for (String name : columnsNames)
     {
-      this.columnsNames.put(convertInv(name), name);
-      Column column = new Column(name);
-      columns.add(column);
+      columns.add(new Column(name));
     }
   }
-  
+
   private String convert(String name)
   {
     boolean flag = true;
@@ -88,33 +93,6 @@ public class TableModel
       {
         sb.append(tmp);
       }
-    }
-    return sb.toString();
-  }
-  
-  public static String convertInv(String name)
-  {
-    boolean flag = false;
-    StringBuilder sb = new StringBuilder();
-    
-    for (int i=0; i<name.length(); ++i)
-    {
-      char c = name.charAt(i);
-      String tmp = String.valueOf(c);
-      if (Character.isLowerCase(c))
-      {
-        flag = true;
-      }
-      else
-      {
-        if (flag && Character.isUpperCase(c))
-        {
-          sb.append("_");
-        }
-        flag = false;
-      }
-      
-      sb.append(tmp);
     }
     return sb.toString();
   }

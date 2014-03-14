@@ -2,11 +2,11 @@ package com.power.oj.bean;
 
 import com.jfinal.plugin.activerecord.Model;
 
-public class Solution extends Model<Solution>
+public class ContestSolution extends Model<ContestSolution>
 {
   private static final long serialVersionUID = 1L;
   
-  public static final Solution dao = new Solution();
+  public static final ContestSolution dao = new ContestSolution();
   
   public static final String SID = "sid";
   public static final String UID = "uid";
@@ -17,18 +17,18 @@ public class Solution extends Model<Solution>
   public static final String MEMORY = "memory";
   public static final String RESULT = "result";
   public static final String LANGUAGE = "language";
+  public static final String CTIME = "ctime";
+  public static final String ERROR = "error";
   public static final String SOURCE = "source";
   public static final String CODE_LEN = "codeLen";
-  public static final String ERROR = "error";
   public static final String SYSTEM_ERROR = "systemError";
-  public static final String CTIME = "ctime";
 
   public <T> T getSid()
   {
     return get(SID);
   }
   
-  public Solution setSid(Object value)
+  public ContestSolution setSid(Object value)
   {
     return set(SID, value);
   }
@@ -38,7 +38,7 @@ public class Solution extends Model<Solution>
     return get(UID);
   }
   
-  public Solution setUid(Object value)
+  public ContestSolution setUid(Object value)
   {
     return set(UID, value);
   }
@@ -48,7 +48,7 @@ public class Solution extends Model<Solution>
     return get(PID);
   }
   
-  public Solution setPid(Object value)
+  public ContestSolution setPid(Object value)
   {
     return set(PID, value);
   }
@@ -58,7 +58,7 @@ public class Solution extends Model<Solution>
     return get(CID);
   }
   
-  public Solution setCid(Object value)
+  public ContestSolution setCid(Object value)
   {
     return set(CID, value);
   }
@@ -68,7 +68,7 @@ public class Solution extends Model<Solution>
     return get(NUM);
   }
   
-  public Solution setNum(Object value)
+  public ContestSolution setNum(Object value)
   {
     return set(NUM, value);
   }
@@ -78,7 +78,7 @@ public class Solution extends Model<Solution>
     return get(TIME);
   }
   
-  public Solution setTime(Object value)
+  public ContestSolution setTime(Object value)
   {
     return set(TIME, value);
   }
@@ -88,7 +88,7 @@ public class Solution extends Model<Solution>
     return get(MEMORY);
   }
   
-  public Solution setMemory(Object value)
+  public ContestSolution setMemory(Object value)
   {
     return set(MEMORY, value);
   }
@@ -98,7 +98,7 @@ public class Solution extends Model<Solution>
     return get(RESULT);
   }
   
-  public Solution setResult(Object value)
+  public ContestSolution setResult(Object value)
   {
     return set(RESULT, value);
   }
@@ -108,9 +108,29 @@ public class Solution extends Model<Solution>
     return get(LANGUAGE);
   }
   
-  public Solution setLanguage(Object value)
+  public ContestSolution setLanguage(Object value)
   {
     return set(LANGUAGE, value);
+  }
+  
+  public <T> T getCtime()
+  {
+    return get(CTIME);
+  }
+  
+  public ContestSolution setCtime(Object value)
+  {
+    return set(CTIME, value);
+  }
+  
+  public <T> T getError()
+  {
+    return get(ERROR);
+  }
+  
+  public ContestSolution setError(Object value)
+  {
+    return set(ERROR, value);
   }
   
   public <T> T getSource()
@@ -118,7 +138,7 @@ public class Solution extends Model<Solution>
     return get(SOURCE);
   }
   
-  public Solution setSource(Object value)
+  public ContestSolution setSource(Object value)
   {
     return set(SOURCE, value);
   }
@@ -128,19 +148,9 @@ public class Solution extends Model<Solution>
     return get(CODE_LEN);
   }
   
-  public Solution setCodeLen(Object value)
+  public ContestSolution setCodeLen(Object value)
   {
     return set(CODE_LEN, value);
-  }
-  
-  public <T> T getError()
-  {
-    return get(ERROR);
-  }
-  
-  public Solution setError(Object value)
-  {
-    return set(ERROR, value);
   }
   
   public <T> T getSystemError()
@@ -148,19 +158,9 @@ public class Solution extends Model<Solution>
     return get(SYSTEM_ERROR);
   }
   
-  public Solution setSystemError(Object value)
+  public ContestSolution setSystemError(Object value)
   {
     return set(SYSTEM_ERROR, value);
-  }
-  
-  public <T> T getCtime()
-  {
-    return get(CTIME);
-  }
-  
-  public Solution setCtime(Object value)
-  {
-    return set(CTIME, value);
   }
   
 }

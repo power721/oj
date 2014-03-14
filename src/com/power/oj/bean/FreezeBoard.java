@@ -2,16 +2,16 @@ package com.power.oj.bean;
 
 import com.jfinal.plugin.activerecord.Model;
 
-public class Board extends Model<Board>
+public class FreezeBoard extends Model<FreezeBoard>
 {
   private static final long serialVersionUID = 1L;
   
-  public static final Board dao = new Board();
+  public static final FreezeBoard dao = new FreezeBoard();
   
   public static final String ID = "id";
   public static final String CID = "cid";
   public static final String UID = "uid";
-  public static final String SOLVED = "solved";
+  public static final String ACCEPTS = "accepts";
   public static final String PENALTY = "penalty";
   public static final String A_SOLVED_TIME = "A_SolvedTime";
   public static final String A_WRONG_NUM = "A_WrongNum";
@@ -71,7 +71,7 @@ public class Board extends Model<Board>
     return get(ID);
   }
   
-  public Board setId(Object value)
+  public FreezeBoard setId(Object value)
   {
     return set(ID, value);
   }
@@ -81,7 +81,7 @@ public class Board extends Model<Board>
     return get(CID);
   }
   
-  public Board setCid(Object value)
+  public FreezeBoard setCid(Object value)
   {
     return set(CID, value);
   }
@@ -91,19 +91,19 @@ public class Board extends Model<Board>
     return get(UID);
   }
   
-  public Board setUid(Object value)
+  public FreezeBoard setUid(Object value)
   {
     return set(UID, value);
   }
   
-  public <T> T getSolved()
+  public <T> T getAccepts()
   {
-    return get(SOLVED);
+    return get(ACCEPTS);
   }
   
-  public Board setSolved(Object value)
+  public FreezeBoard setAccepts(Object value)
   {
-    return set(SOLVED, value);
+    return set(ACCEPTS, value);
   }
   
   public <T> T getPenalty()
@@ -111,7 +111,7 @@ public class Board extends Model<Board>
     return get(PENALTY);
   }
   
-  public Board setPenalty(Object value)
+  public FreezeBoard setPenalty(Object value)
   {
     return set(PENALTY, value);
   }
@@ -121,7 +121,7 @@ public class Board extends Model<Board>
     return get(A_SOLVED_TIME);
   }
   
-  public Board setA_SolvedTime(Object value)
+  public FreezeBoard setA_SolvedTime(Object value)
   {
     return set(A_SOLVED_TIME, value);
   }
@@ -131,7 +131,7 @@ public class Board extends Model<Board>
     return get(A_WRONG_NUM);
   }
   
-  public Board setA_WrongNum(Object value)
+  public FreezeBoard setA_WrongNum(Object value)
   {
     return set(A_WRONG_NUM, value);
   }
@@ -141,7 +141,7 @@ public class Board extends Model<Board>
     return get(B_SOLVED_TIME);
   }
   
-  public Board setB_SolvedTime(Object value)
+  public FreezeBoard setB_SolvedTime(Object value)
   {
     return set(B_SOLVED_TIME, value);
   }
@@ -151,7 +151,7 @@ public class Board extends Model<Board>
     return get(B_WRONG_NUM);
   }
   
-  public Board setB_WrongNum(Object value)
+  public FreezeBoard setB_WrongNum(Object value)
   {
     return set(B_WRONG_NUM, value);
   }
@@ -161,7 +161,7 @@ public class Board extends Model<Board>
     return get(C_SOLVED_TIME);
   }
   
-  public Board setC_SolvedTime(Object value)
+  public FreezeBoard setC_SolvedTime(Object value)
   {
     return set(C_SOLVED_TIME, value);
   }
@@ -171,7 +171,7 @@ public class Board extends Model<Board>
     return get(C_WRONG_NUM);
   }
   
-  public Board setC_WrongNum(Object value)
+  public FreezeBoard setC_WrongNum(Object value)
   {
     return set(C_WRONG_NUM, value);
   }
@@ -181,7 +181,7 @@ public class Board extends Model<Board>
     return get(D_SOLVED_TIME);
   }
   
-  public Board setD_SolvedTime(Object value)
+  public FreezeBoard setD_SolvedTime(Object value)
   {
     return set(D_SOLVED_TIME, value);
   }
@@ -191,7 +191,7 @@ public class Board extends Model<Board>
     return get(D_WRONG_NUM);
   }
   
-  public Board setD_WrongNum(Object value)
+  public FreezeBoard setD_WrongNum(Object value)
   {
     return set(D_WRONG_NUM, value);
   }
@@ -201,7 +201,7 @@ public class Board extends Model<Board>
     return get(E_SOLVED_TIME);
   }
   
-  public Board setE_SolvedTime(Object value)
+  public FreezeBoard setE_SolvedTime(Object value)
   {
     return set(E_SOLVED_TIME, value);
   }
@@ -211,7 +211,7 @@ public class Board extends Model<Board>
     return get(E_WRONG_NUM);
   }
   
-  public Board setE_WrongNum(Object value)
+  public FreezeBoard setE_WrongNum(Object value)
   {
     return set(E_WRONG_NUM, value);
   }
@@ -221,7 +221,7 @@ public class Board extends Model<Board>
     return get(F_SOLVED_TIME);
   }
   
-  public Board setF_SolvedTime(Object value)
+  public FreezeBoard setF_SolvedTime(Object value)
   {
     return set(F_SOLVED_TIME, value);
   }
@@ -231,7 +231,7 @@ public class Board extends Model<Board>
     return get(F_WRONG_NUM);
   }
   
-  public Board setF_WrongNum(Object value)
+  public FreezeBoard setF_WrongNum(Object value)
   {
     return set(F_WRONG_NUM, value);
   }
@@ -241,7 +241,7 @@ public class Board extends Model<Board>
     return get(G_SOLVED_TIME);
   }
   
-  public Board setG_SolvedTime(Object value)
+  public FreezeBoard setG_SolvedTime(Object value)
   {
     return set(G_SOLVED_TIME, value);
   }
@@ -251,7 +251,7 @@ public class Board extends Model<Board>
     return get(G_WRONG_NUM);
   }
   
-  public Board setG_WrongNum(Object value)
+  public FreezeBoard setG_WrongNum(Object value)
   {
     return set(G_WRONG_NUM, value);
   }
@@ -261,7 +261,7 @@ public class Board extends Model<Board>
     return get(H_SOLVED_TIME);
   }
   
-  public Board setH_SolvedTime(Object value)
+  public FreezeBoard setH_SolvedTime(Object value)
   {
     return set(H_SOLVED_TIME, value);
   }
@@ -271,7 +271,7 @@ public class Board extends Model<Board>
     return get(H_WRONG_NUM);
   }
   
-  public Board setH_WrongNum(Object value)
+  public FreezeBoard setH_WrongNum(Object value)
   {
     return set(H_WRONG_NUM, value);
   }
@@ -281,7 +281,7 @@ public class Board extends Model<Board>
     return get(I_SOLVED_TIME);
   }
   
-  public Board setI_SolvedTime(Object value)
+  public FreezeBoard setI_SolvedTime(Object value)
   {
     return set(I_SOLVED_TIME, value);
   }
@@ -291,7 +291,7 @@ public class Board extends Model<Board>
     return get(I_WRONG_NUM);
   }
   
-  public Board setI_WrongNum(Object value)
+  public FreezeBoard setI_WrongNum(Object value)
   {
     return set(I_WRONG_NUM, value);
   }
@@ -301,7 +301,7 @@ public class Board extends Model<Board>
     return get(J_SOLVED_TIME);
   }
   
-  public Board setJ_SolvedTime(Object value)
+  public FreezeBoard setJ_SolvedTime(Object value)
   {
     return set(J_SOLVED_TIME, value);
   }
@@ -311,7 +311,7 @@ public class Board extends Model<Board>
     return get(J_WRONG_NUM);
   }
   
-  public Board setJ_WrongNum(Object value)
+  public FreezeBoard setJ_WrongNum(Object value)
   {
     return set(J_WRONG_NUM, value);
   }
@@ -321,7 +321,7 @@ public class Board extends Model<Board>
     return get(K_SOLVED_TIME);
   }
   
-  public Board setK_SolvedTime(Object value)
+  public FreezeBoard setK_SolvedTime(Object value)
   {
     return set(K_SOLVED_TIME, value);
   }
@@ -331,7 +331,7 @@ public class Board extends Model<Board>
     return get(K_WRONG_NUM);
   }
   
-  public Board setK_WrongNum(Object value)
+  public FreezeBoard setK_WrongNum(Object value)
   {
     return set(K_WRONG_NUM, value);
   }
@@ -341,7 +341,7 @@ public class Board extends Model<Board>
     return get(L_SOLVED_TIME);
   }
   
-  public Board setL_SolvedTime(Object value)
+  public FreezeBoard setL_SolvedTime(Object value)
   {
     return set(L_SOLVED_TIME, value);
   }
@@ -351,7 +351,7 @@ public class Board extends Model<Board>
     return get(L_WRONG_NUM);
   }
   
-  public Board setL_WrongNum(Object value)
+  public FreezeBoard setL_WrongNum(Object value)
   {
     return set(L_WRONG_NUM, value);
   }
@@ -361,7 +361,7 @@ public class Board extends Model<Board>
     return get(M_SOLVED_TIME);
   }
   
-  public Board setM_SolvedTime(Object value)
+  public FreezeBoard setM_SolvedTime(Object value)
   {
     return set(M_SOLVED_TIME, value);
   }
@@ -371,7 +371,7 @@ public class Board extends Model<Board>
     return get(M_WRONG_NUM);
   }
   
-  public Board setM_WrongNum(Object value)
+  public FreezeBoard setM_WrongNum(Object value)
   {
     return set(M_WRONG_NUM, value);
   }
@@ -381,7 +381,7 @@ public class Board extends Model<Board>
     return get(N_SOLVED_TIME);
   }
   
-  public Board setN_SolvedTime(Object value)
+  public FreezeBoard setN_SolvedTime(Object value)
   {
     return set(N_SOLVED_TIME, value);
   }
@@ -391,7 +391,7 @@ public class Board extends Model<Board>
     return get(N_WRONG_NUM);
   }
   
-  public Board setN_WrongNum(Object value)
+  public FreezeBoard setN_WrongNum(Object value)
   {
     return set(N_WRONG_NUM, value);
   }
@@ -401,7 +401,7 @@ public class Board extends Model<Board>
     return get(O_SOLVED_TIME);
   }
   
-  public Board setO_SolvedTime(Object value)
+  public FreezeBoard setO_SolvedTime(Object value)
   {
     return set(O_SOLVED_TIME, value);
   }
@@ -411,7 +411,7 @@ public class Board extends Model<Board>
     return get(O_WRONG_NUM);
   }
   
-  public Board setO_WrongNum(Object value)
+  public FreezeBoard setO_WrongNum(Object value)
   {
     return set(O_WRONG_NUM, value);
   }
@@ -421,7 +421,7 @@ public class Board extends Model<Board>
     return get(P_SOLVED_TIME);
   }
   
-  public Board setP_SolvedTime(Object value)
+  public FreezeBoard setP_SolvedTime(Object value)
   {
     return set(P_SOLVED_TIME, value);
   }
@@ -431,7 +431,7 @@ public class Board extends Model<Board>
     return get(P_WRONG_NUM);
   }
   
-  public Board setP_WrongNum(Object value)
+  public FreezeBoard setP_WrongNum(Object value)
   {
     return set(P_WRONG_NUM, value);
   }
@@ -441,7 +441,7 @@ public class Board extends Model<Board>
     return get(Q_SOLVED_TIME);
   }
   
-  public Board setQ_SolvedTime(Object value)
+  public FreezeBoard setQ_SolvedTime(Object value)
   {
     return set(Q_SOLVED_TIME, value);
   }
@@ -451,7 +451,7 @@ public class Board extends Model<Board>
     return get(Q_WRONG_NUM);
   }
   
-  public Board setQ_WrongNum(Object value)
+  public FreezeBoard setQ_WrongNum(Object value)
   {
     return set(Q_WRONG_NUM, value);
   }
@@ -461,7 +461,7 @@ public class Board extends Model<Board>
     return get(R_SOLVED_TIME);
   }
   
-  public Board setR_SolvedTime(Object value)
+  public FreezeBoard setR_SolvedTime(Object value)
   {
     return set(R_SOLVED_TIME, value);
   }
@@ -471,7 +471,7 @@ public class Board extends Model<Board>
     return get(R_WRONG_NUM);
   }
   
-  public Board setR_WrongNum(Object value)
+  public FreezeBoard setR_WrongNum(Object value)
   {
     return set(R_WRONG_NUM, value);
   }
@@ -481,7 +481,7 @@ public class Board extends Model<Board>
     return get(S_SOLVED_TIME);
   }
   
-  public Board setS_SolvedTime(Object value)
+  public FreezeBoard setS_SolvedTime(Object value)
   {
     return set(S_SOLVED_TIME, value);
   }
@@ -491,7 +491,7 @@ public class Board extends Model<Board>
     return get(S_WRONG_NUM);
   }
   
-  public Board setS_WrongNum(Object value)
+  public FreezeBoard setS_WrongNum(Object value)
   {
     return set(S_WRONG_NUM, value);
   }
@@ -501,7 +501,7 @@ public class Board extends Model<Board>
     return get(T_SOLVED_TIME);
   }
   
-  public Board setT_SolvedTime(Object value)
+  public FreezeBoard setT_SolvedTime(Object value)
   {
     return set(T_SOLVED_TIME, value);
   }
@@ -511,7 +511,7 @@ public class Board extends Model<Board>
     return get(T_WRONG_NUM);
   }
   
-  public Board setT_WrongNum(Object value)
+  public FreezeBoard setT_WrongNum(Object value)
   {
     return set(T_WRONG_NUM, value);
   }
@@ -521,7 +521,7 @@ public class Board extends Model<Board>
     return get(U_SOLVED_TIME);
   }
   
-  public Board setU_SolvedTime(Object value)
+  public FreezeBoard setU_SolvedTime(Object value)
   {
     return set(U_SOLVED_TIME, value);
   }
@@ -531,7 +531,7 @@ public class Board extends Model<Board>
     return get(U_WRONG_NUM);
   }
   
-  public Board setU_WrongNum(Object value)
+  public FreezeBoard setU_WrongNum(Object value)
   {
     return set(U_WRONG_NUM, value);
   }
@@ -541,7 +541,7 @@ public class Board extends Model<Board>
     return get(V_SOLVED_TIME);
   }
   
-  public Board setV_SolvedTime(Object value)
+  public FreezeBoard setV_SolvedTime(Object value)
   {
     return set(V_SOLVED_TIME, value);
   }
@@ -551,7 +551,7 @@ public class Board extends Model<Board>
     return get(V_WRONG_NUM);
   }
   
-  public Board setV_WrongNum(Object value)
+  public FreezeBoard setV_WrongNum(Object value)
   {
     return set(V_WRONG_NUM, value);
   }
@@ -561,7 +561,7 @@ public class Board extends Model<Board>
     return get(W_SOLVED_TIME);
   }
   
-  public Board setW_SolvedTime(Object value)
+  public FreezeBoard setW_SolvedTime(Object value)
   {
     return set(W_SOLVED_TIME, value);
   }
@@ -571,7 +571,7 @@ public class Board extends Model<Board>
     return get(W_WRONG_NUM);
   }
   
-  public Board setW_WrongNum(Object value)
+  public FreezeBoard setW_WrongNum(Object value)
   {
     return set(W_WRONG_NUM, value);
   }
@@ -581,7 +581,7 @@ public class Board extends Model<Board>
     return get(X_SOLVED_TIME);
   }
   
-  public Board setX_SolvedTime(Object value)
+  public FreezeBoard setX_SolvedTime(Object value)
   {
     return set(X_SOLVED_TIME, value);
   }
@@ -591,7 +591,7 @@ public class Board extends Model<Board>
     return get(X_WRONG_NUM);
   }
   
-  public Board setX_WrongNum(Object value)
+  public FreezeBoard setX_WrongNum(Object value)
   {
     return set(X_WRONG_NUM, value);
   }
@@ -601,7 +601,7 @@ public class Board extends Model<Board>
     return get(Y_SOLVED_TIME);
   }
   
-  public Board setY_SolvedTime(Object value)
+  public FreezeBoard setY_SolvedTime(Object value)
   {
     return set(Y_SOLVED_TIME, value);
   }
@@ -611,7 +611,7 @@ public class Board extends Model<Board>
     return get(Y_WRONG_NUM);
   }
   
-  public Board setY_WrongNum(Object value)
+  public FreezeBoard setY_WrongNum(Object value)
   {
     return set(Y_WRONG_NUM, value);
   }
@@ -621,7 +621,7 @@ public class Board extends Model<Board>
     return get(Z_SOLVED_TIME);
   }
   
-  public Board setZ_SolvedTime(Object value)
+  public FreezeBoard setZ_SolvedTime(Object value)
   {
     return set(Z_SOLVED_TIME, value);
   }
@@ -631,7 +631,7 @@ public class Board extends Model<Board>
     return get(Z_WRONG_NUM);
   }
   
-  public Board setZ_WrongNum(Object value)
+  public FreezeBoard setZ_WrongNum(Object value)
   {
     return set(Z_WRONG_NUM, value);
   }

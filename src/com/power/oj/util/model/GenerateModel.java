@@ -22,12 +22,13 @@ public class GenerateModel
     Map<String, TableModel> map = new HashMap<String, TableModel>();
     TableModel myModel = new TableModel();
     myModel.setPackageName(DBConn.p.getProperty("package"));
+    myModel.setModel("true".equals(DBConn.p.getProperty("model")));
     List<String> tables = DBConn.getTableNamesByDBName();
     for (String table : tables)
     {
       myModel.setTableName(table);
       myModel.setModelName(table);
-      myModel.setColumnsNames(DBConn.getColumnsNamesByTableName(table));
+      myModel.setColumns(DBConn.getColumnsNamesByTableName(table));
       map.put("myModel", myModel);
       File createFolder = new File(System.getProperty("user.dir") + "/src/" + DBConn.p.getProperty("package").replace(".", "/"));
       createFolder.mkdirs();
