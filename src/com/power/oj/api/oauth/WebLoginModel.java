@@ -9,7 +9,7 @@ public class WebLoginModel extends Model<WebLoginModel>
   public static final WebLoginModel dao = new WebLoginModel();
   
   public static final String ID = "id";
-  public static final String OPEN_ID = "open_id";
+  public static final String OPEN_ID = "openId";
   public static final String UID = "uid";
   public static final String NICK = "nick";
   public static final String AVATAR = "avatar";
@@ -33,12 +33,12 @@ public class WebLoginModel extends Model<WebLoginModel>
     return set(ID, value);
   }
   
-  public String getOpen_id()
+  public String getOpenId()
   {
     return getStr(OPEN_ID);
   }
   
-  public WebLoginModel setOpen_id(String value)
+  public WebLoginModel setOpenId(String value)
   {
     return set(OPEN_ID, value);
   }

@@ -12,7 +12,7 @@ public class TimingInterceptor implements Interceptor
   public void intercept(ActionInvocation ai)
   {
     OjConfig.startInterceptorTime = System.currentTimeMillis();
-    OjConfig.timeStamp = OjConfig.startInterceptorTime / 1000;
+    OjConfig.timeStamp = (int) (OjConfig.startInterceptorTime / 1000);
     
     Controller controller = ai.getController();
     String actionKey = ai.getActionKey();

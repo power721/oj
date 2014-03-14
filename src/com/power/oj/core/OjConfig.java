@@ -38,7 +38,7 @@ public class OjConfig
   public static int mailPageSize = 20;
   public static int noticePageSize = 20;
 
-  public static long timeStamp;
+  public static int timeStamp;
   public static long startInterceptorTime;
   public static long startGlobalHandlerTime;
 

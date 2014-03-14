@@ -50,23 +50,23 @@ public class QQLoginApiController extends OjController
       if (null == webLogin)
       {
         webLogin = new WebLoginModel();
-        webLogin.set(WebLoginModel.OPEN_ID, openid);
-        webLogin.set(WebLoginModel.TYPE, type);
-        webLogin.set(WebLoginModel.AVATAR, avatar);
-        webLogin.set(WebLoginModel.CTIME, OjConfig.timeStamp);
-        webLogin.set(WebLoginModel.STATUS, false);
-        webLogin.set(WebLoginModel.NICK, nickname).save();
+        webLogin.setOpenId(openid);
+        webLogin.setType(type);
+        webLogin.setAvatar(avatar);
+        webLogin.setCtime(OjConfig.timeStamp);
+        webLogin.setStatus(false);
+        webLogin.setNick(nickname).save();
       }
       
-      boolean status = webLogin.getBoolean(WebLoginModel.STATUS);
-      if (null != webLogin.getInt(WebLoginModel.ID) && !status)
+      boolean status = webLogin.getStatus();
+      if (null != webLogin.getId() && !status)
       {
-        if (null == webLogin.getInt(WebLoginModel.UID))
+        if (null == webLogin.getUid())
         {
           setSessionAttr("nouser", true);
         }
         
-        setSessionAttr("id", webLogin.getInt(WebLoginModel.ID));
+        setSessionAttr("id", webLogin.getId());
         setSessionAttr("type", type);
         setSessionAttr("nickname", nickname);
         setSessionAttr("avatar", avatar);
@@ -76,7 +76,7 @@ public class QQLoginApiController extends OjController
       
       //if (status)
       {
-        UserModel userModel = UserModel.dao.findById(webLogin.getInt(WebLoginModel.UID));
+        UserModel userModel = UserModel.dao.findById(webLogin.getUid());
         if (!userService.autoLogin(this, userModel, false))
         {
           setFlashMessage(new FlashMessage("Auto login failed, please inform admin!", MessageType.ERROR, getText("message.error.title")));
