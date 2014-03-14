@@ -23,8 +23,8 @@
     }
     setInterval(updateTime, 1000);
     
-    var startTimeText = new Date(${contest.start_time}*1e3).format("yyyy/MM/dd hh:mm:ss");
-    var dayNumber = Math.floor(${contest.start_time-serverTime}/3600/24);
+    var startTimeText = new Date(${contest.startTime}*1e3).format("yyyy/MM/dd hh:mm:ss");
+    var dayNumber = Math.floor(${contest.startTime-serverTime}/3600/24);
     dayNumber = dayNumber ? dayNumber.toString().length : 0;
     $('.countdown').jCountdown({
       timeText: startTimeText,
@@ -60,7 +60,7 @@
     */ 
   var __qqClockShare = {
      content: "<#if user??>Hi ${user.name}, </#if>比赛 ${contest.cid!}: ${contest.title!} 即将开始。",
-     time: new Date(${contest.start_time!0}*1000).format("yyyy-MM-dd hh:mm"),
+     time: new Date(${contest.startTime!0}*1000).format("yyyy-MM-dd hh:mm"),
      advance: 5,
      url: "${baseUrl}/contest/show/${contest.cid!}",
      icon: "1_1"

@@ -19,7 +19,7 @@
 </#list>
 </#if>
 </div>
-<#if serverTime<contest.end_time>
+<#if serverTime<contest.endTime>
 <div class="text-center">
   <button class="btn btn-primary" id="newQuestion" data-toggle="modal" data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post New Question</button>
 </div>

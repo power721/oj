@@ -1,6 +1,6 @@
 <@override name="contest_content">
 <div class="progress" id="contest-progress">
-  <div class="bar" id="contest-bar" style="width:<#if (serverTime > contest.end_time)>100%</#if>"></div>
+  <div class="bar" id="contest-bar" style="width:<#if (serverTime > contest.endTime)>100%</#if>"></div>
 </div>
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
@@ -87,21 +87,21 @@
 
 <script type="text/javascript" charset="utf-8">
   $(document).ready(function() {
-    var start_time = ${contest.start_time!0} * 1000;
-    var end_time = ${contest.end_time!0} * 1000;
-    var during_time = end_time - start_time;
+    var startTime = ${contest.startTime!0} * 1000;
+    var endTime = ${contest.endTime!0} * 1000;
+    var during_time = endTime - startTime;
     var current_time = ${serverTime!}*1000;
     function updateProgress() {
       current_time+=1000;
-      if (current_time >= start_time && current_time <= end_time) {
-        var percent = (current_time - start_time) / during_time * 100;
+      if (current_time >= startTime && current_time <= endTime) {
+        var percent = (current_time - startTime) / during_time * 100;
         $('#contest-bar').css('width', percent.toFixed(2) + '%');
       }
       $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
     }
     setInterval(updateProgress, 1000);
     
-    if (current_time >= start_time && current_time <= end_time) {
+    if (current_time >= startTime && current_time <= endTime) {
       $('#contest-progress').addClass('progress-danger progress-striped active');
     }
     

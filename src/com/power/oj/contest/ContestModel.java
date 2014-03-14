@@ -18,6 +18,7 @@ public class ContestModel extends Model<ContestModel>
   public static final String START_TIME = "startTime";
   public static final String END_TIME = "endTime";
   public static final String DESCRIPTION = "description";
+  public static final String REPORT = "report";
   public static final String TYPE = "type";
   public static final String PASSWORD = "password";
   public static final String ATIME = "atime";
@@ -38,20 +39,19 @@ public class ContestModel extends Model<ContestModel>
 
   public boolean saveContest()
   {
-    long ctime = OjConfig.timeStamp;
-    this.set("ctime", ctime);
+    this.setCtime(OjConfig.timeStamp);
 
     return this.save();
   }
   
   public boolean isPending()
   {
-    return getInt("start_time") > OjConfig.timeStamp;
+    return getStartTime() > OjConfig.timeStamp;
   }
   
   public boolean isFinished()
   {
-    return getInt("end_time") < OjConfig.timeStamp;
+    return getEndTime() < OjConfig.timeStamp;
   }
   
   public boolean isRunning()
@@ -61,27 +61,27 @@ public class ContestModel extends Model<ContestModel>
 
   public boolean hasPassword()
   {
-    return getInt("type") == ContestModel.TYPE_PASSWORD;
+    return getType() == ContestModel.TYPE_PASSWORD;
   }
 
   public boolean isPrivate()
   {
-    return getInt("type") == ContestModel.TYPE_PRIVATE;
+    return getType() == ContestModel.TYPE_PRIVATE;
   }
 
   public boolean isStrictPrivate()
   {
-    return getInt("type") == ContestModel.TYPE_STRICT_PRIVATE;
+    return getType() == ContestModel.TYPE_STRICT_PRIVATE;
   }
 
   public boolean isTest()
   {
-    return getInt("type") == ContestModel.TYPE_TEST;
+    return getType() == ContestModel.TYPE_TEST;
   }
   
   public boolean checkPassword(String password)
   {
-    return hasPassword() && get("pass").equals(password);
+    return hasPassword() && getPassword().equals(password);
   }
 
   public Integer getCid()
@@ -142,6 +142,16 @@ public class ContestModel extends Model<ContestModel>
   public ContestModel setDescription(String value)
   {
     return set(DESCRIPTION, value);
+  }
+
+  public String getReport()
+  {
+    return getStr(REPORT);
+  }
+  
+  public ContestModel setReport(String value)
+  {
+    return set(REPORT, value);
   }
   
   public Integer getType()

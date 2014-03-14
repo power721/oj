@@ -39,18 +39,18 @@
             <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
           </td>
           <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
-          <td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button></#if></td>
+          <td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button></#if></td>
         </tr>
         </#list>
         </#if>
-        <#if serverTime<contest.end_time>
+        <#if serverTime<contest.endTime>
         <tr>
           <form class="form-inline" id="addProblem" action="api/contest/addProblem" method="post">
           <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
           <td><input type="number" name="pid" class="input-small" placeholder="Problem ID" required></td>
           <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
           <td>
-            <button type="submit" class="btn btn-success">Add</button> <#if serverTime<contest.start_time><a class="btn btn-info hidden" id="reorder">Save</a></#if></td>
+            <button type="submit" class="btn btn-success">Add</button> <#if serverTime<contest.startTime><a class="btn btn-info hidden" id="reorder">Save</a></#if></td>
           </form>
         </tr>
         </#if>
@@ -119,7 +119,7 @@
         });
     }
     updateId();
-    <#if serverTime<contest.start_time>
+    <#if serverTime<contest.startTime>
     $("#problem-list tbody").sortable({
       helper: fixHelper,
       connectWith: "tr",
@@ -158,7 +158,7 @@
                           '<a href="problem/show/' + pid + '">' + pid + '</a>' +
                           '</td>' +
                           '<td class="title"><a href="contest/problem/' + cid + '-' + pid + '">' + title + '</a></td>' +
-                          '<td class="admin"><#if serverTime<contest.start_time><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
+                          '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
                           '</tr>';
                 that.parent().before(html);
                 updateId();

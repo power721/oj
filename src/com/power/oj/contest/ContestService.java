@@ -45,7 +45,7 @@ public class ContestService
   public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status)
   {
     List<Object> paras = new ArrayList<Object>();
-    String sql = "SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t";
+    String sql = "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t";
     StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
     if (type > -1)
     {
@@ -56,13 +56,13 @@ public class ContestService
 
     if (status == ContestModel.PENDING)
     {
-      sb.append(" AND start_time>UNIX_TIMESTAMP()");
+      sb.append(" AND startTime>UNIX_TIMESTAMP()");
     } else if (status == ContestModel.RUNNING)
     {
-      sb.append(" AND start_time<UNIX_TIMESTAMP() AND end_time>UNIX_TIMESTAMP()");
+      sb.append(" AND startTime<UNIX_TIMESTAMP() AND endTime>UNIX_TIMESTAMP()");
     } else if (status == ContestModel.FINISHED)
     {
-      sb.append(" AND end_time<UNIX_TIMESTAMP()");
+      sb.append(" AND endTime<UNIX_TIMESTAMP()");
     }
 
     sb.append(" ORDER BY cid DESC");
@@ -72,28 +72,28 @@ public class ContestService
     for (ContestModel contest : ContestList.getList())
     {
       long ctime = OjConfig.timeStamp;
-      int start_time = contest.getInt("start_time");
-      int end_time = contest.getInt("end_time");
+      int startTime = contest.getStartTime();
+      int endTime = contest.getEndTime();
       String cstatus = "Running";
 
-      if (start_time > ctime)
+      if (startTime > ctime)
         cstatus = "Pending";
-      else if (end_time < ctime)
+      else if (endTime < ctime)
         cstatus = "Finished";
 
       contest.put("cstatus", cstatus);
 
       String ctype = "Public";
-      if (contest.getInt("type") == ContestModel.TYPE_PASSWORD)
+      if (contest.hasPassword())
       {
         ctype = "Password";
-      } else if (contest.getInt("type") == ContestModel.TYPE_PRIVATE)
+      } else if (contest.isPrivate())
       {
         ctype = "Private";
-      } else if (contest.getInt("type") == ContestModel.TYPE_STRICT_PRIVATE)
+      } else if (contest.isStrictPrivate())
       {
         ctype = "Strict Private";
-      } else if (contest.getInt("type") == ContestModel.TYPE_TEST)
+      } else if (contest.isTest())
       {
         ctype = "Test";
       }
@@ -116,13 +116,13 @@ public class ContestService
 
     if ("running".equals(sSearch.toLowerCase()))
     {
-      sb.append(" AND start_time>UNIX_TIMESTAMP()");
+      sb.append(" AND startTime>UNIX_TIMESTAMP()");
     } else if ("pending".equals(sSearch.toLowerCase()))
     {
-      sb.append(" AND start_time<UNIX_TIMESTAMP() AND end_time>UNIX_TIMESTAMP()");
+      sb.append(" AND startTime<UNIX_TIMESTAMP() AND endTime>UNIX_TIMESTAMP()");
     } else if ("finished".equals(sSearch.toLowerCase()))
     {
-      sb.append(" AND end_time<UNIX_TIMESTAMP()");
+      sb.append(" AND endTime<UNIX_TIMESTAMP()");
     }
 
     sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", cid DESC");
@@ -132,28 +132,28 @@ public class ContestService
     for (ContestModel contest : ContestList.getList())
     {
       long ctime = OjConfig.timeStamp;
-      int start_time = contest.getInt("start_time");
-      int end_time = contest.getInt("end_time");
+      int startTime = contest.getInt("startTime");
+      int endTime = contest.getInt("endTime");
       String cstatus = "Running";
 
-      if (start_time > ctime)
+      if (startTime > ctime)
         cstatus = "Pending";
-      else if (end_time < ctime)
+      else if (endTime < ctime)
         cstatus = "Finished";
 
       contest.put("cstatus", cstatus);
 
       String ctype = "Public";
-      if (contest.getInt("type") == ContestModel.TYPE_PASSWORD)
+      if (contest.hasPassword())
       {
         ctype = "Password";
-      } else if (contest.getInt("type") == ContestModel.TYPE_PRIVATE)
+      } else if (contest.isPrivate())
       {
         ctype = "Private";
-      } else if (contest.getInt("type") == ContestModel.TYPE_STRICT_PRIVATE)
+      } else if (contest.isStrictPrivate())
       {
         ctype = "Strict Private";
-      } else if (contest.getInt("type") == ContestModel.TYPE_TEST)
+      } else if (contest.isTest())
       {
         ctype = "Test";
       }
@@ -174,7 +174,7 @@ public class ContestService
   public ContestModel getContest(Integer cid)
   {
     ContestModel contestModle = dao.findFirst(
-        "SELECT *,FROM_UNIXTIME(start_time, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(end_time, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=? LIMIT 1",
+        "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=? LIMIT 1",
         cid);
     return contestModle;
   }
@@ -376,7 +376,7 @@ public class ContestService
         ContestkendoSchedulerTask contest = new ContestkendoSchedulerTask();
         try
         {
-          timeStamp = sdf.parse(data.getString("start_time")).getTime();
+          timeStamp = sdf.parse(data.getString("startTime")).getTime();
         } catch (ParseException e)
         {
           timeStamp = 0;
@@ -404,16 +404,16 @@ public class ContestService
   
   public int getContestStatus(Integer cid)
   {
-    ContestModel contestModle = dao.findFirst("SELECT start_time,end_time FROM contest WHERE cid=? LIMIT 1", cid);
+    ContestModel contestModle = dao.findFirst("SELECT startTime,endTime FROM contest WHERE cid=? LIMIT 1", cid);
     if (contestModle == null)
       return -1;
     long ctime = OjConfig.timeStamp;
-    int start_time = contestModle.getInt("start_time");
-    int end_time = contestModle.getInt("end_time");
+    int startTime = contestModle.getInt("startTime");
+    int endTime = contestModle.getInt("endTime");
 
-    if (start_time > ctime)
+    if (startTime > ctime)
       return ContestModel.PENDING;
-    else if (end_time < ctime)
+    else if (endTime < ctime)
       return  ContestModel.FINISHED;
 
     return  ContestModel.RUNNING;
@@ -444,30 +444,30 @@ public class ContestService
   
   public boolean updateContest(ContestModel contestModel)
   {
-    ContestModel newContest = dao.findById(contestModel.get("cid"));
-    if (contestModel.get("freeze") == null)
+    ContestModel newContest = dao.findById(contestModel.getCid());
+    if (contestModel.getFreeze())
     {
-      newContest.set("freeze", 0);
+      newContest.setFreeze(false);
     }
     
-    if (contestModel.getInt("type") == ContestModel.TYPE_PASSWORD)
+    if (contestModel.hasPassword())
     {
-      if (StringUtil.isNotBlank(contestModel.getStr("pass")))
+      if (StringUtil.isNotBlank(contestModel.getPassword()))
       {
-        newContest.set("pass", contestModel.get("pass"));
+        newContest.setPassword(contestModel.getPassword());
       }
       else if (newContest.getInt("type") != ContestModel.TYPE_PASSWORD)
       {
         return false;
       }
     }
-    newContest.set("title", contestModel.get("title"));
-    newContest.set("description", contestModel.get("description"));
-    newContest.set("report", contestModel.get("report"));
-    newContest.set("start_time", contestModel.get("start_time"));
-    newContest.set("end_time", contestModel.get("end_time"));
-    newContest.set("type", contestModel.get("type"));
-    newContest.set("mtime", OjConfig.timeStamp);
+    newContest.setTitle(contestModel.getTitle());
+    newContest.setDescription(contestModel.getDescription());
+    newContest.setReport(contestModel.getReport());
+    newContest.setStartTime(contestModel.getStartTime());
+    newContest.setEndTime(contestModel.getEndTime());
+    newContest.setType(contestModel.getType());
+    newContest.setMtime(OjConfig.timeStamp);
     
     return contestModel.update();
   }
@@ -588,7 +588,7 @@ public class ContestService
   {
     Db.update("DELETE FROM board WHERE cid=?", cid);
     ContestModel contestModle = getContest(cid);
-    int contestStartTime = contestModle.getInt("start_time");
+    int contestStartTime = contestModle.getInt("startTime");
     List<Record> solutions = Db.find("SELECT uid,pid,num,result,ctime FROM contest_solution WHERE cid=? ORDER BY sid", cid);
     HashMap<Object, UserInfo> userRank = new HashMap<Object, UserInfo>();
     UserInfo userInfo = null;
@@ -689,12 +689,12 @@ public class ContestService
 
   public boolean isContestPending(Integer cid)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND start_time>UNIX_TIMESTAMP() LIMIT 1", cid) != null;
+    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND startTime>UNIX_TIMESTAMP() LIMIT 1", cid) != null;
   }
 
   public boolean isContestFinished(Integer cid)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND end_time<UNIX_TIMESTAMP() LIMIT 1", cid) != null;
+    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND endTime<UNIX_TIMESTAMP() LIMIT 1", cid) != null;
   }
 
   public boolean isContestHasPassword(Integer cid)
@@ -704,7 +704,7 @@ public class ContestService
 
   public boolean checkContestPassword(Integer cid, String password)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND pass=? AND type=1 LIMIT 1", cid, password) != null;
+    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND password=? AND type=1 LIMIT 1", cid, password) != null;
   }
 
   public class UserInfo

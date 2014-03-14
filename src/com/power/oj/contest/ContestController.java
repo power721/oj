@@ -60,13 +60,13 @@ public class ContestController extends OjController
     }
     
     long serverTime = OjConfig.timeStamp;
-    int start_time = contestModel.getInt("start_time");
-    int end_time = contestModel.getInt("end_time");
+    int startTime = contestModel.getInt("startTime");
+    int endTime = contestModel.getInt("endTime");
     String status = getText("contest.status.running");
 
-    if (start_time > serverTime)
+    if (startTime > serverTime)
       status = getText("contest.status.pending");
-    else if (end_time < serverTime)
+    else if (endTime < serverTime)
       status = getText("contest.status.finished");
 
     setAttr("contest", contestModel);
@@ -359,15 +359,15 @@ public class ContestController extends OjController
   @RequiresPermissions("contest:edit")
   public void update()
   {
-    String start_time = getPara("start_time");
-    String end_time = getPara("end_time");
+    String startTime = getPara("startTime");
+    String endTime = getPara("endTime");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     ContestModel contestModel = getModel(ContestModel.class, "contest");
     
     try
     {
-      contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
-      contestModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
+      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())
@@ -384,8 +384,8 @@ public class ContestController extends OjController
   {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     long ctime = OjConfig.startInterceptorTime + 3600000;
-    setAttr("start_time", sdf.format(new Date(ctime)));
-    setAttr("end_time", sdf.format(new Date(ctime + 18000000)));
+    setAttr("startTime", sdf.format(new Date(ctime)));
+    setAttr("endTime", sdf.format(new Date(ctime + 18000000)));
     
     setTitle(getText("contest.add.title"));
   }
@@ -395,17 +395,17 @@ public class ContestController extends OjController
   @RequiresPermissions("contest:add")
   public void save()
   {
-    String start_time = getPara("start_time");
-    String end_time = getPara("end_time");
+    String startTime = getPara("startTime");
+    String endTime = getPara("endTime");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     ContestModel contestModel = getModel(ContestModel.class, "contest");
-    contestModel.set("uid", userService.getCurrentUid());
+    contestModel.setUid(userService.getCurrentUid());
     try
     {
-      contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
-      contestModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
-      log.info(contestModel.get("end_time").toString());
+      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
+      log.info(contestModel.getEndTime().toString());
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())
@@ -429,13 +429,13 @@ public class ContestController extends OjController
     }
     
     long serverTime = OjConfig.timeStamp;
-    int start_time = contestModel.getInt("start_time");
-    int end_time = contestModel.getInt("end_time");
+    int startTime = contestModel.getInt("startTime");
+    int endTime = contestModel.getInt("endTime");
     String status = getText("contest.status.running");
 
-    if (start_time > serverTime)
+    if (startTime > serverTime)
       status = getText("contest.status.pending");
-    else if (end_time < serverTime)
+    else if (endTime < serverTime)
       status = getText("contest.status.finished");
 
     setAttr("contest", contestModel);
@@ -457,13 +457,13 @@ public class ContestController extends OjController
     }
     
     long serverTime = OjConfig.timeStamp;
-    int start_time = contestModel.getInt("start_time");
-    int end_time = contestModel.getInt("end_time");
+    int startTime = contestModel.getInt("startTime");
+    int endTime = contestModel.getInt("endTime");
     String status = getText("contest.status.running");
 
-    if (start_time > serverTime)
+    if (startTime > serverTime)
       status = getText("contest.status.pending");
-    else if (end_time < serverTime)
+    else if (endTime < serverTime)
       status = getText("contest.status.finished");
 
     setAttr("contest", contestModel);

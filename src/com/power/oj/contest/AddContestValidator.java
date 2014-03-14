@@ -22,7 +22,7 @@ public class AddContestValidator extends Validator
     int type = c.getParaToInt("contest.type");
     if (type == ContestModel.TYPE_PASSWORD)
     {
-      validateRequired("contest.pass", "passMsg", c.getText("contest.add.validate.pass"));
+      validateRequired("contest.password", "passMsg", c.getText("contest.add.validate.pass"));
     }
     
     // TODO validate time

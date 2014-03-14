@@ -54,7 +54,7 @@ public class ContestPasswordInterceptor implements Interceptor
     
     controller.keepPara(OjConstants.PAGE_TITLE);
 
-    controller.setAttr("title", contestModle.get("title"));
+    controller.setAttr("title", contestModle.getTitle());
     controller.setAttr("cid", cid);
 
     controller.render("password.html");
