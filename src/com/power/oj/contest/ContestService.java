@@ -445,10 +445,6 @@ public class ContestService
   public boolean updateContest(ContestModel contestModel)
   {
     ContestModel newContest = dao.findById(contestModel.getCid());
-    if (contestModel.getFreeze())
-    {
-      newContest.setFreeze(false);
-    }
     
     if (contestModel.hasPassword())
     {
@@ -467,6 +463,7 @@ public class ContestService
     newContest.setStartTime(contestModel.getStartTime());
     newContest.setEndTime(contestModel.getEndTime());
     newContest.setType(contestModel.getType());
+    newContest.setFreeze(contestModel.getFreeze());
     newContest.setMtime(OjConfig.timeStamp);
     
     return contestModel.update();

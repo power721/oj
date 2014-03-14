@@ -56,7 +56,7 @@
   <div class="control-group">
     <div class="controls">
       <label class="checkbox"> 
-        <input type="checkbox" name="contest.freeze" value="1"<#if contest.freeze==1> checked</#if>>Freeze
+        <input type="checkbox" name="contest.freeze" value="1"<#if contest.freeze??> checked</#if>>Freeze
       </label>
       <button type="submit" class="btn btn-primary">Submit</button>
       <button type="reset" class="btn btn-info">Reset</button>
