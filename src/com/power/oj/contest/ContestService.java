@@ -54,13 +54,13 @@ public class ContestService
     }
     // TODO only admin and attendee can see test contest
 
-    if (status == 0)
+    if (status == ContestModel.PENDING)
     {
       sb.append(" AND start_time>UNIX_TIMESTAMP()");
-    } else if (status == 1)
+    } else if (status == ContestModel.RUNNING)
     {
       sb.append(" AND start_time<UNIX_TIMESTAMP() AND end_time>UNIX_TIMESTAMP()");
-    } else if (status == 2)
+    } else if (status == ContestModel.FINISHED)
     {
       sb.append(" AND end_time<UNIX_TIMESTAMP()");
     }
@@ -84,16 +84,16 @@ public class ContestService
       contest.put("cstatus", cstatus);
 
       String ctype = "Public";
-      if (contest.getInt("type") == 1)
+      if (contest.getInt("type") == ContestModel.TYPE_PASSWORD)
       {
         ctype = "Password";
-      } else if (contest.getInt("type") == 2)
+      } else if (contest.getInt("type") == ContestModel.TYPE_PRIVATE)
       {
         ctype = "Private";
-      } else if (contest.getInt("type") == 3)
+      } else if (contest.getInt("type") == ContestModel.TYPE_STRICT_PRIVATE)
       {
         ctype = "Strict Private";
-      } else if (contest.getInt("type") == 4)
+      } else if (contest.getInt("type") == ContestModel.TYPE_TEST)
       {
         ctype = "Test";
       }
@@ -144,16 +144,16 @@ public class ContestService
       contest.put("cstatus", cstatus);
 
       String ctype = "Public";
-      if (contest.getInt("type") == 1)
+      if (contest.getInt("type") == ContestModel.TYPE_PASSWORD)
       {
         ctype = "Password";
-      } else if (contest.getInt("type") == 2)
+      } else if (contest.getInt("type") == ContestModel.TYPE_PRIVATE)
       {
         ctype = "Private";
-      } else if (contest.getInt("type") == 3)
+      } else if (contest.getInt("type") == ContestModel.TYPE_STRICT_PRIVATE)
       {
         ctype = "Strict Private";
-      } else if (contest.getInt("type") == 4)
+      } else if (contest.getInt("type") == ContestModel.TYPE_TEST)
       {
         ctype = "Test";
       }
@@ -412,11 +412,11 @@ public class ContestService
     int end_time = contestModle.getInt("end_time");
 
     if (start_time > ctime)
-      return ContestModel.Pending;
+      return ContestModel.PENDING;
     else if (end_time < ctime)
-      return  ContestModel.Finished;
+      return  ContestModel.FINISHED;
 
-    return  ContestModel.Running;
+    return  ContestModel.RUNNING;
   }
 
   public List<Record> getContestStatistics(Integer cid)
@@ -450,13 +450,13 @@ public class ContestService
       newContest.set("freeze", 0);
     }
     
-    if (contestModel.getInt("type") == ContestModel.TYPE_Password)
+    if (contestModel.getInt("type") == ContestModel.TYPE_PASSWORD)
     {
       if (StringUtil.isNotBlank(contestModel.getStr("pass")))
       {
         newContest.set("pass", contestModel.get("pass"));
       }
-      else if (newContest.getInt("type") != ContestModel.TYPE_Password)
+      else if (newContest.getInt("type") != ContestModel.TYPE_PASSWORD)
       {
         return false;
       }
