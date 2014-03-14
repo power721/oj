@@ -8,32 +8,32 @@ public class ${myModel.modelName} extends Model<${myModel.modelName}>
   
   public static final ${myModel.modelName} dao = new ${myModel.modelName}();
   
-<#list myModel.columnsNames?keys as key>
-  public static final String ${key?upper_case} = "${myModel.columnsNames[key]}";
+<#list myModel.columns as column>
+  public static final String ${column.field?upper_case} = "${column.name}";
 </#list>
 
-<#list myModel.columnsNames?keys as key>
-  <#assign name=myModel.columnsNames[key]?cap_first >
+<#list myModel.columns as column>
+  <#assign name=column.name?cap_first >
   <#if name?starts_with("Is")>
   <#assign setName=name?substring(2)>
   public Boolean ${name}()
   {
-    return getBoolean(${key?upper_case});
+    return getBoolean(${column.field?upper_case});
   }
   
   public ${myModel.modelName} set${setName}(Boolean value)
   {
-    return set(${key?upper_case}, value);
+    return set(${column.field?upper_case}, value);
   }
   <#else>
   public <T> T get${name}()
   {
-    return get(${key?upper_case});
+    return get(${column.field?upper_case});
   }
   
   public ${myModel.modelName} set${name}(Object value)
   {
-    return set(${key?upper_case}, value);
+    return set(${column.field?upper_case}, value);
   }
   </#if>
   

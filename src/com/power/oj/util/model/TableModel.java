@@ -1,5 +1,6 @@
 package com.power.oj.util.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class TableModel
   private String tableName;
   private String modelName;
   private HashMap<String, String> columnsNames;
+  private ArrayList<Column> columns;
 
   public String getPackageName()
   {
@@ -45,13 +47,21 @@ public class TableModel
   {
     return columnsNames;
   }
+  
+  public ArrayList<Column> getColumns()
+  {
+    return columns;
+  }
 
   public void setColumnsNames(List<String> columnsNames)
   {
     this.columnsNames = new HashMap<String, String>();
+    columns = new ArrayList<Column>();
     for (String name : columnsNames)
     {
       this.columnsNames.put(convertInv(name), name);
+      Column column = new Column(name);
+      columns.add(column);
     }
   }
   
@@ -82,7 +92,7 @@ public class TableModel
     return sb.toString();
   }
   
-  private String convertInv(String name)
+  public static String convertInv(String name)
   {
     boolean flag = false;
     StringBuilder sb = new StringBuilder();
