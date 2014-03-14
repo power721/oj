@@ -17,7 +17,7 @@
       <th width="5%">Solved</th>
       <th width="10%">Penalty</th> <#list contestProblems as Problem>
       <th><a href="contest/problem/${cid!}-${Problem.id}" data-toggle="tooltip" title="${Problem.title}"><strong>${Problem.id}</strong></a><br> <a
-        href="contest/status/${cid!}?pid=${Problem.id}&result=0">${Problem.accept}</a>/ <a href="contest/status/${cid!}?pid=${Problem.id}">${Problem.submit}</a></th>
+        href="contest/status/${cid!}?pid=${Problem.id}&result=0">${Problem.accepted}</a>/ <a href="contest/status/${cid!}?pid=${Problem.id}">${Problem.submission}</a></th>
       </#list>
     </tr>
   </thead>
@@ -32,8 +32,8 @@
       <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
       <td>${User.penalty!}</td> <#list contestProblems as Problem> <#assign ac=User["${Problem.id}_time"]> <#assign wa=User["${Problem.id}_WrongSubmits"]>
       <td
-        class="<#if ac==0 && wa!=0>wa wa${(wa/5)?int}</#if><#if ac!=0 && wa==0>ac</#if><#if ac!=0 && wa!=0>ac1</#if><#if Problem.first_blood == User.uid> fb</#if>"><#--
-        允许多个First Boold： Problem.first_blood_time == ac --> <#if (ac>0)>${ac}<#if (wa>0)><br></#if></#if><#if (wa>0)>(-${wa})</#if>
+        class="<#if ac==0 && wa!=0>wa wa${(wa/5)?int}</#if><#if ac!=0 && wa==0>ac</#if><#if ac!=0 && wa!=0>ac1</#if><#if Problem.firstBloodUid == User.uid> fb</#if>"><#--
+        允许多个First Boold： Problem.firstBloodTime == ac --> <#if (ac>0)>${ac}<#if (wa>0)><br></#if></#if><#if (wa>0)>(-${wa})</#if>
       </td> </#list>
     </tr>
     </#list> </#if>

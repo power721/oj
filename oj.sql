@@ -263,23 +263,17 @@ CREATE TABLE `contest_clarify` (
 -- ----------------------------
 DROP TABLE IF EXISTS `contest_problem`;
 CREATE TABLE `contest_problem` (
-`id`  int(9) NOT NULL AUTO_INCREMENT ,
-`cid`  int(9) NOT NULL DEFAULT 0 ,
-`pid`  int(9) NOT NULL DEFAULT 0 ,
-`title`  char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-`num`  int(5) NOT NULL DEFAULT 0 ,
-`accept` int(9) NOT NULL DEFAULT '0',
-`submit` int(9) NOT NULL DEFAULT '0',
-`first_blood` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
-`first_blood_time` int(9) NOT NULL DEFAULT '-1' COMMENT 'first time(minutes) solved this problem',
-PRIMARY KEY (`id`),
-UNIQUE KEY `problem` (`cid`,`pid`) USING BTREE
-)
-ENGINE=InnoDB
-DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
-AUTO_INCREMENT=1
-
-;
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `cid` int(9) NOT NULL,
+  `pid` int(9) NOT NULL,
+  `title` char(255) NOT NULL,
+  `num` tinyint(5) NOT NULL DEFAULT '0',
+  `accepted` int(5) NOT NULL DEFAULT '0',
+  `submission` int(5) NOT NULL DEFAULT '0',
+  `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
+  `firstBloodTime` int(9) NOT NULL DEFAULT '-1' COMMENT 'first time(minutes) solved this problem',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of contest_problem

@@ -190,7 +190,7 @@ public class ContestService
     List<Record> contestProblems;
     if (uid != null && uid > 0)
     {
-      sql = "SELECT cp.pid,cp.num,cp.accept,cp.submit,title,status FROM contest_problem cp LEFT OUTER JOIN (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
+      sql = "SELECT cp.pid,cp.num,cp.accepted,cp.submission,title,status FROM contest_problem cp LEFT OUTER JOIN (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
       contestProblems = Db.find(sql, uid, cid, cid);
     } else
     {
@@ -218,7 +218,7 @@ public class ContestService
   
   public ProblemModel getProblem(Integer cid, Integer num)
   {
-    Record record = Db.findFirst("SELECT pid,title,accept,submit FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
+    Record record = Db.findFirst("SELECT pid,title,accepted,submission FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
     if (record == null)
       return null;
 
@@ -231,8 +231,8 @@ public class ContestService
     if (StringUtil.isNotBlank(title))
       problem.set("title", title);
 
-    problem.set("accept", record.get("accept"));
-    problem.set("submit", record.get("submit"));
+    problem.set("accept", record.get("accepted"));
+    problem.set("submit", record.get("submission"));
     problem.set("submit_user", Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=?", cid, num));
     problem.set("solved", Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE result=0 AND cid=? AND num=?", cid, num));
     problem.put("id", (char) (num + 'A'));
@@ -677,7 +677,7 @@ public class ContestService
     }
     for (int i = 0; i < OjConstants.MAX_PROBLEMS_IN_CONTEST; ++i)
     {
-      Db.update("UPDATE contest_problem SET first_blood=?,first_blood_time=?,accept=?,submit=? WHERE cid=? AND num=?", firstBoold[i], firstBooldTime[i],
+      Db.update("UPDATE contest_problem SET firstBloodUid=?,firstBloodTime=?,accepted=?,submission=? WHERE cid=? AND num=?", firstBoold[i], firstBooldTime[i],
           accept[i], submit[i], cid, i);
     }
 
