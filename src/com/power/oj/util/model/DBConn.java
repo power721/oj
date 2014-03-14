@@ -19,7 +19,7 @@ public class DBConn
     try
     {
       p.load(DBConn.class.getResourceAsStream("/createEntity.properties"));
-      Class.forName("com.mysql.jdbc.Driver");
+      Class.forName(p.getProperty("className"));
     } catch (ClassNotFoundException e)
     {
       e.printStackTrace();

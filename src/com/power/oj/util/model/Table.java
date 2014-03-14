@@ -41,7 +41,7 @@ public class Table
   {
     modelName = new StringBuilder().append(prefix).append(convert(tableName)).append(suffix).toString();
     modelName  = modelName.substring(0,1).toUpperCase() + modelName.substring(1);
-    System.out.println("Table Name: " + tableName + "  Model Name: " + modelName);
+    System.out.println("Table Name: " + tableName + "  -->  Model Name: " + modelName);
   }
 
   public String getPrefix()

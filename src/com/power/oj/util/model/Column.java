@@ -6,12 +6,6 @@ public class Column
   private String field;
   private String type;
   
-  public Column(String name)
-  {
-    this.name = name;
-    this.field = convertInv(name);
-  }
-
   public Column(String name, String type)
   {
     this.name = name;
@@ -141,15 +135,15 @@ public class Column
   {
     switch (type)
     {
-      case "String": return "Str";
-      case "Integer": return "Int";
-      case "java.sql.Date": return "Date";
-      case "java.sql.Time": return "Time";
-      case "java.sql.Timestamp": return "Timestamp";
-      case "java.math.BigInteger": return "BigInteger";
-      case "java.math.BigDecimal": return "BigDecimal";
-      case "byte[]": return "Bytes";
+      case "String": return "getStr";
+      case "Integer": return "getInt";
+      case "java.sql.Date": return "getDate";
+      case "java.sql.Time": return "getTime";
+      case "java.sql.Timestamp": return "getTimestamp";
+      case "java.math.BigInteger": return "getBigInteger";
+      case "java.math.BigDecimal": return "getBigDecimal";
+      case "byte[]": return "getBytes";
     }
-    return type;
+    return "get" + type;
   }
 }

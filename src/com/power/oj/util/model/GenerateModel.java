@@ -19,6 +19,7 @@ public class GenerateModel
     Configuration config = new Configuration();
     config.setClassForTemplateLoading(GenerateModel.class, ".");
     
+    int count = 0;
     Template temp = config.getTemplate("model.tpl");
     Map<String, Table> map = new HashMap<String, Table>();
     List<String> tables = DBConn.getTableNamesByDBName();
@@ -38,8 +39,10 @@ public class GenerateModel
       File createFolder = new File(System.getProperty("user.dir") + "/src/" + DBConn.p.getProperty("package").replace(".", "/"));
       createFolder.mkdirs();
       temp.process(map, new FileWriter(createFolder + "/" + myModel.getModelName() + ".java"));
+      
+      count += 1;
     }
     
-    System.out.println("Completed!");
+    System.out.println("Generated " + count + " tables, package: " + DBConn.p.getProperty("package"));
   }
 }

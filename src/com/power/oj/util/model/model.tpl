@@ -29,7 +29,7 @@ public class ${myModel.modelName} extends Model<${myModel.modelName}>
   <#assign name=column.name?cap_first >
   public <#if column.type??>${column.type}<#else><T> T</#if> get${name}()
   {
-    return get${column.method}(${column.field?upper_case});
+    return ${column.method}(${column.field?upper_case});
   }
   
   public ${myModel.modelName} set${name}(<#if column.type??>${column.type}<#else>Object</#if> value)
