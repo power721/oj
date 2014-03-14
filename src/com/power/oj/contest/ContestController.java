@@ -319,12 +319,12 @@ public class ContestController extends OjController
   }
 
   @ClearInterceptor
-  @Before({ContestInterceptor.class, POST.class})
+  @Before(POST.class)
   public void password()
   {
     Integer cid = getParaToInt("cid");
     String password = getPara("password");
-
+    
     if (contestService.checkContestPassword(cid, password))
     {
       String token_name = new StringBuilder("cid-").append(cid).toString();
