@@ -13,15 +13,29 @@ public class ${myModel.modelName} extends Model<${myModel.modelName}>
 </#list>
 
 <#list myModel.columnsNames?keys as key>
-  public <T> T get${myModel.columnsNames[key]?cap_first}()
+  <#assign name=myModel.columnsNames[key]?cap_first >
+  <#if name?starts_with("Is")>
+  <#assign setName=name?substring(2)>
+  public Boolean ${name}()
+  {
+    return getBoolean(${key?upper_case});
+  }
+  
+  public ${myModel.modelName} set${setName}(Boolean value)
+  {
+    return set(${key?upper_case}, value);
+  }
+  <#else>
+  public <T> T get${name}()
   {
     return get(${key?upper_case});
   }
   
-  public ${myModel.modelName} set${myModel.columnsNames[key]?cap_first}(Object value)
+  public ${myModel.modelName} set${name}(Object value)
   {
     return set(${key?upper_case}, value);
   }
+  </#if>
   
 </#list>
 }
