@@ -14,52 +14,52 @@ public class MailContent extends Model<MailContent>
   public static final String CONTENT = "content";
   public static final String CTIME = "ctime";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public MailContent setId(Object value)
+  public MailContent setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getFromUid()
+  public Integer getFromUid()
   {
-    return get(FROM_UID);
+    return getInt(FROM_UID);
   }
   
-  public MailContent setFromUid(Object value)
+  public MailContent setFromUid(Integer value)
   {
     return set(FROM_UID, value);
   }
   
-  public <T> T getToUid()
+  public Integer getToUid()
   {
-    return get(TO_UID);
+    return getInt(TO_UID);
   }
   
-  public MailContent setToUid(Object value)
+  public MailContent setToUid(Integer value)
   {
     return set(TO_UID, value);
   }
   
-  public <T> T getContent()
+  public String getContent()
   {
-    return get(CONTENT);
+    return getStr(CONTENT);
   }
   
-  public MailContent setContent(Object value)
+  public MailContent setContent(String value)
   {
     return set(CONTENT, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public MailContent setCtime(Object value)
+  public MailContent setCtime(Integer value)
   {
     return set(CTIME, value);
   }

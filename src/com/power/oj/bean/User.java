@@ -39,302 +39,302 @@ public class User extends Model<User>
   public static final String STATUS = "status";
   public static final String TOKEN = "token";
 
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public User setUid(Object value)
+  public User setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getTid()
+  public Integer getTid()
   {
-    return get(TID);
+    return getInt(TID);
   }
   
-  public User setTid(Object value)
+  public User setTid(Integer value)
   {
     return set(TID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public User setName(Object value)
+  public User setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getPassword()
+  public String getPassword()
   {
-    return get(PASSWORD);
+    return getStr(PASSWORD);
   }
   
-  public User setPassword(Object value)
+  public User setPassword(String value)
   {
     return set(PASSWORD, value);
   }
   
-  public <T> T getNick()
+  public String getNick()
   {
-    return get(NICK);
+    return getStr(NICK);
   }
   
-  public User setNick(Object value)
+  public User setNick(String value)
   {
     return set(NICK, value);
   }
   
-  public <T> T getRealName()
+  public String getRealName()
   {
-    return get(REAL_NAME);
+    return getStr(REAL_NAME);
   }
   
-  public User setRealName(Object value)
+  public User setRealName(String value)
   {
     return set(REAL_NAME, value);
   }
   
-  public <T> T getRegEmail()
+  public String getRegEmail()
   {
-    return get(REG_EMAIL);
+    return getStr(REG_EMAIL);
   }
   
-  public User setRegEmail(Object value)
+  public User setRegEmail(String value)
   {
     return set(REG_EMAIL, value);
   }
   
-  public <T> T getEmail()
+  public String getEmail()
   {
-    return get(EMAIL);
+    return getStr(EMAIL);
   }
   
-  public User setEmail(Object value)
+  public User setEmail(String value)
   {
     return set(EMAIL, value);
   }
   
-  public <T> T getEmailVerified()
+  public Boolean getEmailVerified()
   {
-    return get(EMAIL_VERIFIED);
+    return getBoolean(EMAIL_VERIFIED);
   }
   
-  public User setEmailVerified(Object value)
+  public User setEmailVerified(Boolean value)
   {
     return set(EMAIL_VERIFIED, value);
   }
   
-  public <T> T getLanguage()
+  public Integer getLanguage()
   {
-    return get(LANGUAGE);
+    return getInt(LANGUAGE);
   }
   
-  public User setLanguage(Object value)
+  public User setLanguage(Integer value)
   {
     return set(LANGUAGE, value);
   }
   
-  public <T> T getSchool()
+  public String getSchool()
   {
-    return get(SCHOOL);
+    return getStr(SCHOOL);
   }
   
-  public User setSchool(Object value)
+  public User setSchool(String value)
   {
     return set(SCHOOL, value);
   }
   
-  public <T> T getSolved()
+  public Integer getSolved()
   {
-    return get(SOLVED);
+    return getInt(SOLVED);
   }
   
-  public User setSolved(Object value)
+  public User setSolved(Integer value)
   {
     return set(SOLVED, value);
   }
   
-  public <T> T getAccepted()
+  public Integer getAccepted()
   {
-    return get(ACCEPTED);
+    return getInt(ACCEPTED);
   }
   
-  public User setAccepted(Object value)
+  public User setAccepted(Integer value)
   {
     return set(ACCEPTED, value);
   }
   
-  public <T> T getSubmission()
+  public Integer getSubmission()
   {
-    return get(SUBMISSION);
+    return getInt(SUBMISSION);
   }
   
-  public User setSubmission(Object value)
+  public User setSubmission(Integer value)
   {
     return set(SUBMISSION, value);
   }
   
-  public <T> T getAtime()
+  public Integer getAtime()
   {
-    return get(ATIME);
+    return getInt(ATIME);
   }
   
-  public User setAtime(Object value)
+  public User setAtime(Integer value)
   {
     return set(ATIME, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public User setCtime(Object value)
+  public User setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getMtime()
+  public Integer getMtime()
   {
-    return get(MTIME);
+    return getInt(MTIME);
   }
   
-  public User setMtime(Object value)
+  public User setMtime(Integer value)
   {
     return set(MTIME, value);
   }
   
-  public <T> T getLoginTime()
+  public Integer getLoginTime()
   {
-    return get(LOGIN_TIME);
+    return getInt(LOGIN_TIME);
   }
   
-  public User setLoginTime(Object value)
+  public User setLoginTime(Integer value)
   {
     return set(LOGIN_TIME, value);
   }
   
-  public <T> T getLoginIP()
+  public String getLoginIP()
   {
-    return get(LOGIN_IP);
+    return getStr(LOGIN_IP);
   }
   
-  public User setLoginIP(Object value)
+  public User setLoginIP(String value)
   {
     return set(LOGIN_IP, value);
   }
   
-  public <T> T getPhone()
+  public String getPhone()
   {
-    return get(PHONE);
+    return getStr(PHONE);
   }
   
-  public User setPhone(Object value)
+  public User setPhone(String value)
   {
     return set(PHONE, value);
   }
   
-  public <T> T getQq()
+  public String getQq()
   {
-    return get(QQ);
+    return getStr(QQ);
   }
   
-  public User setQq(Object value)
+  public User setQq(String value)
   {
     return set(QQ, value);
   }
   
-  public <T> T getBlog()
+  public String getBlog()
   {
-    return get(BLOG);
+    return getStr(BLOG);
   }
   
-  public User setBlog(Object value)
+  public User setBlog(String value)
   {
     return set(BLOG, value);
   }
   
-  public <T> T getGender()
+  public String getGender()
   {
-    return get(GENDER);
+    return getStr(GENDER);
   }
   
-  public User setGender(Object value)
+  public User setGender(String value)
   {
     return set(GENDER, value);
   }
   
-  public <T> T getComeFrom()
+  public String getComeFrom()
   {
-    return get(COME_FROM);
+    return getStr(COME_FROM);
   }
   
-  public User setComeFrom(Object value)
+  public User setComeFrom(String value)
   {
     return set(COME_FROM, value);
   }
   
-  public <T> T getOnline()
+  public Integer getOnline()
   {
-    return get(ONLINE);
+    return getInt(ONLINE);
   }
   
-  public User setOnline(Object value)
+  public User setOnline(Integer value)
   {
     return set(ONLINE, value);
   }
   
-  public <T> T getAvatar()
+  public String getAvatar()
   {
-    return get(AVATAR);
+    return getStr(AVATAR);
   }
   
-  public User setAvatar(Object value)
+  public User setAvatar(String value)
   {
     return set(AVATAR, value);
   }
   
-  public <T> T getSignature()
+  public String getSignature()
   {
-    return get(SIGNATURE);
+    return getStr(SIGNATURE);
   }
   
-  public User setSignature(Object value)
+  public User setSignature(String value)
   {
     return set(SIGNATURE, value);
   }
   
-  public <T> T getShareCode()
+  public Boolean getShareCode()
   {
-    return get(SHARE_CODE);
+    return getBoolean(SHARE_CODE);
   }
   
-  public User setShareCode(Object value)
+  public User setShareCode(Boolean value)
   {
     return set(SHARE_CODE, value);
   }
   
-  public <T> T getStatus()
+  public Integer getStatus()
   {
-    return get(STATUS);
+    return getInt(STATUS);
   }
   
-  public User setStatus(Object value)
+  public User setStatus(Integer value)
   {
     return set(STATUS, value);
   }
   
-  public <T> T getToken()
+  public String getToken()
   {
-    return get(TOKEN);
+    return getStr(TOKEN);
   }
   
-  public User setToken(Object value)
+  public User setToken(String value)
   {
     return set(TOKEN, value);
   }

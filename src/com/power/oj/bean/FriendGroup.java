@@ -14,52 +14,52 @@ public class FriendGroup extends Model<FriendGroup>
   public static final String COUNT = "count";
   public static final String CTIME = "ctime";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public FriendGroup setId(Object value)
+  public FriendGroup setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public FriendGroup setUid(Object value)
+  public FriendGroup setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public FriendGroup setName(Object value)
+  public FriendGroup setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getCount()
+  public Integer getCount()
   {
-    return get(COUNT);
+    return getInt(COUNT);
   }
   
-  public FriendGroup setCount(Object value)
+  public FriendGroup setCount(Integer value)
   {
     return set(COUNT, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public FriendGroup setCtime(Object value)
+  public FriendGroup setCtime(Integer value)
   {
     return set(CTIME, value);
   }

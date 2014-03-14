@@ -26,7 +26,7 @@ public class DiscussionService
   {
     List<Object> paras = new ArrayList<Object>();
     StringBuilder sb = new StringBuilder();
-    sb.append("FROM topic t LEFT JOIN user u ON u.uid=t.uid");
+    sb.append("FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid");
     if (pid != null && pid > 0)
     {
       sb.append(" WHERE pid=?");
@@ -38,7 +38,7 @@ public class DiscussionService
     
     for (TopicModel topic : topicPage.getList())
     {
-      CommentModel comment = CommentModel.dao.findFirst("SELECT COUNT(*) AS reply,MAX(ctime) AS last FROM comment WHERE threadId=? LIMIT 1", topic.get("id"));
+      CommentModel comment = CommentModel.dao.findFirst("SELECT COUNT(*) AS reply,MAX(ctime) AS last FROM `comment` WHERE threadId=? LIMIT 1", topic.get("id"));
       topic.put("reply", comment.get("reply"));
       topic.put("last", comment.get("last"));
     }
@@ -55,7 +55,7 @@ public class DiscussionService
   
   public TopicModel getTopic(Integer id)
   {
-    return dao.findFirst("SELECT t.*,u.name,u.avatar FROM topic LEFT JOIN user u ON u.uid=t.uid WHERE id=?", id);
+    return dao.findFirst("SELECT t.*,u.name,u.avatar FROM `topic` LEFT JOIN `user` u ON u.uid=t.uid WHERE id=?", id);
   }
   
   public boolean addDiscussion(TopicModel topicModel)

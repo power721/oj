@@ -3,23 +3,14 @@ package com.power.oj.util.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableModel
+public class Table
 {
-  private boolean model = false;
   private String packageName;
   private String tableName;
+  private String prefix;
   private String modelName;
-  private ArrayList<Column> columns;
-
-  public boolean isModel()
-  {
-    return model;
-  }
-
-  public void setModel(boolean model)
-  {
-    this.model = model;
-  }
+  private String suffix;
+  private List<Column> columns;
 
   public String getPackageName()
   {
@@ -48,15 +39,32 @@ public class TableModel
 
   public void setModelName(String tableName)
   {
-    StringBuilder sb = new StringBuilder();
-    sb.append(convert(tableName));
-    if (model)
-      sb.append("Model");
-    modelName = sb.toString();
+    modelName = new StringBuilder().append(prefix).append(convert(tableName)).append(suffix).toString();
+    modelName  = modelName.substring(0,1).toUpperCase() + modelName.substring(1);
     System.out.println("Table Name: " + tableName + "  Model Name: " + modelName);
   }
 
-  public ArrayList<Column> getColumns()
+  public String getPrefix()
+  {
+    return prefix;
+  }
+
+  public void setPrefix(String prefix)
+  {
+    this.prefix = prefix.trim();
+  }
+
+  public String getSuffix()
+  {
+    return suffix;
+  }
+
+  public void setSuffix(String suffix)
+  {
+    this.suffix = suffix.trim();
+  }
+
+  public List<Column> getColumns()
   {
     return columns;
   }
@@ -66,7 +74,8 @@ public class TableModel
     columns = new ArrayList<Column>();
     for (String name : columnsNames)
     {
-      columns.add(new Column(name));
+      String fields[] = name.split(";");
+      columns.add(new Column(fields[0], fields[1]));
     }
   }
 

@@ -13,42 +13,42 @@ public class Category extends Model<Category>
   public static final String NAME = "name";
   public static final String ZH = "zh";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Category setId(Object value)
+  public Category setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getParent()
+  public Integer getParent()
   {
-    return get(PARENT);
+    return getInt(PARENT);
   }
   
-  public Category setParent(Object value)
+  public Category setParent(Integer value)
   {
     return set(PARENT, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public Category setName(Object value)
+  public Category setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getZh()
+  public String getZh()
   {
-    return get(ZH);
+    return getStr(ZH);
   }
   
-  public Category setZh(Object value)
+  public Category setZh(String value)
   {
     return set(ZH, value);
   }

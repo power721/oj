@@ -18,92 +18,92 @@ public class ContestProblem extends Model<ContestProblem>
   public static final String FIRST_BLOOD_UID = "firstBloodUid";
   public static final String FIRST_BLOOD_TIME = "firstBloodTime";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public ContestProblem setId(Object value)
+  public ContestProblem setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public ContestProblem setCid(Object value)
+  public ContestProblem setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public ContestProblem setPid(Object value)
+  public ContestProblem setPid(Integer value)
   {
     return set(PID, value);
   }
   
-  public <T> T getTitle()
+  public String getTitle()
   {
-    return get(TITLE);
+    return getStr(TITLE);
   }
   
-  public ContestProblem setTitle(Object value)
+  public ContestProblem setTitle(String value)
   {
     return set(TITLE, value);
   }
   
-  public <T> T getNum()
+  public Integer getNum()
   {
-    return get(NUM);
+    return getInt(NUM);
   }
   
-  public ContestProblem setNum(Object value)
+  public ContestProblem setNum(Integer value)
   {
     return set(NUM, value);
   }
   
-  public <T> T getAccepted()
+  public Integer getAccepted()
   {
-    return get(ACCEPTED);
+    return getInt(ACCEPTED);
   }
   
-  public ContestProblem setAccepted(Object value)
+  public ContestProblem setAccepted(Integer value)
   {
     return set(ACCEPTED, value);
   }
   
-  public <T> T getSubmission()
+  public Integer getSubmission()
   {
-    return get(SUBMISSION);
+    return getInt(SUBMISSION);
   }
   
-  public ContestProblem setSubmission(Object value)
+  public ContestProblem setSubmission(Integer value)
   {
     return set(SUBMISSION, value);
   }
   
-  public <T> T getFirstBloodUid()
+  public Integer getFirstBloodUid()
   {
-    return get(FIRST_BLOOD_UID);
+    return getInt(FIRST_BLOOD_UID);
   }
   
-  public ContestProblem setFirstBloodUid(Object value)
+  public ContestProblem setFirstBloodUid(Integer value)
   {
     return set(FIRST_BLOOD_UID, value);
   }
   
-  public <T> T getFirstBloodTime()
+  public Integer getFirstBloodTime()
   {
-    return get(FIRST_BLOOD_TIME);
+    return getInt(FIRST_BLOOD_TIME);
   }
   
-  public ContestProblem setFirstBloodTime(Object value)
+  public ContestProblem setFirstBloodTime(Integer value)
   {
     return set(FIRST_BLOOD_TIME, value);
   }

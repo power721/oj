@@ -66,572 +66,572 @@ public class Board extends Model<Board>
   public static final String Z_SOLVED_TIME = "Z_SolvedTime";
   public static final String Z_WRONG_NUM = "Z_WrongNum";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Board setId(Object value)
+  public Board setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public Board setCid(Object value)
+  public Board setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Board setUid(Object value)
+  public Board setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getSolved()
+  public Integer getSolved()
   {
-    return get(SOLVED);
+    return getInt(SOLVED);
   }
   
-  public Board setSolved(Object value)
+  public Board setSolved(Integer value)
   {
     return set(SOLVED, value);
   }
   
-  public <T> T getPenalty()
+  public Integer getPenalty()
   {
-    return get(PENALTY);
+    return getInt(PENALTY);
   }
   
-  public Board setPenalty(Object value)
+  public Board setPenalty(Integer value)
   {
     return set(PENALTY, value);
   }
   
-  public <T> T getA_SolvedTime()
+  public Integer getA_SolvedTime()
   {
-    return get(A_SOLVED_TIME);
+    return getInt(A_SOLVED_TIME);
   }
   
-  public Board setA_SolvedTime(Object value)
+  public Board setA_SolvedTime(Integer value)
   {
     return set(A_SOLVED_TIME, value);
   }
   
-  public <T> T getA_WrongNum()
+  public Integer getA_WrongNum()
   {
-    return get(A_WRONG_NUM);
+    return getInt(A_WRONG_NUM);
   }
   
-  public Board setA_WrongNum(Object value)
+  public Board setA_WrongNum(Integer value)
   {
     return set(A_WRONG_NUM, value);
   }
   
-  public <T> T getB_SolvedTime()
+  public Integer getB_SolvedTime()
   {
-    return get(B_SOLVED_TIME);
+    return getInt(B_SOLVED_TIME);
   }
   
-  public Board setB_SolvedTime(Object value)
+  public Board setB_SolvedTime(Integer value)
   {
     return set(B_SOLVED_TIME, value);
   }
   
-  public <T> T getB_WrongNum()
+  public Integer getB_WrongNum()
   {
-    return get(B_WRONG_NUM);
+    return getInt(B_WRONG_NUM);
   }
   
-  public Board setB_WrongNum(Object value)
+  public Board setB_WrongNum(Integer value)
   {
     return set(B_WRONG_NUM, value);
   }
   
-  public <T> T getC_SolvedTime()
+  public Integer getC_SolvedTime()
   {
-    return get(C_SOLVED_TIME);
+    return getInt(C_SOLVED_TIME);
   }
   
-  public Board setC_SolvedTime(Object value)
+  public Board setC_SolvedTime(Integer value)
   {
     return set(C_SOLVED_TIME, value);
   }
   
-  public <T> T getC_WrongNum()
+  public Integer getC_WrongNum()
   {
-    return get(C_WRONG_NUM);
+    return getInt(C_WRONG_NUM);
   }
   
-  public Board setC_WrongNum(Object value)
+  public Board setC_WrongNum(Integer value)
   {
     return set(C_WRONG_NUM, value);
   }
   
-  public <T> T getD_SolvedTime()
+  public Integer getD_SolvedTime()
   {
-    return get(D_SOLVED_TIME);
+    return getInt(D_SOLVED_TIME);
   }
   
-  public Board setD_SolvedTime(Object value)
+  public Board setD_SolvedTime(Integer value)
   {
     return set(D_SOLVED_TIME, value);
   }
   
-  public <T> T getD_WrongNum()
+  public Integer getD_WrongNum()
   {
-    return get(D_WRONG_NUM);
+    return getInt(D_WRONG_NUM);
   }
   
-  public Board setD_WrongNum(Object value)
+  public Board setD_WrongNum(Integer value)
   {
     return set(D_WRONG_NUM, value);
   }
   
-  public <T> T getE_SolvedTime()
+  public Integer getE_SolvedTime()
   {
-    return get(E_SOLVED_TIME);
+    return getInt(E_SOLVED_TIME);
   }
   
-  public Board setE_SolvedTime(Object value)
+  public Board setE_SolvedTime(Integer value)
   {
     return set(E_SOLVED_TIME, value);
   }
   
-  public <T> T getE_WrongNum()
+  public Integer getE_WrongNum()
   {
-    return get(E_WRONG_NUM);
+    return getInt(E_WRONG_NUM);
   }
   
-  public Board setE_WrongNum(Object value)
+  public Board setE_WrongNum(Integer value)
   {
     return set(E_WRONG_NUM, value);
   }
   
-  public <T> T getF_SolvedTime()
+  public Integer getF_SolvedTime()
   {
-    return get(F_SOLVED_TIME);
+    return getInt(F_SOLVED_TIME);
   }
   
-  public Board setF_SolvedTime(Object value)
+  public Board setF_SolvedTime(Integer value)
   {
     return set(F_SOLVED_TIME, value);
   }
   
-  public <T> T getF_WrongNum()
+  public Integer getF_WrongNum()
   {
-    return get(F_WRONG_NUM);
+    return getInt(F_WRONG_NUM);
   }
   
-  public Board setF_WrongNum(Object value)
+  public Board setF_WrongNum(Integer value)
   {
     return set(F_WRONG_NUM, value);
   }
   
-  public <T> T getG_SolvedTime()
+  public Integer getG_SolvedTime()
   {
-    return get(G_SOLVED_TIME);
+    return getInt(G_SOLVED_TIME);
   }
   
-  public Board setG_SolvedTime(Object value)
+  public Board setG_SolvedTime(Integer value)
   {
     return set(G_SOLVED_TIME, value);
   }
   
-  public <T> T getG_WrongNum()
+  public Integer getG_WrongNum()
   {
-    return get(G_WRONG_NUM);
+    return getInt(G_WRONG_NUM);
   }
   
-  public Board setG_WrongNum(Object value)
+  public Board setG_WrongNum(Integer value)
   {
     return set(G_WRONG_NUM, value);
   }
   
-  public <T> T getH_SolvedTime()
+  public Integer getH_SolvedTime()
   {
-    return get(H_SOLVED_TIME);
+    return getInt(H_SOLVED_TIME);
   }
   
-  public Board setH_SolvedTime(Object value)
+  public Board setH_SolvedTime(Integer value)
   {
     return set(H_SOLVED_TIME, value);
   }
   
-  public <T> T getH_WrongNum()
+  public Integer getH_WrongNum()
   {
-    return get(H_WRONG_NUM);
+    return getInt(H_WRONG_NUM);
   }
   
-  public Board setH_WrongNum(Object value)
+  public Board setH_WrongNum(Integer value)
   {
     return set(H_WRONG_NUM, value);
   }
   
-  public <T> T getI_SolvedTime()
+  public Integer getI_SolvedTime()
   {
-    return get(I_SOLVED_TIME);
+    return getInt(I_SOLVED_TIME);
   }
   
-  public Board setI_SolvedTime(Object value)
+  public Board setI_SolvedTime(Integer value)
   {
     return set(I_SOLVED_TIME, value);
   }
   
-  public <T> T getI_WrongNum()
+  public Integer getI_WrongNum()
   {
-    return get(I_WRONG_NUM);
+    return getInt(I_WRONG_NUM);
   }
   
-  public Board setI_WrongNum(Object value)
+  public Board setI_WrongNum(Integer value)
   {
     return set(I_WRONG_NUM, value);
   }
   
-  public <T> T getJ_SolvedTime()
+  public Integer getJ_SolvedTime()
   {
-    return get(J_SOLVED_TIME);
+    return getInt(J_SOLVED_TIME);
   }
   
-  public Board setJ_SolvedTime(Object value)
+  public Board setJ_SolvedTime(Integer value)
   {
     return set(J_SOLVED_TIME, value);
   }
   
-  public <T> T getJ_WrongNum()
+  public Integer getJ_WrongNum()
   {
-    return get(J_WRONG_NUM);
+    return getInt(J_WRONG_NUM);
   }
   
-  public Board setJ_WrongNum(Object value)
+  public Board setJ_WrongNum(Integer value)
   {
     return set(J_WRONG_NUM, value);
   }
   
-  public <T> T getK_SolvedTime()
+  public Integer getK_SolvedTime()
   {
-    return get(K_SOLVED_TIME);
+    return getInt(K_SOLVED_TIME);
   }
   
-  public Board setK_SolvedTime(Object value)
+  public Board setK_SolvedTime(Integer value)
   {
     return set(K_SOLVED_TIME, value);
   }
   
-  public <T> T getK_WrongNum()
+  public Integer getK_WrongNum()
   {
-    return get(K_WRONG_NUM);
+    return getInt(K_WRONG_NUM);
   }
   
-  public Board setK_WrongNum(Object value)
+  public Board setK_WrongNum(Integer value)
   {
     return set(K_WRONG_NUM, value);
   }
   
-  public <T> T getL_SolvedTime()
+  public Integer getL_SolvedTime()
   {
-    return get(L_SOLVED_TIME);
+    return getInt(L_SOLVED_TIME);
   }
   
-  public Board setL_SolvedTime(Object value)
+  public Board setL_SolvedTime(Integer value)
   {
     return set(L_SOLVED_TIME, value);
   }
   
-  public <T> T getL_WrongNum()
+  public Integer getL_WrongNum()
   {
-    return get(L_WRONG_NUM);
+    return getInt(L_WRONG_NUM);
   }
   
-  public Board setL_WrongNum(Object value)
+  public Board setL_WrongNum(Integer value)
   {
     return set(L_WRONG_NUM, value);
   }
   
-  public <T> T getM_SolvedTime()
+  public Integer getM_SolvedTime()
   {
-    return get(M_SOLVED_TIME);
+    return getInt(M_SOLVED_TIME);
   }
   
-  public Board setM_SolvedTime(Object value)
+  public Board setM_SolvedTime(Integer value)
   {
     return set(M_SOLVED_TIME, value);
   }
   
-  public <T> T getM_WrongNum()
+  public Integer getM_WrongNum()
   {
-    return get(M_WRONG_NUM);
+    return getInt(M_WRONG_NUM);
   }
   
-  public Board setM_WrongNum(Object value)
+  public Board setM_WrongNum(Integer value)
   {
     return set(M_WRONG_NUM, value);
   }
   
-  public <T> T getN_SolvedTime()
+  public Integer getN_SolvedTime()
   {
-    return get(N_SOLVED_TIME);
+    return getInt(N_SOLVED_TIME);
   }
   
-  public Board setN_SolvedTime(Object value)
+  public Board setN_SolvedTime(Integer value)
   {
     return set(N_SOLVED_TIME, value);
   }
   
-  public <T> T getN_WrongNum()
+  public Integer getN_WrongNum()
   {
-    return get(N_WRONG_NUM);
+    return getInt(N_WRONG_NUM);
   }
   
-  public Board setN_WrongNum(Object value)
+  public Board setN_WrongNum(Integer value)
   {
     return set(N_WRONG_NUM, value);
   }
   
-  public <T> T getO_SolvedTime()
+  public Integer getO_SolvedTime()
   {
-    return get(O_SOLVED_TIME);
+    return getInt(O_SOLVED_TIME);
   }
   
-  public Board setO_SolvedTime(Object value)
+  public Board setO_SolvedTime(Integer value)
   {
     return set(O_SOLVED_TIME, value);
   }
   
-  public <T> T getO_WrongNum()
+  public Integer getO_WrongNum()
   {
-    return get(O_WRONG_NUM);
+    return getInt(O_WRONG_NUM);
   }
   
-  public Board setO_WrongNum(Object value)
+  public Board setO_WrongNum(Integer value)
   {
     return set(O_WRONG_NUM, value);
   }
   
-  public <T> T getP_SolvedTime()
+  public Integer getP_SolvedTime()
   {
-    return get(P_SOLVED_TIME);
+    return getInt(P_SOLVED_TIME);
   }
   
-  public Board setP_SolvedTime(Object value)
+  public Board setP_SolvedTime(Integer value)
   {
     return set(P_SOLVED_TIME, value);
   }
   
-  public <T> T getP_WrongNum()
+  public Integer getP_WrongNum()
   {
-    return get(P_WRONG_NUM);
+    return getInt(P_WRONG_NUM);
   }
   
-  public Board setP_WrongNum(Object value)
+  public Board setP_WrongNum(Integer value)
   {
     return set(P_WRONG_NUM, value);
   }
   
-  public <T> T getQ_SolvedTime()
+  public Integer getQ_SolvedTime()
   {
-    return get(Q_SOLVED_TIME);
+    return getInt(Q_SOLVED_TIME);
   }
   
-  public Board setQ_SolvedTime(Object value)
+  public Board setQ_SolvedTime(Integer value)
   {
     return set(Q_SOLVED_TIME, value);
   }
   
-  public <T> T getQ_WrongNum()
+  public Integer getQ_WrongNum()
   {
-    return get(Q_WRONG_NUM);
+    return getInt(Q_WRONG_NUM);
   }
   
-  public Board setQ_WrongNum(Object value)
+  public Board setQ_WrongNum(Integer value)
   {
     return set(Q_WRONG_NUM, value);
   }
   
-  public <T> T getR_SolvedTime()
+  public Integer getR_SolvedTime()
   {
-    return get(R_SOLVED_TIME);
+    return getInt(R_SOLVED_TIME);
   }
   
-  public Board setR_SolvedTime(Object value)
+  public Board setR_SolvedTime(Integer value)
   {
     return set(R_SOLVED_TIME, value);
   }
   
-  public <T> T getR_WrongNum()
+  public Integer getR_WrongNum()
   {
-    return get(R_WRONG_NUM);
+    return getInt(R_WRONG_NUM);
   }
   
-  public Board setR_WrongNum(Object value)
+  public Board setR_WrongNum(Integer value)
   {
     return set(R_WRONG_NUM, value);
   }
   
-  public <T> T getS_SolvedTime()
+  public Integer getS_SolvedTime()
   {
-    return get(S_SOLVED_TIME);
+    return getInt(S_SOLVED_TIME);
   }
   
-  public Board setS_SolvedTime(Object value)
+  public Board setS_SolvedTime(Integer value)
   {
     return set(S_SOLVED_TIME, value);
   }
   
-  public <T> T getS_WrongNum()
+  public Integer getS_WrongNum()
   {
-    return get(S_WRONG_NUM);
+    return getInt(S_WRONG_NUM);
   }
   
-  public Board setS_WrongNum(Object value)
+  public Board setS_WrongNum(Integer value)
   {
     return set(S_WRONG_NUM, value);
   }
   
-  public <T> T getT_SolvedTime()
+  public Integer getT_SolvedTime()
   {
-    return get(T_SOLVED_TIME);
+    return getInt(T_SOLVED_TIME);
   }
   
-  public Board setT_SolvedTime(Object value)
+  public Board setT_SolvedTime(Integer value)
   {
     return set(T_SOLVED_TIME, value);
   }
   
-  public <T> T getT_WrongNum()
+  public Integer getT_WrongNum()
   {
-    return get(T_WRONG_NUM);
+    return getInt(T_WRONG_NUM);
   }
   
-  public Board setT_WrongNum(Object value)
+  public Board setT_WrongNum(Integer value)
   {
     return set(T_WRONG_NUM, value);
   }
   
-  public <T> T getU_SolvedTime()
+  public Integer getU_SolvedTime()
   {
-    return get(U_SOLVED_TIME);
+    return getInt(U_SOLVED_TIME);
   }
   
-  public Board setU_SolvedTime(Object value)
+  public Board setU_SolvedTime(Integer value)
   {
     return set(U_SOLVED_TIME, value);
   }
   
-  public <T> T getU_WrongNum()
+  public Integer getU_WrongNum()
   {
-    return get(U_WRONG_NUM);
+    return getInt(U_WRONG_NUM);
   }
   
-  public Board setU_WrongNum(Object value)
+  public Board setU_WrongNum(Integer value)
   {
     return set(U_WRONG_NUM, value);
   }
   
-  public <T> T getV_SolvedTime()
+  public Integer getV_SolvedTime()
   {
-    return get(V_SOLVED_TIME);
+    return getInt(V_SOLVED_TIME);
   }
   
-  public Board setV_SolvedTime(Object value)
+  public Board setV_SolvedTime(Integer value)
   {
     return set(V_SOLVED_TIME, value);
   }
   
-  public <T> T getV_WrongNum()
+  public Integer getV_WrongNum()
   {
-    return get(V_WRONG_NUM);
+    return getInt(V_WRONG_NUM);
   }
   
-  public Board setV_WrongNum(Object value)
+  public Board setV_WrongNum(Integer value)
   {
     return set(V_WRONG_NUM, value);
   }
   
-  public <T> T getW_SolvedTime()
+  public Integer getW_SolvedTime()
   {
-    return get(W_SOLVED_TIME);
+    return getInt(W_SOLVED_TIME);
   }
   
-  public Board setW_SolvedTime(Object value)
+  public Board setW_SolvedTime(Integer value)
   {
     return set(W_SOLVED_TIME, value);
   }
   
-  public <T> T getW_WrongNum()
+  public Integer getW_WrongNum()
   {
-    return get(W_WRONG_NUM);
+    return getInt(W_WRONG_NUM);
   }
   
-  public Board setW_WrongNum(Object value)
+  public Board setW_WrongNum(Integer value)
   {
     return set(W_WRONG_NUM, value);
   }
   
-  public <T> T getX_SolvedTime()
+  public Integer getX_SolvedTime()
   {
-    return get(X_SOLVED_TIME);
+    return getInt(X_SOLVED_TIME);
   }
   
-  public Board setX_SolvedTime(Object value)
+  public Board setX_SolvedTime(Integer value)
   {
     return set(X_SOLVED_TIME, value);
   }
   
-  public <T> T getX_WrongNum()
+  public Integer getX_WrongNum()
   {
-    return get(X_WRONG_NUM);
+    return getInt(X_WRONG_NUM);
   }
   
-  public Board setX_WrongNum(Object value)
+  public Board setX_WrongNum(Integer value)
   {
     return set(X_WRONG_NUM, value);
   }
   
-  public <T> T getY_SolvedTime()
+  public Integer getY_SolvedTime()
   {
-    return get(Y_SOLVED_TIME);
+    return getInt(Y_SOLVED_TIME);
   }
   
-  public Board setY_SolvedTime(Object value)
+  public Board setY_SolvedTime(Integer value)
   {
     return set(Y_SOLVED_TIME, value);
   }
   
-  public <T> T getY_WrongNum()
+  public Integer getY_WrongNum()
   {
-    return get(Y_WRONG_NUM);
+    return getInt(Y_WRONG_NUM);
   }
   
-  public Board setY_WrongNum(Object value)
+  public Board setY_WrongNum(Integer value)
   {
     return set(Y_WRONG_NUM, value);
   }
   
-  public <T> T getZ_SolvedTime()
+  public Integer getZ_SolvedTime()
   {
-    return get(Z_SOLVED_TIME);
+    return getInt(Z_SOLVED_TIME);
   }
   
-  public Board setZ_SolvedTime(Object value)
+  public Board setZ_SolvedTime(Integer value)
   {
     return set(Z_SOLVED_TIME, value);
   }
   
-  public <T> T getZ_WrongNum()
+  public Integer getZ_WrongNum()
   {
-    return get(Z_WRONG_NUM);
+    return getInt(Z_WRONG_NUM);
   }
   
-  public Board setZ_WrongNum(Object value)
+  public Board setZ_WrongNum(Integer value)
   {
     return set(Z_WRONG_NUM, value);
   }

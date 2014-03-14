@@ -18,92 +18,92 @@ public class Session extends Model<Session>
   public static final String SESSION_EXPIRES = "sessionExpires";
   public static final String CTIME = "ctime";
 
-  public <T> T getSessionId()
+  public String getSessionId()
   {
-    return get(SESSION_ID);
+    return getStr(SESSION_ID);
   }
   
-  public Session setSessionId(Object value)
+  public Session setSessionId(String value)
   {
     return set(SESSION_ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Session setUid(Object value)
+  public Session setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public Session setName(Object value)
+  public Session setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getIpAddress()
+  public String getIpAddress()
   {
-    return get(IP_ADDRESS);
+    return getStr(IP_ADDRESS);
   }
   
-  public Session setIpAddress(Object value)
+  public Session setIpAddress(String value)
   {
     return set(IP_ADDRESS, value);
   }
   
-  public <T> T getUserAgent()
+  public String getUserAgent()
   {
-    return get(USER_AGENT);
+    return getStr(USER_AGENT);
   }
   
-  public Session setUserAgent(Object value)
+  public Session setUserAgent(String value)
   {
     return set(USER_AGENT, value);
   }
   
-  public <T> T getUri()
+  public String getUri()
   {
-    return get(URI);
+    return getStr(URI);
   }
   
-  public Session setUri(Object value)
+  public Session setUri(String value)
   {
     return set(URI, value);
   }
   
-  public <T> T getLastActivity()
+  public Integer getLastActivity()
   {
-    return get(LAST_ACTIVITY);
+    return getInt(LAST_ACTIVITY);
   }
   
-  public Session setLastActivity(Object value)
+  public Session setLastActivity(Integer value)
   {
     return set(LAST_ACTIVITY, value);
   }
   
-  public <T> T getSessionExpires()
+  public Integer getSessionExpires()
   {
-    return get(SESSION_EXPIRES);
+    return getInt(SESSION_EXPIRES);
   }
   
-  public Session setSessionExpires(Object value)
+  public Session setSessionExpires(Integer value)
   {
     return set(SESSION_EXPIRES, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Session setCtime(Object value)
+  public Session setCtime(Integer value)
   {
     return set(CTIME, value);
   }

@@ -13,42 +13,42 @@ public class UserRole extends Model<UserRole>
   public static final String RID = "rid";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public UserRole setId(Object value)
+  public UserRole setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public UserRole setUid(Object value)
+  public UserRole setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getRid()
+  public Integer getRid()
   {
-    return get(RID);
+    return getInt(RID);
   }
   
-  public UserRole setRid(Object value)
+  public UserRole setRid(Integer value)
   {
     return set(RID, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public UserRole setStatus(Object value)
+  public UserRole setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

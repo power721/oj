@@ -14,52 +14,52 @@ public class Mail extends Model<Mail>
   public static final String PEER_UID = "peerUid";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Mail setId(Object value)
+  public Mail setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getMid()
+  public Integer getMid()
   {
-    return get(MID);
+    return getInt(MID);
   }
   
-  public Mail setMid(Object value)
+  public Mail setMid(Integer value)
   {
     return set(MID, value);
   }
   
-  public <T> T getUserId()
+  public Integer getUserId()
   {
-    return get(USER_ID);
+    return getInt(USER_ID);
   }
   
-  public Mail setUserId(Object value)
+  public Mail setUserId(Integer value)
   {
     return set(USER_ID, value);
   }
   
-  public <T> T getPeerUid()
+  public Integer getPeerUid()
   {
-    return get(PEER_UID);
+    return getInt(PEER_UID);
   }
   
-  public Mail setPeerUid(Object value)
+  public Mail setPeerUid(Integer value)
   {
     return set(PEER_UID, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Mail setStatus(Object value)
+  public Mail setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

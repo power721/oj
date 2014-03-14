@@ -18,92 +18,92 @@ public class Variable extends Model<Variable>
   public static final String TYPE = "type";
   public static final String DESCRIPTION = "description";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Variable setId(Object value)
+  public Variable setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public Variable setCid(Object value)
+  public Variable setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public Variable setName(Object value)
+  public Variable setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getStringValue()
+  public String getStringValue()
   {
-    return get(STRING_VALUE);
+    return getStr(STRING_VALUE);
   }
   
-  public Variable setStringValue(Object value)
+  public Variable setStringValue(String value)
   {
     return set(STRING_VALUE, value);
   }
   
-  public <T> T getBooleanValue()
+  public Boolean getBooleanValue()
   {
-    return get(BOOLEAN_VALUE);
+    return getBoolean(BOOLEAN_VALUE);
   }
   
-  public Variable setBooleanValue(Object value)
+  public Variable setBooleanValue(Boolean value)
   {
     return set(BOOLEAN_VALUE, value);
   }
   
-  public <T> T getIntValue()
+  public Integer getIntValue()
   {
-    return get(INT_VALUE);
+    return getInt(INT_VALUE);
   }
   
-  public Variable setIntValue(Object value)
+  public Variable setIntValue(Integer value)
   {
     return set(INT_VALUE, value);
   }
   
-  public <T> T getTextValue()
+  public String getTextValue()
   {
-    return get(TEXT_VALUE);
+    return getStr(TEXT_VALUE);
   }
   
-  public Variable setTextValue(Object value)
+  public Variable setTextValue(String value)
   {
     return set(TEXT_VALUE, value);
   }
   
-  public <T> T getType()
+  public String getType()
   {
-    return get(TYPE);
+    return getStr(TYPE);
   }
   
-  public Variable setType(Object value)
+  public Variable setType(String value)
   {
     return set(TYPE, value);
   }
   
-  public <T> T getDescription()
+  public String getDescription()
   {
-    return get(DESCRIPTION);
+    return getStr(DESCRIPTION);
   }
   
-  public Variable setDescription(Object value)
+  public Variable setDescription(String value)
   {
     return set(DESCRIPTION, value);
   }

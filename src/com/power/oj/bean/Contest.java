@@ -22,132 +22,132 @@ public class Contest extends Model<Contest>
   public static final String FREEZE = "freeze";
   public static final String STATUS = "status";
 
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public Contest setCid(Object value)
+  public Contest setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Contest setUid(Object value)
+  public Contest setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getTitle()
+  public String getTitle()
   {
-    return get(TITLE);
+    return getStr(TITLE);
   }
   
-  public Contest setTitle(Object value)
+  public Contest setTitle(String value)
   {
     return set(TITLE, value);
   }
   
-  public <T> T getStartTime()
+  public Integer getStartTime()
   {
-    return get(START_TIME);
+    return getInt(START_TIME);
   }
   
-  public Contest setStartTime(Object value)
+  public Contest setStartTime(Integer value)
   {
     return set(START_TIME, value);
   }
   
-  public <T> T getEndTime()
+  public Integer getEndTime()
   {
-    return get(END_TIME);
+    return getInt(END_TIME);
   }
   
-  public Contest setEndTime(Object value)
+  public Contest setEndTime(Integer value)
   {
     return set(END_TIME, value);
   }
   
-  public <T> T getDescription()
+  public String getDescription()
   {
-    return get(DESCRIPTION);
+    return getStr(DESCRIPTION);
   }
   
-  public Contest setDescription(Object value)
+  public Contest setDescription(String value)
   {
     return set(DESCRIPTION, value);
   }
   
-  public <T> T getType()
+  public Integer getType()
   {
-    return get(TYPE);
+    return getInt(TYPE);
   }
   
-  public Contest setType(Object value)
+  public Contest setType(Integer value)
   {
     return set(TYPE, value);
   }
   
-  public <T> T getPassword()
+  public String getPassword()
   {
-    return get(PASSWORD);
+    return getStr(PASSWORD);
   }
   
-  public Contest setPassword(Object value)
+  public Contest setPassword(String value)
   {
     return set(PASSWORD, value);
   }
   
-  public <T> T getAtime()
+  public Integer getAtime()
   {
-    return get(ATIME);
+    return getInt(ATIME);
   }
   
-  public Contest setAtime(Object value)
+  public Contest setAtime(Integer value)
   {
     return set(ATIME, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Contest setCtime(Object value)
+  public Contest setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getMtime()
+  public Integer getMtime()
   {
-    return get(MTIME);
+    return getInt(MTIME);
   }
   
-  public Contest setMtime(Object value)
+  public Contest setMtime(Integer value)
   {
     return set(MTIME, value);
   }
   
-  public <T> T getFreeze()
+  public Boolean getFreeze()
   {
-    return get(FREEZE);
+    return getBoolean(FREEZE);
   }
   
-  public Contest setFreeze(Object value)
+  public Contest setFreeze(Boolean value)
   {
     return set(FREEZE, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Contest setStatus(Object value)
+  public Contest setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

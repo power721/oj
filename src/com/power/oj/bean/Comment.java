@@ -16,72 +16,72 @@ public class Comment extends Model<Comment>
   public static final String IP = "ip";
   public static final String CTIME = "ctime";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Comment setId(Object value)
+  public Comment setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Comment setUid(Object value)
+  public Comment setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getThreadId()
+  public Integer getThreadId()
   {
-    return get(THREAD_ID);
+    return getInt(THREAD_ID);
   }
   
-  public Comment setThreadId(Object value)
+  public Comment setThreadId(Integer value)
   {
     return set(THREAD_ID, value);
   }
   
-  public <T> T getQuoteId()
+  public Integer getQuoteId()
   {
-    return get(QUOTE_ID);
+    return getInt(QUOTE_ID);
   }
   
-  public Comment setQuoteId(Object value)
+  public Comment setQuoteId(Integer value)
   {
     return set(QUOTE_ID, value);
   }
   
-  public <T> T getContent()
+  public String getContent()
   {
-    return get(CONTENT);
+    return getStr(CONTENT);
   }
   
-  public Comment setContent(Object value)
+  public Comment setContent(String value)
   {
     return set(CONTENT, value);
   }
   
-  public <T> T getIp()
+  public String getIp()
   {
-    return get(IP);
+    return getStr(IP);
   }
   
-  public Comment setIp(Object value)
+  public Comment setIp(String value)
   {
     return set(IP, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Comment setCtime(Object value)
+  public Comment setCtime(Integer value)
   {
     return set(CTIME, value);
   }

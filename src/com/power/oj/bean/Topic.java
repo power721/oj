@@ -18,92 +18,92 @@ public class Topic extends Model<Topic>
   public static final String MTIME = "mtime";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Topic setId(Object value)
+  public Topic setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Topic setUid(Object value)
+  public Topic setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public Topic setPid(Object value)
+  public Topic setPid(Integer value)
   {
     return set(PID, value);
   }
   
-  public <T> T getTitle()
+  public String getTitle()
   {
-    return get(TITLE);
+    return getStr(TITLE);
   }
   
-  public Topic setTitle(Object value)
+  public Topic setTitle(String value)
   {
     return set(TITLE, value);
   }
   
-  public <T> T getContent()
+  public String getContent()
   {
-    return get(CONTENT);
+    return getStr(CONTENT);
   }
   
-  public Topic setContent(Object value)
+  public Topic setContent(String value)
   {
     return set(CONTENT, value);
   }
   
-  public <T> T getAtime()
+  public Integer getAtime()
   {
-    return get(ATIME);
+    return getInt(ATIME);
   }
   
-  public Topic setAtime(Object value)
+  public Topic setAtime(Integer value)
   {
     return set(ATIME, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Topic setCtime(Object value)
+  public Topic setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getMtime()
+  public Integer getMtime()
   {
-    return get(MTIME);
+    return getInt(MTIME);
   }
   
-  public Topic setMtime(Object value)
+  public Topic setMtime(Integer value)
   {
     return set(MTIME, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Topic setStatus(Object value)
+  public Topic setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

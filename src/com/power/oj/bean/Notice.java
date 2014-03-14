@@ -22,132 +22,132 @@ public class Notice extends Model<Notice>
   public static final String VIEW = "view";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Notice setId(Object value)
+  public Notice setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Notice setUid(Object value)
+  public Notice setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getEditorUid()
+  public Integer getEditorUid()
   {
-    return get(EDITOR_UID);
+    return getInt(EDITOR_UID);
   }
   
-  public Notice setEditorUid(Object value)
+  public Notice setEditorUid(Integer value)
   {
     return set(EDITOR_UID, value);
   }
   
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public Notice setCid(Object value)
+  public Notice setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getTitle()
+  public String getTitle()
   {
-    return get(TITLE);
+    return getStr(TITLE);
   }
   
-  public Notice setTitle(Object value)
+  public Notice setTitle(String value)
   {
     return set(TITLE, value);
   }
   
-  public <T> T getStartTime()
+  public Integer getStartTime()
   {
-    return get(START_TIME);
+    return getInt(START_TIME);
   }
   
-  public Notice setStartTime(Object value)
+  public Notice setStartTime(Integer value)
   {
     return set(START_TIME, value);
   }
   
-  public <T> T getEndTime()
+  public Integer getEndTime()
   {
-    return get(END_TIME);
+    return getInt(END_TIME);
   }
   
-  public Notice setEndTime(Object value)
+  public Notice setEndTime(Integer value)
   {
     return set(END_TIME, value);
   }
   
-  public <T> T getContent()
+  public String getContent()
   {
-    return get(CONTENT);
+    return getStr(CONTENT);
   }
   
-  public Notice setContent(Object value)
+  public Notice setContent(String value)
   {
     return set(CONTENT, value);
   }
   
-  public <T> T getAtime()
+  public Integer getAtime()
   {
-    return get(ATIME);
+    return getInt(ATIME);
   }
   
-  public Notice setAtime(Object value)
+  public Notice setAtime(Integer value)
   {
     return set(ATIME, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Notice setCtime(Object value)
+  public Notice setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getMtime()
+  public Integer getMtime()
   {
-    return get(MTIME);
+    return getInt(MTIME);
   }
   
-  public Notice setMtime(Object value)
+  public Notice setMtime(Integer value)
   {
     return set(MTIME, value);
   }
   
-  public <T> T getView()
+  public Integer getView()
   {
-    return get(VIEW);
+    return getInt(VIEW);
   }
   
-  public Notice setView(Object value)
+  public Notice setView(Integer value)
   {
     return set(VIEW, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Notice setStatus(Object value)
+  public Notice setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

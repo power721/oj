@@ -16,72 +16,72 @@ public class Permission extends Model<Permission>
   public static final String TITLE = "title";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Permission setId(Object value)
+  public Permission setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getModule()
+  public String getModule()
   {
-    return get(MODULE);
+    return getStr(MODULE);
   }
   
-  public Permission setModule(Object value)
+  public Permission setModule(String value)
   {
     return set(MODULE, value);
   }
   
-  public <T> T getType()
+  public Integer getType()
   {
-    return get(TYPE);
+    return getInt(TYPE);
   }
   
-  public Permission setType(Object value)
+  public Permission setType(Integer value)
   {
     return set(TYPE, value);
   }
   
-  public <T> T getParentID()
+  public Integer getParentID()
   {
-    return get(PARENT_ID);
+    return getInt(PARENT_ID);
   }
   
-  public Permission setParentID(Object value)
+  public Permission setParentID(Integer value)
   {
     return set(PARENT_ID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public Permission setName(Object value)
+  public Permission setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getTitle()
+  public String getTitle()
   {
-    return get(TITLE);
+    return getStr(TITLE);
   }
   
-  public Permission setTitle(Object value)
+  public Permission setTitle(String value)
   {
     return set(TITLE, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Permission setStatus(Object value)
+  public Permission setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

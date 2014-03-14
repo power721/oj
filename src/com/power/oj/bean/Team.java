@@ -39,267 +39,267 @@ public class Team extends Model<Team>
   public static final String IS_SPECIAL_TEAM = "isSpecialTeam";
   public static final String STATUS = "status";
 
-  public <T> T getTid()
+  public Integer getTid()
   {
-    return get(TID);
+    return getInt(TID);
   }
   
-  public Team setTid(Object value)
+  public Team setTid(Integer value)
   {
     return set(TID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Team setUid(Object value)
+  public Team setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getName1()
+  public String getName1()
   {
-    return get(NAME1);
+    return getStr(NAME1);
   }
   
-  public Team setName1(Object value)
+  public Team setName1(String value)
   {
     return set(NAME1, value);
   }
   
-  public <T> T getStuId1()
+  public String getStuId1()
   {
-    return get(STU_ID1);
+    return getStr(STU_ID1);
   }
   
-  public Team setStuId1(Object value)
+  public Team setStuId1(String value)
   {
     return set(STU_ID1, value);
   }
   
-  public <T> T getCollege1()
+  public String getCollege1()
   {
-    return get(COLLEGE1);
+    return getStr(COLLEGE1);
   }
   
-  public Team setCollege1(Object value)
+  public Team setCollege1(String value)
   {
     return set(COLLEGE1, value);
   }
   
-  public <T> T getClass1()
+  public String getClass1()
   {
-    return get(CLASS1);
+    return getStr(CLASS1);
   }
   
-  public Team setClass1(Object value)
+  public Team setClass1(String value)
   {
     return set(CLASS1, value);
   }
   
-  public <T> T getGender1()
+  public String getGender1()
   {
-    return get(GENDER1);
+    return getStr(GENDER1);
   }
   
-  public Team setGender1(Object value)
+  public Team setGender1(String value)
   {
     return set(GENDER1, value);
   }
   
-  public <T> T getContact1()
+  public String getContact1()
   {
-    return get(CONTACT1);
+    return getStr(CONTACT1);
   }
   
-  public Team setContact1(Object value)
+  public Team setContact1(String value)
   {
     return set(CONTACT1, value);
   }
   
-  public <T> T getName2()
+  public String getName2()
   {
-    return get(NAME2);
+    return getStr(NAME2);
   }
   
-  public Team setName2(Object value)
+  public Team setName2(String value)
   {
     return set(NAME2, value);
   }
   
-  public <T> T getStuId2()
+  public String getStuId2()
   {
-    return get(STU_ID2);
+    return getStr(STU_ID2);
   }
   
-  public Team setStuId2(Object value)
+  public Team setStuId2(String value)
   {
     return set(STU_ID2, value);
   }
   
-  public <T> T getCollege2()
+  public String getCollege2()
   {
-    return get(COLLEGE2);
+    return getStr(COLLEGE2);
   }
   
-  public Team setCollege2(Object value)
+  public Team setCollege2(String value)
   {
     return set(COLLEGE2, value);
   }
   
-  public <T> T getClass2()
+  public String getClass2()
   {
-    return get(CLASS2);
+    return getStr(CLASS2);
   }
   
-  public Team setClass2(Object value)
+  public Team setClass2(String value)
   {
     return set(CLASS2, value);
   }
   
-  public <T> T getGender2()
+  public String getGender2()
   {
-    return get(GENDER2);
+    return getStr(GENDER2);
   }
   
-  public Team setGender2(Object value)
+  public Team setGender2(String value)
   {
     return set(GENDER2, value);
   }
   
-  public <T> T getContact2()
+  public String getContact2()
   {
-    return get(CONTACT2);
+    return getStr(CONTACT2);
   }
   
-  public Team setContact2(Object value)
+  public Team setContact2(String value)
   {
     return set(CONTACT2, value);
   }
   
-  public <T> T getName3()
+  public String getName3()
   {
-    return get(NAME3);
+    return getStr(NAME3);
   }
   
-  public Team setName3(Object value)
+  public Team setName3(String value)
   {
     return set(NAME3, value);
   }
   
-  public <T> T getStuId3()
+  public String getStuId3()
   {
-    return get(STU_ID3);
+    return getStr(STU_ID3);
   }
   
-  public Team setStuId3(Object value)
+  public Team setStuId3(String value)
   {
     return set(STU_ID3, value);
   }
   
-  public <T> T getCollege3()
+  public String getCollege3()
   {
-    return get(COLLEGE3);
+    return getStr(COLLEGE3);
   }
   
-  public Team setCollege3(Object value)
+  public Team setCollege3(String value)
   {
     return set(COLLEGE3, value);
   }
   
-  public <T> T getClass3()
+  public String getClass3()
   {
-    return get(CLASS3);
+    return getStr(CLASS3);
   }
   
-  public Team setClass3(Object value)
+  public Team setClass3(String value)
   {
     return set(CLASS3, value);
   }
   
-  public <T> T getGender3()
+  public String getGender3()
   {
-    return get(GENDER3);
+    return getStr(GENDER3);
   }
   
-  public Team setGender3(Object value)
+  public Team setGender3(String value)
   {
     return set(GENDER3, value);
   }
   
-  public <T> T getContact3()
+  public String getContact3()
   {
-    return get(CONTACT3);
+    return getStr(CONTACT3);
   }
   
-  public Team setContact3(Object value)
+  public Team setContact3(String value)
   {
     return set(CONTACT3, value);
   }
   
-  public <T> T getComment()
+  public String getComment()
   {
-    return get(COMMENT);
+    return getStr(COMMENT);
   }
   
-  public Team setComment(Object value)
+  public Team setComment(String value)
   {
     return set(COMMENT, value);
   }
   
-  public <T> T getYear()
+  public Integer getYear()
   {
-    return get(YEAR);
+    return getInt(YEAR);
   }
   
-  public Team setYear(Object value)
+  public Team setYear(Integer value)
   {
     return set(YEAR, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Team setCtime(Object value)
+  public Team setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getMtime()
+  public Integer getMtime()
   {
-    return get(MTIME);
+    return getInt(MTIME);
   }
   
-  public Team setMtime(Object value)
+  public Team setMtime(Integer value)
   {
     return set(MTIME, value);
   }
   
-  public <T> T getHistory()
+  public String getHistory()
   {
-    return get(HISTORY);
+    return getStr(HISTORY);
   }
   
-  public Team setHistory(Object value)
+  public Team setHistory(String value)
   {
     return set(HISTORY, value);
   }
   
-  public <T> T getNotice()
+  public Boolean getNotice()
   {
-    return get(NOTICE);
+    return getBoolean(NOTICE);
   }
   
-  public Team setNotice(Object value)
+  public Team setNotice(Boolean value)
   {
     return set(NOTICE, value);
   }
   
-  public Boolean IsGirlTeam()
+  public Boolean isGirlTeam()
   {
     return getBoolean(IS_GIRL_TEAM);
   }
@@ -309,7 +309,7 @@ public class Team extends Model<Team>
     return set(IS_GIRL_TEAM, value);
   }
   
-  public Boolean IsRookieTeam()
+  public Boolean isRookieTeam()
   {
     return getBoolean(IS_ROOKIE_TEAM);
   }
@@ -319,7 +319,7 @@ public class Team extends Model<Team>
     return set(IS_ROOKIE_TEAM, value);
   }
   
-  public Boolean IsSpecialTeam()
+  public Boolean isSpecialTeam()
   {
     return getBoolean(IS_SPECIAL_TEAM);
   }
@@ -329,12 +329,12 @@ public class Team extends Model<Team>
     return set(IS_SPECIAL_TEAM, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Team setStatus(Object value)
+  public Team setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

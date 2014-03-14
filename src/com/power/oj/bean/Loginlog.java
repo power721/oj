@@ -16,72 +16,72 @@ public class Loginlog extends Model<Loginlog>
   public static final String SUCCESS = "success";
   public static final String CTIME = "ctime";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Loginlog setId(Object value)
+  public Loginlog setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Loginlog setUid(Object value)
+  public Loginlog setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public Loginlog setName(Object value)
+  public Loginlog setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getIp()
+  public String getIp()
   {
-    return get(IP);
+    return getStr(IP);
   }
   
-  public Loginlog setIp(Object value)
+  public Loginlog setIp(String value)
   {
     return set(IP, value);
   }
   
-  public <T> T getInfo()
+  public String getInfo()
   {
-    return get(INFO);
+    return getStr(INFO);
   }
   
-  public Loginlog setInfo(Object value)
+  public Loginlog setInfo(String value)
   {
     return set(INFO, value);
   }
   
-  public <T> T getSuccess()
+  public Boolean getSuccess()
   {
-    return get(SUCCESS);
+    return getBoolean(SUCCESS);
   }
   
-  public Loginlog setSuccess(Object value)
+  public Loginlog setSuccess(Boolean value)
   {
     return set(SUCCESS, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Loginlog setCtime(Object value)
+  public Loginlog setCtime(Integer value)
   {
     return set(CTIME, value);
   }

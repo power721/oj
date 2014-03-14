@@ -13,42 +13,42 @@ public class ProblemCategory extends Model<ProblemCategory>
   public static final String CID = "cid";
   public static final String WEIGHT = "weight";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public ProblemCategory setId(Object value)
+  public ProblemCategory setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public ProblemCategory setPid(Object value)
+  public ProblemCategory setPid(Integer value)
   {
     return set(PID, value);
   }
   
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public ProblemCategory setCid(Object value)
+  public ProblemCategory setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getWeight()
+  public Integer getWeight()
   {
-    return get(WEIGHT);
+    return getInt(WEIGHT);
   }
   
-  public ProblemCategory setWeight(Object value)
+  public ProblemCategory setWeight(Integer value)
   {
     return set(WEIGHT, value);
   }

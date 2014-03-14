@@ -16,72 +16,72 @@ public class Tag extends Model<Tag>
   public static final String MTIME = "mtime";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Tag setId(Object value)
+  public Tag setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public Tag setPid(Object value)
+  public Tag setPid(Integer value)
   {
     return set(PID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Tag setUid(Object value)
+  public Tag setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getTag()
+  public String getTag()
   {
-    return get(TAG);
+    return getStr(TAG);
   }
   
-  public Tag setTag(Object value)
+  public Tag setTag(String value)
   {
     return set(TAG, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Tag setCtime(Object value)
+  public Tag setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getMtime()
+  public Integer getMtime()
   {
-    return get(MTIME);
+    return getInt(MTIME);
   }
   
-  public Tag setMtime(Object value)
+  public Tag setMtime(Integer value)
   {
     return set(MTIME, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Tag setStatus(Object value)
+  public Tag setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

@@ -11,22 +11,22 @@ public class Level extends Model<Level>
   public static final String LEVEL = "level";
   public static final String EXPERIENCE = "experience";
 
-  public <T> T getLevel()
+  public Integer getLevel()
   {
-    return get(LEVEL);
+    return getInt(LEVEL);
   }
   
-  public Level setLevel(Object value)
+  public Level setLevel(Integer value)
   {
     return set(LEVEL, value);
   }
   
-  public <T> T getExperience()
+  public Integer getExperience()
   {
-    return get(EXPERIENCE);
+    return getInt(EXPERIENCE);
   }
   
-  public Level setExperience(Object value)
+  public Level setExperience(Integer value)
   {
     return set(EXPERIENCE, value);
   }

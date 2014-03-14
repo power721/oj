@@ -13,42 +13,42 @@ public class MailBanlist extends Model<MailBanlist>
   public static final String BANNED_UID = "bannedUid";
   public static final String CTIME = "ctime";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public MailBanlist setId(Object value)
+  public MailBanlist setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public MailBanlist setUid(Object value)
+  public MailBanlist setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getBannedUid()
+  public Integer getBannedUid()
   {
-    return get(BANNED_UID);
+    return getInt(BANNED_UID);
   }
   
-  public MailBanlist setBannedUid(Object value)
+  public MailBanlist setBannedUid(Integer value)
   {
     return set(BANNED_UID, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public MailBanlist setCtime(Object value)
+  public MailBanlist setCtime(Integer value)
   {
     return set(CTIME, value);
   }

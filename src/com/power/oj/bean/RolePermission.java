@@ -12,32 +12,32 @@ public class RolePermission extends Model<RolePermission>
   public static final String RID = "rid";
   public static final String PID = "pid";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public RolePermission setId(Object value)
+  public RolePermission setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getRid()
+  public Integer getRid()
   {
-    return get(RID);
+    return getInt(RID);
   }
   
-  public RolePermission setRid(Object value)
+  public RolePermission setRid(Integer value)
   {
     return set(RID, value);
   }
   
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public RolePermission setPid(Object value)
+  public RolePermission setPid(Integer value)
   {
     return set(PID, value);
   }

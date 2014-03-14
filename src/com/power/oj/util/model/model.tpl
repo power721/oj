@@ -13,8 +13,8 @@ public class ${myModel.modelName} extends Model<${myModel.modelName}>
 </#list>
 
 <#list myModel.columns as column>
-  <#assign name=column.name?cap_first >
-  <#if name?starts_with("Is")>
+  <#if column.name?starts_with("is")>
+  <#assign name=column.name >
   <#assign setName=name?substring(2)>
   public Boolean ${name}()
   {
@@ -26,12 +26,13 @@ public class ${myModel.modelName} extends Model<${myModel.modelName}>
     return set(${column.field?upper_case}, value);
   }
   <#else>
-  public <T> T get${name}()
+  <#assign name=column.name?cap_first >
+  public <#if column.type??>${column.type}<#else><T> T</#if> get${name}()
   {
-    return get(${column.field?upper_case});
+    return get${column.method}(${column.field?upper_case});
   }
   
-  public ${myModel.modelName} set${name}(Object value)
+  public ${myModel.modelName} set${name}(<#if column.type??>${column.type}<#else>Object</#if> value)
   {
     return set(${column.field?upper_case}, value);
   }

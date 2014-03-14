@@ -23,142 +23,142 @@ public class ProgramLanguage extends Model<ProgramLanguage>
   public static final String SCRIPT = "script";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public ProgramLanguage setId(Object value)
+  public ProgramLanguage setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public ProgramLanguage setName(Object value)
+  public ProgramLanguage setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getDescription()
+  public String getDescription()
   {
-    return get(DESCRIPTION);
+    return getStr(DESCRIPTION);
   }
   
-  public ProgramLanguage setDescription(Object value)
+  public ProgramLanguage setDescription(String value)
   {
     return set(DESCRIPTION, value);
   }
   
-  public <T> T getExtTime()
+  public Integer getExtTime()
   {
-    return get(EXT_TIME);
+    return getInt(EXT_TIME);
   }
   
-  public ProgramLanguage setExtTime(Object value)
+  public ProgramLanguage setExtTime(Integer value)
   {
     return set(EXT_TIME, value);
   }
   
-  public <T> T getExtMemory()
+  public Integer getExtMemory()
   {
-    return get(EXT_MEMORY);
+    return getInt(EXT_MEMORY);
   }
   
-  public ProgramLanguage setExtMemory(Object value)
+  public ProgramLanguage setExtMemory(Integer value)
   {
     return set(EXT_MEMORY, value);
   }
   
-  public <T> T getTimeFactor()
+  public Integer getTimeFactor()
   {
-    return get(TIME_FACTOR);
+    return getInt(TIME_FACTOR);
   }
   
-  public ProgramLanguage setTimeFactor(Object value)
+  public ProgramLanguage setTimeFactor(Integer value)
   {
     return set(TIME_FACTOR, value);
   }
   
-  public <T> T getMemoryFactor()
+  public Integer getMemoryFactor()
   {
-    return get(MEMORY_FACTOR);
+    return getInt(MEMORY_FACTOR);
   }
   
-  public ProgramLanguage setMemoryFactor(Object value)
+  public ProgramLanguage setMemoryFactor(Integer value)
   {
     return set(MEMORY_FACTOR, value);
   }
   
-  public <T> T getExt()
+  public String getExt()
   {
-    return get(EXT);
+    return getStr(EXT);
   }
   
-  public ProgramLanguage setExt(Object value)
+  public ProgramLanguage setExt(String value)
   {
     return set(EXT, value);
   }
   
-  public <T> T getExe()
+  public String getExe()
   {
-    return get(EXE);
+    return getStr(EXE);
   }
   
-  public ProgramLanguage setExe(Object value)
+  public ProgramLanguage setExe(String value)
   {
     return set(EXE, value);
   }
   
-  public <T> T getComplieOrder()
+  public Integer getComplieOrder()
   {
-    return get(COMPLIE_ORDER);
+    return getInt(COMPLIE_ORDER);
   }
   
-  public ProgramLanguage setComplieOrder(Object value)
+  public ProgramLanguage setComplieOrder(Integer value)
   {
     return set(COMPLIE_ORDER, value);
   }
   
-  public <T> T getCompileCmd()
+  public String getCompileCmd()
   {
-    return get(COMPILE_CMD);
+    return getStr(COMPILE_CMD);
   }
   
-  public ProgramLanguage setCompileCmd(Object value)
+  public ProgramLanguage setCompileCmd(String value)
   {
     return set(COMPILE_CMD, value);
   }
   
-  public <T> T getBrush()
+  public String getBrush()
   {
-    return get(BRUSH);
+    return getStr(BRUSH);
   }
   
-  public ProgramLanguage setBrush(Object value)
+  public ProgramLanguage setBrush(String value)
   {
     return set(BRUSH, value);
   }
   
-  public <T> T getScript()
+  public Boolean getScript()
   {
-    return get(SCRIPT);
+    return getBoolean(SCRIPT);
   }
   
-  public ProgramLanguage setScript(Object value)
+  public ProgramLanguage setScript(Boolean value)
   {
     return set(SCRIPT, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public ProgramLanguage setStatus(Object value)
+  public ProgramLanguage setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

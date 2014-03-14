@@ -23,142 +23,142 @@ public class Solution extends Model<Solution>
   public static final String SYSTEM_ERROR = "systemError";
   public static final String CTIME = "ctime";
 
-  public <T> T getSid()
+  public Integer getSid()
   {
-    return get(SID);
+    return getInt(SID);
   }
   
-  public Solution setSid(Object value)
+  public Solution setSid(Integer value)
   {
     return set(SID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Solution setUid(Object value)
+  public Solution setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public Solution setPid(Object value)
+  public Solution setPid(Integer value)
   {
     return set(PID, value);
   }
   
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public Solution setCid(Object value)
+  public Solution setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getNum()
+  public Integer getNum()
   {
-    return get(NUM);
+    return getInt(NUM);
   }
   
-  public Solution setNum(Object value)
+  public Solution setNum(Integer value)
   {
     return set(NUM, value);
   }
   
-  public <T> T getTime()
+  public Integer getTime()
   {
-    return get(TIME);
+    return getInt(TIME);
   }
   
-  public Solution setTime(Object value)
+  public Solution setTime(Integer value)
   {
     return set(TIME, value);
   }
   
-  public <T> T getMemory()
+  public Integer getMemory()
   {
-    return get(MEMORY);
+    return getInt(MEMORY);
   }
   
-  public Solution setMemory(Object value)
+  public Solution setMemory(Integer value)
   {
     return set(MEMORY, value);
   }
   
-  public <T> T getResult()
+  public Integer getResult()
   {
-    return get(RESULT);
+    return getInt(RESULT);
   }
   
-  public Solution setResult(Object value)
+  public Solution setResult(Integer value)
   {
     return set(RESULT, value);
   }
   
-  public <T> T getLanguage()
+  public Integer getLanguage()
   {
-    return get(LANGUAGE);
+    return getInt(LANGUAGE);
   }
   
-  public Solution setLanguage(Object value)
+  public Solution setLanguage(Integer value)
   {
     return set(LANGUAGE, value);
   }
   
-  public <T> T getSource()
+  public String getSource()
   {
-    return get(SOURCE);
+    return getStr(SOURCE);
   }
   
-  public Solution setSource(Object value)
+  public Solution setSource(String value)
   {
     return set(SOURCE, value);
   }
   
-  public <T> T getCodeLen()
+  public Integer getCodeLen()
   {
-    return get(CODE_LEN);
+    return getInt(CODE_LEN);
   }
   
-  public Solution setCodeLen(Object value)
+  public Solution setCodeLen(Integer value)
   {
     return set(CODE_LEN, value);
   }
   
-  public <T> T getError()
+  public String getError()
   {
-    return get(ERROR);
+    return getStr(ERROR);
   }
   
-  public Solution setError(Object value)
+  public Solution setError(String value)
   {
     return set(ERROR, value);
   }
   
-  public <T> T getSystemError()
+  public String getSystemError()
   {
-    return get(SYSTEM_ERROR);
+    return getStr(SYSTEM_ERROR);
   }
   
-  public Solution setSystemError(Object value)
+  public Solution setSystemError(String value)
   {
     return set(SYSTEM_ERROR, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Solution setCtime(Object value)
+  public Solution setCtime(Integer value)
   {
     return set(CTIME, value);
   }

@@ -13,42 +13,42 @@ public class Role extends Model<Role>
   public static final String DESCRIPTION = "description";
   public static final String STATUS = "status";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Role setId(Object value)
+  public Role setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getName()
+  public String getName()
   {
-    return get(NAME);
+    return getStr(NAME);
   }
   
-  public Role setName(Object value)
+  public Role setName(String value)
   {
     return set(NAME, value);
   }
   
-  public <T> T getDescription()
+  public String getDescription()
   {
-    return get(DESCRIPTION);
+    return getStr(DESCRIPTION);
   }
   
-  public Role setDescription(Object value)
+  public Role setDescription(String value)
   {
     return set(DESCRIPTION, value);
   }
   
-  public <T> T getStatus()
+  public Integer getStatus()
   {
-    return get(STATUS);
+    return getInt(STATUS);
   }
   
-  public Role setStatus(Object value)
+  public Role setStatus(Integer value)
   {
     return set(STATUS, value);
   }

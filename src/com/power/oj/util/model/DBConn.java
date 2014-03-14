@@ -53,7 +53,7 @@ public class DBConn
     ResultSet rs = stame.executeQuery("desc " + tName + ";");
     while (rs.next())
     {
-      list.add(rs.getString(1));
+      list.add(rs.getString(1) + ";" + rs.getString(2));
     }
     return list;
   }

@@ -27,182 +27,182 @@ public class UserExt extends Model<UserExt>
   public static final String LAST_GET_DRIFT = "lastGetDrift";
   public static final String GET_DRIFT_NUM = "getDriftNum";
 
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public UserExt setUid(Object value)
+  public UserExt setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getTid()
+  public Integer getTid()
   {
-    return get(TID);
+    return getInt(TID);
   }
   
-  public UserExt setTid(Object value)
+  public UserExt setTid(Integer value)
   {
     return set(TID, value);
   }
   
-  public <T> T getRealName()
+  public String getRealName()
   {
-    return get(REAL_NAME);
+    return getStr(REAL_NAME);
   }
   
-  public UserExt setRealName(Object value)
+  public UserExt setRealName(String value)
   {
     return set(REAL_NAME, value);
   }
   
-  public <T> T getPhone()
+  public String getPhone()
   {
-    return get(PHONE);
+    return getStr(PHONE);
   }
   
-  public UserExt setPhone(Object value)
+  public UserExt setPhone(String value)
   {
     return set(PHONE, value);
   }
   
-  public <T> T getQq()
+  public String getQq()
   {
-    return get(QQ);
+    return getStr(QQ);
   }
   
-  public UserExt setQq(Object value)
+  public UserExt setQq(String value)
   {
     return set(QQ, value);
   }
   
-  public <T> T getBlog()
+  public String getBlog()
   {
-    return get(BLOG);
+    return getStr(BLOG);
   }
   
-  public UserExt setBlog(Object value)
+  public UserExt setBlog(String value)
   {
     return set(BLOG, value);
   }
   
-  public <T> T getShareCode()
+  public Boolean getShareCode()
   {
-    return get(SHARE_CODE);
+    return getBoolean(SHARE_CODE);
   }
   
-  public UserExt setShareCode(Object value)
+  public UserExt setShareCode(Boolean value)
   {
     return set(SHARE_CODE, value);
   }
   
-  public <T> T getOnline()
+  public Integer getOnline()
   {
-    return get(ONLINE);
+    return getInt(ONLINE);
   }
   
-  public UserExt setOnline(Object value)
+  public UserExt setOnline(Integer value)
   {
     return set(ONLINE, value);
   }
   
-  public <T> T getLevel()
+  public Integer getLevel()
   {
-    return get(LEVEL);
+    return getInt(LEVEL);
   }
   
-  public UserExt setLevel(Object value)
+  public UserExt setLevel(Integer value)
   {
     return set(LEVEL, value);
   }
   
-  public <T> T getCredit()
+  public Integer getCredit()
   {
-    return get(CREDIT);
+    return getInt(CREDIT);
   }
   
-  public UserExt setCredit(Object value)
+  public UserExt setCredit(Integer value)
   {
     return set(CREDIT, value);
   }
   
-  public <T> T getExperience()
+  public Integer getExperience()
   {
-    return get(EXPERIENCE);
+    return getInt(EXPERIENCE);
   }
   
-  public UserExt setExperience(Object value)
+  public UserExt setExperience(Integer value)
   {
     return set(EXPERIENCE, value);
   }
   
-  public <T> T getCheckin()
+  public Integer getCheckin()
   {
-    return get(CHECKIN);
+    return getInt(CHECKIN);
   }
   
-  public UserExt setCheckin(Object value)
+  public UserExt setCheckin(Integer value)
   {
     return set(CHECKIN, value);
   }
   
-  public <T> T getCheckinTimes()
+  public Integer getCheckinTimes()
   {
-    return get(CHECKIN_TIMES);
+    return getInt(CHECKIN_TIMES);
   }
   
-  public UserExt setCheckinTimes(Object value)
+  public UserExt setCheckinTimes(Integer value)
   {
     return set(CHECKIN_TIMES, value);
   }
   
-  public <T> T getTotalCheckin()
+  public Integer getTotalCheckin()
   {
-    return get(TOTAL_CHECKIN);
+    return getInt(TOTAL_CHECKIN);
   }
   
-  public UserExt setTotalCheckin(Object value)
+  public UserExt setTotalCheckin(Integer value)
   {
     return set(TOTAL_CHECKIN, value);
   }
   
-  public <T> T getLastSendDrift()
+  public Integer getLastSendDrift()
   {
-    return get(LAST_SEND_DRIFT);
+    return getInt(LAST_SEND_DRIFT);
   }
   
-  public UserExt setLastSendDrift(Object value)
+  public UserExt setLastSendDrift(Integer value)
   {
     return set(LAST_SEND_DRIFT, value);
   }
   
-  public <T> T getSendDriftNum()
+  public Integer getSendDriftNum()
   {
-    return get(SEND_DRIFT_NUM);
+    return getInt(SEND_DRIFT_NUM);
   }
   
-  public UserExt setSendDriftNum(Object value)
+  public UserExt setSendDriftNum(Integer value)
   {
     return set(SEND_DRIFT_NUM, value);
   }
   
-  public <T> T getLastGetDrift()
+  public Integer getLastGetDrift()
   {
-    return get(LAST_GET_DRIFT);
+    return getInt(LAST_GET_DRIFT);
   }
   
-  public UserExt setLastGetDrift(Object value)
+  public UserExt setLastGetDrift(Integer value)
   {
     return set(LAST_GET_DRIFT, value);
   }
   
-  public <T> T getGetDriftNum()
+  public Integer getGetDriftNum()
   {
-    return get(GET_DRIFT_NUM);
+    return getInt(GET_DRIFT_NUM);
   }
   
-  public UserExt setGetDriftNum(Object value)
+  public UserExt setGetDriftNum(Integer value)
   {
     return set(GET_DRIFT_NUM, value);
   }

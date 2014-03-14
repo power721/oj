@@ -35,262 +35,262 @@ public class Problem extends Model<Problem>
   public static final String VIEW = "view";
   public static final String STATUS = "status";
 
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public Problem setPid(Object value)
+  public Problem setPid(Integer value)
   {
     return set(PID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public Problem setUid(Object value)
+  public Problem setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getTitle()
+  public String getTitle()
   {
-    return get(TITLE);
+    return getStr(TITLE);
   }
   
-  public Problem setTitle(Object value)
+  public Problem setTitle(String value)
   {
     return set(TITLE, value);
   }
   
-  public <T> T getDescription()
+  public String getDescription()
   {
-    return get(DESCRIPTION);
+    return getStr(DESCRIPTION);
   }
   
-  public Problem setDescription(Object value)
+  public Problem setDescription(String value)
   {
     return set(DESCRIPTION, value);
   }
   
-  public <T> T getInput()
+  public String getInput()
   {
-    return get(INPUT);
+    return getStr(INPUT);
   }
   
-  public Problem setInput(Object value)
+  public Problem setInput(String value)
   {
     return set(INPUT, value);
   }
   
-  public <T> T getOutput()
+  public String getOutput()
   {
-    return get(OUTPUT);
+    return getStr(OUTPUT);
   }
   
-  public Problem setOutput(Object value)
+  public Problem setOutput(String value)
   {
     return set(OUTPUT, value);
   }
   
-  public <T> T getSampleInput()
+  public String getSampleInput()
   {
-    return get(SAMPLE_INPUT);
+    return getStr(SAMPLE_INPUT);
   }
   
-  public Problem setSampleInput(Object value)
+  public Problem setSampleInput(String value)
   {
     return set(SAMPLE_INPUT, value);
   }
   
-  public <T> T getSampleOutput()
+  public String getSampleOutput()
   {
-    return get(SAMPLE_OUTPUT);
+    return getStr(SAMPLE_OUTPUT);
   }
   
-  public Problem setSampleOutput(Object value)
+  public Problem setSampleOutput(String value)
   {
     return set(SAMPLE_OUTPUT, value);
   }
   
-  public <T> T getHint()
+  public String getHint()
   {
-    return get(HINT);
+    return getStr(HINT);
   }
   
-  public Problem setHint(Object value)
+  public Problem setHint(String value)
   {
     return set(HINT, value);
   }
   
-  public <T> T getSource()
+  public String getSource()
   {
-    return get(SOURCE);
+    return getStr(SOURCE);
   }
   
-  public Problem setSource(Object value)
+  public Problem setSource(String value)
   {
     return set(SOURCE, value);
   }
   
-  public <T> T getSampleProgram()
+  public String getSampleProgram()
   {
-    return get(SAMPLE_PROGRAM);
+    return getStr(SAMPLE_PROGRAM);
   }
   
-  public Problem setSampleProgram(Object value)
+  public Problem setSampleProgram(String value)
   {
     return set(SAMPLE_PROGRAM, value);
   }
   
-  public <T> T getTimeLimit()
+  public Integer getTimeLimit()
   {
-    return get(TIME_LIMIT);
+    return getInt(TIME_LIMIT);
   }
   
-  public Problem setTimeLimit(Object value)
+  public Problem setTimeLimit(Integer value)
   {
     return set(TIME_LIMIT, value);
   }
   
-  public <T> T getMemoryLimit()
+  public Integer getMemoryLimit()
   {
-    return get(MEMORY_LIMIT);
+    return getInt(MEMORY_LIMIT);
   }
   
-  public Problem setMemoryLimit(Object value)
+  public Problem setMemoryLimit(Integer value)
   {
     return set(MEMORY_LIMIT, value);
   }
   
-  public <T> T getAtime()
+  public Integer getAtime()
   {
-    return get(ATIME);
+    return getInt(ATIME);
   }
   
-  public Problem setAtime(Object value)
+  public Problem setAtime(Integer value)
   {
     return set(ATIME, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Problem setCtime(Object value)
+  public Problem setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getMtime()
+  public Integer getMtime()
   {
-    return get(MTIME);
+    return getInt(MTIME);
   }
   
-  public Problem setMtime(Object value)
+  public Problem setMtime(Integer value)
   {
     return set(MTIME, value);
   }
   
-  public <T> T getStime()
+  public Integer getStime()
   {
-    return get(STIME);
+    return getInt(STIME);
   }
   
-  public Problem setStime(Object value)
+  public Problem setStime(Integer value)
   {
     return set(STIME, value);
   }
   
-  public <T> T getAccepted()
+  public Integer getAccepted()
   {
-    return get(ACCEPTED);
+    return getInt(ACCEPTED);
   }
   
-  public Problem setAccepted(Object value)
+  public Problem setAccepted(Integer value)
   {
     return set(ACCEPTED, value);
   }
   
-  public <T> T getSolved()
+  public Integer getSolved()
   {
-    return get(SOLVED);
+    return getInt(SOLVED);
   }
   
-  public Problem setSolved(Object value)
+  public Problem setSolved(Integer value)
   {
     return set(SOLVED, value);
   }
   
-  public <T> T getSubmission()
+  public Integer getSubmission()
   {
-    return get(SUBMISSION);
+    return getInt(SUBMISSION);
   }
   
-  public Problem setSubmission(Object value)
+  public Problem setSubmission(Integer value)
   {
     return set(SUBMISSION, value);
   }
   
-  public <T> T getSubmitUser()
+  public Integer getSubmitUser()
   {
-    return get(SUBMIT_USER);
+    return getInt(SUBMIT_USER);
   }
   
-  public Problem setSubmitUser(Object value)
+  public Problem setSubmitUser(Integer value)
   {
     return set(SUBMIT_USER, value);
   }
   
-  public <T> T getError()
+  public Integer getError()
   {
-    return get(ERROR);
+    return getInt(ERROR);
   }
   
-  public Problem setError(Object value)
+  public Problem setError(Integer value)
   {
     return set(ERROR, value);
   }
   
-  public <T> T getRatio()
+  public Integer getRatio()
   {
-    return get(RATIO);
+    return getInt(RATIO);
   }
   
-  public Problem setRatio(Object value)
+  public Problem setRatio(Integer value)
   {
     return set(RATIO, value);
   }
   
-  public <T> T getDifficulty()
+  public Integer getDifficulty()
   {
-    return get(DIFFICULTY);
+    return getInt(DIFFICULTY);
   }
   
-  public Problem setDifficulty(Object value)
+  public Problem setDifficulty(Integer value)
   {
     return set(DIFFICULTY, value);
   }
   
-  public <T> T getView()
+  public Integer getView()
   {
-    return get(VIEW);
+    return getInt(VIEW);
   }
   
-  public Problem setView(Object value)
+  public Problem setView(Integer value)
   {
     return set(VIEW, value);
   }
   
-  public <T> T getStatus()
+  public Boolean getStatus()
   {
-    return get(STATUS);
+    return getBoolean(STATUS);
   }
   
-  public Problem setStatus(Object value)
+  public Problem setStatus(Boolean value)
   {
     return set(STATUS, value);
   }

@@ -23,142 +23,142 @@ public class ContestSolution extends Model<ContestSolution>
   public static final String CODE_LEN = "codeLen";
   public static final String SYSTEM_ERROR = "systemError";
 
-  public <T> T getSid()
+  public Integer getSid()
   {
-    return get(SID);
+    return getInt(SID);
   }
   
-  public ContestSolution setSid(Object value)
+  public ContestSolution setSid(Integer value)
   {
     return set(SID, value);
   }
   
-  public <T> T getUid()
+  public Integer getUid()
   {
-    return get(UID);
+    return getInt(UID);
   }
   
-  public ContestSolution setUid(Object value)
+  public ContestSolution setUid(Integer value)
   {
     return set(UID, value);
   }
   
-  public <T> T getPid()
+  public Integer getPid()
   {
-    return get(PID);
+    return getInt(PID);
   }
   
-  public ContestSolution setPid(Object value)
+  public ContestSolution setPid(Integer value)
   {
     return set(PID, value);
   }
   
-  public <T> T getCid()
+  public Integer getCid()
   {
-    return get(CID);
+    return getInt(CID);
   }
   
-  public ContestSolution setCid(Object value)
+  public ContestSolution setCid(Integer value)
   {
     return set(CID, value);
   }
   
-  public <T> T getNum()
+  public Integer getNum()
   {
-    return get(NUM);
+    return getInt(NUM);
   }
   
-  public ContestSolution setNum(Object value)
+  public ContestSolution setNum(Integer value)
   {
     return set(NUM, value);
   }
   
-  public <T> T getTime()
+  public Integer getTime()
   {
-    return get(TIME);
+    return getInt(TIME);
   }
   
-  public ContestSolution setTime(Object value)
+  public ContestSolution setTime(Integer value)
   {
     return set(TIME, value);
   }
   
-  public <T> T getMemory()
+  public Integer getMemory()
   {
-    return get(MEMORY);
+    return getInt(MEMORY);
   }
   
-  public ContestSolution setMemory(Object value)
+  public ContestSolution setMemory(Integer value)
   {
     return set(MEMORY, value);
   }
   
-  public <T> T getResult()
+  public Integer getResult()
   {
-    return get(RESULT);
+    return getInt(RESULT);
   }
   
-  public ContestSolution setResult(Object value)
+  public ContestSolution setResult(Integer value)
   {
     return set(RESULT, value);
   }
   
-  public <T> T getLanguage()
+  public Integer getLanguage()
   {
-    return get(LANGUAGE);
+    return getInt(LANGUAGE);
   }
   
-  public ContestSolution setLanguage(Object value)
+  public ContestSolution setLanguage(Integer value)
   {
     return set(LANGUAGE, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public ContestSolution setCtime(Object value)
+  public ContestSolution setCtime(Integer value)
   {
     return set(CTIME, value);
   }
   
-  public <T> T getError()
+  public String getError()
   {
-    return get(ERROR);
+    return getStr(ERROR);
   }
   
-  public ContestSolution setError(Object value)
+  public ContestSolution setError(String value)
   {
     return set(ERROR, value);
   }
   
-  public <T> T getSource()
+  public String getSource()
   {
-    return get(SOURCE);
+    return getStr(SOURCE);
   }
   
-  public ContestSolution setSource(Object value)
+  public ContestSolution setSource(String value)
   {
     return set(SOURCE, value);
   }
   
-  public <T> T getCodeLen()
+  public Integer getCodeLen()
   {
-    return get(CODE_LEN);
+    return getInt(CODE_LEN);
   }
   
-  public ContestSolution setCodeLen(Object value)
+  public ContestSolution setCodeLen(Integer value)
   {
     return set(CODE_LEN, value);
   }
   
-  public <T> T getSystemError()
+  public String getSystemError()
   {
-    return get(SYSTEM_ERROR);
+    return getStr(SYSTEM_ERROR);
   }
   
-  public ContestSolution setSystemError(Object value)
+  public ContestSolution setSystemError(String value)
   {
     return set(SYSTEM_ERROR, value);
   }

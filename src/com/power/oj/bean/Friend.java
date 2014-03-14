@@ -14,52 +14,52 @@ public class Friend extends Model<Friend>
   public static final String FRIEND_UID = "friendUid";
   public static final String CTIME = "ctime";
 
-  public <T> T getId()
+  public Integer getId()
   {
-    return get(ID);
+    return getInt(ID);
   }
   
-  public Friend setId(Object value)
+  public Friend setId(Integer value)
   {
     return set(ID, value);
   }
   
-  public <T> T getGid()
+  public Integer getGid()
   {
-    return get(GID);
+    return getInt(GID);
   }
   
-  public Friend setGid(Object value)
+  public Friend setGid(Integer value)
   {
     return set(GID, value);
   }
   
-  public <T> T getUserId()
+  public Integer getUserId()
   {
-    return get(USER_ID);
+    return getInt(USER_ID);
   }
   
-  public Friend setUserId(Object value)
+  public Friend setUserId(Integer value)
   {
     return set(USER_ID, value);
   }
   
-  public <T> T getFriendUid()
+  public Integer getFriendUid()
   {
-    return get(FRIEND_UID);
+    return getInt(FRIEND_UID);
   }
   
-  public Friend setFriendUid(Object value)
+  public Friend setFriendUid(Integer value)
   {
     return set(FRIEND_UID, value);
   }
   
-  public <T> T getCtime()
+  public Integer getCtime()
   {
-    return get(CTIME);
+    return getInt(CTIME);
   }
   
-  public Friend setCtime(Object value)
+  public Friend setCtime(Integer value)
   {
     return set(CTIME, value);
   }
