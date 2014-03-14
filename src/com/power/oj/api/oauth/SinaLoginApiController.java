@@ -50,7 +50,7 @@ public class SinaLoginApiController extends OjController
       if (null == webLogin)
       {
         webLogin = new WebLoginModel();
-        webLogin.set(WebLoginModel.OPENID, openid);
+        webLogin.set(WebLoginModel.OPEN_ID, openid);
         webLogin.set(WebLoginModel.TYPE, type);
         webLogin.set(WebLoginModel.AVATAR, avatar);
         webLogin.set(WebLoginModel.CTIME, OjConfig.timeStamp);
