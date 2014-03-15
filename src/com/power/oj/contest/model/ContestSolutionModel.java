@@ -3,6 +3,7 @@ package com.power.oj.contest.model;
 import com.jfinal.plugin.activerecord.Model;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.solution.SolutionModel;
 
 public class ContestSolutionModel extends Model<ContestSolutionModel>
 {
@@ -26,6 +27,16 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public static final String CODE_LEN = "codeLen";
   public static final String SYSTEM_ERROR = "systemError";
 
+  public ContestSolutionModel() {}
+  
+  public ContestSolutionModel(SolutionModel solutionModel)
+  {
+    for (String filed : solutionModel.getAttrNames())
+    {
+      set(filed, solutionModel.get(filed));
+    }
+  }
+  
   public boolean addSolution()
   {
     setCtime(OjConfig.timeStamp);

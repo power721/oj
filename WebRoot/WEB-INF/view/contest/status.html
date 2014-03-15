@@ -11,19 +11,19 @@
       </#list>
       </#if>
       </select>
-      <select class="input-medium" id="inputResult" name="result">
-        <option value="-1">Result</option>
-        <#if judge_result??>
-        <#list judge_result as Result>
-        <option value="${Result.id!}"<#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option> 
-        </#list> 
-        </#if>
-      </select>
       <select class="input-medium" id="inputLanguage" name="language">
         <option value="-1">Language</option> 
         <#if program_languages??> 
         <#list program_languages as Language>
         <option value="${Language.id!}"<#if language?? && language==Language.id>selected</#if>>${Language.name!}</option> 
+        </#list> 
+        </#if>
+      </select>
+      <select class="input-medium" id="inputResult" name="result">
+        <option value="-1">Result</option>
+        <#if judge_result??>
+        <#list judge_result as Result>
+        <option value="${Result.id!}"<#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option> 
         </#list> 
         </#if>
       </select>

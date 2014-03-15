@@ -16,6 +16,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestProblemModel;
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
@@ -159,18 +160,43 @@ public abstract class JudgeAdapter implements Runnable
   protected boolean updateCompileError(String error)
   {
     solutionModel.set("result", ResultType.CE).set("error", error);
+    
+    Integer cid = solutionModel.getInt("cid");
+    if (cid != null && cid > 0)
+    {
+      log.info("updateCompileError");
+      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
+      return contestSolution.update();
+    }
     return solutionModel.update();
   }
 
   protected boolean updateSystemError(String error)
   {
     solutionModel.set("result", ResultType.SE).set("systemError", error);
+
+    Integer cid = solutionModel.getInt("cid");
+    log.info(solutionModel.toString());
+    if (cid != null && cid > 0)
+    {
+      log.info("updateSystemError");
+      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
+      return contestSolution.update();
+    }
     return solutionModel.update();
   }
   
   protected boolean updateResult(int result, int time, int memory)
   {
     solutionModel.set("result", result).set("time", time).set("memory", memory);
+
+    Integer cid = solutionModel.getInt("cid");
+    if (cid != null && cid > 0)
+    {
+      log.info("updateResult");
+      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
+      return contestSolution.update();
+    }
     return solutionModel.update();
   }
   

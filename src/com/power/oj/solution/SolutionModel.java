@@ -37,14 +37,7 @@ public class SolutionModel extends Model<SolutionModel>
   {
     for (String filed : contestSolution.getAttrNames())
     {
-      if (StringUtil.equalsOne(filed, SolutionModel.dao.getAttrNames()) != -1)
-      {
-        set(filed, contestSolution.get(filed));
-      }
-      else
-      {
-        put(filed, contestSolution.get(filed));
-      }
+      set(filed, contestSolution.get(filed));
     }
   }
   
