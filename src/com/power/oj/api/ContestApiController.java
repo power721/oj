@@ -1,5 +1,6 @@
 package com.power.oj.api;
 
+import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -140,6 +141,7 @@ public class ContestApiController extends OjController
         // TODO replace "/"
       }
     }
+    solutionModel.setSource(HtmlEncoder.text(solutionModel.getSource()));
 
     int num = solutionModel.getNum();
     setAttr("success", true);
@@ -151,8 +153,12 @@ public class ContestApiController extends OjController
     setAttr("solution", solutionModel);
 
     String brush = getAttrForStr("language").toLowerCase();
-    if ("G++".equalsIgnoreCase(brush) || "GCC".equalsIgnoreCase(brush))
-      brush = "cpp";
+    if ("GCC".equalsIgnoreCase(brush))
+      brush = "c";
+    if ("G++".equalsIgnoreCase(brush))
+      brush = "cc";
+    if ("Python".equalsIgnoreCase(brush))
+      brush = "py";
     setAttr("brush", brush);
 
     renderJson(new String[]{"success", "alpha", "problemTitle", "language", "resultLongName", "resultName", "solution", "brush"});

@@ -1,7 +1,7 @@
 <@override name="contest_content">
 <div class="pagination pagination-centered">
   <div class="form-inline">
-    <form class="form-search" action="contest/status/${cid!}" method="post">
+    <form class="form-search" action="contest/status/${cid!}">
       <input type="text" class="input-small" name="name" value="${name!}" placeholder="User Name">
       <select class="input-medium" id="inputProblem" name="pid">
       <option value="">Problem</option>
@@ -77,9 +77,28 @@
 </table>
 <div class="pagination pagination-centered">
 </div>
+<div class="hide" id="contest_code">
+  <a href="contest/code/[cid]-[sid]" target="_blank" title="show source code">[sid]</a>
+</div>
+<div class="modal hide fade problemModal" id="codeModal" cid="${cid!}">
+    <div class="modal-header">
+      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+      <h3 id="codeModalLabel">
+        Source Code <span id="sid"></span>
+      </h3>
+    </div>
+    <div class="modal-body">
+      <div id="content">
+        <img src="assets/images/ajax-loader.gif" /> Loading...
+      </div>
+    </div>
+</div>
 </@override>
-
+<@override name="styles">
+<link rel="stylesheet" type="text/css" href="assets/prettify/prettify.css" />
+</@override>
 <@override name="scripts">
+<script type="text/javascript" src="assets/prettify/prettify.js"></script>
 <script type="text/javascript">
   $(document).ready(function(){
     document.onkeydown=nextpage;
@@ -109,17 +128,34 @@
     });
     
     $('.result i').click(function() {
-    	$.get("api/contest/code", { sid: $(this).attr('sid') },
-    	          function(data) {
-    	            if (data.success)
-    	            {
-    	              
-    	            }
-    	            else
-    	            {
-    	              
-    	            }
-    	        });
+      var sid = $(this).attr('sid');
+      $('#codeModal').modal("show");
+      var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, $('#codeModal').attr('cid'));
+      $('#codeModal #sid').html(tmp);
+    	$.get("api/contest/code", { sid: sid },
+        function(data) {
+          if (data.success)
+          {
+            var code = "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
+            code += "/*\n";
+            code += " * Problem: " + data.solution.cid + "-" + data.alpha + " (" + data.problemTitle + ")\n";
+            code += " * User: " + data.solution.name + "\n";
+            code += " * Language: " + data.language + "\n";
+            code += " * Result: " + data.resultLongName + "\n";
+            if (data.resultName == 'AC') {
+              code += " * Time: " + data.solution.time + " MS  Memory: " + data.solution.memory + " KB\n";
+            }
+            code += " */\n";
+            code += data.solution.source;
+            code += '</pre>';
+            $('#codeModal #content').html(code).removeClass().addClass('prettyprint');
+            prettyPrint();
+          }
+          else
+          {
+            $('#codeModal #content').html(data.result).addClass("alert alert-error");
+          }
+      });
     });
   });
 </script>

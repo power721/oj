@@ -1,7 +1,5 @@
 package com.power.oj.solution;
 
-import jodd.util.StringUtil;
-
 import com.jfinal.plugin.activerecord.Model;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
