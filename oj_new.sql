@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.35, for debian-linux-gnu (i686)
+-- MySQL dump 10.13  Distrib 5.5.35, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: oj
+-- Host: localhost    Database: oj_new
 -- ------------------------------------------------------
--- Server version	5.5.35-0+wheezy1
+-- Server version 5.5.35-0ubuntu0.12.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -97,7 +97,7 @@ CREATE TABLE `category` (
   `name` varchar(2048) NOT NULL,
   `zh` varchar(2048) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,6 +133,7 @@ CREATE TABLE `contest` (
   `startTime` int(11) DEFAULT '0',
   `endTime` int(11) DEFAULT '0',
   `description` text,
+  `report` text,
   `type` tinyint(4) NOT NULL DEFAULT '0',
   `password` varchar(255) DEFAULT NULL,
   `atime` int(11) DEFAULT NULL,
@@ -142,6 +143,28 @@ CREATE TABLE `contest` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`cid`),
   KEY `search` (`title`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `contest_clarify`
+--
+
+DROP TABLE IF EXISTS `contest_clarify`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contest_clarify` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `cid` int(9) NOT NULL,
+  `uid` int(9) NOT NULL,
+  `admin` int(9) DEFAULT NULL,
+  `question` text NOT NULL,
+  `reply` text,
+  `public` tinyint(1) NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL,
+  `atime` int(11) DEFAULT NULL COMMENT 'answer timestamp',
+  `mtime` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -193,6 +216,22 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 
 --
+-- Table structure for table `contest_user`
+--
+
+DROP TABLE IF EXISTS `contest_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contest_user` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `cid` int(9) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `freeze_board`
 --
 
@@ -203,7 +242,7 @@ CREATE TABLE `freeze_board` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `cid` int(9) NOT NULL DEFAULT '0',
   `uid` int(9) NOT NULL,
-  `accepts` int(5) NOT NULL DEFAULT '0',
+  `solved` int(5) NOT NULL DEFAULT '0',
   `penalty` int(11) NOT NULL DEFAULT '0',
   `A_SolvedTime` int(11) DEFAULT '0',
   `A_WrongNum` tinyint(5) unsigned DEFAULT '0',
@@ -275,7 +314,7 @@ CREATE TABLE `friend` (
   `friendUid` int(9) NOT NULL,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,7 +331,7 @@ CREATE TABLE `friend_group` (
   `count` int(9) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -306,7 +345,7 @@ CREATE TABLE `level` (
   `level` tinyint(5) NOT NULL AUTO_INCREMENT,
   `experience` int(9) NOT NULL,
   PRIMARY KEY (`level`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -325,7 +364,7 @@ CREATE TABLE `loginlog` (
   `success` tinyint(1) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -342,7 +381,7 @@ CREATE TABLE `mail` (
   `peerUid` int(9) NOT NULL COMMENT 'peer uid',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=new, 1=read, 2=deleted',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -375,7 +414,7 @@ CREATE TABLE `mail_content` (
   `content` text,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -400,7 +439,7 @@ CREATE TABLE `notice` (
   `view` int(9) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -419,7 +458,7 @@ CREATE TABLE `permission` (
   `title` varchar(64) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -457,7 +496,7 @@ CREATE TABLE `problem` (
   `view` int(9) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -515,7 +554,7 @@ CREATE TABLE `role` (
   `description` varchar(80) NOT NULL,
   `status` tinyint(2) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -530,7 +569,7 @@ CREATE TABLE `role_permission` (
   `rid` int(9) NOT NULL,
   `pid` int(9) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -577,7 +616,7 @@ CREATE TABLE `solution` (
   `systemError` text,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`sid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -701,9 +740,8 @@ CREATE TABLE `user` (
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT 'Whether the user is active(1) or blocked(0).',
   `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, 'admin@local.host', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '0', '127.0.0.1', null, null, null, 'secret', null, '118', '0', '', null, '1', null);
 
 --
 -- Table structure for table `user_ext`
@@ -749,7 +787,7 @@ CREATE TABLE `user_role` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `rid` (`rid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -770,7 +808,7 @@ CREATE TABLE `variable` (
   `type` enum('boolean','int','string','text') NOT NULL DEFAULT 'string',
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -807,7 +845,7 @@ CREATE TABLE `web_login` (
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `contest_solution` AS select `solution`.`sid` AS `sid`,`solution`.`uid` AS `uid`,`solution`.`pid` AS `pid`,`solution`.`cid` AS `cid`,`solution`.`num` AS `num`,`solution`.`time` AS `time`,`solution`.`memory` AS `memory`,`solution`.`result` AS `result`,`solution`.`language` AS `language`,`solution`.`ctime` AS `ctime`,`solution`.`error` AS `error`,`solution`.`source` AS `source`,`solution`.`codeLen` AS `codeLen`,`solution`.`systemError` AS `systemError` from `solution` where (`solution`.`cid` <> 0) */;
+/*!50001 VIEW `contest_solution` AS select `oj_new`.`solution`.`sid` AS `sid`,`oj_new`.`solution`.`uid` AS `uid`,`oj_new`.`solution`.`pid` AS `pid`,`oj_new`.`solution`.`cid` AS `cid`,`oj_new`.`solution`.`num` AS `num`,`oj_new`.`solution`.`time` AS `time`,`oj_new`.`solution`.`memory` AS `memory`,`oj_new`.`solution`.`result` AS `result`,`oj_new`.`solution`.`language` AS `language`,`oj_new`.`solution`.`ctime` AS `ctime`,`oj_new`.`solution`.`error` AS `error`,`oj_new`.`solution`.`source` AS `source`,`oj_new`.`solution`.`codeLen` AS `codeLen`,`oj_new`.`solution`.`systemError` AS `systemError` from `solution` where (`oj_new`.`solution`.`cid` <> 0) */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -821,4 +859,4 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-14 16:40:21
+-- Dump completed on 2014-03-15 11:03:00
