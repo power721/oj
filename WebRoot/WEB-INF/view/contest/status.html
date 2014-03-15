@@ -60,7 +60,7 @@
       <td class="sid">${solution.sid!}</td>
       <td class="user"><a href="user/profile/${(solution.name)!}" data-toggle="tooltip" title="${(solution.nick)!}">${(solution.name)!}</a></td>
       <td class="problem"><a href="contest/problem/${cid}-${solution.alpha!}">${solution.alpha!}</a></td>
-      <td class="result" id="${solution.resultName!}"><i class="btn">${solution.resultLongName!}</i></td>
+      <td class="result" id="${solution.resultName!}"><i class="btn" sid="${solution.sid!}">${solution.resultLongName!}</i></td>
       <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
       <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
       <td class="language">
@@ -106,6 +106,20 @@
     	else if (resultName == 'Wait')
     		btnClass = '';
     	$(this).addClass(btnClass);
+    });
+    
+    $('.result i').click(function() {
+    	$.get("api/contest/code", { sid: $(this).attr('sid') },
+    	          function(data) {
+    	            if (data.success)
+    	            {
+    	              
+    	            }
+    	            else
+    	            {
+    	              
+    	            }
+    	        });
     });
   });
 </script>

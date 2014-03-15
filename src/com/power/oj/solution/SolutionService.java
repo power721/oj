@@ -78,6 +78,11 @@ public class SolutionService
   {
     return ContestSolutionModel.dao.findFirst("SELECT * FROM contest_solution WHERE sid=? LIMIT 1", sid);
   }
+
+  public ContestSolutionModel findContestSolution4Json(Integer sid)
+  {
+    return ContestSolutionModel.dao.findFirst("SELECT cid,codeLen,s.language,time,memory,num,result,source,u.name FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE sid=? LIMIT 1", sid);
+  }
   
   public Page<SolutionModel> getPageForContest(int pageNumber, int pageSize, int result, int language, int cid, int num, String userName)
   {

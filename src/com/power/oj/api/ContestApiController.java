@@ -1,14 +1,23 @@
 package com.power.oj.api;
 
+import jodd.util.StringUtil;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
 import com.power.oj.contest.ContestService;
+import com.power.oj.contest.model.ContestSolutionModel;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.ResultType;
+import com.power.oj.solution.SolutionService;
+import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
 public class ContestApiController extends OjController
 {
+  private static final SolutionService solutionService = SolutionService.me();
+  private static final UserService userService = UserService.me();
   private static final ContestService contestService = ContestService.me();
   
   @RequiresPermissions("contest:addProblem")
@@ -100,4 +109,52 @@ public class ContestApiController extends OjController
     renderJson("success", contestService.updateClarify(id, reply, isPublic));
   }
   
+  public void code()
+  {
+    Integer sid = getParaToInt("sid");
+    boolean isAdmin = userService.isAdmin();
+    ContestSolutionModel solutionModel = solutionService.findContestSolution4Json(sid);
+    
+    if (solutionModel == null)
+    {
+      renderJson("success:false,result:\"Cannot find code.\"");
+      return;
+    }
+    ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
+    Integer cid = solutionModel.getCid();
+    Integer uid = solutionModel.getUid();
+    Integer loginUid = userService.getCurrentUid();
+    
+    if (uid != loginUid && !isAdmin)
+    {
+      renderJson("success:false,result:\"Permission denied.\"");
+      return;
+    }
+
+    if (!isAdmin)
+    {
+      String error = solutionModel.getError();
+      if (error != null)
+      {
+        solutionModel.setError(error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
+        // TODO replace "/"
+      }
+    }
+
+    int num = solutionModel.getNum();
+    setAttr("success", true);
+    setAttr("language", OjConfig.language_name.get(solutionModel.getLanguage()));
+    setAttr("alpha", (char) (num + 'A'));
+    setAttr("problemTitle", contestService.getProblemTitle(cid, num));
+    setAttr("resultLongName", resultType.getLongName());
+    setAttr("resultName", resultType.getName());
+    setAttr("solution", solutionModel);
+
+    String brush = getAttrForStr("language").toLowerCase();
+    if ("G++".equalsIgnoreCase(brush) || "GCC".equalsIgnoreCase(brush))
+      brush = "cpp";
+    setAttr("brush", brush);
+
+    renderJson(new String[]{"success", "alpha", "problemTitle", "language", "resultLongName", "resultName", "solution", "brush"});
+  }
 }
