@@ -659,14 +659,14 @@ public class ContestService
         char c = (char) (i + 'A');
         if (userInfo.acTime[i] > 0)
         {
-          fields.append(",").append(c).append("_time");
+          fields.append(",").append(c).append("_SolvedTime");
           values.append(",?");
           paras.add(userInfo.acTime[i]);
         }
 
         if (userInfo.waTime[i] > 0)
         {
-          fields.append(",").append(c).append("_WrongSubmits");
+          fields.append(",").append(c).append("_WrongNum");
           paras.add(userInfo.waTime[i]);
           values.append(",?");
         }

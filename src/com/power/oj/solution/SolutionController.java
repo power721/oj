@@ -174,7 +174,7 @@ public class SolutionController extends OjController
       
       if (cid != null && cid > 0)
       {
-          Db.update("UPDATE contest_problem SET submit=submit+1 WHERE cid=? AND pid=?", cid, pid);
+          Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
       }
       else
       {

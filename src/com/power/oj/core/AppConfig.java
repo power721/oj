@@ -38,6 +38,7 @@ import com.power.oj.api.oauth.SinaLoginApiController;
 import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.ContestModel;
+import com.power.oj.contest.ContestProblemModel;
 import com.power.oj.core.controller.MainController;
 import com.power.oj.core.controller.UeditorController;
 import com.power.oj.core.handler.BaseUrlHandler;
@@ -174,6 +175,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);
+    arp.addMapping("contest_problem", ContestProblemModel.class);
     arp.addMapping("session", "session_id", SessionModel.class);
     arp.addMapping("mail", MailModel.class);
     arp.addMapping("mail_content", MailContentModel.class);

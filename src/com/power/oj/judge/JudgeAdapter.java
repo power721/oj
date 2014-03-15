@@ -14,6 +14,7 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.ContestModel;
+import com.power.oj.contest.ContestProblemModel;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -225,34 +226,34 @@ public abstract class JudgeAdapter implements Runnable
         Db.save("board", board);
         board = Db.findById("board", board.get("id"));
       }
-      Integer wrongSubmits = board.getInt(c + "_WrongSubmits");
+      Integer wrongSubmits = board.getInt(c + "_WrongNum");
       
       if (solutionModel.getInt("result") == ResultType.AC)
       {
-        Record contestProblem = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
+        ContestProblemModel contestProblem = ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
         ContestModel contestModle = contestService.getContest(cid);
-        Integer contestStartTime = contestModle.getInt("start_time");
+        Integer contestStartTime = contestModle.getStartTime();
         
-        if (contestProblem.getInt("first_blood") == 0)
+        if (contestProblem.getFirstBloodUid() == 0)
         {
-          contestProblem.set("first_blood", solutionModel.getUid());
-          contestProblem.set("first_blood_time", (submitTime - contestStartTime) / 60);
+          contestProblem.setFirstBloodUid(solutionModel.getUid());
+          contestProblem.setFirstBloodTime((int) ((submitTime - contestStartTime) / 60));
         }
-        contestProblem.set("accept", contestProblem.getInt("accept")+1);
-        Db.update("contest_problem", contestProblem);
+        contestProblem.setAccepted(contestProblem.getAccepted()+1);
+        contestProblem.update();
         
-        Integer acTime = board.getInt(c + "_time");
+        Integer acTime = board.getInt(c + "_SolvedTime");
         if (acTime == null || acTime == 0)
         {
           acTime = (int) ((submitTime - contestStartTime) / 60);
-          board.set(c+"_time", acTime);
+          board.set(c+"_SolvedTime", acTime);
           board.set("solved", board.getInt("solved")+1);
           board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMIT);
         }
       }
       else
       {
-        board.set(c+"_WrongSubmits", wrongSubmits+1);
+        board.set(c+"_WrongNum", wrongSubmits+1);
       }
       
       Db.update("board", board);
