@@ -11,7 +11,7 @@ public class FreezeBoard extends Model<FreezeBoard>
   public static final String ID = "id";
   public static final String CID = "cid";
   public static final String UID = "uid";
-  public static final String ACCEPTS = "accepts";
+  public static final String SOLVED = "solved";
   public static final String PENALTY = "penalty";
   public static final String A_SOLVED_TIME = "A_SolvedTime";
   public static final String A_WRONG_NUM = "A_WrongNum";
@@ -96,14 +96,14 @@ public class FreezeBoard extends Model<FreezeBoard>
     return set(UID, value);
   }
   
-  public Integer getAccepts()
+  public Integer getSolved()
   {
-    return getInt(ACCEPTS);
+    return getInt(SOLVED);
   }
   
-  public FreezeBoard setAccepts(Integer value)
+  public FreezeBoard setSolved(Integer value)
   {
-    return set(ACCEPTS, value);
+    return set(SOLVED, value);
   }
   
   public Integer getPenalty()

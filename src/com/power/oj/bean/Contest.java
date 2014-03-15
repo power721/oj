@@ -14,6 +14,7 @@ public class Contest extends Model<Contest>
   public static final String START_TIME = "startTime";
   public static final String END_TIME = "endTime";
   public static final String DESCRIPTION = "description";
+  public static final String REPORT = "report";
   public static final String TYPE = "type";
   public static final String PASSWORD = "password";
   public static final String ATIME = "atime";
@@ -80,6 +81,16 @@ public class Contest extends Model<Contest>
   public Contest setDescription(String value)
   {
     return set(DESCRIPTION, value);
+  }
+  
+  public String getReport()
+  {
+    return getStr(REPORT);
+  }
+  
+  public Contest setReport(String value)
+  {
+    return set(REPORT, value);
   }
   
   public Integer getType()

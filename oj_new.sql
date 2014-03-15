@@ -701,8 +701,9 @@ CREATE TABLE `user` (
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT 'Whether the user is active(1) or blocked(0).',
   `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1002 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, 'admin@local.host', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '0', '127.0.0.1', null, null, null, 'secret', null, '118', '0', '', null, '1', null);
 
 --
 -- Table structure for table `user_ext`
@@ -770,6 +771,26 @@ CREATE TABLE `variable` (
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `web_login`
+--
+
+DROP TABLE IF EXISTS `web_login`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `web_login` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `openId` varchar(64) NOT NULL,
+  `uid` int(9) DEFAULT NULL,
+  `nick` varchar(64) DEFAULT NULL,
+  `avatar` varchar(255) DEFAULT NULL,
+  `type` varchar(64) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
