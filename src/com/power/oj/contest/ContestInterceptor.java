@@ -3,6 +3,7 @@ package com.power.oj.contest;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
+import com.power.oj.contest.model.ContestModel;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserService;
 

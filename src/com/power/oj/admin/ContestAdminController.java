@@ -8,8 +8,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
-import com.power.oj.contest.ContestModel;
 import com.power.oj.contest.ContestService;
+import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;

@@ -1,14 +1,14 @@
-package com.power.oj.contest;
+package com.power.oj.contest.model;
 
 import com.jfinal.plugin.activerecord.Model;
 
-public class BoardModel extends Model<BoardModel>
+public class FreezeBoardModel extends Model<FreezeBoardModel>
 {
   private static final long serialVersionUID = 1L;
   
-  public static final BoardModel dao = new BoardModel();
+  public static final FreezeBoardModel dao = new FreezeBoardModel();
   
-  public static final String TABLE_NAME = "board";
+  public static final String TABLE_NAME = "freeze_board";
   public static final String ID = "id";
   public static final String CID = "cid";
   public static final String UID = "uid";
@@ -72,7 +72,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(ID);
   }
   
-  public BoardModel setId(Integer value)
+  public FreezeBoardModel setId(Integer value)
   {
     return set(ID, value);
   }
@@ -82,7 +82,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(CID);
   }
   
-  public BoardModel setCid(Integer value)
+  public FreezeBoardModel setCid(Integer value)
   {
     return set(CID, value);
   }
@@ -92,7 +92,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(UID);
   }
   
-  public BoardModel setUid(Integer value)
+  public FreezeBoardModel setUid(Integer value)
   {
     return set(UID, value);
   }
@@ -102,7 +102,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(SOLVED);
   }
   
-  public BoardModel setSolved(Integer value)
+  public FreezeBoardModel setSolved(Integer value)
   {
     return set(SOLVED, value);
   }
@@ -112,17 +112,46 @@ public class BoardModel extends Model<BoardModel>
     return getInt(PENALTY);
   }
   
-  public BoardModel setPenalty(Integer value)
+  public FreezeBoardModel setPenalty(Integer value)
   {
     return set(PENALTY, value);
   }
   
+  public Integer getSolvedTime(int num)
+  {
+    char c = (char) (num + 'A');
+    String field = new StringBuilder().append(c).append("_SolvedTime").toString();
+    return getInt(field);
+  }
+  
+  public FreezeBoardModel setSolvedTime(int num, Integer value)
+  {
+    char c = (char) (num + 'A');
+    String field = new StringBuilder().append(c).append("_SolvedTime").toString();
+    return set(field, value);
+  }
+
+  public Integer getWrongNum(int num)
+  {
+    char c = (char) (num + 'A');
+    String field = new StringBuilder().append(c).append("_WrongNum").toString();
+    return getInt(field);
+  }
+  
+  public FreezeBoardModel setWrongNum(int num, Integer value)
+  {
+    char c = (char) (num + 'A');
+    String field = new StringBuilder().append(c).append("_WrongNum").toString();
+    return set(field, value);
+  }
+  
+  /*
   public Integer getA_SolvedTime()
   {
     return getInt(A_SOLVED_TIME);
   }
-  /*
-  public BoardModel setA_SolvedTime(Integer value)
+  
+  public FreezeBoardModel setA_SolvedTime(Integer value)
   {
     return set(A_SOLVED_TIME, value);
   }
@@ -132,7 +161,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(A_WRONG_NUM);
   }
   
-  public BoardModel setA_WrongNum(Integer value)
+  public FreezeBoardModel setA_WrongNum(Integer value)
   {
     return set(A_WRONG_NUM, value);
   }
@@ -142,7 +171,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(B_SOLVED_TIME);
   }
   
-  public BoardModel setB_SolvedTime(Integer value)
+  public FreezeBoardModel setB_SolvedTime(Integer value)
   {
     return set(B_SOLVED_TIME, value);
   }
@@ -152,7 +181,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(B_WRONG_NUM);
   }
   
-  public BoardModel setB_WrongNum(Integer value)
+  public FreezeBoardModel setB_WrongNum(Integer value)
   {
     return set(B_WRONG_NUM, value);
   }
@@ -162,7 +191,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(C_SOLVED_TIME);
   }
   
-  public BoardModel setC_SolvedTime(Integer value)
+  public FreezeBoardModel setC_SolvedTime(Integer value)
   {
     return set(C_SOLVED_TIME, value);
   }
@@ -172,7 +201,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(C_WRONG_NUM);
   }
   
-  public BoardModel setC_WrongNum(Integer value)
+  public FreezeBoardModel setC_WrongNum(Integer value)
   {
     return set(C_WRONG_NUM, value);
   }
@@ -182,7 +211,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(D_SOLVED_TIME);
   }
   
-  public BoardModel setD_SolvedTime(Integer value)
+  public FreezeBoardModel setD_SolvedTime(Integer value)
   {
     return set(D_SOLVED_TIME, value);
   }
@@ -192,7 +221,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(D_WRONG_NUM);
   }
   
-  public BoardModel setD_WrongNum(Integer value)
+  public FreezeBoardModel setD_WrongNum(Integer value)
   {
     return set(D_WRONG_NUM, value);
   }
@@ -202,7 +231,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(E_SOLVED_TIME);
   }
   
-  public BoardModel setE_SolvedTime(Integer value)
+  public FreezeBoardModel setE_SolvedTime(Integer value)
   {
     return set(E_SOLVED_TIME, value);
   }
@@ -212,7 +241,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(E_WRONG_NUM);
   }
   
-  public BoardModel setE_WrongNum(Integer value)
+  public FreezeBoardModel setE_WrongNum(Integer value)
   {
     return set(E_WRONG_NUM, value);
   }
@@ -222,7 +251,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(F_SOLVED_TIME);
   }
   
-  public BoardModel setF_SolvedTime(Integer value)
+  public FreezeBoardModel setF_SolvedTime(Integer value)
   {
     return set(F_SOLVED_TIME, value);
   }
@@ -232,7 +261,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(F_WRONG_NUM);
   }
   
-  public BoardModel setF_WrongNum(Integer value)
+  public FreezeBoardModel setF_WrongNum(Integer value)
   {
     return set(F_WRONG_NUM, value);
   }
@@ -242,7 +271,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(G_SOLVED_TIME);
   }
   
-  public BoardModel setG_SolvedTime(Integer value)
+  public FreezeBoardModel setG_SolvedTime(Integer value)
   {
     return set(G_SOLVED_TIME, value);
   }
@@ -252,7 +281,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(G_WRONG_NUM);
   }
   
-  public BoardModel setG_WrongNum(Integer value)
+  public FreezeBoardModel setG_WrongNum(Integer value)
   {
     return set(G_WRONG_NUM, value);
   }
@@ -262,7 +291,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(H_SOLVED_TIME);
   }
   
-  public BoardModel setH_SolvedTime(Integer value)
+  public FreezeBoardModel setH_SolvedTime(Integer value)
   {
     return set(H_SOLVED_TIME, value);
   }
@@ -272,7 +301,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(H_WRONG_NUM);
   }
   
-  public BoardModel setH_WrongNum(Integer value)
+  public FreezeBoardModel setH_WrongNum(Integer value)
   {
     return set(H_WRONG_NUM, value);
   }
@@ -282,7 +311,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(I_SOLVED_TIME);
   }
   
-  public BoardModel setI_SolvedTime(Integer value)
+  public FreezeBoardModel setI_SolvedTime(Integer value)
   {
     return set(I_SOLVED_TIME, value);
   }
@@ -292,7 +321,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(I_WRONG_NUM);
   }
   
-  public BoardModel setI_WrongNum(Integer value)
+  public FreezeBoardModel setI_WrongNum(Integer value)
   {
     return set(I_WRONG_NUM, value);
   }
@@ -302,7 +331,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(J_SOLVED_TIME);
   }
   
-  public BoardModel setJ_SolvedTime(Integer value)
+  public FreezeBoardModel setJ_SolvedTime(Integer value)
   {
     return set(J_SOLVED_TIME, value);
   }
@@ -312,7 +341,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(J_WRONG_NUM);
   }
   
-  public BoardModel setJ_WrongNum(Integer value)
+  public FreezeBoardModel setJ_WrongNum(Integer value)
   {
     return set(J_WRONG_NUM, value);
   }
@@ -322,7 +351,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(K_SOLVED_TIME);
   }
   
-  public BoardModel setK_SolvedTime(Integer value)
+  public FreezeBoardModel setK_SolvedTime(Integer value)
   {
     return set(K_SOLVED_TIME, value);
   }
@@ -332,7 +361,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(K_WRONG_NUM);
   }
   
-  public BoardModel setK_WrongNum(Integer value)
+  public FreezeBoardModel setK_WrongNum(Integer value)
   {
     return set(K_WRONG_NUM, value);
   }
@@ -342,7 +371,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(L_SOLVED_TIME);
   }
   
-  public BoardModel setL_SolvedTime(Integer value)
+  public FreezeBoardModel setL_SolvedTime(Integer value)
   {
     return set(L_SOLVED_TIME, value);
   }
@@ -352,7 +381,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(L_WRONG_NUM);
   }
   
-  public BoardModel setL_WrongNum(Integer value)
+  public FreezeBoardModel setL_WrongNum(Integer value)
   {
     return set(L_WRONG_NUM, value);
   }
@@ -362,7 +391,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(M_SOLVED_TIME);
   }
   
-  public BoardModel setM_SolvedTime(Integer value)
+  public FreezeBoardModel setM_SolvedTime(Integer value)
   {
     return set(M_SOLVED_TIME, value);
   }
@@ -372,7 +401,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(M_WRONG_NUM);
   }
   
-  public BoardModel setM_WrongNum(Integer value)
+  public FreezeBoardModel setM_WrongNum(Integer value)
   {
     return set(M_WRONG_NUM, value);
   }
@@ -382,7 +411,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(N_SOLVED_TIME);
   }
   
-  public BoardModel setN_SolvedTime(Integer value)
+  public FreezeBoardModel setN_SolvedTime(Integer value)
   {
     return set(N_SOLVED_TIME, value);
   }
@@ -392,7 +421,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(N_WRONG_NUM);
   }
   
-  public BoardModel setN_WrongNum(Integer value)
+  public FreezeBoardModel setN_WrongNum(Integer value)
   {
     return set(N_WRONG_NUM, value);
   }
@@ -402,7 +431,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(O_SOLVED_TIME);
   }
   
-  public BoardModel setO_SolvedTime(Integer value)
+  public FreezeBoardModel setO_SolvedTime(Integer value)
   {
     return set(O_SOLVED_TIME, value);
   }
@@ -412,7 +441,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(O_WRONG_NUM);
   }
   
-  public BoardModel setO_WrongNum(Integer value)
+  public FreezeBoardModel setO_WrongNum(Integer value)
   {
     return set(O_WRONG_NUM, value);
   }
@@ -422,7 +451,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(P_SOLVED_TIME);
   }
   
-  public BoardModel setP_SolvedTime(Integer value)
+  public FreezeBoardModel setP_SolvedTime(Integer value)
   {
     return set(P_SOLVED_TIME, value);
   }
@@ -432,7 +461,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(P_WRONG_NUM);
   }
   
-  public BoardModel setP_WrongNum(Integer value)
+  public FreezeBoardModel setP_WrongNum(Integer value)
   {
     return set(P_WRONG_NUM, value);
   }
@@ -442,7 +471,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(Q_SOLVED_TIME);
   }
   
-  public BoardModel setQ_SolvedTime(Integer value)
+  public FreezeBoardModel setQ_SolvedTime(Integer value)
   {
     return set(Q_SOLVED_TIME, value);
   }
@@ -452,7 +481,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(Q_WRONG_NUM);
   }
   
-  public BoardModel setQ_WrongNum(Integer value)
+  public FreezeBoardModel setQ_WrongNum(Integer value)
   {
     return set(Q_WRONG_NUM, value);
   }
@@ -462,7 +491,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(R_SOLVED_TIME);
   }
   
-  public BoardModel setR_SolvedTime(Integer value)
+  public FreezeBoardModel setR_SolvedTime(Integer value)
   {
     return set(R_SOLVED_TIME, value);
   }
@@ -472,7 +501,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(R_WRONG_NUM);
   }
   
-  public BoardModel setR_WrongNum(Integer value)
+  public FreezeBoardModel setR_WrongNum(Integer value)
   {
     return set(R_WRONG_NUM, value);
   }
@@ -482,7 +511,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(S_SOLVED_TIME);
   }
   
-  public BoardModel setS_SolvedTime(Integer value)
+  public FreezeBoardModel setS_SolvedTime(Integer value)
   {
     return set(S_SOLVED_TIME, value);
   }
@@ -492,7 +521,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(S_WRONG_NUM);
   }
   
-  public BoardModel setS_WrongNum(Integer value)
+  public FreezeBoardModel setS_WrongNum(Integer value)
   {
     return set(S_WRONG_NUM, value);
   }
@@ -502,7 +531,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(T_SOLVED_TIME);
   }
   
-  public BoardModel setT_SolvedTime(Integer value)
+  public FreezeBoardModel setT_SolvedTime(Integer value)
   {
     return set(T_SOLVED_TIME, value);
   }
@@ -512,7 +541,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(T_WRONG_NUM);
   }
   
-  public BoardModel setT_WrongNum(Integer value)
+  public FreezeBoardModel setT_WrongNum(Integer value)
   {
     return set(T_WRONG_NUM, value);
   }
@@ -522,7 +551,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(U_SOLVED_TIME);
   }
   
-  public BoardModel setU_SolvedTime(Integer value)
+  public FreezeBoardModel setU_SolvedTime(Integer value)
   {
     return set(U_SOLVED_TIME, value);
   }
@@ -532,7 +561,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(U_WRONG_NUM);
   }
   
-  public BoardModel setU_WrongNum(Integer value)
+  public FreezeBoardModel setU_WrongNum(Integer value)
   {
     return set(U_WRONG_NUM, value);
   }
@@ -542,7 +571,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(V_SOLVED_TIME);
   }
   
-  public BoardModel setV_SolvedTime(Integer value)
+  public FreezeBoardModel setV_SolvedTime(Integer value)
   {
     return set(V_SOLVED_TIME, value);
   }
@@ -552,7 +581,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(V_WRONG_NUM);
   }
   
-  public BoardModel setV_WrongNum(Integer value)
+  public FreezeBoardModel setV_WrongNum(Integer value)
   {
     return set(V_WRONG_NUM, value);
   }
@@ -562,7 +591,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(W_SOLVED_TIME);
   }
   
-  public BoardModel setW_SolvedTime(Integer value)
+  public FreezeBoardModel setW_SolvedTime(Integer value)
   {
     return set(W_SOLVED_TIME, value);
   }
@@ -572,7 +601,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(W_WRONG_NUM);
   }
   
-  public BoardModel setW_WrongNum(Integer value)
+  public FreezeBoardModel setW_WrongNum(Integer value)
   {
     return set(W_WRONG_NUM, value);
   }
@@ -582,7 +611,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(X_SOLVED_TIME);
   }
   
-  public BoardModel setX_SolvedTime(Integer value)
+  public FreezeBoardModel setX_SolvedTime(Integer value)
   {
     return set(X_SOLVED_TIME, value);
   }
@@ -592,7 +621,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(X_WRONG_NUM);
   }
   
-  public BoardModel setX_WrongNum(Integer value)
+  public FreezeBoardModel setX_WrongNum(Integer value)
   {
     return set(X_WRONG_NUM, value);
   }
@@ -602,7 +631,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(Y_SOLVED_TIME);
   }
   
-  public BoardModel setY_SolvedTime(Integer value)
+  public FreezeBoardModel setY_SolvedTime(Integer value)
   {
     return set(Y_SOLVED_TIME, value);
   }
@@ -612,7 +641,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(Y_WRONG_NUM);
   }
   
-  public BoardModel setY_WrongNum(Integer value)
+  public FreezeBoardModel setY_WrongNum(Integer value)
   {
     return set(Y_WRONG_NUM, value);
   }
@@ -622,7 +651,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(Z_SOLVED_TIME);
   }
   
-  public BoardModel setZ_SolvedTime(Integer value)
+  public FreezeBoardModel setZ_SolvedTime(Integer value)
   {
     return set(Z_SOLVED_TIME, value);
   }
@@ -632,7 +661,7 @@ public class BoardModel extends Model<BoardModel>
     return getInt(Z_WRONG_NUM);
   }
   
-  public BoardModel setZ_WrongNum(Integer value)
+  public FreezeBoardModel setZ_WrongNum(Integer value)
   {
     return set(Z_WRONG_NUM, value);
   }

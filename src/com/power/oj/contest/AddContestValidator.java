@@ -2,6 +2,7 @@ package com.power.oj.contest;
 
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
+import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConstants;
 
 public class AddContestValidator extends Validator

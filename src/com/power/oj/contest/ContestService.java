@@ -9,6 +9,7 @@ import java.util.Map;
 
 import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
+
 import org.apache.http.conn.HttpHostConnectException;
 
 import com.alibaba.fastjson.JSON;
@@ -20,6 +21,8 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.contest.model.BoardModel;
+import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
@@ -676,15 +679,14 @@ public class ContestService
 
       for (int i = 0; i < 26; ++i)
       {
-        char c = (char) (i + 'A');
-        if (userInfo.acTime[i] > 0)
+        if (userInfo.getAcTime(i) > 0)
         {
-          board.set(c + "_SolvedTime", userInfo.acTime[i]);
+          board.setSolvedTime(i, userInfo.getAcTime(i));
         }
 
-        if (userInfo.waNum[i] > 0)
+        if (userInfo.getWaNum(i) > 0)
         {
-          board.set(c + "_WrongNum", userInfo.waNum[i]);
+          board.setWrongNum(i, userInfo.getWaNum(i));
         }
       }
       board.save();

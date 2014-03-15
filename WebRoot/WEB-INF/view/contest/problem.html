@@ -5,7 +5,7 @@
     <ul class="nav nav-pills">
       <#list contestProblems as Problem>
       <li class="<#if problem.id==Problem.id>active</#if>">
-      <a href="contest/problem/${cid}-${Problem.id}" data-toggle="tooltip" data-placement="bottom" title="${Problem.title}">${Problem.id}</a>
+      <a href="contest/problem/${cid}-${Problem.id}" data-toggle="tooltip" data-placement="bottom" title="${Problem.title} (${Problem.accepted}/${Problem.submission})">${Problem.id}</a>
       </li>
       </#list>
     </ul>

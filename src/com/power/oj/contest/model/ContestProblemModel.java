@@ -1,4 +1,4 @@
-package com.power.oj.contest;
+package com.power.oj.contest.model;
 
 import com.jfinal.plugin.activerecord.Model;
 
