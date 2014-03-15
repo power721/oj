@@ -40,6 +40,7 @@ import com.power.oj.contest.ContestController;
 import com.power.oj.contest.model.BoardModel;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestProblemModel;
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.controller.MainController;
 import com.power.oj.core.controller.UeditorController;
 import com.power.oj.core.handler.BaseUrlHandler;
@@ -177,6 +178,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);
     arp.addMapping("contest_problem", ContestProblemModel.class);
+    arp.addMapping("contest_solution", "sid", ContestSolutionModel.class);
     arp.addMapping("board", BoardModel.class);
     arp.addMapping("session", "session_id", SessionModel.class);
     arp.addMapping("mail", MailModel.class);

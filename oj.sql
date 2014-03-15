@@ -280,6 +280,35 @@ CREATE TABLE `contest_problem` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `contest_solution`
+-- ----------------------------
+DROP TABLE IF EXISTS `contest_solution`;
+CREATE TABLE `solution` (
+`sid`  int(9) NOT NULL AUTO_INCREMENT ,
+`uid`  int(9) NOT NULL ,
+`pid`  int(9) NOT NULL ,
+`cid`  int(9) NOT NULL DEFAULT 0 ,
+`num`  int(3) NULL DEFAULT NULL ,
+`time`  int(9) NULL DEFAULT NULL ,
+`memory`  int(9) NULL DEFAULT NULL ,
+`result`  int(5) NOT NULL ,
+`language`  int(3) NOT NULL ,
+`ctime`  int(11) NOT NULL ,
+`error`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`source`  text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+`codeLen`  int(9) NOT NULL DEFAULT 0 ,
+`systemError`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+PRIMARY KEY (`sid`)
+)
+ENGINE=InnoDB
+DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci
+AUTO_INCREMENT=1000;
+
+-- ----------------------------
+-- Records of contest_solution
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `contest_user`
 -- ----------------------------
 DROP TABLE IF EXISTS `contest_user`;
@@ -679,8 +708,8 @@ CREATE TABLE `solution` (
 `ctime`  int(11) NOT NULL ,
 `error`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `source`  text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
-`code_len`  int(9) NOT NULL DEFAULT 0 ,
-`system_error`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+`codeLen`  int(9) NOT NULL DEFAULT 0 ,
+`systemError`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 PRIMARY KEY (`sid`)
 )
 ENGINE=InnoDB
@@ -1237,9 +1266,3 @@ ALTER TABLE `user` AUTO_INCREMENT=1001;
 -- Auto increment value for `variable`
 -- ----------------------------
 ALTER TABLE `variable` AUTO_INCREMENT=15;
-
--- ----------------------------
--- View structure for `contest_solution`
--- ----------------------------
-DROP VIEW IF EXISTS `contest_solution`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `contest_solution` AS select * from `solution` where (`solution`.`cid` <> 0);

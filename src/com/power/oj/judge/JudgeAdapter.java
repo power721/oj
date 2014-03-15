@@ -164,7 +164,7 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateSystemError(String error)
   {
-    solutionModel.set("result", ResultType.SE).set("system_error", error);
+    solutionModel.set("result", ResultType.SE).set("systemError", error);
     return solutionModel.update();
   }
   

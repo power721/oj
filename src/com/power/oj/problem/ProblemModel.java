@@ -120,7 +120,7 @@ public class ProblemModel extends Model<ProblemModel>
 
   public List<Record> getUserInfo(Integer pid, Integer uid)
   {
-    List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,code_len,language FROM solution WHERE uid=? AND pid=? GROUP BY result", uid, pid);
+    List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,codeLen,language FROM solution WHERE uid=? AND pid=? GROUP BY result", uid, pid);
     return userInfo;
   }
 

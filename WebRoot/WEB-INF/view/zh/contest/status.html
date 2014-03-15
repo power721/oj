@@ -61,9 +61,9 @@
       <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
       <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
       <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="code/${solution.sid!}?cid=${cid}" target="_blank"
-        title="show source code"></#if> ${solution.language!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
+        title="show source code"></#if> ${solution.languageName!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
       </td>
-      <td class="code_len">${solution.code_len!}B</td>
+      <td class="code_len">${solution.codeLen!}B</td>
       <td class="ctime">${solution.ctime!}</td>
     </tr>
     </#list> </#if>

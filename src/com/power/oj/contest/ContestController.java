@@ -15,15 +15,16 @@ import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.model.ContestModel;
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.model.LanguageModel;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
@@ -143,6 +144,28 @@ public class ContestController extends OjController
     else
       render("submit.html");
   }
+  
+  @ClearInterceptor
+  @Before(POST.class)
+  public void submitSolution()
+  {
+    log.info("submitSolution");
+    ContestSolutionModel contestSolution = getModel(ContestSolutionModel.class, "solution");
+    Integer cid = contestSolution.getCid();
+    String url = new StringBuilder(2).append("/contest/status/").append(cid).toString();
+    int result = contestService.submitSolution(contestSolution);
+    
+    if (result == -1)
+    {
+      setFlashMessage(new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));
+    }
+    else if (result == -2)
+    {
+      setFlashMessage(new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
+    }
+    
+    redirect(url);
+  }
 
   public void rank()
   {
@@ -240,7 +263,7 @@ public class ContestController extends OjController
     {
       query.append("&language=").append(language);
     }
-    Page<SolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
+    Page<ContestSolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     setAttr("solutionList", solutionList);
@@ -254,6 +277,68 @@ public class ContestController extends OjController
       render("ajax/problem_status.html");
     else
       render("problem_status.html");
+  }
+  
+  public void code()
+  {
+    int sid = getParaToInt(0);
+    boolean isAdmin = userService.isAdmin();
+    ContestSolutionModel solutionModel = solutionService.findContestSolution(sid);
+    ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
+    int uid = solutionModel.getUid();
+    int loginUid = userService.getCurrentUid();
+    if (uid != loginUid && !isAdmin)
+    {
+      FlashMessage msg = new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
+      redirect("/status", msg);
+      return;
+    }
+
+    if (!isAdmin)
+    {
+      String error = solutionModel.getStr("error");
+      if (error != null)
+      {
+        solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
+        // TODO replace "/"
+      }
+    }
+
+    String problemTitle = "";
+    int cid = solutionModel.getInt("cid");
+    if (cid > 0)
+    {
+      int num = solutionModel.getInt("num");
+      problemTitle = ContestService.me().getProblemTitle(cid, num);
+      setAttr("alpha", (char) (num + 'A'));
+      setAttr("cid", cid);
+    } else
+    {
+      problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getInt("pid"));
+    }
+
+    setAttr("problemTitle", problemTitle);
+    try
+    {
+      setAttr("submitUser", UserService.me().getUserByUid(uid));
+    } catch (NullPointerException e)
+    {
+      log.warn(e.getLocalizedMessage());
+    }
+    LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
+    setAttr("language", language.get("name"));
+
+    setAttr("resultLongName", resultType.getLongName());
+    setAttr("resultName", resultType.getName());
+    setAttr("solution", solutionModel);
+
+    String brush = getAttrForStr("language").toLowerCase();
+    if ("G++".equalsIgnoreCase(brush) || "GCC".equalsIgnoreCase(brush))
+      brush = "cpp";
+    setAttr("brush", brush);
+
+    setTitle(getText("solution.show.title"));
+    render("code.html");
   }
 
   public void statistics()

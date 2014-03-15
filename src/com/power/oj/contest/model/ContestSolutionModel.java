@@ -1,6 +1,8 @@
 package com.power.oj.contest.model;
 
 import com.jfinal.plugin.activerecord.Model;
+import com.power.oj.core.OjConfig;
+import com.power.oj.core.bean.ResultType;
 
 public class ContestSolutionModel extends Model<ContestSolutionModel>
 {
@@ -24,6 +26,22 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public static final String CODE_LEN = "codeLen";
   public static final String SYSTEM_ERROR = "systemError";
 
+  public boolean addSolution()
+  {
+    setCtime(OjConfig.timeStamp);
+    setResult(ResultType.WAIT);
+    setTime(0);
+    setMemory(0);
+    setCodeLen(getSource().length());
+    if (getCodeLen() < 10 || getCodeLen() > 30000)
+    {
+      // TODO throw exception or validator
+      return false;
+    }
+
+    return save();
+  }
+  
   public Integer getSid()
   {
     return getInt(SID);

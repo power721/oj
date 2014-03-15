@@ -17,10 +17,11 @@ public class ContestInterceptor implements Interceptor
   {
     Controller controller = ai.getController();
     Integer cid = 0;
-    if (controller.getParaToInt(0) != null)
-      cid = controller.getParaToInt(0);
-    else if (controller.getParaToInt("cid") != null)
+    
+    if (controller.getParaToInt("cid") != null)
       cid = controller.getParaToInt("cid");
+    else if (controller.getParaToInt(0) != null)
+      cid = controller.getParaToInt(0);
     
     ContestModel contestModle = controller.getAttr("contest");
     if (contestModle == null)

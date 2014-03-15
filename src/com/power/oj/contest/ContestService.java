@@ -23,12 +23,17 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.model.BoardModel;
 import com.power.oj.contest.model.ContestModel;
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.LanguageModel;
+import com.power.oj.judge.JudgeAdapter;
+import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
+import com.power.oj.solution.SolutionModel;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
 
@@ -443,6 +448,47 @@ public class ContestService
     }
 
     return statistics;
+  }
+  
+  public int submitSolution(ContestSolutionModel contestSolution)
+  {
+    Integer cid = contestSolution.getCid();
+    contestSolution.setUid(userService.getCurrentUid());
+    contestSolution.setPid(getPid(contestSolution.getCid(), contestSolution.getNum()));
+    
+    if (contestSolution.addSolution())
+    {
+      Integer pid = contestSolution.getPid();
+      ProblemModel problemModel = ProblemService.me().findProblem(pid);
+      if (problemModel == null)
+      {
+        return -1;
+      }
+      
+      UserModel userModel = userService.getCurrentUser();
+      userModel.set("submit", userModel.getInt("submit") + 1).update();
+      
+      Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
+            
+      synchronized (JudgeAdapter.class)
+      {
+        SolutionModel solutionModel = new SolutionModel(contestSolution);
+        JudgeAdapter.addSolution(solutionModel);
+        log.info("JudgeAdapter.addSolution");
+        if (JudgeAdapter.size() <= 1)
+        {
+          JudgeAdapter judge = new PojJudgeAdapter();
+          new Thread(judge).start();
+          log.info("judge.start()");
+        }
+      }
+      System.out.println(contestSolution.getInt("sid"));
+    } else
+    {
+      return -2;
+    }
+
+    return 0;
   }
   
   public boolean updateContest(ContestModel contestModel)
