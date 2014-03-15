@@ -234,10 +234,10 @@ public class ContestController extends OjController
     setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"),cid)).toString());
   }
 
-  public void problem_status()
+  public void problemStatus()
   {
-    Integer cid = getParaToInt("cid");
-    char id = getPara("pid", "A").toUpperCase().charAt(0);
+    Integer cid = getParaToInt(0);
+    char id = getPara(1, "A").toUpperCase().charAt(0);
     Integer num = id - 'A';
     ProblemModel problemModel = contestService.getProblem(cid, num);
     boolean ajax = getParaToBoolean("ajax", false);
@@ -255,8 +255,8 @@ public class ContestController extends OjController
       setAttr("problem", problemModel);
     }
 
-    int pageNumber = getParaToInt(0, 1);
-    int pageSize = getParaToInt(1, OjConfig.statusPageSize);
+    int pageNumber = getParaToInt(2, 1);
+    int pageSize = getParaToInt(3, OjConfig.statusPageSize);
     Integer language = getParaToInt("language", -1);
     StringBuilder query = new StringBuilder();
     if (language > -1)
@@ -281,7 +281,8 @@ public class ContestController extends OjController
   
   public void code()
   {
-    int sid = getParaToInt(0);
+    Integer cid = getParaToInt(0);
+    Integer sid = getParaToInt(1);
     boolean isAdmin = userService.isAdmin();
     ContestSolutionModel solutionModel = solutionService.findContestSolution(sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
@@ -305,17 +306,10 @@ public class ContestController extends OjController
     }
 
     String problemTitle = "";
-    int cid = solutionModel.getInt("cid");
-    if (cid > 0)
-    {
-      int num = solutionModel.getInt("num");
-      problemTitle = ContestService.me().getProblemTitle(cid, num);
-      setAttr("alpha", (char) (num + 'A'));
-      setAttr("cid", cid);
-    } else
-    {
-      problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getInt("pid"));
-    }
+    int num = solutionModel.getInt("num");
+    problemTitle = ContestService.me().getProblemTitle(cid, num);
+    setAttr("alpha", (char) (num + 'A'));
+    setAttr("cid", cid);
 
     setAttr("problemTitle", problemTitle);
     try

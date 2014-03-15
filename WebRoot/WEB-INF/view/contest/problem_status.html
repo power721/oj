@@ -32,11 +32,11 @@
       Best solutions of Problem <a href="contest/problem/${cid!}-${id}" data-toggle="tooltip" title="${problem.title!}">${cid!}-${id}</a>
     </h4>
     <div class="pull-left btn-group ajax-loader">
-      <a url="contest/problem_status/?cid=${cid!}&pid=${id!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+      <a url="contest/problemStatus/${cid!}-${id!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
         class="btn btn-warning ajax-loader<#if !language?? || language==-1> active</#if>">All</a> 
         <#if program_languages??> 
         <#list program_languages as Language> 
-        <a url="contest/problem_status/?cid=${cid!}&pid=${id!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>&language=${Language.id!}"
+        <a url="contest/problemStatus/${cid!}-${id!}?language=${Language.id!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
         class="btn btn-success ajax-loader<#if language?? && language==Language.id> active</#if>" type="a">${Language.name!}</a> 
         </#list> 
         </#if>
@@ -66,7 +66,7 @@
           <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
           <td class="time">${solution.time!0} MS</td>
           <td class="memory">${solution.memory!0} KB</td>
-          <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="contest/code/${solution.sid!}" target="blank"
+          <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="${cid}-contest/code/${solution.sid!}" target="blank"
             title="show source code"></#if> ${solution.languageName!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
           </td>
           <td class="code_len">${solution.codeLen!}B</td>
@@ -76,8 +76,8 @@
       </tbody>
     </table>
     <div class="pagination pagination-centered ajax-loader">
-      <#include "../common/_paginate.html" />
-      <@paginate currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/problem_status/" urlParas="?cid=${cid!}&id=${id!}${query!}" />
+      <#include "../common/_paginate2.html" />
+      <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/problemStatus/${cid!}-${id!}" urlParas="?id=${query!}" />
     </div>
   </div>
 </div>

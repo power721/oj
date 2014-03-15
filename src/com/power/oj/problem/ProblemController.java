@@ -62,12 +62,12 @@ public class ProblemController extends OjController
 
   public void status()
   {
-    if (!isParaExists(0))
+    /*if (!isParaExists(0))
     {
       forwardAction("/contest/problem_status");
       return;
     }
-
+    */
     Integer pid = getParaToInt(0);
     ProblemModel problemModel = problemService.findProblem(pid);
     if (problemModel == null)
