@@ -95,12 +95,12 @@ public abstract class JudgeAdapter implements Runnable
   
   protected void prepare() throws IOException
   {
-    language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
-    problemModel = ProblemModel.dao.findById(solutionModel.getInt("pid"));
+    language = (LanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
+    problemModel = ProblemModel.dao.findById(solutionModel.getPid());
     
     if (OjConfig.getBoolean("delete_tmp_file"))
     {
-      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid") - 2).toString());
+      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid() - 2).toString());
       if (prevWorkDir.isDirectory())
       {
         FileUtil.deleteDir(prevWorkDir);
@@ -108,7 +108,7 @@ public abstract class JudgeAdapter implements Runnable
       }
     }
     
-    File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getInt("sid")).toString());
+    File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid()).toString());
     FileUtil.mkdirs(workDir);
     workDirPath = workDir.getAbsolutePath();
     log.info("mkdirs workDir: " + workDirPath);
@@ -127,7 +127,7 @@ public abstract class JudgeAdapter implements Runnable
   
   protected int getDataFiles() throws IOException
   {
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append(File.separator).append(solutionModel.getInt("pid")).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append(File.separator).append(solutionModel.getPid()).toString());
     if (!dataDir.isDirectory())
     {
       throw new IOException("Data files does not exist.");
@@ -159,9 +159,9 @@ public abstract class JudgeAdapter implements Runnable
   
   protected boolean updateCompileError(String error)
   {
-    solutionModel.set("result", ResultType.CE).set("error", error);
+    solutionModel.setResult(ResultType.CE).setError(error);
     
-    Integer cid = solutionModel.getInt("cid");
+    Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
       log.info("updateCompileError");
@@ -173,9 +173,9 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateSystemError(String error)
   {
-    solutionModel.set("result", ResultType.SE).set("systemError", error);
+    solutionModel.setResult(ResultType.SE).setSystemError(error);
 
-    Integer cid = solutionModel.getInt("cid");
+    Integer cid = solutionModel.getCid();
     log.info(solutionModel.toString());
     if (cid != null && cid > 0)
     {
@@ -188,9 +188,9 @@ public abstract class JudgeAdapter implements Runnable
   
   protected boolean updateResult(int result, int time, int memory)
   {
-    solutionModel.set("result", result).set("time", time).set("memory", memory);
+    solutionModel.setResult(result).setTime(time).setMemory(memory);
 
-    Integer cid = solutionModel.getInt("cid");
+    Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
       log.info("updateResult");
@@ -202,7 +202,7 @@ public abstract class JudgeAdapter implements Runnable
   
   protected boolean updateUser()
   {
-    if (solutionModel.getInt("result") != ResultType.AC)
+    if (solutionModel.getResult() != ResultType.AC)
     {
       return false;
     }
@@ -214,13 +214,13 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateProblem()
   {
-    if (solutionModel.getInt("result") != ResultType.AC)
+    if (solutionModel.getResult() != ResultType.AC)
     {
       return false;
     }
     
-    Integer pid = solutionModel.getInt("pid");
-    Integer sid = solutionModel.getInt("sid");
+    Integer pid = solutionModel.getPid();
+    Integer sid = solutionModel.getSid();
     Integer uid = solutionModel.getUid();
     ProblemModel problemModel = ProblemService.me().findProblem(pid);
     
@@ -236,7 +236,7 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateContest()
   {
-    Integer cid = solutionModel.getInt("cid");
+    Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
       Integer uid = solutionModel.getUid();
