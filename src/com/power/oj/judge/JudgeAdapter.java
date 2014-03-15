@@ -248,7 +248,7 @@ public abstract class JudgeAdapter implements Runnable
           acTime = (int) ((submitTime - contestStartTime) / 60);
           board.set(c+"_SolvedTime", acTime);
           board.set("solved", board.getInt("solved")+1);
-          board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMIT);
+          board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
         }
       }
       else
