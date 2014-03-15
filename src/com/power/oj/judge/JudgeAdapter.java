@@ -240,8 +240,8 @@ public abstract class JudgeAdapter implements Runnable
     if (cid != null && cid > 0)
     {
       Integer uid = solutionModel.getUid();
-      Integer num = solutionModel.getInt("num");
-      Long submitTime = solutionModel.getLong("ctime");
+      Integer num = solutionModel.getNum();
+      Integer submitTime = solutionModel.getCtime();
       char c = (char) (num + 'A');
       Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
       if (board == null)
@@ -254,7 +254,7 @@ public abstract class JudgeAdapter implements Runnable
       }
       Integer wrongSubmits = board.getInt(c + "_WrongNum");
       
-      if (solutionModel.getInt("result") == ResultType.AC)
+      if (solutionModel.getResult() == ResultType.AC)
       {
         ContestProblemModel contestProblem = ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
         ContestModel contestModle = contestService.getContest(cid);

@@ -283,7 +283,7 @@ CREATE TABLE `contest_problem` (
 -- Table structure for `contest_solution`
 -- ----------------------------
 DROP TABLE IF EXISTS `contest_solution`;
-CREATE TABLE `solution` (
+CREATE TABLE `contest_solution` (
 `sid`  int(9) NOT NULL AUTO_INCREMENT ,
 `uid`  int(9) NOT NULL ,
 `pid`  int(9) NOT NULL ,
