@@ -58,14 +58,18 @@
     <#list solutionList.list as solution>
     <tr>
       <td class="sid">${solution.sid!}</td>
-      <td class="user"><a href="user/profile/${(solution.name)!}" data-toggle="tooltip" title="${(solution.nick)!}">${(solution.name)!}</a></td>
+      <td class="user" uid="${solution.uid}">
+        <a href="user/profile/${(solution.name)!}" data-toggle="tooltip" title="${(solution.nick)!}">${(solution.name)!}</a>
+      </td>
       <td class="problem"><a href="contest/problem/${cid}-${solution.alpha!}">${solution.alpha!}</a></td>
       <td class="result" id="${solution.resultName!}"><i class="btn" sid="${solution.sid!}">${solution.resultLongName!}</i></td>
       <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
       <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
       <td class="language">
       <#if user?? &&(adminUser?? || user.uid==solution.uid)>
-        <a href="contest/code/${cid}-${solution.sid!}" target="_blank" title="show source code">${solution.languageName!}</a><#else> ${solution.languageName!}
+        <a href="contest/code/${cid}-${solution.sid!}" target="_blank" title="show source code">${solution.languageName!}</a>
+      <#else> 
+        ${solution.languageName!}
       </#if>
       </td>
       <td class="code_len">${solution.codeLen!}B</td>
@@ -127,8 +131,14 @@
     	$(this).addClass(btnClass);
     });
     
+    <#if user??>
+    var userId = ${user.uid};
+    var isAdmin = <#if adminUser??>true<#else>false</#if>;
     $('.result i').click(function() {
       var sid = $(this).attr('sid');
+      var uid = $(this).parent().parent().children('.user').attr('uid');
+      if (!isAdmin && uid != userId)
+        return false;
       $('#codeModal').modal("show");
       var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, $('#codeModal').attr('cid'));
       $('#codeModal #sid').html(tmp);
@@ -139,7 +149,7 @@
             var code = "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
             code += "/*\n";
             code += " * Problem: " + data.solution.cid + "-" + data.alpha + " (" + data.problemTitle + ")\n";
-            code += " * User: " + data.solution.name + "\n";
+            code += " * User: " + (data.solution.name || "Guest") + "\n";
             code += " * Language: " + data.language + "\n";
             code += " * Result: " + data.resultLongName + "\n";
             if (data.resultName == 'AC') {
@@ -153,10 +163,11 @@
           }
           else
           {
-            $('#codeModal #content').html(data.result).addClass("alert alert-error");
+            $('#codeModal #content').html(data.result).removeClass().addClass("alert alert-error");
           }
       });
     });
+    </#if>
   });
 </script>
 </@override>

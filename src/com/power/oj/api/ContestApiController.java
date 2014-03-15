@@ -118,17 +118,17 @@ public class ContestApiController extends OjController
     
     if (solutionModel == null)
     {
-      renderJson("success:false,result:\"Cannot find code.\"");
+      renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
       return;
     }
     ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
     Integer cid = solutionModel.getCid();
-    Integer uid = solutionModel.getUid();
-    Integer loginUid = userService.getCurrentUid();
+    int uid = solutionModel.getUid();
+    int loginUid = userService.getCurrentUid();
     
     if (uid != loginUid && !isAdmin)
     {
-      renderJson("success:false,result:\"Permission denied.\"");
+      renderJson("{\"success\":false,\"result\":\"Permission denied.\"}");
       return;
     }
 
