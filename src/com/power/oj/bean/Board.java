@@ -8,6 +8,7 @@ public class Board extends Model<Board>
   
   public static final Board dao = new Board();
   
+  public static final String TABLE_NAME = "board";
   public static final String ID = "id";
   public static final String CID = "cid";
   public static final String UID = "uid";

@@ -8,6 +8,7 @@ public class Team extends Model<Team>
   
   public static final Team dao = new Team();
   
+  public static final String TABLE_NAME = "team";
   public static final String TID = "tid";
   public static final String UID = "uid";
   public static final String NAME1 = "name1";

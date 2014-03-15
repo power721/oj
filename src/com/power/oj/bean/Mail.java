@@ -8,6 +8,7 @@ public class Mail extends Model<Mail>
   
   public static final Mail dao = new Mail();
   
+  public static final String TABLE_NAME = "mail";
   public static final String ID = "id";
   public static final String MID = "mid";
   public static final String USER_ID = "userId";

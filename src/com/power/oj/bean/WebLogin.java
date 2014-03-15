@@ -8,6 +8,7 @@ public class WebLogin extends Model<WebLogin>
   
   public static final WebLogin dao = new WebLogin();
   
+  public static final String TABLE_NAME = "web_login";
   public static final String ID = "id";
   public static final String OPEN_ID = "openId";
   public static final String UID = "uid";

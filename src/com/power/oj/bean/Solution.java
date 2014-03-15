@@ -8,6 +8,7 @@ public class Solution extends Model<Solution>
   
   public static final Solution dao = new Solution();
   
+  public static final String TABLE_NAME = "solution";
   public static final String SID = "sid";
   public static final String UID = "uid";
   public static final String PID = "pid";

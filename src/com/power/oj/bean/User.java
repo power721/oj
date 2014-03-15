@@ -8,6 +8,7 @@ public class User extends Model<User>
   
   public static final User dao = new User();
   
+  public static final String TABLE_NAME = "user";
   public static final String UID = "uid";
   public static final String TID = "tid";
   public static final String NAME = "name";

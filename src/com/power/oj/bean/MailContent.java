@@ -8,6 +8,7 @@ public class MailContent extends Model<MailContent>
   
   public static final MailContent dao = new MailContent();
   
+  public static final String TABLE_NAME = "mail_content";
   public static final String ID = "id";
   public static final String FROM_UID = "fromUid";
   public static final String TO_UID = "toUid";

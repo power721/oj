@@ -8,6 +8,7 @@ public class Comment extends Model<Comment>
   
   public static final Comment dao = new Comment();
   
+  public static final String TABLE_NAME = "comment";
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String THREAD_ID = "threadId";

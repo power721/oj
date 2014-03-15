@@ -8,6 +8,7 @@ public class Session extends Model<Session>
   
   public static final Session dao = new Session();
   
+  public static final String TABLE_NAME = "session";
   public static final String SESSION_ID = "sessionId";
   public static final String UID = "uid";
   public static final String NAME = "name";

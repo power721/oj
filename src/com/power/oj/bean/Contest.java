@@ -8,6 +8,7 @@ public class Contest extends Model<Contest>
   
   public static final Contest dao = new Contest();
   
+  public static final String TABLE_NAME = "contest";
   public static final String CID = "cid";
   public static final String UID = "uid";
   public static final String TITLE = "title";

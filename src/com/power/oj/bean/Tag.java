@@ -8,6 +8,7 @@ public class Tag extends Model<Tag>
   
   public static final Tag dao = new Tag();
   
+  public static final String TABLE_NAME = "tag";
   public static final String ID = "id";
   public static final String PID = "pid";
   public static final String UID = "uid";

@@ -8,6 +8,7 @@ public class Friend extends Model<Friend>
   
   public static final Friend dao = new Friend();
   
+  public static final String TABLE_NAME = "friend";
   public static final String ID = "id";
   public static final String GID = "gid";
   public static final String USER_ID = "userId";

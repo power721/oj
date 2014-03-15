@@ -8,6 +8,7 @@ public class Topic extends Model<Topic>
   
   public static final Topic dao = new Topic();
   
+  public static final String TABLE_NAME = "topic";
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String PID = "pid";

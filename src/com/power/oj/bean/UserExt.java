@@ -8,6 +8,7 @@ public class UserExt extends Model<UserExt>
   
   public static final UserExt dao = new UserExt();
   
+  public static final String TABLE_NAME = "user_ext";
   public static final String UID = "uid";
   public static final String TID = "tid";
   public static final String REAL_NAME = "realName";

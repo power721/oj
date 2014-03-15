@@ -8,6 +8,7 @@ public class ${myModel.modelName} extends Model<${myModel.modelName}>
   
   public static final ${myModel.modelName} dao = new ${myModel.modelName}();
   
+  public static final String TABLE_NAME = "${myModel.tableName}";
 <#list myModel.columns as column>
   public static final String ${column.field?upper_case} = "${column.name}";
 </#list>

@@ -8,6 +8,7 @@ public class Category extends Model<Category>
   
   public static final Category dao = new Category();
   
+  public static final String TABLE_NAME = "category";
   public static final String ID = "id";
   public static final String PARENT = "parent";
   public static final String NAME = "name";

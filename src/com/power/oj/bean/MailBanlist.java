@@ -8,6 +8,7 @@ public class MailBanlist extends Model<MailBanlist>
   
   public static final MailBanlist dao = new MailBanlist();
   
+  public static final String TABLE_NAME = "mail_banlist";
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String BANNED_UID = "bannedUid";

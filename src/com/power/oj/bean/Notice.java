@@ -8,6 +8,7 @@ public class Notice extends Model<Notice>
   
   public static final Notice dao = new Notice();
   
+  public static final String TABLE_NAME = "notice";
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String EDITOR_UID = "editorUid";

@@ -8,6 +8,7 @@ public class Loginlog extends Model<Loginlog>
   
   public static final Loginlog dao = new Loginlog();
   
+  public static final String TABLE_NAME = "loginlog";
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String NAME = "name";

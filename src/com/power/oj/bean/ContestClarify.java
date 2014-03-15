@@ -8,6 +8,7 @@ public class ContestClarify extends Model<ContestClarify>
   
   public static final ContestClarify dao = new ContestClarify();
   
+  public static final String TABLE_NAME = "contest_clarify";
   public static final String ID = "id";
   public static final String CID = "cid";
   public static final String UID = "uid";

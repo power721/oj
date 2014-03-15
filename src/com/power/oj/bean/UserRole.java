@@ -8,6 +8,7 @@ public class UserRole extends Model<UserRole>
   
   public static final UserRole dao = new UserRole();
   
+  public static final String TABLE_NAME = "user_role";
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String RID = "rid";

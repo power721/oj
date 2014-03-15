@@ -8,6 +8,7 @@ public class FreezeBoard extends Model<FreezeBoard>
   
   public static final FreezeBoard dao = new FreezeBoard();
   
+  public static final String TABLE_NAME = "freeze_board";
   public static final String ID = "id";
   public static final String CID = "cid";
   public static final String UID = "uid";

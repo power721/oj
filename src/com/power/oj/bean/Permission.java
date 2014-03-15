@@ -8,6 +8,7 @@ public class Permission extends Model<Permission>
   
   public static final Permission dao = new Permission();
   
+  public static final String TABLE_NAME = "permission";
   public static final String ID = "id";
   public static final String MODULE = "module";
   public static final String TYPE = "type";

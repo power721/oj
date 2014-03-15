@@ -8,6 +8,7 @@ public class Problem extends Model<Problem>
   
   public static final Problem dao = new Problem();
   
+  public static final String TABLE_NAME = "problem";
   public static final String PID = "pid";
   public static final String UID = "uid";
   public static final String TITLE = "title";

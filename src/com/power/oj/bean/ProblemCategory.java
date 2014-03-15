@@ -8,6 +8,7 @@ public class ProblemCategory extends Model<ProblemCategory>
   
   public static final ProblemCategory dao = new ProblemCategory();
   
+  public static final String TABLE_NAME = "problem_category";
   public static final String ID = "id";
   public static final String PID = "pid";
   public static final String CID = "cid";

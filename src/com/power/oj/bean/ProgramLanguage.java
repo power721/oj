@@ -8,6 +8,7 @@ public class ProgramLanguage extends Model<ProgramLanguage>
   
   public static final ProgramLanguage dao = new ProgramLanguage();
   
+  public static final String TABLE_NAME = "program_language";
   public static final String ID = "id";
   public static final String NAME = "name";
   public static final String DESCRIPTION = "description";

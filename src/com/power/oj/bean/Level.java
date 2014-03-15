@@ -8,6 +8,7 @@ public class Level extends Model<Level>
   
   public static final Level dao = new Level();
   
+  public static final String TABLE_NAME = "level";
   public static final String LEVEL = "level";
   public static final String EXPERIENCE = "experience";
 

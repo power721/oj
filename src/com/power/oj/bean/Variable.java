@@ -8,6 +8,7 @@ public class Variable extends Model<Variable>
   
   public static final Variable dao = new Variable();
   
+  public static final String TABLE_NAME = "variable";
   public static final String ID = "id";
   public static final String CID = "cid";
   public static final String NAME = "name";
