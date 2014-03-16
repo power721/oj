@@ -54,16 +54,16 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
+      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
 
-      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
+      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
 
-      if (solution.get("num") != null && solution.getInt("num") > -1)
+      /*if (solution.getNum() != null && solution.getNum() > -1)
       {
-        solution.put("alpha", (char) (solution.getInt("num") + 'A'));
-      }
+        solution.put("alpha", (char) (solution.getNum() + 'A'));
+      }*/
     }
 
     return solutionList;
@@ -84,7 +84,7 @@ public class SolutionService
     return ContestSolutionModel.dao.findFirst("SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE sid=? LIMIT 1", sid);
   }
   
-  public Page<SolutionModel> getPageForContest(int pageNumber, int pageSize, int result, int language, int cid, int num, String userName)
+  public Page<ContestSolutionModel> getPageForContest(int pageNumber, int pageSize, int result, int language, int cid, int num, String userName)
   {
     String sql = "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick";
     StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE cid=?");
@@ -113,16 +113,16 @@ public class SolutionService
     }
 
     sb.append(" ORDER BY sid DESC");
-    Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+    Page<ContestSolutionModel> solutionList = ContestSolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
-    for (SolutionModel solution : solutionList.getList())
+    for (ContestSolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
+      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
 
-      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
+      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
-      solution.put("alpha", (char) (solution.getInt("num") + 'A'));
+      solution.put("alpha", (char) (solution.getNum() + 'A'));
     }
 
     return solutionList;
@@ -153,9 +153,9 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getInt("language"))).get("name"));
+      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
 
-      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getInt("result"));
+      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
     }
@@ -217,7 +217,7 @@ public class SolutionService
     
     for (ContestSolutionModel record : resultList)
     {
-      ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
+      ResultType resultType = (ResultType) OjConfig.result_type.get(record.getResult());
       record.put("longName", resultType.getLongName());
       record.put("name", resultType.getName());
     }

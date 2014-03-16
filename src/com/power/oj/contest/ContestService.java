@@ -655,7 +655,7 @@ public class ContestService
     Db.update("DELETE FROM board WHERE cid=?", cid);
     ContestModel contestModle = getContest(cid);
     Integer contestStartTime = contestModle.getStartTime();
-    List<Record> solutions = Db.find("SELECT * FROM contest_solution WHERE cid=? ORDER BY sid", cid);
+    List<ContestSolutionModel> solutions = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? ORDER BY sid", cid);
     HashMap<Integer, UserInfo> userRank = new HashMap<Integer, UserInfo>();
     UserInfo userInfo = null;
     Integer uid = 0;
@@ -670,12 +670,12 @@ public class ContestService
     int accepted[] = new int[26];
     int submission[] = new int[26];
     
-    for (Record solution : solutions)
+    for (ContestSolutionModel solution : solutions)
     {
-      uid = solution.getInt("uid");
-      num = solution.getInt("num");
-      result = solution.getInt("result");
-      ctime = solution.getInt("ctime");
+      uid = solution.getUid();
+      num = solution.getNum();
+      result = solution.getResult();
+      ctime = solution.getCtime();
       ++submission[num];
       userInfo = userRank.get(uid);
       penalty = (ctime - contestStartTime) / 60;

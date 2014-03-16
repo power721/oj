@@ -16,7 +16,6 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.LanguageModel;
 import com.power.oj.judge.JudgeAdapter;
 import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
@@ -80,7 +79,7 @@ public class SolutionController extends OjController
     int sid = getParaToInt(0);
     boolean isAdmin = userService.isAdmin();
     SolutionModel solutionModel = solutionService.findSolution(sid);
-    ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
+    ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getResult());
     int uid = solutionModel.getUid();
     int loginUid = userService.getCurrentUid();
     if (uid != loginUid && !isAdmin)
@@ -92,7 +91,7 @@ public class SolutionController extends OjController
 
     if (!isAdmin)
     {
-      String error = solutionModel.getStr("error");
+      String error = solutionModel.getError();
       if (error != null)
       {
         solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
@@ -101,16 +100,16 @@ public class SolutionController extends OjController
     }
 
     String problemTitle = "";
-    int cid = solutionModel.getInt("cid");
+    int cid = solutionModel.getCid();
     if (cid > 0)
     {
-      int num = solutionModel.getInt("num");
+      int num = solutionModel.getNum();
       problemTitle = ContestService.me().getProblemTitle(cid, num);
       setAttr("alpha", (char) (num + 'A'));
       setAttr("cid", cid);
     } else
     {
-      problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getInt("pid"));
+      problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getPid());
     }
 
     setAttr("problemTitle", problemTitle);
@@ -121,9 +120,8 @@ public class SolutionController extends OjController
     {
       log.warn(e.getLocalizedMessage());
     }
-    LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
-    setAttr("language", language.get("name"));
-
+    
+    setAttr("language", OjConfig.language_name.get(solutionModel.getLanguage()));
     setAttr("resultLongName", resultType.getLongName());
     setAttr("resultName", resultType.getName());
     setAttr("solution", solutionModel);
@@ -159,7 +157,7 @@ public class SolutionController extends OjController
     // TODO move to SolutionService
     if (solutionModel.addSolution())
     {
-      Integer pid = solutionModel.getInt("pid");
+      Integer pid = solutionModel.getPid();
       ProblemModel problemModel = ProblemService.me().findProblem(pid);
       if (problemModel == null)
       {
@@ -194,7 +192,7 @@ public class SolutionController extends OjController
           log.info("judge.start()");
         }
       }
-      System.out.println(solutionModel.getInt("sid"));
+      System.out.println(solutionModel.getSid());
     } else
     {
       setFlashMessage(new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));

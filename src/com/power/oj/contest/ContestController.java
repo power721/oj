@@ -285,7 +285,7 @@ public class ContestController extends OjController
     Integer sid = getParaToInt(1);
     boolean isAdmin = userService.isAdmin();
     ContestSolutionModel solutionModel = solutionService.findContestSolution(sid);
-    ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getInt("result"));
+    ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getResult());
     int uid = solutionModel.getUid();
     int loginUid = userService.getCurrentUid();
     if (uid != loginUid && !isAdmin)
@@ -297,7 +297,7 @@ public class ContestController extends OjController
 
     if (!isAdmin)
     {
-      String error = solutionModel.getStr("error");
+      String error = solutionModel.getError();
       if (error != null)
       {
         solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
