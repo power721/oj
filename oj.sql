@@ -405,8 +405,8 @@ DROP TABLE IF EXISTS `friend`;
 CREATE TABLE `friend` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `gid` int(9) NOT NULL DEFAULT '1',
-  `user` int(9) NOT NULL,
-  `friend` int(9) NOT NULL,
+  `userId` int(9) NOT NULL,
+  `friendUid` int(9) NOT NULL,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

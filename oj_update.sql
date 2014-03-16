@@ -117,7 +117,7 @@ ALTER TABLE freeze_board CHANGE `A_time` `A_SolvedTime` int(11) DEFAULT '0',
 ALTER TABLE friend CHANGE `user`  `userId` int(9) NOT NULL,
                    CHANGE `friend`  `friendUid` int(9) NOT NULL;
 
-ALTER TABLE level CHANGE `exp` `experience` int(9) NOT NULL;
+#ALTER TABLE level CHANGE `exp` `experience` int(9) NOT NULL;
 
 ALTER TABLE loginlog DROP `password`,
                      DROP `info`;

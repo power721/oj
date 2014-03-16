@@ -26,7 +26,7 @@ public class SocialService
   {
     List<FriendGroupModel> groupList = dao
         .find(
-            "(SELECT g.id,g.uid,g.name,COUNT(f.user) AS count,g.ctime FROM friend_group g LEFT JOIN friend f ON f.user=? AND f.gid=g.id WHERE g.uid=0) UNION (SELECT * FROM friend_group WHERE uid=? ORDER BY id)",
+            "(SELECT g.id,g.uid,g.name,COUNT(f.userId) AS count,g.ctime FROM friend_group g LEFT JOIN friend f ON f.userId=? AND f.gid=g.id WHERE g.uid=0) UNION (SELECT * FROM friend_group WHERE uid=? ORDER BY id)",
             uid, uid);
     if (groupList.size() > 0 && StringUtil.isEmpty(groupList.get(0).getStr("name")))
     {
@@ -37,24 +37,24 @@ public class SocialService
 
   public Page<FriendGroupModel> getFollowingList(int pageNumber, int pageSize, Integer uid, Integer gid)
   {
-    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submit,u.comefrom,u.gender,u.sign,u.avatar,(SELECT 1 FROM friend ff WHERE ff.user=f.friend AND ff.friend=f.user) AS isFriend";
+    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submit,u.comefrom,u.gender,u.sign,u.avatar,(SELECT 1 FROM friend ff WHERE ff.userId=f.friendUid AND ff.friendUid=f.userId) AS isFriend";
     String from = null;
 
     if (gid == null || gid <= 0)
     {
       gid = 0;
-      from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.friend WHERE f.user=? AND f.gid>?";
+      from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.friendUid WHERE f.userId=? AND f.gid>?";
     } else
     {
-      from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.friend WHERE f.user=? AND f.gid=?";
+      from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.friendUid WHERE f.userId=? AND f.gid=?";
     }
     return dao.paginate(pageNumber, pageSize, sql, from, uid, gid);
   }
 
   public Page<FriendGroupModel> getFollowedList(int pageNumber, int pageSize, Integer uid)
   {
-    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submit,u.comefrom,u.gender,u.sign,u.avatar,(SELECT 1 FROM friend ff WHERE ff.user=f.friend AND ff.friend=f.user) AS isFriend";
-    String from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.user WHERE f.friend=?";
+    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submit,u.comefrom,u.gender,u.sign,u.avatar,(SELECT 1 FROM friend ff WHERE ff.userId=f.friendUid AND ff.friendUid=f.userId) AS isFriend";
+    String from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.userId WHERE f.friendUid=?";
 
     return dao.paginate(pageNumber, pageSize, sql, from, uid);
   }
@@ -99,7 +99,7 @@ public class SocialService
       return false;
     }
 
-    boolean result = Db.update("UPDATE friend SET gid=? WHERE user=? AND friend=? AND gid=?", tgid, uid, fid, gid) > 0;
+    boolean result = Db.update("UPDATE friend SET gid=? WHERE userId=? AND friendUid=? AND gid=?", tgid, uid, fid, gid) > 0;
     if (result)
     {
       if (gid > 1)
@@ -131,15 +131,15 @@ public class SocialService
   
   public boolean addFriend(Integer uid, Integer fid, Integer gid)
   {
-    FriendModel friend = FriendModel.dao.findFirst("SELECT * FROM friend WHERE user=? AND friend=?", uid, fid);
+    FriendModel friend = FriendModel.dao.findFirst("SELECT * FROM friend WHERE userId=? AND friendUid=?", uid, fid);
     
     if (friend == null)
     {
       friend = new FriendModel();
-      friend.set("user", uid);
-      friend.set("friend", fid);
-      friend.set("gid", gid);
-      friend.set("ctime", OjConfig.timeStamp);
+      friend.setUserId(uid);
+      friend.setFriendUid(fid);
+      friend.setGid(gid);
+      friend.setCtime(OjConfig.timeStamp);
       if(friend.save())
       {
         if (gid > 1)
@@ -154,7 +154,7 @@ public class SocialService
 
   public boolean deleteFriend(Integer uid, Integer fid)
   {
-    FriendModel friend = FriendModel.dao.findFirst("SELECT * FROM friend WHERE user=? AND friend=?", uid, fid);
+    FriendModel friend = FriendModel.dao.findFirst("SELECT * FROM friend WHERE userId=? AND friendUid=?", uid, fid);
     
     if (friend != null)
     {

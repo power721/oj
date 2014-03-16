@@ -205,7 +205,7 @@
                                 for (var i = 0, l = data.list.length; i < l; i++) {
                                     var a = data.list[i];
                                     html += temp
-                                            .replace(/\[uid\]/g, a.user)
+                                            .replace(/\[uid\]/g, a.userId)
                                             .replace(/\[gid\]/g, a.gid)
                                             .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
                                             .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
