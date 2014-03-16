@@ -59,5 +59,55 @@ public class MailModel extends Model<MailModel>
   {
     return Db.update("DELETE FROM mail WHERE user=?", uid);
   }
+
+  public Integer getId()
+  {
+    return getInt(ID);
+  }
+  
+  public MailModel setId(Integer value)
+  {
+    return set(ID, value);
+  }
+  
+  public Integer getMid()
+  {
+    return getInt(MID);
+  }
+  
+  public MailModel setMid(Integer value)
+  {
+    return set(MID, value);
+  }
+  
+  public Integer getUser()
+  {
+    return getInt(USER);
+  }
+  
+  public MailModel setUser(Integer value)
+  {
+    return set(USER, value);
+  }
+  
+  public Integer getPeer()
+  {
+    return getInt(PEER);
+  }
+  
+  public MailModel setPeer(Integer value)
+  {
+    return set(PEER, value);
+  }
+  
+  public Boolean getStatus()
+  {
+    return getBoolean(STATUS);
+  }
+  
+  public MailModel setStatus(Boolean value)
+  {
+    return set(STATUS, value);
+  }
   
 }

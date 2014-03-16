@@ -122,8 +122,8 @@ ALTER TABLE friend CHANGE `user`  `userId` int(9) NOT NULL,
 ALTER TABLE loginlog DROP `password`,
                      DROP `info`;
 
-ALTER TABLE mail CHANGE `user` `userId` int(9) NOT NULL COMMENT 'user id',
-                 CHANGE `peer` `peerUid` int(9) NOT NULL COMMENT 'peer uid';
+#ALTER TABLE mail CHANGE `user` `userId` int(9) NOT NULL COMMENT 'user id',
+#                 CHANGE `peer` `peerUid` int(9) NOT NULL COMMENT 'peer uid';
 
 ALTER TABLE mail_banlist CHANGE `user` `uid` int(9) NOT NULL,
                          CHANGE `ban_user` `bannedUid` int(9) NOT NULL;

@@ -11,8 +11,8 @@ public class Mail extends Model<Mail>
   public static final String TABLE_NAME = "mail";
   public static final String ID = "id";
   public static final String MID = "mid";
-  public static final String USER_ID = "userId";
-  public static final String PEER_UID = "peerUid";
+  public static final String USER = "user";
+  public static final String PEER = "peer";
   public static final String STATUS = "status";
 
   public Integer getId()
@@ -35,24 +35,24 @@ public class Mail extends Model<Mail>
     return set(MID, value);
   }
   
-  public Integer getUserId()
+  public Integer getUser()
   {
-    return getInt(USER_ID);
+    return getInt(USER);
   }
   
-  public Mail setUserId(Integer value)
+  public Mail setUser(Integer value)
   {
-    return set(USER_ID, value);
+    return set(USER, value);
   }
   
-  public Integer getPeerUid()
+  public Integer getPeer()
   {
-    return getInt(PEER_UID);
+    return getInt(PEER);
   }
   
-  public Mail setPeerUid(Integer value)
+  public Mail setPeer(Integer value)
   {
-    return set(PEER_UID, value);
+    return set(PEER, value);
   }
   
   public Boolean getStatus()

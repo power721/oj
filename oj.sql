@@ -515,8 +515,8 @@ CREATE TABLE `mail` (
 DROP TABLE IF EXISTS `mail_banlist`;
 CREATE TABLE `mail_banlist` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
-  `user` int(9) NOT NULL,
-  `ban_user` int(9) NOT NULL,
+  `uid` int(9) NOT NULL,
+  `bannedUid` int(9) NOT NULL,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -531,8 +531,8 @@ CREATE TABLE `mail_banlist` (
 DROP TABLE IF EXISTS `mail_content`;
 CREATE TABLE `mail_content` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
-  `from` int(9) NOT NULL,
-  `to` int(9) NOT NULL,
+  `fromUid` int(9) NOT NULL,
+  `toUid` int(9) NOT NULL,
   `content` text,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)

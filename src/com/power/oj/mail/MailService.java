@@ -25,8 +25,8 @@ public class MailService
   {
     MailContentModel mailContent = new MailContentModel();
     
-    mailContent.set("from", from);
-    mailContent.set("to", to);
+    mailContent.set("fromUid", from);
+    mailContent.set("toUid", to);
     mailContent.set("content", content);
     mailContent.set("ctime", OjConfig.timeStamp);
     if(!mailContent.save())
@@ -63,8 +63,8 @@ public class MailService
     {
       MailContentModel mailContent = new MailContentModel();
     
-      mailContent.set("from", from);
-      mailContent.set("to", 0);
+      mailContent.set("fromUid", from);
+      mailContent.set("toUid", 0);
       mailContent.set("content", content);
       mailContent.set("ctime", OjConfig.timeStamp);
       mailContent.save();
@@ -93,10 +93,10 @@ public class MailService
       if (mailContent != null)
       {
         MailModel mail = new MailModel();
-        mail.set("mid", mailContent.get("id")).set("user", uid).set("peer", mailContent.get("from"));
+        mail.set("mid", mailContent.get("id")).set("user", uid).set("peer", mailContent.get("fromUid"));
         mail.save();
         
-        mailContent.set("to", uid).update();
+        mailContent.set("toUid", uid).update();
         drift += 1;
         userExtModel.set("get_drift", drift).set("last_get_drift", OjConfig.timeStamp).update();
         return drift;
@@ -144,8 +144,8 @@ public class MailService
   {
     resetUserNewMails(user, peer);
     
-    String sql = "SELECT m.id,mc.from,mc.to,mc.content,mc.ctime,u1.name AS fromuser,u2.name AS touser";
-    String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u1 ON u1.uid=mc.from LEFT JOIN user u2 ON u2.uid=mc.to WHERE user=? AND peer=? AND m.status!=2 ORDER BY id DESC";
+    String sql = "SELECT m.id,mc.fromUid,mc.toUid,mc.content,mc.ctime,u1.name AS fromuser,u2.name AS touser";
+    String from = "FROM mail m LEFT JOIN mail_content mc ON mc.id=m.mid LEFT JOIN user u1 ON u1.uid=mc.fromUid LEFT JOIN user u2 ON u2.uid=mc.toUid WHERE user=? AND peer=? AND m.status!=2 ORDER BY id DESC";
     
     return dao.paginate(pageNumber, pageSize, sql, from, user, peer);
   }
@@ -173,8 +173,8 @@ public class MailService
     }
     
     Record record = new Record();
-    record.set("user", user);
-    record.set("ban_user", banUser);
+    record.set("uid", user);
+    record.set("bannedUid", banUser);
     record.set("ctime", OjConfig.timeStamp);
     
     return Db.save("mail_banlist", record);
@@ -182,18 +182,18 @@ public class MailService
 
   public int deleteMailBanlistItem(Integer user, Integer banUser)
   {
-    return Db.update("DELETE FROM mail_banlist WHERE user=? AND ban_user=?", user, banUser);
+    return Db.update("DELETE FROM mail_banlist WHERE uid=? AND bannedUid=?", user, banUser);
   }
   
   public boolean isUserInMailBanlist(Integer banUser, Integer user)
   {
-    return Db.queryInt("SELECT id FROM mail_banlist WHERE user=? AND ban_user=?", user, banUser) != null;
+    return Db.queryInt("SELECT id FROM mail_banlist WHERE uid=? AND bannedUid=?", user, banUser) != null;
   }
   
   public Page<MailModel> getUserMailBanlist(int pageNumber, int pageSize, Integer user)
   {
-    String sql = "SELECT m.ban_user AS uid,u.name AS uname";
-    String from = "FROM mail_banlist m LEFT JOIN user u ON u.uid=m.ban_user WHERE m.user=?";
+    String sql = "SELECT m.bannedUid AS uid,u.name AS uname";
+    String from = "FROM mail_banlist m LEFT JOIN user u ON u.uid=m.bannedUid WHERE m.uid=?";
     
     return dao.paginate(pageNumber, pageSize, sql, from, user);
   }
