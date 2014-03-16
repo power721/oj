@@ -118,7 +118,7 @@ public class NoticeController extends OjController
       setFlashMessage(new FlashMessage("Update notice failed!", MessageType.ERROR, getText("message.error.title")));
     }
     
-    redirect("/notice/show/" + noticeModel.get("id"));
+    redirect("/notice/show/" + noticeModel.getId());
   }
   
   public void delete()

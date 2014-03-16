@@ -162,7 +162,10 @@ ALTER TABLE session CHANGE `session_id` `sessionId` varchar(40) NOT NULL DEFAULT
 ALTER TABLE solution CHANGE `code_len` `codeLen` int(9) NOT NULL DEFAULT '0',
                      CHANGE `system_error` `systemError` text;
 
-ALTER TABLE team CHANGE `girl_team` `isGirlTeam` tinyint(1) NOT NULL DEFAULT '0',
+ALTER TABLE team CHANGE `stu_id1` `stuId1` varchar(8) NOT NULL,
+                 CHANGE `stu_id2` `stuId2` varchar(8) NOT NULL,
+                 CHANGE `stu_id3` `stuId3` varchar(8) NOT NULL,
+                 CHANGE `girl_team` `isGirlTeam` tinyint(1) NOT NULL DEFAULT '0',
                  CHANGE `new_team` `isRookieTeam` tinyint(1) NOT NULL DEFAULT '0',
                  CHANGE `sp_team` `isSpecialTeam` tinyint(1) NOT NULL DEFAULT '0';
 
@@ -188,4 +191,4 @@ ALTER TABLE user_ext CHANGE `exp` `experience` int(9) NOT NULL DEFAULT '0',
                      CHANGE `last_get_drift` `lastGetDrift` int(11) NOT NULL DEFAULT '0',
                      CHANGE `get_drift` `getDriftNum` tinyint(3) NOT NULL DEFAULT '0';
 
-ALTER TABLE variable CHANGE `value` `stringValue` varchar(255) DEFAULT NULL;
+#ALTER TABLE variable CHANGE `value` `stringValue` varchar(255) DEFAULT NULL;
