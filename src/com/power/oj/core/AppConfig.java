@@ -180,7 +180,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("contest_problem", ContestProblemModel.class);
     arp.addMapping("contest_solution", "sid", ContestSolutionModel.class);
     arp.addMapping("board", BoardModel.class);
-    arp.addMapping("session", "session_id", SessionModel.class);
+    arp.addMapping("session", "sessionId", SessionModel.class);
     arp.addMapping("mail", MailModel.class);
     arp.addMapping("mail_content", MailContentModel.class);
     arp.addMapping("program_language", LanguageModel.class);

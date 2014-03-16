@@ -669,14 +669,14 @@ INSERT INTO `program_language` (`id`, `name`, `description`, `ext_time`, `ext_me
 -- ----------------------------
 DROP TABLE IF EXISTS `session`;
 CREATE TABLE `session` (
-`session_id`  varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' ,
+`sessionId`  varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' ,
 `uid`  int(9) NOT NULL DEFAULT 0 ,
 `name`  varchar(35) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
-`ip_address`  varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' ,
-`user_agent`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,
-`ctime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Session create time.',
-`last_activity`  int(11) UNSIGNED NOT NULL DEFAULT 0 ,
-`session_expires`  int(11) NOT NULL ,
+`ipAddress`  varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' ,
+`userAgent`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,
+`ctime` int(11) NOT NULL DEFAULT '0' COMMENT 'Session create time.',
+`lastActivity`  int(11) NOT NULL DEFAULT 0 ,
+`sessionExpires`  int(11) NOT NULL ,
 `session_data`  blob NULL DEFAULT NULL ,
 `user_data`  text CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
 `uri`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,

@@ -81,7 +81,7 @@ public class SessionService
     String name = userModel.getStr("name");
     
     SessionModel sessionModel = dao.findById(id);
-    sessionModel.set("uid", uid).set("name", name).update();
+    sessionModel.setUid(uid).setName(name).update();
     SessionService.me().putModel(id, sessionModel);
   }
 
@@ -90,7 +90,7 @@ public class SessionService
     String id = (String) ShiroKit.getSubject().getSession().getId();
    
     SessionModel sessionModel = dao.findById(id);
-    sessionModel.set("uid", uid).set("name", name).update();
+    sessionModel.setUid(uid).setName(name).update();
     SessionService.me().putModel(id, sessionModel);
   }
   
@@ -100,10 +100,10 @@ public class SessionService
     SessionModel sessionModel = SessionService.me().getModel(id);
     if (sessionModel == null)
     {
-      sessionModel = new SessionModel().set("session_id", id);
+      sessionModel = new SessionModel().setSessionId(id);
     }
           
-    sessionModel.set("last_activity", OjConfig.timeStamp).set("uri", url);
+    sessionModel.setLastActivity(OjConfig.timeStamp).setUri(url);
     return SessionService.me().putModel(id, sessionModel);
   }
   
@@ -111,9 +111,9 @@ public class SessionService
   {
     String id = (String) session.getId();
     
-    SessionModel sessionModel = new SessionModel().set("session_id", id).set("ip_address", session.getHost());//.set("user_agent", agent);
-    sessionModel.set("ctime", OjConfig.timeStamp).set("last_activity", OjConfig.timeStamp);
-    sessionModel.set("session_expires", OjConfig.timeStamp + session.getTimeout());
+    SessionModel sessionModel = new SessionModel().setSessionId(id).setIpAddress(session.getHost());//.set("user_agent", agent);
+    sessionModel.setCtime(OjConfig.timeStamp).setLastActivity(OjConfig.timeStamp);
+    sessionModel.setSessionExpires((int) (OjConfig.timeStamp + session.getTimeout()));
     sessionModel.save();
 
     SessionService.me().putModel(id, sessionModel);
@@ -192,7 +192,7 @@ public class SessionService
     for (Enumeration<SessionModel> e = accessLog.elements(); e.hasMoreElements();)
     {
       SessionModel sessionModel = e.nextElement();
-      if (sessionModel.getInt("uid") != null)
+      if (sessionModel.getUid() != null)
         number++;
     }
     

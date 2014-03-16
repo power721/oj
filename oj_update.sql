@@ -156,7 +156,7 @@ ALTER TABLE problem_language CHANGE `ext_time` `extTime` int(9) NOT NULL DEFAULT
 ALTER TABLE session CHANGE `session_id` `sessionId` varchar(40) NOT NULL DEFAULT '0',
                     CHANGE `ip_address` `ipAddress` varchar(45) NOT NULL DEFAULT '0',
                     CHANGE `user_agent` `userAgent` varchar(255) DEFAULT '',
-                    CHANGE `last_activity` `lastActivity` int(11) unsigned NOT NULL DEFAULT '0',
+                    CHANGE `last_activity` `lastActivity` int(11) NOT NULL DEFAULT '0',
                     CHANGE `session_expires` `sessionExpires` int(11) NOT NULL;
 
 ALTER TABLE solution CHANGE `code_len` `codeLen` int(9) NOT NULL DEFAULT '0',
