@@ -43,8 +43,8 @@ public class NoticeController extends OjController
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     long ctime = OjConfig.startInterceptorTime;
     
-    setAttr("start_time", sdf.format(new Date(ctime)));
-    setAttr("end_time", sdf.format(new Date(ctime + 18000000)));
+    setAttr("startTime", sdf.format(new Date(ctime)));
+    setAttr("endTime", sdf.format(new Date(ctime + 18000000)));
     
     setTitle("Add Notice");
   }
@@ -53,15 +53,15 @@ public class NoticeController extends OjController
   @RequiresPermissions("notice:add")
   public void save()
   {
-    String start_time = getPara("start_time");
-    String end_time = getPara("end_time");
+    String startTime = getPara("startTime");
+    String endTime = getPara("endTime");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     NoticeModel noticeModel = getModel(NoticeModel.class, "notice"); // will lost start_time, end_time
     
     try
     {
-      noticeModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
-      noticeModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
+      noticeModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      noticeModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())
@@ -93,15 +93,15 @@ public class NoticeController extends OjController
   @RequiresPermissions("notice:edit")
   public void update()
   {
-    String start_time = getPara("start_time");
-    String end_time = getPara("end_time");
+    String startTime = getPara("startTime");
+    String endTime = getPara("endTime");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     NoticeModel noticeModel = getModel(NoticeModel.class, "notice"); // will lost start_time, end_time
     
     try
     {
-      noticeModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
-      noticeModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
+      noticeModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      noticeModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())
