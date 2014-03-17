@@ -30,6 +30,7 @@ public class Table
   public void setTableName(String tableName)
   {
     this.tableName = tableName;
+    setModelName(tableName);
   }
 
   public String getModelName()
@@ -39,8 +40,8 @@ public class Table
 
   public void setModelName(String tableName)
   {
-    modelName = new StringBuilder().append(prefix).append(convert(tableName)).append(suffix).toString();
-    modelName  = modelName.substring(0,1).toUpperCase() + modelName.substring(1);
+    modelName = new StringBuilder().append(prefix).append(toUpperCamelCase(tableName)).append(suffix).toString();
+    modelName  = modelName.substring(0, 1).toUpperCase() + modelName.substring(1);
     System.out.println("Table Name: " + tableName + "  -->  Model Name: " + modelName);
   }
 
@@ -79,7 +80,7 @@ public class Table
     }
   }
 
-  private String convert(String name)
+  private String toUpperCamelCase(String name)
   {
     boolean flag = true;
     StringBuilder sb = new StringBuilder();

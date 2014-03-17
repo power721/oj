@@ -32,8 +32,7 @@ public class GenerateModel
     for (String table : tables)
     {
       myModel.setTableName(table);
-      myModel.setModelName(table);
-      myModel.setColumns(DBConn.getColumnsNamesByTableName(table));
+      myModel.setColumns(DBConn.getColumnsInfoByTableName(table));
       map.put("myModel", myModel);
       
       File createFolder = new File(System.getProperty("user.dir") + "/src/" + DBConn.p.getProperty("package").replace(".", "/"));

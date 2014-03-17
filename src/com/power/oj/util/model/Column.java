@@ -9,7 +9,7 @@ public class Column
   public Column(String name, String type)
   {
     this.name = name;
-    this.field = convertInv(name);
+    this.field = convertFieldName(name);
     this.type = converType(type);
   }
 
@@ -43,7 +43,7 @@ public class Column
     this.type = type;
   }
   
-  private String convertInv(String name)
+  private String convertFieldName(String name)
   {
     boolean flag = false;
     StringBuilder sb = new StringBuilder();
@@ -126,9 +126,9 @@ public class Column
       case "mediumblob":
       case "longblob": 
         return "byte[]";
+      default:
+        return null;
     }
-
-    return null;
   }
   
   public String getMethod()
@@ -143,7 +143,7 @@ public class Column
       case "java.math.BigInteger": return "getBigInteger";
       case "java.math.BigDecimal": return "getBigDecimal";
       case "byte[]": return "getBytes";
+      default: return "get" + type;
     }
-    return "get" + type;
   }
 }

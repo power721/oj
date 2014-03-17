@@ -37,7 +37,7 @@ public class DBConn
   public static List<String> getTableNamesByDBName() throws SQLException, IOException
   {
     Statement stame = (Statement) DBConn.getConnection().createStatement();
-    ResultSet rs = stame.executeQuery("show tables;");
+    ResultSet rs = stame.executeQuery("SHOW TABLES;");
     List<String> list = new ArrayList<String>();
     while (rs.next())
     {
@@ -46,11 +46,11 @@ public class DBConn
     return list;
   }
 
-  public static List<String> getColumnsNamesByTableName(String tName) throws SQLException, IOException
+  public static List<String> getColumnsInfoByTableName(String tName) throws SQLException, IOException
   {
     List<String> list = new ArrayList<String>();
     Statement stame = (Statement) DBConn.getConnection().createStatement();
-    ResultSet rs = stame.executeQuery("desc " + tName + ";");
+    ResultSet rs = stame.executeQuery("DESC " + tName + ";");
     while (rs.next())
     {
       list.add(rs.getString(1) + ";" + rs.getString(2));
