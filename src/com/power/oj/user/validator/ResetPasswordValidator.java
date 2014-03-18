@@ -15,8 +15,8 @@ public class ResetPasswordValidator extends Validator
     String regExpression = String.format(".{%d,%d}", passwordMinLength, passwordMaxLength);
     String passwordMsg = String.format(c.getText("validate.password.length"), passwordMinLength, passwordMaxLength);
     
-    validateRegex("pass", regExpression, "passwordMsg", passwordMsg);
-    validateEqualField("pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
+    validateRegex("password", regExpression, "passwordMsg", passwordMsg);
+    validateEqualField("password", "repass", "confirmMsg", c.getText("validate.password.confirm"));
   }
 
   @Override

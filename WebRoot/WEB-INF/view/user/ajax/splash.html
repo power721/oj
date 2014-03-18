@@ -30,7 +30,7 @@
     <li class="b">用户的在线时长总和。</li>
   <li class="a">解决问题数量<span class="pts" style="color:#798;">${user.solved}</span>Problems</li>
     <li class="b">用户解决问题总和。<!--未审核、已退回与已删除的投稿数据不计入其中。--></li>
-  <li class="a">我的提交总数<span class="pts" style="color:#ca6;">${user.submit}</span>Submissions</li>
+  <li class="a">我的提交总数<span class="pts" style="color:#ca6;">${user.submission}</span>Submissions</li>
     <li class="b">用户提交代码总和。<!--未审核、已退回与已删除的投稿不计入其中。--></li>
   <!--<li class="a">投稿总收藏数<span class="pts" style="color:#696;">0</span>Favors</li>
     <li class="b">当前所有有效投稿的收藏数总和。未审核、已退回与已删除的投稿数据不计入其中。</li>
@@ -41,7 +41,7 @@
 <script type="text/javascript">
 $(document).ready(function () {
   var timestamp = Math.round(new Date().getTime()/1000);
-  var online = Math.round(parseInt(${user.online}) + (timestamp - parseInt(${user.login})) / 60);
+  var online = Math.round(parseInt(${user.online}) + (timestamp - parseInt(${user.loginTime})) / 60);
   $('span#online').html(online);
 });
 </script>

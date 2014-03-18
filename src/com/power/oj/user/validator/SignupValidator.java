@@ -23,8 +23,8 @@ public class SignupValidator extends Validator
     String passwordMsg = String.format(c.getText("validate.password.length"), passwordMinLength, passwordMaxLength);
     
     validateEmail("user.email", "emailMsg", c.getText("validate.email.error"));
-    validateRegex("user.pass", regExpression, "passwordMsg", passwordMsg);
-    validateEqualField("user.pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
+    validateRegex("user.password", regExpression, "passwordMsg", passwordMsg);
+    validateEqualField("user.password", "repass", "confirmMsg", c.getText("validate.password.confirm"));
 
     String email = c.getPara("user.email");
     if (StringUtil.isNotBlank(email) && UserService.me().containsEmail(email))

@@ -316,8 +316,8 @@ public class ProblemService
     if (problemModel == null)
       throw new ProblemException("Problem is not exist!");
     
-    long accept = 0;
-    long submit = 0;
+    long accepted = 0;
+    long submission = 0;
     long ratio = 0;
     long submit_user = 0;
     long solved = 0;
@@ -327,19 +327,19 @@ public class ProblemService
 
     if (record != null)
     {
-      submit = record.getLong("count");
-      problemModel.set("submit", submit);
+      submission = record.getLong("count");
+      problemModel.set("submission", submission);
     }
 
     record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
     if (record != null)
     {
-      accept = record.getLong("count");
-      problemModel.set("accept", accept);
+      accepted = record.getLong("count");
+      problemModel.set("accepted", accepted);
     }
 
-    if (submit > 0)
-      ratio = accept / submit;
+    if (submission > 0)
+      ratio = accepted / submission;
     problemModel.set("ratio", ratio);
 
     record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);

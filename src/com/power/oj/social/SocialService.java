@@ -37,7 +37,7 @@ public class SocialService
 
   public Page<FriendGroupModel> getFollowingList(int pageNumber, int pageSize, Integer uid, Integer gid)
   {
-    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submit,u.comefrom,u.gender,u.sign,u.avatar,(SELECT 1 FROM friend ff WHERE ff.userId=f.friendUid AND ff.friendUid=f.userId) AS isFriend";
+    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submission,u.comeFrom,u.gender,u.signature,u.avatar,(SELECT 1 FROM friend ff WHERE ff.userId=f.friendUid AND ff.friendUid=f.userId) AS isFriend";
     String from = null;
 
     if (gid == null || gid <= 0)
@@ -53,7 +53,7 @@ public class SocialService
 
   public Page<FriendGroupModel> getFollowedList(int pageNumber, int pageSize, Integer uid)
   {
-    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submit,u.comefrom,u.gender,u.sign,u.avatar,(SELECT 1 FROM friend ff WHERE ff.userId=f.friendUid AND ff.friendUid=f.userId) AS isFriend";
+    String sql = "SELECT g.name AS groupName,f.*,u.name,u.solved,u.submission,u.comeFrom,u.gender,u.signature,u.avatar,(SELECT 1 FROM friend ff WHERE ff.userId=f.friendUid AND ff.friendUid=f.userId) AS isFriend";
     String from = "FROM friend f LEFT JOIN friend_group g ON f.gid=g.id LEFT JOIN user u ON u.uid=f.userId WHERE f.friendUid=?";
 
     return dao.paginate(pageNumber, pageSize, sql, from, uid);

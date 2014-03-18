@@ -101,7 +101,7 @@ public class UserApiController extends OjController
   {
     UserModel userModel = getAttr(OjConstants.USER);
     userModel.put("success", true);
-    userModel.remove("token").remove("pass").remove("data");
+    userModel.remove("token").remove("password").remove("data");
     renderJson(userModel);
   }
 
@@ -128,7 +128,7 @@ public class UserApiController extends OjController
     } else
     {
       userModel.put("success", true);
-      userModel.remove("token").remove("pass").remove("realname").remove("phone").remove("data");
+      userModel.remove("token").remove("password").remove("realName").remove("phone").remove("data");
       renderJson(userModel);
     }
   }
@@ -140,7 +140,7 @@ public class UserApiController extends OjController
     UserExtModel userModel = UserExtModel.dao.findById(uid);
     if ((incExp = userService.checkin(userModel)) > 0)
     {
-      int checkinTimes = userModel.getInt("checkin_times");
+      int checkinTimes = userModel.getCheckinTimes();
       renderJson("{\"success\":true, \"incexp\":" + incExp +",\"result\":" + checkinTimes + "}");
     }
     else
@@ -164,7 +164,7 @@ public class UserApiController extends OjController
   {
     String sign = HtmlEncoder.text(getPara("sign", "").trim());
     UserModel userModel = getAttr(OjConstants.USER);
-    if (userModel.set("sign", sign).update())
+    if (userModel.setSignature(sign).update())
     {
       renderJson("{\"success\":true}");
     }
@@ -184,7 +184,7 @@ public class UserApiController extends OjController
     if (userService.checkPassword(userModel.getUid(), origPwd))
     {
       newPwd = BCrypt.hashpw(newPwd, BCrypt.gensalt());
-      if (userModel.set("pass", newPwd).update())
+      if (userModel.setPassword(newPwd).update())
       {
         renderJson("{\"success\":true}");
       }
@@ -242,13 +242,13 @@ public class UserApiController extends OjController
   public void profileSubmit()
   {
     UserModel userModel = getAttr(OjConstants.USER);
-    userModel.set("comefrom", getPara("comefrom"));
-    userModel.set("qq", getPara("qq"));
-    userModel.set("blog", getPara("blog"));
-    userModel.set("phone", getPara("phone"));
-    userModel.set("realname", getPara("realname"));
-    userModel.set("gender", getPara("gender")); // TODO check gender value
-    userModel.set("school", getPara("school"));
+    userModel.setComeFrom(HtmlEncoder.text(getPara("comeFrom")));
+    userModel.setQQ(HtmlEncoder.text(getPara("qq")));
+    userModel.setBlog(HtmlEncoder.text(getPara("blog")));
+    userModel.setPhone(HtmlEncoder.text(getPara("phone")));
+    userModel.setRealName(HtmlEncoder.text(getPara("realName")));
+    userModel.setGender(HtmlEncoder.text(getPara("gender"))); // TODO check gender value
+    userModel.setSchool(HtmlEncoder.text(getPara("school")));
     
     if (userModel.update())
     {

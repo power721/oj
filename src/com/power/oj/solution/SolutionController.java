@@ -167,7 +167,7 @@ public class SolutionController extends OjController
       }
       
       UserModel userModel = userService.getCurrentUser();
-      userModel.set("submit", userModel.getInt("submit") + 1).update();
+      userModel.setSubmission(userModel.getSubmission() + 1).update();
       
       
       if (cid != null && cid > 0)

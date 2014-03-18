@@ -151,7 +151,7 @@
                     未签到
                   </button>
                   </#if>
-                  <p title="当前总经验值：${user.exp!0} / 下一级所需总经验值：${user.nextExp!200}" class="level" id="user-level" data-credit="${user.credit!0}">
+                  <p title="当前总经验值：${user.experience!0} / 下一级所需总经验值：${user.nextExp!200}" class="level" id="user-level" data-credit="${user.credit!0}">
                     <span style="width:${user.percent!0}%;" class="a">
                     </span>
                     <span class="b">
@@ -192,7 +192,7 @@
                   </span>
                 </div>
                 <p title="点击以修改签名" class="desc">
-                  ${user.sign!"这个人很懒，什么都没有写..."}
+                  ${user.signature!"这个人很懒，什么都没有写..."}
                 </p>
                 <p class="divider">
                 </p>

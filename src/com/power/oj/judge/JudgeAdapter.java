@@ -208,7 +208,7 @@ public abstract class JudgeAdapter implements Runnable
     }
     
     Integer uid = solutionModel.getUid();
-    Db.update("UPDATE user SET accept=accept+1 WHERE uid=?", uid);
+    Db.update("UPDATE user SET accepted=accepted+1 WHERE uid=?", uid);
     return true;
   }
 

@@ -508,7 +508,7 @@ system.tv = function () {
                                             .replace(/\[name\]/g, data.name)
                                             .replace(/\[uid\]/g, data.uid)
                                             .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + avatar + '"')
-                                            .replace(/\[sign\]/g, data.sign || '这个人很懒，什么都没有写...')
+                                            .replace(/\[sign\]/g, data.signature || '这个人很懒，什么都没有写...')
                                             .replace(/\[email\]/g, data.email)
                                             .replace(/\[regTime\]/g, $.parseTime(data.ctime*1000));
                                     ub
@@ -523,15 +523,15 @@ system.tv = function () {
                                         $('#btn-sign-personal').click(); //
                                     });
                                     //
-                                    $('#ipt-truename-personal').val($.parseSafe(data.realname));
+                                    $('#ipt-truename-personal').val($.parseSafe(data.realName));
                                     //$('#ipt-birthday-personal').val($.parseSafe(data.birthday));
                                     $('#ipt-tel-personal').val($.parseSafe(data.phone));
                                     $('#ipt-school-personal').val($.parseSafe(data.school));
                                     $('#ipt-home-personal').val($.parseSafe(data.blog));
                                     var qq = data.qq==null ? '' : data.qq + '';
                                     $('#ipt-qq-personal').val($.parseSafe(qq));
-                                    if (!!data.comefrom) {
-                                        var a = data.comefrom.split(',');
+                                    if (!!data.comeFrom) {
+                                        var a = data.comeFrom.split(',');
                                         $('#ipt-location-a-personal').val(a[0]).change();
                                         window.setTimeout(function () {
                                             $('#ipt-location-b-personal').val(a[1]);
@@ -558,7 +558,7 @@ system.tv = function () {
                 callback: function () {
                     //
                     $.post('api/user/profileSubmit', {
-                        comefrom: ($('#ipt-location-a-personal').val() + ',' + $('#ipt-location-b-personal').val()).replace(/\,?不公开/g, ''),
+                        comeFrom: ($('#ipt-location-a-personal').val() + ',' + $('#ipt-location-b-personal').val()).replace(/\,?不公开/g, ''),
                         qq: function () {
                             var a = $.parseSafe($('#ipt-qq-personal').val());
                             a = a.search('请输入') != -1 ? '' : a;
@@ -574,7 +574,7 @@ system.tv = function () {
                             a = a.search('请输入') != -1 ? '' : a;
                             return a;
                         },
-                        realname: function () {
+                        realName: function () {
                             var a = $.parseSafe($('#ipt-truename-personal').val());
                             a = a.search('请输入') != -1 ? '' : a;
                             return a;

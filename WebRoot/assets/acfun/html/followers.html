@@ -207,7 +207,7 @@
                                     html += temp
                                             .replace(/\[uid\]/g, a.userId)
                                             .replace(/\[gid\]/g, a.gid)
-                                            .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
+                                            .replace(/\[sign\]/g, $.parseSafe(a.signature) || '这个人很懒，神马都没有写…')
                                             .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
                                             .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
                                             .replace(/\[isFriend\]/g, (!a.isFriend ? '<button class="btn-follow-followed btn primary mini"><i class="icon white icon-plus-sign"></i>关注</button>' : '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>'))
@@ -217,7 +217,7 @@
                                             .replace(/\[favors\]/g, a.userContributeStow || 0)
                                             .replace(/\[comms\]/g, a.userContributeComment || 0)
                                             .replace(/\[views\]/g, a.userContributeView || 0)
-                                            .replace(/\[from\]/g, a.comefrom ? ($.parseSafe(a.comefrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
+                                            .replace(/\[from\]/g, a.comeFrom ? ($.parseSafe(a.comeFrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
                                             .replace(/\[gender\]/g, {'secret': 'TA', 'female': '她', 'male': '他'}[a.gender])
                                             .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)
                                     ;

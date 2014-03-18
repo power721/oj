@@ -24,10 +24,10 @@ public class UpdateUserValidator extends Validator
      * addError("emailMsg", "This Email already registered!"); }
      */
 
-    String password = c.getPara("user.pass");
+    String password = c.getPara("user.password");
     if (StringUtil.isNotBlank(password))
     {
-      validateEqualField("user.pass", "repass", "confirmMsg", c.getText("validate.password.confirm"));
+      validateEqualField("user.password", "repass", "confirmMsg", c.getText("validate.password.confirm"));
     }
 
     password = c.getPara("oldpass");

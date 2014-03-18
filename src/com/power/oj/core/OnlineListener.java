@@ -91,7 +91,7 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
       String id = session.getId();
       UserModel userModel = (UserModel) Added;
       uid = userModel.getUid();
-      name = userModel.getStr("name");
+      name = userModel.getName();
 
       List<SessionModel> sessions = SessionModel.dao.find("SELECT session_id, ip_address, user_agent, last_activity, session_expires FROM session WHERE uid=?", uid);
       for (SessionModel sessionRecord : sessions)

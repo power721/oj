@@ -228,7 +228,7 @@
             <div class="sign">[sign]</div>
             <div class="info">
                 [gender]来自<span class="from">[from]</span>&nbsp;&nbsp;/&nbsp;&nbsp;听众&nbsp;<span class="pts followeds">[followeds]</span>&nbsp;&nbsp;/&nbsp;&nbsp;关注&nbsp;<span
-                    class="pts">[followings]</span>&nbsp;&nbsp;/&nbsp;&nbsp;解决&nbsp;<span class="pts">[solved]</span>&nbsp;&nbsp;/&nbsp;&nbsp;提交&nbsp;<span class="pts">[submit]</span>
+                    class="pts">[followings]</span>&nbsp;&nbsp;/&nbsp;&nbsp;解决&nbsp;<span class="pts">[solved]</span>&nbsp;&nbsp;/&nbsp;&nbsp;提交&nbsp;<span class="pts">[submission]</span>
             </div>
             <div class="area-tool-following">
                 [isFriend]
@@ -389,19 +389,19 @@ system.tv = function () {
                                 html += temp
                                         .replace(/\[uid\]/g, a.friendUid)
                                         .replace(/\[gid\]/g, a.gid)
-                                        .replace(/\[sign\]/g, $.parseSafe(a.sign) || '这个人很懒，神马都没有写…')
+                                        .replace(/\[sign\]/g, $.parseSafe(a.signature) || '这个人很懒，神马都没有写…')
                                         .replace(/\[name\]/g, $.parseSafe(a.name || "该用户不存在"))
                                         .replace(/\[avatar\](?:\=\"\")?/g, 'src="' + ($.parseSafe(a.avatar) || 'assets/images/user/default.png') + '"')
                                         .replace(/\[isFriend\]/g, (!a.isFriend ? '<i class="icon grey icon-star"></i>已关注，<a class="btn-disfollow-followed">取消</a>' : '<i class="icon grey icon-heart"></i>已互加关注，<a class="btn-disfollow-followed">取消</a>'))
                                         .replace(/\[followings\]/g, a.followingCount || 0)
                                         .replace(/\[solved\]/g, a.solved || 0)
-                                        .replace(/\[submit\]/g, a.submit || 0)
+                                        .replace(/\[submission\]/g, a.submission || 0)
                                         .replace(/\[followeds\]/g, a.followedCount || 0)
                                         .replace(/\[posts\]/g, a.userContributeCount || 0)
                                         .replace(/\[favors\]/g, a.userContributeStow || 0)
                                         .replace(/\[comms\]/g, a.userContributeComment || 0)
                                         .replace(/\[views\]/g, a.userContributeView || 0)
-                                        .replace(/\[from\]/g, a.comefrom ? ($.parseSafe(a.comefrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
+                                        .replace(/\[from\]/g, a.comeFrom ? ($.parseSafe(a.comeFrom).replace(/[\s\,]/g, '').replace(/不限/g, '')) : '未知地理位置')
                                         .replace(/\[gender\]/g, {'secret': 'TA', 'female': '她', 'male': '他'}[a.gender])
                                         .replace(/\[group\]/g, !param.isGroup && a.groupName ? '/  <span style="color:' + $.parseColor(a.groupName) + ';">' + a.groupName + '</span>' : '')
                                         .replace(/\[index\]/g, data.totalRow - (data.pageNumber - 1) * data.pageSize - i)

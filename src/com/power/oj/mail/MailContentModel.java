@@ -18,7 +18,7 @@ public class MailContentModel extends Model<MailContentModel>
   
   public MailContentModel getRandMail(Integer uid)
   {
-    String sql = "SELECT t1.* FROM `mail_content` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `mail_content`)-(SELECT MIN(id) FROM `mail_content`))+(SELECT MIN(id) FROM `mail_content`)) AS id) AS t2 WHERE t1.id >= t2.id AND `to`=0 AND `from`!=? ORDER BY t1.id LIMIT 1";
+    String sql = "SELECT t1.* FROM `mail_content` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(id) FROM `mail_content`)-(SELECT MIN(id) FROM `mail_content`))+(SELECT MIN(id) FROM `mail_content`)) AS id) AS t2 WHERE t1.id >= t2.id AND `toUid`=0 AND `fromUid`!=? ORDER BY t1.id LIMIT 1";
     return dao.findFirst(sql, uid);
   }
   

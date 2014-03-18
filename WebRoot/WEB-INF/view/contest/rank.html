@@ -31,7 +31,7 @@
       <#assign rank=User_index+1+(contestRank.pageNumber-1)*contestRank.pageSize>
       <td><#if cstatus==2 && rank<4><i class="oj-medal_${rank}"></i></#if>${rank}
       </td>
-      <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realname??>data-toggle="tooltip" title="${(User.realname)!}"</#if>>${User.name!}</a></td>
+      <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realName??>data-toggle="tooltip" title="${(User.realName)!}"</#if>>${User.name!}</a></td>
       <td class="user">${User.nick!}</td>
       <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
       <td>${User.penalty!}</td> 

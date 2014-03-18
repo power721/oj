@@ -278,7 +278,7 @@ public class UserController extends OjController
     UserModel userModel = userService.getUserByName(name);
     FlashMessage msg = new FlashMessage(getText("user.recover.success"));
     
-    userModel.set("token", token).set("mtime", OjConfig.timeStamp).update();
+    userModel.setToken(token).setMtime(OjConfig.timeStamp).update();
     try
     {
       // TODO: create new thread to send mail
@@ -315,7 +315,7 @@ public class UserController extends OjController
   public void resetPassword()
   {
     String name = getSessionAttr("name");
-    String password = getPara("pass");
+    String password = getPara("password");
     
     if (userService.resetPassword(name, password))
     {
@@ -372,7 +372,7 @@ public class UserController extends OjController
     {
       if (userService.signup(userModel))
       {
-        setCookie("oj_username", userModel.getStr("name"), OjConstants.COOKIE_AGE);
+        setCookie("oj_username", userModel.getName(), OjConstants.COOKIE_AGE);
         setFlashMessage(new FlashMessage(getText("user.save.success")));
       }
       else
@@ -406,7 +406,7 @@ public class UserController extends OjController
     
     userService.updateUser(userModel);
 
-    String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
+    String redirectURL = new StringBuilder(2).append("/user/profile/").append(userModel.getName()).toString();
     redirect(redirectURL, new FlashMessage(getText("user.update.success")));
   }
 

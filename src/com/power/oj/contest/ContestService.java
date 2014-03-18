@@ -174,7 +174,7 @@ public class ContestService
   public Page<Record> getContestRank(int pageNumber, int pageSize, Integer cid)
   {
     String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY solved DESC,penalty";
-    Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realname", sql, cid);
+    Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realName", sql, cid);
     
     return userRank;
   }
@@ -263,7 +263,7 @@ public class ContestService
 
   public List<Record> getContestUsers(Integer cid)
   {
-    return Db.find("SELECT c.*,u.name,u.realname,u.nick FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
+    return Db.find("SELECT c.*,u.name,u.realName,u.nick FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
   }
 
   public boolean isUserInContest(Integer uid, Integer cid)
@@ -468,7 +468,7 @@ public class ContestService
       }
       
       UserModel userModel = userService.getCurrentUser();
-      userModel.set("submit", userModel.getInt("submit") + 1).update();
+      userModel.setSubmission(userModel.getSubmission() + 1).update();
       
       Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
             

@@ -78,7 +78,7 @@ public class SessionService
     UserModel userModel = UserService.me().getCurrentUser();
     String id = (String) session.getId();
     int uid = userModel.getUid();
-    String name = userModel.getStr("name");
+    String name = userModel.getName();
     
     SessionModel sessionModel = dao.findById(id);
     sessionModel.setUid(uid).setName(name).update();

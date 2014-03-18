@@ -30,12 +30,12 @@
     <#if userList??> <#list userList.list as User>
     <tr>
       <td>${User.rank!}</td>
-      <td class="user"><a href="user/profile/${User.name!}" class="user"<#if adminUser?? && User.realname??>data-toggle="tooltip"
-          title="${(User.realname)!}"</#if>>${User.name!}</a></td>
+      <td class="user"><a href="user/profile/${User.name!}" class="user"<#if adminUser?? && User.realName??>data-toggle="tooltip"
+          title="${(User.realName)!}"</#if>>${User.name!}</a></td>
       <td>${User.nick!}</td>
       <td><a href="status?name=${User.name!}&result=0">${User.solved!}</a></td>
-      <td><a href="status?name=${User.name!}">${User.submit!}</a></td>
-      <td><#if (User.submit>0)>${(User.solved/User.submit*100)?int}<#else>0</#if>%</td>
+      <td><a href="status?name=${User.name!}">${User.submission!}</a></td>
+      <td><#if (User.submission>0)>${(User.solved/User.submission*100)?int}<#else>0</#if>%</td>
     </tr>
     </#list> </#if>
   </tbody>

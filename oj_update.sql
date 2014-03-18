@@ -176,7 +176,7 @@ ALTER TABLE user CHANGE `pass` `password` varchar(128) NOT NULL COMMENT 'User’
                  CHANGE `accept` `accepted` int(6) NOT NULL DEFAULT '0',
                  CHANGE `submit` `submission` int(6) NOT NULL DEFAULT '0' COMMENT 'the number of user submit code',
                  CHANGE `login` `loginTime` int(11) NOT NULL DEFAULT '0' COMMENT 'Timestamp for user last login.',
-                 CHANGE `login_P` `loginIP` varchar(64) DEFAULT NULL,
+                 CHANGE `login_IP` `loginIP` varchar(64) DEFAULT NULL,
                  CHANGE `comefrom` `comeFrom` varchar(35) DEFAULT NULL,
                  CHANGE `sign` `signature` varchar(255) DEFAULT NULL,
                  CHANGE `share` `shareCode` tinyint(1) NOT NULL DEFAULT '0';

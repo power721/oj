@@ -75,7 +75,7 @@ public class UserService
       SessionService.me().updateLogin();
       
       UserModel userModel = getCurrentUser();
-      String avatar = userModel.getStr("avatar");
+      String avatar = userModel.getAvatar();
       controller.setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
       controller.setCookie("oj_username", name, OjConstants.COOKIE_AGE);
       if (StringUtil.isNotBlank(avatar))
@@ -100,9 +100,9 @@ public class UserService
   
   public boolean autoLogin(OjController controller, UserModel userModel, boolean rememberMe)
   {
-    String name = userModel.getStr("name");
-    String password = userModel.getStr("pass");
-    String avatar = userModel.getStr("avatar");
+    String name = userModel.getName();
+    String password = userModel.getPassword();
+    String avatar = userModel.getAvatar();
     Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
@@ -138,29 +138,29 @@ public class UserService
   
   public void addExp(UserExtModel userExtModel, int incExp)
   {
-    int exp = userExtModel.getInt("exp") + incExp;
-    int credit = userExtModel.getInt("credit") + incExp;
+    int exp = userExtModel.getExperience() + incExp;
+    int credit = userExtModel.getCredit() + incExp;
     int level = Arrays.binarySearch(OjConfig.level.toArray(), exp);
     level = level<0 ? -level : level+2;
     
-    userExtModel.set("credit", credit).set("exp", exp).set("level", level);
+    userExtModel.setCredit(credit).setExperience( exp).setLevel(level);
   }
   
   public int checkin(UserExtModel userExtModel)
   {
     int timestamp = Tool.getDayTimestamp();
-    int checkin = userExtModel.getInt("checkin");
-    int checkinTimes = userExtModel.getInt("checkin_times");
-    int level = userExtModel.getInt("level");
+    int checkin = userExtModel.getCheckin();
+    int checkinTimes = userExtModel.getCheckinTimes();
+    int level = userExtModel.getLevel();
     
     if (checkin < timestamp)
     {
       checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
       int incExp = Math.min(checkinTimes, level);
-      int totalCheckin = userExtModel.getInt("total_checkin") + 1;
+      int totalCheckin = userExtModel.getTotalCheckin() + 1;
       
       addExp(userExtModel, incExp);
-      userExtModel.set("checkin", OjConfig.timeStamp).set("checkin_times", checkinTimes).set("total_checkin", totalCheckin).update();
+      userExtModel.setCheckin(OjConfig.timeStamp).setCheckinTimes(checkinTimes).setTotalCheckin(totalCheckin).update();
       return incExp;
     }
     
@@ -169,7 +169,7 @@ public class UserService
   
   public boolean isCheckin(UserModel userModel)
   {
-    int checkin = userModel.getInt("checkin");
+    int checkin = userModel.getInt("checkin"); // UserModel does not have "checkin"
     
     if (checkin < Tool.getDayTimestamp())
     {
@@ -190,12 +190,13 @@ public class UserService
     UserModel userModel = getCurrentUser();
     if (userModel != null)
     {
-      int online = userModel.getInt("online");
-      int login = userModel.getInt("login");
+      int online = userModel.getOnline();
+      int login = userModel.getLoginTime();
       
       log.info("online: " + online + " login: " + login + " current: " + OjConfig.timeStamp);
+      // TODO it's incorrect
       online += (OjConfig.timeStamp - login) / 60;
-      userModel.set("online", online).update();
+      userModel.setOnline(online).update();
     }
     
     controller.removeCookie("auth_key");
@@ -213,15 +214,15 @@ public class UserService
    */
   public boolean signup(UserModel userModel) throws Exception
   {
-    String name = HtmlEncoder.text(userModel.getStr("name"));
-    String password = BCrypt.hashpw(userModel.getStr("pass"), BCrypt.gensalt());
-    String email = userModel.getStr("email");
+    String name = HtmlEncoder.text(userModel.getName());
+    String password = BCrypt.hashpw(userModel.getPassword(), BCrypt.gensalt());
+    String email = userModel.getEmail();
     String token = UUID.randomUUID().toString();
     
-    long ctime = OjConfig.timeStamp;
+    int ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
-    newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email).set("ctime", ctime);
-    newUser.set("token", token).set("mtime", OjConfig.timeStamp);
+    newUser.setName(HtmlEncoder.text(name)).setPassword(password).setEmail(email).setRegEmail(email);
+    newUser.setToken(token).setCtime(ctime).setMtime(ctime);
     
     if (newUser.save())
     {
@@ -229,7 +230,7 @@ public class UserService
       Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
       
       UserExtModel userExt = new UserExtModel();
-      userExt.set("uid", uid).save();
+      userExt.setUid(uid).save();
       //password = userModel.getStr("pass");
       //return login(name, password, false);
       
@@ -245,14 +246,13 @@ public class UserService
     String name = email;
     String pass = Tool.randomPassword(9);
     String password = BCrypt.hashpw(pass, BCrypt.gensalt());
-    String avatar = webLogin.getStr("avatar");
+    String avatar = webLogin.getAvatar();
     String token = UUID.randomUUID().toString();
-    long ctime = OjConfig.timeStamp;
+    int ctime = OjConfig.timeStamp;
     
     UserModel newUser = new UserModel();
-    newUser.set("name", name).set("pass", password).set("email", email).set("reg_email", email);
-    newUser.set("nick", webLogin.get("nick")).set("avatar", avatar).set("ctime", ctime);
-    newUser.set("token", token).set("mtime", OjConfig.timeStamp);
+    newUser.setName(HtmlEncoder.text(name)).setPassword(password).setEmail(email).setRegEmail(email).setCtime(ctime);
+    newUser.setNick(HtmlEncoder.text(webLogin.getNick())).setAvatar(avatar).setToken(token).setMtime(ctime);
     
     if (newUser.save())
     {
@@ -260,19 +260,19 @@ public class UserService
       
       int uid = newUser.getUid();
       Calendar cal = Calendar.getInstance();
-      name = new StringBuilder(3).append(webLogin.getStr("type")).append(cal.get(Calendar.YEAR)).append(uid).toString();
-      newUser.set("name", name).update();
+      name = new StringBuilder(3).append(webLogin.getType()).append(cal.get(Calendar.YEAR)).append(uid).toString();
+      newUser.setName(name).update();
       
       Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
       
       UserExtModel userExt = new UserExtModel();
-      userExt.set("uid", uid).save();
+      userExt.setUid(uid).save();
       
       Map<String, Object> paras = new HashMap<String, Object>();
       paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
       paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
-      paras.put("nick", webLogin.get("nick"));
-      paras.put("type", webLogin.get("type"));
+      paras.put("nick", webLogin.getNick());
+      paras.put("type", webLogin.getType());
       paras.put("name", name);
       paras.put("token", token);
       paras.put("password", pass);
@@ -292,26 +292,26 @@ public class UserService
    */
   public boolean updateUser(UserModel userModel)
   {
-    UserModel newUser = new UserModel();
-    String password = userModel.getStr("pass");
+    UserModel newUser = getCurrentUser();
+    String password = userModel.getPassword();
     
     if (StringUtil.isNotBlank(password))
     {
       password = BCrypt.hashpw(password, BCrypt.gensalt());
-      newUser.set("pass", password);
+      newUser.setPassword(password);
     }
     
-    newUser.set("uid", getCurrentUid());
-    newUser.set("nick", HtmlEncoder.text(userModel.getStr("nick")));
-    newUser.set("school", HtmlEncoder.text(userModel.getStr("school")));
-    newUser.set("realname", HtmlEncoder.text(userModel.getStr("realname")));
-    newUser.set("blog", HtmlEncoder.text(userModel.getStr("blog")));
-    newUser.set("email", HtmlEncoder.text(userModel.getStr("email")));
-    newUser.set("phone", HtmlEncoder.text(userModel.getStr("phone")));
-    newUser.set("gender", HtmlEncoder.text(userModel.getStr("gender")));
-    newUser.set("language", userModel.getInt("language"));
-    newUser.set("qq", userModel.getStr("qq"));
-    newUser.set("mtime", OjConfig.timeStamp);
+    newUser.setUid(getCurrentUid());
+    newUser.setNick(HtmlEncoder.text(userModel.getNick()));
+    newUser.setSchool(HtmlEncoder.text(userModel.getSchool()));
+    newUser.setRealName(HtmlEncoder.text(userModel.getRealName()));
+    newUser.setBlog(HtmlEncoder.text(userModel.getBlog()));
+    newUser.setEmail(HtmlEncoder.text(userModel.getEmail()));
+    newUser.setPhone(HtmlEncoder.text(userModel.getPhone()));
+    newUser.setGender(HtmlEncoder.text(userModel.getGender()));
+    newUser.setLanguage(userModel.getLanguage());
+    newUser.setQQ(userModel.getQQ());
+    newUser.setMtime(OjConfig.timeStamp);
     
     return newUser.update();
   }
@@ -330,11 +330,11 @@ public class UserService
     if (success)
     {
       UserModel userModel = getCurrentUser();
-      if (userModel.getBoolean("email_verified"))
+      if (userModel.getEmailVerified())
       {
-        userModel.set("token", null); // resetPassword token
+        userModel.setToken(null); // resetPassword token
       }
-      userModel.set("login", OjConfig.timeStamp).set("login_ip", ip).update();
+      userModel.setLoginTime(OjConfig.timeStamp).setLoginIP(ip).update();
       
       loginLog.set("uid", userModel.getUid());
     }
@@ -345,11 +345,11 @@ public class UserService
   
   public boolean updateEmail(UserModel userModel, String email) throws Exception
   {
-    String name = userModel.getStr("name");
+    String name = userModel.getName();
     String token = UUID.randomUUID().toString();
     
-    userModel.set("email", email).set("email_verified", false);
-    userModel.set("token", token).set("mtime", OjConfig.timeStamp);
+    userModel.setEmail(email).setEmailVerified(false);
+    userModel.setToken(token).setMtime(OjConfig.timeStamp);
     OjService.me().sendVerifyEmail(name, email, token);
     
     return userModel.update();
@@ -371,13 +371,13 @@ public class UserService
 
     if (record != null)
     {
-      userModel.set("submit", record.getLong("count"));
+      userModel.set("submission", record.getLong("count"));
     }
 
     record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
     if (record != null)
     {
-      userModel.set("accept", record.getLong("count"));
+      userModel.set("accepted", record.getLong("count"));
     }
 
     record = Db.findFirst("SELECT COUNT(distinct pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
@@ -399,7 +399,7 @@ public class UserService
   {
     UserModel userModel = dao.getUserByName(name);
     
-    userModel.set("token", null).set("email_verified", true).set("pass", BCrypt.hashpw(password, BCrypt.gensalt()));
+    userModel.setToken(null).setEmailVerified(true).setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
     return userModel.update();
   }
   
@@ -413,15 +413,15 @@ public class UserService
   {
     UserModel userModel = dao.getUserByName(name);
     
-    if (userModel != null && token != null && token.equals(userModel.getStr("token")))
+    if (userModel != null && token != null && token.equals(userModel.getToken()))
     {
-      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.RESET_PASSWORD_EXPIRES_TIME)
+      if (OjConfig.timeStamp - userModel.getMtime() <= OjConstants.RESET_PASSWORD_EXPIRES_TIME)
       {
         return true;
       }
       else
       {
-        userModel.set("token", null).update();
+        userModel.setToken(null).update();
       }
     }
     
@@ -432,18 +432,18 @@ public class UserService
   {
     UserModel userModel = dao.getUserByName(name);
     
-    if (userModel != null && token != null && token.equals(userModel.getStr("token")) && !userModel.getBoolean("email_verified"))
+    if (userModel != null && token != null && token.equals(userModel.getToken()) && !userModel.getEmailVerified())
     {
-      if (OjConfig.timeStamp - userModel.getInt("mtime") <= OjConstants.VERIFY_EMAIL_EXPIRES_TIME)
+      if (OjConfig.timeStamp - userModel.getMtime() <= OjConstants.VERIFY_EMAIL_EXPIRES_TIME)
       {
-        log.info(String.valueOf(OjConfig.timeStamp - userModel.getInt("mtime")));
-        userModel.set("token", null).set("email_verified", true).update();
+        log.info(String.valueOf(OjConfig.timeStamp - userModel.getMtime()));
+        userModel.setToken(null).setEmailVerified(true).update();
         
         return true;
       }
       else
       {
-        userModel.set("token", null).update();
+        userModel.setToken(null).update();
         log.info("token expires");
         return false;
       }
@@ -501,7 +501,7 @@ public class UserService
     imageScale.resizeFix(srcFile, destFile, OjConstants.AVATAR_WIDTH, OjConstants.AVATAR_HEIGHT, x1, y1, cutWidth, catHeight);
     FileUtil.delete(srcFile);
     destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
-    userModel.set("avatar", destFileName).update();
+    userModel.setAvatar(destFileName).update();
   }
   
   public String saveAvatar(File srcFile) throws Exception
@@ -517,7 +517,7 @@ public class UserService
     FileUtil.moveFile(srcFile, destFile);
     
     destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
-    userModel.set("avatar", destFileName).update();
+    userModel.setAvatar(destFileName).update();
     
     return destFileName;
   }
@@ -530,7 +530,7 @@ public class UserService
    */
   public Page<UserModel> searchUser(int pageNumber, int pageSize, String scope, String word)
   {
-    String select = "SELECT @num:=@num+1 AS num,uid,name,nick,school,solved,submit";
+    String select = "SELECT @num:=@num+1 AS num,uid,name,nick,school,solved,submission";
     Page<UserModel> userList = null;
     List<Object> paras = new ArrayList<Object>();
     paras.add((pageNumber - 1) * pageSize);
@@ -557,7 +557,7 @@ public class UserService
         for (int i = 0; i < 4; ++i)
           paras.add(word);
       }
-      sb.append(") AND status=1 ORDER BY solved desc,submit,uid");
+      sb.append(") AND status=1 ORDER BY solved desc,submission,uid");
       
       userList = dao.paginate(pageNumber, pageSize, select, sb.toString(), paras.toArray());
     }
@@ -585,8 +585,8 @@ public class UserService
 	    if (userModel != null)
 	    {
 	    	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	        userModel.put("createTime", sdf.format(new Date(userModel.getInt("ctime") * 1000L)));
-	        userModel.put("loginTime", sdf.format(new Date(userModel.getInt("login") * 1000L)));
+	        userModel.put("createTime_t", sdf.format(new Date(userModel.getCtime() * 1000L)));
+	        userModel.put("loginTime_t", sdf.format(new Date(userModel.getLoginTime() * 1000L)));
 	        userModel.put("rank", getUserRank(userModel.getUid()));
 	        userModel.put("problems", dao.getSubmittedProblems(userModel.getUid()));
 	    }
@@ -605,7 +605,7 @@ public class UserService
     UserModel userModel = getCurrentUser();
    
     Integer uid = userModel.getUid();
-    String name = userModel.get("name");
+    String name = userModel.getName();
     Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT @num:=@num+1 AS num,l.*",
                         "FROM loginlog l,(SELECT @num:=?)r WHERE uid=? OR name=? ORDER BY ctime DESC", 
                         (pageNumber - 1) * pageSize, uid, name);
@@ -622,7 +622,7 @@ public class UserService
     UserModel userModel = getCurrentUser();
     Integer uid = userModel.getUid();
     List<Record> codes = dao.getSolvedProblems(uid);
-    String userDir = new StringBuilder(3).append(OjConfig.downloadPath).append(File.separator).append(userModel.getStr("name")).toString();
+    String userDir = new StringBuilder(3).append(OjConfig.downloadPath).append(File.separator).append(userModel.getName()).toString();
     File userDirFile = new File(userDir);
     FileUtil.mkdirs(userDirFile);
     
@@ -631,7 +631,7 @@ public class UserService
       String problemDir = new StringBuilder(3).append(userDir).append(File.separator).append(code.get("pid")).toString();
       FileUtil.mkdirs(problemDir);
       
-      String ext = OjConfig.language_type.get(code.get("language")).getStr("ext");
+      String ext = OjConfig.language_type.get(code.get("language")).getExt();
       StringBuilder sb = new StringBuilder(10).append(problemDir).append(File.separator).append(code.get("sid")).append("_").append(code.get("time"));
       sb.append("MS_").append(code.get("memory")).append("KB").append(".").append(ext);
       
@@ -679,7 +679,8 @@ public class UserService
   public UserModel getCurrentUserExt()
   {
     UserModel userModel = dao.getUserExt(getCurrentUid());
-    int exp = userModel.getInt("exp");
+    log.info(userModel.toString());
+    int exp = userModel.getInt("experience");
     int level = userModel.getInt("level");
     int lastExp = 0;
     if (level > 1)
@@ -757,7 +758,7 @@ public class UserService
 
     if (StringUtil.isNotEmpty(sSearch))
     {
-      sb.append(" AND (name LIKE ? OR realname LIKE ?)");
+      sb.append(" AND (name LIKE ? OR realName LIKE ?)");
       param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
       param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
     }
@@ -768,7 +769,7 @@ public class UserService
 
   public boolean checkPassword(Integer uid, String password)
   {
-    String stored_hash = dao.findById(uid, "pass").getStr("pass");
+    String stored_hash = dao.findById(uid).getPassword();
     return BCrypt.checkpw(password, stored_hash);
   }
 

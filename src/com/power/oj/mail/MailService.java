@@ -53,8 +53,8 @@ public class MailService
   {
     UserExtModel userExtModel = UserExtModel.dao.findById(from);
     int timestamp = Tool.getDayTimestamp();
-    int drift = userExtModel.getInt("send_drift");
-    int last_drift = userExtModel.getInt("last_send_drift");
+    int drift = userExtModel.getSendDriftNum();
+    int last_drift = userExtModel.getLastSendDrift();
     
     if (last_drift + OjConstants.DAY_TIMESTAMP < timestamp)
       drift = 0;
@@ -70,7 +70,7 @@ public class MailService
       mailContent.save();
       
       drift += 1;
-      userExtModel.set("send_drift", drift).set("last_send_drift", OjConfig.timeStamp).update();
+      userExtModel.setSendDriftNum(drift).setLastSendDrift(OjConfig.timeStamp).update();
     }
     
     return drift;
@@ -80,8 +80,8 @@ public class MailService
   {
     UserExtModel userExtModel = UserExtModel.dao.findById(uid);
     int timestamp = Tool.getDayTimestamp();
-    int drift = userExtModel.getInt("get_drift");
-    int last_drift = userExtModel.getInt("last_get_drift");
+    int drift = userExtModel.getGetDriftNum();
+    int last_drift = userExtModel.getLastGetDrift();
     
     if (last_drift + OjConstants.DAY_TIMESTAMP < timestamp)
       drift = 0;
@@ -98,7 +98,7 @@ public class MailService
         
         mailContent.set("toUid", uid).update();
         drift += 1;
-        userExtModel.set("get_drift", drift).set("last_get_drift", OjConfig.timeStamp).update();
+        userExtModel.setGetDriftNum(drift).setLastGetDrift(OjConfig.timeStamp).update();
         return drift;
       }
       return 0;
