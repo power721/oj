@@ -20,7 +20,7 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
@@ -40,7 +40,7 @@ public abstract class JudgeAdapter implements Runnable
   protected static ConcurrentLinkedQueue<SolutionModel> judgeList = new ConcurrentLinkedQueue<SolutionModel>();
   protected SolutionModel solutionModel;
   protected ProblemModel problemModel;
-  protected LanguageModel language;
+  protected ProgramLanguageModel language;
   protected String workDirPath;
   
   protected List<String> inFiles = new ArrayList<String>();
@@ -95,7 +95,7 @@ public abstract class JudgeAdapter implements Runnable
   
   protected void prepare() throws IOException
   {
-    language = (LanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
+    language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
     problemModel = ProblemModel.dao.findById(solutionModel.getPid());
     
     if (OjConfig.getBoolean("delete_tmp_file"))
@@ -224,11 +224,11 @@ public abstract class JudgeAdapter implements Runnable
     Integer uid = solutionModel.getUid();
     ProblemModel problemModel = ProblemService.me().findProblem(pid);
     
-    problemModel.set("accept", problemModel.getInt("accept")+1);
+    problemModel.setAccepted(problemModel.getAccepted()+1);
     Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
-      problemModel.set("solved", problemModel.getInt("solved")+1);
+      problemModel.setSolved(problemModel.getSolved()+1);
     }
     
     return problemModel.update();

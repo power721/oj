@@ -9,7 +9,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.ProgramLanguageModel;
 
 public class SolutionService
 {
@@ -54,7 +54,7 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
+      solution.put("languageName", ((ProgramLanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
 
       ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
@@ -117,7 +117,7 @@ public class SolutionService
 
     for (ContestSolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
+      solution.put("languageName", ((ProgramLanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
 
       ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
@@ -153,7 +153,7 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((LanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
+      solution.put("languageName", ((ProgramLanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
 
       ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());

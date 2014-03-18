@@ -27,7 +27,7 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.judge.JudgeAdapter;
 import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
@@ -432,7 +432,7 @@ public class ContestService
   public List<Record> getContestStatistics(Integer cid)
   {
     StringBuilder sb = new StringBuilder("SELECT ");
-    for (LanguageModel language : OjConfig.program_languages)
+    for (ProgramLanguageModel language : OjConfig.program_languages)
     {
       sb.append("COUNT(IF(language=").append(language.getInt("id")).append(",1,NULL)) AS ").append(language.getStr("ext")).append(",");
     }

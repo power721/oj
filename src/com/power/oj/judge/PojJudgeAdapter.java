@@ -20,12 +20,12 @@ public class PojJudgeAdapter extends JudgeAdapter
   public boolean Compile() throws IOException
   {
     log.info(solutionModel.getSid() + " Start compiling...");
-    File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getStr("ext")).toString());
+    File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getExt()).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solutionModel.getSource());
 
     String comShellName = OjConfig.get("compile_shell");
-    String compileCmdName = getCompileCmd(language.getStr("compile_cmd"), workDirPath, sourceFileName, language.getStr("ext"));
+    String compileCmdName = getCompileCmd(language.getCompileCmd(), workDirPath, sourceFileName, language.getExt());
     log.info("compileCmd: " + compileCmdName);
 
     /*
@@ -57,7 +57,7 @@ public class PojJudgeAdapter extends JudgeAdapter
       log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
     }
 
-    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getStr("exe")).toString());
+    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getExe()).toString());
     log.info(mainProgram.getAbsolutePath());
     boolean success = mainProgram.isFile();
 
@@ -82,18 +82,18 @@ public class PojJudgeAdapter extends JudgeAdapter
 
     int numOfData = getDataFiles();
 
-    long timeLimit = problemModel.getInt("time_limit") * language.getInt("time_factor") + numOfData * language.getInt("ext_time");
-    long caseTimeLimit = problemModel.getInt("time_limit") * language.getInt("time_factor") + language.getInt("ext_time");
+    long timeLimit = problemModel.getTimeLimit() * language.getTimeFactor() + numOfData * language.getExtTime();
+    long caseTimeLimit = problemModel.getTimeLimit() * language.getTimeFactor() + language.getExtTime();
     runProcessOutputStream.write((timeLimit + "\n").getBytes());
     runProcessOutputStream.write((caseTimeLimit + "\n").getBytes());
 
-    long memoryLimit = (problemModel.getInt("memory_limit") + language.getInt("ext_memory")) * 1024L;
+    long memoryLimit = (problemModel.getMemoryLimit() + language.getExtMemory()) * 1024L;
     runProcessOutputStream.write((memoryLimit + "\n").getBytes());
     log.info("timeLimit: " + timeLimit);
     log.info("caseTimeLimit: " + caseTimeLimit);
     log.info("memoryLimit: " + memoryLimit);
 
-    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getStr("exe")).append("\n").toString();
+    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getExe()).append("\n").toString();
     runProcessOutputStream.write(mainProgram.getBytes());
     runProcessOutputStream.write((workDirPath + "\n").getBytes());
     log.info("mainProgram: " + mainProgram);
@@ -125,7 +125,7 @@ public class PojJudgeAdapter extends JudgeAdapter
     log.info("original memory: " + buff);
     int memory = Integer.parseInt(buff);
     if (memory > 0)
-      memory -= language.getInt("ext_memory");
+      memory -= language.getExtMemory();
     StringBuilder sb = new StringBuilder();
 
     InputStream errorStream = runProcess.getErrorStream();
@@ -144,7 +144,7 @@ public class PojJudgeAdapter extends JudgeAdapter
     int result = runProcess.waitFor();
     result = runProcess.exitValue();
     log.info("original result: " + result);
-    if (result != ResultType.AC && (errorOut.indexOf("Exception") != -1 || errorOut.indexOf("Traceback") != -1))
+    if (result != ResultType.AC && (errorOut.indexOf("Exception") != -1 || errorOut.indexOf("Traceback") != -1) || errorOut.indexOf("Runtime error") != -1)
       result = ResultType.RE;
     if (result < 0)
     {

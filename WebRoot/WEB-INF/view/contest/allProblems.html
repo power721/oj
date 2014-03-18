@@ -48,6 +48,10 @@ table td,table th {
 	border: solid 1px black;
 	padding: 5px;
 }
+
+.center {
+  text-align: center;
+}
 </style>
 </head>
 <body>
@@ -55,9 +59,11 @@ table td,table th {
   <div class="">
     <#if contestProblems??>
     <#list contestProblems as problem>
-    <center>
+    <div class="center">
       <h1>${problem.id!}: ${problem.title!}</h1>
-    </center>
+      Time Limit: <span class="blue">${problem.timeLimit!} MS</span> 
+      Memory Limit: <span class="blue">${problem.memoryLimit!} KB</span>
+    </div>
     <h2 style='margin-top: 10px'>Description</h2>
     <p>${problem.description!}</p>
     <h2 style='margin-top: 10px'>Input</h2>

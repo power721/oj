@@ -52,7 +52,7 @@ import com.power.oj.core.interceptor.I18NInterceptor;
 import com.power.oj.core.interceptor.OjVariableInterceptor;
 import com.power.oj.core.interceptor.SessionAttrInterceptor;
 import com.power.oj.core.interceptor.TimingInterceptor;
-import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.discussion.CommentModel;
@@ -183,7 +183,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("session", "sessionId", SessionModel.class);
     arp.addMapping("mail", MailModel.class);
     arp.addMapping("mail_content", MailContentModel.class);
-    arp.addMapping("program_language", LanguageModel.class);
+    arp.addMapping("program_language", ProgramLanguageModel.class);
     arp.addMapping("web_login", WebLoginModel.class);
     arp.addMapping("variable", VariableModel.class);
     me.add(arp);

@@ -146,12 +146,12 @@ ALTER TABLE problem DROP `in_path`,
                     CHANGE `submit` `submission` int(5) NOT NULL DEFAULT '0',
                     CHANGE `submit_user` `submitUser` int(5) NOT NULL DEFAULT '0';
 
-ALTER TABLE problem_language CHANGE `ext_time` `extTime` int(9) NOT NULL DEFAULT '0',
+ALTER TABLE program_language CHANGE `ext_time` `extTime` int(9) NOT NULL DEFAULT '0',
                              CHANGE `ext_memory` `extMemory` int(9) NOT NULL DEFAULT '0',
                              CHANGE `time_factor` `timeFactor` tinyint(3) NOT NULL DEFAULT '1',
                              CHANGE `memory_factor` `memoryFactor` tinyint(3) NOT NULL DEFAULT '1',
-                             CHANGE `complie_order` `complieOrder` tinyint(3) NOT NULL DEFAULT '0';
-                             CHANGE `compile_cmd` `compileCmd` varchar(255) NOT NULL,
+                             CHANGE `complie_order` `complieOrder` tinyint(3) NOT NULL DEFAULT '0',
+                             CHANGE `compile_cmd` `compileCmd` varchar(255) NOT NULL;
 
 ALTER TABLE session CHANGE `session_id` `sessionId` varchar(40) NOT NULL DEFAULT '0',
                     CHANGE `ip_address` `ipAddress` varchar(45) NOT NULL DEFAULT '0',

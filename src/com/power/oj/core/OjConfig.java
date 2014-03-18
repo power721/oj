@@ -9,7 +9,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.util.FileKit;
 
@@ -43,8 +43,8 @@ public class OjConfig
   public static long startGlobalHandlerTime;
 
   public static boolean variableChanged = false;
-  public static List<LanguageModel> program_languages;
-  public static HashMap<Integer, LanguageModel> language_type;
+  public static List<ProgramLanguageModel> program_languages;
+  public static HashMap<Integer, ProgramLanguageModel> language_type;
   public static HashMap<Integer, String> language_name;
   public static HashMap<Integer, ResultType> result_type;
   public static List<ResultType> judge_result;
@@ -90,10 +90,10 @@ public class OjConfig
   
   public static void loadLanguage()
   {
-    language_type = new HashMap<Integer, LanguageModel>();
+    language_type = new HashMap<Integer, ProgramLanguageModel>();
     language_name = new HashMap<Integer, String>();
-    program_languages = LanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
-    for (LanguageModel Language : program_languages)
+    program_languages = ProgramLanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
+    for (ProgramLanguageModel Language : program_languages)
     {
       language_type.put(Language.getInt("id"), Language);
       language_name.put(Language.getInt("id"), Language.getStr("name"));

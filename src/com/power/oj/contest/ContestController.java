@@ -22,7 +22,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.LanguageModel;
+import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionService;
@@ -319,7 +319,7 @@ public class ContestController extends OjController
     {
       log.warn(e.getLocalizedMessage());
     }
-    LanguageModel language = (LanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
+    ProgramLanguageModel language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
     setAttr("language", language.get("name"));
 
     setAttr("resultLongName", resultType.getLongName());

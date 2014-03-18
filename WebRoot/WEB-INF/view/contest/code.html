@@ -36,11 +36,12 @@
     <pre class="error">${solution.error!}</pre>
   </div>
 </div>
-</#if> <#if adminUser?? && solution.system_error??>
+</#if> 
+<#if adminUser?? && solution.systemError??>
 <div class="row">
   <div class="span12">
     <h3>System Error</h3>
-    <pre class="error">${solution.system_error!}</pre>
+    <pre class="error">${solution.systemError!}</pre>
   </div>
 </div>
 </#if> 
