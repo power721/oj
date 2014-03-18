@@ -24,14 +24,14 @@
   </h2>
   <#if adminUser??>
   <div class="problem-admin">
-    <a href="problem/edit/${problem.pid!}" class="btn btn-primary">Edit</a> 
+    <a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> 
     <a href="#" class="btn btn-danger">Rejudge</a>
   </div>
   </#if>
-  Time Limit:<span class="blue">${problem.time_limit!}MS</span> 
-  Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
-  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submit!}</a> 
-  Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accept!}</a> 
+  Time Limit:<span class="blue">${problem.timeLimit!}MS</span> 
+  Memory Limit:<span class="blue">${problem.memoryLimit!}KB</span><br>
+  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submission!}</a> 
+  Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accepted!}</a> 
   Page View:<span class="blue">${problem.view!}</span><br><br> 
   <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
@@ -131,11 +131,11 @@
   </div>
 </section>
 
-<section id="sample_input">
+<section id="sampleInput">
   <!--<div class="page-header">
             <h4>Sample Input</h4>
         </div>-->
-  <div class="tabbable content" id="sample_input">
+  <div class="tabbable content" id="sampleInput">
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
       <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
@@ -143,21 +143,21 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="tab1">
-        <pre>${problem.sample_input!}</pre>
+        <pre>${problem.sampleInput!}</pre>
       </div>
       <div class="tab-pane" id="tab2">
-        <textarea id="sample_input" class="auto-width" rows="${problem.sample_input_rows!12}"
-          cols="185">${problem.sample_input!}</textarea>
+        <textarea id="sampleInput" class="auto-width" rows="${problem.sample_input_rows!12}"
+          cols="185">${problem.sampleInput!}</textarea>
       </div>
     </div>
   </div>
 </section>
 
-<section id="sample_output">
+<section id="sampleOutput">
   <!--<div class="page-header">
             <h4>Sample Output</h4>
         </div>-->
-  <div class="tabbable content" id="sample_output">
+  <div class="tabbable content" id="sampleOutput">
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
       <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
@@ -165,11 +165,11 @@
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="tab3">
-        <pre>${problem.sample_output!}</pre>
+        <pre>${problem.sampleOutput!}</pre>
       </div>
       <div class="tab-pane" id="tab4">
-        <textarea id="sample_output" class="auto-width" rows="${problem.sample_output_rows!12}"
-          cols="185">${problem.sample_output!}</textarea>
+        <textarea id="sampleOutput" class="auto-width" rows="${problem.sample_output_rows!12}"
+          cols="185">${problem.sampleOutput!}</textarea>
       </div>
     </div>
   </div>

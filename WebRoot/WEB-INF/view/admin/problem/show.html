@@ -41,12 +41,12 @@
               </div>-->
               <div class="problem-info">
                 <div>
-                  Time Limit:<a href="#" id="time_limit">${problem.time_limit!}</a> MS
-                  Memory Limit:<a href="#" id="memory_limit">${problem.memory_limit!}</a> KB
+                  Time Limit:<a href="#" id="timeLimit">${problem.timeLimit!}</a> MS
+                  Memory Limit:<a href="#" id="memoryLimit">${problem.memoryLimit!}</a> KB
                 </div>
                 <div>
-                  Total Submit:<a href="status?pid=${problem.pid!}" target="_blank">${problem.submit!}</a> 
-                  Accepted:<a href="status?pid=${problem.pid!}&result=0" target="_blank">${problem.accept!}</a> 
+                  Total Submit:<a href="status?pid=${problem.pid!}" target="_blank">${problem.submission!}</a> 
+                  Accepted:<a href="status?pid=${problem.pid!}&result=0" target="_blank">${problem.accepted!}</a> 
                   Page View:<span class="pts">${problem.view!}</span>
                 </div>
               </div>
@@ -125,21 +125,21 @@
               </div>
             </section>
             
-            <section id="problem-sample_input">
+            <section id="problem-sampleInput">
               <div class="page-header">
                 <h4>Sample Input</h4>
               </div>
-              <div class="problem-content" id="problem-sample_input">
-                <pre><a href="#" id="sample_input">${problem.sample_input!}</a></pre>
+              <div class="problem-content" id="problem-sampleInput">
+                <pre><a href="#" id="sampleInput">${problem.sampleInput!}</a></pre>
               </div>
             </section>
             
-            <section id="problem-sample_output">
+            <section id="problem-sampleOutput">
               <div class="page-header">
                 <h4>Sample Output</h4>
               </div>
-              <div class="problem-content" id="problem-sample_output">    
-                <pre><a href="#" id="sample_output">${problem.sample_output!}</a></pre>
+              <div class="problem-content" id="problem-sampleOutput">    
+                <pre><a href="#" id="sampleOutput">${problem.sampleOutput!}</a></pre>
               </div>
             </section>
             
@@ -213,7 +213,7 @@
               pk: pid,
               title: 'Change problem title'
             });
-            $('#time_limit').editable({
+            $('#timeLimit').editable({
               type: 'number',
               pk: pid,
               title: 'Change problem time limit',
@@ -227,7 +227,7 @@
                 }
               }
             });
-            $('#memory_limit').editable({
+            $('#memoryLimit').editable({
               type: 'number',
               pk: pid,
               title: 'Change problem time limit',
@@ -256,12 +256,12 @@
               pk: pid,
               title: 'Change problem output'
             });
-            $('#sample_input').editable({
+            $('#sampleInput').editable({
               type: 'textarea',
               pk: pid,
               title: 'Change problem sample input'
             });
-            $('#sample_output').editable({
+            $('#sampleOutput').editable({
               type: 'textarea',
               pk: pid,
               title: 'Change problem sample output'

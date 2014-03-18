@@ -237,12 +237,14 @@ public class ContestService
     
     String title = record.getStr("title");
     if (StringUtil.isNotBlank(title))
-      problem.set("title", title);
-
-    problem.set("accept", record.get("accepted"));
-    problem.set("submit", record.get("submission"));
-    problem.set("submit_user", Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=?", cid, num));
-    problem.set("solved", Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE result=0 AND cid=? AND num=?", cid, num));
+      problem.setTitle(title);
+    
+    long submitUser = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=?", cid, num);
+    long solved = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE result=0 AND cid=? AND num=?", cid, num);
+    problem.setAccepted(record.getInt("accepted"));
+    problem.setSubmission(record.getInt("submission"));
+    problem.setSubmitUser((int) submitUser);
+    problem.setSolved((int) solved);
     problem.put("id", (char) (num + 'A'));
     problem.put("num", num);
 

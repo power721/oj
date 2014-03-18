@@ -45,15 +45,15 @@ public class ProblemService
       return null;
     
     int sample_input_rows = 1;
-    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
-      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
+    if (StringUtil.isNotBlank(problemModel.getSampleInput()))
+      sample_input_rows = StringUtil.count(problemModel.getSampleInput(), '\n') + 1;
     problemModel.put("sample_input_rows", sample_input_rows);
     
     int sample_output_rows = 1;
-    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
-      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
+    if (StringUtil.isNotBlank(problemModel.getSampleOutput()))
+      sample_output_rows = StringUtil.count(problemModel.getSampleOutput(), '\n') + 1;
     problemModel.put("sample_output_rows", sample_output_rows);
-    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
+    problemModel.setView(VisitCountService.get(VisitCountService.problemViewCount, pid));
 
     return problemModel;
   }
@@ -66,15 +66,15 @@ public class ProblemService
       return null;
     
     int sample_input_rows = 1;
-    if (StringUtil.isNotBlank(problemModel.getStr("sample_input")))
-      sample_input_rows = StringUtil.count(problemModel.getStr("sample_input"), '\n') + 1;
+    if (StringUtil.isNotBlank(problemModel.getSampleInput()))
+      sample_input_rows = StringUtil.count(problemModel.getSampleInput(), '\n') + 1;
     problemModel.put("sample_input_rows", sample_input_rows);
     
     int sample_output_rows = 1;
-    if (StringUtil.isNotBlank(problemModel.getStr("sample_output")))
-      sample_output_rows = StringUtil.count(problemModel.getStr("sample_output"), '\n') + 1;
+    if (StringUtil.isNotBlank(problemModel.getSampleOutput()))
+      sample_output_rows = StringUtil.count(problemModel.getSampleOutput(), '\n') + 1;
     problemModel.put("sample_output_rows", sample_output_rows);
-    problemModel.set("view", VisitCountService.get(VisitCountService.problemViewCount, pid));
+    problemModel.setView(VisitCountService.get(VisitCountService.problemViewCount, pid));
 
     return problemModel;
   }
@@ -106,7 +106,7 @@ public class ProblemService
 
   public void setViewCount(Integer pid, Integer view)
   {
-    dao.setViewCount(pid, view);;
+    dao.setViewCount(pid, view);
   }
 
   public List<Record> getTags(Integer pid)
@@ -125,7 +125,6 @@ public class ProblemService
     if (uid == null)
       return null;
     
-    // TODO split contest_solution 
     return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND cid=0 LIMIT 1", uid, pid);
   }
   
@@ -136,7 +135,7 @@ public class ProblemService
   
   public <T> T getProblemField(Integer pid, String name)
   {
-    String[] fields = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
+    String[] fields = {"title", "timeLimit", "memoryLimit", "description", "input", "output", "sampleInput", "sampleOutput", "hint", "source", "status"};
     if (StringUtil.equalsOne(name, fields) == -1)
     {
       return null;
@@ -153,7 +152,7 @@ public class ProblemService
   
   public Page<ProblemModel> getProblemPage(int pageNumber, int pageSize)
   {
-    String sql = "SELECT pid,title,source,accept,submit,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime,status";
+    String sql = "SELECT pid,title,source,accepted,submission,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,status";
     StringBuilder sb = new StringBuilder().append("FROM problem");
     if (!userService.isAdmin())
       sb.append(" WHERE status=1");
@@ -167,7 +166,7 @@ public class ProblemService
   public Page<ProblemModel> getProblemPageDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
   {
     List<Object> param = new ArrayList<Object>();
-    String sql = "SELECT pid,title,source,accept,submit,ctime,status";
+    String sql = "SELECT pid,title,source,accepted,submission,ctime,status";
     StringBuilder sb = new StringBuilder().append("FROM problem WHERE 1=1");
     if (StringUtil.isNotEmpty(sSearch))
     {
@@ -233,7 +232,7 @@ public class ProblemService
   {
     Page<ProblemModel> problemList = null;
     List<Object> paras = new ArrayList<Object>();
-    String sql = "SELECT pid,title,accept,submit,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime";
+    String sql = "SELECT pid,title,accepted,submission,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t";
 
     if (StringUtil.isNotBlank(word))
     {
@@ -262,7 +261,7 @@ public class ProblemService
         paras.add(word);
         paras.add(word);
       }
-      sb.append(" ) AND status=1 ORDER BY accept desc,submit desc,pid");
+      sb.append(" ) AND status=1 ORDER BY accepted desc,submission desc,pid");
       problemList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
     }
     
@@ -295,20 +294,20 @@ public class ProblemService
   public int updateProblemByField(Integer pid, String name, String value)
   {
     // TODO store tags in problem table
-    String[] fields = {"title", "time_limit", "memory_limit", "description", "input", "output", "sample_input", "sample_output", "hint", "source", "status"};
+    String[] fields = {"title", "timeLimit", "memoryLimit", "description", "input", "output", "sampleInput", "sampleOutput", "hint", "source", "status"};
     if (StringUtil.equalsOne(name, fields) == -1)
     {
       return -1;
     }
     
     long mtime = OjConfig.timeStamp;
-    if (StringUtil.equalsOne(name, new String[]{"time_limit", "memory_limit", "status"}) != -1)
+    if (StringUtil.equalsOne(name, new String[]{"timeLimit", "memoryLimit", "status"}) != -1)
     {
       Integer intValue = Integer.parseInt(value);
-      return Db.update("UPDATE problem SET " + name + "=?,mtime=? WHERE pid=?", intValue, mtime, pid);
+      return Db.update("UPDATE problem SET `" + name + "`=?,`mtime`=? WHERE `pid`=?", intValue, mtime, pid);
     }
     
-    return Db.update("UPDATE problem SET " + name + "=?,mtime=? WHERE pid=?", value, mtime, pid);
+    return Db.update("UPDATE problem SET `" + name + "`=?,`mtime`=? WHERE `pid`=?", value, mtime, pid);
   }
   
   public boolean build(Integer pid)
@@ -354,12 +353,12 @@ public class ProblemService
     if (record != null)
     {
       solved = record.getLong("count");
-      problemModel.set("solved", solved);
+      problemModel.setSolved((int) solved);
     }
 
     if (submit_user > 0)
       difficulty = solved / submit_user;
-    problemModel.set("difficulty", difficulty);
+    problemModel.setDifficulty((int) difficulty);
 
     return problemModel.update();
   }

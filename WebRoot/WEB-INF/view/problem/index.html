@@ -37,10 +37,10 @@
       <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
       <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
       </a></td>
-      <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
-      <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submit!}</a></td>
-      <td class="ratio"><#if (Problem.submit>0)>${(Problem.accept/Problem.submit*100)?int}<#else>0</#if>%</td>
-      <td class="ctime">${Problem.ctime!}</td>
+      <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accepted!}</a></td>
+      <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submission!}</a></td>
+      <td class="ratio"><#if (Problem.submission>0)>${(Problem.accepted/Problem.submission*100)?int}<#else>0</#if>%</td>
+      <td class="ctime">${Problem.ctime_t!}</td>
     </tr>
     </#list> </#if>
   </tbody>

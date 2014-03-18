@@ -18,8 +18,8 @@
   <#include "../common/_paginate.html" />
   <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" urlParas="${query!}" />
   <div class="pull-right">
-    <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> <span class="badge badge-info">${problemList.totalRow}
-      Problems</span>
+    <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> 
+    <span class="badge badge-info">${problemList.totalRow}Problems</span>
   </div>
 </div>
 
@@ -41,10 +41,10 @@
         <td class="result"></td>
         <td class="pid">${Problem.pid!}</td>
         <td class="title"><a href="problem/show/${Problem.pid!}">${Problem.title!}</a></td>
-        <td class="accept"><a href="#">${Problem.accept!}</a></td>
-        <td class="submit"><a href="#">${Problem.submit!}</a></td>
+        <td class="accept"><a href="#">${Problem.accepted!}</a></td>
+        <td class="submit"><a href="#">${Problem.submission!}</a></td>
         <td class="source"><a href="problem/search?word=${Problem.source!}&scope=source">${Problem.source!}</a></td>
-        <td class="ctime">${Problem.ctime!}</td>
+        <td class="ctime">${Problem.ctime_t!}</td>
       </tr>
       </#list> </#if>
     </tbody>

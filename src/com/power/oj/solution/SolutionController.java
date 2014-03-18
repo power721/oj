@@ -176,9 +176,8 @@ public class SolutionController extends OjController
       }
       else
       {
-        long stime = OjConfig.timeStamp;
         // TODO update submit_user?
-        problemModel.set("submit", problemModel.getInt("submit") + 1).set("stime", stime).update();
+        problemModel.setSubmission(problemModel.getSubmission() + 1).setStime(OjConfig.timeStamp).update();
       }
       
       synchronized (JudgeAdapter.class)

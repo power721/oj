@@ -57,12 +57,12 @@
                     return '<a href="admin/problem/show/' + full.pid + '">' + data + '</a>';
                   }
                 },
-                { "mData": "accept",
+                { "mData": "accepted",
                   "mRender": function (data, type, full) {
                     return '<a href="status/?pid=' + full.pid + '&result=0" target="_blank">' + data + '</a>';
                   }
                 },
-                { "mData": "submit",
+                { "mData": "submission",
                   "mRender": function (data, type, full) {
                     return '<a href="status/?pid=' + full.pid + '" target="_blank">' + data + '</a>';
                   }
