@@ -18,15 +18,43 @@
          updateCheck="false" monitoring="autodetect"
          dynamicConfig="true">
 
-    <transactionManagerLookup class="net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup"
-                              properties="jndiName=java:/TransactionManager" propertySeparator=";"/>
-            
+    <diskStore path="java.io.tmpdir/oj-ehcache"/>
+
+    <defaultCache
+            maxEntriesLocalHeap="10000"
+            maxEntriesLocalDisk="0"
+            eternal="false"
+            overflowToDisk="false"
+            memoryStoreEvictionPolicy="LFU"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120" />
+
     <cache name="user"
            maxEntriesLocalHeap="1000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="900"
            timeToIdleSeconds="900"
+           diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="900" />
+
+    <cache name="problem"
+           maxEntriesLocalHeap="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="0"
+           timeToIdleSeconds="0"
+           diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="900" />
+
+    <cache name="contest"
+           maxEntriesLocalHeap="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="3600"
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900" />
 

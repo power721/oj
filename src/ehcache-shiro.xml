@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ehcache name="shiro">
 
+    <diskStore path="java.io.tmpdir/shiro-ehcache"/>
+
     <defaultCache
-   		  maxEntriesLocalHeap="10000"
-           maxEntriesLocalDisk="0"
-           eternal="false"
-           overflowToDisk="false"
-           memoryStoreEvictionPolicy="LFU"
+   		      maxEntriesLocalHeap="10000"
+            maxEntriesLocalDisk="0"
+            eternal="false"
+            overflowToDisk="false"
+            memoryStoreEvictionPolicy="LFU"
             timeToIdleSeconds="120"
             timeToLiveSeconds="120"
             diskPersistent="false"
-            diskExpiryThreadIntervalSeconds="120"
-            />
-            
+            diskExpiryThreadIntervalSeconds="120" />
+
     <cache name="myRealm.authorizationCache"
            maxEntriesLocalHeap="200000"
            overflowToDisk="true"
@@ -30,5 +31,5 @@
            timeToIdleSeconds="0"
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900"/>
-           
+
 </ehcache>
