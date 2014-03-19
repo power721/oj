@@ -30,6 +30,7 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -312,6 +313,7 @@ public class UserService
     newUser.setLanguage(userModel.getLanguage());
     newUser.setQQ(userModel.getQQ());
     newUser.setMtime(OjConfig.timeStamp);
+    updateCache(newUser);
     
     return newUser.update();
   }
@@ -336,6 +338,7 @@ public class UserService
       }
       userModel.setLoginTime(OjConfig.timeStamp).setLoginIP(ip).update();
       
+      updateCache(userModel);
       loginLog.set("uid", userModel.getUid());
     }
     
@@ -351,6 +354,7 @@ public class UserService
     userModel.setEmail(email).setEmailVerified(false);
     userModel.setToken(token).setMtime(OjConfig.timeStamp);
     OjService.me().sendVerifyEmail(name, email, token);
+    updateCache(userModel);
     
     return userModel.update();
   }
@@ -385,6 +389,7 @@ public class UserService
     {
       userModel.set("solved", record.getLong("count"));
     }
+    updateCache(userModel);
 
     return userModel.update();
   }
@@ -438,12 +443,14 @@ public class UserService
       {
         log.info(String.valueOf(OjConfig.timeStamp - userModel.getMtime()));
         userModel.setToken(null).setEmailVerified(true).update();
+        updateCache(userModel);
         
         return true;
       }
       else
       {
         userModel.setToken(null).update();
+        updateCache(userModel);
         log.info("token expires");
         return false;
       }
@@ -502,6 +509,7 @@ public class UserService
     FileUtil.delete(srcFile);
     destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
     userModel.setAvatar(destFileName).update();
+    updateCache(userModel);
   }
   
   public String saveAvatar(File srcFile) throws Exception
@@ -518,6 +526,7 @@ public class UserService
     
     destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
     userModel.setAvatar(destFileName).update();
+    updateCache(userModel);
     
     return destFileName;
   }
@@ -649,7 +658,12 @@ public class UserService
     
     return zipFile;
   }
-
+  
+  private void updateCache(UserModel user)
+  {
+    CacheKit.put("user", user.getUid(), user);
+  }
+  
   /**
    * Get current uid form Shiro.
    * @return the uid of current user or null.
@@ -673,7 +687,17 @@ public class UserService
    */
   public UserModel getCurrentUser()
   {
-    return getUserByUid(getCurrentUid());
+    Integer uid = getCurrentUid();
+    
+    if (OjConfig.getDevMode())
+    {
+      return getUserByUid(uid);
+    }
+    else
+    {
+      List<UserModel> result = dao.findByCache("user", uid, "SELECT * FROM user WHERE uid=?", uid);
+      return result.size() > 0 ? result.get(0) : null;
+    }
   }
   
   public UserModel getCurrentUserExt()
@@ -695,6 +719,7 @@ public class UserService
     
     userModel.put("nextExp", nextExp);
     userModel.put("percent", (int)((exp-lastExp)/(double)(nextExp-lastExp) * 100));
+    // TODO cache?
     
     return userModel;
   }
@@ -800,7 +825,7 @@ public class UserService
     {
       return null;
     }
-        
+    
     return userModel.get(name);
   }
 

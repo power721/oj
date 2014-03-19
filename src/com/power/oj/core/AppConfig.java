@@ -101,10 +101,10 @@ public class AppConfig extends JFinalConfig
     me.setDevMode(getPropertyToBoolean("devMode", false));
     baseViewPath = "/WEB-INF/view";
     me.setBaseViewPath(baseViewPath);
-    me.setError401View("/WEB-INF/view/error/401.html");
-    me.setError403View("/WEB-INF/view/error/403.html");
-    me.setError404View("/WEB-INF/view/error/404.html");
-    me.setError500View("/WEB-INF/view/error/500.html");
+    me.setError401View(baseViewPath + "/error/401.html");
+    me.setError403View(baseViewPath + "/error/403.html");
+    me.setError404View(baseViewPath + "/error/404.html");
+    me.setError500View(baseViewPath + "/error/500.html");
 
     log.debug("configConstant finished.");
   }
@@ -146,26 +146,26 @@ public class AppConfig extends JFinalConfig
    */
   public void configPlugin(Plugins me)
   {
-    DruidPlugin dp = null;
+    DruidPlugin druidPlugin = null;
     if (isBaeMode())
     {
-      dp = new DruidPlugin(getProperty("bae.jdbcUrl"), getProperty("bae.user"), getProperty("bae.password").trim());
+      druidPlugin = new DruidPlugin(getProperty("bae.jdbcUrl"), getProperty("bae.user"), getProperty("bae.password").trim());
+      druidPlugin.setTestWhileIdle(true);
+      druidPlugin.setTestOnBorrow(true);
+      druidPlugin.setTestOnReturn(true);
     }
     else
     {
-      dp = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"), getProperty("dev.password").trim());
+      druidPlugin = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"), getProperty("dev.password").trim());
     }
-    dp.setTestWhileIdle(true);
-    dp.setTestOnBorrow(true);
-    dp.setTestOnReturn(true);
-    dp.addFilter(new StatFilter());
+    druidPlugin.addFilter(new StatFilter());
     WallFilter wall = new WallFilter();
     wall.setDbType("mysql");
-    dp.addFilter(wall);
-    me.add(dp);
+    druidPlugin.addFilter(wall);
+    me.add(druidPlugin);
 
     // 配置ActiveRecord插件
-    ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
+    ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
     arp.setShowSql(getPropertyToBoolean("devMode", false));
     arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
     arp.addMapping("user_ext", "uid", UserExtModel.class);

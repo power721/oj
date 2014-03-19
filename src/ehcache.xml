@@ -20,5 +20,14 @@
 
     <transactionManagerLookup class="net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup"
                               properties="jndiName=java:/TransactionManager" propertySeparator=";"/>
+            
+    <cache name="user"
+           maxEntriesLocalHeap="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="900"
+           timeToIdleSeconds="900"
+           diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="900" />
 
 </ehcache>
