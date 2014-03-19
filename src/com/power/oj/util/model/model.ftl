@@ -13,6 +13,9 @@ public class ${myModel.modelName} extends Model<${myModel.modelName}>
   public static final String ${column.field?upper_case} = "${column.name}";
 </#list>
 
+  /*
+   * auto generated getter and setter
+   */
 <#list myModel.columns as column>
   <#if column.name?starts_with("is")>
   <#assign name=column.name >

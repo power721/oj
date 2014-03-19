@@ -20,7 +20,7 @@ public class GenerateModel
     config.setClassForTemplateLoading(GenerateModel.class, ".");
     
     int count = 0;
-    Template temp = config.getTemplate("model.tpl");
+    Template temp = config.getTemplate("model.ftl");
     Map<String, Table> map = new HashMap<String, Table>();
     List<String> tables = DBConn.getTableNamesByDBName();
     Table myModel = new Table();

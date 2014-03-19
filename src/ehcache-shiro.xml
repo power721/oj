@@ -15,7 +15,7 @@
             diskExpiryThreadIntervalSeconds="120" />
 
     <cache name="myRealm.authorizationCache"
-           maxEntriesLocalHeap="200000"
+           maxEntriesLocalHeap="1000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="0"
@@ -24,7 +24,7 @@
            diskExpiryThreadIntervalSeconds="900" />
 
     <cache name="shiro-activeSessionCache"
-           maxEntriesLocalHeap="200000"
+           maxEntriesLocalHeap="1000"
            overflowToDisk="true"
            eternal="false"
            timeToLiveSeconds="0"
