@@ -24,7 +24,7 @@
     <#if logs??> 
     <#list logs.list as log>
       <tr>
-        <td>${log.num!1}</td>
+        <td>${(logs.pageNumber-1) * logs.pageSize + log_index + 1}</td>
         <td>${log.uid!0}</td>
         <td>${log.name!}</td>
         <td>${log.ip!}</td>

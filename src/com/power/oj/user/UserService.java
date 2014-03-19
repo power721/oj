@@ -35,6 +35,7 @@ import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.image.ImageScaleImpl;
@@ -89,10 +90,11 @@ public class UserService
       }
     } catch (AuthenticationException e)
     {
-      updateLogin(name, false);
       if (OjConfig.getDevMode())
         e.printStackTrace();
       log.warn("User signin failed.");
+      
+      updateLogin(name, false);
       return false;
     }
 
@@ -127,24 +129,25 @@ public class UserService
       }
     } catch (AuthenticationException e)
     {
-      updateLogin(name, false);
       if (OjConfig.getDevMode())
         e.printStackTrace();
       log.warn("User signin failed.");
+      
+      updateLogin(name, false);
       return false;
     }
 
     return true;
   }
   
-  public void addExp(UserExtModel userExtModel, int incExp)
+  private void addExp(UserExtModel userExtModel, int incExp)
   {
     int exp = userExtModel.getExperience() + incExp;
     int credit = userExtModel.getCredit() + incExp;
     int level = Arrays.binarySearch(OjConfig.level.toArray(), exp);
     level = level<0 ? -level : level+2;
     
-    userExtModel.setCredit(credit).setExperience( exp).setLevel(level);
+    userExtModel.setCredit(credit).setExperience( exp).setLevel(level); // no update
   }
   
   public int checkin(UserExtModel userExtModel)
@@ -178,7 +181,7 @@ public class UserService
     }
     else
     {
-      userModel.put("isCheckin", checkin);
+      userModel.put("isCheckin", checkin); // use lastCheckin?
       return true;
     }
   }
@@ -195,7 +198,7 @@ public class UserService
       int login = userModel.getLoginTime();
       
       log.info("online: " + online + " login: " + login + " current: " + OjConfig.timeStamp);
-      // TODO it's incorrect
+      // TODO online time is incorrect
       online += (OjConfig.timeStamp - login) / 60;
       userModel.setOnline(online).update();
     }
@@ -218,12 +221,12 @@ public class UserService
     String name = HtmlEncoder.text(userModel.getName());
     String password = BCrypt.hashpw(userModel.getPassword(), BCrypt.gensalt());
     String email = userModel.getEmail();
-    String token = UUID.randomUUID().toString();
+    String verifyEmailToken = UUID.randomUUID().toString();
     
     int ctime = OjConfig.timeStamp;
     UserModel newUser = new UserModel();
-    newUser.setName(HtmlEncoder.text(name)).setPassword(password).setEmail(email).setRegEmail(email);
-    newUser.setToken(token).setCtime(ctime).setMtime(ctime);
+    newUser.setName(name).setPassword(password).setEmail(email).setRegEmail(email);
+    newUser.setToken(verifyEmailToken).setCtime(ctime).setMtime(ctime);
     
     if (newUser.save())
     {
@@ -235,7 +238,7 @@ public class UserService
       //password = userModel.getStr("pass");
       //return login(name, password, false);
       
-      OjService.me().sendVerifyEmail(name, email, token);
+      OjService.me().sendVerifyEmail(name, email, verifyEmailToken);
       return true;
     }
     
@@ -244,22 +247,22 @@ public class UserService
   
   public UserModel signup(String email, WebLoginModel webLogin) throws Exception
   {
-    String name = email;
+    String name = HtmlEncoder.text(email);
     String pass = Tool.randomPassword(9);
     String password = BCrypt.hashpw(pass, BCrypt.gensalt());
     String avatar = webLogin.getAvatar();
-    String token = UUID.randomUUID().toString();
+    String verifyEmailToken = UUID.randomUUID().toString();
     int ctime = OjConfig.timeStamp;
     
     UserModel newUser = new UserModel();
-    newUser.setName(HtmlEncoder.text(name)).setPassword(password).setEmail(email).setRegEmail(email).setCtime(ctime);
-    newUser.setNick(HtmlEncoder.text(webLogin.getNick())).setAvatar(avatar).setToken(token).setMtime(ctime);
+    newUser.setName(name).setPassword(password).setEmail(email).setRegEmail(email).setToken(verifyEmailToken);
+    newUser.setNick(HtmlEncoder.text(webLogin.getNick())).setAvatar(avatar).setCtime(ctime).setMtime(ctime);
     
     if (newUser.save())
     {
-      webLogin.set(WebLoginModel.STATUS, true).update();
+      webLogin.setStatus(true).update();
       
-      int uid = newUser.getUid();
+      Integer uid = newUser.getUid();
       Calendar cal = Calendar.getInstance();
       name = new StringBuilder(3).append(webLogin.getType()).append(cal.get(Calendar.YEAR)).append(uid).toString();
       newUser.setName(name).update();
@@ -275,7 +278,7 @@ public class UserService
       paras.put("nick", webLogin.getNick());
       paras.put("type", webLogin.getType());
       paras.put("name", name);
-      paras.put("token", token);
+      paras.put("token", verifyEmailToken);
       paras.put("password", pass);
       paras.put("ctime", OjConfig.timeStamp);
       paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
@@ -337,8 +340,8 @@ public class UserService
         userModel.setToken(null); // resetPassword token
       }
       userModel.setLoginTime(OjConfig.timeStamp).setLoginIP(ip).update();
-      
       updateCache(userModel);
+      
       loginLog.set("uid", userModel.getUid());
     }
     
@@ -353,8 +356,9 @@ public class UserService
     
     userModel.setEmail(email).setEmailVerified(false);
     userModel.setToken(token).setMtime(OjConfig.timeStamp);
-    OjService.me().sendVerifyEmail(name, email, token);
     updateCache(userModel);
+    
+    OjService.me().sendVerifyEmail(name, email, token);
     
     return userModel.update();
   }
@@ -371,24 +375,9 @@ public class UserService
     
     Integer uid = userModel.getUid();
     
-    Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? LIMIT 1", uid);
-
-    if (record != null)
-    {
-      userModel.set("submission", record.getLong("count"));
-    }
-
-    record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
-    if (record != null)
-    {
-      userModel.set("accepted", record.getLong("count"));
-    }
-
-    record = Db.findFirst("SELECT COUNT(distinct pid) AS count FROM solution WHERE uid=? AND result=0 LIMIT 1", uid);
-    if (record != null)
-    {
-      userModel.set("solved", record.getLong("count"));
-    }
+    userModel.set("submission", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? LIMIT 1", uid));
+    userModel.set("accepted", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND result=? LIMIT 1", uid, ResultType.AC));
+    userModel.set("solved", Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? LIMIT 1", uid, ResultType.AC));
     updateCache(userModel);
 
     return userModel.update();
@@ -451,6 +440,7 @@ public class UserService
       {
         userModel.setToken(null).update();
         updateCache(userModel);
+        
         log.info("token expires");
         return false;
       }
@@ -539,34 +529,37 @@ public class UserService
    */
   public Page<UserModel> searchUser(int pageNumber, int pageSize, String scope, String word)
   {
-    String select = "SELECT @num:=@num+1 AS num,uid,name,nick,school,solved,submission";
+    String select = "SELECT uid,name,nick,school,solved,submission";
     Page<UserModel> userList = null;
     List<Object> paras = new ArrayList<Object>();
-    paras.add((pageNumber - 1) * pageSize);
-
+    
     if (StringUtil.isBlank(word))
     {
       word = "No Such User!";
     }
     {
       word = new StringBuilder(3).append("%").append(word).append("%").toString();
-      StringBuilder sb = new StringBuilder("FROM user,(SELECT @num:=?)r WHERE (");
+      StringBuilder sb = new StringBuilder("FROM user WHERE (");
       
       if (StringUtil.isNotBlank(scope))
       {
         String scopes[] =
         { "name", "nick", "school", "email" };
         if (StringUtil.equalsOneIgnoreCase(scope, scopes) == -1)
+        {
           return null;
+        }
         sb.append(scope).append(" LIKE ? ");
         paras.add(word);
       } else
       {
         sb.append("name LIKE ? OR nick LIKE ? OR school LIKE ? OR email LIKE ?");
         for (int i = 0; i < 4; ++i)
+        {
           paras.add(word);
+        }
       }
-      sb.append(") AND status=1 ORDER BY solved desc,submission,uid");
+      sb.append(") AND status=1 ORDER BY solved DESC,submission,uid");
       
       userList = dao.paginate(pageNumber, pageSize, select, sb.toString(), paras.toArray());
     }
@@ -581,26 +574,26 @@ public class UserService
    */
   public UserModel getUserProfile(String name)
   {
-	  UserModel userModel = null;
-	    
-	    if (name == null)
-	    {
-	      userModel = getCurrentUser();
-	    } else
-	    {
-	      userModel = getUserByName(name);
-	    }
-	    
-	    if (userModel != null)
-	    {
-	    	  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	        userModel.put("createTime_t", sdf.format(new Date(userModel.getCtime() * 1000L)));
-	        userModel.put("loginTime_t", sdf.format(new Date(userModel.getLoginTime() * 1000L)));
-	        userModel.put("rank", getUserRank(userModel.getUid()));
-	        userModel.put("problems", dao.getSubmittedProblems(userModel.getUid()));
-	    }
-	    
-	    return userModel;
+    UserModel userModel = null;
+    
+    if (name == null)
+    {
+      userModel = getCurrentUser();
+    } else
+    {
+      userModel = getUserByName(name);
+    }
+    
+    if (userModel != null)
+    {
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+      userModel.put("createTime_t", sdf.format(new Date(userModel.getCtime() * 1000L)));
+      userModel.put("loginTime_t", sdf.format(new Date(userModel.getLoginTime() * 1000L)));
+      userModel.put("rank", getUserRank(userModel.getUid()));
+      userModel.put("problems", getSubmittedProblems(userModel.getUid()));
+    }
+    
+    return userModel;
   }
   
   /**
@@ -612,12 +605,12 @@ public class UserService
   public Page<Record> getLoginlog(int pageNumber, int pageSize)
   {
     UserModel userModel = getCurrentUser();
-   
     Integer uid = userModel.getUid();
     String name = userModel.getName();
-    Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT @num:=@num+1 AS num,l.*",
-                        "FROM loginlog l,(SELECT @num:=?)r WHERE uid=? OR name=? ORDER BY ctime DESC", 
-                        (pageNumber - 1) * pageSize, uid, name);
+    
+    Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT *",
+                        "FROM loginlog WHERE uid=? OR name=? ORDER BY ctime DESC", 
+                        uid, name);
     return logs;
   }
   
@@ -630,7 +623,7 @@ public class UserService
   {
     UserModel userModel = getCurrentUser();
     Integer uid = userModel.getUid();
-    List<Record> codes = dao.getSolvedProblems(uid);
+    List<Record> codes = getSolvedProblems(uid);
     String userDir = new StringBuilder(3).append(OjConfig.downloadPath).append(File.separator).append(userModel.getName()).toString();
     File userDirFile = new File(userDir);
     FileUtil.mkdirs(userDirFile);
@@ -641,12 +634,13 @@ public class UserService
       FileUtil.mkdirs(problemDir);
       
       String ext = OjConfig.language_type.get(code.get("language")).getExt();
-      StringBuilder sb = new StringBuilder(10).append(problemDir).append(File.separator).append(code.get("sid")).append("_").append(code.get("time"));
-      sb.append("MS_").append(code.get("memory")).append("KB").append(".").append(ext);
+      StringBuilder sb = new StringBuilder(10).append(problemDir).append(File.separator).append(code.get("sid")).append("_");
+      sb.append(code.get("time")).append("MS_").append(code.get("memory")).append("KB").append(".").append(ext);
       
       File file = new File(sb.toString());
       if (file.createNewFile() == false)
       {
+        log.info("Create file failed: " + sb.toString());
         continue;
       }
       
@@ -704,13 +698,15 @@ public class UserService
   {
     UserModel userModel = dao.getUserExt(getCurrentUid());
     log.info(userModel.toString());
-    int exp = userModel.getInt("experience");
-    int level = userModel.getInt("level");
+    int exp = userModel.getInt("experience"); // UserModel does not have experience
+    int level = userModel.getInt("level"); // UserModel does not have level
     int lastExp = 0;
+    
     if (level > 1)
     {
       lastExp = OjConfig.level.get(level-2);
     }
+    
     int nextExp = (1<<31) - 1;
     if (level - 1 < OjConfig.level.size())
     {
@@ -792,6 +788,16 @@ public class UserService
     return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
   }
 
+  public List<Record> getSubmittedProblems(Integer uid)
+  {
+    return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid WHERE s.uid=? GROUP BY s.pid", uid);
+  }
+  
+  public List<Record> getSolvedProblems(Integer uid)
+  {
+    return Db.find("SELECT * FROM solution WHERE uid=? AND result=? GROUP BY pid", uid, ResultType.AC);
+  }
+  
   public boolean checkPassword(Integer uid, String password)
   {
     String stored_hash = dao.findById(uid).getPassword();

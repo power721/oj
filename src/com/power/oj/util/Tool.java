@@ -101,6 +101,7 @@ public class Tool
    */
   public static void sendEmail(String from, String to, String subject, EmailMessage content) throws MailException
   {
+    // TODO: create new thread to send mail
     Email email = new Email();
 
     email.setFrom(from);

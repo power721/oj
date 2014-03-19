@@ -8,7 +8,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.shiro.ShiroKit;
 
 /**
- * Get and Set user session and controller attributes, auto login.
+ * Get and Set current user to request attribute.
  * 
  * @author power
  * 

@@ -76,6 +76,7 @@ public class UserController extends OjController
     
     if (userModel == null)
     {
+      // TODO use exception
       FlashMessage msg = new FlashMessage(getText("user.error.none"), MessageType.WARN, getText("message.warn.title"));
       redirect("/", msg);
       return;
@@ -86,9 +87,10 @@ public class UserController extends OjController
     setTitle(getText("user.profile.title"));
   }
   
+  @RequiresUser
   public void option()
   {
-    
+    // TODO
   }
   
   @RequiresUser
@@ -107,10 +109,10 @@ public class UserController extends OjController
     int pageNumber = getParaToInt(0, 1);
     int pageSize = getParaToInt(1, OjConfig.userPageSize);
     String word = HtmlEncoder.text(getPara("word", "").trim());
-    String scope = getPara("scope");
+    String scope = HtmlEncoder.text(getPara("scope"));
     StringBuilder query = new StringBuilder();
     
-    query.append("?word=").append(word);
+    query.append("word=").append(word);
     if (StringUtil.isNotBlank(scope) && "all".equals(scope) == false)
     {
       query.append("&scope=").append(scope);
@@ -174,7 +176,9 @@ public class UserController extends OjController
   {
     String lastAccessURL = sessionService.getLastAccessURL();
     if (isParaExists("t"))
+    {
       lastAccessURL = getPara("t");
+    }
     
     userService.logout(this);
 
@@ -186,13 +190,13 @@ public class UserController extends OjController
   {
     try
     {
-      File file = userService.archiveCode();
-      renderFile(file);
+      renderFile(userService.archiveCode());
     } catch (IOException e)
     {
       log.warn(e.getLocalizedMessage());
       if (OjConfig.getDevMode())
         e.printStackTrace();
+      
       redirect(sessionService.getLastAccessURL());
     }
   }
@@ -200,6 +204,7 @@ public class UserController extends OjController
   @RequiresPermissions("user:upload:avatar")
   public void avatar()
   {
+    // TODO remove
     setTitle(getText("user.avatar.title"));
   }
 
@@ -207,6 +212,7 @@ public class UserController extends OjController
   @RequiresPermissions("user:upload:avatar")
   public void uploadAvatar()
   {
+    // TODO remove
     UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
     File file = uploadFile.getFile();
     String rootPath = PathKit.getWebRootPath() + File.separator;
@@ -236,6 +242,7 @@ public class UserController extends OjController
   @RequiresPermissions("user:upload:avatar")
   public void saveAvatar() throws IOException
   {
+    // TODO remove
     int x1 = getParaToInt("x1", 0);
     int y1 = getParaToInt("y1", 0);
     int x2 = getParaToInt("x2", OjConstants.AVATAR_WIDTH);
@@ -278,16 +285,17 @@ public class UserController extends OjController
     UserModel userModel = userService.getUserByName(name);
     FlashMessage msg = new FlashMessage(getText("user.recover.success"));
     
+    // TODO move to UserService
     userModel.setToken(token).setMtime(OjConfig.timeStamp).update();
     try
     {
-      // TODO: create new thread to send mail
       OjService.me().sendResetPasswordEmail(name, email, token);
     } catch (Exception e)
     {
       if (OjConfig.getDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
+      
       msg = new FlashMessage(getText("user.recover.error"), MessageType.ERROR, getText("message.error.title"));
     }
     
@@ -322,8 +330,7 @@ public class UserController extends OjController
       removeSessionAttr("name");
     }
     
-    FlashMessage msg = new FlashMessage(getText("user.resetPassword.success"));
-    redirect("/login", msg);
+    redirect("/login", new FlashMessage(getText("user.resetPassword.success")));
   }
   
   public void verify()
@@ -334,8 +341,7 @@ public class UserController extends OjController
     if (userService.verifyEmail(name, token))
     {
       String redirectUrl = ShiroKit.isUser() ? sessionService.getLastAccessURL() : "/login";
-      setFlashMessage(new FlashMessage(getText("user.verify.success")));
-      redirect(redirectUrl);
+      redirect(redirectUrl, new FlashMessage(getText("user.verify.success")));
       return;
     }
     
@@ -356,10 +362,7 @@ public class UserController extends OjController
     
     setTitle(getText("user.signup.title"));
     
-    if (ajax)
-      render("ajax/signup.html");
-    else
-      render("signup.html");
+    render(ajax ? "ajax/signup.html" : "signup.html");
   }
   
   @Before({POST.class, SignupValidator.class})
@@ -384,6 +387,7 @@ public class UserController extends OjController
       if (OjConfig.getDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
+      
       setFlashMessage(new FlashMessage(getText("user.save.error")));
     }
 

@@ -1,7 +1,7 @@
 <@override name="content">
 <div class="row pagination pagination-centered">
   <div class="pull-left">
-    <form class="form-search" action="user/search" method="post">
+    <form class="form-search" action="user/search" method="get">
       <div class="input-append">
         <input type="text" class="input-medium search-query" name="word" value="${word!}" placeholder="Search user">
         <select name="scope" class="input-small">
@@ -16,7 +16,7 @@
     </form>
   </div>
   <#include "../common/_paginate.html" />
-  <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="user/search/" urlParas="${query!}" />
+  <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="user/search/" urlParas="?${query!}" />
   <div class="pull-right">
     <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span>
     <span class="badge badge-info">${userList.totalRow} Users</span>
@@ -38,7 +38,7 @@
       <#if userList??>
         <#list userList.list as User>
         <tr>
-          <td>${User.num!}</td>
+          <td>${(userList.pageNumber-1) * userList.pageSize + User_index + 1}</td>
           <td class="user"><a href="user/profile/${User.name!}">${User.name!}</a></td>
           <td>${User.nick!}</td>
           <td>${User.school!}</td>

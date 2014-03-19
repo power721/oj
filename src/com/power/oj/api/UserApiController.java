@@ -69,6 +69,7 @@ public class UserApiController extends OjController
         if (OjConfig.getDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
+        
         renderJson("status", "mail_error");
         return;
       } catch (Exception e)
@@ -76,6 +77,7 @@ public class UserApiController extends OjController
         if (OjConfig.getDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
+        
         renderJson("status", "signup_error");
         return;
       }
@@ -86,8 +88,8 @@ public class UserApiController extends OjController
       return;
     }
     
-    webLogin.set(WebLoginModel.UID, userModel.getUid());
-    webLogin.set(WebLoginModel.STATUS, true); // change after email verified?
+    webLogin.setUid(userModel.getUid());
+    webLogin.setStatus(true); // change after email verified?
     if (webLogin.update())
     {
       userService.autoLogin(this, userModel, false);
@@ -99,7 +101,7 @@ public class UserApiController extends OjController
   
   public void profile()
   {
-    UserModel userModel = getAttr(OjConstants.USER);
+    UserModel userModel = userService.getCurrentUser();
     userModel.put("success", true);
     userModel.remove("token").remove("password").remove("data");
     renderJson(userModel);
@@ -108,18 +110,14 @@ public class UserApiController extends OjController
   @ClearInterceptor
   public void info()
   {
-    int uid = 0;
-    String name = "";
     UserModel userModel = null;
 
     if (isParaExists("uid"))
     {
-      uid = getParaToInt("uid");
-      userModel = userService.getUserInfoByUid(uid);
+      userModel = userService.getUserInfoByUid(getParaToInt("uid"));
     } else if (isParaExists("name"))
     {
-      name = getPara("name");
-      userModel = userService.getUserInfoByName(name);
+      userModel = userService.getUserInfoByName(getPara("name"));
     }
 
     if (userModel == null)
@@ -128,6 +126,7 @@ public class UserApiController extends OjController
     } else
     {
       userModel.put("success", true);
+      // TODO check user sensitive information
       userModel.remove("token").remove("password").remove("realName").remove("phone").remove("data");
       renderJson(userModel);
     }
@@ -140,8 +139,7 @@ public class UserApiController extends OjController
     UserExtModel userModel = UserExtModel.dao.findById(uid);
     if ((incExp = userService.checkin(userModel)) > 0)
     {
-      int checkinTimes = userModel.getCheckinTimes();
-      renderJson("{\"success\":true, \"incexp\":" + incExp +",\"result\":" + checkinTimes + "}");
+      renderJson("{\"success\":true, \"incexp\":" + incExp +",\"result\":" + userModel.getCheckinTimes() + "}");
     }
     else
     {
@@ -152,6 +150,7 @@ public class UserApiController extends OjController
   @ClearInterceptor
   public void online()
   {
+    // TODO
     Integer uid = getParaToInt("uid");
     String name = getPara("name");
     SessionService.me().updateOnline(uid, name);
@@ -163,7 +162,7 @@ public class UserApiController extends OjController
   public void signSubmit()
   {
     String sign = HtmlEncoder.text(getPara("sign", "").trim());
-    UserModel userModel = getAttr(OjConstants.USER);
+    UserModel userModel = userService.getCurrentUser();
     if (userModel.setSignature(sign).update())
     {
       renderJson("{\"success\":true}");
@@ -177,7 +176,7 @@ public class UserApiController extends OjController
   @Before(POST.class)
   public void pwdSubmit()
   {
-    UserModel userModel = getAttr(OjConstants.USER);
+    UserModel userModel = userService.getCurrentUser();
     String origPwd = getPara("origPwd");
     String newPwd = getPara("newPwd");
     
@@ -201,7 +200,7 @@ public class UserApiController extends OjController
   
   public void emailSubmit()
   {
-    UserModel userModel = getAttr(OjConstants.USER);
+    UserModel userModel = userService.getCurrentUser();
     Integer uid = userModel.getUid();
     String origPwd = getPara("origPwd");
     String newEmail = getPara("newEmail");
@@ -229,6 +228,7 @@ public class UserApiController extends OjController
         if (OjConfig.getDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
+        
         renderJson("{\"success\":false, \"result\":\"Send verify email failed.\"}");
       }
     }
@@ -241,7 +241,7 @@ public class UserApiController extends OjController
   @Before(POST.class)
   public void profileSubmit()
   {
-    UserModel userModel = getAttr(OjConstants.USER);
+    UserModel userModel = userService.getCurrentUser();
     userModel.setComeFrom(HtmlEncoder.text(getPara("comeFrom")));
     userModel.setQQ(HtmlEncoder.text(getPara("qq")));
     userModel.setBlog(HtmlEncoder.text(getPara("blog")));
@@ -276,6 +276,7 @@ public class UserApiController extends OjController
       if (OjConfig.getDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
+      
       renderJson("{\"success\":false, \"state\":\"FAIL\"}");
       return;
     }
@@ -325,9 +326,7 @@ public class UserApiController extends OjController
   @ClearInterceptor(ClearLayer.ALL)
   public void getUid()
   {
-    String name = getPara("name");
-    
-    renderJson("result", userService.getUidByName(name));
+    renderJson("result", userService.getUidByName(getPara("name")));
   }
   
 }
