@@ -39,8 +39,8 @@ public class ContestAdminController extends OjController
   {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     long ctime = OjConfig.startInterceptorTime + 3600000;
-    setAttr("start_time", sdf.format(new Date(ctime)));
-    setAttr("end_time", sdf.format(new Date(ctime + 18000000)));
+    setAttr("startTime_t", sdf.format(new Date(ctime)));
+    setAttr("endTime_t", sdf.format(new Date(ctime + 18000000)));
     
     setTitle(getText("contest.add.title"));
   }
@@ -49,17 +49,17 @@ public class ContestAdminController extends OjController
   @RequiresPermissions("contest:add")
   public void save()
   {
-    String start_time = getPara("start_time");
-    String end_time = getPara("end_time");
+    String startTime = getPara("startTime");
+    String endTime = getPara("endTime");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     ContestModel contestModel = getModel(ContestModel.class, "contest");
     contestModel.set("uid", userService.getCurrentUid());
     try
     {
-      contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
-      contestModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
-      log.info(contestModel.get("end_time").toString());
+      contestModel.set("startTime", sdf.parse(startTime).getTime() / 1000);
+      contestModel.set("endTime", sdf.parse(endTime).getTime() / 1000);
+      log.info(contestModel.get("endTime").toString());
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())
@@ -87,15 +87,15 @@ public class ContestAdminController extends OjController
   @RequiresPermissions("contest:edit")
   public void update()
   {
-    String start_time = getPara("start_time");
-    String end_time = getPara("end_time");
+    String startTime = getPara("startTime");
+    String endTime = getPara("endTime");
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     ContestModel contestModel = getModel(ContestModel.class, "contest");
     
     try
     {
-      contestModel.set("start_time", sdf.parse(start_time).getTime() / 1000);
-      contestModel.set("end_time", sdf.parse(end_time).getTime() / 1000);
+      contestModel.set("startTime", sdf.parse(startTime).getTime() / 1000);
+      contestModel.set("endTime", sdf.parse(endTime).getTime() / 1000);
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())

@@ -54,9 +54,9 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((ProgramLanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
+      solution.put("languageName", (OjConfig.language_type.get(solution.getLanguage())).get("name"));
 
-      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
+      ResultType resultType = OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
 

@@ -1,5 +1,7 @@
 package com.power.oj.discussion;
 
+import org.apache.shiro.authz.annotation.RequiresUser;
+
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
 import com.power.oj.core.OjConfig;
@@ -25,12 +27,14 @@ public class DiscussionController extends OjController
     
   }
   
+  @RequiresUser
   public void add()
   {
     
   }
   
   @Before(POST.class)
+  @RequiresUser
   public void save()
   {
     TopicModel discussionModel = getModel(TopicModel.class, "topic");
@@ -45,22 +49,26 @@ public class DiscussionController extends OjController
     }
   }
   
+  @RequiresUser
   public void edit()
   {
     
   }
   
   @Before(POST.class)
+  @RequiresUser
   public void update()
   {
     
   }
 
+  @RequiresUser
   public void remove()
   {
     
   }
   
+  @RequiresUser
   public void delete()
   {
     

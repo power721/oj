@@ -2,7 +2,11 @@
 
 <div class="pagination pagination-centered">
   <div class="pull-left">
-    <a href="discuss/add" class="btn btn-primary">Post new topic</a> 
+    <#if user??>
+    <a href="discuss/add" class="btn btn-primary">Post new topic</a>
+    <#else>
+    <a href="" class="btn btn-info" data-toggle="modal" data-target="#loginModal">Post new topic</a>
+    </#if>
   </div>
   <#include "../common/_paginate.html" />
   <@paginate currentPage=topicList.pageNumber totalPage=topicList.totalPage actionUrl="notice/" />
