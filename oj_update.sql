@@ -191,4 +191,9 @@ ALTER TABLE user_ext CHANGE `exp` `experience` int(9) NOT NULL DEFAULT '0',
                      CHANGE `last_get_drift` `lastGetDrift` int(11) NOT NULL DEFAULT '0',
                      CHANGE `get_drift` `getDriftNum` tinyint(3) NOT NULL DEFAULT '0';
 
-#ALTER TABLE variable CHANGE `value` `stringValue` varchar(255) DEFAULT NULL;
+ALTER TABLE web_login CHANGE `open_id` `openId` varchar(64) NOT NULL;
+
+ALTER TABLE variable CHANGE `value` `stringValue` varchar(255) DEFAULT NULL,
+                     CHANGE `boolean_value` `booleanValue` varchar(255) DEFAULT NULL,
+                     CHANGE `int_value` `intValue` varchar(255) DEFAULT NULL,
+                     CHANGE `text_value` `textValue` varchar(255) DEFAULT NULL;

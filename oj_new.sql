@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.35, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.35, for debian-linux-gnu (i686)
 --
 -- Host: localhost    Database: oj_new
 -- ------------------------------------------------------
--- Server version 5.5.35-0ubuntu0.12.04.2
+-- Server version 5.5.35-0+wheezy1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,9 +24,9 @@ DROP TABLE IF EXISTS `board`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `board` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
-  `cid` int(9) NOT NULL,
+  `cid` int(9) NOT NULL DEFAULT '0',
   `uid` int(9) NOT NULL,
-  `solved` tinyint(5) NOT NULL DEFAULT '0',
+  `solved` int(5) NOT NULL DEFAULT '0',
   `penalty` int(11) NOT NULL DEFAULT '0',
   `A_SolvedTime` int(11) DEFAULT '0',
   `A_WrongNum` tinyint(5) unsigned DEFAULT '0',
@@ -97,7 +97,7 @@ CREATE TABLE `category` (
   `name` varchar(2048) NOT NULL,
   `zh` varchar(2048) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,15 +135,15 @@ CREATE TABLE `contest` (
   `description` text,
   `report` text,
   `type` tinyint(4) NOT NULL DEFAULT '0',
-  `password` varchar(255) DEFAULT NULL,
+  `pass` varchar(255) DEFAULT NULL,
+  `freeze` tinyint(1) NOT NULL DEFAULT '0',
   `atime` int(11) DEFAULT NULL,
   `ctime` int(11) DEFAULT NULL,
   `mtime` int(11) DEFAULT NULL,
-  `freeze` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`cid`),
   KEY `search` (`title`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -190,30 +190,30 @@ CREATE TABLE `contest_problem` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Temporary table structure for view `contest_solution`
+-- Table structure for table `contest_solution`
 --
 
 DROP TABLE IF EXISTS `contest_solution`;
-/*!50001 DROP VIEW IF EXISTS `contest_solution`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE TABLE `contest_solution` (
-  `sid` tinyint NOT NULL,
-  `uid` tinyint NOT NULL,
-  `pid` tinyint NOT NULL,
-  `cid` tinyint NOT NULL,
-  `num` tinyint NOT NULL,
-  `time` tinyint NOT NULL,
-  `memory` tinyint NOT NULL,
-  `result` tinyint NOT NULL,
-  `language` tinyint NOT NULL,
-  `ctime` tinyint NOT NULL,
-  `error` tinyint NOT NULL,
-  `source` tinyint NOT NULL,
-  `codeLen` tinyint NOT NULL,
-  `systemError` tinyint NOT NULL
-) ENGINE=MyISAM */;
-SET character_set_client = @saved_cs_client;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contest_solution` (
+  `sid` int(9) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `pid` int(9) NOT NULL,
+  `cid` int(9) NOT NULL DEFAULT '0',
+  `num` int(3) DEFAULT NULL,
+  `time` int(9) DEFAULT NULL,
+  `memory` int(9) DEFAULT NULL,
+  `result` int(5) NOT NULL,
+  `language` int(3) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `error` text,
+  `source` text NOT NULL,
+  `codeLen` int(9) NOT NULL DEFAULT '0',
+  `systemError` text,
+  PRIMARY KEY (`sid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `contest_user`
@@ -228,7 +228,7 @@ CREATE TABLE `contest_user` (
   `cid` int(9) NOT NULL,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -331,7 +331,7 @@ CREATE TABLE `friend_group` (
   `count` int(9) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -342,10 +342,10 @@ DROP TABLE IF EXISTS `level`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `level` (
-  `level` tinyint(5) NOT NULL AUTO_INCREMENT,
-  `experience` int(9) NOT NULL,
+  `level` int(5) NOT NULL AUTO_INCREMENT,
+  `exp` int(9) NOT NULL,
   PRIMARY KEY (`level`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -359,10 +359,9 @@ CREATE TABLE `loginlog` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `uid` int(9) NOT NULL DEFAULT '0',
   `name` varchar(35) DEFAULT NULL,
-  `ip` varchar(64) DEFAULT NULL,
-  `info` text,
-  `success` tinyint(1) NOT NULL DEFAULT '0',
+  `ip` varchar(100) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
+  `success` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -377,8 +376,8 @@ DROP TABLE IF EXISTS `mail`;
 CREATE TABLE `mail` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `mid` int(9) NOT NULL COMMENT 'mail id',
-  `userId` int(9) NOT NULL COMMENT 'user id',
-  `peerUid` int(9) NOT NULL COMMENT 'peer uid',
+  `user` int(9) NOT NULL COMMENT 'user id',
+  `peer` int(9) NOT NULL COMMENT 'peer uid',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=new, 1=read, 2=deleted',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -414,7 +413,7 @@ CREATE TABLE `mail_content` (
   `content` text,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -439,7 +438,7 @@ CREATE TABLE `notice` (
   `view` int(9) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -452,13 +451,13 @@ DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `module` varchar(20) NOT NULL,
-  `type` tinyint(3) NOT NULL DEFAULT '1',
-  `parentID` int(9) NOT NULL DEFAULT '0',
+  `type` tinyint(2) NOT NULL DEFAULT '1',
   `name` varchar(64) NOT NULL,
   `title` varchar(64) NOT NULL,
+  `parentID` int(9) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -496,7 +495,7 @@ CREATE TABLE `problem` (
   `view` int(9) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`pid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -510,7 +509,7 @@ CREATE TABLE `problem_category` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `pid` int(9) NOT NULL,
   `cid` int(9) NOT NULL,
-  `weight` tinyint(5) NOT NULL DEFAULT '0',
+  `weight` int(5) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -554,7 +553,7 @@ CREATE TABLE `role` (
   `description` varchar(80) NOT NULL,
   `status` tinyint(2) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -569,7 +568,7 @@ CREATE TABLE `role_permission` (
   `rid` int(9) NOT NULL,
   `pid` int(9) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -585,10 +584,10 @@ CREATE TABLE `session` (
   `name` varchar(35) DEFAULT NULL,
   `ipAddress` varchar(45) NOT NULL DEFAULT '0',
   `userAgent` varchar(255) DEFAULT '',
-  `uri` varchar(255) DEFAULT '',
-  `lastActivity` int(11) unsigned NOT NULL DEFAULT '0',
+  `ctime` int(11) NOT NULL DEFAULT '0' COMMENT 'Session create time.',
+  `lastActivity` int(11) NOT NULL DEFAULT '0',
   `sessionExpires` int(11) NOT NULL,
-  `ctime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Session create time.',
+  `uri` varchar(255) DEFAULT '',
   PRIMARY KEY (`sessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -605,18 +604,18 @@ CREATE TABLE `solution` (
   `uid` int(9) NOT NULL,
   `pid` int(9) NOT NULL,
   `cid` int(9) NOT NULL DEFAULT '0',
-  `num` tinyint(3) DEFAULT NULL,
+  `num` int(3) DEFAULT NULL,
   `time` int(9) DEFAULT NULL,
   `memory` int(9) DEFAULT NULL,
-  `result` tinyint(5) NOT NULL,
-  `language` tinyint(3) NOT NULL,
+  `result` int(5) NOT NULL,
+  `language` int(3) NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `error` text,
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
-  `error` text,
   `systemError` text,
-  `ctime` int(11) NOT NULL,
   PRIMARY KEY (`sid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -666,16 +665,16 @@ CREATE TABLE `team` (
   `class3` varchar(20) DEFAULT NULL,
   `gender3` enum('female','male') DEFAULT NULL,
   `contact3` varchar(100) DEFAULT NULL,
+  `notice` tinyint(1) NOT NULL DEFAULT '1',
   `comment` varchar(200) DEFAULT NULL,
-  `year` smallint(4) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `history` text,
-  `notice` tinyint(1) NOT NULL DEFAULT '1',
-  `isGirlTeam` tinyint(1) NOT NULL,
+  `year` int(4) DEFAULT NULL,
+  `isGirlTeam` tinyint(1) NOT NULL DEFAULT '0',
   `isRookieTeam` tinyint(1) NOT NULL DEFAULT '0',
   `isSpecialTeam` tinyint(1) NOT NULL DEFAULT '0',
-  `status` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -712,13 +711,13 @@ CREATE TABLE `user` (
   `uid` int(9) NOT NULL AUTO_INCREMENT COMMENT 'Unique user ID, internal use.',
   `tid` int(9) NOT NULL DEFAULT '0' COMMENT 'refere team id.',
   `name` varchar(35) NOT NULL COMMENT 'unique user login name.',
-  `password` varchar(128) NOT NULL COMMENT 'User’s password (hashed).',
+  `password` varchar(128) NOT NULL COMMENT 'User password (hashed).',
   `nick` varchar(255) DEFAULT NULL COMMENT 'nick',
   `realName` varchar(35) DEFAULT NULL,
   `regEmail` varchar(64) NOT NULL,
   `email` varchar(64) NOT NULL COMMENT 'User’s e-mail address.',
   `emailVerified` tinyint(1) NOT NULL DEFAULT '0',
-  `language` tinyint(3) NOT NULL DEFAULT '0',
+  `language` int(5) NOT NULL DEFAULT '0',
   `school` varchar(65) DEFAULT NULL,
   `solved` int(6) NOT NULL DEFAULT '0' COMMENT 'the number of problems user solved',
   `accepted` int(6) NOT NULL DEFAULT '0',
@@ -734,13 +733,13 @@ CREATE TABLE `user` (
   `gender` enum('female','male','secret') NOT NULL DEFAULT 'secret',
   `comeFrom` varchar(35) DEFAULT NULL,
   `online` int(9) NOT NULL DEFAULT '0',
-  `avatar` varchar(64) DEFAULT NULL COMMENT 'user avatar path',
-  `signature` varchar(255) DEFAULT NULL,
   `shareCode` tinyint(1) NOT NULL DEFAULT '0',
+  `avatar` varchar(255) DEFAULT NULL COMMENT 'user avatar path',
+  `signature` varchar(255) DEFAULT NULL,
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT 'Whether the user is active(1) or blocked(0).',
   `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -759,10 +758,10 @@ CREATE TABLE `user_ext` (
   `blog` varchar(255) DEFAULT NULL,
   `shareCode` tinyint(1) NOT NULL DEFAULT '0',
   `online` int(9) NOT NULL DEFAULT '0',
-  `level` tinyint(5) NOT NULL DEFAULT '1',
+  `level` int(9) NOT NULL DEFAULT '1',
   `credit` int(9) NOT NULL DEFAULT '0',
   `experience` int(9) NOT NULL DEFAULT '0',
-  `checkin` int(11) NOT NULL DEFAULT '0' COMMENT 'checkin timestamp',
+  `checkin` int(11) NOT NULL DEFAULT '0',
   `checkinTimes` tinyint(5) NOT NULL DEFAULT '0',
   `totalCheckin` int(9) NOT NULL DEFAULT '0',
   `lastSendDrift` int(11) NOT NULL DEFAULT '0',
@@ -787,7 +786,7 @@ CREATE TABLE `user_role` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   KEY `rid` (`rid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -801,14 +800,14 @@ CREATE TABLE `variable` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `cid` int(11) DEFAULT NULL,
   `name` varchar(32) NOT NULL,
-  `stringValue` varchar(255) DEFAULT NULL,
-  `booleanValue` tinyint(1) DEFAULT NULL,
-  `intValue` int(11) DEFAULT NULL,
-  `textValue` text,
+  `value` varchar(255) DEFAULT NULL,
+  `boolean_value` tinyint(1) DEFAULT NULL,
+  `int_value` int(11) DEFAULT NULL,
+  `text_value` text,
   `type` enum('boolean','int','string','text') NOT NULL DEFAULT 'string',
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -830,25 +829,6 @@ CREATE TABLE `web_login` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Final view structure for view `contest_solution`
---
-
-/*!50001 DROP TABLE IF EXISTS `contest_solution`*/;
-/*!50001 DROP VIEW IF EXISTS `contest_solution`*/;
-/*!50001 SET @saved_cs_client          = @@character_set_client */;
-/*!50001 SET @saved_cs_results         = @@character_set_results */;
-/*!50001 SET @saved_col_connection     = @@collation_connection */;
-/*!50001 SET character_set_client      = utf8 */;
-/*!50001 SET character_set_results     = utf8 */;
-/*!50001 SET collation_connection      = utf8_general_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50013 DEFINER=`root`@`%` SQL SECURITY DEFINER */
-/*!50001 VIEW `contest_solution` AS select `oj_new`.`solution`.`sid` AS `sid`,`oj_new`.`solution`.`uid` AS `uid`,`oj_new`.`solution`.`pid` AS `pid`,`oj_new`.`solution`.`cid` AS `cid`,`oj_new`.`solution`.`num` AS `num`,`oj_new`.`solution`.`time` AS `time`,`oj_new`.`solution`.`memory` AS `memory`,`oj_new`.`solution`.`result` AS `result`,`oj_new`.`solution`.`language` AS `language`,`oj_new`.`solution`.`ctime` AS `ctime`,`oj_new`.`solution`.`error` AS `error`,`oj_new`.`solution`.`source` AS `source`,`oj_new`.`solution`.`codeLen` AS `codeLen`,`oj_new`.`solution`.`systemError` AS `systemError` from `solution` where (`oj_new`.`solution`.`cid` <> 0) */;
-/*!50001 SET character_set_client      = @saved_cs_client */;
-/*!50001 SET character_set_results     = @saved_cs_results */;
-/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -859,4 +839,4 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-15 11:03:00
+-- Dump completed on 2014-03-20 11:58:18
