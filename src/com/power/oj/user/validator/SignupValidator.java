@@ -41,7 +41,7 @@ public class SignupValidator extends Validator
       addError("nameMsg", c.getText("validate.name.reserved"));
     } else
     {
-      regExpression = String.format("[a-zA-Z0-9_]{5,15}", usernameMinLength, usernameMaxLength);
+      regExpression = String.format("[a-zA-Z0-9_]{%d,%d}", usernameMinLength, usernameMaxLength);
       passwordMsg = String.format(c.getText("validate.name.error"), usernameMinLength, usernameMaxLength);
       validateRegex("user.name", regExpression, "nameMsg", passwordMsg);
     }

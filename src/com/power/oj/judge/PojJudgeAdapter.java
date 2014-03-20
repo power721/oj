@@ -145,7 +145,9 @@ public class PojJudgeAdapter extends JudgeAdapter
     result = runProcess.exitValue();
     log.info("original result: " + result);
     if (result != ResultType.AC && (errorOut.indexOf("Exception") != -1 || errorOut.indexOf("Traceback") != -1) || errorOut.indexOf("Runtime error") != -1)
+    {
       result = ResultType.RE;
+    }
     if (result < 0)
     {
       result = ResultType.SE;

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import jodd.io.FileUtil;
+import jodd.util.StringUtil;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
@@ -218,7 +219,7 @@ public class UeditorController extends OjController
       imgStr += file.getPath().replace(rootPath, "") + "ue_separate_ue";
     }
     
-    if (imgStr != "")
+    if (StringUtil.isNotBlank(imgStr))
     {
       imgStr = imgStr.substring(0, imgStr.lastIndexOf("ue_separate_ue")).replace(File.separator, "/").trim();
     }

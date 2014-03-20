@@ -90,11 +90,11 @@ public class SocialService
 
   public boolean changeFollowingByGroup(Integer uid, Integer fid, Integer gid, Integer tgid)
   {
-    if (gid == tgid)
+    if (gid.equals(tgid))
     {
       return true;
     }
-    if (uid == fid)
+    if (uid.equals(fid))
     {
       return false;
     }

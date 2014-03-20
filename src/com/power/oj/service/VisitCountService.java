@@ -60,11 +60,12 @@ public class VisitCountService extends TimerTask
         switch(type)
         {
           case problemViewCount: nCount = problemService.getViewCount(obj_id);break;
+          default: nCount = 1;
         }
       }
       else
       {
-        nCount = nCount + 1;
+        nCount += 1;
       }
       
       queue.put(obj_id, nCount.intValue());
