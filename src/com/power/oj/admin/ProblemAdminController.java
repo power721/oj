@@ -61,7 +61,7 @@ public class ProblemAdminController extends OjController
         FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
         setFlashMessage(msg);
       }
-      redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(problemModel.getInt("pid")).toString();
+      redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(problemModel.getPid()).toString();
     } catch (IOException e)
     {
       if (OjConfig.getDevMode())
@@ -94,9 +94,9 @@ public class ProblemAdminController extends OjController
   public void update()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-    problemModel.updateProblem();
+    problemService.updateProblem(problemModel);
 
-    String redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(problemModel.getInt("pid")).toString();
+    String redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(problemModel.getPid()).toString();
     redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
   }
 

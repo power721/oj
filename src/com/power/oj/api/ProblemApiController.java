@@ -31,6 +31,7 @@ public class ProblemApiController extends OjController
     setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
     setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
     setAttr("userInfo", problemService.getUserInfo(pid, uid));
+    
     renderJson(new String[]
     { "userInfo", "language_name", "result_type" });
   }
@@ -48,7 +49,9 @@ public class ProblemApiController extends OjController
 
     Record userResult = problemService.getUserResult(pid, uid);
     if (userResult != null && userResult.getInt("result") != null)
+    {
       userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
+    }
     
     renderJson(userResult);
   }

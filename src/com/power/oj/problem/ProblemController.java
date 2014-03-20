@@ -92,7 +92,6 @@ public class ProblemController extends OjController
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("language", language);
-    setAttr("pid", pid);
     
     setTitle(new StringBuilder(2).append(String.format(getText("problem.status.title"), pid)).toString());
   }
@@ -181,7 +180,9 @@ public class ProblemController extends OjController
     Integer pid = getParaToInt("pid");
     
     if ("add".equals(op) && StringUtil.isNotBlank(tag))
+    {
       problemService.addTag(pid, tag);
+    }
 
     String redirectURL = new StringBuilder(3).append("/problem/show/").append(pid).append("#tag").toString();
     redirect(redirectURL, new FlashMessage(getText("problem.tag.success")));
@@ -204,19 +205,16 @@ public class ProblemController extends OjController
     setAttr("problem", problemService.findProblem(pid));
     setTitle(new StringBuilder(2).append(getText("problem.edit.title")).append(pid).toString());
 
-    if (ajax)
-      render("ajax/edit.html");
-    else
-      render("edit.html");
+    render(ajax ? "ajax/edit.html" : "edit.html");
   }
 
   @RequiresPermissions("problem:edit")
   public void update()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
-    problemModel.updateProblem();
+    problemService.updateProblem(problemModel);
 
-    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+    String redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getPid()).toString();
     redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
   }
 
@@ -239,7 +237,7 @@ public class ProblemController extends OjController
         FlashMessage msg = new FlashMessage(getText("problem.save.warn"), MessageType.WARN, getText("message.warn.title"));
         setFlashMessage(msg);
       }
-      redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getInt("pid")).toString();
+      redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getPid()).toString();
     } catch (IOException e)
     {
       if (OjConfig.getDevMode())

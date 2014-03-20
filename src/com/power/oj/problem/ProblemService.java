@@ -12,6 +12,7 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.service.VisitCountService;
@@ -31,15 +32,35 @@ public class ProblemService
   {
     return me;
   }
-  
+
   public ProblemModel findProblem(Integer pid)
   {
-    return dao.findByPid(pid, userService.isAdmin());
+    ProblemModel problemModel = null;
+    
+    if (OjConfig.getDevMode())
+    {
+      problemModel = dao.findById(pid);
+    }
+    else
+    {
+      problemModel = dao.findFirstByCache("problem", pid, "SELECT * FROM problem WHERE pid=?", pid);
+    }
+    
+    if (userService.isAdmin())
+    {
+      return problemModel;
+    }
+    else if (problemModel != null && problemModel.getStatus())
+    {
+      return problemModel;
+    }
+
+    return null;
   }
 
   public ProblemModel findProblemForShow(Integer pid)
   {
-    ProblemModel problemModel = dao.findByPid(pid, userService.isAdmin());
+    ProblemModel problemModel = findProblem(pid);
     
     if (problemModel == null)
       return null;
@@ -60,7 +81,7 @@ public class ProblemService
 
   public ProblemModel findProblemForContest(Integer pid)
   {
-    ProblemModel problemModel = dao.findById(pid);
+    ProblemModel problemModel = findProblem(pid);
     
     if (problemModel == null)
       return null;
@@ -86,39 +107,74 @@ public class ProblemService
   
   public int getNextPid(Integer pid)
   {
-    return dao.getNextPid(pid, userService.isAdmin());
+    int nextPid = 0;
+    StringBuilder sb = new StringBuilder().append("SELECT pid FROM problem WHERE pid>?");
+    if (!userService.isAdmin())
+    {
+      sb.append(" AND status=1");
+    }
+    sb.append(" ORDER BY pid LIMIT 1");
+
+    try
+    {
+      nextPid = dao.findFirst(sb.toString(), pid).getPid();
+    } catch (Exception e)
+    {
+      nextPid = pid;
+    }
+    return nextPid;
   }
   
   public int getPrevPid(Integer pid)
   {
-    return dao.getPrevPid(pid, userService.isAdmin());
+    int prevPid = 0;
+    StringBuilder sb = new StringBuilder().append("SELECT pid FROM problem WHERE pid<?");
+    if (!userService.isAdmin())
+    {
+      sb.append(" AND status=1");
+    }
+    sb.append(" ORDER BY pid DESC LIMIT 1");
+
+    try
+    {
+      prevPid = dao.findFirst(sb.toString(), pid).getPid();
+    } catch (Exception e)
+    {
+      prevPid = pid;
+    }
+    return prevPid;
   }
 
   public Integer getRandomPid()
   {
-    return dao.getRandomPid();
+    return dao.findFirst(
+        "SELECT t1.pid FROM `problem` AS t1 JOIN (SELECT ROUND(RAND() * ((SELECT MAX(pid) FROM `problem`)-(SELECT MIN(pid) FROM `problem`))+(SELECT MIN(pid) FROM `problem`)) AS pid) AS t2 WHERE t1.pid >= t2.pid AND status=1 ORDER BY t1.pid LIMIT 1")
+    .getPid();
   }
-
-  public Integer getViewCount(Integer pid)
-  {
-    return dao.getViewCount(pid);
-  }
-
-  public void setViewCount(Integer pid, Integer view)
-  {
-    dao.setViewCount(pid, view);
-  }
-
+  
   public List<Record> getTags(Integer pid)
   {
-    return dao.getTags(pid);
+    List<Record> tagList = Db.find("SELECT t.tag,u.name FROM tag t LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
+    
+    if (tagList.isEmpty())
+    {
+      return null;
+    }
+    return tagList;
   }
 
   public List<Record> getUserInfo(Integer pid, Integer uid)
   {
-    return dao.getUserInfo(pid, uid);
+    List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,codeLen,language FROM solution WHERE uid=? AND pid=? GROUP BY result", uid, pid);
+    return userInfo;
   }
-  
+
+  public Record getUserResult(Integer pid, Integer uid)
+  {
+    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND cid=0 LIMIT 1", uid, pid);
+    return record;
+  }
+
   public Integer getUserResult(Integer pid)
   {
     Integer uid = userService.getCurrentUid();
@@ -127,12 +183,7 @@ public class ProblemService
     
     return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND cid=0 LIMIT 1", uid, pid);
   }
-  
-  public Record getUserResult(Integer pid, Integer uid)
-  {
-    return dao.getUserResult(pid, uid);
-  }
-  
+
   public <T> T getProblemField(Integer pid, String name)
   {
     String[] fields = {"title", "timeLimit", "memoryLimit", "description", "input", "output", "sampleInput", "sampleOutput", "hint", "source", "status"};
@@ -141,7 +192,7 @@ public class ProblemService
       return null;
     }
     
-    ProblemModel problemModel = dao.findByPid(pid, false);
+    ProblemModel problemModel = findProblem(pid);
     if (problemModel == null)
     {
       return null;
@@ -267,17 +318,35 @@ public class ProblemService
     
     return problemList;
   }
-  
+
+  public Integer getViewCount(Integer pid)
+  {
+    return Db.queryInt("SELECT `view` FROM problem WHERE pid=? LIMIT 1", pid);
+  }
+
+  public void setViewCount(Integer pid, Integer view)
+  {
+    Db.update("UPDATE problem SET `view`=? WHERE pid=?", view, pid);
+  }
+
   public boolean addTag(Integer pid, String tag)
   {
     Integer uid = userService.getCurrentUid();
-    return dao.addTag(pid, uid, tag);
+    Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", OjConfig.timeStamp);
+    return Db.save("tag", Tag);
   }
 
   public boolean addProblem(ProblemModel problemModel) throws IOException
   {
+    int ctime = OjConfig.timeStamp;
+    problemModel.setCtime(ctime).setMtime(ctime);
+    if (problemModel.getStatus() == null)
+    {
+      problemModel.setStatus(false);
+    }
+
     problemModel.set("uid", userService.getCurrentUid());
-    problemModel.saveProblem();
+    problemModel.save();
 
     File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
@@ -291,76 +360,86 @@ public class ProblemService
     return true;
   }
   
-  public int updateProblemByField(Integer pid, String name, String value)
+  public Boolean updateProblemByField(Integer pid, String name, String value)
   {
     // TODO store tags in problem table
     String[] fields = {"title", "timeLimit", "memoryLimit", "description", "input", "output", "sampleInput", "sampleOutput", "hint", "source", "status"};
     if (StringUtil.equalsOne(name, fields) == -1)
     {
-      return -1;
+      return false;
     }
     
-    long mtime = OjConfig.timeStamp;
+    ProblemModel problemModel = findProblem(pid);
+    if (problemModel == null)
+    {
+      return false;
+    }
+    
+    int mtime = OjConfig.timeStamp;
     if (StringUtil.equalsOne(name, new String[]{"timeLimit", "memoryLimit", "status"}) != -1)
     {
       Integer intValue = Integer.parseInt(value);
-      return Db.update("UPDATE problem SET `" + name + "`=?,`mtime`=? WHERE `pid`=?", intValue, mtime, pid);
+      problemModel.set(name, intValue);
     }
+    else
+    {
+      problemModel.set(name, value);
+    }
+    updateCache(problemModel);
     
-    return Db.update("UPDATE problem SET `" + name + "`=?,`mtime`=? WHERE `pid`=?", value, mtime, pid);
+    return problemModel.setMtime(mtime).update();
   }
-  
+
+  public boolean updateProblem(ProblemModel problemModel)
+  {
+    problemModel.setMtime(OjConfig.timeStamp);
+    if (problemModel.getStatus() == null)
+    {
+      problemModel.setStatus(false);
+    }
+    updateCache(problemModel);
+
+    return problemModel.update();
+  }
+
   public boolean build(Integer pid)
   {
     ProblemModel problemModel = findProblem(pid);
     if (problemModel == null)
+    {
       throw new ProblemException("Problem is not exist!");
+    }
     
-    long accepted = 0;
-    long submission = 0;
-    long ratio = 0;
-    long submit_user = 0;
-    long solved = 0;
-    long difficulty = 0;
-
-    Record record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
-
-    if (record != null)
-    {
-      submission = record.getLong("count");
-      problemModel.set("submission", submission);
-    }
-
-    record = Db.findFirst("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
-    if (record != null)
-    {
-      accepted = record.getLong("count");
-      problemModel.set("accepted", accepted);
-    }
+    long accepted = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
+    long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
+    int ratio = 0;
+    long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
+    long solved = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
+    int difficulty = 0;
 
     if (submission > 0)
-      ratio = accepted / submission;
-    problemModel.set("ratio", ratio);
-
-    record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
-    if (record != null)
     {
-      submit_user = record.getLong("count");
-      problemModel.set("submit_user", submit_user);
+      ratio = (int) (accepted / submission);
     }
-
-    record = Db.findFirst("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
-    if (record != null)
+    if (submitUser > 0)
     {
-      solved = record.getLong("count");
-      problemModel.setSolved((int) solved);
+      difficulty = (int) (solved / submitUser);
     }
-
-    if (submit_user > 0)
-      difficulty = solved / submit_user;
-    problemModel.setDifficulty((int) difficulty);
+    
+    problemModel.setSubmission((int) submission);
+    problemModel.setAccepted((int) accepted);
+    problemModel.setRatio(ratio);
+    problemModel.setSubmitUser((int) submitUser);
+    problemModel.setSolved((int) solved);
+    problemModel.setDifficulty(difficulty);
+    updateCache(problemModel);
 
     return problemModel.update();
   }
   
+  private void updateCache(ProblemModel problemModel)
+  {
+    CacheKit.put("problem", problemModel.getPid(), problemModel);
+  }
+
 }

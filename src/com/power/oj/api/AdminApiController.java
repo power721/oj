@@ -61,7 +61,7 @@ public class AdminApiController extends OjController
     String name = getPara("name");
     String value = getPara("value");
     
-    if (problemService.updateProblemByField(pid, name, value) > 0)
+    if (problemService.updateProblemByField(pid, name, value))
     {
       renderNull();
     }

@@ -1,7 +1,7 @@
 <@override name="content">
 <div class="pagination pagination-centered">
   <div class="pull-left">
-    <form class="form-search" action="problem/search" method="post">
+    <form class="form-search" action="problem/search" method="get">
       <div class="input-append">
         <input type="text" class="input-medium search-query" name="word" value="${word!}">
         <select name="scope" class="input-small">
@@ -16,7 +16,7 @@
     </form>
   </div>
   <#include "../common/_paginate.html" />
-  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" urlParas="${query!}" />
+  <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" urlParas="?word=${word!}&scope=${scope!}" />
   <div class="pull-right">
     <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> 
     <span class="badge badge-info">${problemList.totalRow}Problems</span>

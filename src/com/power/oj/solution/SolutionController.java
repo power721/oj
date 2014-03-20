@@ -27,6 +27,7 @@ public class SolutionController extends OjController
 {
   
   private static final UserService userService = UserService.me();
+  private static final ProblemService problemService = ProblemService.me();
   private static final SolutionService solutionService = SolutionService.me();
   
   @ActionKey("/status")
@@ -109,7 +110,7 @@ public class SolutionController extends OjController
       setAttr("cid", cid);
     } else
     {
-      problemTitle = ProblemModel.dao.getProblemTitle(solutionModel.getPid());
+      problemTitle = problemService.getProblemField(solutionModel.getPid(), "title");
     }
 
     setAttr("problemTitle", problemTitle);

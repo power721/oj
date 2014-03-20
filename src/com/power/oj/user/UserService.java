@@ -653,11 +653,6 @@ public class UserService
     return zipFile;
   }
   
-  private void updateCache(UserModel user)
-  {
-    CacheKit.put("user", user.getUid(), user);
-  }
-  
   /**
    * Get current uid form Shiro.
    * @return the uid of current user or null.
@@ -689,8 +684,7 @@ public class UserService
     }
     else
     {
-      List<UserModel> result = dao.findByCache("user", uid, "SELECT * FROM user WHERE uid=?", uid);
-      return result.size() > 0 ? result.get(0) : null;
+      return dao.findFirstByCache("user", uid, "SELECT * FROM user WHERE uid=?", uid);
     }
   }
   
@@ -835,4 +829,9 @@ public class UserService
     return userModel.get(name);
   }
 
+  private void updateCache(UserModel user)
+  {
+    CacheKit.put("user", user.getUid(), user);
+  }
+  
 }
