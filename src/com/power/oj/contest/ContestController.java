@@ -300,7 +300,7 @@ public class ContestController extends OjController
       String error = solutionModel.getError();
       if (error != null)
       {
-        solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
+        solutionModel.set("error", error.replaceAll(StringUtil.replace(OjConfig.get("workPath"), "\\", "\\\\"), ""));
         // TODO replace "/"
       }
     }

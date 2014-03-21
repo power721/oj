@@ -1096,20 +1096,20 @@ CREATE TABLE `variable` (
 -- ----------------------------
 -- Records of variable
 -- ----------------------------
-INSERT INTO `variable` VALUES ('1', null, 'work_path', 'C:\\power\\oj\\temp', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('2', null, 'data_path', 'C:\\power\\oj\\data', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('3', null, 'run_shell', 'C:\\power\\oj\\JudgeOnline\\bin\\run.exe', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('4', null, 'compile_shell', 'C:\\power\\oj\\JudgeOnline\\bin\\com.exe', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('5', null, 'admin_name', 'root', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('6', null, 'admin_mail', 'root@localhost.com', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('7', null, 'debug_file', 'debug.log', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('8', null, 'error_file', 'error.log', null, null, null, 'string', null);
-INSERT INTO `variable` VALUES ('9', null, 'delete_tmp_file', null, '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('1', null, 'workPath', 'C:\\power\\oj\\temp', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('2', null, 'dataPath', 'C:\\power\\oj\\data', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('3', null, 'runShell', 'C:\\power\\oj\\JudgeOnline\\bin\\run.exe', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('4', null, 'compileShell', 'C:\\power\\oj\\JudgeOnline\\bin\\com.exe', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('5', null, 'adminName', 'root', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('6', null, 'adminMail', 'root@localhost.com', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('7', null, 'debugFile', 'debug.log', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('8', null, 'errorFile', 'error.log', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('9', null, 'deleteTmpFile', null, '1', null, null, 'boolean', null);
 INSERT INTO `variable` VALUES ('10', null, 'debug', null, '0', null, null, 'boolean', null);
-INSERT INTO `variable` VALUES ('11', null, 'enable_login', null, '1', null, null, 'boolean', null);
-INSERT INTO `variable` VALUES ('12', null, 'enable_mail', null, '1', null, null, 'boolean', null);
-INSERT INTO `variable` VALUES ('13', null, 'enable_source', null, '1', null, null, 'boolean', null);
-INSERT INTO `variable` VALUES ('14', null, 'enable_archive', null, '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('11', null, 'enableLogin', null, '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('12', null, 'enableMail', null, '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('13', null, 'enableSource', null, '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('14', null, 'enableArchive', null, '1', null, null, 'boolean', null);
 
 -- ----------------------------
 -- Table structure for `web_login`

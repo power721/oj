@@ -348,7 +348,7 @@ public class ProblemService
     problemModel.set("uid", userService.getCurrentUid());
     problemModel.save();
 
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append("\\").append(problemModel.getInt("pid")).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append("\\").append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
       log.warn("Data directory already exists: " + dataDir.getPath());

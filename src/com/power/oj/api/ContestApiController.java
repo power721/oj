@@ -137,7 +137,7 @@ public class ContestApiController extends OjController
       String error = solutionModel.getError();
       if (error != null)
       {
-        solutionModel.setError(error.replaceAll(StringUtil.replace(OjConfig.get("work_path"), "\\", "\\\\"), ""));
+        solutionModel.setError(error.replaceAll(StringUtil.replace(OjConfig.get("workPath"), "\\", "\\\\"), ""));
         // TODO replace "/"
       }
     }

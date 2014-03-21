@@ -49,7 +49,7 @@ public abstract class JudgeAdapter implements Runnable
   static
   {
     // TODO move to OjConfig
-    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("work_path"))).append(File.separator).toString();
+    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("workPath"))).append(File.separator).toString();
   }
   
   public JudgeAdapter()
@@ -98,7 +98,7 @@ public abstract class JudgeAdapter implements Runnable
     language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
     problemModel = ProblemModel.dao.findById(solutionModel.getPid());
     
-    if (OjConfig.getBoolean("delete_tmp_file"))
+    if (OjConfig.getBoolean("deleteTmpFile"))
     {
       File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid() - 2).toString());
       if (prevWorkDir.isDirectory())
@@ -127,7 +127,7 @@ public abstract class JudgeAdapter implements Runnable
   
   protected int getDataFiles() throws IOException
   {
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("data_path")).append(File.separator).append(solutionModel.getPid()).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(solutionModel.getPid()).toString());
     if (!dataDir.isDirectory())
     {
       throw new IOException("Data files does not exist.");

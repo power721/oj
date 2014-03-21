@@ -60,12 +60,12 @@ public class AdminService
     ojInfo.put("uploadPath", OjConfig.uploadPath.replace(rootPath, ""));
     ojInfo.put("downloadPath", OjConfig.downloadPath.replace(rootPath, ""));
     
-    ojInfo.put("workPath", OjConfig.get("work_path"));
-    ojInfo.put("dataPath", OjConfig.get("data_path"));
-    ojInfo.put("runShell", OjConfig.get("run_shell"));
-    ojInfo.put("compilerShell", OjConfig.get("compile_shell"));
-    ojInfo.put("debugFile", OjConfig.get("debug_file"));
-    ojInfo.put("errorFile", OjConfig.get("error_file"));
+    ojInfo.put("workPath", OjConfig.get("workPath"));
+    ojInfo.put("dataPath", OjConfig.get("dataPath"));
+    ojInfo.put("runShell", OjConfig.get("runShell"));
+    ojInfo.put("compilerShell", OjConfig.get("compileShell"));
+    ojInfo.put("debugFile", OjConfig.get("debugFile"));
+    ojInfo.put("errorFile", OjConfig.get("errorFile"));
     
     return ojInfo;
   }
