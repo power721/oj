@@ -21,8 +21,10 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.contest.model.BoardModel;
 import com.power.oj.contest.model.ContestModel;
+import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -33,7 +35,6 @@ import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
-import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
 
@@ -50,146 +51,35 @@ public class ContestService
     return me;
   }
 
-  public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status)
-  {
-    List<Object> paras = new ArrayList<Object>();
-    String sql = "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t";
-    StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
-    if (type > -1)
-    {
-      sb.append(" AND type=?");
-      paras.add(type);
-    }
-    // TODO only admin and attendee can see test contest
-
-    if (status == ContestModel.PENDING)
-    {
-      sb.append(" AND startTime>UNIX_TIMESTAMP()");
-    } else if (status == ContestModel.RUNNING)
-    {
-      sb.append(" AND startTime<UNIX_TIMESTAMP() AND endTime>UNIX_TIMESTAMP()");
-    } else if (status == ContestModel.FINISHED)
-    {
-      sb.append(" AND endTime<UNIX_TIMESTAMP()");
-    }
-
-    sb.append(" ORDER BY cid DESC");
-
-    Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
-
-    for (ContestModel contest : ContestList.getList())
-    {
-      long ctime = OjConfig.timeStamp;
-      int startTime = contest.getStartTime();
-      int endTime = contest.getEndTime();
-      String cstatus = "Running";
-
-      if (startTime > ctime)
-        cstatus = "Pending";
-      else if (endTime < ctime)
-        cstatus = "Finished";
-
-      contest.put("cstatus", cstatus);
-
-      String ctype = "Public";
-      if (contest.hasPassword())
-      {
-        ctype = "Password";
-      } else if (contest.isPrivate())
-      {
-        ctype = "Private";
-      } else if (contest.isStrictPrivate())
-      {
-        ctype = "Strict Private";
-      } else if (contest.isTest())
-      {
-        ctype = "Test";
-      }
-      contest.put("ctype", ctype);
-    }
-
-    return ContestList;
-  }
-
-  public Page<ContestModel> getContestListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
-  {
-    List<Object> paras = new ArrayList<Object>();
-    String sql = "SELECT *";
-    StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
-    /*if (type > -1)
-    {
-      sb.append(" AND type=?");
-      paras.add(type);
-    }*/
-
-    if ("running".equals(sSearch.toLowerCase()))
-    {
-      sb.append(" AND startTime>UNIX_TIMESTAMP()");
-    } else if ("pending".equals(sSearch.toLowerCase()))
-    {
-      sb.append(" AND startTime<UNIX_TIMESTAMP() AND endTime>UNIX_TIMESTAMP()");
-    } else if ("finished".equals(sSearch.toLowerCase()))
-    {
-      sb.append(" AND endTime<UNIX_TIMESTAMP()");
-    }
-
-    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", cid DESC");
-
-    Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
-
-    for (ContestModel contest : ContestList.getList())
-    {
-      long ctime = OjConfig.timeStamp;
-      int startTime = contest.getInt("startTime");
-      int endTime = contest.getInt("endTime");
-      String cstatus = "Running";
-
-      if (startTime > ctime)
-        cstatus = "Pending";
-      else if (endTime < ctime)
-        cstatus = "Finished";
-
-      contest.put("cstatus", cstatus);
-
-      String ctype = "Public";
-      if (contest.hasPassword())
-      {
-        ctype = "Password";
-      } else if (contest.isPrivate())
-      {
-        ctype = "Private";
-      } else if (contest.isStrictPrivate())
-      {
-        ctype = "Strict Private";
-      } else if (contest.isTest())
-      {
-        ctype = "Test";
-      }
-      contest.put("ctype", ctype);
-    }
-
-    return ContestList;
-  }
-
-  public Page<Record> getContestRank(int pageNumber, int pageSize, Integer cid)
-  {
-    String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY solved DESC,penalty";
-    Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realName", sql, cid);
-    
-    return userRank;
-  }
-  
   public ContestModel getContest(Integer cid)
   {
-    ContestModel contestModle = dao.findFirst(
-        "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=? LIMIT 1",
+    ContestModel contestModel = null;
+    if (OjConfig.getDevMode())
+    {
+      contestModel = dao.findFirst(
+        "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,"
+        + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=?",
         cid);
-    return contestModle;
+    }
+    else
+    {
+      contestModel = dao.findFirstByCache("contest", cid, 
+          "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,"
+        + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=?",
+        cid);
+    }
+    return contestModel;
   }
 
   public String getContestTitle(Integer cid)
   {
-    return Db.queryStr("SELECT title FROM contest WHERE cid=? LIMIT 1", cid);
+    ContestModel contestModel = getContest(cid);
+    
+    if (contestModel == null)
+    {
+      return null;
+    }
+    return contestModel.getTitle();
   }
 
   public List<Record> getContestProblems(Integer cid, Integer uid)
@@ -198,7 +88,9 @@ public class ContestService
     List<Record> contestProblems;
     if (uid != null && uid > 0)
     {
-      sql = "SELECT cp.pid,cp.num,cp.accepted,cp.submission,title,status FROM contest_problem cp LEFT OUTER JOIN (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
+      sql = "SELECT cp.pid,num,accepted,submission,title,status FROM contest_problem cp LEFT OUTER JOIN"
+          + " (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? "
+          + "AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
       contestProblems = Db.find(sql, uid, cid, cid);
     } else
     {
@@ -279,6 +171,143 @@ public class ContestService
     
     return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
   }
+
+  public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status)
+  {
+    List<Object> paras = new ArrayList<Object>();
+    String sql = "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t";
+    StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
+    if (type > -1)
+    {
+      sb.append(" AND type=?");
+      paras.add(type);
+    }
+    // TODO only admin and attendee can see test contest
+
+    if (status == ContestModel.PENDING)
+    {
+      sb.append(" AND startTime>UNIX_TIMESTAMP()");
+    } else if (status == ContestModel.RUNNING)
+    {
+      sb.append(" AND startTime<UNIX_TIMESTAMP() AND endTime>UNIX_TIMESTAMP()");
+    } else if (status == ContestModel.FINISHED)
+    {
+      sb.append(" AND endTime<UNIX_TIMESTAMP()");
+    }
+
+    sb.append(" ORDER BY cid DESC");
+
+    Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+
+    for (ContestModel contest : ContestList.getList())
+    {
+      int ctime = OjConfig.timeStamp;
+      int startTime = contest.getStartTime();
+      int endTime = contest.getEndTime();
+      String cstatus = "Running";
+
+      if (startTime > ctime)
+      {
+        cstatus = "Pending";
+      }
+      else if (endTime < ctime)
+      {
+        cstatus = "Finished";
+      }
+
+      contest.put("cstatus", cstatus);
+
+      String ctype = "Public";
+      if (contest.hasPassword())
+      {
+        ctype = "Password";
+      } else if (contest.isPrivate())
+      {
+        ctype = "Private";
+      } else if (contest.isStrictPrivate())
+      {
+        ctype = "Strict Private";
+      } else if (contest.isTest())
+      {
+        ctype = "Test";
+      }
+      contest.put("ctype", ctype);
+    }
+
+    return ContestList;
+  }
+
+  public Page<ContestModel> getContestListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
+  {
+    List<Object> paras = new ArrayList<Object>();
+    String sql = "SELECT *";
+    StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
+    /*if (type > -1)
+    {
+      sb.append(" AND type=?");
+      paras.add(type);
+    }*/
+
+    if ("running".equals(sSearch.toLowerCase()))
+    {
+      sb.append(" AND startTime>UNIX_TIMESTAMP()");
+    } else if ("pending".equals(sSearch.toLowerCase()))
+    {
+      sb.append(" AND startTime<UNIX_TIMESTAMP() AND endTime>UNIX_TIMESTAMP()");
+    } else if ("finished".equals(sSearch.toLowerCase()))
+    {
+      sb.append(" AND endTime<UNIX_TIMESTAMP()");
+    }
+
+    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", cid DESC");
+
+    Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+
+    for (ContestModel contest : ContestList.getList())
+    {
+      int ctime = OjConfig.timeStamp;
+      int startTime = contest.getInt("startTime");
+      int endTime = contest.getInt("endTime");
+      String cstatus = "Running";
+
+      if (startTime > ctime)
+      {
+        cstatus = "Pending";
+      }
+      else if (endTime < ctime)
+      {
+        cstatus = "Finished";
+      }
+
+      contest.put("cstatus", cstatus);
+
+      String ctype = "Public";
+      if (contest.hasPassword())
+      {
+        ctype = "Password";
+      } else if (contest.isPrivate())
+      {
+        ctype = "Private";
+      } else if (contest.isStrictPrivate())
+      {
+        ctype = "Strict Private";
+      } else if (contest.isTest())
+      {
+        ctype = "Test";
+      }
+      contest.put("ctype", ctype);
+    }
+
+    return ContestList;
+  }
+
+  public Page<Record> getContestRank(int pageNumber, int pageSize, Integer cid)
+  {
+    String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY solved DESC,penalty";
+    Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realName", sql, cid);
+    
+    return userRank;
+  }
   
   public List<Record> getClarifyList(Integer cid)
   {
@@ -329,7 +358,9 @@ public class ContestService
   
   public String getRecentContest()
   {
-    String json = null;
+    String json = CacheKit.get("contest", "recent");
+    if (json == null)
+    {
       List<ContestkendoSchedulerTask> contests = new ArrayList<ContestkendoSchedulerTask>();
       String html = null;
       try
@@ -408,23 +439,32 @@ public class ContestService
         contests.add(contest);
       }
       json = JsonKit.listToJson(contests, 2);
+      CacheKit.put("contest", "recent", json);
+    }
     
     return json;
   }
   
   public int getContestStatus(Integer cid)
   {
-    ContestModel contestModle = dao.findFirst("SELECT startTime,endTime FROM contest WHERE cid=? LIMIT 1", cid);
-    if (contestModle == null)
+    ContestModel contestModel = getContest(cid);
+    if (contestModel == null)
+    {
       return -1;
-    long ctime = OjConfig.timeStamp;
-    int startTime = contestModle.getInt("startTime");
-    int endTime = contestModle.getInt("endTime");
+    }
+    
+    int ctime = OjConfig.timeStamp;
+    int startTime = contestModel.getInt("startTime");
+    int endTime = contestModel.getInt("endTime");
 
     if (startTime > ctime)
+    {
       return ContestModel.PENDING;
+    }
     else if (endTime < ctime)
+    {
       return  ContestModel.FINISHED;
+    }
 
     return  ContestModel.RUNNING;
   }
@@ -434,16 +474,16 @@ public class ContestService
     StringBuilder sb = new StringBuilder("SELECT ");
     for (ProgramLanguageModel language : OjConfig.program_languages)
     {
-      sb.append("COUNT(IF(language=").append(language.getInt("id")).append(",1,NULL)) AS ").append(language.getStr("ext")).append(",");
+      sb.append("COUNT(IF(language=").append(language.getId()).append(",1,NULL)) AS ").append(language.getExt()).append(",");
     }
     for (ResultType resultType : OjConfig.judge_result)
     {
-      if (resultType.getId() > 9)
+      if (resultType.getId() > ResultType.CE)
         break;
       sb.append("COUNT(IF(result=").append(resultType.getId()).append(",1,NULL)) AS ").append(resultType.getName()).append(",");
     }
-    sb.append("pid,num,COUNT(IF(result>9,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? GROUP BY pid ORDER BY num");
-    List<Record> statistics = Db.find(sb.toString(), cid);
+    sb.append("pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? GROUP BY pid ORDER BY num");
+    List<Record> statistics = Db.find(sb.toString(), ResultType.CE, cid);
     for (Record record : statistics)
     {
       record.set("id", (char) (record.getInt("num") + 'A'));
@@ -455,20 +495,21 @@ public class ContestService
   public int submitSolution(ContestSolutionModel contestSolution)
   {
     Integer cid = contestSolution.getCid();
-    contestSolution.setUid(userService.getCurrentUid());
-    contestSolution.setPid(getPid(contestSolution.getCid(), contestSolution.getNum()));
+    Integer uid = userService.getCurrentUid();
+    Integer pid = getPid(contestSolution.getCid(), contestSolution.getNum());
+    ProblemModel problemModel = ProblemService.me().findProblem(pid);
+    
+    if (problemModel == null)
+    {
+      return -1;
+    }
+    
+    contestSolution.setUid(uid);
+    contestSolution.setPid(pid);
     
     if (contestSolution.addSolution())
     {
-      Integer pid = contestSolution.getPid();
-      ProblemModel problemModel = ProblemService.me().findProblem(pid);
-      if (problemModel == null)
-      {
-        return -1;
-      }
-      
-      UserModel userModel = userService.getCurrentUser();
-      userModel.setSubmission(userModel.getSubmission() + 1).update();
+      //userService.incSubmission();
       
       Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
             
@@ -484,7 +525,7 @@ public class ContestService
           log.info("judge.start()");
         }
       }
-      System.out.println(contestSolution.getInt("sid"));
+      System.out.println(contestSolution.getSid());
     } else
     {
       return -2;
@@ -495,7 +536,7 @@ public class ContestService
   
   public boolean updateContest(ContestModel contestModel)
   {
-    ContestModel newContest = dao.findById(contestModel.getCid());
+    ContestModel newContest = getContest(contestModel.getCid());
     
     if (contestModel.hasPassword())
     {
@@ -503,7 +544,7 @@ public class ContestService
       {
         newContest.setPassword(contestModel.getPassword());
       }
-      else if (newContest.getInt("type") != ContestModel.TYPE_PASSWORD)
+      else if (newContest.getType() != ContestModel.TYPE_PASSWORD)
       {
         return false;
       }
@@ -634,29 +675,99 @@ public class ContestService
 
   public boolean isContestPending(Integer cid)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND startTime>UNIX_TIMESTAMP() LIMIT 1", cid) != null;
+    ContestModel contestModel = getContest(cid);
+    if (contestModel != null && contestModel.getStartTime() > OjConfig.timeStamp)
+    {
+      return true;
+    }
+    return false;
   }
 
   public boolean isContestFinished(Integer cid)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND endTime<UNIX_TIMESTAMP() LIMIT 1", cid) != null;
+    ContestModel contestModel = getContest(cid);
+    if (contestModel != null && contestModel.getEndTime() < OjConfig.timeStamp)
+    {
+      return true;
+    }
+    return false;
   }
 
   public boolean isContestHasPassword(Integer cid)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND type=1 LIMIT 1", cid) != null;
+    ContestModel contestModel = getContest(cid);
+    if (contestModel != null && contestModel.getType() == ContestModel.TYPE_PASSWORD)
+    {
+      return true;
+    }
+    return false;
   }
 
   public boolean checkContestPassword(Integer cid, String password)
   {
-    return dao.findFirst("SELECT 1 FROM contest WHERE cid=? AND password=? AND type=1 LIMIT 1", cid, password) != null;
+    ContestModel contestModel = getContest(cid);
+    if (contestModel != null && contestModel.getPassword().equals(password))
+    {
+      return true;
+    }
+    return false;
+  }
+  
+  public boolean updateBoard(SolutionModel solutionModel)
+  {
+    Integer cid = solutionModel.getCid();
+    Integer uid = solutionModel.getUid();
+    Integer num = solutionModel.getNum();
+    Integer submitTime = solutionModel.getCtime();
+    char c = (char) (num + 'A');
+    Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
+    
+    if (board == null)
+    {
+      board = new Record();
+      board.set("cid", cid);
+      board.set("uid", uid);
+      Db.save("board", board);
+      board = Db.findById("board", board.get("id"));
+    }
+    Integer wrongSubmits = board.getInt(c + "_WrongNum");
+    
+    if (solutionModel.getResult() == ResultType.AC)
+    {
+      ContestProblemModel contestProblem = ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
+      ContestModel contestModle = getContest(cid);
+      Integer contestStartTime = contestModle.getStartTime();
+      
+      if (contestProblem.getFirstBloodUid() == 0)
+      {
+        contestProblem.setFirstBloodUid(solutionModel.getUid());
+        contestProblem.setFirstBloodTime((int) ((submitTime - contestStartTime) / 60));
+      }
+      contestProblem.setAccepted(contestProblem.getAccepted()+1);
+      contestProblem.update();
+      
+      Integer acTime = board.getInt(c + "_SolvedTime");
+      if (acTime == null || acTime == 0)
+      {
+        acTime = (int) ((submitTime - contestStartTime) / 60);
+        board.set(c+"_SolvedTime", acTime);
+        board.set("solved", board.getInt("solved") + 1);
+        board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
+      }
+    }
+    else
+    {
+      board.set(c+"_WrongNum", wrongSubmits + 1);
+    }
+    
+    return Db.update("board", board);
   }
 
   public boolean buildRank(Integer cid)
   {
     Db.update("DELETE FROM board WHERE cid=?", cid);
-    ContestModel contestModle = getContest(cid);
-    Integer contestStartTime = contestModle.getStartTime();
+    ContestModel contestModel = getContest(cid);
+    Integer contestStartTime = contestModel.getStartTime();
     List<ContestSolutionModel> solutions = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? ORDER BY sid", cid);
     HashMap<Integer, UserInfo> userRank = new HashMap<Integer, UserInfo>();
     UserInfo userInfo = null;

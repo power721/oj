@@ -362,6 +362,24 @@ public class UserService
     
     return userModel.update();
   }
+  
+  public boolean incSubmission()
+  {
+    UserModel userModel = getCurrentUser();
+    userModel.setSubmission(userModel.getSubmission() + 1);
+    updateCache(userModel);
+    
+    return userModel.update();
+  }
+
+  public boolean incAccepted(Integer uid)
+  {
+    UserModel userModel = getUser(uid);
+    userModel.setAccepted(userModel.getAccepted() + 1);
+    updateCache(userModel);
+    
+    return userModel.update();
+  }
 
   /**
    * Build user statistics.
@@ -669,15 +687,9 @@ public class UserService
     
     return (Integer) principal;
   }
-
-  /**
-   * Get current user by uid.
-   * @return current user or null.
-   */
-  public UserModel getCurrentUser()
+  
+  public UserModel getUser(Integer uid)
   {
-    Integer uid = getCurrentUid();
-    
     if (OjConfig.getDevMode())
     {
       return getUserByUid(uid);
@@ -686,6 +698,15 @@ public class UserService
     {
       return dao.findFirstByCache("user", uid, "SELECT * FROM user WHERE uid=?", uid);
     }
+  }
+
+  /**
+   * Get current user by uid.
+   * @return current user or null.
+   */
+  public UserModel getCurrentUser()
+  {
+    return getUser(getCurrentUid());
   }
   
   public UserModel getCurrentUserExt()

@@ -401,6 +401,33 @@ public class ProblemService
 
     return problemModel.update();
   }
+  
+  public boolean incSubmission(Integer pid)
+  {
+    ProblemModel problemModel = findProblem(pid);
+    
+    problemModel.setSubmission(problemModel.getSubmission() + 1);
+    problemModel.setStime(OjConfig.timeStamp);
+    return problemModel.update();
+    
+  }
+  
+  public boolean incAccepted(SolutionModel solutionModel)
+  {
+    Integer pid = solutionModel.getPid();
+    Integer sid = solutionModel.getSid();
+    Integer uid = solutionModel.getUid();
+    ProblemModel problemModel = findProblem(pid);
+    
+    problemModel.setAccepted(problemModel.getAccepted()+1);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
+    if (lastAccepted == null)
+    {
+      problemModel.setSolved(problemModel.getSolved()+1);
+    }
+    
+    return problemModel.update();
+  }
 
   public boolean build(Integer pid)
   {

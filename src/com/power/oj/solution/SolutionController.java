@@ -20,7 +20,6 @@ import com.power.oj.judge.JudgeAdapter;
 import com.power.oj.judge.PojJudgeAdapter;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
-import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
 public class SolutionController extends OjController
@@ -167,9 +166,7 @@ public class SolutionController extends OjController
         return;
       }
       
-      UserModel userModel = userService.getCurrentUser();
-      userModel.setSubmission(userModel.getSubmission() + 1).update();
-      
+      userService.incSubmission();
       
       if (cid != null && cid > 0)
       {
@@ -177,8 +174,7 @@ public class SolutionController extends OjController
       }
       else
       {
-        // TODO update submit_user?
-        problemModel.setSubmission(problemModel.getSubmission() + 1).setStime(OjConfig.timeStamp).update();
+        problemService.incSubmission(pid);
       }
       
       synchronized (JudgeAdapter.class)

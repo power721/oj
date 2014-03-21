@@ -68,7 +68,7 @@ public class ContestPasswordInterceptor implements Interceptor
       return true;
     }
 
-    Integer cid = contestModle.getInt("cid");
+    Integer cid = contestModle.getCid();
     String token_name = new StringBuilder("cid-").append(cid).toString();
     String token = controller.getSessionAttr(token_name);
     if (token != null)
@@ -76,6 +76,7 @@ public class ContestPasswordInterceptor implements Interceptor
       try
       {
         token = CryptUtils.decrypt(token, token_name);
+        log.info(token);
         if (contestModle.checkPassword(token))
         {
           return true;

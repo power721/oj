@@ -39,9 +39,9 @@ public class ContestModel extends Model<ContestModel>
 
   public boolean saveContest()
   {
-    this.setCtime(OjConfig.timeStamp);
+    setCtime(OjConfig.timeStamp);
 
-    return this.save();
+    return save();
   }
   
   public boolean isPending()

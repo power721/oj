@@ -54,12 +54,12 @@ public class ContestAdminController extends OjController
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     ContestModel contestModel = getModel(ContestModel.class, "contest");
-    contestModel.set("uid", userService.getCurrentUid());
+    contestModel.setUid(userService.getCurrentUid());
     try
     {
-      contestModel.set("startTime", sdf.parse(startTime).getTime() / 1000);
-      contestModel.set("endTime", sdf.parse(endTime).getTime() / 1000);
-      log.info(contestModel.get("endTime").toString());
+      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
+      log.info(contestModel.getEndTime().toString());
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())
@@ -68,7 +68,7 @@ public class ContestAdminController extends OjController
     }
     contestModel.saveContest();
 
-    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
+    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getCid()).toString());
   }
 
   @RequiresPermissions("contest:edit")
@@ -94,8 +94,8 @@ public class ContestAdminController extends OjController
     
     try
     {
-      contestModel.set("startTime", sdf.parse(startTime).getTime() / 1000);
-      contestModel.set("endTime", sdf.parse(endTime).getTime() / 1000);
+      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
     } catch (ParseException e)
     {
       if (OjConfig.getDevMode())
@@ -103,7 +103,7 @@ public class ContestAdminController extends OjController
     }
     
     contestService.updateContest(contestModel);
-    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
+    redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getCid()).toString());
   }
 
   @RequiresPermissions("contest:build")

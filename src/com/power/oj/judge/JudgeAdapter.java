@@ -11,14 +11,9 @@ import jodd.io.FileUtil;
 import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.ContestService;
-import com.power.oj.contest.model.ContestModel;
-import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.problem.ProblemModel;
@@ -96,7 +91,7 @@ public abstract class JudgeAdapter implements Runnable
   protected void prepare() throws IOException
   {
     language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
-    problemModel = ProblemModel.dao.findById(solutionModel.getPid());
+    problemModel = problemService.findProblem(solutionModel.getPid());
     
     if (OjConfig.getBoolean("deleteTmpFile"))
     {
@@ -207,9 +202,7 @@ public abstract class JudgeAdapter implements Runnable
       return false;
     }
     
-    Integer uid = solutionModel.getUid();
-    Db.update("UPDATE user SET accepted=accepted+1 WHERE uid=?", uid);
-    return true;
+    return userService.incAccepted(solutionModel.getUid());
   }
 
   protected boolean updateProblem()
@@ -218,20 +211,8 @@ public abstract class JudgeAdapter implements Runnable
     {
       return false;
     }
-    
-    Integer pid = solutionModel.getPid();
-    Integer sid = solutionModel.getSid();
-    Integer uid = solutionModel.getUid();
-    ProblemModel problemModel = ProblemService.me().findProblem(pid);
-    
-    problemModel.setAccepted(problemModel.getAccepted()+1);
-    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
-    if (lastAccepted == null)
-    {
-      problemModel.setSolved(problemModel.getSolved()+1);
-    }
-    
-    return problemModel.update();
+
+    return problemService.incAccepted(solutionModel);
   }
 
   protected boolean updateContest()
@@ -239,50 +220,7 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      Integer uid = solutionModel.getUid();
-      Integer num = solutionModel.getNum();
-      Integer submitTime = solutionModel.getCtime();
-      char c = (char) (num + 'A');
-      Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
-      if (board == null)
-      {
-        board = new Record();
-        board.set("cid", cid);
-        board.set("uid", uid);
-        Db.save("board", board);
-        board = Db.findById("board", board.get("id"));
-      }
-      Integer wrongSubmits = board.getInt(c + "_WrongNum");
-      
-      if (solutionModel.getResult() == ResultType.AC)
-      {
-        ContestProblemModel contestProblem = ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
-        ContestModel contestModle = contestService.getContest(cid);
-        Integer contestStartTime = contestModle.getStartTime();
-        
-        if (contestProblem.getFirstBloodUid() == 0)
-        {
-          contestProblem.setFirstBloodUid(solutionModel.getUid());
-          contestProblem.setFirstBloodTime((int) ((submitTime - contestStartTime) / 60));
-        }
-        contestProblem.setAccepted(contestProblem.getAccepted()+1);
-        contestProblem.update();
-        
-        Integer acTime = board.getInt(c + "_SolvedTime");
-        if (acTime == null || acTime == 0)
-        {
-          acTime = (int) ((submitTime - contestStartTime) / 60);
-          board.set(c+"_SolvedTime", acTime);
-          board.set("solved", board.getInt("solved")+1);
-          board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
-        }
-      }
-      else
-      {
-        board.set(c+"_WrongNum", wrongSubmits+1);
-      }
-      
-      Db.update("board", board);
+      contestService.updateBoard(solutionModel);
       return true;
     }
     return false;

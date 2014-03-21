@@ -23,11 +23,7 @@ public class ContestInterceptor implements Interceptor
     else if (controller.getParaToInt(0) != null)
       cid = controller.getParaToInt(0);
     
-    ContestModel contestModle = controller.getAttr("contest");
-    if (contestModle == null)
-    {
-      contestModle = contestService.getContest(cid);
-    }
+    ContestModel contestModle = contestService.getContest(cid);
     if (contestModle == null)
     {
       controller.renderError(404);
@@ -58,7 +54,7 @@ public class ContestInterceptor implements Interceptor
   private boolean checkAccess(ContestModel contestModle)
   {
     Integer uid = userService.getCurrentUid();
-    Integer cid = contestModle.getInt("cid");
+    Integer cid = contestModle.getCid();
     if (contestModle.isStrictPrivate() || contestModle.isTest())
     {
       if (uid == null || !contestService.isUserInContest(uid, cid))

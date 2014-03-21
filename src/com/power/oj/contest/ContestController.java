@@ -55,15 +55,11 @@ public class ContestController extends OjController
     Integer cid = getParaToInt(0);
     Integer uid = userService.getCurrentUid();
     
-    ContestModel contestModel = getAttr("contest");
-    if (contestModel == null)
-    {
-      contestModel = contestService.getContest(cid);
-    }
+    ContestModel contestModel = contestService.getContest(cid);
     
     long serverTime = OjConfig.timeStamp;
-    int startTime = contestModel.getInt("startTime");
-    int endTime = contestModel.getInt("endTime");
+    int startTime = contestModel.getStartTime();
+    int endTime = contestModel.getEndTime();
     String status = getText("contest.status.running");
 
     if (startTime > serverTime)
@@ -103,7 +99,7 @@ public class ContestController extends OjController
     setAttr("cstatus", contestService.getContestStatus(cid));
     setAttr("contestProblems", contestService.getContestProblems(cid, null));
 
-    setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
+    setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getTitle()).toString());
   }
   
   public void allProblems()
@@ -138,7 +134,7 @@ public class ContestController extends OjController
     setAttr("problem", problemModel);
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
     
-    setTitle(new StringBuilder(6).append(getText("contest.problem.title")).append(cid).append("-").append(id).append(": ").append(problemModel.getStr("title")).toString());
+    setTitle(new StringBuilder(6).append(getText("contest.problem.title")).append(cid).append("-").append(id).append(": ").append(problemModel.getTitle()).toString());
     if (ajax)
       render("ajax/submit.html");
     else
@@ -149,7 +145,6 @@ public class ContestController extends OjController
   @Before(POST.class)
   public void submitSolution()
   {
-    log.info("submitSolution");
     ContestSolutionModel contestSolution = getModel(ContestSolutionModel.class, "solution");
     Integer cid = contestSolution.getCid();
     String url = new StringBuilder(2).append("/contest/status/").append(cid).toString();
@@ -261,7 +256,7 @@ public class ContestController extends OjController
     StringBuilder query = new StringBuilder();
     if (language > -1)
     {
-      query.append("&language=").append(language);
+      query.append("language=").append(language);
     }
     Page<ContestSolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
@@ -273,10 +268,7 @@ public class ContestController extends OjController
     setAttr("id", id);
 
     setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"), cid, id)).toString());
-    if (ajax)
-      render("ajax/problem_status.html");
-    else
-      render("problem_status.html");
+    render(ajax ? "ajax/problemStatus.html" : "problemStatus.html");
   }
   
   public void code()
@@ -319,20 +311,21 @@ public class ContestController extends OjController
     {
       log.warn(e.getLocalizedMessage());
     }
-    ProgramLanguageModel language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getInt("language"));
-    setAttr("language", language.get("name"));
+    ProgramLanguageModel language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
+    setAttr("language", language.getName());
 
     setAttr("resultLongName", resultType.getLongName());
     setAttr("resultName", resultType.getName());
     setAttr("solution", solutionModel);
 
-    String brush = getAttrForStr("language").toLowerCase();
+    String brush = language.getName().toLowerCase();
     if ("G++".equalsIgnoreCase(brush) || "GCC".equalsIgnoreCase(brush))
+    {
       brush = "cpp";
+    }
     setAttr("brush", brush);
 
     setTitle(getText("solution.show.title"));
-    render("code.html");
   }
 
   public void statistics()
@@ -381,15 +374,7 @@ public class ContestController extends OjController
   @ClearInterceptor
   public void recent_contest()
   {
-    String json = getSessionAttr("contests.json");
-    if (json == null)
-    {
-      // TODO cache for everyone
-      json = contestService.getRecentContest();
-      setSessionAttr("contests.json", json);
-    }
-
-    renderJson(json);
+    renderJson(contestService.getRecentContest());
   }
 
   @ClearInterceptor
@@ -427,11 +412,7 @@ public class ContestController extends OjController
     boolean ajax = getParaToBoolean("ajax", false);
     
     setTitle(getText("contest.edit.title"));
-
-    if (ajax)
-      render("ajax/edit.html");
-    else
-      render("edit.html");
+    render(ajax ? "ajax/edit.html" : "edit.html");
   }
 
   @ClearInterceptor
@@ -502,11 +483,7 @@ public class ContestController extends OjController
   {
     Integer cid = getParaToInt(0);
     
-    ContestModel contestModel = getAttr("contest");
-    if (contestModel == null)
-    {
-      contestModel = contestService.getContest(cid);
-    }
+    ContestModel contestModel = contestService.getContest(cid);
     
     long serverTime = OjConfig.timeStamp;
     int startTime = contestModel.getInt("startTime");
@@ -530,11 +507,7 @@ public class ContestController extends OjController
   {
     Integer cid = getParaToInt(0);
     
-    ContestModel contestModel = getAttr("contest");
-    if (contestModel == null)
-    {
-      contestModel = contestService.getContest(cid);
-    }
+    ContestModel contestModel = contestService.getContest(cid);
     
     long serverTime = OjConfig.timeStamp;
     int startTime = contestModel.getInt("startTime");

@@ -9,15 +9,6 @@ public class AddContestValidator extends Validator
 {
 
   @Override
-  protected void handleError(Controller c)
-  {
-    c.keepModel(ContestModel.class, "contest");
-    c.keepPara(OjConstants.PAGE_TITLE);
-
-    c.render("add.html");
-  }
-
-  @Override
   protected void validate(Controller c)
   {
     int type = c.getParaToInt("contest.type");
@@ -27,6 +18,15 @@ public class AddContestValidator extends Validator
     }
     
     // TODO validate time
+  }
+
+  @Override
+  protected void handleError(Controller c)
+  {
+    c.keepModel(ContestModel.class, "contest");
+    c.keepPara(OjConstants.PAGE_TITLE);
+
+    c.render("add.html");
   }
 
 }

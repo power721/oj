@@ -77,7 +77,7 @@
     </table>
     <div class="pagination pagination-centered ajax-loader">
       <#include "../common/_paginate2.html" />
-      <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/problemStatus/${cid!}-${id!}" urlParas="?id=${query!}" />
+      <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/problemStatus/${cid!}-${id!}" urlParas="?${query!}" />
     </div>
   </div>
 </div>
