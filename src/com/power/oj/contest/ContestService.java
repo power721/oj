@@ -44,6 +44,7 @@ public class ContestService
   private static final ContestModel dao = ContestModel.dao;
   private static final ContestService me = new ContestService();
   private static final UserService userService = UserService.me();
+  private static final ProblemService problemService = ProblemService.me();
   
   private ContestService() {}
   public static ContestService me()
@@ -557,6 +558,7 @@ public class ContestService
     newContest.setType(contestModel.getType());
     newContest.setFreeze(contestModel.getFreeze());
     newContest.setMtime(OjConfig.timeStamp);
+    updateCache(contestModel);
     
     return contestModel.update();
   }
@@ -568,7 +570,7 @@ public class ContestService
       return 4;
     }
     
-    if(Db.queryInt("SELECT pid FROM problem WHERE pid=? AND status=1", pid) == null)
+    if(problemService.findProblem(pid) == null)
     {
       return 3;
     }
@@ -927,4 +929,8 @@ public class ContestService
     }
   }
   
+  private void updateCache(ContestModel contestModel)
+  {
+    CacheKit.put("contest", contestModel.getCid(), contestModel);
+  }
 }

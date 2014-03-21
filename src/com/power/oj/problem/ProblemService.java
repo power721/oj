@@ -319,16 +319,6 @@ public class ProblemService
     return problemList;
   }
 
-  public Integer getViewCount(Integer pid)
-  {
-    return Db.queryInt("SELECT `view` FROM problem WHERE pid=? LIMIT 1", pid);
-  }
-
-  public void setViewCount(Integer pid, Integer view)
-  {
-    Db.update("UPDATE problem SET `view`=? WHERE pid=?", view, pid);
-  }
-
   public boolean addTag(Integer pid, String tag)
   {
     Integer uid = userService.getCurrentUid();
@@ -401,13 +391,27 @@ public class ProblemService
 
     return problemModel.update();
   }
-  
+
+  public Integer getViewCount(Integer pid)
+  {
+    return findProblem(pid).getView();
+  }
+
+  public void setViewCount(Integer pid, Integer view)
+  {
+    ProblemModel problemModel = findProblem(pid);
+    problemModel.setView(view).update();
+    updateCache(problemModel);
+  }
+
   public boolean incSubmission(Integer pid)
   {
     ProblemModel problemModel = findProblem(pid);
     
     problemModel.setSubmission(problemModel.getSubmission() + 1);
     problemModel.setStime(OjConfig.timeStamp);
+    updateCache(problemModel);
+    
     return problemModel.update();
     
   }
@@ -425,6 +429,7 @@ public class ProblemService
     {
       problemModel.setSolved(problemModel.getSolved()+1);
     }
+    updateCache(problemModel);
     
     return problemModel.update();
   }
