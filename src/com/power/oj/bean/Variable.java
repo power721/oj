@@ -19,6 +19,9 @@ public class Variable extends Model<Variable>
   public static final String TYPE = "type";
   public static final String DESCRIPTION = "description";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);
@@ -59,22 +62,22 @@ public class Variable extends Model<Variable>
     return set(STRING_VALUE, value);
   }
   
-  public Boolean getBooleanValue()
+  public String getBooleanValue()
   {
-    return getBoolean(BOOLEAN_VALUE);
+    return getStr(BOOLEAN_VALUE);
   }
   
-  public Variable setBooleanValue(Boolean value)
+  public Variable setBooleanValue(String value)
   {
     return set(BOOLEAN_VALUE, value);
   }
   
-  public Integer getIntValue()
+  public String getIntValue()
   {
-    return getInt(INT_VALUE);
+    return getStr(INT_VALUE);
   }
   
-  public Variable setIntValue(Integer value)
+  public Variable setIntValue(String value)
   {
     return set(INT_VALUE, value);
   }

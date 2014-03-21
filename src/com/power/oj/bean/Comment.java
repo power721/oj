@@ -17,6 +17,9 @@ public class Comment extends Model<Comment>
   public static final String IP = "ip";
   public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

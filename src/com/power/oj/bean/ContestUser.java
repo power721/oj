@@ -14,6 +14,9 @@ public class ContestUser extends Model<ContestUser>
   public static final String CID = "cid";
   public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

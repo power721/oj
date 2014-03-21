@@ -15,6 +15,9 @@ public class Friend extends Model<Friend>
   public static final String FRIEND_UID = "friendUid";
   public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

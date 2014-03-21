@@ -15,6 +15,9 @@ public class Mail extends Model<Mail>
   public static final String PEER = "peer";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

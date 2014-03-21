@@ -12,11 +12,14 @@ public class Permission extends Model<Permission>
   public static final String ID = "id";
   public static final String MODULE = "module";
   public static final String TYPE = "type";
-  public static final String PARENT_ID = "parentID";
   public static final String NAME = "name";
   public static final String TITLE = "title";
+  public static final String PARENT_ID = "parentID";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);
@@ -47,16 +50,6 @@ public class Permission extends Model<Permission>
     return set(TYPE, value);
   }
   
-  public Integer getParentID()
-  {
-    return getInt(PARENT_ID);
-  }
-  
-  public Permission setParentID(Integer value)
-  {
-    return set(PARENT_ID, value);
-  }
-  
   public String getName()
   {
     return getStr(NAME);
@@ -75,6 +68,16 @@ public class Permission extends Model<Permission>
   public Permission setTitle(String value)
   {
     return set(TITLE, value);
+  }
+  
+  public Integer getParentID()
+  {
+    return getInt(PARENT_ID);
+  }
+  
+  public Permission setParentID(Integer value)
+  {
+    return set(PARENT_ID, value);
   }
   
   public Boolean getStatus()

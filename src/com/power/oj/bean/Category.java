@@ -14,6 +14,9 @@ public class Category extends Model<Category>
   public static final String NAME = "name";
   public static final String ZH = "zh";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

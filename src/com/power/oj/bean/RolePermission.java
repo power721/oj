@@ -13,6 +13,9 @@ public class RolePermission extends Model<RolePermission>
   public static final String RID = "rid";
   public static final String PID = "pid";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

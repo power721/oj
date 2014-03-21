@@ -14,6 +14,9 @@ public class UserRole extends Model<UserRole>
   public static final String RID = "rid";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

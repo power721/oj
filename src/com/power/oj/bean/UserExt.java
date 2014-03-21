@@ -28,6 +28,9 @@ public class UserExt extends Model<UserExt>
   public static final String LAST_GET_DRIFT = "lastGetDrift";
   public static final String GET_DRIFT_NUM = "getDriftNum";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getUid()
   {
     return getInt(UID);

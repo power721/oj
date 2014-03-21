@@ -15,6 +15,9 @@ public class MailContent extends Model<MailContent>
   public static final String CONTENT = "content";
   public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

@@ -14,11 +14,14 @@ public class Session extends Model<Session>
   public static final String NAME = "name";
   public static final String IP_ADDRESS = "ipAddress";
   public static final String USER_AGENT = "userAgent";
-  public static final String URI = "uri";
+  public static final String CTIME = "ctime";
   public static final String LAST_ACTIVITY = "lastActivity";
   public static final String SESSION_EXPIRES = "sessionExpires";
-  public static final String CTIME = "ctime";
+  public static final String URI = "uri";
 
+  /*
+   * auto generated getter and setter
+   */
   public String getSessionId()
   {
     return getStr(SESSION_ID);
@@ -69,14 +72,14 @@ public class Session extends Model<Session>
     return set(USER_AGENT, value);
   }
   
-  public String getUri()
+  public Integer getCtime()
   {
-    return getStr(URI);
+    return getInt(CTIME);
   }
   
-  public Session setUri(String value)
+  public Session setCtime(Integer value)
   {
-    return set(URI, value);
+    return set(CTIME, value);
   }
   
   public Integer getLastActivity()
@@ -99,14 +102,14 @@ public class Session extends Model<Session>
     return set(SESSION_EXPIRES, value);
   }
   
-  public Integer getCtime()
+  public String getUri()
   {
-    return getInt(CTIME);
+    return getStr(URI);
   }
   
-  public Session setCtime(Integer value)
+  public Session setUri(String value)
   {
-    return set(CTIME, value);
+    return set(URI, value);
   }
   
 }

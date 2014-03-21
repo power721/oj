@@ -14,6 +14,9 @@ public class Role extends Model<Role>
   public static final String DESCRIPTION = "description";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

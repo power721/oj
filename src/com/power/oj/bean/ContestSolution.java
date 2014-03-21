@@ -21,9 +21,12 @@ public class ContestSolution extends Model<ContestSolution>
   public static final String CTIME = "ctime";
   public static final String ERROR = "error";
   public static final String SOURCE = "source";
-  public static final String CODE_LEN = "code_len";
-  public static final String SYSTEM_ERROR = "system_error";
+  public static final String CODE_LEN = "codeLen";
+  public static final String SYSTEM_ERROR = "systemError";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getSid()
   {
     return getInt(SID);
@@ -144,22 +147,22 @@ public class ContestSolution extends Model<ContestSolution>
     return set(SOURCE, value);
   }
   
-  public Integer getCode_len()
+  public Integer getCodeLen()
   {
     return getInt(CODE_LEN);
   }
   
-  public ContestSolution setCode_len(Integer value)
+  public ContestSolution setCodeLen(Integer value)
   {
     return set(CODE_LEN, value);
   }
   
-  public String getSystem_error()
+  public String getSystemError()
   {
     return getStr(SYSTEM_ERROR);
   }
   
-  public ContestSolution setSystem_error(String value)
+  public ContestSolution setSystemError(String value)
   {
     return set(SYSTEM_ERROR, value);
   }

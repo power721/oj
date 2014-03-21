@@ -14,6 +14,9 @@ public class MailBanlist extends Model<MailBanlist>
   public static final String BANNED_UID = "bannedUid";
   public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

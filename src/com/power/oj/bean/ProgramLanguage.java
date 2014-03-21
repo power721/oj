@@ -24,6 +24,9 @@ public class ProgramLanguage extends Model<ProgramLanguage>
   public static final String SCRIPT = "script";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

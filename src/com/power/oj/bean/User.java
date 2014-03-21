@@ -34,12 +34,15 @@ public class User extends Model<User>
   public static final String GENDER = "gender";
   public static final String COME_FROM = "comeFrom";
   public static final String ONLINE = "online";
+  public static final String SHARE_CODE = "shareCode";
   public static final String AVATAR = "avatar";
   public static final String SIGNATURE = "signature";
-  public static final String SHARE_CODE = "shareCode";
   public static final String STATUS = "status";
   public static final String TOKEN = "token";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getUid()
   {
     return getInt(UID);
@@ -290,6 +293,16 @@ public class User extends Model<User>
     return set(ONLINE, value);
   }
   
+  public Boolean getShareCode()
+  {
+    return getBoolean(SHARE_CODE);
+  }
+  
+  public User setShareCode(Boolean value)
+  {
+    return set(SHARE_CODE, value);
+  }
+  
   public String getAvatar()
   {
     return getStr(AVATAR);
@@ -308,16 +321,6 @@ public class User extends Model<User>
   public User setSignature(String value)
   {
     return set(SIGNATURE, value);
-  }
-  
-  public Boolean getShareCode()
-  {
-    return getBoolean(SHARE_CODE);
-  }
-  
-  public User setShareCode(Boolean value)
-  {
-    return set(SHARE_CODE, value);
   }
   
   public Integer getStatus()

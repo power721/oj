@@ -23,6 +23,9 @@ public class Notice extends Model<Notice>
   public static final String VIEW = "view";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

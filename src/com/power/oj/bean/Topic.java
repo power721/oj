@@ -19,6 +19,9 @@ public class Topic extends Model<Topic>
   public static final String MTIME = "mtime";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

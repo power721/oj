@@ -10,8 +10,11 @@ public class Level extends Model<Level>
   
   public static final String TABLE_NAME = "level";
   public static final String LEVEL = "level";
-  public static final String EXPERIENCE = "experience";
+  public static final String EXP = "exp";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getLevel()
   {
     return getInt(LEVEL);
@@ -22,14 +25,14 @@ public class Level extends Model<Level>
     return set(LEVEL, value);
   }
   
-  public Integer getExperience()
+  public Integer getExp()
   {
-    return getInt(EXPERIENCE);
+    return getInt(EXP);
   }
   
-  public Level setExperience(Integer value)
+  public Level setExp(Integer value)
   {
-    return set(EXPERIENCE, value);
+    return set(EXP, value);
   }
   
 }

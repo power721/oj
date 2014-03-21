@@ -36,6 +36,9 @@ public class Problem extends Model<Problem>
   public static final String VIEW = "view";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getPid()
   {
     return getInt(PID);

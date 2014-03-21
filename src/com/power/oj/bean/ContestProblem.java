@@ -19,6 +19,9 @@ public class ContestProblem extends Model<ContestProblem>
   public static final String FIRST_BLOOD_UID = "firstBloodUid";
   public static final String FIRST_BLOOD_TIME = "firstBloodTime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

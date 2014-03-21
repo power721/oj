@@ -17,13 +17,16 @@ public class Contest extends Model<Contest>
   public static final String DESCRIPTION = "description";
   public static final String REPORT = "report";
   public static final String TYPE = "type";
-  public static final String PASSWORD = "password";
+  public static final String PASS = "pass";
+  public static final String FREEZE = "freeze";
   public static final String ATIME = "atime";
   public static final String CTIME = "ctime";
   public static final String MTIME = "mtime";
-  public static final String FREEZE = "freeze";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getCid()
   {
     return getInt(CID);
@@ -104,14 +107,24 @@ public class Contest extends Model<Contest>
     return set(TYPE, value);
   }
   
-  public String getPassword()
+  public String getPass()
   {
-    return getStr(PASSWORD);
+    return getStr(PASS);
   }
   
-  public Contest setPassword(String value)
+  public Contest setPass(String value)
   {
-    return set(PASSWORD, value);
+    return set(PASS, value);
+  }
+  
+  public Boolean getFreeze()
+  {
+    return getBoolean(FREEZE);
+  }
+  
+  public Contest setFreeze(Boolean value)
+  {
+    return set(FREEZE, value);
   }
   
   public Integer getAtime()
@@ -142,16 +155,6 @@ public class Contest extends Model<Contest>
   public Contest setMtime(Integer value)
   {
     return set(MTIME, value);
-  }
-  
-  public Boolean getFreeze()
-  {
-    return getBoolean(FREEZE);
-  }
-  
-  public Contest setFreeze(Boolean value)
-  {
-    return set(FREEZE, value);
   }
   
   public Boolean getStatus()

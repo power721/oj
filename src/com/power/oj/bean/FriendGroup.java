@@ -15,6 +15,9 @@ public class FriendGroup extends Model<FriendGroup>
   public static final String COUNT = "count";
   public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

@@ -13,10 +13,12 @@ public class Loginlog extends Model<Loginlog>
   public static final String UID = "uid";
   public static final String NAME = "name";
   public static final String IP = "ip";
-  public static final String INFO = "info";
-  public static final String SUCCESS = "success";
   public static final String CTIME = "ctime";
+  public static final String SUCCESS = "success";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);
@@ -57,14 +59,14 @@ public class Loginlog extends Model<Loginlog>
     return set(IP, value);
   }
   
-  public String getInfo()
+  public Integer getCtime()
   {
-    return getStr(INFO);
+    return getInt(CTIME);
   }
   
-  public Loginlog setInfo(String value)
+  public Loginlog setCtime(Integer value)
   {
-    return set(INFO, value);
+    return set(CTIME, value);
   }
   
   public Boolean getSuccess()
@@ -75,16 +77,6 @@ public class Loginlog extends Model<Loginlog>
   public Loginlog setSuccess(Boolean value)
   {
     return set(SUCCESS, value);
-  }
-  
-  public Integer getCtime()
-  {
-    return getInt(CTIME);
-  }
-  
-  public Loginlog setCtime(Integer value)
-  {
-    return set(CTIME, value);
   }
   
 }

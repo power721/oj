@@ -29,17 +29,20 @@ public class Team extends Model<Team>
   public static final String CLASS3 = "class3";
   public static final String GENDER3 = "gender3";
   public static final String CONTACT3 = "contact3";
+  public static final String NOTICE = "notice";
   public static final String COMMENT = "comment";
-  public static final String YEAR = "year";
+  public static final String STATUS = "status";
   public static final String CTIME = "ctime";
   public static final String MTIME = "mtime";
   public static final String HISTORY = "history";
-  public static final String NOTICE = "notice";
+  public static final String YEAR = "year";
   public static final String IS_GIRL_TEAM = "isGirlTeam";
   public static final String IS_ROOKIE_TEAM = "isRookieTeam";
   public static final String IS_SPECIAL_TEAM = "isSpecialTeam";
-  public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getTid()
   {
     return getInt(TID);
@@ -240,6 +243,16 @@ public class Team extends Model<Team>
     return set(CONTACT3, value);
   }
   
+  public Boolean getNotice()
+  {
+    return getBoolean(NOTICE);
+  }
+  
+  public Team setNotice(Boolean value)
+  {
+    return set(NOTICE, value);
+  }
+  
   public String getComment()
   {
     return getStr(COMMENT);
@@ -250,14 +263,14 @@ public class Team extends Model<Team>
     return set(COMMENT, value);
   }
   
-  public Integer getYear()
+  public Boolean getStatus()
   {
-    return getInt(YEAR);
+    return getBoolean(STATUS);
   }
   
-  public Team setYear(Integer value)
+  public Team setStatus(Boolean value)
   {
-    return set(YEAR, value);
+    return set(STATUS, value);
   }
   
   public Integer getCtime()
@@ -290,14 +303,14 @@ public class Team extends Model<Team>
     return set(HISTORY, value);
   }
   
-  public Boolean getNotice()
+  public Integer getYear()
   {
-    return getBoolean(NOTICE);
+    return getInt(YEAR);
   }
   
-  public Team setNotice(Boolean value)
+  public Team setYear(Integer value)
   {
-    return set(NOTICE, value);
+    return set(YEAR, value);
   }
   
   public Boolean isGirlTeam()
@@ -328,16 +341,6 @@ public class Team extends Model<Team>
   public Team setSpecialTeam(Boolean value)
   {
     return set(IS_SPECIAL_TEAM, value);
-  }
-  
-  public Boolean getStatus()
-  {
-    return getBoolean(STATUS);
-  }
-  
-  public Team setStatus(Boolean value)
-  {
-    return set(STATUS, value);
   }
   
 }

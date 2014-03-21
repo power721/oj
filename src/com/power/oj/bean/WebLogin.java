@@ -18,6 +18,9 @@ public class WebLogin extends Model<WebLogin>
   public static final String STATUS = "status";
   public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

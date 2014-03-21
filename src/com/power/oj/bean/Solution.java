@@ -18,12 +18,15 @@ public class Solution extends Model<Solution>
   public static final String MEMORY = "memory";
   public static final String RESULT = "result";
   public static final String LANGUAGE = "language";
+  public static final String CTIME = "ctime";
+  public static final String ERROR = "error";
   public static final String SOURCE = "source";
   public static final String CODE_LEN = "codeLen";
-  public static final String ERROR = "error";
   public static final String SYSTEM_ERROR = "systemError";
-  public static final String CTIME = "ctime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getSid()
   {
     return getInt(SID);
@@ -114,6 +117,26 @@ public class Solution extends Model<Solution>
     return set(LANGUAGE, value);
   }
   
+  public Integer getCtime()
+  {
+    return getInt(CTIME);
+  }
+  
+  public Solution setCtime(Integer value)
+  {
+    return set(CTIME, value);
+  }
+  
+  public String getError()
+  {
+    return getStr(ERROR);
+  }
+  
+  public Solution setError(String value)
+  {
+    return set(ERROR, value);
+  }
+  
   public String getSource()
   {
     return getStr(SOURCE);
@@ -134,16 +157,6 @@ public class Solution extends Model<Solution>
     return set(CODE_LEN, value);
   }
   
-  public String getError()
-  {
-    return getStr(ERROR);
-  }
-  
-  public Solution setError(String value)
-  {
-    return set(ERROR, value);
-  }
-  
   public String getSystemError()
   {
     return getStr(SYSTEM_ERROR);
@@ -152,16 +165,6 @@ public class Solution extends Model<Solution>
   public Solution setSystemError(String value)
   {
     return set(SYSTEM_ERROR, value);
-  }
-  
-  public Integer getCtime()
-  {
-    return getInt(CTIME);
-  }
-  
-  public Solution setCtime(Integer value)
-  {
-    return set(CTIME, value);
   }
   
 }

@@ -14,6 +14,9 @@ public class ProblemCategory extends Model<ProblemCategory>
   public static final String CID = "cid";
   public static final String WEIGHT = "weight";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

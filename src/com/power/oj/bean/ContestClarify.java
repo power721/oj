@@ -20,6 +20,9 @@ public class ContestClarify extends Model<ContestClarify>
   public static final String ATIME = "atime";
   public static final String MTIME = "mtime";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

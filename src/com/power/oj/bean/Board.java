@@ -67,6 +67,9 @@ public class Board extends Model<Board>
   public static final String Z_SOLVED_TIME = "Z_SolvedTime";
   public static final String Z_WRONG_NUM = "Z_WrongNum";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);

@@ -70,7 +70,7 @@ public class OjConfig
     variable = new HashMap<String, VariableModel>();
     for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable"))
     {
-      variable.put(variableModel.getStr("name"), variableModel);
+      variable.put(variableModel.getName(), variableModel);
     }
     
     siteTitle = get("siteTitle", "Power OJ");
@@ -95,8 +95,8 @@ public class OjConfig
     program_languages = ProgramLanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
     for (ProgramLanguageModel Language : program_languages)
     {
-      language_type.put(Language.getInt("id"), Language);
-      language_name.put(Language.getInt("id"), Language.getStr("name"));
+      language_type.put(Language.getId(), Language);
+      language_name.put(Language.getId(), Language.getName());
     }
   }
 
@@ -146,7 +146,7 @@ public class OjConfig
     VariableModel model = variable.get(name);
     if (model != null)
     {
-      return model.getStr("value");
+      return model.getStringValue();
     }
     
     return defaultValue;
@@ -162,7 +162,7 @@ public class OjConfig
     VariableModel model = variable.get(name);
     if (model != null)
     {
-      return model.getInt("int_value");
+      return model.getIntValue();
     }
     
     return defaultValue;
@@ -178,7 +178,7 @@ public class OjConfig
     VariableModel model = variable.get(name);
     if (model != null)
     {
-      return model.getBoolean("boolean_value");
+      return model.getBooleanValue();
     }
     
     return defaultValue;
@@ -186,12 +186,12 @@ public class OjConfig
 
   public static String getText(String name)
   {
-    return variable.get(name).getStr("text_value");
+    return variable.get(name).getTextValue();
   }
 
   public static String getType(String name)
   {
-    return variable.get(name).getStr("type");
+    return variable.get(name).getType();
   }
 
 }
