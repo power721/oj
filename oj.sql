@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50535
 File Encoding         : 65001
 
-Date: 2014-03-20 11:18:20
+Date: 2014-03-21 17:48:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -1084,10 +1084,10 @@ CREATE TABLE `variable` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
   `cid` int(11) DEFAULT NULL,
   `name` varchar(32) NOT NULL,
-  `value` varchar(255) DEFAULT NULL,
-  `boolean_value` tinyint(1) DEFAULT NULL,
-  `int_value` int(11) DEFAULT NULL,
-  `text_value` text,
+  `stringValue` varchar(255) DEFAULT NULL,
+  `booleanValue` tinyint(1) DEFAULT NULL,
+  `intValue` int(11) DEFAULT NULL,
+  `textValue` text,
   `type` enum('boolean','int','string','text') NOT NULL DEFAULT 'string',
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
