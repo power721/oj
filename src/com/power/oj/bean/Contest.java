@@ -17,7 +17,7 @@ public class Contest extends Model<Contest>
   public static final String DESCRIPTION = "description";
   public static final String REPORT = "report";
   public static final String TYPE = "type";
-  public static final String PASS = "pass";
+  public static final String PASSWORD = "password";
   public static final String FREEZE = "freeze";
   public static final String ATIME = "atime";
   public static final String CTIME = "ctime";
@@ -107,14 +107,14 @@ public class Contest extends Model<Contest>
     return set(TYPE, value);
   }
   
-  public String getPass()
+  public String getPassword()
   {
-    return getStr(PASS);
+    return getStr(PASSWORD);
   }
   
-  public Contest setPass(String value)
+  public Contest setPassword(String value)
   {
-    return set(PASS, value);
+    return set(PASSWORD, value);
   }
   
   public Boolean getFreeze()

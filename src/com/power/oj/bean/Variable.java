@@ -10,7 +10,6 @@ public class Variable extends Model<Variable>
   
   public static final String TABLE_NAME = "variable";
   public static final String ID = "id";
-  public static final String CID = "cid";
   public static final String NAME = "name";
   public static final String STRING_VALUE = "stringValue";
   public static final String BOOLEAN_VALUE = "booleanValue";
@@ -30,16 +29,6 @@ public class Variable extends Model<Variable>
   public Variable setId(Integer value)
   {
     return set(ID, value);
-  }
-  
-  public Integer getCid()
-  {
-    return getInt(CID);
-  }
-  
-  public Variable setCid(Integer value)
-  {
-    return set(CID, value);
   }
   
   public String getName()
@@ -62,22 +51,22 @@ public class Variable extends Model<Variable>
     return set(STRING_VALUE, value);
   }
   
-  public Boolean getBooleanValue()
+  public String getBooleanValue()
   {
-    return getBoolean(BOOLEAN_VALUE);
+    return getStr(BOOLEAN_VALUE);
   }
   
-  public Variable setBooleanValue(Boolean value)
+  public Variable setBooleanValue(String value)
   {
     return set(BOOLEAN_VALUE, value);
   }
   
-  public Integer getIntValue()
+  public String getIntValue()
   {
-    return getInt(INT_VALUE);
+    return getStr(INT_VALUE);
   }
   
-  public Variable setIntValue(Integer value)
+  public Variable setIntValue(String value)
   {
     return set(INT_VALUE, value);
   }

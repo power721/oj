@@ -193,7 +193,8 @@ ALTER TABLE user_ext CHANGE `exp` `experience` int(9) NOT NULL DEFAULT '0',
 
 ALTER TABLE web_login CHANGE `open_id` `openId` varchar(64) NOT NULL;
 
-ALTER TABLE variable CHANGE `value` `stringValue` varchar(255) DEFAULT NULL,
+ALTER TABLE variable DROP `cid`,
+                     CHANGE `value` `stringValue` varchar(255) DEFAULT NULL,
                      CHANGE `boolean_value` `booleanValue` varchar(255) DEFAULT NULL,
                      CHANGE `int_value` `intValue` varchar(255) DEFAULT NULL,
                      CHANGE `text_value` `textValue` varchar(255) DEFAULT NULL;
