@@ -27,5 +27,4 @@ public class AdminController extends OjController
     
     redirect("/admin");
   }
-
 }

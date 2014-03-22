@@ -24,11 +24,6 @@ import com.power.oj.user.UserService;
 
 public class SolutionController extends OjController
 {
-  
-  private static final UserService userService = UserService.me();
-  private static final ProblemService problemService = ProblemService.me();
-  private static final SolutionService solutionService = SolutionService.me();
-  
   @ActionKey("/status")
   public void index()
   {

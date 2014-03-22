@@ -2,19 +2,13 @@ package com.power.oj.api;
 
 import com.jfinal.aop.Before;
 import com.power.oj.admin.AdminService;
-import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
-import com.power.oj.problem.ProblemService;
-import com.power.oj.user.UserService;
 
 @Before(AdminInterceptor.class)
 public class AdminApiController extends OjController
 {
   private static final AdminService adminService = AdminService.me();
-  private static final UserService userService = UserService.me();
-  private static final ProblemService problemService = ProblemService.me();
-  private static final ContestService contestService = ContestService.me();
   
   public void problemList()
   {

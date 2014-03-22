@@ -7,15 +7,12 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
 public class ProblemApiController extends OjController
 {
-  private static final ProblemService problemService = ProblemService.me();
-  
   @ClearInterceptor(ClearLayer.ALL)
   public void userInfo()
   {

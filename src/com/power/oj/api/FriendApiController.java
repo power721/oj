@@ -3,15 +3,10 @@ package com.power.oj.api;
 import com.jfinal.aop.Before;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
-import com.power.oj.social.SocialService;
-import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
 public class FriendApiController extends OjController
 {
-  private static final UserService userService = UserService.me();
-  private static final SocialService socialService = SocialService.me();
-  
   public void getGroupList()
   {
     Integer uid = userService.getCurrentUid();

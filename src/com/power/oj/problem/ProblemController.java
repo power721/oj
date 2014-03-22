@@ -18,8 +18,6 @@ import com.power.oj.service.VisitCountService;
 
 public class ProblemController extends OjController
 {
-  private static final ProblemService problemService = ProblemService.me();
-  
   public void index()
   {
     int pageNumber = 1;

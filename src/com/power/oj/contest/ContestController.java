@@ -1,6 +1,5 @@
 package com.power.oj.contest;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,17 +24,12 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
 
 @Before({ContestPasswordInterceptor.class, ContestInterceptor.class})
 public class ContestController extends OjController
 {
-  private static final SolutionService solutionService = SolutionService.me();
-  private static final UserService userService = UserService.me();
-  private static final ContestService contestService = ContestService.me();
-
   @ClearInterceptor
   public void index()
   {
@@ -416,20 +410,10 @@ public class ContestController extends OjController
   {
     String startTime = getPara("startTime");
     String endTime = getPara("endTime");
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     ContestModel contestModel = getModel(ContestModel.class, "contest");
     
-    try
-    {
-      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
-      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
-    } catch (ParseException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-    }
+    contestService.updateContest(contestModel, startTime, endTime);
     
-    contestService.updateContest(contestModel);
     redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
   }
 
@@ -439,8 +423,8 @@ public class ContestController extends OjController
   {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     long ctime = OjConfig.startInterceptorTime + 3600000;
-    setAttr("startTime", sdf.format(new Date(ctime)));
-    setAttr("endTime", sdf.format(new Date(ctime + 18000000)));
+    setAttr("startDateTime", sdf.format(new Date(ctime)));
+    setAttr("endDateTime", sdf.format(new Date(ctime + 18000000)));
     
     setTitle(getText("contest.add.title"));
   }
@@ -452,22 +436,9 @@ public class ContestController extends OjController
   {
     String startTime = getPara("startTime");
     String endTime = getPara("endTime");
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
     ContestModel contestModel = getModel(ContestModel.class, "contest");
-    contestModel.setUid(userService.getCurrentUid());
-    try
-    {
-      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
-      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
-      log.info(contestModel.getEndTime().toString());
-    } catch (ParseException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-    }
-    contestModel.saveContest();
+    
+    contestService.addContest(contestModel, startTime, endTime);
 
     redirect(new StringBuilder(2).append("/contest/admin/").append(contestModel.getInt("cid")).toString());
   }

@@ -1,6 +1,5 @@
 package com.power.oj.admin;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,19 +7,14 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
-import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
-import com.power.oj.user.UserService;
 
 @RequiresPermissions("admin")
 public class ContestAdminController extends OjController
 {
-  private static final UserService userService = UserService.me();
-  private static final ContestService contestService = ContestService.me();
-  
   public void index()
   {
     int pageNumber = getParaToInt(0, 1);
@@ -39,8 +33,8 @@ public class ContestAdminController extends OjController
   {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     long ctime = OjConfig.startInterceptorTime + 3600000;
-    setAttr("startTime_t", sdf.format(new Date(ctime)));
-    setAttr("endTime_t", sdf.format(new Date(ctime + 18000000)));
+    setAttr("startDateTime", sdf.format(new Date(ctime)));
+    setAttr("endDateTime", sdf.format(new Date(ctime + 18000000)));
     
     setTitle(getText("contest.add.title"));
   }
@@ -51,23 +45,10 @@ public class ContestAdminController extends OjController
   {
     String startTime = getPara("startTime");
     String endTime = getPara("endTime");
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
     ContestModel contestModel = getModel(ContestModel.class, "contest");
-    contestModel.setUid(userService.getCurrentUid());
-    try
-    {
-      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
-      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
-      log.info(contestModel.getEndTime().toString());
-    } catch (ParseException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-    }
-    contestModel.saveContest();
-
+    
+    contestService.addContest(contestModel, startTime, endTime);
+    
     redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getCid()).toString());
   }
 
@@ -89,20 +70,10 @@ public class ContestAdminController extends OjController
   {
     String startTime = getPara("startTime");
     String endTime = getPara("endTime");
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     ContestModel contestModel = getModel(ContestModel.class, "contest");
     
-    try
-    {
-      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
-      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
-    } catch (ParseException e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-    }
+    contestService.updateContest(contestModel, startTime, endTime);
     
-    contestService.updateContest(contestModel);
     redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getCid()).toString());
   }
 

@@ -19,18 +19,13 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.SessionService;
-import com.power.oj.mail.MailService;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
-import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
 public class UserApiController extends OjController
 {
-  private static final UserService userService = UserService.me();
-  private static final MailService mailService = MailService.me();
-
   public void splash()
   {
     UserModel userModel = userService.getCurrentUserExt();

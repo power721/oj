@@ -4,20 +4,15 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresGuest;
 
-import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.user.UserModel;
-import com.power.oj.user.UserService;
 
 public class QQLoginApiController extends OjController
 {
-  private static final Logger log = Logger.getLogger(QQLoginApiController.class);
-  private static final UserService userService = UserService.me();
-
   @RequiresGuest
   public void index()
   {

@@ -547,9 +547,42 @@ public class ContestService
     return 0;
   }
   
-  public boolean updateContest(ContestModel contestModel)
+  public boolean addContest(ContestModel contestModel, String startTime, String endTime)
   {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    
+    contestModel.setUid(userService.getCurrentUid());
+    contestModel.setCtime(OjConfig.timeStamp);
+    try
+    {
+      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
+      log.info(contestModel.getEndTime().toString());
+    } catch (ParseException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      
+      log.error(e.getLocalizedMessage());
+    }
+    
+    return contestModel.save();
+  }
+  
+  public boolean updateContest(ContestModel contestModel, String startTime, String endTime)
+  {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     ContestModel newContest = getContest(contestModel.getCid());
+
+    try
+    {
+      contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
+      contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
+    } catch (ParseException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+    }
     
     if (contestModel.hasPassword())
     {
@@ -873,7 +906,7 @@ public class ContestService
     return true;
   }
 
-  public class UserInfo
+  class UserInfo
   {
     private Integer uid;
     private int solved = 0;

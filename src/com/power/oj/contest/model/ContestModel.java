@@ -37,13 +37,6 @@ public class ContestModel extends Model<ContestModel>
   public static final int RUNNING = 1;
   public static final int FINISHED = 2;
 
-  public boolean saveContest()
-  {
-    setCtime(OjConfig.timeStamp);
-
-    return save();
-  }
-  
   public boolean isPending()
   {
     return getStartTime() > OjConfig.timeStamp;
@@ -84,6 +77,9 @@ public class ContestModel extends Model<ContestModel>
     return hasPassword() && getPassword().equals(password);
   }
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getCid()
   {
     return getInt(CID);

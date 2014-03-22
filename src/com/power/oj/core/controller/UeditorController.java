@@ -26,7 +26,6 @@ import com.power.oj.util.FileKit;
 
 public class UeditorController extends OjController
 {
-
   @RequiresPermissions("admin:upload")
   public void upload()
   {

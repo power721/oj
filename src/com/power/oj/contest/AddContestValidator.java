@@ -1,8 +1,12 @@
 package com.power.oj.contest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import com.jfinal.core.Controller;
 import com.jfinal.validate.Validator;
 import com.power.oj.contest.model.ContestModel;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 
 public class AddContestValidator extends Validator
@@ -17,7 +21,21 @@ public class AddContestValidator extends Validator
       validateRequired("contest.password", "passMsg", c.getText("contest.add.validate.pass"));
     }
     
-    // TODO validate time
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    try
+    {
+      long startTime = sdf.parse(c.getPara("startTime")).getTime();
+      long endTime = sdf.parse(c.getPara("endTime")).getTime();
+      if (startTime <= endTime)
+      {
+        return;
+      }
+    } catch (ParseException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+    }
+    addError("timeMsg", "Contest time is incorrect!");
   }
 
   @Override

@@ -9,8 +9,6 @@ import com.power.oj.core.OjController;
 
 public class DiscussionController extends OjController
 {
-  private static final DiscussionService discussionService = DiscussionService.me();
-  
   public void index()
   {
     int pageNumber = getParaToInt(0, 1);

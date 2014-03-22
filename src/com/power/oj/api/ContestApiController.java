@@ -8,21 +8,14 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
-import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.solution.SolutionService;
-import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
 public class ContestApiController extends OjController
 {
-  private static final SolutionService solutionService = SolutionService.me();
-  private static final UserService userService = UserService.me();
-  private static final ContestService contestService = ContestService.me();
-  
   @RequiresPermissions("contest:addProblem")
   public void addProblem()
   {

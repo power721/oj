@@ -15,8 +15,6 @@ import com.power.oj.core.bean.MessageType;
 
 public class NoticeController extends OjController
 {
-  private static final NoticeService noticeService = NoticeService.me();
-  
   public void index()
   {
     int pageNumber = getParaToInt(0, 1);

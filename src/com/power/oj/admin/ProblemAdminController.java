@@ -10,14 +10,10 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.problem.ProblemException;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.problem.ProblemService;
 
 @RequiresPermissions("admin")
 public class ProblemAdminController extends OjController
 {
-  
-  private static final ProblemService problemService = ProblemService.me();
-
   public void index()
   {
     setTitle(getText("problem.index.title"));

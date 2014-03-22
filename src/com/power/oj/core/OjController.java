@@ -8,9 +8,18 @@ import javax.servlet.http.Cookie;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
+import com.power.oj.contest.ContestService;
 import com.power.oj.core.bean.FlashMessage;
+import com.power.oj.core.service.SessionService;
+import com.power.oj.discussion.DiscussionService;
+import com.power.oj.mail.MailService;
+import com.power.oj.notice.NoticeService;
+import com.power.oj.problem.ProblemService;
+import com.power.oj.social.SocialService;
+import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserInterceptor;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 import com.power.oj.util.freemarker.FreemarkerKit;
 
 /**
@@ -22,6 +31,16 @@ import com.power.oj.util.freemarker.FreemarkerKit;
 public class OjController extends Controller
 {
   protected final Logger log = Logger.getLogger(getClass());
+  
+  protected static final ContestService contestService = ContestService.me();
+  protected static final DiscussionService discussionService = DiscussionService.me();
+  protected static final MailService mailService = MailService.me();
+  protected static final NoticeService noticeService = NoticeService.me();
+  protected static final ProblemService problemService = ProblemService.me();
+  protected static final SessionService sessionService = SessionService.me();
+  protected static final SocialService socialService = SocialService.me();
+  protected static final SolutionService solutionService = SolutionService.me();
+  protected static final UserService userService = UserService.me();
 
   /**
    * Redirect to url with flash message。

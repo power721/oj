@@ -16,7 +16,6 @@ import com.power.oj.problem.ProblemService;
  */
 public class MainController extends OjController
 {
-
   /**
    * The index page.
    */

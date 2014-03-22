@@ -26,7 +26,6 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.service.OjService;
-import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.validator.RecoverAccountValidator;
 import com.power.oj.user.validator.ResetPasswordValidator;
@@ -40,12 +39,6 @@ import com.power.oj.user.validator.UpdateUserValidator;
  */
 public class UserController extends OjController
 {
-  /*
-   * If most controllers use these services, move them to OjController.
-   */
-  private static final UserService userService = UserService.me();
-  private static final SessionService sessionService = SessionService.me();
-  
   @RequiresUser
   public void index()
   {

@@ -28,14 +28,14 @@
               <div class="control-group contest">
                 <label class="control-label" for="inputStartTime">Start Time</label>
                 <div class="controls input-append date form_datetime" id="startTime">
-                  <input size="16" type="text" name="startTime" id="inputStartTime" value="${startTime_t!}" readonly required>
+                  <input size="16" type="text" name="startTime" id="inputStartTime" value="${startDateTime!}" readonly required>
                   <span class="add-on"><i class="icon-th"></i></span>
                 </div>
               </div>
               <div class="control-group contest">
                 <label class="control-label" for="inputEndTime">End Time</label>
                 <div class="controls input-append date form_datetime" id="endTime">
-                  <input size="16" type="text" name="endTime" id="inputEndTime" value="${endTime_t!}" readonly required>
+                  <input size="16" type="text" name="endTime" id="inputEndTime" value="${endDateTime!}" readonly required>
                   <span class="add-on"><i class="icon-th"></i></span>
                 </div>
               </div>
@@ -125,7 +125,7 @@
               autoclose: true,
               todayBtn: true,
               pickerPosition: "bottom-left",
-              startDate: "${startTime_t!}",
+              startDate: "${startDateTime!}",
               //minuteStep: 30
           });
   

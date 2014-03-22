@@ -7,15 +7,10 @@ import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.mail.MailModel;
-import com.power.oj.mail.MailService;
-import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
 public class MailApiController extends OjController
 {
-  private static final UserService userService = UserService.me();
-  private static final MailService mailService = MailService.me();
-  
   public void unRead()
   {
     Integer uid = userService.getCurrentUid();
