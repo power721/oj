@@ -6,6 +6,8 @@ import jodd.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.ClearInterceptor;
+import com.jfinal.aop.ClearLayer;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -112,6 +114,7 @@ public class ContestApiController extends OjController
   
   public void code()
   {
+    // TODO check permission
     Integer sid = getParaToInt("sid");
     boolean isAdmin = userService.isAdmin();
     ContestSolutionModel solutionModel = solutionService.findContestSolution4Json(sid);
@@ -163,4 +166,17 @@ public class ContestApiController extends OjController
 
     renderJson(new String[]{"success", "alpha", "problemTitle", "language", "resultLongName", "resultName", "solution", "brush"});
   }
+
+  @ClearInterceptor(ClearLayer.ALL)
+  public void recent()
+  {
+    renderJson(contestService.getRecentContest());
+  }
+
+  public void evictRecent()
+  {
+    contestService.evictRecentContest();
+    renderNull();
+  }
+  
 }

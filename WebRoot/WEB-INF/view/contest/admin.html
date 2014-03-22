@@ -62,12 +62,14 @@
 </@override>
 
 <@override name="styles">
-  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+  <link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet">
 </@override>
 <@override name="scripts">
+<#if oj_style != "slate">
 <link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+</#if>
 
 <script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>

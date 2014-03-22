@@ -372,12 +372,6 @@ public class ContestController extends OjController
   }
 
   @ClearInterceptor
-  public void recentContest()
-  {
-    renderJson(contestService.getRecentContest());
-  }
-
-  @ClearInterceptor
   public void recent()
   {
     setTitle(getText("contest.recent.title"));

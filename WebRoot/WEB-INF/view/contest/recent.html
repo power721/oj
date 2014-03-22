@@ -1,12 +1,19 @@
 <@override name="content">
 <div id="scheduler"></div>
+<#if user??>
+<i class="btn btn-info" id="evict">Evict Cache</i>
+</#if>
 </@override>
 
+<@override name="styles">
+  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+  <link href="assets/kendo-ui/styles/kendo.common.min.css" rel="stylesheet" />
+  <link href="assets/kendo-ui/styles/kendo.default.min.css" rel="stylesheet" />
+</@override>
 <@override name="scripts">
-<link href="assets/kendo-ui/styles/kendo.common.min.css" rel="stylesheet" />
-<link href="assets/kendo-ui/styles/kendo.default.min.css" rel="stylesheet" />
-<script src="assets/kendo-ui/js/jquery.min.js"></script>
+<script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
 <script src="assets/kendo-ui/js/kendo.web.min.js"></script>
+
 <script type="text/javascript" charset="utf-8">
     $(function() {
       $("#scheduler").kendoScheduler({
@@ -25,7 +32,7 @@
               //batch: true,
               transport: {
                   read: {
-                      url: "contest/recentContest",
+                      url: "api/contest/recent",
                       dataType: "json"
                   },
                   /*update: {
@@ -82,15 +89,35 @@
                   { text: "BNU", value: "BNU", color: "#f8a398" },
                   { text: "CSU", value: "CSU", color: "#95aa98" },
                   { text: "HDU", value: "HDU", color: "#51a0ed" },
-                  { text: "UVA", value: "UVA", color: "#56ca85" },
-                  { text: "Codeforces", value: "Codeforces", color: "#00ca85" },
+                  { text: "UVA", value: "UVA", color: "#66ca85" },
+                  { text: "Codeforces", value: "Codeforces", color: "#FF33CC" },
                   { text: "HUNNU", value: "HUNNU", color: "#442585" },
-                  { text: "Topcoder", value: "Topcoder", color: "#9925aa" },
+                  { text: "Topcoder", value: "Topcoder", color: "#DAA520" },
                   { text: "SYSU", value: "SYSU", color: "#FF5555" },
+                  { text: "FZU", value: "FZU", color: "#EE82EE" },
+                  { text: "ZJU", value: "ZJU", color: "#99aa55" },
+                  { text: "XTU", value: "XTU", color: "#FFA500" },
+                  { text: "Codechef", value: "Codechef", color: "#D2B48C" },
               ]
             }
           ]
       });
+  });
+  $(function() {
+    $('#evict').click(function() {
+      if ($(this).hasClass('disabled')) {
+        return;
+      }
+      $.get('api/contest/evictRecent', function(data) {
+        $('#evict').removeClass('btn-info').addClass('btn-success disabled');
+        $.pnotify({
+              title: 'Evict Success',
+              text: 'Evict cache for Recent contest successfully.',
+              history: false,
+              type: 'success'
+          });
+      });
+    });
   });
 </script>
 </@override>

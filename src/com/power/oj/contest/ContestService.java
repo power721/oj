@@ -452,6 +452,12 @@ public class ContestService
     return json;
   }
   
+  public void evictRecentContest()
+  {
+    CacheKit.remove("contest", "recent");
+    getRecentContest();
+  }
+  
   public int getContestStatus(Integer cid)
   {
     ContestModel contestModel = getContest(cid);
