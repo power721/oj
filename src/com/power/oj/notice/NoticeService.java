@@ -20,7 +20,7 @@ public class NoticeService
   
   public NoticeModel getNotice(Integer id)
   {
-    return dao.findFirst("SELECT n.*,u.name,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM notice n LEFT JOIN user u ON u.uid=n.uid WHERE id=? AND n.status=1", id);
+    return dao.findFirst("SELECT n.*,u.name,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM notice n LEFT JOIN user u ON u.uid=n.uid WHERE id=? AND n.status=1", id);
   }
   
   public List<NoticeModel> getNoticeList()

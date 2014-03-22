@@ -58,15 +58,15 @@ public class ContestService
     if (OjConfig.getDevMode())
     {
       contestModel = dao.findFirst(
-        "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,"
-        + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=?",
+        "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
+        + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM contest WHERE cid=?",
         cid);
     }
     else
     {
       contestModel = dao.findFirstByCache("contest", cid, 
-          "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,"
-        + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t FROM contest WHERE cid=?",
+          "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
+        + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM contest WHERE cid=?",
         cid);
     }
     return contestModel;
@@ -176,7 +176,7 @@ public class ContestService
   public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status)
   {
     List<Object> paras = new ArrayList<Object>();
-    String sql = "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS start_time_t,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS end_time_t";
+    String sql = "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime";
     StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
     if (type > -1)
     {

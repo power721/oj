@@ -11,9 +11,9 @@
       <a href="contest/admin/${contest.cid!}" class="btn btn-primary">Manage</a>
     </div>
     </#if>
-    <span>Start time</span>: <span class="time">${contest.start_time_t!}</span> 
-    <span>End time</span>: <span class="time">${contest.end_time_t!}</span><br>
-    <span>Current System Time</span>: <span class="time" id="current">${contest.start_time_t!}</span> 
+    <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> 
+    <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
+    <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span> 
     <span>Contest Status</span>: <span class="status ${status!}">${status!}</span><br>
   </div>
 </div>

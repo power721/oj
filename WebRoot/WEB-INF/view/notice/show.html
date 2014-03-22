@@ -7,8 +7,8 @@
       <a href="notice/edit/${notice.id!}" class="btn btn-primary">Edit</a> 
     </div>
     </#if>
-    <span>Start time</span>: <span class="time">${notice.start_time_t!}</span> 
-    <span>End time</span>: <span class="time">${notice.end_time_t!}</span><br>
+    <span>Start time</span>: <span class="time">${notice.startDateTime!}</span> 
+    <span>End time</span>: <span class="time">${notice.endDateTime!}</span><br>
     <span>Publisher</span>: <span class="name"><a href="user/profile/${notice.name!}">${notice.name!}</a></span>
     <span>View</span>: <span class="pts">${notice.view!}</span><br>
   </div>
