@@ -411,6 +411,7 @@ public class ContestService
         }
         jsonArray = JSON.parseArray(html);
       }
+      log.info(html);
 
       for (int i = 0; i < jsonArray.size(); ++i)
       {
@@ -418,7 +419,7 @@ public class ContestService
         ContestkendoSchedulerTask contest = new ContestkendoSchedulerTask();
         try
         {
-          timeStamp = sdf.parse(data.getString("startTime")).getTime();
+          timeStamp = sdf.parse(data.getString("start_time")).getTime();
         } catch (ParseException e)
         {
           timeStamp = 0;

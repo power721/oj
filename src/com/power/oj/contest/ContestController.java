@@ -372,7 +372,7 @@ public class ContestController extends OjController
   }
 
   @ClearInterceptor
-  public void recent_contest()
+  public void recentContest()
   {
     renderJson(contestService.getRecentContest());
   }
