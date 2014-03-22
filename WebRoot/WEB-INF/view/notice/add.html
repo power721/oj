@@ -57,7 +57,7 @@
 
     }).on('changeDate', function(ev){
         var time = ev.date.valueOf();
-        var date = formatDate(new Date(time + 3600000));
+        var date = formatDate(new Date(time + 300000));
         var endDate = formatDate(new Date(time));
         
         $('#inputEndTime').val(endDate);

@@ -3,6 +3,7 @@ package com.power.oj.notice;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.user.UserService;
 
@@ -20,12 +21,16 @@ public class NoticeService
   
   public NoticeModel getNotice(Integer id)
   {
-    return dao.findFirst("SELECT n.*,u.name,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM notice n LEFT JOIN user u ON u.uid=n.uid WHERE id=? AND n.status=1", id);
+    return dao.findFirstByCache("notice", id, 
+        "SELECT n.*,u.name,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
+        + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM notice n "
+        + "LEFT JOIN user u ON u.uid=n.uid WHERE id=? AND n.status=1", id);
   }
   
   public List<NoticeModel> getNoticeList()
   {
-    return dao.find("SELECT id,title FROM notice WHERE startTime<=UNIX_TIMESTAMP() AND endTime>=UNIX_TIMESTAMP() AND status=1 ORDER BY id DESC");
+    return dao.findByCache("notice", "notice", "SELECT id,title FROM notice WHERE "
+        + "startTime<=UNIX_TIMESTAMP() AND endTime>=UNIX_TIMESTAMP() AND status=1 ORDER BY id DESC");
   }
   
   public Page<NoticeModel> getNoticePage(int pageNumber, int pageSize)
@@ -65,8 +70,13 @@ public class NoticeService
     newNotice.setContent(noticeModel.getContent());
     newNotice.setStatus(noticeModel.getStatus());
     newNotice.setMtime(OjConfig.timeStamp);
+    updateCache(newNotice);
     
     return newNotice.update();
   }
   
+  private void updateCache(NoticeModel noticeModel)
+  {
+    CacheKit.put("notice", noticeModel.getId(), noticeModel);
+  }
 }
