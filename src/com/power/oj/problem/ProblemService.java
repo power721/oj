@@ -394,12 +394,12 @@ public class ProblemService
 
   public Integer getViewCount(Integer pid)
   {
-    return findProblem(pid).getView();
+    return dao.findById(pid).getView();
   }
 
   public void setViewCount(Integer pid, Integer view)
   {
-    ProblemModel problemModel = findProblem(pid);
+    ProblemModel problemModel = dao.findById(pid);
     problemModel.setView(view).update();
     updateCache(problemModel);
   }

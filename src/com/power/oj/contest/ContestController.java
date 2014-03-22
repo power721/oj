@@ -189,6 +189,7 @@ public class ContestController extends OjController
       }
     }
     String userName = getPara("name");
+    // TODO force userName ad current user name
     StringBuilder query = new StringBuilder().append("?cid=").append(cid);
 
     if (result > -1)

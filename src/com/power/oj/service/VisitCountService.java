@@ -25,7 +25,7 @@ public class VisitCountService extends TimerTask
   private final static Logger log = Logger.getLogger(VisitCountService.class);
   private static boolean start = false;
   private static VisitCountService daemon;
-  private static Timer click_timer;
+  private static Timer clickTimer;
   private final static long INTERVAL = 15 * 60 * 1000;
 
   /**
@@ -63,12 +63,8 @@ public class VisitCountService extends TimerTask
           default: nCount = 1;
         }
       }
-      else
-      {
-        nCount += 1;
-      }
-      
-      queue.put(obj_id, nCount.intValue());
+
+      queue.put(obj_id, nCount + 1);
     }
   }
   
@@ -101,8 +97,8 @@ public class VisitCountService extends TimerTask
     if (!start)
     {
       daemon = new VisitCountService();
-      click_timer = new Timer("VisitCountService", true);
-      click_timer.schedule(daemon, INTERVAL, INTERVAL);// 运行间隔1分钟
+      clickTimer = new Timer("VisitCountService", true);
+      clickTimer.schedule(daemon, INTERVAL, INTERVAL);// 运行间隔1分钟
       start = true;
     }
     log.info("VisitCountService started.");
@@ -115,7 +111,7 @@ public class VisitCountService extends TimerTask
   {
     if (start)
     {
-      click_timer.cancel();
+      clickTimer.cancel();
       start = false;
     }
     log.info("VisitCountService stopped.");
