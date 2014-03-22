@@ -359,7 +359,12 @@ public class ContestService
   
   public String getRecentContest()
   {
-    String json = CacheKit.get("contest", "recent");
+    String json = null;
+    
+    if (!OjConfig.getDevMode())
+    {
+      json = CacheKit.get("contest", "recent");
+    }
     if (json == null)
     {
       List<ContestkendoSchedulerTask> contests = new ArrayList<ContestkendoSchedulerTask>();
