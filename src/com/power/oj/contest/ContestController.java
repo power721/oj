@@ -12,7 +12,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -229,40 +228,22 @@ public class ContestController extends OjController
     char id = getPara(1, "A").toUpperCase().charAt(0);
     Integer num = id - 'A';
     ProblemModel problemModel = contestService.getProblem(cid, num);
-    boolean ajax = getParaToBoolean("ajax", false);
-
-    if (!ajax)
+    
+    if (problemModel == null)
     {
-      if (problemModel == null)
-      {
-        FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-        redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
-        return;
-      }
-
-      setAttr("resultList", solutionService.getProblemStatusForContest(cid, num));
-      setAttr("problem", problemModel);
+      FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+      redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
+      return;
     }
 
-    int pageNumber = getParaToInt(2, 1);
-    int pageSize = getParaToInt(3, OjConfig.statusPageSize);
-    Integer language = getParaToInt("language", -1);
-    StringBuilder query = new StringBuilder();
-    if (language > -1)
-    {
-      query.append("language=").append(language);
-    }
-    Page<ContestSolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
-
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
-    setAttr("solutionList", solutionList);
-    setAttr("language", language);
-    setAttr("query", query.toString());
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr("language", getParaToInt("language"));
     setAttr("pageSize", OjConfig.statusPageSize);
+    setAttr("resultList", solutionService.getProblemStatusForContest(cid, num));
+    setAttr("problem", problemModel);
     setAttr("id", id);
 
     setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"), cid, id)).toString());
-    render(ajax ? "ajax/problemStatus.html" : "problemStatus.html");
   }
   
   public void code()

@@ -8,14 +8,39 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
+import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
+
 
 @Before(GuestInterceptor.class)
 public class ContestApiController extends OjController
 {
+  @ClearInterceptor(ClearLayer.ALL)
+  public void problemStatus()
+  {
+    Integer cid = getParaToInt(0);
+    char id = getPara(1, "A").toUpperCase().charAt(0);
+    Integer num = id - 'A';
+    
+    int pageNumber = getParaToInt("p", 1);
+    int pageSize = getParaToInt("s", OjConfig.statusPageSize);
+    Integer language = getParaToInt("language", -1);
+
+    Page<ContestSolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
+
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr("solutionList", solutionList);
+    setAttr("language", language);
+    setAttr("user", userService.getCurrentUser());
+    setAttr("adminUser", userService.isAdmin());
+    
+    renderJson(new String[]{"user", "adminUser", "solutionList", "language", "program_languages"});
+  }
+  
   @RequiresPermissions("contest:addProblem")
   public void addProblem()
   {

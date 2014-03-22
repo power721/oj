@@ -7,7 +7,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
@@ -65,23 +64,16 @@ public class ProblemApiController extends OjController
     Integer pid = getParaToInt(0);
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", OjConfig.statusPageSize);
-    Integer language = getParaToInt("language");
-    StringBuilder query = new StringBuilder();
-    if (language != null)
-    {
-      query.append("&language=").append(language);
-    }
+    Integer language = getParaToInt("language", -1);
     
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("language", language);
-    setAttr("user", UserService.me().getCurrentUser());
-    setAttr("adminUser", UserService.me().isAdmin());
-    setAttr("pid", pid);
+    setAttr("user", userService.getCurrentUser());
+    setAttr("adminUser", userService.isAdmin());
     
-    setAttr("query", query.toString());
-    setAttr("solutionList", SolutionService.me().getProblemStatusPage(pageNumber, pageSize, language, pid));
-    renderJson(new String[]{ "pid", "user", "adminUser", "pageSize", "language", "query", "program_languages", "solutionList" });
+    setAttr("solutionList", solutionService.getProblemStatusPage(pageNumber, pageSize, language, pid));
+    renderJson(new String[]{ "user", "adminUser", "pageSize", "language", "program_languages", "solutionList" });
   }
   
   @ClearInterceptor(ClearLayer.ALL)

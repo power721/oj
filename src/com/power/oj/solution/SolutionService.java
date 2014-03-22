@@ -171,7 +171,7 @@ public class SolutionService
 
     List<Object> paras = new ArrayList<Object>();
 
-    if (language != null)
+    if (language != null && language > -1)
     {
       sb.append(" AND s.language=?");
       paras.add(language);
@@ -188,7 +188,7 @@ public class SolutionService
 
   public Page<ContestSolutionModel> getProblemStatusPageForContest(int pageNumber, int pageSize, int language, int cid, int num)
   {
-    String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,l.name AS languageName";
+    String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
     StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();

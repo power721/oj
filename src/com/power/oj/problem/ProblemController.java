@@ -60,12 +60,6 @@ public class ProblemController extends OjController
 
   public void status()
   {
-    /*if (!isParaExists(0))
-    {
-      forwardAction("/contest/problem_status");
-      return;
-    }
-    */
     Integer pid = getParaToInt(0);
     ProblemModel problemModel = problemService.findProblem(pid);
     if (problemModel == null)
@@ -75,22 +69,14 @@ public class ProblemController extends OjController
       return;
     }
 
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr("pageSize", OjConfig.statusPageSize);
+    setAttr("language", getParaToInt("language"));
     setAttr("problem", problemModel);
     setAttr("resultList", problemService.getProblemStatus(pid));
     setAttr("prevPid", problemService.getPrevPid(pid));
     setAttr("nextPid", problemService.getNextPid(pid));
 
-    Integer language = getParaToInt("language");
-    StringBuilder query = new StringBuilder();
-    if (language != null)
-    {
-      query.append("?language=").append(language);
-    }
-    
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
-    setAttr("pageSize", OjConfig.statusPageSize);
-    setAttr("language", language);
-    
     setTitle(new StringBuilder(2).append(String.format(getText("problem.status.title"), pid)).toString());
   }
   
