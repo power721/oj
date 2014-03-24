@@ -105,29 +105,27 @@ $(document).ready(function() {
     $("#oj-navbar").addClass("navbar-inverse");
   }
   
-  $('#loginForm').submit(function() {
-    var loginForm = $("#loginForm");
-    $("#loginMsg").removeClass().addClass('alert').html('<img style="height:20px" src="assets/images/ajax-loader.gif" /> Validating....').fadeIn(300);
-    $("input:submit,button:submit,.btn", loginForm).attr("disabled","disabled").addClass("disabled");
-      $.post($(this).attr("action"), $(this).serialize(), function(data) {
-        if (data.success) {
-          $("#loginMsg",loginForm).fadeTo(100,0.1,function() {
-            $(this).removeClass().addClass('alert alert-success').html('Login success.').fadeTo(100,1);
-          });
-          setTimeout(function() {
+  $('#loginForm').ajaxForm({
+    beforeSubmit: function (formData, loginForm, options) {
+      $("#loginMsg").removeClass().addClass('alert').html('<img style="height:20px" src="assets/images/ajax-loader.gif" /> Validating....').fadeIn(300);
+      $("input:submit,button:submit,.btn", loginForm).attr("disabled", "disabled").addClass("disabled");
+    },
+    success: function(data, statusText, xhr, loginForm) {
+      if (data.success) {
+        $("#loginMsg",loginForm).fadeTo(100, 0.1, function() {
+          $(this).removeClass().addClass('alert alert-success').html('Login success.').fadeTo(100, 1, function() {
             window.location.reload();
-          },
-          500);
-        }
-        else {
-          $("#loginMsg",loginForm).fadeTo(100,0.1,function() {
-            $(this).removeClass().addClass('alert alert-error').html(data.result).fadeTo(300,1);
           });
-          $("input:submit,button:submit,.btn", loginForm).removeAttr("disabled","disabled").removeClass("disabled");
-        }
-      });
-      return false;
-    });
+        });
+      }
+      else {
+        $("#loginMsg",loginForm).fadeTo(100, 0.1, function() {
+          $(this).removeClass().addClass('alert alert-error').html(data.result).fadeTo(300, 1);
+        });
+        $("input:submit,button:submit,.btn", loginForm).removeAttr("disabled", "disabled").removeClass("disabled");
+      }
+    }
+  });
 });
 
 (function($) {
