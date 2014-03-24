@@ -59,7 +59,7 @@ public class DiscussionController extends OjController
     Integer uid = userService.getCurrentUid();
     TopicModel topicModel = discussionService.findTopic(id);
     
-    if (topicModel != null && (userService.isAdmin() || uid == topicModel.getUid()))
+    if (topicModel != null && (userService.isAdmin() || uid.equals(topicModel.getUid())))
     {
       setAttr("topic", topicModel);
     }

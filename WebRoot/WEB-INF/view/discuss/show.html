@@ -2,7 +2,7 @@
 <h3 class="text-center">${topic.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
-    <#if adminUser??>
+    <#if adminUser?? || user.uid==topic.uid>
     <div class="topic-admin">
       <a href="discuss/edit/${topic.id!}" class="btn btn-primary">Edit</a> 
     </div>
