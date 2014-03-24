@@ -3,14 +3,12 @@ package com.power.oj.discussion;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.user.UserService;
 
 public class DiscussionService
 {
-  private static final Logger log = Logger.getLogger(DiscussionService.class);
   private static final TopicModel dao = TopicModel.dao;
   private static final DiscussionService me = new DiscussionService();
   private static final UserService userService = UserService.me();
@@ -38,7 +36,7 @@ public class DiscussionService
     
     for (TopicModel topic : topicPage.getList())
     {
-      CommentModel comment = CommentModel.dao.findFirst("SELECT COUNT(*) AS reply,MAX(ctime) AS last FROM `comment` WHERE threadId=? LIMIT 1", topic.get("id"));
+      CommentModel comment = CommentModel.dao.findFirst("SELECT COUNT(*) AS reply,MAX(ctime) AS last FROM `comment` WHERE threadId=? LIMIT 1", topic.getId());
       topic.put("reply", comment.get("reply"));
       topic.put("last", comment.get("last"));
     }
@@ -53,40 +51,47 @@ public class DiscussionService
     return commentList;
   }
   
-  public TopicModel getTopic(Integer id)
+  public TopicModel findTopic(Integer id)
   {
-    return dao.findFirst("SELECT t.*,u.name,u.avatar FROM `topic` LEFT JOIN `user` u ON u.uid=t.uid WHERE id=?", id);
+    return dao.findFirst("SELECT t.*,u.name,u.avatar FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE id=?", id);
+  }
+
+  public TopicModel findTopic4Show(Integer id)
+  {
+    TopicModel topic = dao.findFirst("SELECT t.*,u.name,u.avatar FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE id=?", id);
+    topic.setView(topic.getView() + 1).update();
+    return topic;
   }
   
   public boolean addDiscussion(TopicModel topicModel)
   {
     TopicModel newTopic = new TopicModel();
     
-    newTopic.set("uid", userService.getCurrentUid());
-    newTopic.set("pid", topicModel.get("pid"));
-    newTopic.set("title", topicModel.get("title"));
-    newTopic.set("content", topicModel.get("content"));
-    newTopic.set("ctime", OjConfig.timeStamp);
+    newTopic.setUid(userService.getCurrentUid());
+    newTopic.setPid(topicModel.getPid());
+    newTopic.setTitle(topicModel.getTitle());
+    newTopic.setContent(topicModel.getContent());
+    newTopic.setCtime(OjConfig.timeStamp);
     
     return newTopic.save();
   }
   
   public boolean updateDiscussion(TopicModel topicModel)
   {
-    TopicModel newTopic = dao.findById(topicModel.get("id"));
+    TopicModel newTopic = dao.findById(topicModel.getId());
     
-    newTopic.set("uid", topicModel.get("uid"));
-    newTopic.set("pid", topicModel.get("pid"));
-    newTopic.set("title", topicModel.get("title"));
-    newTopic.set("content", topicModel.get("content"));
-    newTopic.set("mtime", OjConfig.timeStamp);
+    newTopic.setUid(topicModel.getUid());
+    newTopic.setPid(topicModel.getPid());
+    newTopic.setTitle(topicModel.getTitle());
+    newTopic.setContent(topicModel.getContent());
+    newTopic.setMtime(OjConfig.timeStamp);
     
     return newTopic.update();
   }
   
   public boolean removeDiscussion(TopicModel topicModel)
   {
-    topicModel.set("status", false);
+    topicModel.setStatus(false);
     return topicModel.update();
   }
 

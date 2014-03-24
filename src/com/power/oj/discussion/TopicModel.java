@@ -13,6 +13,7 @@ public class TopicModel extends Model<TopicModel>
   public static final String PID = "pid";
   public static final String TITLE = "title";
   public static final String CONTENT = "content";
+  public static final String VIEW = "view";
   public static final String ATIME = "atime";
   public static final String CTIME = "ctime";
   public static final String MTIME = "mtime";
@@ -66,6 +67,16 @@ public class TopicModel extends Model<TopicModel>
   public TopicModel setContent(String value)
   {
     return set(CONTENT, value);
+  }
+
+  public Integer getView()
+  {
+    return getInt(VIEW);
+  }
+  
+  public TopicModel setView(Integer value)
+  {
+    return set(VIEW, value);
   }
   
   public Integer getAtime()

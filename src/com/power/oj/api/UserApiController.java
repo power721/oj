@@ -323,6 +323,14 @@ public class UserApiController extends OjController
     }
   }
   
+  @ClearInterceptor(ClearLayer.ALL)
+  public void logout()
+  {
+    userService.logout(this);
+
+    renderNull();
+  }
+  
   public void getSubmissions()
   {
     int pageNumber = getParaToInt("page", 1);

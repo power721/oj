@@ -973,6 +973,7 @@ CREATE TABLE `topic` (
   `pid` int(9) DEFAULT NULL,
   `title` varchar(255) DEFAULT NULL,
   `content` text,
+  `view` int(9) NOT NULL DEFAULT '0',
   `atime` int(11) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',

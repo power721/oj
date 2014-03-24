@@ -169,6 +169,8 @@ ALTER TABLE team CHANGE `stu_id1` `stuId1` varchar(8) NOT NULL,
                  CHANGE `new_team` `isRookieTeam` tinyint(1) NOT NULL DEFAULT '0',
                  CHANGE `sp_team` `isSpecialTeam` tinyint(1) NOT NULL DEFAULT '0';
 
+ALTER TABLE topic ADD `view` int(9) NOT NULL DEFAULT '0';
+
 ALTER TABLE user CHANGE `pass` `password` varchar(128) NOT NULL COMMENT 'User’s password (hashed).',
                  CHANGE `realname` `realName` varchar(35) DEFAULT NULL,
                  CHANGE `reg_email` `regEmail` varchar(64) NOT NULL,

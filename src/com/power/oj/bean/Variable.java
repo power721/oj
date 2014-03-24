@@ -51,22 +51,22 @@ public class Variable extends Model<Variable>
     return set(STRING_VALUE, value);
   }
   
-  public String getBooleanValue()
+  public Boolean getBooleanValue()
   {
-    return getStr(BOOLEAN_VALUE);
+    return getBoolean(BOOLEAN_VALUE);
   }
   
-  public Variable setBooleanValue(String value)
+  public Variable setBooleanValue(Boolean value)
   {
     return set(BOOLEAN_VALUE, value);
   }
   
-  public String getIntValue()
+  public Integer getIntValue()
   {
-    return getStr(INT_VALUE);
+    return getInt(INT_VALUE);
   }
   
-  public Variable setIntValue(String value)
+  public Variable setIntValue(Integer value)
   {
     return set(INT_VALUE, value);
   }

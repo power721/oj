@@ -22,7 +22,9 @@ public class DiscussionController extends OjController
   
   public void show()
   {
+    Integer id = getParaToInt(0);
     
+    setAttr("topic", discussionService.findTopic4Show(id));
   }
   
   @RequiresUser
