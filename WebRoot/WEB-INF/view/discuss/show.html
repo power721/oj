@@ -8,6 +8,9 @@
     </div>
     </#if>
     <span>Post time</span>: <span class="timestamp" data="${topic.ctime!}"></span><br>
+    <#if topic.pid??>
+    <span>Problem</span>: <span class="pid"><a href="problem/show/${topic.pid!}">${topic.pid!}: ${topic.problem!}</a></span><br>
+    </#if>
     <span>Author</span>: <span class="name"><a href="user/profile/${topic.name!}">${topic.name!}</a></span>
     <span>View</span>: <span class="pts">${topic.view!}</span><br>
   </div>

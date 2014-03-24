@@ -53,35 +53,29 @@ public class DiscussionService
   
   public TopicModel findTopic(Integer id)
   {
-    return dao.findFirst("SELECT t.*,u.name,u.avatar FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE id=?", id);
+    return dao.findFirst("SELECT * FROM `topic` WHERE id=?", id);
   }
 
   public TopicModel findTopic4Show(Integer id)
   {
-    TopicModel topic = dao.findFirst("SELECT t.*,u.name,u.avatar FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE id=?", id);
+    TopicModel topic = dao.findFirst("SELECT t.*,u.name,u.avatar,p.title AS problem FROM `topic` t "
+        + "LEFT JOIN `user` u ON u.uid=t.uid LEFT JOIN problem p ON p.pid=t.pid WHERE id=?", id);
     topic.setView(topic.getView() + 1).update();
     return topic;
   }
   
   public boolean addDiscussion(TopicModel topicModel)
   {
-    TopicModel newTopic = new TopicModel();
+    topicModel.setUid(userService.getCurrentUid());
+    topicModel.setCtime(OjConfig.timeStamp);
     
-    newTopic.setUid(userService.getCurrentUid());
-    newTopic.setPid(topicModel.getPid());
-    newTopic.setTitle(topicModel.getTitle());
-    newTopic.setContent(topicModel.getContent());
-    newTopic.setCtime(OjConfig.timeStamp);
-    
-    return newTopic.save();
+    return topicModel.save();
   }
   
   public boolean updateDiscussion(TopicModel topicModel)
   {
     TopicModel newTopic = dao.findById(topicModel.getId());
     
-    //newTopic.setUid(topicModel.getUid());
-    newTopic.setPid(topicModel.getPid());
     newTopic.setTitle(topicModel.getTitle());
     newTopic.setContent(topicModel.getContent());
     newTopic.setMtime(OjConfig.timeStamp);
