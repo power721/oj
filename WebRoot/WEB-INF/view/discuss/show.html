@@ -1,0 +1,25 @@
+<@override name="content">
+<h3 class="text-center">${topic.title!}</h3>
+<div class="row text-center">
+  <div clas="span4 offset4">
+    <#if adminUser??>
+    <div class="topic-admin">
+      <a href="discuss/edit/${topic.id!}" class="btn btn-primary">Edit</a> 
+    </div>
+    </#if>
+    <span>Post time</span>: <span class="timestamp" data="${topic.ctime!}"></span><br>
+    <span>Author</span>: <span class="name"><a href="user/profile/${topic.name!}">${topic.name!}</a></span>
+    <span>View</span>: <span class="pts">${topic.view!}</span><br>
+  </div>
+</div>
+<div class="row content" id="notice-content">
+  <div clas="span4 offset4">
+    <pre>${topic.content!}</pre>
+  </div>
+</div>
+
+</@override>
+
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

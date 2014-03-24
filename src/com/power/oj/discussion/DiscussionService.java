@@ -46,7 +46,7 @@ public class DiscussionService
   
   public List<CommentModel> getCommentList(Integer thread)
   {
-    List<CommentModel> commentList = CommentModel.dao.find("SELECT * FROM topic", thread);
+    List<CommentModel> commentList = CommentModel.dao.find("SELECT c.*,u.name,u.avatar FROM `comment` c JOIN `user` u ON u.uid=c.uid WHERE threadId=?", thread);
     
     return commentList;
   }
@@ -80,7 +80,7 @@ public class DiscussionService
   {
     TopicModel newTopic = dao.findById(topicModel.getId());
     
-    newTopic.setUid(topicModel.getUid());
+    //newTopic.setUid(topicModel.getUid());
     newTopic.setPid(topicModel.getPid());
     newTopic.setTitle(topicModel.getTitle());
     newTopic.setContent(topicModel.getContent());
