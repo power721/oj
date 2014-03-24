@@ -25,7 +25,6 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
-import com.power.oj.core.service.OjService;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.validator.RecoverAccountValidator;
 import com.power.oj.user.validator.ResetPasswordValidator;
@@ -260,7 +259,7 @@ public class UserController extends OjController
   @RequiresGuest
   public void forget()
   {
-    if (!OjService.me().checkEmailConf())
+    if (!ojService.checkEmailConf())
     {
       FlashMessage msg = new FlashMessage(getText("conf.email.error"), MessageType.ERROR, getText("message.error.title"));
       redirect(sessionService.getLastAccessURL(), msg);
@@ -280,7 +279,7 @@ public class UserController extends OjController
     
     // TODO move to UserService
     userModel.setToken(token).setMtime(OjConfig.timeStamp).update();
-    OjService.me().sendResetPasswordEmail(name, email, token);
+    ojService.sendResetPasswordEmail(name, email, token);
     
     redirect(sessionService.getLastAccessURL(), msg);
   }

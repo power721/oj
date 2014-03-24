@@ -46,8 +46,9 @@ import com.power.oj.util.Tool;
 public class UserService
 {
   private static final Logger log = Logger.getLogger(UserService.class);
-  private static final UserService me = new UserService();
   private static final UserModel dao = UserModel.dao;
+  private static final UserService me = new UserService();
+  private static final OjService ojService = OjService.me();
   
   private UserService() {}
   
@@ -239,7 +240,7 @@ public class UserService
       //password = userModel.getStr("pass");
       //return login(name, password, false);
       
-      OjService.me().sendVerifyEmail(name, email, verifyEmailToken);
+      ojService.sendVerifyEmail(name, email, verifyEmailToken);
       return true;
     }
     
@@ -284,7 +285,7 @@ public class UserService
       paras.put("ctime", OjConfig.timeStamp);
       paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
       
-      OjService.me().sendVerifyEmail(name, email, paras);
+      ojService.sendVerifyEmail(name, email, paras);
     }
     
     return newUser;
@@ -359,7 +360,7 @@ public class UserService
     userModel.setToken(token).setMtime(OjConfig.timeStamp);
     updateCache(userModel);
     
-    OjService.me().sendVerifyEmail(name, email, token);
+    ojService.sendVerifyEmail(name, email, token);
     
     return userModel.update();
   }
