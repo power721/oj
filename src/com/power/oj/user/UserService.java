@@ -201,6 +201,7 @@ public class UserService
       // TODO online time is incorrect
       online += (OjConfig.timeStamp - login) / 60;
       userModel.setOnline(online).update();
+      evictCache(userModel.getUid());
     }
     
     controller.removeCookie("auth_key");
@@ -216,7 +217,7 @@ public class UserService
    * @return
    * @throws Exception 
    */
-  public boolean signup(UserModel userModel) throws Exception
+  public boolean signup(UserModel userModel)
   {
     String name = HtmlEncoder.text(userModel.getName());
     String password = BCrypt.hashpw(userModel.getPassword(), BCrypt.gensalt());
@@ -855,4 +856,8 @@ public class UserService
     CacheKit.put("user", user.getUid(), user);
   }
   
+  private void evictCache(Integer uid)
+  {
+    CacheKit.remove("user", uid);
+  }
 }

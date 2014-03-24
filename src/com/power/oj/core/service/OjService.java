@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import jodd.mail.EmailMessage;
-import jodd.mail.MailException;
 import jodd.util.MimeTypes;
 
 import com.jfinal.log.Logger;
@@ -60,7 +59,7 @@ public class OjService
     return true;
   }
 
-  public boolean sendVerifyEmail(String name, String email, String token) throws MailException
+  public boolean sendVerifyEmail(String name, String email, String token)
   {
     Map<String, Object> paras = new HashMap<String, Object>();
     paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
@@ -76,26 +75,31 @@ public class OjService
     return true;
   }
 
-  public boolean sendVerifyEmail(String name, String email, Map<String, Object> paras) throws MailException
+  public boolean sendVerifyEmail(String name, final String email, Map<String, Object> paras)
   {
-    String adminEmail = OjConfig.get("adminEmail");
+    final String adminEmail = OjConfig.get("adminEmail");
     if (adminEmail == null)
     {
       return false;
     }
     
     String html = FreemarkerKit.processString("tpl/verifyEmail.html", paras);
-    EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
+    final EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
     
-    Tool.sendEmail(adminEmail, email, "Confirm PowerOJ account!", htmlMessage);
+    new Thread(new Runnable() {
+      @Override
+      public void run()
+      {
+        Tool.sendEmail(adminEmail, email, "Confirm PowerOJ account!", htmlMessage);
+      }}).start();
     
     log.info("Account recovery email send to user " + name);
     return true;
   }
 
-  public boolean sendResetPasswordEmail(String name, String email, String token) throws MailException
+  public boolean sendResetPasswordEmail(String name, final String email, String token)
   {
-    String adminEmail = OjConfig.get("adminEmail");
+    final String adminEmail = OjConfig.get("adminEmail");
     
     Map<String, Object> paras = new HashMap<String, Object>();
     paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
@@ -106,9 +110,14 @@ public class OjService
     paras.put("expires", OjConstants.RESET_PASSWORD_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
     
     String html = FreemarkerKit.processString("/tpl/resetEmail.html", paras);
-    EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
+    final EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
     
-    Tool.sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
+    new Thread(new Runnable() {
+      @Override
+      public void run()
+      {
+        Tool.sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
+      }}).start();
     
     log.info("Account recovery email send to user " + name);
     return true;

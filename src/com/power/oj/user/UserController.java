@@ -280,17 +280,7 @@ public class UserController extends OjController
     
     // TODO move to UserService
     userModel.setToken(token).setMtime(OjConfig.timeStamp).update();
-    try
-    {
-      OjService.me().sendResetPasswordEmail(name, email, token);
-    } catch (Exception e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-      
-      msg = new FlashMessage(getText("user.recover.error"), MessageType.ERROR, getText("message.error.title"));
-    }
+    OjService.me().sendResetPasswordEmail(name, email, token);
     
     redirect(sessionService.getLastAccessURL(), msg);
   }
@@ -363,27 +353,17 @@ public class UserController extends OjController
   public void save()
   {
     UserModel userModel = getModel(UserModel.class, "user");
-    
-    try
-    {
-      if (userService.signup(userModel))
-      {
-        setCookie("oj_username", userModel.getName(), OjConstants.COOKIE_AGE);
-        setFlashMessage(new FlashMessage(getText("user.save.success")));
-      }
-      else
-      {
-        // TODO
-      }
-    } catch (Exception e)
-    {
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-      
-      setFlashMessage(new FlashMessage(getText("user.save.error")));
-    }
 
+    if (userService.signup(userModel))
+    {
+      setCookie("oj_username", userModel.getName(), OjConstants.COOKIE_AGE);
+      setFlashMessage(new FlashMessage(getText("user.save.success")));
+    }
+    else
+    {
+      // TODO
+    }
+    
     redirect("/login");
   }
 

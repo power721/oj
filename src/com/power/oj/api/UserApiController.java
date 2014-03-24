@@ -305,6 +305,24 @@ public class UserApiController extends OjController
     }
   }
 
+  @Before(POST.class)
+  @ClearInterceptor
+  @RequiresGuest
+  public void signup()
+  {
+    UserModel userModel = getModel(UserModel.class, "user");
+    
+    if (userService.signup(userModel))
+    {
+      setCookie("oj_username", userModel.getName(), OjConstants.COOKIE_AGE);
+      renderJson("{\"success\":true}");
+    }
+    else
+    {
+      renderJson("{\"success\":false, \"result\":\"Signup failed.\"}");
+    }
+  }
+  
   public void getSubmissions()
   {
     int pageNumber = getParaToInt("page", 1);
