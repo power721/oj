@@ -19,6 +19,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.shiro.ShiroKit;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
@@ -284,7 +285,13 @@ public class UserApiController extends OjController
   @ClearShiro
   public void signin()
   {
-    String username = getPara("username");
+    if (ShiroKit.isAuthenticated())
+    {
+      renderJson("{\"success\":false, \"result\":\"User already signined.\"}");
+      return;
+    }
+    
+    String username = getPara("name").trim();
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
@@ -294,7 +301,7 @@ public class UserApiController extends OjController
     }
     else
     {
-      renderJson("{\"success\":false, \"result\":\"User signin failed.\"}");
+      renderJson("{\"success\":false, \"result\":\"Invalid username or password.\"}");
     }
   }
 

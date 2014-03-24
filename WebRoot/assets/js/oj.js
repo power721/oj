@@ -54,15 +54,15 @@ $(document).ready(function() {
   /*$("#marqueepos").css("height", $("marquee").height()+$("#oj-navbar").height()-70);*/
   
   $('.toLogin').click(function() {
-	  $('#signupModal').modal("hide");
-	  $('#loginModal').modal("show");
-	  return false;
+    $('#signupModal').modal("hide");
+    $('#loginModal').modal("show");
+    return false;
   });
 
   $('.toSignup').click(function() {
-	  $('#loginModal').modal("hide");
-	  $('#signup').trigger("click");
-	  return false;
+    $('#loginModal').modal("hide");
+    $('#signup').trigger("click");
+    return false;
   });
 
   $('td.user a').each(function() {
@@ -104,6 +104,30 @@ $(document).ready(function() {
   if (config.globe.navbarInverse) {
     $("#oj-navbar").addClass("navbar-inverse");
   }
+  
+  $('#loginForm').submit(function() {
+    var loginForm = $("#loginForm");
+    $("#loginMsg").removeClass().addClass('alert').html('<img style="height:20px" src="assets/images/ajax-loader.gif" /> Validating....').fadeIn(300);
+    $("input:submit,button:submit,.btn", loginForm).attr("disabled","disabled").addClass("disabled");
+      $.post($(this).attr("action"), $(this).serialize(), function(data) {
+        if (data.success) {
+          $("#loginMsg",loginForm).fadeTo(100,0.1,function() {
+            $(this).removeClass().addClass('alert alert-success').html('Login success.').fadeTo(100,1);
+          });
+          setTimeout(function() {
+            window.location.reload();
+          },
+          500);
+        }
+        else {
+          $("#loginMsg",loginForm).fadeTo(100,0.1,function() {
+            $(this).removeClass().addClass('alert alert-error').html(data.result).fadeTo(300,1);
+          });
+          $("input:submit,button:submit,.btn", loginForm).removeAttr("disabled","disabled").removeClass("disabled");
+        }
+      });
+      return false;
+    });
 });
 
 (function($) {
@@ -584,7 +608,7 @@ Date.prototype.format = function(format) {
 
 function parseTimestamp(nS) {
   if (!nS || nS == null || nS == "")
-	  return "";
+    return "";
   return new Date(parseInt(nS) * 1000).format("yyyy-MM-dd hh:mm:ss");
 }
 
