@@ -46,19 +46,22 @@
 </@override>
 
 <@override name="scripts">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.timestamp').each( function() {
+        var that = $(this);
+        that.html(parseTimestamp(that.attr('data')));
+      });
+    });
+  </script>
   
   <#if oj_style != "slate">
   <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-  <script type="text/javascript" charset="utf-8">
+  <script type="text/javascript">
     $(document).ready(function() {
-      $('.timestamp').each( function() {
-        var that = $(this);
-        that.html(parseTimestamp(that.attr('data')));
-      });
-      
       $("#topic-list").tablecloth({
         theme:"stats",
         condensed:true,

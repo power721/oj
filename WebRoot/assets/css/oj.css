@@ -1,227 +1,328 @@
 a.cureent {
-	color: black;
+  color: black;
 }
 
-.navbar-inverse .nav li.dropdown.active > .dropdown-toggle.admin {
-    color: red;
-    font-weight: bold;
+.navbar-inverse .nav li.dropdown.active>.dropdown-toggle.admin {
+  color: red;
+  font-weight: bold;
 }
 
 .green {
-    color: green;
+  color: green;
 }
+
 .red {
-    color: red;
+  color: red;
 }
+
 .blue {
-    color: blue;
+  color: blue;
 }
+
 .gray {
-    color: gray;
+  color: gray;
 }
+
 .orange {
-    color: orange;
+  color: orange;
 }
+
 .navy {
-    color: navy;
+  color: navy;
 }
+
 .black {
-	color: black
+  color: black
 }
 
 .left {
-  float: left;	
+  float: left;
 }
 
 .main {
-	min-height: 600px;
+  min-height: 600px;
 }
 
 .copyright {
-	line-height: 39px;
-	text-align: center;
-	border-top: 1px solid #ccc;
+  line-height: 39px;
+  text-align: center;
+  border-top: 1px solid #ccc;
 }
 
 .footer {
-    margin-top: 70px;
-    padding: 30px 0;
-    text-align: center;
+  margin-top: 70px;
+  padding: 30px 0;
+  text-align: center;
 }
+
 .footer-links li {
-    display: inline;
-    height: 59px;
-    margin-top: 30px;
-    padding: 10px 0;
+  display: inline;
+  height: 59px;
+  margin-top: 30px;
+  padding: 10px 0;
 }
 
 #login-box,#signup-box {
-	margin: 65px auto;
+  margin: 65px auto;
 }
 
 .profile dl {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
-.problem textarea,.solution textarea, .contest textarea, .notice textarea, textarea.auto-width {
-	width: auto;
-	overflow:visible;
+.problem textarea,.solution textarea,.contest textarea,.notice textarea,textarea.auto-width
+  {
+  width: auto;
+  overflow: visible;
 }
-	
-.problem .input-append, .contest .input-append, .notice .input-append {
-	display: block
+
+.problem .input-append,.contest .input-append,.notice .input-append {
+  display: block
 }
 
 .problemModal .modal-body {
-	max-height: 600px;
-	max-width: 900px;
+  max-height: 600px;
+  max-width: 900px;
 }
+
 .problemModal {
-	/* SET THE WIDTH OF THE MODAL 设置Modal的宽度*/
-	width: 900px;
-	/* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
-	margin: -50px 0 0 -450px;
+  /* SET THE WIDTH OF THE MODAL 设置Modal的宽度*/
+  width: 900px;
+  /* CHANGE MARGINS TO ACCOMODATE THE NEW WIDTH (original = margin: -250px 0 0 -280px;) */
+  margin: -50px 0 0 -450px;
 }
 
 .modal-body textarea {
-	width: 98%;
+  width: 98%;
 }
 
 #notice-content {
-	margin: 20px;
-	min-height: 450px;
+  margin: 20px;
+  min-height: 450px;
 }
 
 .solution .controls {
-	padding-top: 5px;
+  padding-top: 5px;
 }
 
 table#status td.time,td.memory {
-	text-align: center
+  text-align: center
 }
 
 #problem-status h4 {
-	text-align: center
+  text-align: center
 }
 
 #AC {
-	color: #ff0000;
-	font-weight: bold;
+  color: #ff0000;
+  font-weight: bold;
 }
 
 #WA {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #CE {
-	color: #8bbc21;
+  color: #8bbc21;
 }
 
 #TLE {
-	color: #ff9900;
+  color: #ff9900;
 }
 
 #MLE {
-	color: #0692ff;
+  color: #0692ff;
 }
 
 #RE {
-	color: #bb338f;
+  color: #bb338f;
 }
 
 #OLE {
-	color: #999999;
+  color: #999999;
 }
 
 #PE {
-	color: #ff03fa;
+  color: #ff03fa;
 }
 
 #SE,#Others {
-	color: #492970;
+  color: #492970;
 }
 
 #Wait {
-	color: green;
+  color: green;
 }
 
 a.active {
-	color: red;
+  color: red;
 }
 
 div#source-code {
-	text-align: center
+  text-align: center
 }
 
 .countdown {
-  margin: 20px	
+  margin: 20px
 }
 
 .Pending {
-	color: green !important;
+  color: green !important;
 }
 
 .Running {
-	color: red !important;
+  color: red !important;
 }
-	
+
 .Finished {
-	color: blue !important;
+  color: blue !important;
 }
 
 span.time {
-	color: #993399;
+  color: #993399;
 }
 
 td.time,td.memory {
-	color: #775599;
+  color: #775599;
 }
 
 table#contest-rank th,table#contest-rank td {
-	text-align: center
+  text-align: center
 }
 
 table#contest-rank td.ac {
-	background-color:#33FF33;
+  background-color: #33FF33;
 }
 
 table#contest-rank td.ac1 {
-	background-color:#99FF99;
+  background-color: #99FF99;
 }
 
 table#contest-rank td.wa {
-	background-color:red;
+  background-color: red;
 }
 
 table#contest-rank td.wa0 {
-	background-color:#FFA0A0;
+  background-color: #FFA0A0;
 }
 
 table#contest-rank td.wa1 {
-	background-color:#FF8080;
+  background-color: #FF8080;
 }
 
 table#contest-rank td.wa2 {
-	background-color:#FF6060;
+  background-color: #FF6060;
 }
 
 table#contest-rank td.wa3 {
-	background-color:#FF4040;
+  background-color: #FF4040;
 }
 
 table#contest-rank td.wa4 {
-	background-color:#FF2020;
+  background-color: #FF2020;
 }
 
 table#contest-rank td.fb {
-	background-color:#007F00 !important;
-	color:#FFF;
+  background-color: #007F00 !important;
+  color: #FFF;
 }
 
 table.table-stats {
-    font-size: 15px;
+  font-size: 15px;
 }
 
-#tagsList {position:relative; width:550px; height:550px; margin: 45px auto; background:#24313d;}
-#tagsList a {position:absolute; top:0px; left:0px; font-family: Microsoft YaHei; color:#fff; font-weight:bold; text-decoration:none; padding: 3px 6px; }
-#tagsList a:hover { color:#FF0000; letter-spacing:2px;}
+/*************** comment ******************/
+.banner {
+  width: auto;
+  text-align: left;
+  position: relative;
+  color: #666;
+  font-family: "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
+  font-size: 14px;
+  height: 36px;
+  line-height: 34px;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #ddd;
+  background-color: #fafafa;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.tab.fixed {
+  float: left !important;
+  border: none;
+  cursor: default;
+  font-size: 18px;
+  font-weight: normal;
+  font-family: Michroma, 'Segoe UI Light', 'Segoe UI', 'Segoe UI WP',
+    'Microsoft Jhenghei', '微软雅黑', sans-serif, Times;
+  overflow: visible;
+  padding: 0 8px;
+}
+
+.banner .tab {
+  cursor: pointer;
+  display: inline-block;
+  width: auto;
+  height: 34px;
+  line-height: 34px;
+  margin: 0;
+  padding: 0 16px;
+  text-align: center;
+  overflow: hidden;
+  color: #333;
+  float: left;
+  position: relative;
+  border: none;
+  font-size: 14px;
+  border-right: 1px solid #eee;
+}
+
+.tab.fixed .hint {
+  font-size: 10px;
+  color: #ccc;
+  margin: 0 0 0 4px;
+}
+
+.tab.more {
+  cursor: pointer;
+  background-color: transparent;
+  height: 32px;
+  line-height: 32px;
+  margin: 0;
+  float: right;
+  color: #08c;
+  border-radius: 2px;
+  border: none;
+  width: auto;
+  height: 24px;
+  line-height: 24px;
+  font-size: 14px;
+  padding: 0 4px;
+  margin-right: 4px;
+  position: relative;
+  top: 4px;
+}
+
+#tagsList {
+  position: relative;
+  width: 550px;
+  height: 550px;
+  margin: 45px auto;
+  background: #24313d;
+}
+
+#tagsList a {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  font-family: Microsoft YaHei;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 3px 6px;
+}
+
+#tagsList a:hover {
+  color: #FF0000;
+  letter-spacing: 2px;
+}

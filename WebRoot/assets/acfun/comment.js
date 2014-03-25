@@ -3,7 +3,7 @@ var showComm = function(param, callback) {
   var func = {
     name: 'showComm()',
     token: 'mimiko',
-    cid: param[0],
+    id: param[0],
     page: param[1],
     cooldown: 1000,
     limit: 10
@@ -20,38 +20,43 @@ var showComm = function(param, callback) {
     if (area.data().port) {
       area.data().port.abort()
     };
-    area.data().port = $.get('/comment_list_json.aspx', {
-      contentId: func.cid,
-      currentPage: func.page
+    area.data().port = $.get('api/discuss/commentList', {
+      threadId: func.id,
+      pageNumber: func.page
     }).done(function(data) {
-      var tool = ['<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>', '', '<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>', '<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>'][user.group];
-      if (!data.commentList.length) {
+      var tool = ['<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>', '', '<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>', '<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>'][/*user.group || */2];
+      if (!data.totalRow) {
         var text = '目前尚未有评论。';
         var html = '<span class="alert alert-info">' + text + '</span>';
         $.info(text);
         inner.html(html)
       } else {
         var page = $.makePager({
-          num: data.page,
-          count: data.totalCount,
+          num: data.pageNumber,
+          count: data.totalRow,
           size: data.pageSize,
           long: 5,
           addon: true
         });
         var quoted = [];
         var html = '';
-        for (var i = 0,
-        l = data.commentList.length; i < l; i++) {
-          var comm = data.commentContentArr['c' + data.commentList[i]];
-          var commIndex = [comm.cid];
-          quoted.push(comm.cid);
+        var idMap = {};
+        for (var i = 0,l = data.list.length; i < l; i++) {
+          var comm = data.list[i];
+          comm.count = comm.count || i+1;
+          idMap[comm.id] = i;
+        }
+        for (var i = 0,l = data.list.length; i < l; i++) {
+          var comm = data.list[i];
+          var commIndex = [idMap[comm.id]];
+          quoted.push(comm.id);
           var cC = comm;
           for (var j = 0; j < 65535; j++) {
             if (cC.quoteId) {
               if ($.inArray(cC.quoteId, quoted) == -1) {
-                commIndex.push(cC.quoteId);
+                commIndex.push(idMap[cC.quoteId]);
                 quoted.push(cC.quoteId);
-                cC = data.commentContentArr['c' + cC.quoteId]
+                cC = data.list[idMap[cC.quoteId]]
               } else {
                 commIndex.push('fin');
                 break
@@ -69,15 +74,15 @@ var showComm = function(param, callback) {
             var cHide = '',
             cDivider = commIndex.length == 1 ? '': '<div class="item-comment-divider"></div>'
           };
-          var avatar = '<img class="avatar" src="' + comm.userImg + '" data-name="' + comm.userName + '">';
+          var avatar = '<img class="avatar" src="' + (comm.avatar || 'assets/images/user/default.png') + '" data-name="' + comm.name + '">';
           for (var n = commIndex.length - 1; n >= 0; n = n - 1) {
-            var cA = data.commentContentArr['c' + commIndex[n]];
+            var cA = data.list[commIndex[n]];
             if (n == 0) {
-              cHtml = cDivider + cHide + cHtml + '<div id="c-' + cA.cid + '" class="item-comment item-comment-first" data-qid="' + cA.quoteId + '" data-layer="' + cA.count + '">' + '<div class="area-comment-left">' + '<a class="thumb' + (cA.userClass ? ' ' + cA.userClass: '') + '" target="_blank" href="/u/' + cA.userID + '.aspx#home">' + avatar + '</a>' + '</div>' + '<div class="area-comment-right">' + '<div class="author-comment last" data-uid="' + cA.userID + '"><span class="index-comment">#' + cA.count + ' </span> <a class="name" target="_blank" href="/u/' + cA.userID + '.aspx#home">' + cA.userName + '</a> 发表于 <span class="time">' + cA.postDate + '</span>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '</div>' + '</div>'
+              cHtml = cDivider + cHide + cHtml + '<div id="c-' + cA.id + '" class="item-comment item-comment-first" data-qid="' + cA.quoteId + '" data-layer="' + cA.count + '">' + '<div class="area-comment-left">' + '<a class="thumb' + (cA.userClass ? ' ' + cA.userClass: '') + '" target="_blank" href="user/profile/' + cA.name + '">' + avatar + '</a>' + '</div>' + '<div class="area-comment-right">' + '<div class="author-comment last" data-uid="' + cA.uid + '"><span class="index-comment">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a> 发表于 <span class="time">' + cA.postDate + '</span>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '</div>' + '</div>'
             } else if (n < func.limit) {
-              cHtml = '<div id="c-' + cA.cid + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' + cA.userID + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="/u/' + cA.userID + '.aspx#home">' + cA.userName + '</a>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
+              cHtml = '<div id="c-' + cA.id + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' + cA.uid + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
             } else {
-              cHtml += '<div id="c-' + cA.cid + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId + '">' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' + cA.userID + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="/u/' + cA.userID + '.aspx#home">' + cA.userName + '</a>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
+              cHtml += '<div id="c-' + cA.id + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId + '">' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' + cA.uid + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
             }
           };
           html += cHtml
@@ -86,14 +91,14 @@ var showComm = function(param, callback) {
         function() {
           var obj = $(this);
           var qid = obj.attr('data-qid');
-          var comm = data.commentContentArr['c' + qid];
-          var commIndex = [qid];
+          var comm = data.list[idMap[qid]];
+          var commIndex = [idMap[qid]];
           var cC = comm;
           for (var j = 0; j < 65535; j++) {
             if (cC.quoteId) {
-              commIndex.push(cC.quoteId);
+              commIndex.push(idMap[cC.quoteId]);
               quoted.push(cC.quoteId);
-              cC = data.commentContentArr['c' + cC.quoteId]
+              cC = data.list[idMap[cC.quoteId]]
             } else {
               commIndex.reverse();
               break
@@ -101,11 +106,11 @@ var showComm = function(param, callback) {
           };
           var cHtml = '';
           for (var n in commIndex) {
-            cA = data.commentContentArr['c' + commIndex[n]];
+            cA = data.list[commIndex[n]];
             if (n == commIndex.length - 1) {} else if (n >= commIndex.length - func.limit) {
-              cHtml = '<div id="c-' + cA.cid + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="/u/' + cA.userID + '.aspx#home">' + cA.userName + '</a><p class="floor-comment">' + (parseInt(n) + 1) + '</p></div>' + '</div>'
+              cHtml = '<div id="c-' + cA.id + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a><p class="floor-comment">' + (parseInt(n) + 1) + '</p></div>' + '</div>'
             } else {
-              cHtml += '<div id="c-' + cA.cid + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId + '">' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="/u/' + cA.userID + '.aspx#home">' + cA.userName + '</a><p class="floor-comment">' + (parseInt(n) + 1) + '</p></div>' + '</div>'
+              cHtml += '<div id="c-' + cA.id + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId + '">' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a><p class="floor-comment">' + (parseInt(n) + 1) + '</p></div>' + '</div>'
             }
           };
           obj.css({
@@ -225,7 +230,7 @@ function sendComm(param, callback) {
       };
       $.info('debug::' + $.parseString(func));
       $.info('回复发送中...');
-      system.port.postComm = $.post('/comment.aspx', $.param(func, true).toString().replace(/\[\]/g, '')).done(function(data) {
+      system.port.postComm = $.post('api/discuss/comment', $.param(func, true).toString().replace(/\[\]/g, '')).done(function(data) {
         var data = data;
         if (data.success) {
           $.info('回复发送成功。');
@@ -261,7 +266,7 @@ function sendComm(param, callback) {
               aid: system.aid,
               title: system.title,
               desc: system.desc || '此视频未填写简介。',
-              cid: system.cid,
+              id: system.id,
               tags: system.tags,
               preview: system.preview,
               views: system.views || 0,
@@ -460,7 +465,7 @@ var deleteComm = function(param) {
       if (system.port.deleteComm) {
         system.port.deleteComm.abort()
       };
-      system.port.deleteComm = $.post('/admin/comment_delete.aspx', {
+      system.port.deleteComm = $.post('api/admin/deleteComment', {
         contentId: system.aid,
         commentId: btn.parents('div.item-comment:first').attr('id').replace(/c\-/, '')
       }).done(function() {

@@ -44,9 +44,11 @@ public class DiscussionService
     return topicPage;
   }
   
-  public List<CommentModel> getCommentList(Integer thread)
+  public Page<CommentModel> getCommentList(int pageNumber, int pageSize, Integer threadId)
   {
-    List<CommentModel> commentList = CommentModel.dao.find("SELECT c.*,u.name,u.avatar FROM `comment` c JOIN `user` u ON u.uid=c.uid WHERE threadId=?", thread);
+    Page<CommentModel> commentList = CommentModel.dao.paginate(pageNumber, pageSize, 
+        "SELECT c.*,u.name,u.avatar,FROM_UNIXTIME(c.ctime, '%Y-%m-%d %H:%i:%s') AS postDate", 
+        "FROM `comment` c JOIN `user` u ON u.uid=c.uid WHERE threadId=? ORDER BY c.ctime DESC", threadId);
     
     return commentList;
   }

@@ -29,6 +29,7 @@ import com.power.oj.admin.ProblemAdminController;
 import com.power.oj.admin.UserAdminController;
 import com.power.oj.api.AdminApiController;
 import com.power.oj.api.ContestApiController;
+import com.power.oj.api.DiscussionApiController;
 import com.power.oj.api.FriendApiController;
 import com.power.oj.api.MailApiController;
 import com.power.oj.api.ProblemApiController;
@@ -131,6 +132,7 @@ public class AppConfig extends JFinalConfig
     me.add("/user", UserController.class);
     me.add("/api/admin", AdminApiController.class, "/admin/");
     me.add("/api/contest", ContestApiController.class, "/contest/");
+    me.add("/api/discuss", DiscussionApiController.class, "/discuss/");
     me.add("/api/mail", MailApiController.class, "/mail/");
     me.add("/api/problem", ProblemApiController.class, "/problem/");
     me.add("/api/user", UserApiController.class, "/user/");

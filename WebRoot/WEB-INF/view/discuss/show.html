@@ -2,7 +2,7 @@
 <h3 class="text-center">${topic.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
-    <#if adminUser?? || user.uid==topic.uid>
+    <#if adminUser?? || (user ?? && user.uid==topic.uid)>
     <div class="topic-admin">
       <a href="discuss/edit/${topic.id!}" class="btn btn-primary">Edit</a> 
     </div>
@@ -20,9 +20,34 @@
     <pre>${topic.content!}</pre>
   </div>
 </div>
-
+<!--area-comment-->
+<div id="area-comment" class="block"></div>
+<!--area-comment-->
 </@override>
 
 <@override name="scripts">
+<link rel="stylesheet" href="assets/acfun/article.css">
+<script src="assets/acfun/core.js"></script>
+<script src="assets/acfun/ubb.min.js"></script>
+<script src="assets/acfun/comment.js"></script>
+<script type="text/javascript">
+  system.aid = ${topic.id!};
+  window.setTimeout(function() {
+      readyComm(function() {
+        var btn = $('#btn-showComm');
+        if (config.comment.autoShowCommentAllowed) {
+          window.setTimeout(function() {
+            btn.click()
+          },
+          50)
+        } else {
+          btn.css({
+            display: 'block'
+          })
+        }
+      })
+  },
+  500);
+</script>
 </@override>
 <@extends name="../common/_layout.html" />
