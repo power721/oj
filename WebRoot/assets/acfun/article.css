@@ -569,7 +569,7 @@ iframe#ACFlashPlayer-re{
 	top:0;
 	left:0;
 	height:auto;
-	width:auto;
+	width:100%;
 	line-height:16px;
 	font-size:13px;
 	color:#666;

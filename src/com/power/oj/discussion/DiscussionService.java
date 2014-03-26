@@ -60,8 +60,8 @@ public class DiscussionService
 
   public TopicModel findTopic4Show(Integer id)
   {
-    TopicModel topic = dao.findFirst("SELECT t.*,u.name,u.avatar,p.title AS problem FROM `topic` t "
-        + "LEFT JOIN `user` u ON u.uid=t.uid LEFT JOIN problem p ON p.pid=t.pid WHERE id=?", id);
+    TopicModel topic = dao.findFirst("SELECT t.*,p.title AS problem,COUNT(c.id) AS reply FROM `topic` t "
+        + "LEFT JOIN problem p ON p.pid=t.pid LEFT JOIN comment c ON c.threadId=t.id WHERE t.id=?", id);
     topic.setView(topic.getView() + 1).update();
     return topic;
   }

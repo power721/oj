@@ -24,7 +24,21 @@ var showComm = function(param, callback) {
       threadId: func.id,
       pageNumber: func.page
     }).done(function(data) {
-      var tool = ['<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>', '', '<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>', '<span class="area-tool-comment">' + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' + '</span>'][/*user.group || */2];
+      var tool = ['<span class="area-tool-comment">' 
+                + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' 
+                + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' 
+                + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' 
+                + '</span>', 
+                '', 
+                '<span class="area-tool-comment">' 
+                + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' 
+                + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' 
+                + '</span>', 
+                '<span class="area-tool-comment">' 
+                + '<a class="btn-quote" onClick="javascript:quoteComm($(this));">[引用]</a>' 
+                + '<a class="btn-delete" onClick="javascript:deleteComm($(this));">[删除]</a>' 
+                + '<a class="btn-report" onClick="javascript:reportComm($(this));">[举报]</a>' 
+                + '</span>'][/*user.group || */2];
       if (!data.totalRow) {
         var text = '目前尚未有评论。';
         var html = '<span class="alert alert-info">' + text + '</span>';
@@ -48,7 +62,7 @@ var showComm = function(param, callback) {
         }
         for (var i = 0,l = data.list.length; i < l; i++) {
           var comm = data.list[i];
-          var commIndex = [idMap[comm.id]];
+          var commIndex = [i]/*[idMap[comm.id]]*/;
           quoted.push(comm.id);
           var cC = comm;
           for (var j = 0; j < 65535; j++) {
@@ -78,11 +92,25 @@ var showComm = function(param, callback) {
           for (var n = commIndex.length - 1; n >= 0; n = n - 1) {
             var cA = data.list[commIndex[n]];
             if (n == 0) {
-              cHtml = cDivider + cHide + cHtml + '<div id="c-' + cA.id + '" class="item-comment item-comment-first" data-qid="' + cA.quoteId + '" data-layer="' + cA.count + '">' + '<div class="area-comment-left">' + '<a class="thumb' + (cA.userClass ? ' ' + cA.userClass: '') + '" target="_blank" href="user/profile/' + cA.name + '">' + avatar + '</a>' + '</div>' + '<div class="area-comment-right">' + '<div class="author-comment last" data-uid="' + cA.uid + '"><span class="index-comment">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a> 发表于 <span class="time">' + cA.postDate + '</span>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '</div>' + '</div>'
+              cHtml = cDivider + cHide + cHtml + '<div id="c-' + cA.id + '" class="item-comment item-comment-first" data-qid="' 
+                + cA.quoteId + '" data-layer="' + cA.count + '">' + '<div class="area-comment-left">' + '<a class="thumb' 
+                + (cA.userClass ? ' ' + cA.userClass: '') + '" target="_blank" href="user/profile/' + cA.name + '">' + avatar + '</a>' 
+                + '</div>' + '<div class="area-comment-right">' + '<div class="author-comment last" data-uid="' + cA.uid 
+                + '"><span class="index-comment">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' 
+                + cA.name + '</a> 发表于 <span class="time">' + cA.postDate + '</span>' + tool + '<p class="floor-comment">' + (commIndex.length - n) 
+                + '</p></div>' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '</div>' + '</div>'
             } else if (n < func.limit) {
-              cHtml = '<div id="c-' + cA.id + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' + cA.uid + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
+              cHtml = '<div id="c-' + cA.id + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml 
+                + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' 
+                + cA.uid + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count 
+                + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a>' + tool 
+                + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
             } else {
-              cHtml += '<div id="c-' + cA.id + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId + '">' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' + cA.uid + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a>' + tool + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
+              cHtml += '<div id="c-' + cA.id + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId 
+                + '">' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment" data-uid="' 
+                + cA.uid + '"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count 
+                + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a>' + tool 
+                + '<p class="floor-comment">' + (commIndex.length - n) + '</p></div>' + '</div>'
             }
           };
           html += cHtml
@@ -108,9 +136,17 @@ var showComm = function(param, callback) {
           for (var n in commIndex) {
             cA = data.list[commIndex[n]];
             if (n == commIndex.length - 1) {} else if (n >= commIndex.length - func.limit) {
-              cHtml = '<div id="c-' + cA.id + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a><p class="floor-comment">' + (parseInt(n) + 1) + '</p></div>' + '</div>'
+              cHtml = '<div id="c-' + cA.id + '" class="item-comment item-comment-quote" data-qid="' + cA.quoteId + '">' + cHtml 
+                + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' 
+                + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count 
+                + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a><p class="floor-comment">' 
+                + (parseInt(n) + 1) + '</p></div>' + '</div>'
             } else {
-              cHtml += '<div id="c-' + cA.id + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId + '">' + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a><p class="floor-comment">' + (parseInt(n) + 1) + '</p></div>' + '</div>'
+              cHtml += '<div id="c-' + cA.id + '" class="item-comment item-comment-quote item-comment-quote-simple" data-qid="' + cA.quoteId + '">' 
+                + '<div class="content-comment">' + $.parseGet(cA.content) + '</div>' 
+                + '<div class="author-comment"><span class="index-comment" title="发表于' + cA.postDate + '">#' + cA.count 
+                + ' </span> <a class="name" target="_blank" href="user/profile/' + cA.name + '">' + cA.name + '</a><p class="floor-comment">' 
+                + (parseInt(n) + 1) + '</p></div>' + '</div>'
             }
           };
           obj.css({
@@ -314,7 +350,10 @@ function readyEditor(callback) {
   };
   var area = $('#area-editor');
   if (user.online == 1) {
-    var temp = '<div id="area-editor-inner" class="form">' + '<script type="text/plain" id="editor" style="width:980px"></script>' + '<div id="block-tool-editor">' + '<div class="l">' + '<button id="btn-send-editor" class="btn success do"><i class="icon white icon-ok-sign"></i>发送评论</button>' + '</div>' + '<div class="r">' + '</div>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div id="item-editor-shadow" class="hidden">编辑器正处于[引用发言]状态，点击以恢复[发表回复]状态。</div>' + '<span class="clearfix"></span>';
+    var temp = '<div id="area-editor-inner" class="form">' + '<script type="text/plain" id="editor" style="width:980px"></script>' 
+    + '<div id="block-tool-editor">' + '<div class="l">' + '<button id="btn-send-editor" class="btn success do"><i class="icon white icon-ok-sign"></i>发送评论</button>' + '</div>' 
+    + '<div class="r">' + '</div>' + '</div>' + '<span class="clearfix"></span>' + '</div>' 
+    + '<div id="item-editor-shadow" class="hidden">编辑器正处于[引用发言]状态，点击以恢复[发表回复]状态。</div>' + '<span class="clearfix"></span>';
     area.html(temp);
     $.setEditorConfig({
       toolbars: [['bold', 'italic', 'underline', 'strikethrough', '|', 'forecolor', 'fontsize', '|', 'emotion', 'insertimage', 'spechars', '|', 'link', 'unlink']],
@@ -370,7 +409,8 @@ function readyEditor(callback) {
           var shadow = $(this);
           var target = $('#area-editor');
           if (!$('#btn-quote-return').length) {
-            $('#block-tool-editor').find('div.r').html('<button id="btn-quote-return" class="btn danger" onClick="' + "javascript:$('#item-editor-shadow').click();" + '"><i class="icon white icon-remove-sign"></i>取消</button>');
+            $('#block-tool-editor').find('div.r').html('<button id="btn-quote-return" class="btn danger" onClick="' 
+              + "javascript:$('#item-editor-shadow').click();" + '"><i class="icon white icon-remove-sign"></i>取消</button>');
             $('#item-editor-shadow').removeClass('hidden')
           };
           var time = !!system.browser.ie ? 0 : 200;
@@ -398,12 +438,13 @@ function readyEditor(callback) {
       $.info('debug::[' + func.name + ']编辑器加载完成。')
     })
   } else {
-    var html = '<span class="alert alert-warning">您无权发表评论，请先行<a onClick="javascript:$(this).call(\'login\');">[登录]</a></span>';
+    var html = '<span class="alert alert-warning">您无权发表评论，请先行<a onClick="javascript:$(\'#login\').click();">[登录]</a></span>';
     area.html(html).css({
       height: 32
     });
     $('#area-comment').before(html);
-    var html = '由于尚未登录，您将无权发表评论。' + '<br />' + '请先行<a onClick="javascript:$(this).call(\'login\');">[登录]</a>或<a href="/reg.aspx">[注册]</a>。';
+    var html = '由于尚未登录，您将无权发表评论。<br />请先行<a onClick="javascript:$(\'#login\').click();">[登录]</a>' 
+        + '或<a onClick="javascript:$(\'#signup\').click();>[注册]</a>。';
     if (system.type == 'video' || !config.globe.guideFloatAllowed) {
       $('#login-guide').find('a').eq( - 2).info(html)
     }
@@ -431,7 +472,8 @@ var quoteComm = function(param) {
       'qname': objQ.children('div.author-comment').children('a.name').text()
     });
     if (!$('#btn-quote-return').length) {
-      $('#block-tool-editor').find('div.r').html('<button id="btn-quote-return" class="btn danger" onClick="' + "javascript:$('#item-editor-shadow').click();" + '"><i class="icon white icon-remove-sign"></i>取消</button>');
+      $('#block-tool-editor').find('div.r').html('<button id="btn-quote-return" class="btn danger" onClick="' 
+        + "javascript:$('#item-editor-shadow').click();" + '"><i class="icon white icon-remove-sign"></i>取消</button>');
       $('#item-editor-shadow').removeClass('hidden')
     };
     var time = !!system.browser.ie ? 0 : 200;
@@ -505,7 +547,11 @@ var reportComm = function(param) {
     $.ensure(function() {
       var proof = func.btn.closest('div.item-comment').find('div.content-comment:last').text().toString().slice(0, 50);
       var cont = func.btn.closest('div.item-comment').find('span.index-comment:last').text().replace(/\s/g, '') + '楼 评论内容违规。';
-      var url = '/report.aspx#name=' + func.btn.closest('div.author-comment').children('a.name:first').text().replace(/[\#\;\@\=]/g, '') + ';from=' + self.location.href.toString().replace(/\#.*/, '') + ';type=' + '评论' + ';desc=' + cont.replace(/[\#\;\@\=]/g, '') + ';proof=' + proof.replace(/[\#\;\@\=]/g, '');
+      var url = '/report.aspx#name=' + func.btn.closest('div.author-comment').children('a.name:first').text().
+                replace(/[\#\;\@\=]/g, '') + ';from=' + self.location.href.toString().
+                replace(/\#.*/, '') + ';type=' + '评论' + ';desc=' + cont.
+                replace(/[\#\;\@\=]/g, '') + ';proof=' + proof.
+                replace(/[\#\;\@\=]/g, '');
       window.open(encodeURI(url))
     })
   } else {
@@ -528,7 +574,9 @@ var readyComm = function(callback) {
   system.gate.sendCommAllowed = 1;
   var area = $('#area-comment');
   if (area.length) {
-    var html = '<div class="banner">' + '<p class="tab fixed">评论列表<span class="hint">Comments</span></p>' + '<p class="tab more">' + '<button id="btn-refresh" class="btn primary mini" onClick="javascript:refreshComm();"><i class="icon white icon-refresh"></i>刷新评论</button>' + '</p>' + '</div>' + '<div id="area-comment-inner">' + '<button id="btn-showComm" class="btn info">显示评论</button>' + '</div>';
+    var html = '<div class="banner">' + '<p class="tab fixed">评论列表<span class="hint">Comments</span></p>' + '<p class="tab more">' 
+    + '<button id="btn-refresh" class="btn btn-primary mini" onClick="javascript:refreshComm();"><i class="icon icon-white icon-refresh"></i>刷新评论</button>' 
+    + '</p>' + '</div>' + '<div id="area-comment-inner">' + '<button id="btn-showComm" class="btn info">显示评论</button>' + '</div>';
     area.after('<div id="area-editor"></div>').html(html);
     var btn = $('#btn-showComm');
     $('#area-comment-inner').readyPager({

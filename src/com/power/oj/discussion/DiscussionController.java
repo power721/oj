@@ -25,8 +25,10 @@ public class DiscussionController extends OjController
   public void show()
   {
     Integer id = getParaToInt(0);
+    TopicModel topic = discussionService.findTopic4Show(id);
     
-    setAttr("topic", discussionService.findTopic4Show(id));
+    setAttr("topic", topic);
+    setAttr("author", userService.getUser(topic.getUid()));
   }
   
   @RequiresUser

@@ -303,6 +303,26 @@ table.table-stats {
   top: 4px;
 }
 
+.area-left,.left.area {
+  width: 50%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  float: left;
+  display: inline-block;
+}
+
+.area-right,.right.area {
+  width: 50%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  float: right;
+  display: inline-block;
+}
+/********* tag ************/
 #tagsList {
   position: relative;
   width: 550px;
