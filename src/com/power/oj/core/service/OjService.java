@@ -139,7 +139,7 @@ public class OjService
   public List<Record> getRolePermission(int rid)
   {
     String sql = "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
-    List<Record> permissionList = Db.find(sql,rid);
+    List<Record> permissionList = Db.find(sql, rid);
     
     return permissionList;
   }

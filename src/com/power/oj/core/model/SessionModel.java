@@ -30,7 +30,7 @@ public class SessionModel extends Model<SessionModel>
   
   public int updateURL(String url, String sessionID)
   {
-    return Db.update("UPDATE session SET lastActivity=UNIX_TIMESTAMP(),uri=? WHERE sessionId=?", url, sessionID);
+    return Db.update("UPDATE session SET lastActivity=UNIX_TIMESTAMP(),uri=? WHERE sessionId=?", (Object) url, sessionID);
   }
   
   public int updateUser(int uid, String name, String sessionID)
@@ -40,7 +40,7 @@ public class SessionModel extends Model<SessionModel>
   
   public int deleteSession(String sessionID)
   {
-    return Db.update("DELETE FROM session WHERE sessionId=?", sessionID);
+    return Db.update("DELETE FROM session WHERE sessionId=?", (Object) sessionID);
   }
   
   public int expiresSession()

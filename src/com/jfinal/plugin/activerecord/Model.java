@@ -688,10 +688,10 @@ public abstract class Model<M extends Model> implements Serializable {
 
   /**
    * Find model by cache.
-   * @see #find(String, Object...)
+   * @see #findFirst(String, Object...)
    * @param cacheName the cache name
    * @param key the key used to get date from cache
-   * @return the list of Model
+   * @return the Model
    */
   public M findFirstByCache(String cacheName, Object key, String sql, Object... paras) {
     ICache cache = getConfig().getCache();

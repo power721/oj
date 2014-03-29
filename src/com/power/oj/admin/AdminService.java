@@ -83,7 +83,7 @@ public class AdminService
   
   public int updateConfig(String name, String value, String type)
   {
-    Record record = Db.findFirst("SELECT * FROM variable WHERE name=?", name);
+    Record record = Db.findFirst("SELECT * FROM variable WHERE name=?", (Object) name);
     
     if (record == null)
     {

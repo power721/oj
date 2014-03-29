@@ -80,7 +80,7 @@ public class SocialService
     {
       return -1;
     }
-    return Db.update("UPDATE friend_group SET name=? WHERE uid=? AND id=? AND id>1", groupName, uid, gid);
+    return Db.update("UPDATE friend_group SET name=? WHERE uid=? AND id=? AND id>1", (Object) groupName, uid, gid);
   }
   
   public int deleteGroup(Integer uid, Integer gid)
