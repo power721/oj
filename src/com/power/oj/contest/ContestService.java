@@ -23,6 +23,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.contest.model.BoardModel;
+import com.power.oj.contest.model.ContestClarifyModel;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -310,32 +311,66 @@ public class ContestService
     return userRank;
   }
   
-  public List<Record> getClarifyList(Integer cid)
+  public List<Record> getClarifyList(Integer cid, Integer num)
   {
-    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? ORDER BY id DESC", cid);
+    if (num != null && num > -1)
+    {
+      return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid "
+          + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND num=? ORDER BY c.id DESC", cid, num);
+    }
+    else
+    {
+      return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid "
+          + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? ORDER BY c.id DESC", cid);
+    }
   }
   
   
-  public List<Record> getPrivateClarifyList(Integer cid, Integer uid)
+  public List<Record> getPrivateClarifyList(Integer cid, Integer num, Integer uid)
   {
-    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND c.uid=? AND public=0 ORDER BY id DESC", cid, uid);
+    StringBuilder sb = new StringBuilder();
+    sb.append("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid ");
+    sb.append("LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.uid=? AND c.public=0 ");
+    if (num != null && num > -1)
+    {
+      sb.append(" AND c.num=? ");
+    }
+    sb.append("ORDER BY c.id DESC");
+    if (num != null && num > -1)
+    {
+      return Db.find(sb.toString(), cid, uid, num);
+    }
+    return Db.find(sb.toString(), cid, uid);
   }
   
-  public List<Record> getPublicClarifyList(Integer cid)
+  public List<Record> getPublicClarifyList(Integer cid, Integer num)
   {
-    return Db.find("SELECT c.*,u.name FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid WHERE cid=? AND public=1 ORDER BY id DESC", cid);
+    StringBuilder sb = new StringBuilder();
+    sb.append("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid ");
+    sb.append("LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.public=1 ");
+    if (num != null && num > -1)
+    {
+      sb.append(" AND c.num=? ");
+    }
+    sb.append("ORDER BY c.id DESC");
+    if (num != null && num > -1)
+    {
+      return Db.find(sb.toString(), cid, num);
+    }
+    return Db.find(sb.toString(), cid);
   }
   
-  public boolean addClarify(Integer cid, String question)
+  public boolean addClarify(Integer cid, Integer num, String question)
   {
-    Record clarify = new Record();
+    ContestClarifyModel clarify = new ContestClarifyModel();
     
-    clarify.set("cid", cid);
-    clarify.set("uid", userService.getCurrentUid());
-    clarify.set("question", question);
-    clarify.set("ctime", OjConfig.timeStamp);
+    clarify.setCid(cid);
+    clarify.setNum(num);
+    clarify.setUid(userService.getCurrentUid());
+    clarify.setQuestion(question);
+    clarify.setCtime(OjConfig.timeStamp);
    
-    return Db.save("contest_clarify", clarify);
+    return clarify.save();
   }
   
   public boolean updateClarify(Integer id, String reply, boolean isPublic)

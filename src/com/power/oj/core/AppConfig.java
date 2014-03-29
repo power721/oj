@@ -39,6 +39,7 @@ import com.power.oj.api.oauth.SinaLoginApiController;
 import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.model.BoardModel;
+import com.power.oj.contest.model.ContestClarifyModel;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -77,6 +78,7 @@ import com.power.oj.user.UserController;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserInterceptor;
 import com.power.oj.user.UserModel;
+import com.power.oj.util.freemarker.AsciiMethod;
 import com.power.oj.util.freemarker.BlockDirective;
 import com.power.oj.util.freemarker.ExtendsDirective;
 import com.power.oj.util.freemarker.OverrideDirective;
@@ -98,6 +100,7 @@ public class AppConfig extends JFinalConfig
     FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
+    FreeMarkerRender.getConfiguration().setSharedVariable("ascii", new AsciiMethod());
     
     me.setDevMode(getPropertyToBoolean("devMode", false));
     baseViewPath = "/WEB-INF/view";
@@ -179,6 +182,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);
+    arp.addMapping("contest_clarify", ContestClarifyModel.class);
     arp.addMapping("contest_problem", ContestProblemModel.class);
     arp.addMapping("contest_solution", "sid", ContestSolutionModel.class);
     arp.addMapping("board", BoardModel.class);

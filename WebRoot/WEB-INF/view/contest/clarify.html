@@ -4,7 +4,9 @@
 <h4>Private Message</h4>
 <#list privateClarifyList as clarify>
   <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> 
-  post at <span class="timestamp" data="${clarify.ctime}"></span> <pre class="question">${clarify.question!}</pre>
+  post at <span class="timestamp" data="${clarify.ctime}"></span>
+  <#if clarify.num??> for problem <a href="contest/problem/${clarify.cid!}-${ascii(clarify.num)}">${ascii(clarify.num)}: ${clarify.title!}</a></#if>
+  <pre class="question">${clarify.question!}</pre>
   <span class="name">Administrator</span> 
   <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if> 
   <pre class="reply">${clarify.reply!}</pre>
@@ -17,7 +19,8 @@
 <h4>Public Message</h4>
 <#list publicClarifyList as clarify>
   <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> 
-  post at <span class="timestamp" data="${clarify.ctime}"></span> 
+  post at <span class="timestamp" data="${clarify.ctime}"></span>
+  <#if clarify.num??> for problem <a href="contest/problem/${clarify.cid!}-${ascii(clarify.num)}">${ascii(clarify.num)}: ${clarify.title!}</a></#if>
   <pre class="question">${clarify.question!}</pre>
   <span class="name">Administrator</span> 
   <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if> <pre class="reply">${clarify.reply!}</pre>
@@ -42,6 +45,14 @@
       </div>
       <div class="modal-body">
         <input type="hidden" name="cid" value="${cid!}">
+        <#if contestProblems??>
+        <select class="input-medium" id="inputProblem" name="num">
+        <option value="">Problem</option>
+        <#list contestProblems as Problem>
+        <option value="${Problem.num!}"<#if pid?? && pid==Problem.id>selected</#if>>${Problem.id!}. ${Problem.title!}</option> 
+        </#list>
+        </select>
+        </#if>
         <textarea name="question" rows="10"></textarea>
       </div>
       <div class="modal-footer">

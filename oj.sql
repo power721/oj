@@ -234,6 +234,7 @@ DROP TABLE IF EXISTS `contest_clarify`;
 CREATE TABLE `contest_clarify` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `cid` int(9) NOT NULL,
+  `num` tinyint(5) DEFAULT NULL,
   `uid` int(9) NOT NULL,
   `admin` int(9) DEFAULT NULL,
   `question` text NOT NULL,

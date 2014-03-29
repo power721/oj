@@ -11,6 +11,7 @@ public class ContestClarifyModel extends Model<ContestClarifyModel>
   public static final String TABLE_NAME = "contest_clarify";
   public static final String ID = "id";
   public static final String CID = "cid";
+  public static final String NUM = "num";
   public static final String UID = "uid";
   public static final String ADMIN = "admin";
   public static final String QUESTION = "question";
@@ -38,6 +39,16 @@ public class ContestClarifyModel extends Model<ContestClarifyModel>
   public ContestClarifyModel setCid(Integer value)
   {
     return set(CID, value);
+  }
+
+  public Integer getNum()
+  {
+    return getInt(NUM);
+  }
+  
+  public ContestClarifyModel setNum(Integer value)
+  {
+    return set(NUM, value);
   }
   
   public Integer getUid()

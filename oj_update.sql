@@ -3,6 +3,8 @@ ALTER TABLE contest CHANGE `start_time` `startTime` int(11) DEFAULT '0',
                     CHANGE `pass` `password` varchar(255) DEFAULT NULL,
                     CHANGE `freeze` `freeze` tinyint(1) NOT NULL DEFAULT '0';
 
+ALTER TABLE contest_clarify ADD `num` tinyint(5) DEFAULT NULL AFTER `cid`;
+                    
 ALTER TABLE contest_problem CHANGE `accept` `accepted` int(5) NOT NULL DEFAULT '0',
                             CHANGE `submit` `submission` int(5) NOT NULL DEFAULT '0',
                             CHANGE `first_blood` `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
