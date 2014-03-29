@@ -3,9 +3,9 @@
 <#if privateClarifyList?? && (privateClarifyList?size > 0)>
 <h4>Private Message</h4>
 <#list privateClarifyList as clarify>
-  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> 
-  post at <span class="timestamp" data="${clarify.ctime}"></span>
-  <#if clarify.num??> for problem <a href="contest/problem/${clarify.cid!}-${ascii(clarify.num)}">${ascii(clarify.num)}: ${clarify.title!}</a></#if>
+  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> /  
+  Post at <span class="timestamp" data="${clarify.ctime}"></span> 
+  <#if clarify.num??>/ Problem <a href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}: ${clarify.title!}</a></#if>
   <pre class="question">${clarify.question!}</pre>
   <span class="name">Administrator</span> 
   <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if> 
@@ -18,9 +18,9 @@
 <#if publicClarifyList?? && (publicClarifyList?size > 0)>
 <h4>Public Message</h4>
 <#list publicClarifyList as clarify>
-  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> 
-  post at <span class="timestamp" data="${clarify.ctime}"></span>
-  <#if clarify.num??> for problem <a href="contest/problem/${clarify.cid!}-${ascii(clarify.num)}">${ascii(clarify.num)}: ${clarify.title!}</a></#if>
+  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> / 
+  Post at <span class="timestamp" data="${clarify.ctime}"></span> 
+  <#if clarify.num??>/ Problem <a href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}: ${clarify.title!}</a></#if>
   <pre class="question">${clarify.question!}</pre>
   <span class="name">Administrator</span> 
   <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if> <pre class="reply">${clarify.reply!}</pre>

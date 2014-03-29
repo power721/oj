@@ -5,7 +5,7 @@ import java.util.List;
 import freemarker.template.TemplateMethodModel;
 import freemarker.template.TemplateModelException;
 
-public class AsciiMethod implements TemplateMethodModel
+public class Num2AlphaMethod implements TemplateMethodModel
 {
 
   @SuppressWarnings("rawtypes")
@@ -19,11 +19,7 @@ public class AsciiMethod implements TemplateMethodModel
       char c = (char) (number + 'A');
       return c;
     }
-    else if (number >= 'A' && number <= 'Z')
-    {
-      char c = (char) (number + 'A' - 'A');
-      return c;
-    }
+    
     return null;
   }
 

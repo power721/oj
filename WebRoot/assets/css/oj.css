@@ -178,7 +178,7 @@ div#source-code {
   color: blue !important;
 }
 
-span.time {
+span.time, span.timestamp {
   color: #993399;
 }
 
