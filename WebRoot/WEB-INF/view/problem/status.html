@@ -102,6 +102,7 @@
           <#if nextPid!=problem.pid>if(event.keyCode==39)window.location=nextpage;</#if>
         });
         
+        <#if (problem.submission>0)>
         // Build the chart
         $('#container').highcharts({
             chart: {
@@ -144,6 +145,7 @@
               ]
           }]
       });
+      </#if>
     });
   </script>
 
