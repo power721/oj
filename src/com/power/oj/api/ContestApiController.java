@@ -115,7 +115,7 @@ public class ContestApiController extends OjController
   public void postQuestion()
   {
     Integer cid = getParaToInt("cid");
-    Integer num = getParaToInt("num", -1);
+    Integer num = getParaToInt("num");
     String question = getPara("question");
     
     renderJson("success", contestService.addClarify(cid, num, question));

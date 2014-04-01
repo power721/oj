@@ -317,7 +317,7 @@ public class ContestService
     if (num != null && num > -1)
     {
       return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid "
-          + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND num=? ORDER BY c.id DESC", cid, num);
+          + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.num=? ORDER BY c.id DESC", cid, num);
     }
     else
     {
@@ -370,6 +370,10 @@ public class ContestService
     clarify.setUid(userService.getCurrentUid());
     clarify.setQuestion(question);
     clarify.setCtime(OjConfig.timeStamp);
+    if (userService.isAdmin())
+    {
+      clarify.setPublic(true);
+    }
    
     return clarify.save();
   }
