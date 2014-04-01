@@ -17,7 +17,7 @@ public class UpdateUserValidator extends Validator
   {
     validateEmail("user.email", "emailMsg", c.getText("validate.email.error"));
 
-    int uid = UserService.me().getCurrentUid();
+    Integer uid = UserService.me().getCurrentUid();
     /*
      * String email = c.getPara("user.email"); if (StringUtil.isNotBlank(email)
      * && UserModel.dao.containEmailExceptThis(uid, email)) {

@@ -66,13 +66,13 @@ public class SolutionController extends OjController
   @RequiresUser
   public void show()
   {
-    int sid = getParaToInt(0);
+    Integer sid = getParaToInt(0);
     boolean isAdmin = userService.isAdmin();
     SolutionModel solutionModel = solutionService.findSolution(sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getResult());
-    int uid = solutionModel.getUid();
-    int loginUid = userService.getCurrentUid();
-    if (uid != loginUid && !isAdmin)
+    Integer uid = solutionModel.getUid();
+    Integer loginUid = userService.getCurrentUid();
+    if (!uid.equals(loginUid) && !isAdmin)
     {
       FlashMessage msg = new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
       redirect("/status", msg);
@@ -90,8 +90,8 @@ public class SolutionController extends OjController
     }
 
     String problemTitle = "";
-    int cid = solutionModel.getCid();
-    if (cid > 0)
+    Integer cid = solutionModel.getCid();
+    if (cid != null && cid > 0)
     {
       int num = solutionModel.getNum();
       problemTitle = ContestService.me().getProblemTitle(cid, num);

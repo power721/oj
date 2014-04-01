@@ -170,7 +170,7 @@ public class OjConfig
 
   public static Boolean getBoolean(String name)
   {
-    return getBoolean(name ,null);
+    return getBoolean(name, null);
   }
 
   public static Boolean getBoolean(String name, Boolean defaultValue)

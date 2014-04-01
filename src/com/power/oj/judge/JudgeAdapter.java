@@ -86,9 +86,13 @@ public abstract class JudgeAdapter implements Runnable
   {
     programLanguage = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
     problemModel = problemService.findProblem(solutionModel.getPid());
+    Integer cid = solutionModel.getCid();
     String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("workPath"))).append(File.separator).toString();
-    
-    if (OjConfig.getBoolean("deleteTmpFile"))
+    if (cid != null && cid > 0)
+    {
+      workPath = new StringBuilder(4).append(workPath).append("c").append(cid).append(File.separator).toString();
+    }
+    else if (OjConfig.getBoolean("deleteTmpFile", false))
     {
       File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid() - 2).toString());
       if (prevWorkDir.isDirectory())
@@ -197,7 +201,7 @@ public abstract class JudgeAdapter implements Runnable
       return false;
     }
     
-    return userService.incAccepted(solutionModel.getUid());
+    return userService.incAccepted(solutionModel);
   }
 
   protected boolean updateProblem()

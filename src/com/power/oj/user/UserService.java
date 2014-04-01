@@ -40,6 +40,7 @@ import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.shiro.ShiroKit;
+import com.power.oj.solution.SolutionModel;
 import com.power.oj.util.FileKit;
 import com.power.oj.util.Tool;
 
@@ -374,10 +375,18 @@ public class UserService
     return userModel.update();
   }
 
-  public boolean incAccepted(Integer uid)
+  public boolean incAccepted(SolutionModel solutionModel)
   {
+    Integer pid = solutionModel.getPid();
+    Integer sid = solutionModel.getSid();
+    Integer uid = solutionModel.getUid();
     UserModel userModel = getUser(uid);
     userModel.setAccepted(userModel.getAccepted() + 1);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
+    if (lastAccepted == null)
+    {
+      userModel.setSolved(userModel.getSolved()+1);
+    }
     updateCache(userModel);
     
     return userModel.update();

@@ -145,10 +145,10 @@ public class ContestApiController extends OjController
     }
     ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
     Integer cid = solutionModel.getCid();
-    int uid = solutionModel.getUid();
-    int loginUid = userService.getCurrentUid();
+    Integer uid = solutionModel.getUid();
+    Integer loginUid = userService.getCurrentUid();
     
-    if (uid != loginUid && !isAdmin)
+    if (!uid.equals(loginUid) && !isAdmin)
     {
       renderJson("{\"success\":false,\"result\":\"Permission denied.\"}");
       return;

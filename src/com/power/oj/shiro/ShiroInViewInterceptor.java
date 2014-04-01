@@ -16,7 +16,7 @@ public class ShiroInViewInterceptor implements Interceptor
     
     if (ShiroKit.isUser()) // if user is logined, set user information in controller
     {
-      int uid = UserService.me().getCurrentUid();
+      Integer uid = UserService.me().getCurrentUid();
       
       if (UserService.me().isAdmin())
         controller.setAttr(OjConstants.ADMIN_USER, uid);

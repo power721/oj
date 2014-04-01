@@ -254,9 +254,9 @@ public class ContestController extends OjController
     boolean isAdmin = userService.isAdmin();
     ContestSolutionModel solutionModel = solutionService.findContestSolution(sid);
     ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getResult());
-    int uid = solutionModel.getUid();
-    int loginUid = userService.getCurrentUid();
-    if (uid != loginUid && !isAdmin)
+    Integer uid = solutionModel.getUid();
+    Integer loginUid = userService.getCurrentUid();
+    if (!uid.equals(loginUid) && !isAdmin)
     {
       FlashMessage msg = new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
       redirect("/status", msg);
