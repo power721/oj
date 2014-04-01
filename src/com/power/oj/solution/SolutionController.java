@@ -8,7 +8,6 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
-import com.jfinal.plugin.activerecord.Db;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -16,14 +15,10 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.judge.JudgeAdapter;
-import com.power.oj.judge.PojJudgeAdapter;
-import com.power.oj.problem.ProblemModel;
-import com.power.oj.problem.ProblemService;
-import com.power.oj.user.UserService;
 
 public class SolutionController extends OjController
 {
+  
   @ActionKey("/status")
   public void index()
   {
@@ -110,7 +105,7 @@ public class SolutionController extends OjController
     setAttr("problemTitle", problemTitle);
     try
     {
-      setAttr("submitUser", UserService.me().getUserByUid(uid));
+      setAttr("submitUser", userService.getUserByUid(uid));
     } catch (NullPointerException e)
     {
       log.warn(e.getLocalizedMessage());
@@ -149,42 +144,7 @@ public class SolutionController extends OjController
       url = new StringBuilder(2).append("/contest/status/").append(cid).toString();
     }
     
-    // TODO move to SolutionService
-    if (solutionModel.addSolution())
-    {
-      Integer pid = solutionModel.getPid();
-      ProblemModel problemModel = ProblemService.me().findProblem(pid);
-      if (problemModel == null)
-      {
-        FlashMessage msg = new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title"));
-        redirect(url, msg);
-        return;
-      }
-      
-      userService.incSubmission();
-      
-      if (cid != null && cid > 0)
-      {
-          Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
-      }
-      else
-      {
-        problemService.incSubmission(pid);
-      }
-      
-      synchronized (JudgeAdapter.class)
-      {
-        JudgeAdapter.addSolution(solutionModel);
-        log.info("JudgeAdapter.addSolution");
-        if (JudgeAdapter.size() <= 1)
-        {
-          JudgeAdapter judge = new PojJudgeAdapter();
-          new Thread(judge).start();
-          log.info("judge.start()");
-        }
-      }
-      System.out.println(solutionModel.getSid());
-    } else
+    if (solutionService.submitSolution(solutionModel) != 0)
     {
       setFlashMessage(new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
     }
@@ -196,4 +156,5 @@ public class SolutionController extends OjController
   {
     renderText("TODO");
   }
+  
 }

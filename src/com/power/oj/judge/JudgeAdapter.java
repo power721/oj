@@ -27,26 +27,20 @@ public abstract class JudgeAdapter implements Runnable
   public static final String DATA_EXT_OUT = ".out";
   public static final String sourceFileName = "Main";
   
-  protected final Logger log = Logger.getLogger(getClass());
-  protected static final String workPath;
   protected static final ContestService contestService = ContestService.me();
   protected static final UserService userService = UserService.me();
   protected static final ProblemService problemService = ProblemService.me();
   protected static ConcurrentLinkedQueue<SolutionModel> judgeList = new ConcurrentLinkedQueue<SolutionModel>();
+  
+  protected final Logger log = Logger.getLogger(getClass());
   protected SolutionModel solutionModel;
   protected ProblemModel problemModel;
-  protected ProgramLanguageModel language;
+  protected ProgramLanguageModel programLanguage;
   protected String workDirPath;
   
   protected List<String> inFiles = new ArrayList<String>();
   protected List<String> outFiles = new ArrayList<String>();
-  
-  static
-  {
-    // TODO move to OjConfig
-    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("workPath"))).append(File.separator).toString();
-  }
-  
+
   public JudgeAdapter()
   {
     super();
@@ -90,8 +84,9 @@ public abstract class JudgeAdapter implements Runnable
   
   protected void prepare() throws IOException
   {
-    language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
+    programLanguage = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
     problemModel = problemService.findProblem(solutionModel.getPid());
+    String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("workPath"))).append(File.separator).toString();
     
     if (OjConfig.getBoolean("deleteTmpFile"))
     {

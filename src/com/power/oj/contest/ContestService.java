@@ -31,8 +31,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.ProgramLanguageModel;
-import com.power.oj.judge.JudgeAdapter;
-import com.power.oj.judge.PojJudgeAdapter;
+import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
@@ -44,6 +43,8 @@ public class ContestService
   private static final Logger log = Logger.getLogger(ContestService.class);
   private static final ContestModel dao = ContestModel.dao;
   private static final ContestService me = new ContestService();
+  
+  private static final JudgeService judgeService = JudgeService.me();
   private static final UserService userService = UserService.me();
   private static final ProblemService problemService = ProblemService.me();
   
@@ -125,7 +126,7 @@ public class ContestService
       return null;
 
     Integer pid = record.getInt("pid");
-    ProblemModel problem = ProblemService.me().findProblemForContest(pid);
+    ProblemModel problem = problemService.findProblemForContest(pid);
     if (problem == null)
       return null;
     
@@ -545,7 +546,7 @@ public class ContestService
     Integer cid = contestSolution.getCid();
     Integer uid = userService.getCurrentUid();
     Integer pid = getPid(contestSolution.getCid(), contestSolution.getNum());
-    ProblemModel problemModel = ProblemService.me().findProblem(pid);
+    ProblemModel problemModel = problemService.findProblem(pid);
     
     if (problemModel == null)
     {
@@ -557,23 +558,10 @@ public class ContestService
     
     if (contestSolution.addSolution())
     {
-      //userService.incSubmission();
-      
       Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
-            
-      synchronized (JudgeAdapter.class)
-      {
-        SolutionModel solutionModel = new SolutionModel(contestSolution);
-        JudgeAdapter.addSolution(solutionModel);
-        log.info("JudgeAdapter.addSolution");
-        if (JudgeAdapter.size() <= 1)
-        {
-          JudgeAdapter judge = new PojJudgeAdapter();
-          new Thread(judge).start();
-          log.info("judge.start()");
-        }
-      }
-      System.out.println(contestSolution.getSid());
+      
+      SolutionModel solutionModel = new SolutionModel(contestSolution);
+      judgeService.judge(solutionModel);
     } else
     {
       return -2;

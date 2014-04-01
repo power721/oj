@@ -365,9 +365,9 @@ public class UserService
     return userModel.update();
   }
   
-  public boolean incSubmission()
+  public boolean incSubmission(Integer uid)
   {
-    UserModel userModel = getCurrentUser();
+    UserModel userModel = getUser(uid);
     userModel.setSubmission(userModel.getSubmission() + 1);
     updateCache(userModel);
     

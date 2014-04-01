@@ -20,12 +20,12 @@ public class PojJudgeAdapter extends JudgeAdapter
   public boolean Compile() throws IOException
   {
     log.info(solutionModel.getSid() + " Start compiling...");
-    File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getExt()).toString());
+    File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solutionModel.getSource());
 
     String comShellName = OjConfig.get("compileShell");
-    String compileCmdName = getCompileCmd(language.getCompileCmd(), workDirPath, sourceFileName, language.getExt());
+    String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, sourceFileName, programLanguage.getExt());
     log.info("compileCmd: " + compileCmdName);
 
     /*
@@ -57,7 +57,7 @@ public class PojJudgeAdapter extends JudgeAdapter
       log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
     }
 
-    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getExe()).toString());
+    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExe()).toString());
     log.info(mainProgram.getAbsolutePath());
     boolean success = mainProgram.isFile();
 
@@ -82,18 +82,18 @@ public class PojJudgeAdapter extends JudgeAdapter
 
     int numOfData = getDataFiles();
 
-    long timeLimit = problemModel.getTimeLimit() * language.getTimeFactor() + numOfData * language.getExtTime();
-    long caseTimeLimit = problemModel.getTimeLimit() * language.getTimeFactor() + language.getExtTime();
+    long timeLimit = problemModel.getTimeLimit() * programLanguage.getTimeFactor() + numOfData * programLanguage.getExtTime();
+    long caseTimeLimit = problemModel.getTimeLimit() * programLanguage.getTimeFactor() + programLanguage.getExtTime();
     runProcessOutputStream.write((timeLimit + "\n").getBytes());
     runProcessOutputStream.write((caseTimeLimit + "\n").getBytes());
 
-    long memoryLimit = (problemModel.getMemoryLimit() + language.getExtMemory()) * 1024L;
+    long memoryLimit = (problemModel.getMemoryLimit() + programLanguage.getExtMemory()) * 1024L;
     runProcessOutputStream.write((memoryLimit + "\n").getBytes());
     log.info("timeLimit: " + timeLimit);
     log.info("caseTimeLimit: " + caseTimeLimit);
     log.info("memoryLimit: " + memoryLimit);
 
-    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(language.getExe()).append("\n").toString();
+    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExe()).append("\n").toString();
     runProcessOutputStream.write(mainProgram.getBytes());
     runProcessOutputStream.write((workDirPath + "\n").getBytes());
     log.info("mainProgram: " + mainProgram);
@@ -125,7 +125,7 @@ public class PojJudgeAdapter extends JudgeAdapter
     log.info("original memory: " + buff);
     int memory = Integer.parseInt(buff);
     if (memory > 0)
-      memory -= language.getExtMemory();
+      memory -= programLanguage.getExtMemory();
     StringBuilder sb = new StringBuilder();
 
     InputStream errorStream = runProcess.getErrorStream();

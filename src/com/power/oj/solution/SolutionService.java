@@ -10,11 +10,19 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.ProgramLanguageModel;
+import com.power.oj.judge.JudgeService;
+import com.power.oj.problem.ProblemModel;
+import com.power.oj.problem.ProblemService;
+import com.power.oj.user.UserService;
 
 public class SolutionService
 {
   private static final SolutionModel dao = SolutionModel.dao;
   private static final SolutionService me = new SolutionService();
+
+  private static final JudgeService judgeService = JudgeService.me();
+  private static final UserService userService = UserService.me();
+  private static final ProblemService problemService = ProblemService.me();
   
   private SolutionService() {}
   public static SolutionService me()
@@ -224,4 +232,29 @@ public class SolutionService
     
     return resultList;
   }
+  
+  public int submitSolution(SolutionModel solutionModel)
+  {
+    Integer uid = userService.getCurrentUid();
+    Integer pid = solutionModel.getPid();
+    ProblemModel problemModel = problemService.findProblem(pid);
+    
+    if (problemModel == null)
+    {
+      return -1;
+    }
+    
+    solutionModel.setUid(uid);
+    
+    if (solutionModel.addSolution())
+    {
+      judgeService.judge(solutionModel);
+    } else
+    {
+      return -2;
+    }
+
+    return 0;
+  }
+  
 }
