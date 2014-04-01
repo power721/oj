@@ -2,8 +2,9 @@
 <div>
 <#if clarifyList?? && (clarifyList?size > 0)>
 <#list clarifyList as clarify>
-  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> post at 
-  <span class="timestamp" data="${clarify.ctime}"></span>
+  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> /  
+  Post at <span class="timestamp" data="${clarify.ctime}"></span> 
+  <#if clarify.num??>/ Problem <a href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}: ${clarify.title!}</a></#if>
   <pre class="question">${clarify.question!}</pre>
   <form class="clarform" action="api/contest/updateClarify" method="post">
     <span class="name">Administrator</span> reply at 
