@@ -28,6 +28,8 @@ public class SolutionModel extends Model<SolutionModel>
   public static final String ERROR = "error";
   public static final String SYSTEM_ERROR = "systemError";
   public static final String CTIME = "ctime";
+  
+  private SolutionModel me = new SolutionModel();
 
   public SolutionModel() {}
   
@@ -37,6 +39,15 @@ public class SolutionModel extends Model<SolutionModel>
     {
       set(filed, contestSolution.get(filed));
     }
+  }
+  
+  public SolutionModel build(ContestSolutionModel contestSolution)
+  {
+    for (String filed : contestSolution.getAttrNames())
+    {
+      me.set(filed, contestSolution.get(filed));
+    }
+    return me;
   }
   
   public boolean addSolution()

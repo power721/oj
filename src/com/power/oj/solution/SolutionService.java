@@ -233,6 +233,24 @@ public class SolutionService
     return resultList;
   }
   
+  public List<SolutionModel> getSolutionListForProblem(Integer pid)
+  {
+    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=?", pid);
+    return solutionList;
+  }
+
+  public List<ContestSolutionModel> getSolutionListForContest(Integer cid)
+  {
+    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=?", cid);
+    return solutionList;
+  }
+
+  public List<ContestSolutionModel> getSolutionListForContestProblem(Integer cid, Integer num)
+  {
+    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=? AND num=?", cid, num);
+    return solutionList;
+  }
+  
   public int submitSolution(SolutionModel solutionModel)
   {
     Integer uid = userService.getCurrentUid();
@@ -257,4 +275,8 @@ public class SolutionService
     return 0;
   }
   
+  public SolutionModel build(ContestSolutionModel contestSolution)
+  {
+    return dao.build(contestSolution);
+  }
 }

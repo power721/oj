@@ -385,9 +385,25 @@ public class UserService
     Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
-      userModel.setSolved(userModel.getSolved()+1);
+      userModel.setSolved(userModel.getSolved() + 1);
     }
     updateCache(userModel);
+    
+    return userModel.update();
+  }
+
+  public boolean decAccepted(SolutionModel solutionModel)
+  {
+    Integer pid = solutionModel.getPid();
+    Integer sid = solutionModel.getSid();
+    Integer uid = solutionModel.getUid();
+    UserModel userModel = getUser(uid);
+    userModel.setAccepted(userModel.getAccepted() - 1);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
+    if (lastAccepted == null)
+    {
+      userModel.setSolved(userModel.getSolved() - 1);
+    }
     
     return userModel.update();
   }

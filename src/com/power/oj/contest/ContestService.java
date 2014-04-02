@@ -35,6 +35,7 @@ import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
 
@@ -564,7 +565,7 @@ public class ContestService
     {
       Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
       
-      SolutionModel solutionModel = new SolutionModel(contestSolution);
+      SolutionModel solutionModel = SolutionService.me().build(contestSolution);
       judgeService.judge(solutionModel);
     } else
     {
@@ -835,6 +836,13 @@ public class ContestService
     }
     
     return Db.update("board", board);
+  }
+  
+  public boolean reset(Integer cid)
+  {
+    Db.update("DELETE FROM board WHERE cid=?", cid);
+    Db.update("UPDATE contest_problem SET accepted=0,submission=0");
+    return true;
   }
 
   public boolean buildRank(Integer cid)
