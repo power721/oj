@@ -25,7 +25,7 @@
   <#if adminUser??>
   <div class="problem-admin">
     <a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> 
-    <a href="#" class="btn btn-danger">Rejudge</a>
+    <a href="problem/rejudge/${problem.pid!}" class="btn btn-danger">Rejudge</a>
   </div>
   </#if>
   Time Limit:<span class="blue">${problem.timeLimit!}MS</span> 

@@ -15,7 +15,6 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.judge.JudgeService;
 
 public class SolutionController extends OjController
 {
@@ -130,7 +129,7 @@ public class SolutionController extends OjController
   public void rejudge()
   {
     Integer sid = getParaToInt(0);
-    JudgeService.me().rejudgeSolution(sid);
+    judgeService.rejudgeSolution(sid);
     
     redirect("/code/" + sid, new FlashMessage("Server got your rejudge request."));
   }

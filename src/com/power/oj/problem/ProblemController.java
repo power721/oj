@@ -241,6 +241,17 @@ public class ProblemController extends OjController
   {
     renderText("TODO");
   }
+  
+  @RequiresPermissions("problem:build")
+  public void rejudge()
+  {
+    Integer pid = getParaToInt(0);
+    String redirectURL = new StringBuilder(2).append("/problem/show/").append(pid).toString();
+    FlashMessage msg = new FlashMessage("Server got your request.");
+    
+    judgeService.rejudgeProblem(pid);
+    redirect(redirectURL, msg);
+  }
 
   @RequiresPermissions("problem:build")
   public void build()

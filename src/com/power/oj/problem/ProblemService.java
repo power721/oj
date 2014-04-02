@@ -423,11 +423,11 @@ public class ProblemService
     Integer uid = solutionModel.getUid();
     ProblemModel problemModel = findProblem(pid);
     
-    problemModel.setAccepted(problemModel.getAccepted()+1);
+    problemModel.setAccepted(problemModel.getAccepted() + 1);
     Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
-      problemModel.setSolved(problemModel.getSolved()+1);
+      problemModel.setSolved(problemModel.getSolved() + 1);
     }
     updateCache(problemModel);
     
@@ -463,12 +463,14 @@ public class ProblemService
     {
       throw new ProblemException("Problem is not exist!");
     }
-
-    problemModel.setSubmission(0);
+    
+    long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
+    long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
+    problemModel.setSubmission((int) submission);
+    problemModel.setSubmitUser((int) submitUser);
     problemModel.setAccepted(0);
-    problemModel.setRatio(0);
-    problemModel.setSubmitUser(0);
     problemModel.setSolved(0);
+    problemModel.setRatio(0);
     problemModel.setDifficulty(0);
 
     return problemModel.update();

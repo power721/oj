@@ -13,6 +13,7 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.discussion.DiscussionService;
+import com.power.oj.judge.JudgeService;
 import com.power.oj.mail.MailService;
 import com.power.oj.notice.NoticeService;
 import com.power.oj.problem.ProblemService;
@@ -35,6 +36,7 @@ public class OjController extends Controller
   
   protected static final ContestService contestService = ContestService.me();
   protected static final DiscussionService discussionService = DiscussionService.me();
+  protected static final JudgeService judgeService = JudgeService.me();
   protected static final MailService mailService = MailService.me();
   protected static final NoticeService noticeService = NoticeService.me();
   protected static final OjService ojService = OjService.me();
