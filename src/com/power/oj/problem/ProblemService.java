@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jodd.io.FileUtil;
+import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
@@ -287,7 +288,7 @@ public class ProblemService
 
     if (StringUtil.isNotBlank(word))
     {
-      word = new StringBuilder(3).append("%").append(word).append("%").toString();
+      word = new StringBuilder(3).append("%").append(HtmlDecoder.decode(word)).append("%").toString();
       StringBuilder sb = new StringBuilder("FROM problem WHERE (");
       if (StringUtil.isNotBlank(scope))
       {
