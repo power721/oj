@@ -486,26 +486,13 @@ public class ProblemService
     
     long accepted = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
     long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
-    int ratio = 0;
     long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
     long solved = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
-    int difficulty = 0;
 
-    if (submission > 0)
-    {
-      ratio = (int) (accepted / submission);
-    }
-    if (submitUser > 0)
-    {
-      difficulty = (int) (solved / submitUser);
-    }
-    
     problemModel.setSubmission((int) submission);
     problemModel.setAccepted((int) accepted);
-    problemModel.setRatio(ratio);
     problemModel.setSubmitUser((int) submitUser);
     problemModel.setSolved((int) solved);
-    problemModel.setDifficulty(difficulty);
     updateCache(problemModel);
 
     return problemModel.update();
