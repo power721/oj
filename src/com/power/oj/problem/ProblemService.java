@@ -434,8 +434,13 @@ public class ProblemService
     return problemModel.update();
   }
 
-  public boolean decAccepted(SolutionModel solutionModel)
+  public boolean revertAccepted(SolutionModel solutionModel)
   {
+    if (solutionModel.getResult() != ResultType.AC)
+    {
+      return false;
+    }
+    
     Integer pid = solutionModel.getPid();
     Integer sid = solutionModel.getSid();
     Integer uid = solutionModel.getUid();

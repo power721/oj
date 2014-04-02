@@ -21,6 +21,7 @@
     <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span> 
     <#if !alpha??>
     <span class="pull-right">
+    <#if adminUser??><a class="btn btn-danger" href="solution/rejudge/${solution.sid!}">Rejudge</a></#if>
     <a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal" data-target="#submitModal">Re Submit</a>
     </span>
     </#if>
