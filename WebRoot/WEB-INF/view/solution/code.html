@@ -33,7 +33,7 @@
 <#if solution.error??>
 <div class="row">
   <div class="span12">
-    <h3>Compile Error</h3>
+    <h3><#if resultName=="CE">Compile Error<#else>Runtime Error</#if></h3>
     <pre class="error">${solution.error!}</pre>
   </div>
 </div>

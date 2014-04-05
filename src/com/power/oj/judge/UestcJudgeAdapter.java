@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import jodd.io.FileNameUtil;
+import jodd.util.StringUtil;
 
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
@@ -159,30 +160,44 @@ public class UestcJudgeAdapter extends JudgeAdapter
     
     if (solutionModel.getResult() == ResultType.CE)
     {
-      StringBuilder sb = new StringBuilder();
-      BufferedReader br = null;
-      try {
-        br = new BufferedReader(new FileReader(workDirPath + "/stderr_compiler.txt"));
-        String line;
-        while ((line = br.readLine()) != null) {
-          if (line.trim().startsWith(workPath)) {
-            line = line.substring(workPath.length());
-          }
-          sb.append(line).append('\n');
-        }
-      } catch (Exception e) {
-        e.printStackTrace();
-      } finally {
-        if (br != null) {
-          try {
-            br.close();
-          } catch (IOException ignored) {
-          }
-        }
+      updateCompileError(readError("stderr_compiler.txt"));
+    }
+    else if (solutionModel.getResult() == ResultType.RE)
+    {
+      if (StringUtil.isBlank(errorOut))
+      {
+        errorOut = readError("stderr_executive.txt");
       }
-      updateCompileError(sb.toString());
+      updateRuntimeError(errorOut);
     }
     return isAccepted;
+  }
+  
+  private String readError(String fileName)
+  {
+    StringBuilder sb = new StringBuilder();
+    BufferedReader br = null;
+    try {
+      br = new BufferedReader(new FileReader(workDirPath + "/" + fileName));
+      String line;
+      while ((line = br.readLine()) != null) {
+        if (line.trim().startsWith(workPath)) {
+          line = line.substring(workPath.length());
+        }
+        sb.append(line).append('\n');
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    } finally {
+      if (br != null) {
+        try {
+          br.close();
+        } catch (IOException ignored) {
+        }
+      }
+    }
+    
+    return sb.length()>0 ? sb.toString() : null;
   }
   
   private int convertResult(int result)

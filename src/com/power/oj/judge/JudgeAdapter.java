@@ -171,6 +171,20 @@ public abstract class JudgeAdapter implements Runnable
     return solutionModel.update();
   }
 
+  protected boolean updateRuntimeError(String error)
+  {
+    solutionModel.setResult(ResultType.RE).setError(error);
+    
+    Integer cid = solutionModel.getCid();
+    if (cid != null && cid > 0)
+    {
+      log.info("updateCompileError");
+      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
+      return contestSolution.update();
+    }
+    return solutionModel.update();
+  }
+
   protected boolean updateSystemError(String error)
   {
     solutionModel.setResult(ResultType.SE).setSystemError(error);
