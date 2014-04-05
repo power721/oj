@@ -2,6 +2,8 @@ package com.power.oj.judge;
 
 import java.util.List;
 
+import jodd.util.SystemUtil;
+
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -45,7 +47,18 @@ public class JudgeService
       log.info("JudgeAdapter.addSolution");
       if (JudgeAdapter.size() <= 1)
       {
-        JudgeAdapter judge = new PojJudgeAdapter();
+        JudgeAdapter judge = null;
+        if (SystemUtil.getOsName().indexOf("Linux") == -1)
+        {
+          log.info("PojJudgeAdapter");
+          judge = new PojJudgeAdapter();
+        }
+        else
+        {
+          log.info("UestcJudgeAdapter");
+          judge = new UestcJudgeAdapter();
+        }
+        
         new Thread(judge).start();
         log.info("judge.start()");
       }
@@ -63,7 +76,17 @@ public class JudgeService
     JudgeAdapter.addSolution(solutionModel);
     if (JudgeAdapter.size() <= 1)
     {
-      JudgeAdapter judge = new PojJudgeAdapter();
+      JudgeAdapter judge = null;
+      if (SystemUtil.getOsName().indexOf("Linux") == -1)
+      {
+        log.info("PojJudgeAdapter");
+        judge = new PojJudgeAdapter();
+      }
+      else
+      {
+        log.info("UestcJudgeAdapter");
+        judge = new UestcJudgeAdapter();
+      }
       new Thread(judge).start();
     }
   }

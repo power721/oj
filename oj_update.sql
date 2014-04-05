@@ -201,3 +201,6 @@ ALTER TABLE variable
                      CHANGE `booleanValue` `booleanValue` tinyint(1) DEFAULT NULL,
                      CHANGE `intValue` `intValue` int(11) DEFAULT NULL,
                      CHANGE `textValue` `textValue` text DEFAULT NULL;
+#2014-04-05
+UPDATE solution SET language=language+1 WHERE language<5;
+UPDATE contest_solution SET language=language+1 WHERE language<5;

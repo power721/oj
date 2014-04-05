@@ -36,7 +36,9 @@ public abstract class JudgeAdapter implements Runnable
   protected SolutionModel solutionModel;
   protected ProblemModel problemModel;
   protected ProgramLanguageModel programLanguage;
+  protected String workPath;
   protected String workDirPath;
+  protected File sourceFile;
   
   protected List<String> inFiles = new ArrayList<String>();
   protected List<String> outFiles = new ArrayList<String>();
@@ -87,7 +89,7 @@ public abstract class JudgeAdapter implements Runnable
     programLanguage = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
     problemModel = problemService.findProblem(solutionModel.getPid());
     Integer cid = solutionModel.getCid();
-    String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("workPath"))).append(File.separator).toString();
+    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("workPath"))).append(File.separator).toString();
     if (cid != null && cid > 0)
     {
       workPath = new StringBuilder(4).append(workPath).append("c").append(cid).append(File.separator).toString();
@@ -106,6 +108,10 @@ public abstract class JudgeAdapter implements Runnable
     FileUtil.mkdirs(workDir);
     workDirPath = workDir.getAbsolutePath();
     log.info("mkdirs workDir: " + workDirPath);
+    
+    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExt()).toString());
+    FileUtil.touch(sourceFile);
+    FileUtil.writeString(sourceFile, solutionModel.getSource());
   }
 
   protected String getCompileCmd(String compileCmd, String path, String name, String ext)
@@ -192,6 +198,39 @@ public abstract class JudgeAdapter implements Runnable
       return contestSolution.update();
     }
     return solutionModel.update();
+  }
+
+  protected boolean updateResult()
+  {
+    Integer cid = solutionModel.getCid();
+    if (cid != null && cid > 0)
+    {
+      log.info("updateResult");
+      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
+      return contestSolution.update();
+    }
+    return solutionModel.update();
+  }
+
+  protected void setResult(int result, int time, int memory)
+  {
+    solutionModel.setResult(result);
+    if (solutionModel.getTime() == null)
+    {
+      solutionModel.setTime(time);
+    }
+    else
+    {
+      solutionModel.setTime(Math.max(time, solutionModel.getTime()));
+    }
+    if (solutionModel.getMemory() == null)
+    {
+      solutionModel.setMemory(memory);
+    }
+    else
+    {
+      solutionModel.setMemory(Math.max(memory, solutionModel.getMemory()));
+    }
   }
   
   protected boolean updateUser()

@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-import jodd.io.FileUtil;
-
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.solution.SolutionModel;
@@ -20,10 +18,7 @@ public class PojJudgeAdapter extends JudgeAdapter
   public boolean Compile() throws IOException
   {
     log.info(solutionModel.getSid() + " Start compiling...");
-    File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExt()).toString());
-    FileUtil.touch(sourceFile);
-    FileUtil.writeString(sourceFile, solutionModel.getSource());
-
+    
     String comShellName = OjConfig.get("compileShell");
     String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, sourceFileName, programLanguage.getExt());
     log.info("compileCmd: " + compileCmdName);

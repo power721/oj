@@ -120,9 +120,11 @@ public class OjConfig
     judge_result.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
     judge_result.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
     judge_result.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
+    judge_result.add(new ResultType(ResultType.RF, "RF", "Restricted Function"));
     judge_result.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
     judge_result.add(new ResultType(ResultType.SE, "SE", "System Error"));
     judge_result.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
+    judge_result.add(new ResultType(ResultType.RUN, "RUN", "Runing"));
     judge_result.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
 
     result_type = new HashMap<Integer, ResultType>();
