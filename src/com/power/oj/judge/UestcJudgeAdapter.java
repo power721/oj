@@ -72,7 +72,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
 
     synchronized (JudgeAdapter.class)
     {
-      updateResult();
+      updateResult(isAccepted);
       updateUser();
       if (!updateContest())
       {
@@ -133,7 +133,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
         int result = convertResult(Integer.parseInt(resultStr[0]));
         if (result == ResultType.AC)
         {
-          
+          result = ResultType.RUN;
         }
         else
         {

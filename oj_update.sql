@@ -204,3 +204,5 @@ ALTER TABLE variable
 #2014-04-05
 UPDATE solution SET language=language+1 WHERE language<5;
 UPDATE contest_solution SET language=language+1 WHERE language<5;
+UPDATE solution SET language=3-language WHERE language<3;
+UPDATE contest_solution SET language=3-language WHERE language<3;

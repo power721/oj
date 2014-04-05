@@ -815,8 +815,8 @@ CREATE TABLE `program_language` (
 -- ----------------------------
 -- Records of program_language
 -- ----------------------------
-INSERT INTO `program_language` VALUES ('1', 'G++', '', '0', '996', '1', '1', 'cc', 'exe', '1', 'C:\\power\\oj\\JudgeOnline\\bin\\gcc\\bin\\g++.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', 'cpp', '0', '1');
-INSERT INTO `program_language` VALUES ('2', 'GCC', '', '0', '996', '1', '1', 'c', 'exe', '1', 'C:\\power\\oj\\JudgeOnline\\bin\\gcc\\bin\\gcc.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', 'cpp', '0', '1');
+INSERT INTO `program_language` VALUES ('1', 'GCC', '', '0', '996', '1', '1', 'c', 'exe', '1', 'C:\\power\\oj\\JudgeOnline\\bin\\gcc\\bin\\gcc.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', 'cpp', '0', '1');
+INSERT INTO `program_language` VALUES ('2', 'G++', '', '0', '996', '1', '1', 'cc', 'exe', '1', 'C:\\power\\oj\\JudgeOnline\\bin\\gcc\\bin\\g++.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', 'cpp', '0', '1');
 INSERT INTO `program_language` VALUES ('3', 'Pascal', '', '0', '1000', '1', '1', 'pas', 'exe', '0', 'C:\\power\\oj\\JudgeOnline\\bin\\fpc\\fpc.exe -Sg -dONLINE_JUDGE %PATH%%NAME%.%EXT%', 'pascal', '0', '1');
 INSERT INTO `program_language` VALUES ('4', 'Java', '', '0', '8000', '3', '3', 'java', 'class', '2', 'C:\\power\\oj\\JudgeOnline\\bin\\Java\\Java.bat %PATH%', 'java', '0', '1');
 INSERT INTO `program_language` VALUES ('5', 'Python', '', '0', '7000', '4', '3', 'py', 'exe', '1', 'C:\\power\\oj\\JudgeOnline\\bin\\Python\\Python.bat %PATH% %NAME% %EXT%', 'python', '0', '1');
