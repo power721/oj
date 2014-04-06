@@ -14,9 +14,10 @@
             <span class="Q">Q</span>：我的程序要在哪里输入和输出数据？
           </div>
           <div class="faq_content_A">
-            <span class="A">A</span>：你的程序必须从stdin（基本输入）读入数据并且从stdout（基本输出）输出数据. <br>
-            例如，你使用C语言的话，使用scanf输入数据，使用printf输出数据，使用C++语言的话，还可以使用cin和cout读入输出数据。
-            <p class="text-info">为了性能，建议C++程序也使用scanf和printf。</p>
+            <span class="A">A</span>：你的程序必须从stdin（标准输入）读入数据并且从stdout（标准输出）输出数据. <br>
+            例如，你使用C语言的话，使用<code>scanf</code>读入数据，使用<code>printf</code>输出数据，
+            使用C++语言的话，还可以使用<code>cin</code>和<code>cout</code>读入输出数据。
+            <p class="text-info">为了性能，建议C++程序也使用<code>scanf</code>和<code>printf</code>。</p>
             <p class="text-warning">注意：不要在程序中输出任何题目未要求的提升信息。</p>
           </div>
           
@@ -26,7 +27,7 @@
           </div>
           <div class="faq_content_A">
             <span class="A">A</span>：c语言: 可以用 <code>while (scanf("%d",&n) != EOF) {...}</code> <br>
-            c++语言: 可以用 <code>while (cin >> n) {...}</code>
+             c++语言: 可以用 <code>while (cin >> n) {...}</code>
           </div>
 <!--
 <div class="faq_content_Q">
@@ -49,12 +50,12 @@ int main()
             <span class="Q">Q</span>：本OnlineJudge提供哪些编译器？编译环境是怎么样的？
           </div>
           <div class="faq_content_A">
-            <span class="A">A</span>：本OJ目前提供GNU C/C++、Free Pascal、Java等编译器，它们的编译参数是：<br> 
-              GCC: <span class="blue">gcc -fno-asm -lm -static -Wall -O2 -DONLINE_JUDGE</span><br> 
-              G++: <span class="blue">g++ -fno-asm -lm -static -Wall -O2 -DONLINE_JUDGE</span><br> 
-              Pascal: <span class="blue">fpc -Co -Cr -Ct -Ci</span><br> 
-              Java: <span class="blue">javac Main.java -d work_dir</span><br> 
-              Python: <span class="blue">python -c "import py_compile; py_compile.compile(r'Main.py')"</span>
+            <span class="A">A</span>：本OJ目前提供GNU C/C++、Free Pascal、Java等编译器，它们的编译参数是：<br>
+              GCC: <code>gcc -fno-asm -lm -static -Wall -O2 -DONLINE_JUDGE</code><br>
+              G++: <code>g++ -fno-asm -lm -static -Wall -O2 -DONLINE_JUDGE</code><br>
+              Pascal: <code>fpc -Co -Cr -Ct -Ci</code><br>
+              Java: <code>javac Main.java -d workDir</code><br>
+              Python: <code>python -c "import py_compile; py_compile.compile(r'Main.py')"</code>
               <br>
             <br> 我们的服务器运行在Linux平台下，提供的编译器的版本分别是：<br>
             <li>GCC/G++ Version 4.6.3</li>
@@ -71,7 +72,7 @@ int main()
             <span class="A">A</span>：不同的编译器之间有一些语法的差异，请使用相应的编译器进行提交。<br>
             另外，我们的OJ对编译器所使用的资源有所限制，限制是：CPU时间<strong>5000 ms</strong>，内存<strong>256 MB</strong>;<br>
             如果你使用的编译器在编译你的程序时超过这个资源限制，将被判为CE。<br>
-            <p class="text-warning">当你使用G++、GCC时main()函数返回值必须是int，否则你可能会得到CE。</p>
+            <p class="text-warning">当你使用G++、GCC时<code>main()</code>函数返回值必须是<code>int</code>，否则你可能会得到CE。</p>
           </div>
 
           <a name="spj"></a>
@@ -93,7 +94,7 @@ int main()
             <ul>
               <li>有符号64位整数，取值范围为：-9223372036854775808 到 9223372036854775807。
                 <center>
-                  <table border="1" style="width: 800px;">
+                  <table class="table table-bordered">
                     <tr align=center>
                       <td>语言</td>
                       <td>GCC/G++</td>
@@ -128,7 +129,7 @@ int main()
               </li>
               <li>无符号64位整数，取值范围为：0 到 18446744073709551615。
                 <center>
-                  <table border="1" style="width: 800px;">
+                  <table class="table table-bordered">
                     <tr align=center>
                       <td>语言</td>
                       <td>GCC/G++</td>
@@ -293,6 +294,12 @@ int main()
             </div>
             <br>
           </div>
+          <h3 id="tips-for-java-usage">Tips for Java usage</h3>
+          <ol>
+          <li>Your solution must contains <strong><em>ONLY ONE</em></strong> Java class, and make sure name it <code>Main</code>(case-sensitive) and make it <code>public</code>. </li>
+          <li>There must be a <code>public</code> and <code>static</code> <code>main</code> method with <code>void</code> returning type in <code>Main</code> class.</li>
+          <li>Note that in problem description, time limit and memory limit of Java may be different with C/C++.</li>
+          </ol>
         </div>
       </div>
     </div>

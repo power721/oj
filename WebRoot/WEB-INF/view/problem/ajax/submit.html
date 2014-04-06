@@ -17,14 +17,24 @@
 </div>
 <div class="control-group solution">
   <label class="control-label" for="inputSource">Source Code</label>
-  <div class="controls">
-    <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="100" required>${(solution.source)!}</textarea>
+
+ <div class="controls">
+  <div id="file_div" ></div>
+    <div id="file_parent" style="padding: 10px;">
+      <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="100" required>${(solution.source)!}</textarea>
+    </div>
+  </div>
+  <div class="syntax-box">
+    <input type="hidden" name="syntax" value="0">
+    <label for="syntax" class="checkbox"><input type="checkbox" name="syntax" id="syntax" value="1"> <span>syntax highlight</span></label>
   </div>
 </div>
 
 <script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
+<script src='assets/ideone/ace.js' type='text/javascript'></script>
+<script src='assets/ideone/jquery.textarea.js' type='text/javascript'></script>
+<script src='assets/ideone/ideone-common.js' type='text/javascript'></script>
 <script type="text/javascript">   
-    document.onkeydown=null;
     $().ready(function() {
       $("#submitForm").validate();
     });

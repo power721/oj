@@ -19,7 +19,7 @@
     </#if> 
     <span class="black">${problem.id!}:</span>
     <#if adminUser??> 
-    <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}">${problem.title!} 
+    <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}">${problem.title!}</a>
     <#else>
     ${problem.title!} 
     </#if> 
@@ -33,8 +33,8 @@
   Memory Limit: <span class="blue">${problem.memoryLimit!} KB</span><br>
   Total Submit: <a href="contest/status/${cid!}?pid=${problem.id!}">${problem.submission!}</a> 
   Accepted: <a href="contest/status/${cid!}?pid=${problem.id!}&result=0">${problem.accepted!}</a>
-  Page View: <span class="blue">${problem.view!}</span><br>
-  <#if spj?? && spj><span class="badge badge-important">Special Judged</span></#if><br> 
+  Page View: <span class="blue">${problem.view!}</span><br> 
+  <#if spj?? && spj><span class="badge badge-important">Special Judged</span></#if><br>
   <#if cstatus?? && cstatus==1> 
   <a href="<#if user??>contest/submit/${cid!}-${problem.id!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   </#if> 
@@ -76,7 +76,7 @@
       <a href="contest/submit/${cid!}-${problem.id!}" class="btn btn-primary">Submit</a>
     </div>
     <div class="modal-footer">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" id="Submit" class="btn btn-primary">Submit</button>
       <button type="reset" class="btn btn-info">Reset</button>
       <button class="btn" data-dismiss="modal">Cancel</button>
     </div>
