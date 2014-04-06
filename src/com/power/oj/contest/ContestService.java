@@ -327,7 +327,6 @@ public class ContestService
     }
   }
   
-  
   public List<Record> getPrivateClarifyList(Integer cid, Integer num, Integer uid)
   {
     StringBuilder sb = new StringBuilder();
@@ -545,7 +544,19 @@ public class ContestService
 
     return statistics;
   }
-  
+
+  public ContestSolutionModel getContestSolution(Integer cid, Integer sid)
+  {
+    Integer uid = userService.getCurrentUid();
+    StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM contest_solution WHERE sid=? AND cid=?");
+    
+    if (!userService.isAdmin())
+      sb.append(" AND uid=").append(uid);
+    sb.append(" LIMIT 1");
+    
+    return ContestSolutionModel.dao.findFirst(sb.toString(), sid, cid);
+  }
+
   public int submitSolution(ContestSolutionModel contestSolution)
   {
     Integer cid = contestSolution.getCid();
@@ -752,6 +763,17 @@ public class ContestService
   {
     ContestModel contestModel = getContest(cid);
     if (contestModel != null && contestModel.getStartTime() > OjConfig.timeStamp)
+    {
+      return true;
+    }
+    return false;
+  }
+
+  public boolean isContestRunning(Integer cid)
+  {
+    ContestModel contestModel = getContest(cid);
+    if (contestModel != null && contestModel.getStartTime() <= OjConfig.timeStamp 
+        && contestModel.getEndTime() >= OjConfig.timeStamp)
     {
       return true;
     }

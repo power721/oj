@@ -23,7 +23,6 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.user.UserService;
 import com.power.oj.util.CryptUtils;
 
 @Before({ContestPasswordInterceptor.class, ContestInterceptor.class})
@@ -123,6 +122,11 @@ public class ContestController extends OjController
       FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
       redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
       return;
+    }
+
+    if (isParaExists("s"))
+    {
+      setAttr("solution", contestService.getContestSolution(cid, getParaToInt("s", 0)));
     }
 
     setAttr("problem", problemModel);
@@ -254,7 +258,7 @@ public class ContestController extends OjController
     Integer sid = getParaToInt(1);
     boolean isAdmin = userService.isAdmin();
     ContestSolutionModel solutionModel = solutionService.findContestSolution(sid);
-    ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getResult());
+    ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
     Integer uid = solutionModel.getUid();
     Integer loginUid = userService.getCurrentUid();
     if (!uid.equals(loginUid) && !isAdmin)
@@ -276,21 +280,23 @@ public class ContestController extends OjController
 
     String problemTitle = "";
     int num = solutionModel.getInt("num");
-    problemTitle = ContestService.me().getProblemTitle(cid, num);
+    problemTitle = contestService.getProblemTitle(cid, num);
+    
     setAttr("alpha", (char) (num + 'A'));
     setAttr("cid", cid);
-
+    setAttr("running", contestService.isContestRunning(cid));
     setAttr("problemTitle", problemTitle);
+    
     try
     {
-      setAttr("submitUser", UserService.me().getUserByUid(uid));
+      setAttr("submitUser", userService.getUserByUid(uid));
     } catch (NullPointerException e)
     {
       log.warn(e.getLocalizedMessage());
     }
+    
     ProgramLanguageModel language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
     setAttr("language", language.getName());
-
     setAttr("resultLongName", resultType.getLongName());
     setAttr("resultName", resultType.getName());
     setAttr("solution", solutionModel);
@@ -303,6 +309,16 @@ public class ContestController extends OjController
     setAttr("brush", brush);
 
     setTitle(getText("solution.show.title"));
+  }
+
+  @RequiresPermissions("code:rejudge")
+  public void rejudgeCode()
+  {
+    Integer cid = getParaToInt(0);
+    Integer sid = getParaToInt(1);
+    judgeService.rejudgeContestSolution(sid);
+    
+    redirect("/contest/code/" + cid + "-" + sid, new FlashMessage("Server got your rejudge request."));
   }
 
   public void statistics()

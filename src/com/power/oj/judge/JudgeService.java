@@ -69,7 +69,8 @@ public class JudgeService
   public void rejudge(SolutionModel solutionModel)
   {
     // revert user accepted/solved
-    userService.revertAccepted(solutionModel);
+    if (solutionModel.getCid() == null)
+      userService.revertAccepted(solutionModel);
     solutionModel.setResult(ResultType.WAIT).setError(null).setSystemError(null);
     solutionModel.update();
     
@@ -112,6 +113,15 @@ public class JudgeService
     }
   }
 
+  public void rejudgeContestSolution(Integer sid)
+  {
+    SolutionModel solutionModel = solutionService.build(solutionService.findContestSolution(sid));
+    // revert problem accepted/solved
+    //problemService.revertAccepted(solutionModel);
+    
+    rejudge(solutionModel);
+  }
+  
   public void rejudgeContest(Integer cid)
   {
     contestService.reset(cid);

@@ -257,7 +257,7 @@ public class ProblemService
     
     return SolutionModel.dao.findFirst(sb.toString(), sid, pid);
   }
-  
+
   public List<SolutionModel> getProblemStatus(Integer pid)
   {
     List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);

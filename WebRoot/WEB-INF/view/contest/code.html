@@ -1,13 +1,10 @@
 <@override name="content">
 <div class="row">
   <div class="span4 offset4" id="source-code">
-    <span class="green">Problem<#if alpha?? && adminUser??>(<a href="problem/show/${solution.pid!}">${solution.pid!}</a>)</#if>
+    <span class="green">
+    Problem<#if adminUser??>(<a href="problem/show/${solution.pid!}">${solution.pid!}</a>)</#if>
     </span>: 
-    <#if alpha??> 
     <a href="contest/problem/${solution.cid!}-${alpha!}">${solution.cid!}-${alpha!} (${problemTitle!})</a> 
-    <#else> 
-    <a href="problem/show/${solution.pid!}">${solution.pid!} (${problemTitle!})</a> 
-    </#if>
     <span class="green">User</span>: <a href="user/profile/${(submitUser.name)!"Guest"}">${(submitUser.name)!"Guest"}</a> <br> 
     <span class="green">Memory</span>: ${solution.memory!0} KB <span class="green">Time</span>: ${solution.time!0} MS <br> 
     <span class="green">Language</span>: ${language!}
@@ -19,11 +16,14 @@
   <div class="span12">
     <h2>Source Code</h2>
     <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span> 
-    <#if !alpha??>
     <span class="pull-right">
-    <a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal" data-target="#submitModal">Re Submit</a>
-    </span>
+    <#if adminUser?? && (resultName=="SE" || resultName=="WAIT")>
+    <a class="btn btn-danger" href="contest/rejudgeCode/${solution.cid!}-${solution.sid!}">Rejudge</a>
     </#if>
+    <#if running>
+    <a class="btn btn-primary" href="contest/submit/${solution.cid!}-${alpha!}?ajax=1&s=${solution.sid!}" data-toggle="modal" data-target="#submitModal">Fork</a>
+    </#if>
+    </span>
     <script id="source" class="hidden">${solution.source!}</script>
     <textarea class="brush: ${brush!'cpp'} auto-width" cols="120" rows="20">${solution.source!}</textarea>
   </div>
@@ -32,7 +32,7 @@
 <#if solution.error??>
 <div class="row">
   <div class="span12">
-    <h3>Compile Error</h3>
+    <h3><#if resultName=="CE">Compile Error<#else>Runtime Error</#if></h3>
     <pre class="error">${solution.error!}</pre>
   </div>
 </div>
@@ -45,17 +45,18 @@
   </div>
 </div>
 </#if> 
-<#if !alpha?? && user??>
+<#if running>
 <div class="modal hide fade problemModal" id="submitModal">
-  <form class="" action="solution/save" method="post">
+  <form class="" action="contest/submitSolution" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="submitModalLabel">
-        Submit Problem ${solution.pid!}:<a href="problem/submit/${solution.pid!}" title="Submit in another page" data-toggle="tooltip" data-placement="bottom">${(problem.title)!}</a>
+        Submit Problem ${solution.cid!}-${alpha!}:<a href="contest/submit/${solution.cid!}-${alpha!}" 
+        title="Submit in another page" data-toggle="tooltip" data-placement="bottom">${problemTitle}</a>
       </h3>
     </div>
     <div class="modal-body">
-      <a href="problem/submit/${solution.pid!}" class="btn btn-primary">Submit</a>
+      <a href="contest/submit/${solution.cid!}-${alpha!}" class="btn btn-primary">Submit</a>
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn btn-primary">Submit</button>
@@ -102,9 +103,4 @@
     SyntaxHighlighter.all();
   </script>
 </@override>
-
-<#if alpha??>
 <@extends name="../contest/_layout.html" />
-<#else>
-<@extends name="../common/_layout.html" />
-</#if>
