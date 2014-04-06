@@ -30,7 +30,7 @@ public class SolutionController extends OjController
     if (StringUtil.isNotBlank(getPara("pid")))
       pid = getParaToInt("pid", 0);
     String userName = getPara("name");
-    StringBuilder query = new StringBuilder().append("?p=").append(pageNumber);
+    StringBuilder query = new StringBuilder();
 
     if (result > -1)
     {
@@ -57,7 +57,7 @@ public class SolutionController extends OjController
     setAttr("language", language);
     setAttr("pid", getPara("pid"));
     setAttr("name", getPara("name"));
-    setAttr("query", query.toString());
+    setAttr("query", query.length()>0 ? query.substring(1).toString() : null);
 
     setTitle(getText("solution.index.title"));
   }

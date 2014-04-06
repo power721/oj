@@ -25,7 +25,7 @@
     </div>
     
     <#include "../common/_paginate.html" />
-    <@paginate currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="status/" urlParas="${query}"/>
+    <@paginate currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="status/" urlParas="?${query!}"/>
     
     <div class="pull-right">
       <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span>
@@ -73,8 +73,8 @@
 <@override name="scripts">
   <script type="text/javascript">
     $(document).ready(function() {
-      var prevpage = "status/${solutionList.pageNumber-1}${query!}";
-      var nextpage = "status/${solutionList.pageNumber+1}${query!}";
+      var prevpage = "status/${solutionList.pageNumber-1}?${query!}";
+      var nextpage = "status/${solutionList.pageNumber+1}?${query!}";
       $(document).keydown(function(event) {
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if solutionList.pageNumber<solutionList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>

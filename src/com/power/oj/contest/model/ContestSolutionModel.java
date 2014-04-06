@@ -22,6 +22,8 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public static final String RESULT = "result";
   public static final String LANGUAGE = "language";
   public static final String CTIME = "ctime";
+  public static final String MTIME = "mtime";
+  public static final String TEST = "test";
   public static final String ERROR = "error";
   public static final String SOURCE = "source";
   public static final String CODE_LEN = "codeLen";
@@ -40,6 +42,7 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public boolean addSolution()
   {
     setCtime(OjConfig.timeStamp);
+    setMtime(OjConfig.timeStamp);
     setResult(ResultType.WAIT);
     setTime(0);
     setMemory(0);
@@ -151,6 +154,26 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public ContestSolutionModel setCtime(Integer value)
   {
     return set(CTIME, value);
+  }
+
+  public Integer getMtime()
+  {
+    return getInt(MTIME);
+  }
+  
+  public ContestSolutionModel setMtime(Integer value)
+  {
+    return set(MTIME, value);
+  }
+  
+  public Integer getTest()
+  {
+    return getInt(TEST);
+  }
+  
+  public ContestSolutionModel setTest(Integer value)
+  {
+    return set(TEST, value);
   }
   
   public String getError()

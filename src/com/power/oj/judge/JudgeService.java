@@ -7,6 +7,7 @@ import jodd.util.SystemUtil;
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
@@ -71,7 +72,8 @@ public class JudgeService
     // revert user accepted/solved
     if (solutionModel.getCid() == null)
       userService.revertAccepted(solutionModel);
-    solutionModel.setResult(ResultType.WAIT).setError(null).setSystemError(null);
+    solutionModel.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
+    solutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
     solutionModel.update();
     
     JudgeAdapter.addSolution(solutionModel);

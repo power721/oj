@@ -206,3 +206,8 @@ UPDATE solution SET language=language+1 WHERE language<5;
 UPDATE contest_solution SET language=language+1 WHERE language<5;
 UPDATE solution SET language=3-language WHERE language<3;
 UPDATE contest_solution SET language=3-language WHERE language<3;
+#2014-04-06
+ALTER TABLE solution ADD `mtime` int(11) NOT NULL AFTER `ctime`,
+                      ADD `test` tinyint(3) NOT NULL DEFAULT '0' AFTER `mtime`;
+ALTER TABLE contest_solution ADD `mtime` int(11) NOT NULL AFTER `ctime`,
+                              ADD `test` tinyint(3) NOT NULL DEFAULT '0' AFTER `mtime`;

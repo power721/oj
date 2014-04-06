@@ -214,12 +214,17 @@ public abstract class JudgeAdapter implements Runnable
     return solutionModel.update();
   }
 
-  protected boolean updateResult(boolean ac)
+  protected boolean updateResult(boolean ac, Integer test)
   {
     if (ac)
     {
       solutionModel.setResult(ResultType.AC);
     }
+    else if (solutionModel.getResult() != ResultType.CE && solutionModel.getResult() != ResultType.RF)
+    {
+      solutionModel.setTest(test);
+    }
+    
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {

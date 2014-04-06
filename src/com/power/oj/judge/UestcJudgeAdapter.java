@@ -27,6 +27,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     log.info(solutionModel.getSid() + " RunProcess...");
     int numOfData = getDataFiles();
 
+    int i;
     long timeLimit = problemModel.getTimeLimit();
     long memoryLimit = problemModel.getMemoryLimit();
     long outputLimit = 8192L;
@@ -38,7 +39,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       log.warn("No data file for problem " + solutionModel.getPid());
     }
     boolean isAccepted = true;
-    for (int i = 0; isAccepted && i < numOfData; ++i)
+    for (i = 0; isAccepted && i < numOfData; ++i)
     {
       String cmd = buildCommand(timeLimit, memoryLimit, outputLimit, isSpj,
           FileNameUtil.getName(inFiles.get(i)), FileNameUtil.getName(outFiles.get(i)), i == 0);
@@ -73,7 +74,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
 
     synchronized (JudgeAdapter.class)
     {
-      updateResult(isAccepted);
+      updateResult(isAccepted, i);
       updateUser();
       if (!updateContest())
       {

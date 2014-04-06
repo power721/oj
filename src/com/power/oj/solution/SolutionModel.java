@@ -12,7 +12,7 @@ public class SolutionModel extends Model<SolutionModel>
   private static final long serialVersionUID = -287562753616099282L;
 
   public static final SolutionModel dao = new SolutionModel();
-  
+
   public static final String TABLE_NAME = "solution";
   public static final String SID = "sid";
   public static final String UID = "uid";
@@ -23,12 +23,14 @@ public class SolutionModel extends Model<SolutionModel>
   public static final String MEMORY = "memory";
   public static final String RESULT = "result";
   public static final String LANGUAGE = "language";
+  public static final String CTIME = "ctime";
+  public static final String MTIME = "mtime";
+  public static final String TEST = "test";
+  public static final String ERROR = "error";
   public static final String SOURCE = "source";
   public static final String CODE_LEN = "codeLen";
-  public static final String ERROR = "error";
   public static final String SYSTEM_ERROR = "systemError";
-  public static final String CTIME = "ctime";
-  
+
   public SolutionModel build(ContestSolutionModel contestSolution)
   {
     for (String filed : contestSolution.getAttrNames())
@@ -41,6 +43,7 @@ public class SolutionModel extends Model<SolutionModel>
   public boolean addSolution()
   {
     setCtime(OjConfig.timeStamp);
+    setMtime(OjConfig.timeStamp);
     setResult(ResultType.WAIT);
     setTime(0);
     setMemory(0);
@@ -192,6 +195,26 @@ public class SolutionModel extends Model<SolutionModel>
   public SolutionModel setCtime(Integer value)
   {
     return set(CTIME, value);
+  }
+
+  public Integer getMtime()
+  {
+    return getInt(MTIME);
+  }
+  
+  public SolutionModel setMtime(Integer value)
+  {
+    return set(MTIME, value);
+  }
+  
+  public Integer getTest()
+  {
+    return getInt(TEST);
+  }
+  
+  public SolutionModel setTest(Integer value)
+  {
+    return set(TEST, value);
   }
   
 }
