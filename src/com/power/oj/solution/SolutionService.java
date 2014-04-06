@@ -235,7 +235,7 @@ public class SolutionService
   
   public List<SolutionModel> getSolutionListForProblem(Integer pid)
   {
-    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=?", pid);
+    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=? ORDER BY sid DESC", pid);
     return solutionList;
   }
 

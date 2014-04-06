@@ -576,6 +576,7 @@ public class ContestService
     {
       Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
       
+      contestSolution = ContestSolutionModel.dao.findById(contestSolution.getSid());
       SolutionModel solutionModel = SolutionService.me().build(contestSolution);
       judgeService.judge(solutionModel);
     } else
