@@ -33,7 +33,7 @@
   Total Submit:<a href="status?pid=${problem.pid!}">${problem.submission!}</a> 
   Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accepted!}</a> 
   Page View:<span class="blue">${problem.view!}</span><br>
-  <#if spj?? && spj><span class="red">Special Judged</span></#if><br> 
+  <#if spj?? && spj><span class="badge badge-important">Special Judged</span></#if><br> 
   <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
   <a href="discuss?pid=${problem.pid!}" class="btn btn-info">Discuss</a>

@@ -16,8 +16,18 @@
           <div class="faq_content_A">
             <span class="A">A</span>：你的程序必须从stdin（基本输入）读入数据并且从stdout（基本输出）输出数据. <br>
             例如，你使用C语言的话，使用scanf输入数据，使用printf输出数据，使用C++语言的话，还可以使用cin和cout读入输出数据。
-        </div>
+            <p class="text-info">为了性能，建议C++程序也使用scanf和printf。</p>
+            <p class="text-warning">注意：不要在程序中输出任何题目未要求的提升信息。</p>
+          </div>
           
+          <a name="multi-io"></a>
+          <div class="faq_content_Q">
+            <span class="Q">Q</span>：当有多组测试数据时,该如何判断循环结束呢?
+          </div>
+          <div class="faq_content_A">
+            <span class="A">A</span>：c语言: 可以用 <code>while (scanf("%d",&n) != EOF) {...}</code> <br>
+            c++语言: 可以用 <code>while (cin >> n) {...}</code>
+          </div>
 <!--
 <div class="faq_content_Q">
 <span class="Q">Q</span>：评测服务器的性能怎样？</div>
@@ -59,17 +69,18 @@ int main()
           </div>
           <div class="faq_content_A">
             <span class="A">A</span>：不同的编译器之间有一些语法的差异，请使用相应的编译器进行提交。<br>
-            另外，我们的OJ对编译器所使用的资源有所限制，限制是：CPU时间5秒，内存使用256MB，如果你使用的编译器在编译你的程序时超过这个资源限制，将被判为CE。<br>
-            当你使用G++、GCC时main()函数返回值必须是int，否则你可能会得到CE。 
+            另外，我们的OJ对编译器所使用的资源有所限制，限制是：CPU时间<strong>5000 ms</strong>，内存<strong>256 MB</strong>;<br>
+            如果你使用的编译器在编译你的程序时超过这个资源限制，将被判为CE。<br>
+            <p class="text-warning">当你使用G++、GCC时main()函数返回值必须是int，否则你可能会得到CE。</p>
           </div>
 
           <a name="spj"></a>
           <div class="faq_content_Q">
-            <span class="Q">Q</span>：有些题目上面有“Special Judge”是什么意思？
+            <span class="Q">Q</span>：有些题目上面有<span class="badge badge-important">Special Judged</span>是什么意思？
           </div>
           <div class="faq_content_A">
-            <span class="A">A</span>：Special Judge是指本题可能有多个正确的解。你的程序的答案将被一个SPJ的检测程序检测，以判断你的程序是否正确。</br> 
-            请注意：SPJ的题目一般不会判出PE，所以请确保你的程序输出格式正确。 
+            <span class="A">A</span>：Special Judged是指本题可能有多个正确的解。你的程序输出的答案将被一个SPJ的程序检测，以判断你的程序是否正确。</br> 
+            <p class="text-warning">请注意：SPJ的题目一般不会判出PE，所以请确保你的程序输出格式正确。</p>
           </div>
 
           <a name="int64"></a>
@@ -162,7 +173,7 @@ int main()
             <span class="A">A</span>：以下是OJ可能返回的结果和其意义：<br>
             <dl class="dl-horizontal">
               <dt id="AC">Accepted</dt>
-              <dd>OK! 你的程序是正确的。</dd>
+              <dd>你的程序产生的输出与参考输出完全一样，但不保证算法是完全正确的。</dd>
               <dt id="PE">Presentation Error</dt>
               <dd>你的输出结果是正确的，但格式不正确，可能是你多输出或少输出了空格、Tab(\t)、换行(\n)等，请检查你的程序输出。</dd>
               <dt id="WA">Wrong Answer</dt>
@@ -176,7 +187,7 @@ int main()
               <dt id="CE">Compile Error</dt>
               <dd>你的程序不能通过编译，请点击该结果可以查看编译器提示。</dd>
               <dt id="OLE">Output Limit Exceed</dt>
-              <dd>你的程序的输出超过了系统限制。请检查你的程序是否存在死循环问题。目前系统的限制是8MB。</dd>
+              <dd>你的程序的输出超过了系统限制。请检查你的程序是否存在死循环问题。目前系统的限制是<strong>8 MB</strong>。</dd>
               <dt id="RF">Restricted Function</dt>
               <dd>使用了受限制的系统调用，比如system()函数是禁止使用的。</dd>
               <dt id="WAIT"><b>Waiting</b></dt>
@@ -186,7 +197,7 @@ int main()
               <dt id="SE">System Error</dt>
               <dd>未知错误，如果有该评测结果，请及时联系管理员。</dd>
             </dl>
-            注意：对于Java语言，有极少部分可能将RF与RE判成WA。 
+            <p class="text-warning">注意：对于Java语言，有极少部分可能将RF或RE误判成WA。</p>
           </div>
 <!--
           <a name="key"></a>
@@ -198,24 +209,10 @@ int main()
 -->
           <a name="sample"></a>
           <div class="faq_content_Q">
-            <span class="Q">Q</span>：1000题怎么解答？
+            <span class="Q">Q</span>：1000题A+B怎么解答？
           </div>
           <div class="faq_content_A">
-            <span class="A">A</span>：以下是1000题的各种语言的参考程序：<br> C++语言:<br>
-            <div class="data">
-              <textarea class="brush: cpp">
-              #include &lt;iostream&gt;
-              using namespace std;
-
-              int main()
-              {
-                int a, b;
-                while (cin &gt;&gt; a &gt;&gt; b) 
-                  cout &lt;&lt; a+b &lt;&lt; endl;
-                return 0;
-              }
-              </textarea>
-            </div>
+            <span class="A">A</span>：以下是1000题的各种语言的参考程序：<br>
             C语言：<br>
             <div class="data">
               <textarea class="brush: c">
@@ -224,8 +221,27 @@ int main()
               int main()
               {
                 int a, b;
-                while (scanf("%d%d", &a, &b) != EOF) 
+                while (scanf("%d%d", &a, &b) != EOF)
+                {
                   printf("%d\n", a+b);
+                }
+                return 0;
+              }
+              </textarea>
+            </div>
+            C++语言:<br>
+            <div class="data">
+              <textarea class="brush: cpp">
+              #include &lt;iostream&gt;
+              using namespace std;
+
+              int main()
+              {
+                int a, b;
+                while (cin &gt;&gt; a &gt;&gt; b)
+                {
+                  cout &lt;&lt; a+b &lt;&lt; endl;
+                }
                 return 0;
               }
               </textarea>

@@ -96,7 +96,7 @@ public abstract class JudgeAdapter implements Runnable
     }
     else if (OjConfig.getBoolean("deleteTmpFile", false))
     {
-      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid() - 2).toString());
+      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid() - 5).toString());
       if (prevWorkDir.isDirectory())
       {
         FileUtil.deleteDir(prevWorkDir);
