@@ -146,12 +146,32 @@ table#status td.time,td.memory {
   color: #ff03fa;
 }
 
+#RF {
+  color: #694990;
+}
+
 #SE,#Others {
   color: #492970;
 }
 
 #Wait {
   color: green;
+}
+
+.Q {
+  color: #FF8040;
+  font-weight: bold;
+}
+
+.A {
+  color: green;
+  font-weight: bold;
+}
+
+.faq_content_A {
+  margin-bottom: 30px;
+  padding-bottom:20px;
+  border-bottom: 1px solid #ccc;
 }
 
 a.active {
