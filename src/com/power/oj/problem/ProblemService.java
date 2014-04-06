@@ -320,6 +320,57 @@ public class ProblemService
     return problemList;
   }
 
+  public boolean checkSpj(Integer pid)
+  {
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(pid).toString());
+    if (!dataDir.isDirectory())
+    {
+      return false;
+    }
+    
+    StringBuilder sb = new StringBuilder(4).append(dataDir.getAbsolutePath()).append(File.separator).append("spj");
+    File spjFile = new File(sb.toString());
+    if (spjFile.isFile())
+    {
+      return true;
+    }
+    spjFile = new File(sb.append(".c").toString());
+    if (spjFile.isFile())
+    {
+      String cmd = new StringBuilder(4).append("gcc -o ").append(sb.toString()).append(" ").append(sb.append(".c").toString()).toString();
+      try
+      {
+        Runtime.getRuntime().exec(cmd);
+      } catch (IOException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        return false;
+      }
+      return true;
+    }
+    
+    spjFile = new File(sb.append(".cc").toString());
+    if (spjFile.isFile())
+    {
+      String cmd = new StringBuilder(4).append("g++ -o ").append(sb.toString()).append(" ").append(sb.append(".cc").toString()).toString();
+      try
+      {
+        Runtime.getRuntime().exec(cmd);
+      } catch (IOException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        return false;
+      }
+      return true;
+    }
+    
+    return false;
+  }
+  
   public boolean addTag(Integer pid, String tag)
   {
     Integer uid = userService.getCurrentUid();
@@ -339,7 +390,7 @@ public class ProblemService
     problemModel.set("uid", userService.getCurrentUid());
     problemModel.save();
 
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append("\\").append(problemModel.getInt("pid")).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
       log.warn("Data directory already exists: " + dataDir.getPath());

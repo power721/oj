@@ -34,6 +34,7 @@ public class ProblemAdminController extends OjController
     setAttr("nextPid", problemService.getNextPid(pid));
     setAttr("tagList", problemService.getTags(pid));
     setAttr("problem", problemModel);
+    setAttr("spj", problemService.checkSpj(pid));
     
     setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
   }

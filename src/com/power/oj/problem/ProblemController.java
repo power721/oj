@@ -50,6 +50,7 @@ public class ProblemController extends OjController
     setAttr("tagList", problemService.getTags(pid));
     setAttr("userResult", problemService.getUserResult(pid));
     setAttr("problem", problemModel);
+    setAttr("spj", problemService.checkSpj(pid));
     setCookie("pageNumber", String.valueOf(problemService.getPageNumber(pid, OjConfig.problemPageSize)), OjConstants.COOKIE_AGE);
 
     //problemModel.incViewCount();

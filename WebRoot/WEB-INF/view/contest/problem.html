@@ -33,7 +33,8 @@
   Memory Limit: <span class="blue">${problem.memoryLimit!} KB</span><br>
   Total Submit: <a href="contest/status/${cid!}?pid=${problem.id!}">${problem.submission!}</a> 
   Accepted: <a href="contest/status/${cid!}?pid=${problem.id!}&result=0">${problem.accepted!}</a>
-  Page View: <span class="blue">${problem.view!}</span><br> <br> 
+  Page View: <span class="blue">${problem.view!}</span><br>
+  <#if spj??><span class="red">Special Judged</span></#if><br> 
   <#if cstatus?? && cstatus==1> 
   <a href="<#if user??>contest/submit/${cid!}-${problem.id!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   </#if> 

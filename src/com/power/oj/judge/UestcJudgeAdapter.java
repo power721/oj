@@ -30,6 +30,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     long timeLimit = problemModel.getTimeLimit();
     long memoryLimit = problemModel.getMemoryLimit();
     long outputLimit = 8192L;
+    boolean isSpj = problemService.checkSpj(solutionModel.getPid());
     
     log.info("data files: " + numOfData);
     if (numOfData < 1)
@@ -39,10 +40,9 @@ public class UestcJudgeAdapter extends JudgeAdapter
     boolean isAccepted = true;
     for (int i = 0; isAccepted && i < numOfData; ++i)
     {
-      Process process = Runtime.getRuntime().exec(
-          buildCommand(timeLimit, memoryLimit, outputLimit, false, 
-              FileNameUtil.getName(inFiles.get(i)), FileNameUtil.getName(outFiles.get(i)),
-              i == 0));
+      String cmd = buildCommand(timeLimit, memoryLimit, outputLimit, isSpj,
+          FileNameUtil.getName(inFiles.get(i)), FileNameUtil.getName(outFiles.get(i)), i == 0);
+      Process process = Runtime.getRuntime().exec(cmd);
       InputStream inputStream = process.getInputStream();
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
       String line;

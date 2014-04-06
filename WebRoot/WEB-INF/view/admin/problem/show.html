@@ -47,7 +47,8 @@
                 <div>
                   Total Submit:<a href="status?pid=${problem.pid!}" target="_blank">${problem.submission!}</a> 
                   Accepted:<a href="status?pid=${problem.pid!}&result=0" target="_blank">${problem.accepted!}</a> 
-                  Page View:<span class="pts">${problem.view!}</span>
+                  Page View:<span class="pts">${problem.view!}</span><br>
+                  <#if spj??><span class="red">Special Judged</span></#if>
                 </div>
               </div>
               <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>

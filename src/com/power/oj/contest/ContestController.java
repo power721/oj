@@ -88,6 +88,7 @@ public class ContestController extends OjController
     }
 
     setAttr("problem", problemModel);
+    setAttr("spj", problemService.checkSpj(problemModel.getPid()));
     setAttr("userResult", contestService.getUserResult(cid, num));
     setAttr("cstatus", contestService.getContestStatus(cid));
     setAttr("contestProblems", contestService.getContestProblems(cid, null));
