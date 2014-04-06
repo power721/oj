@@ -531,7 +531,7 @@ public class ContestService
     }
     for (ResultType resultType : OjConfig.judge_result)
     {
-      if (resultType.getId() > ResultType.CE)
+      if (resultType.getId() > ResultType.RF)
         break;
       sb.append("COUNT(IF(result=").append(resultType.getId()).append(",1,NULL)) AS ").append(resultType.getName()).append(",");
     }

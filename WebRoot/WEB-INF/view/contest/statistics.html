@@ -2,20 +2,29 @@
 <table id="contest-statistics" class="table table-condensed table-bordered table-hover">
   <thead>
     <tr>
-      <th width="5%">ID</th> <#list resultName as name>
-      <th id="${name}">${name}</th> </#list>
-      <th width="10%">Total</th> <#list languageList as language>
-      <th>${language.name}</th> </#list>
+      <th width="5%">ID</th> 
+      <#list resultName as name>
+      <th id="${name}">${name}</th> 
+      </#list>
+      <th width="10%">Total</th> 
+      <#list languageList as language>
+      <th>${language.name}</th> 
+      </#list>
     </tr>
   </thead>
   <tbody>
     <#list statistics as st>
     <tr>
-      <td class="text-center"><a href="contest/problem/${cid}-${st.id!}">${st.id!}</a></td> <#list resultName as name> <#assign val=st["${name}"]>
-      <td>${val}</td> </#list>
-      <td class="text-center"><a href="contest/status/${cid!}?pid=${st.id!}">${st.total!}</a></td> <#list languageList as language> <#assign
-      val=st["${language.ext}"]>
-      <td>${val}</td> </#list>
+      <td class="text-center"><a href="contest/problem/${cid}-${st.id!}">${st.id!}</a></td> 
+      <#list resultName as name> 
+      <#assign val=st["${name}"]>
+      <td>${val}</td> 
+      </#list>
+      <td class="text-center"><a href="contest/status/${cid!}?pid=${st.id!}">${st.total!}</a></td> 
+      <#list languageList as language> 
+      <#assign val=st["${language.ext}"]>
+      <td>${val}</td> 
+      </#list>
     </tr>
     </#list>
   </tbody>

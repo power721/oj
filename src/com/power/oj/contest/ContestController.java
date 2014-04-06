@@ -328,7 +328,7 @@ public class ContestController extends OjController
     
     for (ResultType resultType : OjConfig.judge_result)
     {
-      if (resultType.getId() > 9)
+      if (resultType.getId() > ResultType.RF)
         break;
       resultName.add(resultType.getName());
     }
