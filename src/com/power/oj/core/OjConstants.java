@@ -11,6 +11,9 @@ public interface OjConstants
   /*
    * These contants are used in general.
    */
+  String DATA_EXT_IN = ".in";
+  String DATA_EXT_OUT = ".out";
+  String SOURCE_FILE_NAME = "Main";
   long MINUTE_IN_MILLISECONDS = 60 * 1000;
   long SESSION_EXPIRES_TIME = 15 * 60 * 1000;
   long RESET_PASSWORD_EXPIRES_TIME = 30 * 60 * 1000;

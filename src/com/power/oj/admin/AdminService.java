@@ -1,15 +1,23 @@
 package com.power.oj.admin;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
 
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
@@ -18,7 +26,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.AppConfig;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.FpsProblem;
-import com.power.oj.util.Tool;
+import com.power.oj.problem.ProblemModel;
 
 import jodd.io.FileUtil;
 import jodd.util.SystemUtil;
@@ -117,9 +125,21 @@ public class AdminService
   
   public List<FpsProblem> importProblems(File file, Integer outputLimit, Boolean status)
   {
-    Document doc = Tool.parseXML(file);
-    NodeList itemList = doc.getElementsByTagName("item");
+    SAXReader saxReader = new SAXReader();
+    Document document = null;
     List<FpsProblem> problemList = new ArrayList<FpsProblem>();
+    
+    try
+    {
+      document = saxReader.read(file);
+    } catch (DocumentException e1)
+    {
+      if (OjConfig.getDevMode())
+        e1.printStackTrace();
+      log.error(e1.getLocalizedMessage());
+      return problemList;
+    }
+    
     try
     {
       FileUtil.mkdirs(OjConfig.problemImagePath);
@@ -129,14 +149,56 @@ public class AdminService
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
-    
-    for (int i=0; i<itemList.getLength(); ++i)
+
+    Element root = document.getRootElement();
+    for (Iterator<?> i = root.elementIterator("item"); i.hasNext();)
     {
+      Element ele = (Element) i.next();
       FpsProblem problem = new FpsProblem(outputLimit * 1024, status);
-      problem.itemToProblem(itemList.item(i));
+      problem.itemToProblem(ele);
       problemList.add(problem);
     }
+
     return problemList;
   }
   
+  public File exportProblems(Integer start, Integer end)
+  {
+    Document document = DocumentHelper.createDocument();
+    document.addDocType("fps", "-//FreeProblemSet//EN", "http://freeproblemset.googlecode.com/svn/trunk/fps.current.dtd");
+    Element rootElement = document.addElement("fps");
+    rootElement.addAttribute("version", "1.1");
+    rootElement.addAttribute("url", "http://code.google.com/p/freeproblemset/");
+    
+    Element generator = rootElement.addElement("generator");
+    generator.addAttribute("name", OjConfig.get("siteTitle", "PowerOJ"));
+    generator.addAttribute("url", OjConfig.get("domaiNname", "http://git.oschina.net/power/oj"));
+    
+    List<ProblemModel> problemList = ProblemModel.dao.find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=1", start, end);
+    for (ProblemModel problemModel : problemList)
+    {
+      Element item = rootElement.addElement("item");
+      item.addAttribute("pid", String.valueOf(problemModel.getPid()));
+      FpsProblem problem = new FpsProblem(problemModel);
+      problem.problemToItem(item);
+    }
+    
+    String filePath = OjConfig.downloadPath + File.separator + start + "-" + end + ".xml";
+    try
+    {
+      OutputFormat format = OutputFormat.createPrettyPrint();
+      Writer fileWriter = new FileWriter(filePath);
+      XMLWriter xmlWriter = new XMLWriter(fileWriter, format);
+      
+      xmlWriter.write(document);
+      xmlWriter.flush();
+      xmlWriter.close();
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+    }
+    return new File(filePath);
+  }
 }

@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ELEMENT fps (generator?,item*)>
-<!ATTLIST fps
-    version CDATA #IMPLIED
-    url  CDATA #IMPLIED
->
 <!ELEMENT generator (#PCDATA)>
 <!ATTLIST generator
     name CDATA #IMPLIED
     url  CDATA #IMPLIED
 >
-<!ELEMENT item 
-(title+,time_limit+,memory_limit+,memory_limit+,description+,input?,output?,sample_input+,sample_output+,test_input*,test_output*,hint?,source?,solution*,spj?)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT time_limit (#PCDATA)>
 <!ATTLIST time_limit
@@ -36,3 +29,10 @@
 <!ELEMENT src (#PCDATA)>
 <!ELEMENT base64 (#PCDATA)>
 <!ELEMENT img (src+,base64+)>
+<!ELEMENT item 
+(title+,time_limit+,memory_limit+,memory_limit+,description+,input?,output?,sample_input+,sample_output+,test_input*,test_output*,hint?,source?,solution*,spj?,img*)>
+<!ELEMENT fps (generator?,item*)>
+<!ATTLIST fps
+    version CDATA #IMPLIED
+    url  CDATA #IMPLIED
+>

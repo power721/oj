@@ -130,7 +130,10 @@ public class ProblemAdminController extends OjController
   @ActionKey("/admin/problem/export")
   public void exportXML()
   {
+    Integer start = getParaToInt(0, 1000);
+    Integer end = getParaToInt(1, 1009);
     
+    renderFile(adminService.exportProblems(start, end));
   }
 
   @RequiresPermissions("problem:add")

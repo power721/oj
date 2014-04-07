@@ -14,6 +14,7 @@ import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.problem.ProblemModel;
@@ -23,9 +24,6 @@ import com.power.oj.user.UserService;
 
 public abstract class JudgeAdapter implements Runnable
 {
-  public static final String DATA_EXT_IN = ".in";
-  public static final String DATA_EXT_OUT = ".out";
-  public static final String sourceFileName = "Main";
   
   protected static final ContestService contestService = ContestService.me();
   protected static final UserService userService = UserService.me();
@@ -109,7 +107,7 @@ public abstract class JudgeAdapter implements Runnable
     workDirPath = workDir.getAbsolutePath();
     log.info("mkdirs workDir: " + workDirPath);
     
-    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExt()).toString());
+    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solutionModel.getSource());
   }
@@ -141,10 +139,10 @@ public abstract class JudgeAdapter implements Runnable
     for (int i = 0; i < arrayOfFile.length; i++)
     {
       File in_file = arrayOfFile[i];
-      if (!in_file.getName().toLowerCase().endsWith(DATA_EXT_IN))
+      if (!in_file.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN))
         continue;
       File out_file = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
-          .append(in_file.getName().substring(0, in_file.getName().length() - DATA_EXT_IN.length())).append(DATA_EXT_OUT).toString());
+          .append(in_file.getName().substring(0, in_file.getName().length() - OjConstants.DATA_EXT_IN.length())).append(OjConstants.DATA_EXT_OUT).toString());
       if (!out_file.isFile())
       {
         log.warn("Output file for input file does not exist: " + in_file.getAbsolutePath());

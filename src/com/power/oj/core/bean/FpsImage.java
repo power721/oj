@@ -3,10 +3,9 @@ package com.power.oj.core.bean;
 import java.io.File;
 import java.io.IOException;
 
-import jodd.io.FileUtil;
+import org.dom4j.Element;
 
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import jodd.io.FileUtil;
 
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
@@ -20,18 +19,23 @@ public class FpsImage
 
   private String originalSrc;
   private String src;
+  private String base64;
+  private File imageFile;
 
-  public FpsImage(Node e, FpsProblem p, int num)
+  public FpsImage(Element e, FpsProblem p, int num)
   {
     Integer pid = p.getProblemModel().getPid();
-    NodeList cn = e.getChildNodes();
-    originalSrc = cn.item(0).getTextContent();
-    String base64 = cn.item(1).getTextContent();
+    
+    originalSrc = e.elementText("src");
+    base64 = e.elementText("base64");
     StringBuilder sb = new StringBuilder(6).append(OjConfig.problemImagePath).append(File.separator);
     sb.append(pid).append("_").append(num).append(".png");
-    File imageFile = new File(sb.toString());
+    imageFile = new File(sb.toString());
     src = imageFile.getAbsolutePath().replaceAll(PathKit.getWebRootPath(), "").substring(1);
+  }
 
+  public void saveImage()
+  {
     try
     {
       byte[] decodeBuffer = (new BASE64Decoder()).decodeBuffer(base64);
@@ -44,7 +48,7 @@ public class FpsImage
       log.error(e1.getLocalizedMessage());
     }
   }
-
+  
   public String getOldURL()
   {
     return originalSrc;

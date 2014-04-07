@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
@@ -20,7 +21,7 @@ public class PojJudgeAdapter extends JudgeAdapter
     log.info(solutionModel.getSid() + " Start compiling...");
     
     String comShellName = OjConfig.get("compileShell");
-    String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, sourceFileName, programLanguage.getExt());
+    String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, OjConstants.SOURCE_FILE_NAME, programLanguage.getExt());
     log.info("compileCmd: " + compileCmdName);
 
     /*
@@ -52,7 +53,7 @@ public class PojJudgeAdapter extends JudgeAdapter
       log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
     }
 
-    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExe()).toString());
+    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExe()).toString());
     log.info(mainProgram.getAbsolutePath());
     boolean success = mainProgram.isFile();
 
@@ -88,7 +89,7 @@ public class PojJudgeAdapter extends JudgeAdapter
     log.info("caseTimeLimit: " + caseTimeLimit);
     log.info("memoryLimit: " + memoryLimit);
 
-    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(sourceFileName).append(".").append(programLanguage.getExe()).append("\n").toString();
+    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExe()).append("\n").toString();
     runProcessOutputStream.write(mainProgram.getBytes());
     runProcessOutputStream.write((workDirPath + "\n").getBytes());
     log.info("mainProgram: " + mainProgram);
