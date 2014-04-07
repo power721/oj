@@ -1,9 +1,14 @@
 package com.power.oj.admin;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
+import com.jfinal.aop.Before;
+import com.jfinal.core.ActionKey;
+import com.jfinal.ext.interceptor.POST;
+import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
@@ -14,6 +19,9 @@ import com.power.oj.problem.ProblemModel;
 @RequiresPermissions("admin")
 public class ProblemAdminController extends OjController
 {
+  
+  private static final AdminService adminService = AdminService.me();
+  
   public void index()
   {
     setTitle(getText("problem.index.title"));
@@ -46,6 +54,7 @@ public class ProblemAdminController extends OjController
   }
 
   @RequiresPermissions("problem:add")
+  @Before(POST.class)
   public void save()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
@@ -88,6 +97,7 @@ public class ProblemAdminController extends OjController
   }
 
   @RequiresPermissions("problem:edit")
+  @Before(POST.class)
   public void update()
   {
     ProblemModel problemModel = getModel(ProblemModel.class, "problem");
@@ -95,6 +105,39 @@ public class ProblemAdminController extends OjController
 
     String redirectURL = new StringBuilder(2).append("/admin/problem/show/").append(problemModel.getPid()).toString();
     redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
+  }
+  
+  @RequiresPermissions("problem:add")
+  @ActionKey("/admin/problem/import")
+  public void importXML()
+  {
+    render("import.html");
+  }
+
+  @RequiresPermissions("problem:add")
+  @Before(POST.class)
+  public void importProblems()
+  {
+    UploadFile uploadFile = getFile("xmlFile", "", 100 * 1024 * 1024, "UTF-8");
+    File file = uploadFile.getFile();
+    Integer outputLimit = getParaToInt("outputLimit", 8192);
+    Boolean status = getParaToBoolean("status", false);
+    
+    setAttr("problemList", adminService.importProblems(file, outputLimit, status));
+  }
+
+  @RequiresPermissions("problem:add")
+  @ActionKey("/admin/problem/export")
+  public void exportXML()
+  {
+    
+  }
+
+  @RequiresPermissions("problem:add")
+  @Before(POST.class)
+  public void exportProblems()
+  {
+    
   }
 
   @RequiresPermissions("problem:build")

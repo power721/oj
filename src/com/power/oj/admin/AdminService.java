@@ -1,19 +1,31 @@
 package com.power.oj.admin;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import com.jfinal.kit.PathKit;
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.AppConfig;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.bean.FpsProblem;
+import com.power.oj.util.Tool;
 
+import jodd.io.FileUtil;
 import jodd.util.SystemUtil;
 
 public class AdminService
 {
+  private final Logger log = Logger.getLogger(AdminService.class);
   private static final AdminService me = new AdminService();
   
   private AdminService() {}
@@ -101,6 +113,30 @@ public class AdminService
     record.set("type", type);
     
     return Db.update("variable", record) ? 0 : 1;
+  }
+  
+  public List<FpsProblem> importProblems(File file, Integer outputLimit, Boolean status)
+  {
+    Document doc = Tool.parseXML(file);
+    NodeList itemList = doc.getElementsByTagName("item");
+    List<FpsProblem> problemList = new ArrayList<FpsProblem>();
+    try
+    {
+      FileUtil.mkdirs(OjConfig.problemImagePath);
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+    }
+    
+    for (int i=0; i<itemList.getLength(); ++i)
+    {
+      FpsProblem problem = new FpsProblem(outputLimit * 1024, status);
+      problem.itemToProblem(itemList.item(i));
+      problemList.add(problem);
+    }
+    return problemList;
   }
   
 }

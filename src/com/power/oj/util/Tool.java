@@ -1,10 +1,18 @@
 package com.power.oj.util;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
@@ -157,6 +165,28 @@ public class Tool
       sb.append(CHAR_STR[new Random().nextInt(CHAR_STR.length)]);
     }
     return sb.toString();
+  }
+
+  public static Document parseXML(File file)
+  {
+    Document doc = null;
+    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    try
+    {
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      doc = builder.parse(file);
+      doc.normalize();
+    } catch (ParserConfigurationException e)
+    {
+      e.printStackTrace();
+    } catch (SAXException e)
+    {
+      e.printStackTrace();
+    } catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+    return doc;
   }
 
 }
