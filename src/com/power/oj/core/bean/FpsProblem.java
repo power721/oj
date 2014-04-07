@@ -329,23 +329,23 @@ public class FpsProblem
   {
     if (ext.equalsIgnoreCase("c"))
     {
-      return "c";
+      return "C";
     }
-    else if (ext.equalsIgnoreCase("c"))
+    else if (ext.equalsIgnoreCase("cc") || ext.equalsIgnoreCase("cpp"))
     {
-      return "c++";
+      return "C++";
     }
     else if (ext.equalsIgnoreCase("pas"))
     {
-      return "pascal";
+      return "Pascal";
     }
     else if (ext.equalsIgnoreCase("java"))
     {
-      return "java";
+      return "Java";
     }
     else if (ext.equalsIgnoreCase("py"))
     {
-      return "python";
+      return "Python";
     }
     return "";
   }
