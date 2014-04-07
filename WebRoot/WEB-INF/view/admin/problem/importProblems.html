@@ -30,8 +30,12 @@
             </#if>
             <a href="problem/show/${pid}" target="_blank">${pid}</a>: 
             <a href="admin/problem/show/${pid}">${problem.problemModel.title}</a>
-            <#if (problem.imageList?? && problem.imageList.size()>0)> ${problem.imageList.size()} images.</#if>
-            <#if (problem.dataIn?? && problem.dataIn.size()>0)> ${problem.dataIn.size()} test data files.</#if>
+            <#if (problem.imageList?? && problem.imageList.size()>0)> <i class="icon-picture"></i> ${problem.imageList.size()} image(s).</#if>
+            <#if (problem.dataIn?? && problem.dataIn.size()>0)> 
+              <i class="icon-file"></i> ${problem.dataIn.size()} test data files.
+            <#else>
+              <i class="icon-file"></i> <strong>use sample as data files.</strong>
+            </#if>
             <#if problem.solution??><span class="label label-info">Sample Code</span></#if>
             <#if problem.spj><span class="badge badge-important">Special Judged</span></#if>
             </li>

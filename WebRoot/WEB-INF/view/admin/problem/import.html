@@ -18,12 +18,12 @@
         <div class="well">
           <div id="container">
             <h3>Import Problem:</h3>
-            <p class="text-warning">Import FPS data ,please make sure you file is smaller than 100 MB.</p>
+            <p class="text-warning">Import FPS data ,please make sure your XML file is smaller than 100 MB.</p>
             <form class="form-horizontal" action="admin/problem/importProblems" method="post" enctype="multipart/form-data">
               <div class="control-group problem">
                 <label class="control-label" for="inputFile">File</label>
                 <div class="controls">
-                  <input type="file" id="inputFile" name="xmlFile" required></input>
+                  <input type="file" id="inputFile" name="xmlFile" accept="text/xml, application/xml" required></input>
                 </div>
               </div>
               <div class="control-group problem">
@@ -42,7 +42,7 @@
               </div>
             </form>
             <p class="text-info">free problem set FPS-xml can be download at 
-              <a href="http://code.google.com/p/freeproblemset/downloads/list" target="_blank">FPS-Googlecode</a></p>
+              <a href="http://code.google.com/p/freeproblemset/downloads/list" target="_blank">FPS-Google code</a></p>
           </div>
         </div>
       </div>

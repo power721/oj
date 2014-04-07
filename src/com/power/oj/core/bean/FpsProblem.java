@@ -23,7 +23,7 @@ public class FpsProblem
   private File dataDir;
   private long outputLimit = 8192 * 1024;
   private String solution;
-  private String solutionLang;
+  private String solutionLang = "C++";
   private boolean spj = false;
   private List<FpsImage> imageList;
   private List<String> dataIn;
@@ -159,10 +159,14 @@ public class FpsProblem
       if (name.equalsIgnoreCase("spj"))
       {
         String lang = "c++";
+        spj = true;
         if (e.getAttributes() != null)
         {
           lang = e.getAttributes().getNamedItem("language").getNodeValue();
-          spj = true;
+        }
+        else
+        {
+          problemModel.setHint(problemModel.getHint() + "<br>\n<b><span class=\"red\">need spj.</span></b>");
         }
         saveSourceFile("spj", lang, value);
       }
@@ -184,7 +188,11 @@ public class FpsProblem
   
   public boolean testSource()
   {
-    // TODO
+    if (solution == null)
+    {
+      return false;
+    }
+    
     return true;
   }
 
@@ -237,6 +245,12 @@ public class FpsProblem
 
   private void svaeData()
   {
+    if (dataIn.size() < 1)
+    {
+      saveSampleData();
+      return;
+    }
+    
     int n = 0;
     Iterator<String> in = dataIn.iterator();
     Iterator<String> it = dataOut.iterator();
@@ -271,6 +285,27 @@ public class FpsProblem
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
         }
+    }
+  }
+  
+  private void saveSampleData()
+  {
+    StringBuilder sb = new StringBuilder(3).append(dataDir.getAbsolutePath()).append(File.separator).append("sample");
+    File dataInFile = new File(sb.toString() + ".in");
+    File dataOutFile = new File(sb.toString() + ".out");
+    
+    try
+    {
+      FileUtil.touch(dataOutFile);
+      FileUtil.writeString(dataOutFile, problemModel.getSampleOutput());
+      
+      FileUtil.touch(dataInFile);
+      FileUtil.writeString(dataInFile, problemModel.getSampleInput());
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
     }
   }
   
