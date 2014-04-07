@@ -30,8 +30,8 @@
 <!ELEMENT base64 (#PCDATA)>
 <!ELEMENT img (src+,base64+)>
 <!ELEMENT item 
-(generator?,title+,time_limit+,memory_limit+,memory_limit+,description+,input?,output?,sample_input+,sample_output+,test_input*,test_output*,hint?,source?,solution*,spj?)>
-<!ELEMENT fps (item*)>
+(title+,time_limit+,memory_limit+,memory_limit+,description+,input?,output?,sample_input+,sample_output+,test_input*,test_output*,hint?,source?,solution*,spj?)>
+<!ELEMENT fps (generator?,item*)>
 <!ATTLIST fps
     version CDATA #IMPLIED
     url  CDATA #IMPLIED
