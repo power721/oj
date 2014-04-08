@@ -1,12 +1,16 @@
 package com.power.oj.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import jodd.io.FileUtil;
+
 import com.jfinal.kit.PathKit;
+import com.power.oj.core.OjConfig;
 
 /**
  * Some utils for file handling.
@@ -192,8 +196,13 @@ public class FileKit
   {
     FileKit.allowFiles = allowFiles;
   }
-  
+
   public static String parsePath(String path)
+  {
+    return parsePath(path, false);
+  }
+
+  public static String parsePath(String path, boolean mkdirs)
   {
     path = path.trim();
 
@@ -206,6 +215,17 @@ public class FileKit
     File file = new File(path);
     path = file.getAbsolutePath();
     
+    if (mkdirs && !file.exists())
+    {
+      try
+      {
+        FileUtil.mkdirs(file);
+      } catch (IOException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+      }
+    }
     return path;
   }
 

@@ -75,10 +75,10 @@ public class OjConfig
     
     siteTitle = get("siteTitle", "Power OJ");
 
-    uploadPath = FileKit.parsePath(get("uploadPath", "upload/"));
-    downloadPath = FileKit.parsePath(get("downloadPath", "download/"));
-    userAvatarPath = FileKit.parsePath(get("userAvatarPath", "upload/image/user/"));
-    problemImagePath = FileKit.parsePath(get("problemImagePath", "upload/image/problem/"));
+    uploadPath = FileKit.parsePath(get("uploadPath", "upload/"), true);
+    downloadPath = FileKit.parsePath(get("downloadPath", "download/"), true);
+    userAvatarPath = FileKit.parsePath(get("userAvatarPath", "upload/image/user/"), true);
+    problemImagePath = FileKit.parsePath(get("problemImagePath", "upload/image/problem/"), true);
     
     contestPageSize = getInt("contestPageSize", 20);
     contestRankPageSize = getInt("contestRankPageSize", 50);
