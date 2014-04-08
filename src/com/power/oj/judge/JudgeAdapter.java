@@ -3,6 +3,7 @@ package com.power.oj.judge;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -105,9 +106,12 @@ public abstract class JudgeAdapter implements Runnable
     File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid()).toString());
     if (workDir.isDirectory())
     {
-      FileUtil.deleteDir(workDir);
+      FileUtil.cleanDir(workDir);
     }
-    FileUtil.mkdirs(workDir);
+    else
+    {
+      FileUtil.mkdirs(workDir);
+    }
     workDirPath = workDir.getAbsolutePath();
     log.info("mkdirs workDir: " + workDirPath);
     
@@ -139,7 +143,8 @@ public abstract class JudgeAdapter implements Runnable
     inFiles = new ArrayList<String>();
     outFiles = new ArrayList<String>();
     File[] arrayOfFile = dataDir.listFiles();
-
+    Arrays.sort(arrayOfFile);
+    
     for (int i = 0; i < arrayOfFile.length; i++)
     {
       File in_file = arrayOfFile[i];
