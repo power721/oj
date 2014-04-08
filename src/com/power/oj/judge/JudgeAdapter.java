@@ -103,6 +103,10 @@ public abstract class JudgeAdapter implements Runnable
     }
     
     File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid()).toString());
+    if (workDir.isDirectory())
+    {
+      FileUtil.deleteDir(workDir);
+    }
     FileUtil.mkdirs(workDir);
     workDirPath = workDir.getAbsolutePath();
     log.info("mkdirs workDir: " + workDirPath);
