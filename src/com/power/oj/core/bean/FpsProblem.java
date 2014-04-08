@@ -1,17 +1,28 @@
 package com.power.oj.core.bean;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
 
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
 import jodd.util.StringUtil;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
 import org.dom4j.Element;
 
+import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -201,20 +212,20 @@ public class FpsProblem
     memoryLimit.addCDATA(String.valueOf(problemModel.getMemoryLimit()));
     
     Element description = item.addElement("description");
-    description.addCDATA(problemModel.getDescription().replaceAll("\n", "<br>\n"));
+    description.addCDATA(problemModel.getDescription().replaceAll("\n", "<br>"));
     
     String inputValue = problemModel.getInput();
     if (inputValue != null && inputValue.length() > 0)
     {
       Element input = item.addElement("input");
-      input.addCDATA(inputValue.replaceAll("\n", "<br>\n"));
+      input.addCDATA(inputValue.replaceAll("\n", "<br>"));
     }
 
     String outputValue = problemModel.getOutput();
     if (outputValue != null && outputValue.length() > 0)
     {
       Element output = item.addElement("output");
-      output.addCDATA(outputValue.replaceAll("\n", "<br>\n"));
+      output.addCDATA(outputValue.replaceAll("\n", "<br>"));
     }
 
     Element sample_input = item.addElement("sample_input");
@@ -222,27 +233,22 @@ public class FpsProblem
 
     Element sample_output = item.addElement("sample_output");
     sample_output.addCDATA(problemModel.getSampleOutput());
-    
+
+    try
     {
-      try
-      {
-        addTestData(item);
-        addSolution(item);
-        addSpj(item);
-      } catch (IOException e)
-      {
-        // TODO Auto-generated catch block
+      addTestData(item);
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
         e.printStackTrace();
-      }
-
-      addImages(item);
+      log.error(e.getLocalizedMessage());
     }
-
+    
     String hintValue = problemModel.getHint();
     if (hintValue != null && hintValue.length() > 0)
     {
       Element hint = item.addElement("hint");
-      hint.addCDATA(hintValue.replaceAll("\n", "<br>\n"));
+      hint.addCDATA(hintValue.replaceAll("\n", "<br>"));
     }
 
     String sourceValue = problemModel.getSource();
@@ -252,6 +258,19 @@ public class FpsProblem
       source.addCDATA(sourceValue);
     }
 
+    try
+    {
+      addSolution(item);
+      addSpj(item);
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+    }
+    
+    addImages(item);
+    
     return item;
   }
   
@@ -289,10 +308,10 @@ public class FpsProblem
         continue;
       }
       Element testInput = item.addElement("test_input");
-      testInput.addCDATA(FileUtil.readString(inFile));
+      testInput.addCDATA(FileUtils.readFileToString(inFile));
       
       Element testOutput = item.addElement("test_output");
-      testOutput.addCDATA(FileUtil.readString(outFile));
+      testOutput.addCDATA(FileUtils.readFileToString(outFile));
     }
     return item;
   }
@@ -307,7 +326,7 @@ public class FpsProblem
       if (StringUtil.equalsOne(ext, exts) != -1)
       {
         Element solution = item.addElement("solution");
-        solution.addCDATA(FileUtil.readString(arrayOfFile[i]));
+        solution.addCDATA(FileUtils.readFileToString(arrayOfFile[i]));
         solution.addAttribute("language", ext2lang(ext));
         return item;
       }
@@ -369,7 +388,7 @@ public class FpsProblem
         if (StringUtil.equalsOne(name, files) != -1)
         {
           Element solution = item.addElement("solution");
-          solution.addCDATA(FileUtil.readString(arrayOfFile[i]));
+          solution.addCDATA(FileUtils.readFileToString(arrayOfFile[i]));
           solution.addAttribute("language", ext2lang(ext));
           return item;
         }
@@ -380,16 +399,88 @@ public class FpsProblem
 
   private Element addImages(Element item)
   {
-    // TODO
+    addImage(item, problemModel.getDescription());
+    addImage(item, problemModel.getInput());
+    addImage(item, problemModel.getOutput());
+    addImage(item, problemModel.getHint());
+    
     return item;
   }
 
+  private Element addImage(Element item, String text)
+  {
+    String src;
+    String base64;
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]?([^'\"]+)['\"]?[^>]*>", Pattern.CASE_INSENSITIVE);
+    Matcher m = p.matcher(text);
+
+    while (m.find())
+    {
+      src = m.group(1);
+      if (src.startsWith("http"))
+      {
+        URL url = null;
+        try
+        {
+          url = new URL(src);
+        } catch (MalformedURLException e)
+        {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.error(e.getLocalizedMessage());
+          continue;
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try
+        {
+          BufferedImage image = ImageIO.read(url);
+          ImageIO.write(image, "jpg", baos);
+          baos.flush();
+          base64 = Base64.encodeBase64String(baos.toByteArray());
+        } catch (IOException e)
+        {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.error(e.getLocalizedMessage());
+          continue;
+        }
+      }
+      else
+      {
+        try
+        {
+          base64 = Base64.encodeBase64String(FileUtils.readFileToByteArray(new File(rootPath + src)));
+        } catch (IOException e)
+        {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.error(e.getLocalizedMessage());
+          continue;
+        }
+      }
+      
+      Element img = item.addElement("img");
+      Element srcImg = img.addElement("src");
+      srcImg.addCDATA(src);
+      Element base64Img = img.addElement("base64");
+      base64Img.addCDATA(base64);
+    }
+    
+    return item;
+  }
+  
   private String setImages(String html)
   {
+    if (html == null)
+    {
+      return null;
+    }
     for (Iterator<FpsImage> i = imageList.iterator(); i.hasNext();)
     {
       FpsImage img = (FpsImage) i.next();
-      html = html.replaceAll(img.getOldURL(), img.getURL());
+      html = html.replaceAll(img.getOriginalSrc(), img.getSrc());
     }
 
     return html;

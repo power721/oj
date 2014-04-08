@@ -19,23 +19,18 @@ public class FpsImage
 
   private String originalSrc;
   private String src;
-  private String base64;
-  private File imageFile;
 
   public FpsImage(Element e, FpsProblem p, int num)
   {
     Integer pid = p.getProblemModel().getPid();
     
     originalSrc = e.elementText("src");
-    base64 = e.elementText("base64");
+    String base64 = e.elementText("base64");
     StringBuilder sb = new StringBuilder(6).append(OjConfig.problemImagePath).append(File.separator);
     sb.append(pid).append("_").append(num).append(".png");
-    imageFile = new File(sb.toString());
+    File imageFile = new File(sb.toString());
     src = imageFile.getAbsolutePath().replaceAll(PathKit.getWebRootPath(), "").substring(1);
-  }
-
-  public void saveImage()
-  {
+    
     try
     {
       byte[] decodeBuffer = (new BASE64Decoder()).decodeBuffer(base64);
@@ -48,25 +43,25 @@ public class FpsImage
       log.error(e1.getLocalizedMessage());
     }
   }
-  
-  public String getOldURL()
+
+  public String getOriginalSrc()
   {
     return originalSrc;
   }
 
-  public void setOldURL(String oldURL)
+  public void setOriginalSrc(String originalSrc)
   {
-    this.originalSrc = oldURL;
+    this.originalSrc = originalSrc;
   }
 
-  public String getURL()
+  public String getSrc()
   {
     return src;
   }
 
-  public void setURL(String uRL)
+  public void setSrc(String src)
   {
-    src = uRL;
+    this.src = src;
   }
   
 }

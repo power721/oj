@@ -3,6 +3,8 @@ package com.power.oj.admin;
 import java.io.File;
 import java.io.IOException;
 
+import jodd.util.StringUtil;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
@@ -130,17 +132,36 @@ public class ProblemAdminController extends OjController
   @ActionKey("/admin/problem/export")
   public void exportXML()
   {
-    Integer start = getParaToInt(0, 1000);
-    Integer end = getParaToInt(1, 1009);
-    
-    renderFile(adminService.exportProblems(start, end));
+    render("export.html");
   }
 
   @RequiresPermissions("problem:add")
   @Before(POST.class)
   public void exportProblems()
   {
+    Integer start = getParaToInt("start", 1000);
+    Integer end = getParaToInt("end", 1009);
+    Boolean status = getParaToBoolean("status", false);
+    String in = getPara("in");
+    File xmlFile = null;
     
+    if (StringUtil.isNotBlank(in))
+    {
+      xmlFile = adminService.exportProblems(in, status);
+    }
+    else
+    {
+      xmlFile = adminService.exportProblems(start, end, status);
+    }
+    
+    if (xmlFile == null)
+    {
+      redirect("/admin/problem/export", new FlashMessage("Incorrect parameters!", MessageType.ERROR, getText("message.error.title")));
+    }
+    else
+    {
+      renderFile(xmlFile);
+    }
   }
 
   @RequiresPermissions("problem:build")

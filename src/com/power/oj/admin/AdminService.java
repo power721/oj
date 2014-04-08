@@ -162,9 +162,112 @@ public class AdminService
     return problemList;
   }
   
-  public File exportProblems(Integer start, Integer end)
+  public File exportProblems(String problems, Boolean status)
   {
+    String[] pidStr = problems.split(",");
     Document document = DocumentHelper.createDocument();
+    Element rootElement = createXmlRootElement(document);
+    
+    for (String pidPar : pidStr)
+    {
+      String pids[] = pidPar.split("-");
+      if (pids.length == 1)
+      {
+        try
+        {
+          Integer pid = Integer.parseInt(pids[0]);
+          ProblemModel problemModel = null;
+          if (status)
+          {
+            problemModel = ProblemModel.dao.
+              findFirst("SELECT * FROM problem WHERE pid=? AND status=1", pid);
+          }
+          else
+          {
+            problemModel = ProblemModel.dao.findFirst("SELECT * FROM problem WHERE pid=?", pid);
+          }
+          Element item = rootElement.addElement("item");
+          
+          item.addAttribute("pid", String.valueOf(problemModel.getPid()));
+          FpsProblem problem = new FpsProblem(problemModel);
+          problem.problemToItem(item);
+        } catch (NumberFormatException e)
+        {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.error(e.getLocalizedMessage());
+          return null;
+        }
+      }
+      else if (pids.length == 2)
+      {
+        Integer start = 1;
+        Integer end = 0;
+        try
+        {
+          start = Integer.parseInt(pids[0]);
+          end = Integer.parseInt(pids[1]);
+        } catch (NumberFormatException e)
+        {
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.error(e.getLocalizedMessage());
+          return null;
+        }
+        
+        if (start <= end)
+        {
+          List<ProblemModel> problemList = null;
+          if (status)
+          {
+            problemList = ProblemModel.dao.
+              find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=1", start, end);
+          }
+          else
+          {
+            problemList = ProblemModel.dao.
+                find("SELECT * FROM problem WHERE pid>=? AND pid<=?", start, end);
+          }
+          for (ProblemModel problemModel : problemList)
+          {
+            Element item = rootElement.addElement("item");
+            item.addAttribute("pid", String.valueOf(problemModel.getPid()));
+            FpsProblem problem = new FpsProblem(problemModel);
+            problem.problemToItem(item);
+          }
+        }
+      }
+    }
+
+    String fileName = new StringBuilder(3).append("PowerOJ").append(problems.replaceAll(",", "_")).append(".xml").toString();
+    return exportXmlFile(document, fileName);
+  }
+  
+  public File exportProblems(Integer start, Integer end, Boolean status)
+  {
+    if (start > end)
+    {
+      return null;
+    }
+    Document document = DocumentHelper.createDocument();
+    Element rootElement = createXmlRootElement(document);
+    
+    List<ProblemModel> problemList = ProblemModel.dao.
+        find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=?", start, end, status ? 1 : 0);
+    for (ProblemModel problemModel : problemList)
+    {
+      Element item = rootElement.addElement("item");
+      item.addAttribute("pid", String.valueOf(problemModel.getPid()));
+      FpsProblem problem = new FpsProblem(problemModel);
+      problem.problemToItem(item);
+    }
+    
+    String fileName = new StringBuilder(5).append("PowerOJ").append(start).append("-").append(end).append(".xml").toString();
+    return exportXmlFile(document, fileName);
+  }
+  
+  private Element createXmlRootElement(Document document)
+  {
     document.addDocType("fps", "-//FreeProblemSet//EN", "http://freeproblemset.googlecode.com/svn/trunk/fps.current.dtd");
     Element rootElement = document.addElement("fps");
     rootElement.addAttribute("version", "1.1");
@@ -174,16 +277,13 @@ public class AdminService
     generator.addAttribute("name", OjConfig.get("siteTitle", "PowerOJ"));
     generator.addAttribute("url", OjConfig.get("domaiNname", "http://git.oschina.net/power/oj"));
     
-    List<ProblemModel> problemList = ProblemModel.dao.find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=1", start, end);
-    for (ProblemModel problemModel : problemList)
-    {
-      Element item = rootElement.addElement("item");
-      item.addAttribute("pid", String.valueOf(problemModel.getPid()));
-      FpsProblem problem = new FpsProblem(problemModel);
-      problem.problemToItem(item);
-    }
-    
-    String filePath = OjConfig.downloadPath + File.separator + start + "-" + end + ".xml";
+    return rootElement;
+  }
+  
+  private File exportXmlFile(Document document, String fileName)
+  {
+    String filePath = new StringBuilder(8).append(OjConfig.downloadPath).
+        append(File.separator).append(fileName).toString();
     try
     {
       OutputFormat format = OutputFormat.createPrettyPrint();
@@ -201,4 +301,5 @@ public class AdminService
     }
     return new File(filePath);
   }
+  
 }

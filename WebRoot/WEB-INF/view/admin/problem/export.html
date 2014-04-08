@@ -18,23 +18,28 @@
         <div class="well">
           <div id="container">
             <h3>Export Problem:</h3>
-            <p class="text-warning">Import FPS data ,please make sure your XML file is smaller than 100 MB.</p>
             <form class="form-horizontal" action="admin/problem/exportProblems" method="post">
-              <div class="control-group problem">
-                <label class="control-label" for="inputOutputLimit">Output File Limit</label>
-                <div class="controls input-append">
-                  <input class="input-mini" type="number" id="inputOutputLimit" name="outputLimit" value="8192" required>
-                  <span class="add-on">KB</span>
+              <div class="control-group">
+                <div class="controls">
+                  From pid: <input class="input-mini" type="number" id="inputStart" name="start" value="1000">
+                  To pid: <input class="input-mini" type="number" id="inputEnd" name="end" value="1000">
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <label class="checkbox"> <input type="checkbox" name="status" value="true" checked>Active
+                  Or in: <input type="text" size="40" name="in" value="">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <label class="checkbox"> <input type="checkbox" name="status" value="true" checked>Only Active Problems
                   </label>
                   <button type="submit" class="btn btn-primary">Export</button>
                 </div>
               </div>
             </form>
+            <p class="text-warning">From-To works only if IN is empty</p>
+            <p class="text-info">IN can go with "," seperated problem ids like [1000,1020,1030-1050]</p>
             <p class="text-info">free problem set FPS-xml can be download at 
               <a href="http://code.google.com/p/freeproblemset/downloads/list" target="_blank">FPS-Google code</a></p>
           </div>
