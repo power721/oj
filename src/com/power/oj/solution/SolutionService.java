@@ -38,8 +38,16 @@ public class SolutionService
     List<Object> paras = new ArrayList<Object>();
     if (result > -1)
     {
-      sb.append(" AND result=?");
-      paras.add(result);
+      if (result == 999)
+      {
+        sb.append(" AND result!=?");
+        paras.add(ResultType.AC);
+      }
+      else
+      {
+        sb.append(" AND result=?");
+        paras.add(result);
+      }
     }
     if (language > -1)
     {
@@ -101,8 +109,16 @@ public class SolutionService
     
     if (result > -1)
     {
-      sb.append(" AND result=?");
-      paras.add(result);
+      if (result == 999)
+      {
+        sb.append(" AND result!=?");
+        paras.add(ResultType.AC);
+      }
+      else
+      {
+        sb.append(" AND result=?");
+        paras.add(result);
+      }
     }
     if (language > -1)
     {

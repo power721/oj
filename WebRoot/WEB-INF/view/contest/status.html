@@ -23,8 +23,11 @@
         <option value="-1">Result</option>
         <#if judge_result??>
         <#list judge_result as Result>
-        <option value="${Result.id!}"<#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option> 
+        <#if Result.id<=9>
+        <option value="${Result.id!}"<#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option>
+        </#if>
         </#list> 
+        <option value="999" <#if result?? && result?eval==999>selected</#if>>Not-AC</option>
         </#if>
       </select>
       <button type="submit" class="btn btn-info">Go</button>
