@@ -162,7 +162,7 @@ public class AdminService
     return problemList;
   }
   
-  public File exportProblems(String problems, Boolean status)
+  public File exportProblems(String problems, Boolean status, Boolean replace)
   {
     String[] pidStr = problems.split(",");
     Document document = DocumentHelper.createDocument();
@@ -190,7 +190,7 @@ public class AdminService
           
           item.addAttribute("pid", String.valueOf(problemModel.getPid()));
           FpsProblem problem = new FpsProblem(problemModel);
-          problem.problemToItem(item);
+          problem.problemToItem(item, replace);
         } catch (NumberFormatException e)
         {
           if (OjConfig.getDevMode())
@@ -233,7 +233,7 @@ public class AdminService
             Element item = rootElement.addElement("item");
             item.addAttribute("pid", String.valueOf(problemModel.getPid()));
             FpsProblem problem = new FpsProblem(problemModel);
-            problem.problemToItem(item);
+            problem.problemToItem(item, replace);
           }
         }
       }
@@ -243,7 +243,7 @@ public class AdminService
     return exportXmlFile(document, fileName);
   }
   
-  public File exportProblems(Integer start, Integer end, Boolean status)
+  public File exportProblems(Integer start, Integer end, Boolean status, Boolean replace)
   {
     if (start > end)
     {
@@ -259,7 +259,7 @@ public class AdminService
       Element item = rootElement.addElement("item");
       item.addAttribute("pid", String.valueOf(problemModel.getPid()));
       FpsProblem problem = new FpsProblem(problemModel);
-      problem.problemToItem(item);
+      problem.problemToItem(item, replace);
     }
     
     String fileName = new StringBuilder(5).append("PowerOJ").append(start).append("-").append(end).append(".xml").toString();

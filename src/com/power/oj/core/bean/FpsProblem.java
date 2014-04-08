@@ -198,7 +198,7 @@ public class FpsProblem
     return this;
   }
   
-  public Element problemToItem(Element item)
+  public Element problemToItem(Element item, Boolean replace)
   {
     Element title = item.addElement("title");
     title.addCDATA(problemModel.getTitle());
@@ -212,20 +212,33 @@ public class FpsProblem
     memoryLimit.addCDATA(String.valueOf(problemModel.getMemoryLimit()));
     
     Element description = item.addElement("description");
-    description.addCDATA(problemModel.getDescription().replaceAll("\n", "<br>"));
+    String desc = problemModel.getDescription();
+    if (replace)
+    {
+      desc = desc.replaceAll("\n", "<br>");
+    }
+    description.addCDATA(desc);
     
     String inputValue = problemModel.getInput();
     if (inputValue != null && inputValue.length() > 0)
     {
       Element input = item.addElement("input");
-      input.addCDATA(inputValue.replaceAll("\n", "<br>"));
+      if (replace)
+      {
+        inputValue = inputValue.replaceAll("\n", "<br>");
+      }
+      input.addCDATA(inputValue);
     }
 
     String outputValue = problemModel.getOutput();
     if (outputValue != null && outputValue.length() > 0)
     {
       Element output = item.addElement("output");
-      output.addCDATA(outputValue.replaceAll("\n", "<br>"));
+      if (replace)
+      {
+        outputValue = outputValue.replaceAll("\n", "<br>");
+      }
+      output.addCDATA(outputValue);
     }
 
     Element sample_input = item.addElement("sample_input");
@@ -248,7 +261,11 @@ public class FpsProblem
     if (hintValue != null && hintValue.length() > 0)
     {
       Element hint = item.addElement("hint");
-      hint.addCDATA(hintValue.replaceAll("\n", "<br>"));
+      if (replace)
+      {
+        hintValue = hintValue.replaceAll("\n", "<br>");
+      }
+      hint.addCDATA(hintValue);
     }
 
     String sourceValue = problemModel.getSource();

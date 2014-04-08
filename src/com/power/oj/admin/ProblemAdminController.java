@@ -142,16 +142,17 @@ public class ProblemAdminController extends OjController
     Integer start = getParaToInt("start", 1000);
     Integer end = getParaToInt("end", 1009);
     Boolean status = getParaToBoolean("status", false);
+    Boolean replace = getParaToBoolean("replace", false);
     String in = getPara("in");
     File xmlFile = null;
     
     if (StringUtil.isNotBlank(in))
     {
-      xmlFile = adminService.exportProblems(in, status);
+      xmlFile = adminService.exportProblems(in, status, replace);
     }
     else
     {
-      xmlFile = adminService.exportProblems(start, end, status);
+      xmlFile = adminService.exportProblems(start, end, status, replace);
     }
     
     if (xmlFile == null)
