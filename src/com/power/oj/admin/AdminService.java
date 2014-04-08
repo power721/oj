@@ -287,6 +287,7 @@ public class AdminService
     try
     {
       OutputFormat format = OutputFormat.createPrettyPrint();
+      format.setEncoding("UTF-8");
       Writer fileWriter = new FileWriter(filePath);
       XMLWriter xmlWriter = new XMLWriter(fileWriter, format);
       
