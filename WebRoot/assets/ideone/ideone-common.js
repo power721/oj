@@ -107,7 +107,7 @@ $(document).ready(function(){
   // tabulator
   $("#inputSource").tabby();
     
-  $("#inputLanguage").click(function() {
+  $("#inputLanguage").change(function() {
     languageChanged($(this));
     return false;
   });
