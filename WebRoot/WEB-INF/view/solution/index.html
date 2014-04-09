@@ -87,7 +87,7 @@
         <#if solutionList.pageNumber<solutionList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>
       });
       
-      var refresh = setInterval(function(){refreshResult();}, 1000);
+      var refresh = setInterval(function(){refreshResult();}, 1500);
       setTimeout(function() {clearInterval(refresh);}, 20000);
      
       function refreshResult()

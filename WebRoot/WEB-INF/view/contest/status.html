@@ -119,7 +119,11 @@
     }
     
     $('.result i').each(function() {
-      $(this).addClass(getBtnClass($(this).parent().attr('id')));
+    	var resultName = $(this).parent().attr('id');
+    	if (resultName == 'WAIT' || resultName == 'RUN') {
+    		$(this).append(' <img src="assets/images/' + (resultName == 'RUN'?'':'ajax-') + 'loader.gif" alert="Running" width="18"/>');
+    	}
+      $(this).addClass(getBtnClass(resultName));
     });
     
     function getBtnClass(resultName) {
@@ -132,7 +136,7 @@
             btnClass = 'btn-danger';
           else if (resultName == 'VE' || resultName == 'SE')
             btnClass = 'btn-inverse';
-          else if (resultName == 'Wait')
+          else if (resultName == 'WAIT' || resultName == 'RUN')
             btnClass = '';
         return btnClass;
     }
@@ -175,7 +179,7 @@
     });
     </#if>
   
-    var refresh = setInterval(function(){refreshResult();}, 1000);
+    var refresh = setInterval(function(){refreshResult();}, 1500);
     setTimeout(function() {clearInterval(refresh);}, 20000);
    
     function refreshResult()
@@ -184,10 +188,14 @@
         var $this = $(this);
         var id = $this.attr('id');
         $.getJSON('api/contest/getResult', {'cid':${cid!},'sid':$this.children('i').attr('sid')}, function(data) {
+        	var img = '';
+        	if (data.result.name == 'WAIT' || data.result.name == 'RUN') {
+            img = ' <img src="assets/images/' + (data.result.name == 'RUN'?'':'ajax-') + 'loader.gif" alert="Running" width="18"/>';
+          }
           if (data.result.name != id) {
               $this.attr('id', data.result.name);
               $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="' 
-                + data.sid + '">' + data.result.longName + '</i>');
+                + data.sid + '">' + data.result.longName + img + '</i>');
               if (data.result.name == 'AC') {
                 $this.siblings('.time').html(data.time + ' MS');
                 $this.siblings('.memory').html(data.memory + ' KB');
