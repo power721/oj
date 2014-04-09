@@ -1,8 +1,10 @@
 package com.power.oj.admin;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -288,7 +290,8 @@ public class AdminService
     {
       OutputFormat format = OutputFormat.createPrettyPrint();
       format.setEncoding("UTF-8");
-      Writer fileWriter = new FileWriter(filePath);
+      OutputStream out = new FileOutputStream(filePath);
+      Writer fileWriter = new OutputStreamWriter(out, "UTF-8");
       XMLWriter xmlWriter = new XMLWriter(fileWriter, format);
       
       xmlWriter.write(document);
