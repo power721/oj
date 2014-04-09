@@ -119,20 +119,23 @@
     }
     
     $('.result i').each(function() {
-    	var resultName = $(this).parent().attr('id');
-    	var btnClass = 'btn-warning';
-    	if (resultName == 'AC')
-    		btnClass = 'btn-success';
-    	if (resultName == 'PE')
-    		btnClass = 'btn-info';
-    	else if (resultName == 'WA')
-    		btnClass = 'btn-danger';
-    	else if (resultName == 'VE' || resultName == 'SE')
-    		btnClass = 'btn-inverse';
-    	else if (resultName == 'Wait')
-    		btnClass = '';
-    	$(this).addClass(btnClass);
+      $(this).addClass(getBtnClass($(this).parent().attr('id')));
     });
+    
+    function getBtnClass(resultName) {
+      var btnClass = 'btn-warning';
+      if (resultName == 'AC')
+            btnClass = 'btn-success';
+          if (resultName == 'PE')
+            btnClass = 'btn-info';
+          else if (resultName == 'WA')
+            btnClass = 'btn-danger';
+          else if (resultName == 'VE' || resultName == 'SE')
+            btnClass = 'btn-inverse';
+          else if (resultName == 'Wait')
+            btnClass = '';
+        return btnClass;
+    }
     
     <#if user??>
     var userId = ${user.uid};
@@ -145,7 +148,7 @@
       $('#codeModal').modal("show");
       var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, $('#codeModal').attr('cid'));
       $('#codeModal #sid').html(tmp);
-    	$.get("api/contest/code", { sid: sid },
+      $.get("api/contest/code", { sid: sid },
         function(data) {
           if (data.success)
           {
@@ -171,6 +174,27 @@
       });
     });
     </#if>
+  
+    var refresh = setInterval(function(){refreshResult();}, 1000);
+    setTimeout(function() {clearInterval(refresh);}, 10000);
+   
+    function refreshResult()
+    {
+      $('#WAIT').each(function() {
+        var $this = $(this);
+        $.getJSON('api/contest/getResult', {'cid':${cid!},'sid':$this.children('i').attr('sid')}, function(data) {
+          if (data.result.name != 'WAIT') {
+              $this.attr('id', data.result.name);
+              $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="' 
+                + data.sid + '">' + data.result.longName + '</i>');
+              if (data.result.name == 'AC') {
+                $this.siblings('.time').html(data.time + ' MS');
+                $this.siblings('.memory').html(data.memory + ' KB');
+              }
+            }
+        });
+      });
+    }
   });
 </script>
 </@override>

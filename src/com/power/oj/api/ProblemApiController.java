@@ -85,4 +85,12 @@ public class ProblemApiController extends OjController
     renderJson("result", problemService.getProblemField(pid, name));
   }
   
+  @ClearInterceptor(ClearLayer.ALL)
+  public void getResult()
+  {
+    Integer sid = getParaToInt("sid", 0);
+    
+    renderJson(solutionService.getSolutionResult(sid));
+  }
+  
 }

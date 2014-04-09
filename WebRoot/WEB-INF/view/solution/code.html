@@ -11,7 +11,7 @@
     <span class="green">User</span>: <a href="user/profile/${(submitUser.name)!"Guest"}">${(submitUser.name)!"Guest"}</a> <br> 
     <span class="green">Memory</span>: ${solution.memory!0} KB <span class="green">Time</span>: ${solution.time!0} MS <br> 
     <span class="green">Language</span>: ${language!}
-    <span class="green">Result</span>: <span id="${resultName!}">${resultLongName!}</span><#if (solution.test>0)> on test ${solution.test}</#if> <br>
+    <span class="green">Result</span>: <span class="result" id="${resultName!}" sid="${solution.sid!}">${resultLongName!}</span><#if (solution.test>0)> on test ${solution.test}</#if> <br>
   </div>
 </div>
 
@@ -96,6 +96,27 @@
               type: 'success'
           });
         });
+
+        var refresh = setInterval(function(){refreshResult();}, 1000);
+        setTimeout(function() {clearInterval(refresh);}, 10000);
+       
+        function refreshResult()
+        {
+          $('#WAIT').each(function() {
+            var $this = $(this);
+            $.getJSON('api/problem/getResult', {'sid': $this.attr('sid')}, function(data) {
+              if (data.result.name != 'WAIT') {
+                $this.attr('id', data.result.name);
+                $this.html(data.result.longName);
+                if (data.result.name == 'AC') {
+                  $this.siblings('.time').html(data.time + ' MS');
+                  $this.siblings('.memory').html(data.memory + ' KB');
+                }
+                clearInterval(refresh);
+              }
+            });
+          });
+        }
     });
 
     SyntaxHighlighter.config.tagName = 'textarea';

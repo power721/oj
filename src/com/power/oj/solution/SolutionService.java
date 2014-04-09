@@ -89,6 +89,13 @@ public class SolutionService
   {
     return dao.findFirst("SELECT * FROM solution WHERE sid=? LIMIT 1", sid);
   }
+
+  public SolutionModel getSolutionResult(Integer sid)
+  {
+    SolutionModel solutionModel = dao.findFirst("SELECT sid,time,memory,result FROM solution WHERE sid=? LIMIT 1", sid);
+    solutionModel.set("result", OjConfig.result_type.get(solutionModel.getResult()));
+    return solutionModel;
+  }
   
   public ContestSolutionModel findContestSolution(Integer sid)
   {
@@ -98,6 +105,15 @@ public class SolutionService
   public ContestSolutionModel findContestSolution4Json(Integer sid)
   {
     return ContestSolutionModel.dao.findFirst("SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE sid=? LIMIT 1", sid);
+  }
+
+  public ContestSolutionModel getContestSolutionResult(Integer cid, Integer sid)
+  {
+    // TODO check permission
+    ContestSolutionModel solutionModel = ContestSolutionModel.dao.
+        findFirst("SELECT cid,sid,time,memory,result FROM contest_solution WHERE cid=? AND sid=? LIMIT 1", cid, sid);
+    solutionModel.set("result", OjConfig.result_type.get(solutionModel.getResult()));
+    return solutionModel;
   }
   
   public Page<ContestSolutionModel> getPageForContest(int pageNumber, int pageSize, int result, int language, int cid, int num, String userName)

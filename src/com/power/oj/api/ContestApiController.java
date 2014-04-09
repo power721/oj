@@ -197,5 +197,14 @@ public class ContestApiController extends OjController
     contestService.evictRecentContest();
     renderNull();
   }
+
+  @ClearInterceptor(ClearLayer.ALL)
+  public void getResult()
+  {
+    Integer cid = getParaToInt("cid", 0);
+    Integer sid = getParaToInt("sid", 0);
+    
+    renderJson(solutionService.getContestSolutionResult(cid, sid));
+  }
   
 }

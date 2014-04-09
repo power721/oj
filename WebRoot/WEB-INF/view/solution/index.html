@@ -63,7 +63,7 @@
         </#if> 
         </#if>
         </td>
-        <td class="result" id="${solution.resultName!}">${solution.resultLongName!}</td>
+        <td class="result" id="${solution.resultName!}" sid="${solution.sid!}">${solution.resultLongName!}</td>
         <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
         <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
         <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="code/${solution.sid!}" target="_blank" title="show source code"></#if>
@@ -86,6 +86,26 @@
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if solutionList.pageNumber<solutionList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>
       });
+      
+      var refresh = setInterval(function(){refreshResult();}, 1000);
+      setTimeout(function() {clearInterval(refresh);}, 10000);
+     
+      function refreshResult()
+      {
+          $('#WAIT').each(function() {
+            var $this = $(this);
+            $.getJSON('api/problem/getResult', {'sid': $this.attr('sid')}, function(data) {
+              if (data.result.name != 'WAIT') {
+                $this.attr('id', data.result.name);
+                $this.html(data.result.longName);
+                if (data.result.name == 'AC') {
+                  $this.siblings('.time').html(data.time + ' MS');
+                  $this.siblings('.memory').html(data.memory + ' KB');
+                }
+              }
+            });
+        });
+      }
     });
   </script>
 </@override>
