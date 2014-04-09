@@ -117,7 +117,12 @@ public class JudgeService
 
   public void rejudgeContestSolution(Integer sid)
   {
-    SolutionModel solutionModel = solutionService.build(solutionService.findContestSolution(sid));
+    ContestSolutionModel contestSolutionModel = solutionService.findContestSolution(sid);
+    contestSolutionModel.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
+    contestSolutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
+    contestSolutionModel.update();
+    
+    SolutionModel solutionModel = solutionService.build(contestSolutionModel);
     // revert problem accepted/solved
     //problemService.revertAccepted(solutionModel);
     

@@ -99,11 +99,11 @@
         });
 
         var refresh = setInterval(function(){refreshResult();}, 1000);
-        setTimeout(function() {clearInterval(refresh);}, 10000);
+        setTimeout(function() {clearInterval(refresh);}, 20000);
        
         function refreshResult()
         {
-            $('#WAIT').each(function() {
+            $('#WAIT, #RUN').each(function() {
                 var $this = $(this);
                 $.getJSON('api/contest/getResult', {'cid':${cid!},'sid':$this.children('i').attr('sid')}, function(data) {
                     if (data.result.name != 'WAIT') {
@@ -114,6 +114,7 @@
                             $this.siblings('.time').html(data.time + ' MS');
                             $this.siblings('.memory').html(data.memory + ' KB');
                         }
+                        clearInterval(refresh);
                       }
                 });
             });

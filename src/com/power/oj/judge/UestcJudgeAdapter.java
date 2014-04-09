@@ -39,6 +39,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       log.warn("No data file for problem " + solutionModel.getPid());
     }
     boolean isAccepted = true;
+    setResult(ResultType.RUN, 0, 0);
     for (i = 0; isAccepted && i < numOfData; ++i)
     {
       String cmd = buildCommand(timeLimit, memoryLimit, outputLimit, isSpj,
@@ -223,7 +224,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     */
     switch (result)
     {
-      case 0: return ResultType.WAIT;
+      case 0: return ResultType.RUN;
       case 1: return ResultType.AC;
       case 2: return ResultType.PE;
       case 3: return ResultType.TLE;

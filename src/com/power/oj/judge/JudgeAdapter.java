@@ -143,7 +143,10 @@ public abstract class JudgeAdapter implements Runnable
     inFiles = new ArrayList<String>();
     outFiles = new ArrayList<String>();
     File[] arrayOfFile = dataDir.listFiles();
-    Arrays.sort(arrayOfFile);
+    if (arrayOfFile.length > 3)
+    {
+      Arrays.sort(arrayOfFile);
+    }
     
     for (int i = 0; i < arrayOfFile.length; i++)
     {
@@ -242,7 +245,7 @@ public abstract class JudgeAdapter implements Runnable
     return solutionModel.update();
   }
 
-  protected void setResult(int result, int time, int memory)
+  protected boolean setResult(int result, int time, int memory)
   {
     solutionModel.setResult(result);
     if (solutionModel.getTime() == null)
@@ -261,6 +264,20 @@ public abstract class JudgeAdapter implements Runnable
     {
       solutionModel.setMemory(Math.max(memory, solutionModel.getMemory()));
     }
+    
+    if (result == ResultType.RUN)
+    {
+      return true;
+    }
+    
+    Integer cid = solutionModel.getCid();
+    if (cid != null && cid > 0)
+    {
+      log.info("updateResult");
+      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
+      return contestSolution.update();
+    }
+    return solutionModel.update();
   }
   
   protected boolean updateUser()

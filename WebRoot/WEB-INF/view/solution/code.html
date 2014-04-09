@@ -98,11 +98,11 @@
         });
 
         var refresh = setInterval(function(){refreshResult();}, 1000);
-        setTimeout(function() {clearInterval(refresh);}, 10000);
+        setTimeout(function() {clearInterval(refresh);}, 20000);
        
         function refreshResult()
         {
-          $('#WAIT').each(function() {
+          $('#WAIT, #RUN').each(function() {
             var $this = $(this);
             $.getJSON('api/problem/getResult', {'sid': $this.attr('sid')}, function(data) {
               if (data.result.name != 'WAIT') {
