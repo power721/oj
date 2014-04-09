@@ -94,8 +94,9 @@
       {
           $('#WAIT, #RUN').each(function() {
             var $this = $(this);
+            var id = $this.attr('id');
             $.getJSON('api/problem/getResult', {'sid': $this.attr('sid')}, function(data) {
-              if (data.result.name != 'WAIT') {
+              if (data.result.name != id) {
                 $this.attr('id', data.result.name);
                 $this.html(data.result.longName);
                 if (data.result.name == 'AC') {

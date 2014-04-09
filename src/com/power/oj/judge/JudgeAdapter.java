@@ -247,6 +247,7 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean setResult(int result, int time, int memory)
   {
+    boolean needUpdate = (result != solutionModel.getResult());
     solutionModel.setResult(result);
     if (solutionModel.getTime() == null)
     {
@@ -265,7 +266,7 @@ public abstract class JudgeAdapter implements Runnable
       solutionModel.setMemory(Math.max(memory, solutionModel.getMemory()));
     }
     
-    if (result == ResultType.RUN)
+    if (!needUpdate)
     {
       return true;
     }

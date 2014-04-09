@@ -140,7 +140,7 @@
     <#if user??>
     var userId = ${user.uid};
     var isAdmin = <#if adminUser??>true<#else>false</#if>;
-    $('.result i').click(function() {
+    $('.result').delegate("i", "click", function() {
       var sid = $(this).attr('sid');
       var uid = $(this).parent().parent().children('.user').attr('uid');
       if (!isAdmin && uid != userId)
@@ -182,8 +182,9 @@
     {
       $('#WAIT, #RUN').each(function() {
         var $this = $(this);
+        var id = $this.attr('id');
         $.getJSON('api/contest/getResult', {'cid':${cid!},'sid':$this.children('i').attr('sid')}, function(data) {
-          if (data.result.name != 'WAIT') {
+          if (data.result.name != id) {
               $this.attr('id', data.result.name);
               $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="' 
                 + data.sid + '">' + data.result.longName + '</i>');

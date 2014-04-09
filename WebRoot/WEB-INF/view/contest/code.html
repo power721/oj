@@ -105,8 +105,9 @@
         {
             $('#WAIT, #RUN').each(function() {
                 var $this = $(this);
+                var id = $this.attr('id');
                 $.getJSON('api/contest/getResult', {'cid':${cid!},'sid':$this.children('i').attr('sid')}, function(data) {
-                    if (data.result.name != 'WAIT') {
+                    if (data.result.name != id) {
                         $this.attr('id', data.result.name);
                         $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="' + data.sid 
                             + '">' + data.result.longName + '</i>');
