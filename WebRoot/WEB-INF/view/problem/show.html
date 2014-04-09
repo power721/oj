@@ -1,13 +1,13 @@
 <@override name="content">
 <ul class="pager">
   <li class="previous <#if prevPid==problem.pid>disabled</#if>">
-    <a href="problem/show/${prevPid!}" title="Show previous problem.">&lt;&lt;Prev</a>
+    <a href="problem/show/${prevPid!}" title="Show previous problem."><i class="icon-arrow-left"></i></a>
   </li>
   <li>
-  <a href="problem/random" title="Try another problem.">I feel lucky!</a>
+  <a href="problem/random" title="Try another problem."><i class="icon-random"></i></a>
   </li>
   <li class="next <#if nextPid==problem.pid>disabled</#if>">
-  <a href="problem/show/${nextPid!}" title="Show next problem.">Next&gt;&gt;</a>
+  <a href="problem/show/${nextPid!}" title="Show next problem."><i class="icon-arrow-right"></i></a>
   </li>
 </ul>
 

@@ -535,8 +535,8 @@ public class ContestService
         break;
       sb.append("COUNT(IF(result=").append(resultType.getId()).append(",1,NULL)) AS ").append(resultType.getName()).append(",");
     }
-    sb.append("pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? GROUP BY pid ORDER BY num");
-    List<Record> statistics = Db.find(sb.toString(), ResultType.CE, cid);
+    sb.append("pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? GROUP BY num ORDER BY num");
+    List<Record> statistics = Db.find(sb.toString(), ResultType.RF, cid);
     for (Record record : statistics)
     {
       record.set("id", (char) (record.getInt("num") + 'A'));
