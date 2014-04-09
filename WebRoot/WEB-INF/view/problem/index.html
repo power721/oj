@@ -32,8 +32,7 @@
   <tbody>
     <#if problemList??> <#list problemList.list as Problem>
     <tr>
-      <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
-      </td>
+      <td class="result"></td>
       <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
       <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
       </a></td>
@@ -85,9 +84,9 @@
           if (data.result)
           {
             if (data.result.id)
-              result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
+              result.addClass('wa').html('<span class="label label-important">N</span>');
             else
-              result.addClass('ac').html('<img src="assets/images/accepted.gif"/>');
+              result.addClass('ac').html('<span class="label label-success">Y</span>');
           }
         });
       });

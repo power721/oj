@@ -29,7 +29,7 @@ public class FpsImage
     StringBuilder sb = new StringBuilder(6).append(OjConfig.problemImagePath).append(File.separator);
     sb.append(pid).append("_").append(num).append(".png");
     File imageFile = new File(sb.toString());
-    src = imageFile.getAbsolutePath().replaceAll(PathKit.getWebRootPath(), "").substring(1);
+    src = imageFile.getAbsolutePath().replace(PathKit.getWebRootPath(), "").substring(1);
     
     try
     {
