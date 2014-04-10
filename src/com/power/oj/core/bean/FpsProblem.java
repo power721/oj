@@ -307,7 +307,13 @@ public class FpsProblem
     dataDir = new File(sb.toString());
     if (!dataDir.isDirectory())
     {
-      throw new IOException("Data files does not exist.");
+      log.error("Data files does not exist!");
+      Element testInput = item.addElement("test_input");
+      testInput.addCDATA(problemModel.getSampleInput());
+      
+      Element testOutput = item.addElement("test_output");
+      testOutput.addCDATA(problemModel.getSampleOutput());
+      return item;
     }
     
     File[] arrayOfFile = dataDir.listFiles();
@@ -336,6 +342,11 @@ public class FpsProblem
   private Element addSolution(Element item) throws IOException
   {
     File[] arrayOfFile = dataDir.listFiles();
+    if (arrayOfFile == null)
+    {
+      return item;
+    }
+    
     String[] exts = {"c", "cc", "pas", "java", "py"};
     for (int i = 0; i < arrayOfFile.length; i++)
     {
@@ -426,6 +437,10 @@ public class FpsProblem
 
   private Element addImage(Element item, String text)
   {
+    if (text == null || text.length() < 10)
+    {
+      return item;
+    }
     String src;
     String base64;
     String rootPath = PathKit.getWebRootPath() + File.separator;
@@ -552,10 +567,10 @@ public class FpsProblem
     Iterator<String> it = dataOut.iterator();
     for (; in.hasNext() && it.hasNext(); n++)
     {
-      StringBuilder sb = new StringBuilder(6).append(dataDir.getAbsolutePath()).append(File.separator);
-      sb.append(problemModel.getPid()).append("_").append(n);
-      File dataInFile = new File(sb.toString() + ".in");
-      File dataOutFile = new File(sb.toString() + ".out");
+      StringBuilder sb = new StringBuilder(6).append(dataDir.getAbsolutePath());
+      sb.append(File.separator).append(problemModel.getPid()).append("_").append(n);
+      File dataInFile = new File(sb.toString() + OjConstants.DATA_EXT_IN);
+      File dataOutFile = new File(sb.toString() + OjConstants.DATA_EXT_OUT);
       
         String inData = (String) in.next();
         String outData = (String) it.next();
@@ -587,8 +602,8 @@ public class FpsProblem
   private void saveSampleData()
   {
     StringBuilder sb = new StringBuilder(3).append(dataDir.getAbsolutePath()).append(File.separator).append("sample");
-    File dataInFile = new File(sb.toString() + ".in");
-    File dataOutFile = new File(sb.toString() + ".out");
+    File dataInFile = new File(sb.toString() + OjConstants.DATA_EXT_IN);
+    File dataOutFile = new File(sb.toString() + OjConstants.DATA_EXT_OUT);
     
     try
     {

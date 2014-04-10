@@ -241,7 +241,8 @@ public class AdminService
       }
     }
 
-    String fileName = new StringBuilder(3).append("PowerOJ").append(problems.replaceAll(",", "_")).append(".xml").toString();
+    String fileName = new StringBuilder(4).append("PowerOJ").append("-")
+        .append(problems.replaceAll(",", "_")).append(".xml").toString();
     return exportXmlFile(document, fileName);
   }
   
@@ -264,7 +265,8 @@ public class AdminService
       problem.problemToItem(item, replace);
     }
     
-    String fileName = new StringBuilder(5).append("PowerOJ").append(start).append("-").append(end).append(".xml").toString();
+    String fileName = new StringBuilder(6).append("PowerOJ").append("-").
+        append(start).append("-").append(end).append(".xml").toString();
     return exportXmlFile(document, fileName);
   }
   
