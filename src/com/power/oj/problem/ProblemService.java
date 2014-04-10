@@ -172,8 +172,22 @@ public class ProblemService
 
   public Record getUserResult(Integer pid, Integer uid)
   {
-    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND cid=0 LIMIT 1", uid, pid);
+    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
     return record;
+  }
+
+  public List<Record> getUserProblemResult(Integer uid)
+  {
+    List<Record> records = null;
+    if (OjConfig.getDevMode())
+    {
+      records = Db.find("SELECT pid,MIN(result) AS result FROM solution WHERE uid=? GROUP BY pid", uid);
+    }
+    else
+    {
+      records = Db.findByCache("userResult", uid, "SELECT pid,MIN(result) AS result FROM solution WHERE uid=? GROUP BY pid", uid);
+    }
+    return records;
   }
 
   public Integer getUserResult(Integer pid)
@@ -182,7 +196,7 @@ public class ProblemService
     if (uid == null)
       return null;
     
-    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND cid=0 LIMIT 1", uid, pid);
+    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
   }
 
   public <T> T getProblemField(Integer pid, String name)

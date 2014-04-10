@@ -67,4 +67,13 @@
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900" />
 
+    <cache name="userResult"
+           maxEntriesLocalHeap="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="60"
+           timeToIdleSeconds="60"
+           diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="900" />
+    
 </ehcache>

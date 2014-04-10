@@ -30,9 +30,10 @@
     </tr>
   </thead>
   <tbody>
-    <#if problemList??> <#list problemList.list as Problem>
+    <#if problemList??> 
+    <#list problemList.list as Problem>
     <tr>
-      <td class="result"></td>
+      <td class="result" pid="${Problem.pid!}"></td>
       <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
       <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
       </a></td>
@@ -41,7 +42,8 @@
       <td class="ratio"><#if (Problem.submission>0)>${(Problem.accepted/Problem.submission*100)?int}<#else>0</#if>%</td>
       <td class="ctime">${Problem.ctime_t!}</td>
     </tr>
-    </#list> </#if>
+    </#list> 
+    </#if>
   </tbody>
 </table>
 
@@ -78,18 +80,19 @@
       </#if>
 
       <#if user??>
-      $('td.pid').each(function(i) {
-        var result = $(this).prev('.result');
-        $.getJSON('api/problem/userResult?pid=' + $(this).text(), function(data) {
-          if (data.result)
+      $.getJSON('api/problem/userResult', function(data) {
+          if (data.userResult)
           {
-            if (data.result.id)
-              result.addClass('wa').html('<span class="label label-important">N</span>');
-            else
-              result.addClass('ac').html('<span class="label label-success">Y</span>');
+        	  for (var i = 0; i < data.userResult.length; ++i)
+        		{
+        		  var problem = data.userResult[i];
+        		  if (problem.result != data.acType)
+                  $('.result[pid=' + problem.pid + ']').addClass('wa').html('<span class="label label-important">N</span>');
+              else
+            	   $('.result[pid=' + problem.pid + ']').addClass('ac').html('<span class="label label-success">Y</span>');
+        		}
           }
         });
-      });
       </#if>
     });
   </script>

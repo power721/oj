@@ -1,5 +1,7 @@
 package com.power.oj.api;
 
+import java.util.List;
+
 import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
@@ -7,6 +9,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.user.UserService;
 
 @Before(GuestInterceptor.class)
@@ -37,9 +40,19 @@ public class ProblemApiController extends OjController
   {
     Integer pid = getParaToInt("pid");
     Integer uid = UserService.me().getCurrentUid();
+    
     if (uid == null)
     {
       renderNull();
+      return;
+    }
+    
+    if (pid == null)
+    {
+      List<Record> userResult = problemService.getUserProblemResult(uid);
+      setAttr("userResult", userResult);
+      setAttr("acType", ResultType.AC);
+      renderJson(new String[]{"userResult", "acType"});
       return;
     }
 
