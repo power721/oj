@@ -36,31 +36,35 @@
       </tr>
     </thead>
     <tbody>
-      <#if problemList??> <#list problemList.list as Problem>
+      <#if problemList??> 
+      <#list problemList.list as Problem>
       <tr>
         <td class="result" pid="${Problem.pid!}"></td>
         <td class="pid">${Problem.pid!}</td>
         <td class="title"><a href="problem/show/${Problem.pid!}">${Problem.title!}</a></td>
-        <td class="accept"><a href="#">${Problem.accepted!}</a></td>
-        <td class="submit"><a href="#">${Problem.submission!}</a></td>
+        <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accepted!}</a></td>
+        <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submission!}</a></td>
         <td class="source"><a href="problem/search?word=${Problem.source!}&scope=source">${Problem.source!}</a></td>
         <td class="ctime">${Problem.ctime_t!}</td>
       </tr>
-      </#list> </#if>
+      </#list> 
+      </#if>
     </tbody>
   </table>
 </@override>
 
 <@override name="scripts">
+  <#if oj_style != "slate">
   <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-
+  </#if>
+  
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-      var prevpage="problem/search/?p=${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}"
-      var nextpage="problem/search/?p=${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>&word=${word}&scope=${scope}"
+      var prevpage="problem/search/${problemList.pageNumber-1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"
+      var nextpage="problem/search/${problemList.pageNumber+1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"
       $(document).keydown(function(event) {
         <#if (problemList.pageNumber>1)>if(event.keyCode==37)window.location=prevpage;</#if>
         <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
@@ -78,10 +82,8 @@
 
       <#if user??>
       $.getJSON('api/problem/userResult', function(data) {
-          if (data.userResult)
-          {
-            for (var i = 0; i < data.userResult.length; ++i)
-            {
+          if (data.userResult) {
+            for (var i = 0; i < data.userResult.length; ++i) {
               var problem = data.userResult[i];
               if (problem.result != data.acType)
                   $('.result[pid=' + problem.pid + ']').addClass('wa').html('<span class="label label-important">N</span>');

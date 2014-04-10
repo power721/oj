@@ -55,10 +55,12 @@
 </@override>
 
 <@override name="scripts">
+  <#if oj_style != "slate">
   <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  </#if>
 
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
@@ -81,10 +83,8 @@
 
       <#if user??>
       $.getJSON('api/problem/userResult', function(data) {
-          if (data.userResult)
-          {
-        	  for (var i = 0; i < data.userResult.length; ++i)
-        		{
+          if (data.userResult) {
+        	  for (var i = 0; i < data.userResult.length; ++i) {
         		  var problem = data.userResult[i];
         		  if (problem.result != data.acType)
                   $('.result[pid=' + problem.pid + ']').addClass('wa').html('<span class="label label-important">N</span>');
