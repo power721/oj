@@ -164,6 +164,23 @@ public class ProblemAdminController extends OjController
       renderFile(xmlFile);
     }
   }
+  
+  public void data()
+  {
+    
+  }
+  
+  @RequiresPermissions("problem:edit")
+  @Before(POST.class)
+  public void uploadData()
+  {
+    
+  }
+  
+  public void downloadData()
+  {
+    
+  }
 
   @RequiresPermissions("problem:build")
   public void build()

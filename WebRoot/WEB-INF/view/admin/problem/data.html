@@ -1,0 +1,156 @@
+<@override name="content">
+    <div class="header">
+      <h1 class="page-title">导入题目</h1>
+    </div>
+    <ul class="breadcrumb">
+      <li>
+        <a href="admin">首页</a>
+        <span class="divider">/</span>
+      </li>
+      <li>
+        <a href="admin/problem">题目管理</a>
+        <span class="divider">/</span>
+      </li>
+      <li class="active">数据管理</li>
+    </ul>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="well">
+          <div id="container">
+            <h3>Problem Test Data:</h3>
+            <div id="filelist">
+              <form class="form-horizontal" action="admin/problem/uploadData" method="post" enctype="multipart/form-data">
+                <div class="control-group problem">
+                  <label class="control-label" for="inputFile">File</label>
+                  <div class="controls">
+                    <input type="file" id="inputFile" name="dataFile" required />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div id="container">
+                <a id="pickfiles" href="javascript:;"><i class="btn btn-primary">Select files</i></a> 
+                <a id="uploadfiles" href="javascript:;"><i class="btn btn-primary">Upload</i></a>
+            </div>
+            <pre id="console"></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+</@override>
+
+<@override name="scripts">
+<script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
+<!-- <link type="text/css" rel="stylesheet" href="assets/plupload/jquery.ui.plupload.css" media="screen" />
+<link type="text/css" rel="stylesheet" href="assets/jquery-ui-1.10.4.custom/css/start/jquery-ui-1.10.4.custom.min.css" media="screen" />
+<script type="text/javascript" src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript" src="assets/plupload/js/jquery.ui.plupload.min.js"></script> -->
+<script type="text/javascript">
+// Initialize the widget when the DOM is ready
+/*$(function() {
+  $("#uploader").plupload({
+    // General settings
+    runtimes : 'html5,flash,silverlight,html4',
+    url : "admin/problem/uploadData",
+
+    // Maximum file size
+    //max_file_size : '8mb',
+
+    chunk_size: '1mb',
+
+    // Resize images on clientside if we can
+    resize : {
+      width : 200, 
+      height : 200, 
+      quality : 90,
+      crop: true // crop to exact dimensions
+    },
+
+    // Specify what files to browse for
+    filters : [
+      {title : "Data files", extensions : "in,out,txt"},
+      {title : "Source files", extensions : "c,cc,cpp,pas,java,py"},
+      {title : "Zip files", extensions : "zip,rar"}
+    ],
+
+    // Rename files by clicking on their titles
+    rename: true,
+    
+    // Sort files
+    sortable: true,
+
+    // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+    dragdrop: true,
+
+    // Views to activate
+    views: {
+      list: true,
+      thumbs: true, // Show thumbs
+      active: 'thumbs'
+    },
+
+    // Flash settings
+    flash_swf_url : 'assets/plupload/js/Moxie.swf',
+  
+    // Silverlight settings
+    silverlight_xap_url : 'assets/plupload/js/Moxie.xap'
+  });
+});*/
+</script>
+
+<script type="text/javascript">
+// Custom example logic
+var uploader = new plupload.Uploader({
+  runtimes : 'html5,flash,silverlight,html4',
+  browse_button : 'pickfiles', // you can pass in id...
+  container: document.getElementById('container'), // ... or DOM Element itself
+  url : baseUrl + 'admin/problem/uploadData',
+  flash_swf_url : baseUrl + 'assets/plupload/js/Moxie.swf',
+  silverlight_xap_url : baseUrl + 'assets/plupload/js/Moxie.xap',
+  
+  filters : {
+    max_file_size : '10mb',
+    mime_types: [
+      {title : "Data files", extensions : "in,out,txt"},
+      {title : "Source files", extensions : "c,cc,cpp,pas,java,py"},
+      {title : "Zip files", extensions : "zip,rar"}
+    ]
+  },
+
+  init: {
+    PostInit: function() {
+      document.getElementById('filelist').innerHTML = '';
+
+      document.getElementById('uploadfiles').onclick = function() {
+        uploader.start();
+        return false;
+      };
+    },
+
+    FilesAdded: function(up, files) {
+      plupload.each(files, function(file) {
+        document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+      });
+    },
+
+    UploadProgress: function(up, file) {
+      document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+    },
+
+    Error: function(up, err) {
+      document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+    }
+  }
+});
+
+uploader.init();
+</script>
+</@override>
+<@extends name="../_layout.html"></@extends>
