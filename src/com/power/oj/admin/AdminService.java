@@ -1,12 +1,15 @@
 package com.power.oj.admin;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -123,6 +126,101 @@ public class AdminService
     record.set("type", type);
     
     return Db.update("variable", record) ? 0 : 1;
+  }
+
+  public List<String> getDataFiles(Integer pid)
+  {
+    List<String> dataFiles = new ArrayList<String>();
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(pid).toString());
+    if (!dataDir.isDirectory())
+    {
+      return dataFiles;
+    }
+    
+    File[] arrayOfFile = dataDir.listFiles();
+    if (arrayOfFile.length > 1)
+    {
+      Arrays.sort(arrayOfFile);
+    }
+    
+    for (int i = 0; i < arrayOfFile.length; i++)
+    {
+      try
+      {
+        FileInputStream fis = new FileInputStream(arrayOfFile[i]);
+        long size = fis.available();
+        fis.close();
+        String str = String.format("%d", size) + " ";
+        if (size >= 1048576)
+          str = String.format("%.2f", size / 1048576.) + " M";
+        else if (size >= 1024)
+          str = String.format("%.2f", size / 1024.) + " K";
+        dataFiles.add(arrayOfFile[i].getName() + ";" + str + "B");
+      } catch (FileNotFoundException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+      } catch (IOException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+      }
+    }
+    
+    return dataFiles;
+  }
+  
+  public String uploadData(Integer pid, String filename, File srcFile) throws IOException
+  {
+    String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
+        append(File.separator).append(pid).append(File.separator).append(filename).toString();
+    File destFile = new File(destFileName);
+    
+    if (destFile.exists())
+    {
+      FileUtil.delete(destFile);
+    }
+    FileUtil.moveFile(srcFile, destFile);
+    log.info(destFile.getAbsolutePath());
+    
+    return destFile.getName();
+  }
+  
+  public File downloadData(Integer pid, String filename)
+  {
+    String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
+        append(File.separator).append(pid).append(File.separator).append(filename).toString();
+    File file = new File(destFileName);
+    
+    if (file.exists())
+    {
+      return file;
+    }
+    
+    return null;
+  }
+
+  public boolean deleteData(Integer pid, String filename)
+  {
+    String fileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
+        append(File.separator).append(pid).append(File.separator).append(filename).toString();
+    File srcFile = new File(fileName);
+    File destFile = new File(OjConfig.uploadPath + File.separator + filename);
+    
+    try
+    {
+      FileUtil.moveFile(srcFile, destFile);
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+      return false;
+    }
+    
+    return true;
   }
   
   public List<FpsProblem> importProblems(File file, Integer outputLimit, Boolean status)

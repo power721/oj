@@ -77,6 +77,8 @@
                   "mRender": function (data, type, full) {
                     var action = '<a href="admin/problem/edit/' + full.pid 
                         + '" class="btn btn-success">Edit</a> '
+                        + '<a href="admin/problem/data/' + full.pid 
+                        + '" class="btn btn-info">Data</a> '
                         + '<button id="problem-rejudge" pid="' + full.pid 
                         + '" class="btn btn-danger">Rejudge</button> '
                         + '<button id="problem-toggle" pid="' + full.pid 

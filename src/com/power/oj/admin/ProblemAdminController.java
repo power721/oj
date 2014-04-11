@@ -167,19 +167,60 @@ public class ProblemAdminController extends OjController
   
   public void data()
   {
+    Integer pid = getParaToInt(0);
     
+    setAttr("dataFiles", adminService.getDataFiles(pid));
+    setAttr("problem", problemService.findProblem(pid));
+    setAttr("pid", pid);
   }
   
   @RequiresPermissions("problem:edit")
   @Before(POST.class)
   public void uploadData()
   {
+    UploadFile uploadFile = getFile("file", "", 100 * 1024 * 1024, "UTF-8");
+    File file = uploadFile.getFile();
+    Integer pid = getParaToInt("pid");
+    String filename = getPara("name");
     
+    try
+    {
+      filename = adminService.uploadData(pid, filename, file);
+    } catch (IOException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
+      
+      renderJson("error", "Move file to data directory failed.");
+      return;
+    }
+    renderJson(filename);
   }
   
+  @RequiresPermissions("problem:edit")
   public void downloadData()
   {
+    Integer pid = getParaToInt(0);
+    String filename = getPara("name");
     
+    renderFile(adminService.downloadData(pid, filename));
+  }
+
+  @RequiresPermissions("problem:edit")
+  public void deleteData()
+  {
+    Integer pid = getParaToInt("pid");
+    String filename = getPara("name");
+    
+    if (adminService.deleteData(pid, filename))
+    {
+      renderNull();
+    }
+    else
+    {
+      renderJson("error", "Delete failed.");
+    }
   }
 
   @RequiresPermissions("problem:build")

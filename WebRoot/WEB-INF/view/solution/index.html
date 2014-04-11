@@ -51,7 +51,8 @@
       </tr>
     </thead>
     <tbody>
-      <#if solutionList??> <#list solutionList.list as solution>
+      <#if solutionList??> 
+      <#list solutionList.list as solution>
       <tr>
         <td class="sid">${solution.sid!}</td>
         <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
@@ -59,8 +60,8 @@
         <#if !adminUser?? && solution.alpha??> 
         <a href="contest/problem/${solution.cid}-${solution.alpha!}">${solution.cid}-${solution.alpha!}</a>
         <#else> 
-        <a href="problem/show/${solution.pid!}">${solution.pid!}</a> <#if solution.alpha??> <a href="contest/problem/${solution.cid}-${solution.alpha!}">${solution.cid}-${solution.alpha!}</a>
-        </#if> 
+        <a href="problem/show/${solution.pid!}">${solution.pid!}</a> 
+        <#if solution.alpha??> <a href="contest/problem/${solution.cid}-${solution.alpha!}">${solution.cid}-${solution.alpha!}</a></#if> 
         </#if>
         </td>
         <td class="result" id="${solution.resultName!}" sid="${solution.sid!}">${solution.resultLongName!}</td>
@@ -72,7 +73,8 @@
         <td class="code_len">${solution.codeLen!}B</td>
         <td class="ctime">${solution.ctime_t!}</td>
       </tr>
-      </#list> </#if>
+      </#list> 
+      </#if>
     </tbody>
   </table>
 </@override>

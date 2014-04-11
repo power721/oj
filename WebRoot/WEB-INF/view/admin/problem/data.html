@@ -11,15 +11,16 @@
         <a href="admin/problem">题目管理</a>
         <span class="divider">/</span>
       </li>
-      <li class="active">数据管理</li>
+      <li class="active"><a href="admin/problem/show/${pid!}">数据管理</a></li>
     </ul>
     <div class="container-fluid">
       <div class="row-fluid">
         <div class="well">
           <div id="container">
-            <h3>Problem Test Data:</h3>
+            <h3><a href="problem/show/${problem.pid}" target="_blank">${problem.pid}</a>: <a href="admin/problem/show/${problem.pid}">${problem.title}</a></h3>
+            <p class="text-info">Select files to upload.</p>
             <div id="filelist">
-              <form class="form-horizontal" action="admin/problem/uploadData" method="post" enctype="multipart/form-data">
+              <!-- <form class="form-horizontal" action="admin/problem/uploadData" method="post" enctype="multipart/form-data">
                 <div class="control-group problem">
                   <label class="control-label" for="inputFile">File</label>
                   <div class="controls">
@@ -31,35 +32,108 @@
                     <button type="submit" class="btn btn-primary">Upload</button>
                   </div>
                 </div>
-              </form>
+              </form> -->
             </div>
 
-            <div id="container">
-                <a id="pickfiles" href="javascript:;"><i class="btn btn-primary">Browse</i></a> 
-                <a id="uploadfiles" href="javascript:;"><i class="btn btn-primary">Upload</i></a>
+            <div id="data-container">
+                <a id="pickfiles" href="javascript:;"><i class="icon-file btn btn-primary">Browse</i></a> 
+                <a id="uploadfiles" href="javascript:;"><i class="icon-upload btn btn-primary">Upload</i></a>
             </div>
-            <pre id="console"></pre>
-
+            <div id="console"></div><br>
+          
+          <h4>Problem Test Data:</h4>
+          <div>
+          <#if dataFiles??>
+          <table id="data-files" class="table table-hover table-condensed table-bordered">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>File</th>
+                <th>Size</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+          <#list dataFiles as file>
+          <#assign info=file?split(";")>
+          <tr>
+          <td>${file_index+1}</td>
+          <td class="file">${info[0]}</td>
+          <td class="size">${info[1]}</td>
+          <td class="action" name="${info[0]}">
+            <i class="btn btn-primary edit">Edit</i>
+            <i class="btn btn-info download">Download</i>
+            <i class="btn btn-danger delete">Delete</i>
+          </td>
+          </tr>
+          </#list>
+            </tbody>
+          </table>
+          </#if>
+          </siv>
           </div>
         </div>
       </div>
     </div>
 </@override>
 
+<@override name="styles">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
+  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+</@override>
+
 <@override name="scripts">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('.download').click(function() {
+        window.location.href='admin/problem/downloadData/' + ${pid!} + '?name=' + $(this).parent().attr('name');
+      });
+      $('.delete').click(function() {
+        var $that = $(this).parent().parent();
+        $.post('admin/problem/deleteData', {pid: ${pid!}, name : $(this).parent().attr('name')}, function(data) {
+          if (data.error) {
+            $.dialog().content(data.error).lock().time(1.5);
+          } else {
+           $.dialog().content('Ok, file moved to upload directory.').lock().time(1.5);
+           //$that.remove();
+           setTimeout(function() {
+              window.location.reload();
+            },
+            1500);
+          }
+        });
+      });
+      
+      $("#data-files").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:true,
+        striped:true,
+        clean:true
+      });
+    });
+  </script>
+
+<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
 <script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
 <script type="text/javascript">
 // Custom example logic
 var uploader = new plupload.Uploader({
   runtimes : 'html5,flash,silverlight,html4',
   browse_button : 'pickfiles', // you can pass in id...
-  container: document.getElementById('container'), // cannot change to $('#container')
+  container: document.getElementById('data-container'), // cannot change to $('#container')
   url : baseUrl + 'admin/problem/uploadData',
   flash_swf_url : baseUrl + 'assets/plupload/js/Moxie.swf',
   silverlight_xap_url : baseUrl + 'assets/plupload/js/Moxie.xap',
+  multipart_params : { pid : ${pid!} },
   
   filters : {
-    max_file_size : '10mb',
+    //max_file_size : '10mb',
     mime_types: [
       {title : "Data files", extensions : "in,out,txt"},
       {title : "Source files", extensions : "c,cc,cpp,pas,java,py"},
@@ -79,16 +153,33 @@ var uploader = new plupload.Uploader({
 
     FilesAdded: function(up, files) {
       plupload.each(files, function(file) {
-        document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+        var html = $('#filelist').html();
+        html += '<div class="file">' + file.name + ' (' + plupload.formatSize(file.size) + ')' +
+                '<div style="width:50%;" class="progress progress-striped active">' +
+                '<div class="bar" id="' + file.id + '"></div></div></div>';
+        $('#filelist').html(html);
       });
     },
 
     UploadProgress: function(up, file) {
-      document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+      $('#' + file.id).css('width', file.percent + '%');
+      if (file.percent >= 100) {
+        $('#' + file.id).parent().removeClass('active').addClass('progress-success');
+      }
     },
-
+    
+    UploadComplete: function() {
+      $.dialog().content('All data files uploaded.').lock().time(1);
+      setTimeout(function() {
+        window.location.reload();
+      },
+      1500);
+    },
+    
     Error: function(up, err) {
-      document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+      var html = $('#console').html();
+      html += '<p class="text-error">Error #' + err.code + ': ' + err.message + '</p>';
+      $('#console').html(html);
     }
   }
 });
