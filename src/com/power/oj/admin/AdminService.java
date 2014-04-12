@@ -131,6 +131,7 @@ public class AdminService
   {
     List<DataFile> dataFiles = new ArrayList<DataFile>();
     File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(pid).toString());
+    
     if (!dataDir.isDirectory())
     {
       return dataFiles;
@@ -145,13 +146,6 @@ public class AdminService
     for (int i = 0; i < arrayOfFile.length; i++)
     {
       DataFile dataFile = new DataFile(pid, arrayOfFile[i]);
-      /*long size = dataFile.getSize();
-
-      String str = String.format("%d", size) + " ";
-      if (size >= 1048576)
-        str = String.format("%.2f", size / 1048576.) + " M";
-      else if (size >= 1024)
-        str = String.format("%.2f", size / 1024.) + " K";*/
       dataFiles.add(dataFile);
     }
     
@@ -162,10 +156,6 @@ public class AdminService
   {
     File destFile = new DataFile(pid, filename).getFile();
     
-    if (destFile.exists())
-    {
-      FileUtil.delete(destFile);
-    }
     FileUtil.moveFile(srcFile, destFile);
     log.info(destFile.getAbsolutePath());
     

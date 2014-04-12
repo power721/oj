@@ -7,6 +7,12 @@ import org.apache.commons.io.FileUtils;
 
 import com.power.oj.core.OjConfig;
 
+/**
+ * file info for problem data files.
+ * current implementation is for all files.
+ * @author power
+ *
+ */
 public class DataFile
 {
   private String name;
@@ -15,9 +21,7 @@ public class DataFile
   private String group;
   private String perm;
   private int pid;
-  private long size;
   private long createTime;
-  private long modifyTime;
   private File file;
   
   public DataFile()
@@ -33,12 +37,6 @@ public class DataFile
     path = new StringBuilder(5).append(OjConfig.get("dataPath")).
         append(File.separator).append(pid).append(File.separator).append(name).toString();
     file = new File(path);
-    
-    if (exists())
-    {
-      size = file.length();
-      modifyTime = file.lastModified();
-    }
   }
 
   public DataFile(Integer pid, File file)
@@ -49,8 +47,6 @@ public class DataFile
     if (exists())
     {
       name = file.getName();
-      size = file.length();
-      modifyTime = file.lastModified();
     }
   }
   
@@ -87,11 +83,6 @@ public class DataFile
   public String getPath()
   {
     return path;
-  }
-
-  public void setPath(String path)
-  {
-    this.path = path;
   }
 
   public String getUser()
@@ -136,12 +127,7 @@ public class DataFile
 
   public long getSize()
   {
-    return size;
-  }
-
-  public void setSize(long size)
-  {
-    this.size = size;
+    return file.length();
   }
 
   public long getCreateTime()
@@ -149,19 +135,9 @@ public class DataFile
     return createTime;
   }
 
-  public void setCreateTime(long createTime)
-  {
-    this.createTime = createTime;
-  }
-
   public long getModifyTime()
   {
-    return modifyTime;
-  }
-
-  public void setModifyTime(long modifyTime)
-  {
-    this.modifyTime = modifyTime;
+    return file.lastModified();
   }
 
   public File getFile()
@@ -169,9 +145,4 @@ public class DataFile
     return file;
   }
 
-  public void setFile(File file)
-  {
-    this.file = file;
-  }
-  
 }
