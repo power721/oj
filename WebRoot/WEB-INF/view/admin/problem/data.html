@@ -76,7 +76,7 @@
       </div>
     </div>
     
-  <div class="modal hide fade dataModal" id="editModal"></div>
+  <div class="modal hide fade dataModal" id="editModal" tabindex="-1"></div>
 </@override>
 
 <@override name="styles">
@@ -109,18 +109,29 @@
       });
       
       $('.delete').click(function() {
-        var $that = $(this).parent().parent();
-        $.post('admin/problem/deleteData', {pid: ${pid!}, name : $(this).parent().attr('name')}, function(data) {
-          if (data.error) {
-            $.dialog().content(data.error).lock().time(1.5);
-          } else {
-           $.dialog().content('Ok, file moved to upload directory.').lock().time(1.5);
-           //$that.remove();
-           setTimeout(function() {
-              window.location.reload();
-            },
-            1500);
-          }
+        var name = $(this).parent().attr('name');
+        art.dialog({
+          title: 'Confirm',
+          content: 'Are you sure to delete this data file(' + name + ')?',
+          lock: true,
+          opacity: 0.87,
+          okVal: 'Yes',
+          ok: function () {
+            $.post('admin/problem/deleteData', {pid: ${pid!}, name : name}, function(data) {
+              if (data.error) {
+                $.dialog().content(data.error).lock().time(1.5);
+              } else {
+               $.dialog().content('Ok, file moved to upload directory.').lock().time(1.5);
+               setTimeout(function() {
+                  window.location.reload();
+                },
+                1500);
+              }
+            });
+            return true;
+          },
+          cancelVal: 'No',
+          cancel: true
         });
       });
       

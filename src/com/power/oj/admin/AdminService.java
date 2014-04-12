@@ -212,7 +212,12 @@ public class AdminService
     {
       try
       {
-        return FileUtil.readString(file);
+        String content = FileUtil.readString(file);
+        if (content.length() >= 2 * 1024 * 1024)
+        {
+          content = null;
+        }
+        return content;
       } catch (IOException e)
       {
         if (OjConfig.getDevMode())
