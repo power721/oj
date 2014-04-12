@@ -183,7 +183,7 @@ public class AdminService
       try
       {
         String content = dataFile.readString();
-        if (content.length() >= 2 * 1024 * 1024)
+        if (content != null && content.length() >= 2 * 1024 * 1024)
         {
           content = null;
         }

@@ -3,6 +3,9 @@ package com.power.oj.core.bean;
 import java.io.File;
 import java.io.IOException;
 
+import jodd.io.FileNameUtil;
+import jodd.util.StringUtil;
+
 import org.apache.commons.io.FileUtils;
 
 import com.power.oj.core.OjConfig;
@@ -15,6 +18,7 @@ import com.power.oj.core.OjConfig;
  */
 public class DataFile
 {
+  private static String[] exts = {"in", "out", "txt", "c", "cc", "cpp", "pas", "java", "py"};
   private String name;
   private String path;
   private String user;
@@ -57,6 +61,11 @@ public class DataFile
   
   public String readString() throws IOException
   {
+    String ext = FileNameUtil.getExtension(name);
+    if (StringUtil.equalsOne(ext, exts) == -1)
+    {
+      return null;
+    }
     return FileUtils.readFileToString(file);
   }
   
