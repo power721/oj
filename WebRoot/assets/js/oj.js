@@ -609,6 +609,9 @@ Date.prototype.format = function(format) {
 function parseTimestamp(nS) {
   if (!nS || nS == null || nS == "")
     return "";
+  if (nS > 2147483647) {
+    return new Date(parseInt(nS)).format("yyyy-MM-dd hh:mm:ss");
+  }
   return new Date(parseInt(nS) * 1000).format("yyyy-MM-dd hh:mm:ss");
 }
 
