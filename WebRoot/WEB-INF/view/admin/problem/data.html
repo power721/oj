@@ -55,12 +55,11 @@
             </thead>
             <tbody>
           <#list dataFiles as file>
-          <#assign info=file?split(";")>
           <tr>
           <td>${file_index+1}</td>
-          <td class="file">${info[0]}</td>
-          <td class="size">${info[1]}</td>
-          <td class="action" name="${info[0]}">
+          <td class="file">${file.name}</td>
+          <td class="size" size="${file.size}">${num2size(file.size)}</td>
+          <td class="action" name="${file.name}">
             <i class="btn btn-primary edit">Edit</i>
             <i class="btn btn-info download">Download</i>
             <i class="btn btn-danger delete" data-trigger="confirm">Delete</i>
@@ -110,6 +109,7 @@
       
       $('.delete').click(function() {
         var name = $(this).parent().attr('name');
+        var $that = $(this).parent().parent();
         art.dialog({
           title: 'Confirm',
           content: 'Are you sure to delete this data file(' + name + ')?',
@@ -122,10 +122,7 @@
                 $.dialog().content(data.error).lock().time(1.5);
               } else {
                $.dialog().content('Ok, file moved to upload directory.').lock().time(1.5);
-               setTimeout(function() {
-                  window.location.reload();
-                },
-                1500);
+               $that.remove();
               }
             });
             return true;
@@ -138,85 +135,85 @@
       $("#data-files").tablecloth({
         theme:"stats",
         condensed:true,
-        sortable:true,
+        sortable:false,
         striped:true,
         clean:true
       });
     });
   </script>
 
-<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
-<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
-<script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
-<script type="text/javascript">
-// Custom example logic
-var uploader = new plupload.Uploader({
-  runtimes : 'html5,flash,silverlight,html4',
-  browse_button : 'pickfiles', // you can pass in id...
-  container: document.getElementById('data-container'), // cannot change to $('#container')
-  url : baseUrl + 'admin/problem/uploadData',
-  flash_swf_url : baseUrl + 'assets/plupload/js/Moxie.swf',
-  silverlight_xap_url : baseUrl + 'assets/plupload/js/Moxie.xap',
-  multipart_params : { pid : ${pid!} },
-  
-  filters : {
-    //max_file_size : '10mb',
-    mime_types: [
-      {title : "Data files", extensions : "in,out,txt"},
-      {title : "Source files", extensions : "c,cc,cpp,pas,java,py"},
-      {title : "Zip files", extensions : "zip,rar"}
-    ]
-  },
-
-  init: {
-    PostInit: function() {
-      $('#filelist').html('');
-
-      $('#uploadfiles').click(function() {
-        uploader.start();
-        return false;
-      });
-    },
-
-    FilesAdded: function(up, files) {
-      plupload.each(files, function(file) {
-        var html = $('#filelist').html();
-        html += '<div class="file">' + file.name + ' (' + plupload.formatSize(file.size) + ')' +
-                '<div style="width:50%;" class="progress progress-striped active">' +
-                '<div class="bar" id="' + file.id + '"></div></div></div>';
-        $('#filelist').html(html);
-      });
-    },
-    
-    UploadProgress: function(up, file) {
-      $('#' + file.id).css('width', file.percent + '%');
-      if (file.percent >= 100) {
-        $('#' + file.id).parent().removeClass('active').addClass('progress-success');
-      }
-    },
-    
-    UploadComplete: function() {
-      var html = $('#filelist').html();
-      if (html == '')
-      {
-        return false;
-      }
-      $.dialog().content('All data files uploaded.').lock().time(1);
-      setTimeout(function() {
-        window.location.reload();
+  <script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+  <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+  <script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
+  <script type="text/javascript">
+    // Custom example logic
+    var uploader = new plupload.Uploader({
+      runtimes : 'html5,flash,silverlight,html4',
+      browse_button : 'pickfiles', // you can pass in id...
+      container: document.getElementById('data-container'), // cannot change to $('#container')
+      url : baseUrl + 'admin/problem/uploadData',
+      flash_swf_url : baseUrl + 'assets/plupload/js/Moxie.swf',
+      silverlight_xap_url : baseUrl + 'assets/plupload/js/Moxie.xap',
+      multipart_params : { pid : ${pid!} },
+      
+      filters : {
+        //max_file_size : '10mb',
+        mime_types: [
+          {title : "Data files", extensions : "in,out,txt"},
+          {title : "Source files", extensions : "c,cc,cpp,pas,java,py"},
+          {title : "Zip files", extensions : "zip,rar"}
+        ]
       },
-      1500);
-    },
-    
-    Error: function(up, err) {
-      var html = $('#console').html();
-      html += '<p class="text-error">Error #' + err.code + ': ' + err.message + '</p>';
-      $('#console').html(html);
-    }
-  }
-});
 
-uploader.init();
-</script>
+      init: {
+        PostInit: function() {
+          $('#filelist').html('');
+
+          $('#uploadfiles').click(function() {
+            uploader.start();
+            return false;
+          });
+        },
+
+        FilesAdded: function(up, files) {
+          plupload.each(files, function(file) {
+            var html = $('#filelist').html();
+            html += '<div class="file">' + file.name + ' (' + plupload.formatSize(file.size) + ')' +
+                    '<div style="width:50%;" class="progress progress-striped active">' +
+                    '<div class="bar" id="' + file.id + '"></div></div></div>';
+            $('#filelist').html(html);
+          });
+        },
+        
+        UploadProgress: function(up, file) {
+          $('#' + file.id).css('width', file.percent + '%');
+          if (file.percent >= 100) {
+            $('#' + file.id).parent().removeClass('active').addClass('progress-success');
+          }
+        },
+        
+        UploadComplete: function() {
+          var html = $('#filelist').html();
+          if (html == '')
+          {
+            return false;
+          }
+          $.dialog().content('All data files uploaded.').lock().time(1);
+          setTimeout(function() {
+            window.location.reload();
+          },
+          1500);
+        },
+        
+        Error: function(up, err) {
+          var html = $('#console').html();
+          html += '<p class="text-error">Error #' + err.code + ': ' + err.message + '</p>';
+          $('#console').html(html);
+        }
+      }
+    });
+
+    uploader.init();
+  </script>
 </@override>
 <@extends name="../_layout.html"></@extends>

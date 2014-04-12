@@ -1,8 +1,6 @@
 package com.power.oj.admin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,6 +28,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.AppConfig;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.bean.DataFile;
 import com.power.oj.core.bean.FpsProblem;
 import com.power.oj.problem.ProblemModel;
 
@@ -128,9 +127,9 @@ public class AdminService
     return Db.update("variable", record) ? 0 : 1;
   }
 
-  public List<String> getDataFiles(Integer pid)
+  public List<DataFile> getDataFiles(Integer pid)
   {
-    List<String> dataFiles = new ArrayList<String>();
+    List<DataFile> dataFiles = new ArrayList<DataFile>();
     File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(pid).toString());
     if (!dataDir.isDirectory())
     {
@@ -145,28 +144,15 @@ public class AdminService
     
     for (int i = 0; i < arrayOfFile.length; i++)
     {
-      try
-      {
-        FileInputStream fis = new FileInputStream(arrayOfFile[i]);
-        long size = fis.available();
-        fis.close();
-        String str = String.format("%d", size) + " ";
-        if (size >= 1048576)
-          str = String.format("%.2f", size / 1048576.) + " M";
-        else if (size >= 1024)
-          str = String.format("%.2f", size / 1024.) + " K";
-        dataFiles.add(arrayOfFile[i].getName() + ";" + str + "B");
-      } catch (FileNotFoundException e)
-      {
-        if (OjConfig.getDevMode())
-          e.printStackTrace();
-        log.error(e.getLocalizedMessage());
-      } catch (IOException e)
-      {
-        if (OjConfig.getDevMode())
-          e.printStackTrace();
-        log.error(e.getLocalizedMessage());
-      }
+      DataFile dataFile = new DataFile(pid, arrayOfFile[i]);
+      /*long size = dataFile.getSize();
+
+      String str = String.format("%d", size) + " ";
+      if (size >= 1048576)
+        str = String.format("%.2f", size / 1048576.) + " M";
+      else if (size >= 1024)
+        str = String.format("%.2f", size / 1024.) + " K";*/
+      dataFiles.add(dataFile);
     }
     
     return dataFiles;
@@ -174,9 +160,7 @@ public class AdminService
   
   public String uploadData(Integer pid, String filename, File srcFile) throws IOException
   {
-    String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
-        append(File.separator).append(pid).append(File.separator).append(filename).toString();
-    File destFile = new File(destFileName);
+    File destFile = new DataFile(pid, filename).getFile();
     
     if (destFile.exists())
     {
@@ -190,9 +174,7 @@ public class AdminService
   
   public File downloadData(Integer pid, String filename)
   {
-    String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
-        append(File.separator).append(pid).append(File.separator).append(filename).toString();
-    File file = new File(destFileName);
+    File file = new DataFile(pid, filename).getFile();
     
     if (file.exists())
     {
@@ -204,15 +186,13 @@ public class AdminService
 
   public String editData(Integer pid, String filename)
   {
-    String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
-        append(File.separator).append(pid).append(File.separator).append(filename).toString();
-    File file = new File(destFileName);
+    DataFile dataFile = new DataFile(pid, filename);
     
-    if (file.exists())
+    if (dataFile.exists())
     {
       try
       {
-        String content = FileUtil.readString(file);
+        String content = dataFile.readString();
         if (content.length() >= 2 * 1024 * 1024)
         {
           content = null;
@@ -232,22 +212,18 @@ public class AdminService
   
   public boolean updateData(Integer pid, String originalName, String filename, String content)
   {
-    String srcFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
-        append(File.separator).append(pid).append(File.separator).append(originalName).toString();
-    File srcFile = new File(srcFileName);
+    DataFile srcFile = new DataFile(pid, originalName);
 
     if (srcFile.exists())
     {
       try
       {
-        FileUtil.writeString(srcFile, content);
+        srcFile.writeString(content);
         if (!originalName.equals(filename))
         {
-          String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
-              append(File.separator).append(pid).append(File.separator).append(filename).toString();
-          File destFile = new File(destFileName);
-          FileUtil.touch(destFile);
-          FileUtil.move(srcFile, destFile);
+          DataFile destFile = new DataFile(pid, filename);
+          destFile.touch();
+          FileUtil.move(srcFile.getFile(), destFile.getFile());
         }
       } catch (IOException e)
       {
@@ -259,7 +235,6 @@ public class AdminService
     }
     else
     {
-      log.warn(srcFileName);
       return false;
     }
     return true;
@@ -267,9 +242,7 @@ public class AdminService
 
   public boolean deleteData(Integer pid, String filename)
   {
-    String fileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
-        append(File.separator).append(pid).append(File.separator).append(filename).toString();
-    File srcFile = new File(fileName);
+    File srcFile = new DataFile(pid, filename).getFile();
     File destFile = new File(OjConfig.uploadPath + File.separator + filename);
     
     try

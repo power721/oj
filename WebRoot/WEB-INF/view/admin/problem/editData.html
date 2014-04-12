@@ -1,3 +1,12 @@
+  <style>
+  textarea {
+    width: 535px;
+  }
+  .control-group {
+    margin: 5px;
+  }
+  </style>
+  
   <form class="" id="submitForm" action="admin/problem/updateData" method="post">
     <div class="control-group">
       <label class="control-label" for="inputFilename">File Name</label>
@@ -27,12 +36,12 @@
           if (data.error) {
             $.dialog().content(data.error).lock().time(1.5);
           } else {
-           $.dialog().content('Ok, data file updated.').lock().time(1.5);
-           setTimeout(function() {
+            $.dialog().content('Ok, data file updated.').lock().time(1.5);
+            setTimeout(function() {
               window.location.reload();
             },
             1500);
-        }
+          }
         });
         return false;
       });

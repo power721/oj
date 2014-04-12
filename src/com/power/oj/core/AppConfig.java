@@ -81,6 +81,7 @@ import com.power.oj.user.UserModel;
 import com.power.oj.util.freemarker.Num2AlphaMethod;
 import com.power.oj.util.freemarker.BlockDirective;
 import com.power.oj.util.freemarker.ExtendsDirective;
+import com.power.oj.util.freemarker.Num2SizeMethod;
 import com.power.oj.util.freemarker.OverrideDirective;
 
 public class AppConfig extends JFinalConfig
@@ -101,6 +102,7 @@ public class AppConfig extends JFinalConfig
     FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("num2alpha", new Num2AlphaMethod());
+    FreeMarkerRender.getConfiguration().setSharedVariable("num2size", new Num2SizeMethod());
     
     me.setDevMode(getPropertyToBoolean("devMode", false));
     baseViewPath = "/WEB-INF/view";
