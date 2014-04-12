@@ -168,10 +168,11 @@ public class ProblemAdminController extends OjController
   public void data()
   {
     Integer pid = getParaToInt(0);
-    
+    ProblemModel problem = problemService.findProblem(pid);
     setAttr("dataFiles", adminService.getDataFiles(pid));
-    setAttr("problem", problemService.findProblem(pid));
+    setAttr("problem", problem);
     setAttr("pid", pid);
+    setTitle(pid + ": " + problem.getTitle());
   }
   
   @RequiresPermissions("problem:edit")

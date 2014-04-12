@@ -82,8 +82,8 @@
                         + '<button id="problem-rejudge" pid="' + full.pid 
                         + '" class="btn btn-danger">Rejudge</button> '
                         + '<button id="problem-toggle" pid="' + full.pid 
-                        + '" class="btn btn-warning">' 
-                        + (full.status ? 'Delete' : 'Resume')
+                        + '" class="btn btn-' + (full.status ? 'warning' : 'primary') + '">' 
+                        + (full.status ? 'Disable' : 'Enable')
                         + '</button> ';
                     return action;
                   }

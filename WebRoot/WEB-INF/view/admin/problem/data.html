@@ -37,7 +37,7 @@
 
             <div id="data-container">
                 <a id="pickfiles" href="javascript:;"><i class="icon-file btn btn-primary">Browse</i></a> 
-                <a id="uploadfiles" href="javascript:;"><i class="icon-upload btn btn-primary">Upload</i></a>
+                <a id="uploadfiles" href="javascript:;"><i class="icon-upload btn btn-primary disabled" id="upload">Upload</i></a>
             </div>
             <div id="console"></div><br>
           
@@ -114,7 +114,7 @@
         var $that = $(this).parent().parent();
         art.dialog({
           title: 'Confirm',
-          content: 'Are you sure to delete this data file(' + name + ')?',
+          content: 'Are you sure to remove this file(' + name + ')?',
           lock: true,
           opacity: 0.87,
           okVal: 'Yes',
@@ -178,6 +178,7 @@
         },
 
         FilesAdded: function(up, files) {
+          $('#upload').removeClass('disabled');
           plupload.each(files, function(file) {
             var html = $('#filelist').html();
             html += '<div class="file">' + file.name + ' (' + plupload.formatSize(file.size) + ')' +
@@ -200,7 +201,7 @@
           {
             return false;
           }
-          $.dialog().content('All data files uploaded.').lock().time(1);
+          $.dialog().content('All files uploaded.').lock().time(1);
           setTimeout(function() {
             window.location.reload();
           },
