@@ -208,6 +208,15 @@ public class ProblemAdminController extends OjController
   }
 
   @RequiresPermissions("problem:edit")
+  public void viewData()
+  {
+    Integer pid = getParaToInt(0);
+    String filename = getPara("name");
+    
+    renderText(adminService.viewData(pid, filename));
+  }
+
+  @RequiresPermissions("problem:edit")
   public void editData()
   {
     Integer pid = getParaToInt(0);

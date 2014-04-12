@@ -58,7 +58,7 @@
           <#list dataFiles as file>
           <tr>
           <td>${file_index+1}</td>
-          <td class="file">${file.name}</td>
+          <td class="file"><a href="admin/problem/viewData/${pid}?name=${file.name}" target="_blank">${file.name}</a></td>
           <td class="size" size="${file.size}">${num2size(file.size)}</td>
           <td class="timestamp" data="${file.modifyTime}"></td>
           <td class="action" name="${file.name}">

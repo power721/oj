@@ -174,6 +174,28 @@ public class AdminService
     return null;
   }
 
+  public String viewData(Integer pid, String filename)
+  {
+    DataFile dataFile = new DataFile(pid, filename);
+    
+    if (dataFile.exists())
+    {
+      try
+      {
+        String content = dataFile.readString();
+        return content;
+      } catch (IOException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        return null;
+      }
+    }
+    
+    return null;
+  }
+  
   public String editData(Integer pid, String filename)
   {
     DataFile dataFile = new DataFile(pid, filename);
