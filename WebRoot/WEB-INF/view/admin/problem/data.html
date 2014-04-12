@@ -63,7 +63,7 @@
           <td class="action" name="${info[0]}">
             <i class="btn btn-primary edit">Edit</i>
             <i class="btn btn-info download">Download</i>
-            <i class="btn btn-danger delete">Delete</i>
+            <i class="btn btn-danger delete" data-trigger="confirm">Delete</i>
           </td>
           </tr>
           </#list>
@@ -75,9 +75,12 @@
         </div>
       </div>
     </div>
+    
+  <div class="modal hide fade dataModal" id="editModal"></div>
 </@override>
 
 <@override name="styles">
+  <link rel="stylesheet" href="assets/bootstrap-modal/bootstrap-modal.css">
   <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
   <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
   <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
@@ -87,11 +90,24 @@
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  <script src="assets/bootstrap-modal/bootstrap-modal.js"></script>
+  <script src="assets/bootstrap-modal/bootstrap-modalmanager.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
+      var url = 'admin/problem/editData/' + ${pid!};
+      $modal = $('#editModal');
+      $('.edit').click(function() {
+        $('#filename').html($(this).parent().attr('name'));
+        $('body').modalmanager('loading');
+         $modal.load(url, {'name':$(this).parent().attr('name')}, function() {
+          $modal.modal();
+        });
+      });
+
       $('.download').click(function() {
         window.location.href='admin/problem/downloadData/' + ${pid!} + '?name=' + $(this).parent().attr('name');
       });
+      
       $('.delete').click(function() {
         var $that = $(this).parent().parent();
         $.post('admin/problem/deleteData', {pid: ${pid!}, name : $(this).parent().attr('name')}, function(data) {
@@ -160,7 +176,7 @@ var uploader = new plupload.Uploader({
         $('#filelist').html(html);
       });
     },
-
+    
     UploadProgress: function(up, file) {
       $('#' + file.id).css('width', file.percent + '%');
       if (file.percent >= 100) {
@@ -169,6 +185,11 @@ var uploader = new plupload.Uploader({
     },
     
     UploadComplete: function() {
+      var html = $('#filelist').html();
+      if (html == '')
+      {
+        return false;
+      }
       $.dialog().content('All data files uploaded.').lock().time(1);
       setTimeout(function() {
         window.location.reload();

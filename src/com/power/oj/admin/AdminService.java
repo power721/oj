@@ -202,6 +202,64 @@ public class AdminService
     return null;
   }
 
+  public String editData(Integer pid, String filename)
+  {
+    String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
+        append(File.separator).append(pid).append(File.separator).append(filename).toString();
+    File file = new File(destFileName);
+    
+    if (file.exists())
+    {
+      try
+      {
+        return FileUtil.readString(file);
+      } catch (IOException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        return null;
+      }
+    }
+    
+    return null;
+  }
+  
+  public boolean updateData(Integer pid, String originalName, String filename, String content)
+  {
+    String srcFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
+        append(File.separator).append(pid).append(File.separator).append(originalName).toString();
+    File srcFile = new File(srcFileName);
+
+    if (srcFile.exists())
+    {
+      try
+      {
+        FileUtil.writeString(srcFile, content);
+        if (!originalName.equals(filename))
+        {
+          String destFileName = new StringBuilder(5).append(OjConfig.get("dataPath")).
+              append(File.separator).append(pid).append(File.separator).append(filename).toString();
+          File destFile = new File(destFileName);
+          FileUtil.touch(destFile);
+          FileUtil.move(srcFile, destFile);
+        }
+      } catch (IOException e)
+      {
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
+        return false;
+      }
+    }
+    else
+    {
+      log.warn(srcFileName);
+      return false;
+    }
+    return true;
+  }
+
   public boolean deleteData(Integer pid, String filename)
   {
     String fileName = new StringBuilder(5).append(OjConfig.get("dataPath")).

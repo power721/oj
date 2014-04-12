@@ -208,6 +208,44 @@ public class ProblemAdminController extends OjController
   }
 
   @RequiresPermissions("problem:edit")
+  public void editData()
+  {
+    Integer pid = getParaToInt(0);
+    String filename = getPara("name");
+    String content = adminService.editData(pid, filename);
+    
+    if (content == null)
+    {
+      renderText("<p class=\"text-error\">Error occurred, please <a href=\"admin/problem/downloadData/"
+          + pid + "?name=" + filename + "\">download</a> and edit it.</p>");
+      return; 
+    }
+    
+    setAttr("pid", pid);
+    setAttr("filename", filename);
+    setAttr("content", content);
+  }
+
+  @RequiresPermissions("problem:edit")
+  @Before(POST.class)
+  public void updateData()
+  {
+    Integer pid = getParaToInt("pid");
+    String name = getPara("name");
+    String filename = getPara("filename");
+    String content = getPara("content");
+    
+    if (adminService.updateData(pid, name, filename, content))
+    {
+      renderNull();
+    }
+    else
+    {
+      renderJson("error", "Cannot update data file!");
+    }
+  }
+
+  @RequiresPermissions("problem:edit")
   public void deleteData()
   {
     Integer pid = getParaToInt("pid");

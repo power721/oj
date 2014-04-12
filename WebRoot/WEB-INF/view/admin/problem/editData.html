@@ -1,0 +1,40 @@
+  <form class="" id="submitForm" action="admin/problem/updateData" method="post">
+    <div class="control-group">
+      <label class="control-label" for="inputFilename">File Name</label>
+      <div class="controls">
+        <input type="hidden" id="inputPid" name="pid" value="${pid!}">
+        <input type="hidden" id="inputName" name="name" value="${filename!}">
+        <input type="text" id="inputFilename" name="filename" value="${filename!}" required>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="inputContent">Content</label>
+      <div class="controls">
+        <textarea id="inputContent" name="content" rows="20" cols="100">${content!}</textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <button type="submit" id="Submit" class="btn btn-primary">Update</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+      <button class="btn" data-dismiss="modal">Cancel</button>
+    </div>
+  </form>
+    
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#submitForm').submit(function() {
+        $.post($(this).attr("action"), $('#submitForm').serialize(), function(data) {
+          if (data.error) {
+            $.dialog().content(data.error).lock().time(1.5);
+          } else {
+           $.dialog().content('Ok, data file updated.').lock().time(1.5);
+           setTimeout(function() {
+              window.location.reload();
+            },
+            1500);
+        }
+        });
+        return false;
+      });
+    });
+  </script>
