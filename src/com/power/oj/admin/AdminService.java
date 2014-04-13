@@ -25,11 +25,11 @@ import org.dom4j.io.XMLWriter;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.AppConfig;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.DataFile;
 import com.power.oj.core.bean.FpsProblem;
+import com.power.oj.core.model.VariableModel;
 import com.power.oj.problem.ProblemModel;
 
 import jodd.io.FileUtil;
@@ -84,12 +84,12 @@ public class AdminService
     ojInfo.put("uploadPath", OjConfig.uploadPath.replace(rootPath, ""));
     ojInfo.put("downloadPath", OjConfig.downloadPath.replace(rootPath, ""));
     
-    ojInfo.put("workPath", OjConfig.get("workPath"));
-    ojInfo.put("dataPath", OjConfig.get("dataPath"));
-    ojInfo.put("runShell", OjConfig.get("runShell"));
-    ojInfo.put("compilerShell", OjConfig.get("compileShell"));
-    ojInfo.put("debugFile", OjConfig.get("debugFile"));
-    ojInfo.put("errorFile", OjConfig.get("errorFile"));
+    ojInfo.put("workPath", OjConfig.getString("workPath"));
+    ojInfo.put("dataPath", OjConfig.getString("dataPath"));
+    ojInfo.put("runShell", OjConfig.getString("runShell"));
+    ojInfo.put("compilerShell", OjConfig.getString("compileShell"));
+    ojInfo.put("debugFile", OjConfig.getString("debugFile"));
+    ojInfo.put("errorFile", OjConfig.getString("errorFile"));
     
     return ojInfo;
   }
@@ -107,7 +107,7 @@ public class AdminService
   
   public int updateConfig(String name, String value, String type)
   {
-    Record record = Db.findFirst("SELECT * FROM variable WHERE name=?", name);
+    VariableModel record = OjConfig.get(name);
     
     if (record == null)
     {
@@ -116,21 +116,21 @@ public class AdminService
     
     switch (type)
     {
-      case "string":record.set("value", value);break;
-      case "boolean":record.set("boolean_value", value);break;
-      case "int":record.set("int_value", value);break;
-      case "text":record.set("text_value", value);break;
+      case "string":record.setStringValue(value);break;
+      case "boolean":record.setBooleanValue(Boolean.valueOf(value));break;
+      case "int":record.setIntValue(Integer.parseInt(value));break;
+      case "text":record.setTextValue(value);break;
       default:return -2;
     }
-    record.set("type", type);
+    record.setType(type);
     
-    return Db.update("variable", record) ? 0 : 1;
+    return record.update() ? 0 : 1;
   }
 
   public List<DataFile> getDataFiles(Integer pid)
   {
     List<DataFile> dataFiles = new ArrayList<DataFile>();
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(pid).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid).toString());
     
     if (!dataDir.isDirectory())
     {
@@ -424,8 +424,8 @@ public class AdminService
     rootElement.addAttribute("url", "http://code.google.com/p/freeproblemset/");
     
     Element generator = rootElement.addElement("generator");
-    generator.addAttribute("name", OjConfig.get("siteTitle", "PowerOJ"));
-    generator.addAttribute("url", OjConfig.get("domaiNname", "http://git.oschina.net/power/oj"));
+    generator.addAttribute("name", OjConfig.getString("siteTitle", "PowerOJ"));
+    generator.addAttribute("url", OjConfig.getString("domaiNname", "http://git.oschina.net/power/oj"));
     
     return rootElement;
   }

@@ -20,7 +20,7 @@ public class PojJudgeAdapter extends JudgeAdapter
   {
     log.info(solutionModel.getSid() + " Start compiling...");
     
-    String comShellName = OjConfig.get("compileShell");
+    String comShellName = OjConfig.getString("compileShell");
     String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, OjConstants.SOURCE_FILE_NAME, programLanguage.getExt());
     log.info("compileCmd: " + compileCmdName);
 
@@ -72,9 +72,9 @@ public class PojJudgeAdapter extends JudgeAdapter
     /*
      * execute run command
      */
-    Process runProcess = Runtime.getRuntime().exec(OjConfig.get("runShell"));
+    Process runProcess = Runtime.getRuntime().exec(OjConfig.getString("runShell"));
     OutputStream runProcessOutputStream = runProcess.getOutputStream();
-    log.info("runProcess: " + OjConfig.get("runShell"));
+    log.info("runProcess: " + OjConfig.getString("runShell"));
 
     int numOfData = getDataFiles();
 

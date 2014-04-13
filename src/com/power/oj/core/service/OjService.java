@@ -44,14 +44,14 @@ public class OjService
   
   public boolean checkEmailConf()
   {
-    if (OjConfig.get("adminEmail") == null)
+    if (OjConfig.getString("adminEmail") == null)
     {
       return false;
     }
     
-    String emailServer = OjConfig.get("emailServer");
-    String emailUser = OjConfig.get("emailUser");
-    String emailPass = OjConfig.get("emailPass");
+    String emailServer = OjConfig.getString("emailServer");
+    String emailUser = OjConfig.getString("emailUser");
+    String emailPass = OjConfig.getString("emailPass");
     if (emailServer == null || emailUser == null || emailPass == null)
     {
       return false;
@@ -77,7 +77,7 @@ public class OjService
 
   public boolean sendVerifyEmail(String name, final String email, Map<String, Object> paras)
   {
-    final String adminEmail = OjConfig.get("adminEmail");
+    final String adminEmail = OjConfig.getString("adminEmail");
     if (adminEmail == null)
     {
       return false;
@@ -99,7 +99,7 @@ public class OjService
 
   public boolean sendResetPasswordEmail(String name, final String email, String token)
   {
-    final String adminEmail = OjConfig.get("adminEmail");
+    final String adminEmail = OjConfig.getString("adminEmail");
     
     Map<String, Object> paras = new HashMap<String, Object>();
     paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);

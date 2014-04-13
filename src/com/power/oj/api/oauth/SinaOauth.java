@@ -19,8 +19,8 @@ public class SinaOauth extends Oauth
   public SinaOauth()
   {
     super();
-    setClientId(OjConfig.get("openid_sina"));
-    setClientSecret(OjConfig.get("openkey_sina"));
+    setClientId(OjConfig.getString("openid_sina"));
+    setClientSecret(OjConfig.getString("openkey_sina"));
     setRedirectUri(OjConfig.baseUrl + "/" + REDIRECT_URI);
   }
 

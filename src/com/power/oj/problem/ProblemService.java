@@ -336,7 +336,7 @@ public class ProblemService
 
   public boolean checkSpj(Integer pid)
   {
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(pid).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid).toString());
     if (!dataDir.isDirectory())
     {
       return false;
@@ -404,7 +404,7 @@ public class ProblemService
     problemModel.set("uid", userService.getCurrentUid());
     problemModel.save();
 
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(problemModel.getInt("pid")).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(problemModel.getInt("pid")).toString());
     if (dataDir.isDirectory())
     {
       log.warn("Data directory already exists: " + dataDir.getPath());

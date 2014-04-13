@@ -93,7 +93,7 @@ public class FpsProblem
     int memoryLimit;
     String unit;
 
-    StringBuilder sb = new StringBuilder(7).append(OjConfig.get("dataPath")).append(File.separator).append(problemModel.getPid());
+    StringBuilder sb = new StringBuilder(7).append(OjConfig.getString("dataPath")).append(File.separator).append(problemModel.getPid());
     dataDir = new File(sb.toString());
     try
     {
@@ -303,7 +303,7 @@ public class FpsProblem
   
   private Element addTestData(Element item) throws IOException
   {
-    StringBuilder sb = new StringBuilder(7).append(OjConfig.get("dataPath")).append(File.separator).append(problemModel.getPid());
+    StringBuilder sb = new StringBuilder(7).append(OjConfig.getString("dataPath")).append(File.separator).append(problemModel.getPid());
     dataDir = new File(sb.toString());
     if (!dataDir.isDirectory())
     {
@@ -538,7 +538,7 @@ public class FpsProblem
       ext = "py";
     }
     
-    StringBuilder sb = new StringBuilder(7).append(OjConfig.get("dataPath")).append(File.separator);
+    StringBuilder sb = new StringBuilder(7).append(OjConfig.getString("dataPath")).append(File.separator);
     sb.append(problemModel.getPid()).append(File.separator).append(name).append(".").append(ext).toString();
     File sourceFile = new File(sb.toString());
     

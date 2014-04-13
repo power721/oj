@@ -74,7 +74,7 @@ public class AdminApiController extends OjController
     
     if (result == 0)
     {
-      renderJson("success:true");
+      renderNull();
     }
     else
     {

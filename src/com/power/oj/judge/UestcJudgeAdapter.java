@@ -94,7 +94,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       boolean firstCase)
   {
     StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append(OjConfig.get("runShell"));
+    stringBuilder.append(OjConfig.getString("runShell"));
     // stringBuilder.append("/pyloncore ");
     stringBuilder.append(" -u ");
     stringBuilder.append(solutionModel.getSid());
@@ -103,7 +103,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     stringBuilder.append(" -n ");
     stringBuilder.append(solutionModel.getPid());
     stringBuilder.append(" -D ");
-    stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("dataPath")));
+    stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("dataPath")));
     stringBuilder.append(" -d ");
     stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(workPath));
     stringBuilder.append(" -t ");

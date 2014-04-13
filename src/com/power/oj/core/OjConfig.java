@@ -73,12 +73,12 @@ public class OjConfig
       variable.put(variableModel.getName(), variableModel);
     }
     
-    siteTitle = get("siteTitle", "Power OJ");
+    siteTitle = getString("siteTitle", "Power OJ");
 
-    uploadPath = FileKit.parsePath(get("uploadPath", "upload/"), true);
-    downloadPath = FileKit.parsePath(get("downloadPath", "download/"), true);
-    userAvatarPath = FileKit.parsePath(get("userAvatarPath", "upload/image/user/"), true);
-    problemImagePath = FileKit.parsePath(get("problemImagePath", "upload/image/problem/"), true);
+    uploadPath = FileKit.parsePath(getString("uploadPath", "upload/"), true);
+    downloadPath = FileKit.parsePath(getString("downloadPath", "download/"), true);
+    userAvatarPath = FileKit.parsePath(getString("userAvatarPath", "upload/image/user/"), true);
+    problemImagePath = FileKit.parsePath(getString("problemImagePath", "upload/image/problem/"), true);
     
     contestPageSize = getInt("contestPageSize", 20);
     contestRankPageSize = getInt("contestRankPageSize", 50);
@@ -138,12 +138,17 @@ public class OjConfig
   /*
    * get OJ variable from DB cache
    */
-  public static String get(String name)
+  public static VariableModel get(String name)
   {
-    return get(name, null);
+    return variable.get(name);
   }
   
-  public static String get(String name, String defaultValue)
+  public static String getString(String name)
+  {
+    return getString(name, null);
+  }
+  
+  public static String getString(String name, String defaultValue)
   {
     VariableModel model = variable.get(name);
     if (model != null)

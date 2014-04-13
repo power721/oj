@@ -38,7 +38,7 @@ public class DataFile
     this.pid = pid;
     this.name = name;
     
-    path = new StringBuilder(5).append(OjConfig.get("dataPath")).
+    path = new StringBuilder(5).append(OjConfig.getString("dataPath")).
         append(File.separator).append(pid).append(File.separator).append(name).toString();
     file = new File(path);
   }

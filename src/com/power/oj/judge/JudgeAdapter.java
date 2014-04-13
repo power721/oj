@@ -88,7 +88,7 @@ public abstract class JudgeAdapter implements Runnable
     programLanguage = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
     problemModel = problemService.findProblem(solutionModel.getPid());
     Integer cid = solutionModel.getCid();
-    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.get("workPath"))).append(File.separator).toString();
+    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
     if (cid != null && cid > 0)
     {
       workPath = new StringBuilder(4).append(workPath).append("c").append(cid).append(File.separator).toString();
@@ -133,7 +133,7 @@ public abstract class JudgeAdapter implements Runnable
   
   protected int getDataFiles() throws IOException
   {
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.get("dataPath")).append(File.separator).append(solutionModel.getPid()).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(solutionModel.getPid()).toString());
     if (!dataDir.isDirectory())
     {
       throw new IOException("Data files does not exist.");

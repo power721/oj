@@ -29,12 +29,12 @@ session管理   -OK
 新增题目    -OK
 题目统计    OK
 题目测试
-数据管理
+数据管理    -OK
 图片管理
 
 Judge            -OK
 ReJudge          -
-Special Judge
+Special Judge  -OK
 提交代码        -Ok
 提交状态        -OK
 查看代码        -OK
@@ -59,9 +59,9 @@ AC共享计划
 添加比赛用户    OK
 其它OJ比赛列表  OK
 
-帖子列表
-查看帖子
-发布帖子
+帖子列表   -OK
+查看帖子   -OK
+发布帖子   -
 编辑帖子
 删除帖子
 搜索帖子

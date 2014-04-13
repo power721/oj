@@ -109,9 +109,9 @@ public class Tool
     email.setSubject(subject);
     email.addMessage(content);
 
-    String emailServer = OjConfig.get("emailServer");
-    String emailUser = OjConfig.get("emailUser");
-    String emailPass = OjConfig.get("emailPass");
+    String emailServer = OjConfig.getString("emailServer");
+    String emailUser = OjConfig.getString("emailUser");
+    String emailPass = OjConfig.getString("emailPass");
     SmtpServer smtpServer = new SmtpServer(emailServer, new SimpleAuthenticator(emailUser, emailPass));
 
     SendMailSession session = smtpServer.createSession();
