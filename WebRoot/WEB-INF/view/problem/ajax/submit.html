@@ -5,7 +5,7 @@
 <div class="control-group">
   <label class="control-label" for="inputLanguage">Language</label>
   <div class="controls">
-    <select class="input-small" id="inputLanguage" name="solution.language"> 
+    <select class="input-small" id="inputLanguage" name="solution.language" accesskey="l"> 
     <#if program_languages??> 
     <#list program_languages as language>
       <option value="${language.id!}"<#if (solution.language)??><#if solution.language==language.id>selected</#if><#else><#if
@@ -21,12 +21,12 @@
  <div class="controls">
   <div id="file_div" ></div>
     <div id="file_parent" style="padding: 10px;">
-      <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="100" required>${(solution.source)!}</textarea>
+      <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="100" required accesskey="c">${(solution.source)!}</textarea>
     </div>
   </div>
   <div class="syntax-box">
     <input type="hidden" name="syntax" value="0">
-    <label for="syntax" class="checkbox"><input type="checkbox" name="syntax" id="syntax" value="1"> <span>syntax highlight</span></label>
+    <label for="syntax" class="checkbox"><input type="checkbox" name="syntax" id="syntax" value="1" accesskey="h"> <span>syntax highlight</span></label>
   </div>
 </div>
 

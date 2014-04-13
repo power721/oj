@@ -1,6 +1,6 @@
 <@override name="content">
     <div class="header">
-      <h1 class="page-title">导入题目</h1>
+      <h1 class="page-title">数据管理</h1>
     </div>
     <ul class="breadcrumb">
       <li>
@@ -11,7 +11,11 @@
         <a href="admin/problem">题目管理</a>
         <span class="divider">/</span>
       </li>
-      <li class="active"><a href="admin/problem/show/${pid!}">数据管理</a></li>
+      <li>
+        <a href="admin/problem/show/${pid!}">${pid!}</a>
+        <span class="divider">/</span>
+      </li>
+      <li class="active">数据管理</li>
     </ul>
     <div class="container-fluid">
       <div class="row-fluid">
@@ -41,37 +45,42 @@
             </div>
             <div id="console"></div><br>
           
-          <h4>Problem Test Data:</h4>
-          <div>
-          <#if dataFiles??>
-          <table id="data-files" class="table table-hover table-condensed table-bordered">
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>File</th>
-                <th>Size</th>
-                <th>Modified</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-          <#list dataFiles as file>
-          <tr>
-          <td>${file_index+1}</td>
-          <td class="file"><a href="admin/problem/viewData/${pid}?name=${file.name}" target="_blank">${file.name}</a></td>
-          <td class="size" size="${file.size}">${num2size(file.size)}</td>
-          <td class="timestamp" data="${file.modifyTime}"></td>
-          <td class="action" name="${file.name}">
-            <i class="btn btn-primary edit">Edit</i>
-            <i class="btn btn-info download">Download</i>
-            <i class="btn btn-danger delete" data-trigger="confirm">Delete</i>
-          </td>
-          </tr>
-          </#list>
-            </tbody>
-          </table>
-          </#if>
-          </siv>
+            <h4>Problem Test Data:</h4>
+            <div>
+            <#if dataFiles??>
+            <table id="data-files" class="table table-hover table-condensed table-bordered">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>File</th>
+                  <th>Size</th>
+                  <th>Modified</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <#list dataFiles as file>
+                <tr>
+                <td>${file_index+1}</td>
+                <td class="file"><a href="admin/problem/viewData/${pid}?name=${file.name}" target="_blank">${file.name}</a></td>
+                <td class="size" size="${file.size}">${num2size(file.size)}</td>
+                <td class="timestamp" data="${file.modifyTime}"></td>
+                <td class="action" name="${file.name}">
+                  <i class="btn btn-primary edit">Edit</i>
+                  <i class="btn btn-info download">Download</i>
+                  <i class="btn btn-danger delete" data-trigger="confirm">Delete</i>
+                </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+            </#if>
+            </div>
+            <p class="text-info">.in files are standard input data files.</p>
+            <p class="text-info">.out files are standard output data files.</p>
+            <p class="text-warning">.in file name and .out file name should corresponding.(If there is no 1.out, 1.in will ignored for Judge.)</p>
+            <p class="text-info">spj binary is for Special Judged problem.</p>
+            <p class="text-info">we should always upload source code of spj.</p>
           </div>
         </div>
       </div>

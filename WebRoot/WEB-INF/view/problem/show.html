@@ -77,33 +77,14 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="submit" id="Submit" class="btn btn-primary">Submit</button>
-      <button type="reset" class="btn btn-info">Reset</button>
+      <button type="submit" id="Submit" class="btn btn-primary" accesskey="s">Submit</button>
+      <button type="reset" class="btn btn-info" accesskey="r">Reset</button>
       <button class="btn" data-dismiss="modal">Cancel</button>
     </div>
   </form>
 </div>
 </#if>
-<!--<div class="btn-group pull-right">
-        <a class="btn"><i class="icon-font"></i></a>
-        <a class="btn"><i class="icon-font"></i></a>
-        <a class="btn"><i class="icon-font"></i></a>
-    </div>-->
 
-<!--<div class="row" data-spy="affix" data-offset-top="200">
-        <div class="span3 bs-docs-sidebar">
-            <ul class="nav nav-list bs-docs-sidenav">
-                <li><a href="problem/show/${problem.pid!}#description"><i class="icon-chevron-right"></i> Description</a></li>
-                <li><a href="problem/show/${problem.pid!}#input"><i class="icon-chevron-right"></i> Input</a></li>
-                <li><a href="problem/show/${problem.pid!}#output"><i class="icon-chevron-right"></i> Output</a></li>
-                <li><a href="problem/show/${problem.pid!}#sample_input"><i class="icon-chevron-right"></i> Sample Input</a></li>
-                <li><a href="problem/show/${problem.pid!}#sample_output"><i class="icon-chevron-right"></i> Sample Output</a></li>
-                <li><a href="problem/show/${problem.pid!}#hint"><i class="icon-chevron-right"></i> Hint</a></li>
-                <li><a href="problem/show/${problem.pid!}#source"><i class="icon-chevron-right"></i> Source</a></li>
-            </ul>
-        </div>
-
-    <div class="span9">-->
 <section id="description">
   <div class="page-header">
     <h4>Description</h4>
@@ -132,9 +113,6 @@
 </section>
 
 <section id="sampleInput">
-  <!--<div class="page-header">
-            <h4>Sample Input</h4>
-        </div>-->
   <div class="tabbable content" id="sampleInput">
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
@@ -154,9 +132,6 @@
 </section>
 
 <section id="sampleOutput">
-  <!--<div class="page-header">
-            <h4>Sample Output</h4>
-        </div>-->
   <div class="tabbable content" id="sampleOutput">
     <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
