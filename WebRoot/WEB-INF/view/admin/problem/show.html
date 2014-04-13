@@ -33,7 +33,7 @@
                 <#if problem.status==false><del></#if>
                 <span class="title"><a href="#" id="title">${problem.title!}</a></span>
                 <#if problem.status==false></del></#if>
-                <!--<span class="label label-important">SPJ</span>-->
+                <#if spj?? && spj><span class="badge badge-important">SPJ</span><br></#if>
               </h2>
               <div class="problem-admin">
                 <a href="admin/problem/data/${problem.pid!}" class="btn btn-primary">Data</a>
@@ -48,7 +48,6 @@
                   Total Submit:<a href="status?pid=${problem.pid!}" target="_blank">${problem.submission!}</a> 
                   Accepted:<a href="status?pid=${problem.pid!}&result=0" target="_blank">${problem.accepted!}</a> 
                   Page View:<span class="pts">${problem.view!}</span><br>
-                  <#if spj?? && spj><span class="badge badge-important">Special Judged</span></#if>
                 </div>
               </div>
               <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>

@@ -23,7 +23,7 @@
     <#else>
     ${problem.title!} 
     </#if> 
-    <!--<span class="label label-important">SPJ</span>-->
+    <#if spj?? && spj><span class="badge badge-important">SPJ</span><br></#if>
   </h2>
   <#if adminUser??>
   <a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> 
@@ -34,7 +34,6 @@
   Total Submit: <a href="contest/status/${cid!}?pid=${problem.id!}">${problem.submission!}</a> 
   Accepted: <a href="contest/status/${cid!}?pid=${problem.id!}&result=0">${problem.accepted!}</a>
   Page View: <span class="blue">${problem.view!}</span><br> 
-  <#if spj?? && spj><span class="badge badge-important">Special Judged</span></#if><br>
   <#if cstatus?? && cstatus==1> 
   <a href="<#if user??>contest/submit/${cid!}-${problem.id!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal" data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   </#if> 
