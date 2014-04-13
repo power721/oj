@@ -107,24 +107,24 @@ public class AdminService
   
   public int updateConfig(String name, String value, String type)
   {
-    VariableModel record = OjConfig.get(name);
+    VariableModel variable = OjConfig.get(name);
     
-    if (record == null)
+    if (variable == null)
     {
       return -1;
     }
     
     switch (type)
     {
-      case "string":record.setStringValue(value);break;
-      case "boolean":record.setBooleanValue(Boolean.valueOf(value));break;
-      case "int":record.setIntValue(Integer.parseInt(value));break;
-      case "text":record.setTextValue(value);break;
+      case "string":variable.setStringValue(value);break;
+      case "boolean":variable.setBooleanValue(Boolean.valueOf(value));break;
+      case "int":variable.setIntValue(Integer.parseInt(value));break;
+      case "text":variable.setTextValue(value);break;
       default:return -2;
     }
-    record.setType(type);
+    variable.setType(type);
     
-    return record.update() ? 0 : 1;
+    return variable.update() ? 0 : 1;
   }
 
   public List<DataFile> getDataFiles(Integer pid)
@@ -183,17 +183,21 @@ public class AdminService
       try
       {
         String content = dataFile.readString();
+        if (content == null)
+        {
+          return "unsupport file type.";
+        }
         return content;
       } catch (IOException e)
       {
         if (OjConfig.getDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
-        return null;
+        return "cannot read file.";
       }
     }
     
-    return null;
+    return "file not exists.";
   }
   
   public String editData(Integer pid, String filename)
