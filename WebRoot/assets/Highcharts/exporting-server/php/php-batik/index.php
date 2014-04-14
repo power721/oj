@@ -32,8 +32,8 @@ if (get_magic_quotes_gpc()) {
 }
 
 // check for malicious attack in SVG
-if(strpos($svg,"<!ENTITY") !== false){
-	exit("Execution is topped, the posted SVG could contain code for a mailcious attack");
+if(strpos($svg,"<!ENTITY") !== false || strpos($svg,"<!DOCTYPE") !== false){
+	exit("Execution is topped, the posted SVG could contain code for a malicious attack");
 }
 
 $tempName = md5(rand());
@@ -63,6 +63,7 @@ $outfile = "temp/$tempName.$ext";
 if (isset($typeString)) {
 	
 	// size
+	$width = '';
 	if ($_POST['width']) {
 		$width = (int)$_POST['width'];
 		if ($width) $width = "-w $width";

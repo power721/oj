@@ -56,7 +56,7 @@ function clearEditor() {
   }
 }
 
-function focusEditor(){
+function focusEditor() {
   if($("#syntax").is(':checked')){
     var editor = ace.edit("file_div");
     editor.focus();

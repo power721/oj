@@ -26,7 +26,7 @@ $(function () {
         tooltip: {
             formatter: function() {
                 return '<b>'+ this.series.name +'</b><br/>'+
-                    this.y +' '+ this.x.toLowerCase();
+                    this.point.y +' '+ this.point.name.toLowerCase();
             }
         }
     });
@@ -38,7 +38,7 @@ $(function () {
 <script src="../../js/modules/data.js"></script>
 <script src="../../js/modules/exporting.js"></script>
 
-<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 <table id="datatable">
 	<thead>

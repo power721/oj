@@ -8,11 +8,6 @@
 		<script type="text/javascript">
 $(function () {
         $('#container').highcharts({
-            chart: {
-                type: 'line',
-                marginRight: 130,
-                marginBottom: 25
-            },
             title: {
                 text: 'Monthly Average Temperature',
                 x: -20 //center
@@ -41,9 +36,7 @@ $(function () {
             legend: {
                 layout: 'vertical',
                 align: 'right',
-                verticalAlign: 'top',
-                x: -10,
-                y: 100,
+                verticalAlign: 'middle',
                 borderWidth: 0
             },
             series: [{
@@ -69,7 +62,7 @@ $(function () {
 <script src="../../js/highcharts.js"></script>
 <script src="../../js/modules/exporting.js"></script>
 
-<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
 	</body>
 </html>

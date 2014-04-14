@@ -26,12 +26,18 @@ $(function () {
             },
             xAxis: [{
                 categories: categories,
-                reversed: false
+                reversed: false,
+                labels: {
+                    step: 1
+                }
             }, { // mirror axis on right side
                 opposite: true,
                 reversed: false,
                 categories: categories,
-                linkedTo: 0
+                linkedTo: 0,
+                labels: {
+                    step: 1
+                }
             }],
             yAxis: {
                 title: {
@@ -80,7 +86,7 @@ $(function () {
 <script src="../../js/highcharts.js"></script>
 <script src="../../js/modules/exporting.js"></script>
 
-<div id="container" style="min-width: 400px; max-width: 800px; height: 400px; margin: 0 auto"></div>
+<div id="container" style="min-width: 310px; max-width: 800px; height: 400px; margin: 0 auto"></div>
 
 	</body>
 </html>
