@@ -146,13 +146,14 @@
     var isAdmin = <#if adminUser??>true<#else>false</#if>;
     $('.result').delegate("i", "click", function() {
       var sid = $(this).attr('sid');
+      var cid = $('#codeModal').attr('cid');
       var uid = $(this).parent().parent().children('.user').attr('uid');
       if (!isAdmin && uid != userId)
         return false;
       $('#codeModal').modal("show");
-      var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, $('#codeModal').attr('cid'));
+      var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, cid);
       $('#codeModal #sid').html(tmp);
-      $.get("api/contest/code", { sid: sid },
+      $.get("api/contest/code", { cid: cid, sid: sid },
         function(data) {
           if (data.success)
           {

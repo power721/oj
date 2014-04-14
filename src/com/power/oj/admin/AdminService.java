@@ -31,8 +31,11 @@ import com.power.oj.core.bean.DataFile;
 import com.power.oj.core.bean.FpsProblem;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 
 import jodd.io.FileUtil;
+import jodd.util.BCrypt;
 import jodd.util.SystemUtil;
 
 public class AdminService
@@ -125,6 +128,19 @@ public class AdminService
     variable.setType(type);
     
     return variable.update() ? 0 : 1;
+  }
+  
+  public boolean setUserPassword(String name, String password)
+  {
+    UserModel user = UserService.me().getUserByName(name);
+    if (user == null)
+    {
+      return false;
+    }
+    password = BCrypt.hashpw(password, BCrypt.gensalt());
+    
+    user.setPassword(password).setMtime(OjConfig.timeStamp);
+    return user.update();
   }
 
   public List<DataFile> getDataFiles(Integer pid)
