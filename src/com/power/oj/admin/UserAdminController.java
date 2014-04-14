@@ -2,12 +2,14 @@ package com.power.oj.admin;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjController;
 
 @RequiresPermissions("admin")
+@RequiresAuthentication
 public class UserAdminController extends OjController
 {
   public void index()

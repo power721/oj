@@ -3,6 +3,7 @@ package com.power.oj.admin;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
@@ -13,6 +14,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 
 @RequiresPermissions("admin")
+@RequiresAuthentication
 public class ContestAdminController extends OjController
 {
   public void index()

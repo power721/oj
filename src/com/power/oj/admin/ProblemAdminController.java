@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import jodd.util.StringUtil;
 
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
@@ -19,6 +20,7 @@ import com.power.oj.problem.ProblemException;
 import com.power.oj.problem.ProblemModel;
 
 @RequiresPermissions("admin")
+@RequiresAuthentication
 public class ProblemAdminController extends OjController
 {
   
