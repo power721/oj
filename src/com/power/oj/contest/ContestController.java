@@ -295,7 +295,7 @@ public class ContestController extends OjController
       log.warn(e.getLocalizedMessage());
     }
     
-    ProgramLanguageModel language = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
+    ProgramLanguageModel language = OjConfig.language_type.get(solutionModel.getLanguage());
     setAttr("language", language.getName());
     setAttr("resultLongName", resultType.getLongName());
     setAttr("resultName", resultType.getName());

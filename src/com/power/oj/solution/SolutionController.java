@@ -69,7 +69,7 @@ public class SolutionController extends OjController
     Integer sid = getParaToInt(0);
     boolean isAdmin = userService.isAdmin();
     SolutionModel solutionModel = solutionService.findSolution(sid);
-    ResultType resultType = (ResultType) OjConfig.result_type.get(solutionModel.getResult());
+    ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
     Integer uid = solutionModel.getUid();
     Integer loginUid = userService.getCurrentUid();
     if (!uid.equals(loginUid) && !isAdmin)

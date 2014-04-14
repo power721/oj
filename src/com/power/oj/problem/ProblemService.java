@@ -280,7 +280,7 @@ public class ProblemService
     {
       try
       {
-        ResultType resultType = (ResultType) OjConfig.result_type.get(record.getInt("result"));
+        ResultType resultType = OjConfig.result_type.get(record.getInt("result"));
         record.put("longName", resultType.getLongName());
         record.put("name", resultType.getName());
       } catch (NullPointerException e)

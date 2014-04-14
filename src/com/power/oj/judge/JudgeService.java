@@ -115,6 +115,18 @@ public class JudgeService
     }
   }
 
+  public void rejudgeProblem4Wait(Integer pid)
+  {
+    List<SolutionModel> solutionList = solutionService.getWaitSolutionListForProblem(pid);
+    
+    // TODO lock this problem
+    for (SolutionModel solutionModel: solutionList)
+    {
+      problemService.revertAccepted(solutionModel);
+      rejudge(solutionModel);
+    }
+  }
+
   public void rejudgeContestSolution(Integer sid)
   {
     ContestSolutionModel contestSolutionModel = solutionService.findContestSolution(sid);

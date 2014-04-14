@@ -85,7 +85,7 @@ public abstract class JudgeAdapter implements Runnable
   
   protected void prepare() throws IOException
   {
-    programLanguage = (ProgramLanguageModel) OjConfig.language_type.get(solutionModel.getLanguage());
+    programLanguage = OjConfig.language_type.get(solutionModel.getLanguage());
     problemModel = problemService.findProblem(solutionModel.getPid());
     Integer cid = solutionModel.getCid();
     workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();

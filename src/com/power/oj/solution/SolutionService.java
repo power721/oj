@@ -9,7 +9,6 @@ import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
@@ -157,9 +156,9 @@ public class SolutionService
 
     for (ContestSolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((ProgramLanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
+      solution.put("languageName", OjConfig.language_name.get(solution.getLanguage()));
 
-      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
+      ResultType resultType = OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
       solution.put("alpha", (char) (solution.getNum() + 'A'));
@@ -193,9 +192,9 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", ((ProgramLanguageModel) OjConfig.language_type.get(solution.getLanguage())).get("name"));
+      solution.put("languageName", OjConfig.language_name.get(solution.getLanguage()));
 
-      ResultType resultType = (ResultType) OjConfig.result_type.get(solution.getResult());
+      ResultType resultType = OjConfig.result_type.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
     }
@@ -257,7 +256,7 @@ public class SolutionService
     
     for (ContestSolutionModel record : resultList)
     {
-      ResultType resultType = (ResultType) OjConfig.result_type.get(record.getResult());
+      ResultType resultType = OjConfig.result_type.get(record.getResult());
       record.put("longName", resultType.getLongName());
       record.put("name", resultType.getName());
     }
@@ -268,6 +267,12 @@ public class SolutionService
   public List<SolutionModel> getSolutionListForProblem(Integer pid)
   {
     List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=? ORDER BY sid DESC", pid);
+    return solutionList;
+  }
+
+  public List<SolutionModel> getWaitSolutionListForProblem(Integer pid)
+  {
+    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=? AND result=? ORDER BY sid DESC", pid, ResultType.WAIT);
     return solutionList;
   }
 
