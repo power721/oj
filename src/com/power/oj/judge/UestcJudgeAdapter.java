@@ -39,6 +39,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       log.warn("No data file for problem " + solutionModel.getPid());
     }
     boolean isAccepted = true;
+    totalRunTime = 0;
     setResult(ResultType.RUN, 0, 0);
     for (i = 0; isAccepted && i < numOfData; ++i)
     {
@@ -73,6 +74,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       isAccepted = checkResult(resultStr, sb.toString());
     }
 
+    log.info("Total run time: " + totalRunTime + " ms, max run time: " + solutionModel.getTime());
     synchronized (JudgeAdapter.class)
     {
       updateResult(isAccepted, i);
@@ -144,6 +146,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
         }
         int time = Integer.parseInt(resultStr[1]);
         int memory = Integer.parseInt(resultStr[2]);
+        totalRunTime += time;
         setResult(result, time, memory);
       } catch (NumberFormatException e) 
       {

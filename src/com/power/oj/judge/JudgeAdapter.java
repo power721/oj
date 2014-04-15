@@ -35,6 +35,7 @@ public abstract class JudgeAdapter implements Runnable
   protected SolutionModel solutionModel;
   protected ProblemModel problemModel;
   protected ProgramLanguageModel programLanguage;
+  protected int totalRunTime;
   protected String workPath;
   protected String workDirPath;
   protected File sourceFile;
@@ -229,6 +230,7 @@ public abstract class JudgeAdapter implements Runnable
     if (ac)
     {
       solutionModel.setResult(ResultType.AC);
+      solutionModel.setTime(totalRunTime);
     }
     else if (solutionModel.getResult() != ResultType.CE && solutionModel.getResult() != ResultType.RF)
     {

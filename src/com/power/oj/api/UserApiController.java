@@ -20,7 +20,6 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
-import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
 
@@ -339,7 +338,8 @@ public class UserApiController extends OjController
     Integer language = getParaToInt("languageId", -1);
     Integer uid = userService.getCurrentUid();
     
-    renderJson(SolutionService.me().getPage(pageNumber, pageSize, result, language, uid));
+    // TODO get language name
+    renderJson(solutionService.getPage(pageNumber, pageSize, result, language, uid));
   }
 
   @ClearInterceptor(ClearLayer.ALL)
