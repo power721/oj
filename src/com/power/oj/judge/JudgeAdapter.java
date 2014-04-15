@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import jodd.format.Printf;
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
-import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
@@ -54,10 +54,9 @@ public abstract class JudgeAdapter implements Runnable
 
   public void run()
   {
-    log.info("JudgeAdapter run()");
     while (!judgeList.isEmpty())
     {
-      log.info("Judge threads: " + judgeList.size());
+      log.info(Printf.str("Judge threads: %d", judgeList.size()));
       solutionModel = judgeList.poll();
       synchronized (JudgeAdapter.class)
       {
@@ -116,22 +115,12 @@ public abstract class JudgeAdapter implements Runnable
     workDirPath = workDir.getAbsolutePath();
     log.info("mkdirs workDir: " + workDirPath);
     
-    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExt()).toString());
+    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).
+        append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solutionModel.getSource());
   }
 
-  protected String getCompileCmd(String compileCmd, String path, String name, String ext)
-  {
-    path = new StringBuilder(2).append(path).append(File.separator).toString();
-    compileCmd = StringUtil.replace(compileCmd, "%PATH%", path);
-    compileCmd = StringUtil.replace(compileCmd, "%NAME%", name);
-    compileCmd = StringUtil.replace(compileCmd, "%EXT%", ext);
-    compileCmd = new StringBuilder(2).append(compileCmd).append("\n").toString();
-
-    return compileCmd;
-  }
-  
   protected int getDataFiles() throws IOException
   {
     File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(solutionModel.getPid()).toString());
@@ -139,7 +128,6 @@ public abstract class JudgeAdapter implements Runnable
     {
       throw new IOException("Data files does not exist.");
     }
-    log.info("dataDir: " + dataDir.getAbsolutePath());
     
     inFiles = new ArrayList<String>();
     outFiles = new ArrayList<String>();
@@ -158,7 +146,7 @@ public abstract class JudgeAdapter implements Runnable
           .append(in_file.getName().substring(0, in_file.getName().length() - OjConstants.DATA_EXT_IN.length())).append(OjConstants.DATA_EXT_OUT).toString());
       if (!out_file.isFile())
       {
-        log.warn("Output file for input file does not exist: " + in_file.getAbsolutePath());
+        log.warn(Printf.str("Output file for input file does not exist: %s", in_file.getAbsolutePath()));
         continue;
       }
       inFiles.add(in_file.getAbsolutePath());
@@ -175,7 +163,6 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      log.info("updateCompileError");
       ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
       return contestSolution.update();
     }
@@ -189,7 +176,6 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      log.info("updateCompileError");
       ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
       return contestSolution.update();
     }
@@ -204,7 +190,6 @@ public abstract class JudgeAdapter implements Runnable
     log.info(solutionModel.toString());
     if (cid != null && cid > 0)
     {
-      log.info("updateSystemError");
       ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
       return contestSolution.update();
     }
@@ -218,7 +203,6 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      log.info("updateResult");
       ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
       return contestSolution.update();
     }
@@ -240,7 +224,6 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      log.info("updateResult");
       ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
       return contestSolution.update();
     }
@@ -276,7 +259,6 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      log.info("updateResult");
       ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
       return contestSolution.update();
     }

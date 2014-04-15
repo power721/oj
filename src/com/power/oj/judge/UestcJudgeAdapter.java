@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import jodd.format.Printf;
 import jodd.io.FileNameUtil;
 import jodd.util.StringUtil;
 
@@ -24,16 +25,14 @@ public class UestcJudgeAdapter extends JudgeAdapter
   @Override
   protected boolean RunProcess() throws IOException, InterruptedException
   {
-    log.info(solutionModel.getSid() + " RunProcess...");
     int numOfData = getDataFiles();
 
     int i;
     long timeLimit = problemModel.getTimeLimit();
     long memoryLimit = problemModel.getMemoryLimit();
-    long outputLimit = 8192L;
+    long outputLimit = OjConfig.getInt("outputLimit", 8192);
     boolean isSpj = problemService.checkSpj(solutionModel.getPid());
     
-    log.info("data files: " + numOfData);
     if (numOfData < 1)
     {
       log.warn("No data file for problem " + solutionModel.getPid());
@@ -74,7 +73,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       isAccepted = checkResult(resultStr, sb.toString());
     }
 
-    log.info("Total run time: " + totalRunTime + " ms, max run time: " + solutionModel.getTime());
+    log.info(Printf.str("Total run time: %d ms, max run time: %d ms", totalRunTime, solutionModel.getTime()));
     synchronized (JudgeAdapter.class)
     {
       updateResult(isAccepted, i);
@@ -97,7 +96,6 @@ public class UestcJudgeAdapter extends JudgeAdapter
   {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(OjConfig.getString("runShell"));
-    // stringBuilder.append("/pyloncore ");
     stringBuilder.append(" -u ");
     stringBuilder.append(solutionModel.getSid());
     stringBuilder.append(" -s ");

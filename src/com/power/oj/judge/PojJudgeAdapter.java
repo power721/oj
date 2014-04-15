@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import jodd.util.StringUtil;
+
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
@@ -161,6 +163,17 @@ public class PojJudgeAdapter extends JudgeAdapter
       
       return ret;
     }
+  }
+
+  private String getCompileCmd(String compileCmd, String path, String name, String ext)
+  {
+    path = new StringBuilder(2).append(path).append(File.separator).toString();
+    compileCmd = StringUtil.replace(compileCmd, "%PATH%", path);
+    compileCmd = StringUtil.replace(compileCmd, "%NAME%", name);
+    compileCmd = StringUtil.replace(compileCmd, "%EXT%", ext);
+    compileCmd = new StringBuilder(2).append(compileCmd).append("\n").toString();
+
+    return compileCmd;
   }
   
   public static void main(String[] args)
