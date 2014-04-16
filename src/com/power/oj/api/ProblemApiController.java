@@ -77,7 +77,7 @@ public class ProblemApiController extends OjController
     Integer pid = getParaToInt(0);
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", OjConfig.statusPageSize);
-    Integer language = getParaToInt("language", -1);
+    Integer language = getParaToInt("language", 0);
     
     setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     setAttr("pageSize", OjConfig.statusPageSize);

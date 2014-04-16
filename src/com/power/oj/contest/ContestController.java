@@ -180,7 +180,7 @@ public class ContestController extends OjController
     int pageNumber = getParaToInt(1, 1);
     int pageSize = getParaToInt(2, OjConfig.statusPageSize);
     Integer result = getParaToInt("result", -1);
-    Integer language = getParaToInt("language", -1);
+    Integer language = getParaToInt("language", 0);
     Integer num = -1;
 
     if (StringUtil.isNotBlank(getPara("pid")))
@@ -201,7 +201,7 @@ public class ContestController extends OjController
     {
       query.append("&result=").append(result);
     }
-    if (language > -1)
+    if (language > 0)
     {
       query.append("&language=").append(language);
     }

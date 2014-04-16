@@ -25,7 +25,7 @@ public class SolutionController extends OjController
     int pageNumber = getParaToInt(0, 1);
     int pageSize = getParaToInt(1, OjConfig.statusPageSize);
     int result = getParaToInt("result", -1);
-    int language = getParaToInt("language", -1);
+    int language = getParaToInt("language", 0);
     int pid = 0;
     if (StringUtil.isNotBlank(getPara("pid")))
       pid = getParaToInt("pid", 0);
@@ -36,7 +36,7 @@ public class SolutionController extends OjController
     {
       query.append("&result=").append(result);
     }
-    if (language > -1)
+    if (language > 0)
     {
       query.append("&language=").append(language);
     }

@@ -28,7 +28,7 @@ public class ContestApiController extends OjController
     
     int pageNumber = getParaToInt("p", 1);
     int pageSize = getParaToInt("s", OjConfig.statusPageSize);
-    Integer language = getParaToInt("language", -1);
+    Integer language = getParaToInt("language", 0);
 
     Page<ContestSolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 

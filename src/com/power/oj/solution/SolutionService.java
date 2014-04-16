@@ -48,7 +48,7 @@ public class SolutionService
         paras.add(result);
       }
     }
-    if (language > -1)
+    if (language > 0)
     {
       sb.append(" AND s.language=?");
       paras.add(language);
@@ -139,7 +139,7 @@ public class SolutionService
         paras.add(result);
       }
     }
-    if (language > -1)
+    if (language > 0)
     {
       sb.append(" AND s.language=?");
       paras.add(language);
@@ -186,7 +186,7 @@ public class SolutionService
       sb.append(" AND s.result=?");
       paras.add(result);
     }
-    if (language > -1)
+    if (language > 0)
     {
       sb.append(" AND s.language=?");
       paras.add(language);
@@ -223,7 +223,7 @@ public class SolutionService
 
     List<Object> paras = new ArrayList<Object>();
 
-    if (language != null && language > -1)
+    if (language != null && language > 0)
     {
       sb.append(" AND s.language=?");
       paras.add(language);
@@ -245,7 +245,7 @@ public class SolutionService
 
     List<Object> paras = new ArrayList<Object>();
 
-    if (language > -1)
+    if (language > 0)
     {
       sb.append(" AND s.language=?");
       paras.add(language);

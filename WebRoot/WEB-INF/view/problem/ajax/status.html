@@ -4,7 +4,7 @@
 </h4>
 <div class="pull-left ajax-loader">
   <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
-    class="btn-link btn-info ajax-loader<#if !language?? || language==-1> active</#if>">All</a> <#if program_languages??> <#list program_languages as Language>
+    class="btn-link btn-info ajax-loader<#if !language?? || language==0> active</#if>">All</a> <#if program_languages??> <#list program_languages as Language>
   <a url="problem/status/${pid!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>?language=${Language.id!}"
     class="btn-link btn-info ajax-loader<#if language?? && language==Language.id> active</#if>" type="a">${Language.name!}</a> </#list> </#if>
 </div>

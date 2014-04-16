@@ -34,7 +34,7 @@
       Best solutions of Problem <a href="contest/problem/${cid!}-${id}" data-toggle="tooltip" title="${problem.title!}">${cid!}-${id}</a>
     </h4>
     <div id="lang" class="pull-left btn-group ajax-loader">
-      <a class="btn btn-info ajax-loader" type="a" data-pid="${problem.pid}" data-id="-1">All</a> 
+      <a class="btn btn-info ajax-loader" type="a" data-pid="${problem.pid}" data-id="0">All</a> 
         <#if program_languages??>
         <#list program_languages.keySet() as key> 
         <a class="btn btn-info ajax-loader" type="a" data-pid="${problem.pid}" data-id="${key}">${program_languages.get(key)!}</a>
