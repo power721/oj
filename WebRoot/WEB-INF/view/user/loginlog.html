@@ -29,7 +29,7 @@
         <td>${log.name!}</td>
         <td>${log.ip!}</td>
         <td class="timestamp" data="${log.ctime}"></td>
-        <td>${log.success?string('true', 'false')}</td>
+        <td>${log.success?string('<span class="label label-success">Y</span>', '<span class="label label-important">N</span>')}</td>
       </tr>
     </#list> 
     </#if>
@@ -38,9 +38,11 @@
 </@override>
 
 <@override name="scripts">
+  <#if oj_style != "slate">
   <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  </#if>
 
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {

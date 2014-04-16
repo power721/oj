@@ -4,14 +4,20 @@ import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 
 @RequiresPermissions("admin")
 @RequiresAuthentication
 public class UserAdminController extends OjController
 {
+  
+  private static final AdminService adminService = AdminService.me();
+  
   public void index()
   {
     
@@ -32,5 +38,25 @@ public class UserAdminController extends OjController
     setAttr("roleList", roleList);
     setAttr("permissionList", permissionList);
   }
-  
+
+  @RequiresUser
+  public void loginlog()
+  {
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.userPageSize);
+    
+    setAttr("pageSize", OjConfig.userPageSize);
+    setAttr("logs", adminService.getLoginlog(pageNumber, pageSize));
+    setTitle(getText("user.loginlog.title"));
+  }
+
+  @RequiresPermissions("user:online")
+  public void online()
+  {
+    setAttr("loginUserNum", sessionService.getUserNumber());
+    setAttr(OjConstants.USER_LIST, sessionService.getAccessLog());
+    
+    setTitle(getText("user.online.title"));
+  }
+
 }

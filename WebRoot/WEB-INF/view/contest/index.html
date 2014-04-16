@@ -44,6 +44,7 @@
     </#if>
   </tbody>
 </table>
+<span class="time" id="current"></span>
 </@override>
 
 <@override name="scripts">
@@ -63,7 +64,14 @@
         <#if (contestList.pageNumber>1)>if(event.keyCode==37)location=prevpage;</#if>
         <#if contestList.pageNumber<contestList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
     }
-            
+    
+    var current_time = ${serverTime!}*1000;
+    function updateCurrentTime() {
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+      current_time += 1000;
+    }
+    setInterval(updateCurrentTime, 1000);
+    
     <#if oj_style != "slate">
     $("#Contest-list").tablecloth({
       theme:"stats",

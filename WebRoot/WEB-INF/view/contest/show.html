@@ -91,12 +91,12 @@
     var during_time = endTime - startTime;
     var current_time = ${serverTime!}*1000;
     function updateProgress() {
-      current_time+=1000;
       if (current_time >= startTime && current_time <= endTime) {
         var percent = (current_time - startTime) / during_time * 100;
         $('#contest-bar').css('width', percent.toFixed(2) + '%');
       }
       $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+      current_time+=1000;
     }
     setInterval(updateProgress, 1000);
     

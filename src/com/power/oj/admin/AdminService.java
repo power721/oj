@@ -25,6 +25,8 @@ import org.dom4j.io.XMLWriter;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.AppConfig;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.DataFile;
@@ -142,7 +144,14 @@ public class AdminService
     user.setPassword(password).setMtime(OjConfig.timeStamp);
     return user.update();
   }
-
+  
+  public Page<Record> getLoginlog(int pageNumber, int pageSize)
+  {
+    Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT *",
+                        "FROM loginlog ORDER BY ctime DESC");
+    return logs;
+  }
+  
   public List<DataFile> getDataFiles(Integer pid)
   {
     List<DataFile> dataFiles = new ArrayList<DataFile>();

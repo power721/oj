@@ -1,0 +1,81 @@
+<@override name="content">
+    <div class="header">
+      <h1 class="page-title">在线列表</h1>
+    </div>
+    <ul class="breadcrumb">
+      <li>
+        <a href="admin">首页</a>
+        <span class="divider">/</span>
+      </li>
+      <li class="active">用户管理</li>
+    </ul>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="well">
+          <div id="container">
+            <div class="text-center">
+              <h2>${userList?size} User(s) Online</h2>
+              <span class="badge badge-info">${loginUserNum!0} logined and ${userList?size-loginUserNum} guests</span>
+            </div>
+            <table id="onlineuser" class="table table-striped table-condensed">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>User</th>
+                  <th>Create</th>
+                  <th>Last Activity</th>
+                  <th>IP</th>
+                  <th>Agent</th>
+                  <th>URI</th>
+                </tr>
+              </thead>
+              <tbody>
+                <#if userList??> 
+                <#list userList as User>
+                <tr>
+                  <td>${User_index+1}</td>
+                  <td><#if User.name??><a href="user/profile/${User.name!}" class="user" data="${User.uid!}">${User.name}</a><#else>Guest</#if>
+                  </td>
+                  <td class="timestamp" data="${User.ctime!}"></td>
+                  <td class="timestamp" data="${User.lastActivity!}"></td>
+                  <td>${User.ipAddress!}</td>
+                  <td>${User.userAgent!}</td>
+                  <td><a href="${User.uri!}">${User.uri!}</a></td>
+                </tr>
+                </#list> 
+                </#if>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</@override>
+
+<@override name="scripts">
+  <#if oj_style != "slate">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  </#if>
+
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('.timestamp').each(function() {
+        $(this).html(getLocalTime($(this).attr('data')));
+      });
+      
+      <#if oj_style != "slate">
+      $("#onlineuser").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:true,
+        striped:true,
+        clean:true
+      });
+      </#if>
+  });
+  </script>
+</@override>
+<@extends name="../_layout.html" />

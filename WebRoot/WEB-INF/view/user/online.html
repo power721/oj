@@ -17,7 +17,8 @@
       </tr>
     </thead>
     <tbody>
-      <#if userList??> <#list userList as User>
+      <#if userList??> 
+      <#list userList as User>
       <tr>
         <td>${User_index+1}</td>
         <td><#if User.name??><a href="user/profile/${User.name!}" class="user" data="${User.uid!}">${User.name}</a><#else>Guest</#if>
@@ -28,17 +29,20 @@
         <td>${User.userAgent!}</td>
         <td><a href="${User.uri!}">${User.uri!}</a></td>
       </tr>
-      </#list> </#if>
+      </#list> 
+      </#if>
     </tbody>
   </table>
 </div>
 </@override>
 
 <@override name="scripts">
+  <#if oj_style != "slate">
   <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  </#if>
 
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
