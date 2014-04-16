@@ -30,12 +30,14 @@
   </div>
 </div>
 
-<script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
 <script src='assets/ideone/ace.js' type='text/javascript'></script>
 <script src='assets/ideone/jquery.textarea.js' type='text/javascript'></script>
 <script src='assets/ideone/ideone-common.js' type='text/javascript'></script>
 <script type="text/javascript">   
     $().ready(function() {
-      $("#submitForm").validate();
+      setTimeout(function() {$('#syntax').trigger('click');}, 200);
+      if ($.cookie && $.cookie("program_language") != null) {
+        $('#inputLanguage').val($.cookie("program_language"));
+      }
     });
 </script>

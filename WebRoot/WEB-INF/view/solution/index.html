@@ -70,7 +70,7 @@
         <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="code/${solution.sid!}" target="_blank" title="show source code"></#if>
             ${solution.languageName!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
         </td>
-        <td class="code_len">${solution.codeLen!}B</td>
+        <td class="code_len">${solution.codeLen!} B</td>
         <td class="ctime">${solution.ctime_t!}</td>
       </tr>
       </#list> 

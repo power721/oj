@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import jodd.util.SystemUtil;
+
 import com.jfinal.core.JFinal;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -51,11 +53,21 @@ public class OjConfig
   public static List<Integer> level;
 
   private static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
+  private static boolean isLinux;
+  static
+  {
+    isLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
+  }
   // TODO use enChahe
 
   public static boolean getDevMode()
   {
     return JFinal.me().getConstants().getDevMode();
+  }
+  
+  public static boolean isLinux()
+  {
+    return isLinux;
   }
   
   public static void loadConfig()

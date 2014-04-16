@@ -67,7 +67,8 @@ function focusEditor() {
 
 function languageChanged($this) {
   var lang_id = $("#inputLanguage").val();
-    
+  
+  $.cookie('program_language', lang_id, { expires: 7, path: '/' });
   if($("#syntax").is(':checked')){
     var syn = 'text';
     if (typeof lang_map[lang_id] != "undefined") {
@@ -112,8 +113,8 @@ $(document).ready(function(){
     return false;
   });
   
-  $("#Submit").click(function(){
-    if($('#syntax').is(':checked')){
+  $("#Submit").click(function() {
+    if($('#syntax').is(':checked')) {
       var editor = ace.edit("file_div");
       $("#inputSource").text(editor.getSession().getValue());
       if ($("#inputSource").text().length < 10 || $("#inputSource").text().length > 30000)

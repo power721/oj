@@ -2,9 +2,7 @@ package com.power.oj.judge;
 
 import java.util.List;
 
-import jodd.util.SystemUtil;
-
-import com.jfinal.log.Logger;
+//import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -16,7 +14,7 @@ import com.power.oj.user.UserService;
 
 public class JudgeService
 {
-  private final Logger log = Logger.getLogger(JudgeService.class);
+  //private final Logger log = Logger.getLogger(JudgeService.class);
   private static final JudgeService me = new JudgeService();
   private static final ContestService contestService = ContestService.me();
   private static final ProblemService problemService = ProblemService.me();
@@ -45,33 +43,30 @@ public class JudgeService
     synchronized (JudgeAdapter.class)
     {
       JudgeAdapter.addSolution(solutionModel);
-      log.info("JudgeAdapter.addSolution");
       if (JudgeAdapter.size() <= 1)
       {
         JudgeAdapter judge = null;
-        if (SystemUtil.getOsName().indexOf("Linux") == -1)
+        if (OjConfig.isLinux())
         {
-          log.info("PojJudgeAdapter");
-          judge = new PojJudgeAdapter();
+          judge = new UestcJudgeAdapter();
         }
         else
         {
-          log.info("UestcJudgeAdapter");
-          judge = new UestcJudgeAdapter();
+          judge = new PojJudgeAdapter();
         }
         
         new Thread(judge).start();
-        log.info("judge.start()");
       }
     }
-    System.out.println(solutionModel.getSid());
   }
 
   public void rejudge(SolutionModel solutionModel)
   {
     // revert user accepted/solved
     if (solutionModel.getCid() == null)
+    {
       userService.revertAccepted(solutionModel);
+    }
     solutionModel.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
     solutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
     solutionModel.update();
@@ -80,16 +75,15 @@ public class JudgeService
     if (JudgeAdapter.size() <= 1)
     {
       JudgeAdapter judge = null;
-      if (SystemUtil.getOsName().indexOf("Linux") == -1)
+      if (OjConfig.isLinux())
       {
-        log.info("PojJudgeAdapter");
-        judge = new PojJudgeAdapter();
+        judge = new UestcJudgeAdapter();
       }
       else
       {
-        log.info("UestcJudgeAdapter");
-        judge = new UestcJudgeAdapter();
+        judge = new PojJudgeAdapter();
       }
+      
       new Thread(judge).start();
     }
   }
