@@ -64,6 +64,10 @@ public class SolutionService
       paras.add(userName);
     }
 
+    if (!userService.isAdmin())
+    {
+      sb.append(" AND s.status=1");
+    }
     sb.append(" ORDER BY sid DESC");
     Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
@@ -86,31 +90,31 @@ public class SolutionService
 
   public SolutionModel findSolution(Integer sid)
   {
-    return dao.findFirst("SELECT * FROM solution WHERE sid=? LIMIT 1", sid);
+    return dao.findFirst("SELECT * FROM solution WHERE sid=? AND status=1 LIMIT 1", sid);
   }
 
   public SolutionModel getSolutionResult(Integer sid)
   {
-    SolutionModel solutionModel = dao.findFirst("SELECT sid,time,memory,result FROM solution WHERE sid=? LIMIT 1", sid);
+    SolutionModel solutionModel = dao.findFirst("SELECT sid,time,memory,result FROM solution WHERE sid=? AND status=1 LIMIT 1", sid);
     solutionModel.set("result", OjConfig.result_type.get(solutionModel.getResult()));
     return solutionModel;
   }
   
   public ContestSolutionModel findContestSolution(Integer sid)
   {
-    return ContestSolutionModel.dao.findFirst("SELECT * FROM contest_solution WHERE sid=? LIMIT 1", sid);
+    return ContestSolutionModel.dao.findFirst("SELECT * FROM contest_solution WHERE sid=? AND status=1 LIMIT 1", sid);
   }
 
   public ContestSolutionModel findContestSolution4Json(Integer sid)
   {
-    return ContestSolutionModel.dao.findFirst("SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE sid=? LIMIT 1", sid);
+    return ContestSolutionModel.dao.findFirst("SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE sid=? AND s.status=1 LIMIT 1", sid);
   }
 
   public ContestSolutionModel getContestSolutionResult(Integer cid, Integer sid)
   {
     // TODO check permission
     ContestSolutionModel solutionModel = ContestSolutionModel.dao.
-        findFirst("SELECT cid,sid,time,memory,result FROM contest_solution WHERE cid=? AND sid=? LIMIT 1", cid, sid);
+        findFirst("SELECT cid,sid,time,memory,result FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1", cid, sid);
     solutionModel.set("result", OjConfig.result_type.get(solutionModel.getResult()));
     return solutionModel;
   }
@@ -151,6 +155,10 @@ public class SolutionService
       paras.add(userName);
     }
 
+    if (userService.isAdmin())
+    {
+      sb.append(" AND s.status=1");
+    }
     sb.append(" ORDER BY sid DESC");
     Page<ContestSolutionModel> solutionList = ContestSolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
@@ -187,6 +195,11 @@ public class SolutionService
     sb.append(" AND s.uid=?");
     paras.add(uid);
 
+    if (!userService.isAdmin())
+    {
+      sb.append(" AND s.status=1");
+    }
+
     sb.append(" ORDER BY sid DESC");
     Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
@@ -219,7 +232,7 @@ public class SolutionService
     sb.append(" AND pid=?");
     paras.add(pid);
 
-    sb.append(" ORDER BY time,memory,codeLen,sid");
+    sb.append(" AND s.status=1 ORDER BY time,memory,codeLen,sid");
     Page<SolutionModel> solutionList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
     return solutionList;
@@ -244,7 +257,7 @@ public class SolutionService
     sb.append(" AND num=?");
     paras.add(num);
 
-    sb.append(" ORDER BY time,memory,codeLen,sid");
+    sb.append(" AND s.status=1 ORDER BY time,memory,codeLen,sid");
     Page<ContestSolutionModel> solutionList = ContestSolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
     return solutionList;
@@ -252,7 +265,7 @@ public class SolutionService
 
   public List<ContestSolutionModel> getProblemStatusForContest(Integer cid, Integer num)
   {
-    List<ContestSolutionModel> resultList = ContestSolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM contest_solution WHERE cid=? AND num=? GROUP BY result", cid, num);
+    List<ContestSolutionModel> resultList = ContestSolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM contest_solution WHERE cid=? AND num=? AND status=1 GROUP BY result", cid, num);
     
     for (ContestSolutionModel record : resultList)
     {
@@ -266,25 +279,25 @@ public class SolutionService
   
   public List<SolutionModel> getSolutionListForProblem(Integer pid)
   {
-    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=? ORDER BY sid DESC", pid);
+    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=? AND status=1 ORDER BY sid DESC", pid);
     return solutionList;
   }
 
   public List<SolutionModel> getWaitSolutionListForProblem(Integer pid)
   {
-    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=? AND result=? ORDER BY sid DESC", pid, ResultType.WAIT);
+    List<SolutionModel> solutionList = dao.find("SELECT * FROM solution WHERE pid=? AND result=? AND status=1 ORDER BY sid DESC", pid, ResultType.WAIT);
     return solutionList;
   }
 
   public List<ContestSolutionModel> getSolutionListForContest(Integer cid)
   {
-    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=?", cid);
+    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=? AND status=1", cid);
     return solutionList;
   }
 
   public List<ContestSolutionModel> getSolutionListForContestProblem(Integer cid, Integer num)
   {
-    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=? AND num=?", cid, num);
+    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=? AND num=? AND status=1", cid, num);
     return solutionList;
   }
   

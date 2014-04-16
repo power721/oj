@@ -94,7 +94,7 @@ public class ContestService
     {
       sql = "SELECT cp.pid,num,accepted,submission,title,status FROM contest_problem cp LEFT OUTER JOIN"
           + " (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? "
-          + "AND cid=? GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
+          + "AND cid=? AND status=1 GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
       contestProblems = Db.find(sql, uid, cid, cid);
     } else
     {
@@ -135,8 +135,8 @@ public class ContestService
     if (StringUtil.isNotBlank(title))
       problem.setTitle(title);
     
-    long submitUser = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=?", cid, num);
-    long solved = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE result=0 AND cid=? AND num=?", cid, num);
+    long submitUser = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND status=1", cid, num);
+    long solved = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE result=0 AND cid=? AND num=? AND status=1", cid, num);
     problem.setAccepted(record.getInt("accepted"));
     problem.setSubmission(record.getInt("submission"));
     problem.setSubmitUser((int) submitUser);
@@ -173,7 +173,7 @@ public class ContestService
     if (uid == null)
       return null;
     
-    return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? LIMIT 1", cid, uid, num);
+    return Db.queryInt("SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? AND status=1 LIMIT 1", cid, uid, num);
   }
 
   public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status)
@@ -535,7 +535,7 @@ public class ContestService
         break;
       sb.append("COUNT(IF(result=").append(resultType.getId()).append(",1,NULL)) AS ").append(resultType.getName()).append(",");
     }
-    sb.append("pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? GROUP BY num ORDER BY num");
+    sb.append("pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? AND status=1 GROUP BY num ORDER BY num");
     List<Record> statistics = Db.find(sb.toString(), ResultType.RF, cid);
     for (Record record : statistics)
     {
@@ -548,7 +548,7 @@ public class ContestService
   public ContestSolutionModel getContestSolution(Integer cid, Integer sid)
   {
     Integer uid = userService.getCurrentUid();
-    StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM contest_solution WHERE sid=? AND cid=?");
+    StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM contest_solution WHERE sid=? AND cid=? AND status=1");
     
     if (!userService.isAdmin())
       sb.append(" AND uid=").append(uid);
@@ -873,7 +873,7 @@ public class ContestService
     Db.update("DELETE FROM board WHERE cid=?", cid);
     ContestModel contestModel = getContest(cid);
     Integer contestStartTime = contestModel.getStartTime();
-    List<ContestSolutionModel> solutions = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? ORDER BY sid", cid);
+    List<ContestSolutionModel> solutions = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
     HashMap<Integer, UserInfo> userRank = new HashMap<Integer, UserInfo>();
     UserInfo userInfo = null;
     Integer uid = 0;

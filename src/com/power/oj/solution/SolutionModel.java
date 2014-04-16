@@ -30,6 +30,7 @@ public class SolutionModel extends Model<SolutionModel>
   public static final String SOURCE = "source";
   public static final String CODE_LEN = "codeLen";
   public static final String SYSTEM_ERROR = "systemError";
+  public static final String STATUS = "status";
 
   public SolutionModel build(ContestSolutionModel contestSolution)
   {
@@ -215,6 +216,16 @@ public class SolutionModel extends Model<SolutionModel>
   public SolutionModel setTest(Integer value)
   {
     return set(TEST, value);
+  }
+
+  public Boolean getStatus()
+  {
+    return getBoolean(STATUS);
+  }
+  
+  public SolutionModel setStatus(Boolean value)
+  {
+    return set(STATUS, value);
   }
   
 }

@@ -292,6 +292,7 @@ CREATE TABLE `contest_solution` (
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
   `systemError` text,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`sid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 
@@ -899,6 +900,7 @@ CREATE TABLE `solution` (
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
   `systemError` text,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`sid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
 

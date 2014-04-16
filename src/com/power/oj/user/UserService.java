@@ -382,7 +382,7 @@ public class UserService
     Integer uid = solutionModel.getUid();
     UserModel userModel = getUser(uid);
     userModel.setAccepted(userModel.getAccepted() + 1);
-    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
       userModel.setSolved(userModel.getSolved() + 1);
@@ -404,7 +404,7 @@ public class UserService
     Integer uid = solutionModel.getUid();
     UserModel userModel = getUser(uid);
     userModel.setAccepted(userModel.getAccepted() - 1);
-    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
       userModel.setSolved(userModel.getSolved() - 1);
@@ -425,9 +425,9 @@ public class UserService
     
     Integer uid = userModel.getUid();
     
-    userModel.set("submission", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? LIMIT 1", uid));
-    userModel.set("accepted", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND result=? LIMIT 1", uid, ResultType.AC));
-    userModel.set("solved", Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? LIMIT 1", uid, ResultType.AC));
+    userModel.set("submission", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND status=1 LIMIT 1", uid));
+    userModel.set("accepted", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid, ResultType.AC));
+    userModel.set("solved", Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid, ResultType.AC));
     updateCache(userModel);
 
     return userModel.update();
@@ -837,12 +837,12 @@ public class UserService
 
   public List<Record> getSubmittedProblems(Integer uid)
   {
-    return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid WHERE s.uid=? GROUP BY s.pid", uid);
+    return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid WHERE s.uid=? AND s.status=1 GROUP BY s.pid", uid);
   }
   
   public List<Record> getSolvedProblems(Integer uid)
   {
-    return Db.find("SELECT * FROM solution WHERE uid=? AND result=? GROUP BY pid", uid, ResultType.AC);
+    return Db.find("SELECT * FROM solution WHERE uid=? AND result=? AND status=1 GROUP BY pid", uid, ResultType.AC);
   }
   
   public boolean checkPassword(Integer uid, String password)

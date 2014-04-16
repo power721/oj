@@ -360,7 +360,7 @@ public class FpsProblem
       }
     }
     
-    SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution s WHERE pid=? AND result=? ORDER BY time,memory LIMIT 1",
+    SolutionModel solutionModel = SolutionModel.dao.findFirst("SELECT * FROM solution s WHERE pid=? AND result=? AND s.status=1 ORDER BY time,memory LIMIT 1",
         problemModel.getPid(), ResultType.AC);
     if (solutionModel != null)
     {

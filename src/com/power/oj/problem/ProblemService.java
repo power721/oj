@@ -166,13 +166,13 @@ public class ProblemService
 
   public List<Record> getUserInfo(Integer pid, Integer uid)
   {
-    List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,codeLen,language FROM solution WHERE uid=? AND pid=? GROUP BY result", uid, pid);
+    List<Record> userInfo = Db.find("SELECT uid,sid,pid,cid,result,ctime,num,time,memory,codeLen,language FROM solution WHERE uid=? AND pid=? AND status=1 GROUP BY result", uid, pid);
     return userInfo;
   }
 
   public Record getUserResult(Integer pid, Integer uid)
   {
-    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+    Record record = Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND status=1 LIMIT 1", uid, pid);
     return record;
   }
 
@@ -181,11 +181,11 @@ public class ProblemService
     List<Record> records = null;
     if (OjConfig.getDevMode())
     {
-      records = Db.find("SELECT pid,MIN(result) AS result FROM solution WHERE uid=? GROUP BY pid", uid);
+      records = Db.find("SELECT pid,MIN(result) AS result FROM solution WHERE uid=? AND status=1 GROUP BY pid", uid);
     }
     else
     {
-      records = Db.findByCache("userResult", uid, "SELECT pid,MIN(result) AS result FROM solution WHERE uid=? GROUP BY pid", uid);
+      records = Db.findByCache("userResult", uid, "SELECT pid,MIN(result) AS result FROM solution WHERE uid=? AND status=1 GROUP BY pid", uid);
     }
     return records;
   }
@@ -196,7 +196,7 @@ public class ProblemService
     if (uid == null)
       return null;
     
-    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? LIMIT 1", uid, pid);
+    return Db.queryInt("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND status=1 LIMIT 1", uid, pid);
   }
 
   public <T> T getProblemField(Integer pid, String name)
@@ -263,7 +263,7 @@ public class ProblemService
   public SolutionModel getSolution(Integer pid, Integer sid)
   {
     Integer uid = userService.getCurrentUid();
-    StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=?");
+    StringBuilder sb = new StringBuilder("SELECT pid,uid,language,source FROM solution WHERE sid=? AND pid=? AND status=1");
     
     if (!userService.isAdmin())
       sb.append(" AND uid=").append(uid);
@@ -274,7 +274,7 @@ public class ProblemService
 
   public List<SolutionModel> getProblemStatus(Integer pid)
   {
-    List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? GROUP BY result", pid);
+    List<SolutionModel> resultList = SolutionModel.dao.find("SELECT result,COUNT(*) AS count FROM solution WHERE pid=? AND status=1 GROUP BY result", pid);
     
     for (SolutionModel record : resultList)
     {
@@ -490,7 +490,7 @@ public class ProblemService
     ProblemModel problemModel = findProblem(pid);
     
     problemModel.setAccepted(problemModel.getAccepted() + 1);
-    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
       problemModel.setSolved(problemModel.getSolved() + 1);
@@ -513,7 +513,7 @@ public class ProblemService
     ProblemModel problemModel = findProblem(pid);
     
     problemModel.setAccepted(problemModel.getAccepted() - 1);
-    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? LIMIT 1", pid, uid, sid, ResultType.AC);
+    Integer lastAccepted = Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1", pid, uid, sid, ResultType.AC);
     if (lastAccepted == null)
     {
       problemModel.setSolved(problemModel.getSolved() - 1);
@@ -530,8 +530,8 @@ public class ProblemService
       throw new ProblemException("Problem is not exist!");
     }
     
-    long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
-    long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
+    long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND status=1 LIMIT 1", pid);
+    long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND status=1 LIMIT 1", pid);
     problemModel.setSubmission((int) submission);
     problemModel.setSubmitUser((int) submitUser);
     problemModel.setAccepted(0);
@@ -550,10 +550,10 @@ public class ProblemService
       throw new ProblemException("Problem is not exist!");
     }
     
-    long accepted = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
-    long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? LIMIT 1", pid);
-    long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? LIMIT 1", pid);
-    long solved = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 LIMIT 1", pid);
+    long accepted = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 AND status=1 LIMIT 1", pid);
+    long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND status=1 LIMIT 1", pid);
+    long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND status=1 LIMIT 1", pid);
+    long solved = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 AND status=1 LIMIT 1", pid);
 
     problemModel.setSubmission((int) submission);
     problemModel.setAccepted((int) accepted);

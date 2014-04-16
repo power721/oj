@@ -28,6 +28,7 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public static final String SOURCE = "source";
   public static final String CODE_LEN = "codeLen";
   public static final String SYSTEM_ERROR = "systemError";
+  public static final String STATUS = "status";
 
   public ContestSolutionModel() {}
   
@@ -214,6 +215,16 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public ContestSolutionModel setSystemError(String value)
   {
     return set(SYSTEM_ERROR, value);
+  }
+
+  public Boolean getStatus()
+  {
+    return getBoolean(STATUS);
+  }
+  
+  public ContestSolutionModel setStatus(Boolean value)
+  {
+    return set(STATUS, value);
   }
   
 }
