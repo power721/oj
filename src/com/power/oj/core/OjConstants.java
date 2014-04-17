@@ -15,12 +15,12 @@ public interface OjConstants
   String DATA_EXT_OUT = ".out";
   String SOURCE_FILE_NAME = "Main";
   long MINUTE_IN_MILLISECONDS = 60 * 1000;
-  long SESSION_EXPIRES_TIME = 15 * 60 * 1000;
-  long RESET_PASSWORD_EXPIRES_TIME = 30 * 60 * 1000;
-  long VERIFY_EMAIL_EXPIRES_TIME = 60 * 60 * 1000;
-  long DAY_TIMESTAMP = 24 * 60 * 60 * 1000;
+  long SESSION_EXPIRES_TIME = 15 * 60 * 1000; // 15 minutes
+  long RESET_PASSWORD_EXPIRES_TIME = 30 * 60 * 1000; // 30 minutes
+  long VERIFY_EMAIL_EXPIRES_TIME = 60 * 60 * 1000; // 60 minutes
+  long DAY_TIMESTAMP = 24 * 60 * 60 * 1000; // 24 hours
+  int PENALTY_FOR_WRONG_SUBMISSION = 20 * 60; // 20 minutes
   int MAX_PROBLEMS_IN_CONTEST = 26;
-  int PENALTY_FOR_WRONG_SUBMISSION = 20;
   int AVATAR_WIDTH = 100;
   int AVATAR_HEIGHT = 100;
   int USERNAME_MIN_LENGTH = 5;

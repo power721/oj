@@ -839,7 +839,7 @@ public class ContestService
       if (contestProblem.getFirstBloodUid() == 0)
       {
         contestProblem.setFirstBloodUid(solutionModel.getUid());
-        contestProblem.setFirstBloodTime((int) ((submitTime - contestStartTime) / 60));
+        contestProblem.setFirstBloodTime(submitTime - contestStartTime);
       }
       contestProblem.setAccepted(contestProblem.getAccepted()+1);
       contestProblem.update();
@@ -847,7 +847,7 @@ public class ContestService
       Integer acTime = board.getInt(c + "_SolvedTime");
       if (acTime == null || acTime == 0)
       {
-        acTime = (int) ((submitTime - contestStartTime) / 60);
+        acTime = submitTime - contestStartTime;
         board.set(c+"_SolvedTime", acTime);
         board.set("solved", board.getInt("solved") + 1);
         board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
@@ -872,15 +872,15 @@ public class ContestService
   {
     Db.update("DELETE FROM board WHERE cid=?", cid);
     ContestModel contestModel = getContest(cid);
-    Integer contestStartTime = contestModel.getStartTime();
+    int contestStartTime = contestModel.getStartTime();
     List<ContestSolutionModel> solutions = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
     HashMap<Integer, UserInfo> userRank = new HashMap<Integer, UserInfo>();
     UserInfo userInfo = null;
-    Integer uid = 0;
-    Integer num = 0;
-    Integer result = 0;
-    Integer ctime = 0;
-    Integer penalty = 0;
+    int uid = 0;
+    int num = 0;
+    int result = 0;
+    int ctime = 0;
+    int penalty = 0;
     int firstBooldUid[] = new int[26];
     int firstBooldTime[] = new int[26];
     for (int i = 0; i < 26; ++i)
@@ -896,11 +896,12 @@ public class ContestService
       ctime = solution.getCtime();
       ++submission[num];
       userInfo = userRank.get(uid);
-      penalty = (ctime - contestStartTime) / 60;
+      int elapseTime = ctime - contestStartTime;
+      penalty = elapseTime;
       if (result == ResultType.AC && firstBooldUid[num] == 0)
       {
         firstBooldUid[num] = uid;
-        firstBooldTime[num] = penalty;
+        firstBooldTime[num] = elapseTime;
       }
       if (userInfo == null)
       {
@@ -909,7 +910,7 @@ public class ContestService
         {
           ++userInfo.solved;
           ++accepted[num];
-          userInfo.acTime[num] = penalty;
+          userInfo.acTime[num] = elapseTime;
           userInfo.penalty += penalty;
         } else if (result != ResultType.SE)
         {
@@ -922,7 +923,7 @@ public class ContestService
         {
           ++userInfo.solved;
           ++accepted[num];
-          userInfo.acTime[num] = penalty;
+          userInfo.acTime[num] = elapseTime;
           penalty += userInfo.waNum[num] * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
           userInfo.penalty += penalty;
         } else if (result != ResultType.SE)

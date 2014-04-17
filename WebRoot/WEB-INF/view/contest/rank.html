@@ -26,7 +26,8 @@
     </tr>
   </thead>
   <tbody>
-    <#if contestRank??> <#list contestRank.list as User>
+    <#if contestRank??> 
+    <#list contestRank.list as User>
     <tr>
       <#assign rank=User_index+1+(contestRank.pageNumber-1)*contestRank.pageSize>
       <td><#if cstatus==2 && rank<4><i class="oj-medal_${rank}"></i></#if>${rank}
@@ -34,16 +35,22 @@
       <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realName??>data-toggle="tooltip" title="${(User.realName)!}"</#if>>${User.name!}</a></td>
       <td class="user">${User.nick!}</td>
       <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
-      <td>${User.penalty!}</td> 
+      <td data="${User.penalty!}" class="penalty">${(User.penalty/60)?int!}</td> 
       <#list contestProblems as Problem> 
-        <#assign ac=User["${Problem.id}_SolvedTime"]> 
+        <#assign ac=(User["${Problem.id}_SolvedTime"]/60)?int>
         <#assign wa=User["${Problem.id}_WrongNum"]>
-      <td
-        class="<#if ac==0 && wa!=0>wa wa${(wa/5)?int}</#if><#if ac!=0 && wa==0>ac</#if><#if ac!=0 && wa!=0>ac1</#if><#if Problem.firstBloodUid == User.uid> fb</#if>"><#--
-        允许多个First Boold： Problem.firstBloodTime == ac --> <#if (ac>0)>${ac}<#if (wa>0)><br></#if></#if><#if (wa>0)>(-${wa})</#if>
-      </td> </#list>
+        <#assign class="">
+        <#if ac==0 && wa!=0><#assign class="wa wa${(wa/5)?int}"></#if>
+        <#if ac!=0 && wa==0><#assign class="ac"></#if>
+        <#if ac!=0 && wa!=0><#assign class="ac ac1"></#if>
+        <#if Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
+        <#--允许多个First Boold： Problem.firstBloodTime == ac -->
+      <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (ac>0)><span>${ac}</span><#if (wa>0)><br></#if></#if><#if (wa>0)>(-${wa})</#if>
+      </td> 
+      </#list>
     </tr>
-    </#list> </#if>
+    </#list> 
+    </#if>
   </tbody>
 </table>
 
@@ -69,6 +76,33 @@
       <#if (contestRank.pageNumber>1)>if(event.keyCode==37)location=prevpage;</#if>
       <#if contestRank.pageNumber<contestRank.totalPage>if(event.keyCode==39)location=nextpage;</#if>
     }
+
+    function secondToDate(second) {
+      var time = '';
+      var hours = parseInt(second / 3600);
+      time += (hours<10 ? '0' : '') + hours + ':';
+      second %= 3600;
+      time += new Date(second * 1000).format("mm:ss")
+      return time;
+    }
+
+    $('.ac').mouseover(function() {
+      var data = secondToDate($(this).attr('data'));
+      $(this).children('span').html(data);
+    });
+    $('.ac').mouseleave(function() {
+      var data = parseInt($(this).attr('data') / 60);
+      $(this).children('span').html(data);
+    });
+
+    $('.penalty').mouseover(function() {
+      var data = secondToDate($(this).attr('data'));
+      $(this).html(data);
+    });
+    $('.penalty').mouseleave(function() {
+      var data = parseInt($(this).attr('data') / 60);
+      $(this).html(data);
+    });
 
     <#if oj_style != "slate">
     $("#contest-rank").tablecloth({
