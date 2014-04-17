@@ -26,8 +26,12 @@
           <div class="control-group">
             <label class="control-label" for="inputLanguage">Language</label>
             <div class="controls">
-              <select id="inputLanguage" name="user.language"> <#if program_languages??> <#list program_languages as language>
-                <option value="${language.id!}"<#if user.language==language.id>selected</#if>>${language.name!}</option> </#list> </#if>
+              <select id="inputLanguage" name="user.language"> 
+                <#if program_languages??> 
+                <#list program_languages.keySet() as key>
+                <option value="${key!}"<#if user.language==key>selected</#if>>${program_languages.get(key)!}</option> 
+                </#list> 
+                </#if>
               </select>
             </div>
           </div>

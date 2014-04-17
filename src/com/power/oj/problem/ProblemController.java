@@ -142,7 +142,7 @@ public class ProblemController extends OjController
     }
     
     setAttr("problem", problemModel);
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     
     if (isParaExists("s"))
     {

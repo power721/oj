@@ -130,7 +130,7 @@ public class ContestController extends OjController
     }
 
     setAttr("problem", problemModel);
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     
     setTitle(new StringBuilder(6).append(getText("contest.problem.title")).append(cid).append("-").append(id).append(": ").append(problemModel.getTitle()).toString());
     if (ajax)
@@ -217,7 +217,7 @@ public class ContestController extends OjController
     //setAttr("contest", contestService.getContestById(cid));
     setAttr("contestProblems", contestService.getContestProblems(cid, 0));
     setAttr("solutionList", solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
     setAttr("result", result);
     setAttr("language", language);
@@ -335,7 +335,7 @@ public class ContestController extends OjController
     resultName.add("Others");
     
     setAttr("resultName", resultName);
-    setAttr("languageList", OjConfig.program_languages);
+    setAttr("languageList", OjConfig.program_languages); // need ext
     setAttr("statistics", contestService.getContestStatistics(cid));
 
     setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());

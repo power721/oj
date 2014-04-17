@@ -32,7 +32,7 @@ public class ContestApiController extends OjController
 
     Page<ContestSolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     setAttr("solutionList", solutionList);
     setAttr("language", language);
     setAttr("user", userService.getCurrentUser());

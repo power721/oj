@@ -50,7 +50,7 @@ public class SolutionController extends OjController
     }
 
     setAttr("solutionList", solutionService.getPage(pageNumber, pageSize, result, language, pid, userName));
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("result", result);

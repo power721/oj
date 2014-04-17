@@ -14,8 +14,8 @@
       <select class="input-medium" id="inputLanguage" name="language">
         <option value="0">Language</option> 
         <#if program_languages??> 
-        <#list program_languages as Language>
-        <option value="${Language.id!}"<#if language?? && language==Language.id>selected</#if>>${Language.name!}</option> 
+        <#list program_languages.keySet() as key>
+        <option value="${key!}"<#if language?? && language==key>selected</#if>>${program_languages.get(key)!}</option> 
         </#list> 
         </#if>
       </select>

@@ -41,7 +41,7 @@ public class UpdateUserValidator extends Validator
   protected void handleError(Controller c)
   {
     c.keepModel(UserModel.class, "user");
-    c.setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    c.setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     c.setAttr(OjConstants.PAGE_TITLE, c.getText("user.edit.title"));
 
     c.render("edit.html");

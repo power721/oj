@@ -369,7 +369,7 @@ public class UserController extends OjController
   @RequiresAuthentication
   public void edit()
   {
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.program_languages);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
     
     setTitle(getText("user.edit.title"));
   }
