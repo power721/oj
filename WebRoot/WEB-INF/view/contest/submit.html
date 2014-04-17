@@ -48,7 +48,10 @@
       </div>
       <div class="syntax-box">
         <input type="hidden" name="syntax" value="0">
-        <label for="syntax" class="checkbox"><input type="checkbox" name="syntax" id="syntax" value="1" checked="checked" accesskey="h"> <span>syntax highlight</span></label>
+        <label for="syntax" class="checkbox">
+          <input type="checkbox" name="syntax" id="syntax" value="1" checked="checked" accesskey="h"> 
+          <span>syntax highlight</span>
+        </label>
       </div>
     </div>
   </div>
@@ -71,9 +74,11 @@
 <script src='assets/ideone/ideone-common.js' type='text/javascript'></script>
 <script type="text/javascript">   
   $().ready(function() {
+    <#if !(solution.language)??>
     if ($.cookie && $.cookie("program_language") != null) {
       $('#inputLanguage').val($.cookie("program_language"));
     }
+    </#if>
     $("#submitForm").validate();
   });
 </script>

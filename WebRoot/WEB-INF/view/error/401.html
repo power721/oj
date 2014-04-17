@@ -4,12 +4,14 @@
 <div id="login-box" class="row">
   <div class="span5 offset3">
     <form class="form-horizontal" action="user/signin" method="post">
+      <#if !user??>
       <div class="control-group">
         <div class="controls">
           <span class="help-block">Don't have an account? <a href="signup">Sign up here</a>
           </span>
         </div>
       </div>
+      </#if>
       <div class="control-group
         <#if nameMsg??>error</#if>">
         <label class="control-label" for="inputAccount">Account</label>
@@ -30,11 +32,13 @@
           </div>
         </div>
       </div>
+      <#if !user??>
       <div class="control-group">
         <div class="controls">
           <span class="help-block"><a href="user/forget">Forgot Password</a> </span>
         </div>
       </div>
+      </#if>
       <div class="control-group">
         <div class="controls">
           <input type="submit" class="btn btn-success" value="Login">

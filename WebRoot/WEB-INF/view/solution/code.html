@@ -46,13 +46,14 @@
     <pre class="error">${solution.systemError!}</pre>
   </div>
 </div>
-</#if> <#if !alpha?? && user??>
+</#if> 
+<#if !alpha?? && user??>
 <div class="modal hide fade problemModal" id="submitModal">
   <form class="" action="solution/save" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="submitModalLabel">
-        Submit Problem ${solution.pid!}:<a href="problem/submit/${solution.pid!}" title="Submit in another page" data-toggle="tooltip" data-placement="bottom">${(problem.title)!}</a>
+        Submit Problem ${solution.pid!}:<a href="problem/submit/${solution.pid!}?s=${solution.sid!}" title="Submit in another page" data-toggle="tooltip" data-placement="bottom">${problemTitle!}</a>
       </h3>
     </div>
     <div class="modal-body">

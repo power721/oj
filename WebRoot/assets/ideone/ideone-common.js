@@ -124,7 +124,7 @@ $(document).ready(function() {
       var editor = ace.edit("file_div");
       $("#inputSource").text(editor.getSession().getValue());
       if ($("#inputSource").text().length < 10 || $("#inputSource").text().length > 30000) {
-        $('#error').html('The code length is incorrect, should be [10, 30000].').show();
+        $('#error').html('The code length is incorrect, should in [10, 30000].').show();
         setTimeout(function() {
           $('#error').hide();
         }, 10000);

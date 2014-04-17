@@ -15,10 +15,10 @@
           </div>
           <div class="faq_content_A">
             <span class="A">A</span>：你的程序必须从stdin（标准输入）读入数据并且从stdout（标准输出）输出数据. <br>
-            例如，你使用C语言的话，使用<code>scanf</code>读入数据，使用<code>printf</code>输出数据，
-            使用C++语言的话，还可以使用<code>cin</code>和<code>cout</code>读入输出数据。
-            <p class="text-info">为了性能，建议C++程序也使用<code>scanf</code>和<code>printf</code>。</p>
-            <p class="text-warning">注意：不要在程序中输出任何题目未要求的提升信息。</p>
+            例如，如果你使用C语言，使用<code>scanf</code>读入数据，使用<code>printf</code>输出数据; <br>
+            如果是C++语言，还可以使用<code>cin</code>和<code>cout</code>读入输出数据。
+            <p class="text-info">为了性能，建议C++程序也使用<code>scanf</code>和<code>printf</code>，需要<code>#include &lt;cstdio></code>。</p>
+            <p class="text-warning">注意：不要在程序中输出任何题目未要求的提示信息。</p>
           </div>
           
           <a name="multi-io"></a>
@@ -26,7 +26,7 @@
             <span class="Q">Q</span>：当有多组测试数据时,该如何判断循环结束呢?
           </div>
           <div class="faq_content_A">
-            <span class="A">A</span>：c语言: 可以用 <code>while (scanf("%d",&n) != EOF) {...}</code> <br>
+            <span class="A">A</span>：c语言: 可以用 <code>while (scanf("%d", &n) != EOF) {...}</code> <br>
              c++语言: 可以用 <code>while (cin >> n) {...}</code>
           </div>
 <!--
@@ -37,9 +37,10 @@
 int main()
 {
     int a,b,i;
-    while(scanf("%d%d",&a,&b)!=EOF)
-        printf("%d\n",a+b);
-    for(i=0;i&lt;450000000;++i) ++a;
+    while(scanf("%d%d",&a,&b)!=EOF) {
+      printf("%d\n",a+b);
+    }
+    for(i=0; i&lt;450000000; ++i) ++a;
     return 0;
 }</div>
 <br>
@@ -58,10 +59,12 @@ int main()
               Python: <code>python -c "import py_compile; py_compile.compile(r'Main.py')"</code>
               <br>
             <br> 我们的服务器运行在Linux平台下，提供的编译器的版本分别是：<br>
-            <li>GCC/G++ Version 4.6.3</li>
-            <li>Free Pascal Compiler version 2.4.4-3.1</li>
-            <li>Java SDK Version 1.7.0_51</li>
-            <li>Python 2.7.3</li> 
+            <ul>
+              <li>GCC/G++ Version 4.6.3</li>
+              <li>Free Pascal Compiler version 2.4.4-3.1</li>
+              <li>Java SDK Version 1.7.0_51</li>
+              <li>Python 2.7.3</li>
+            </ul>
           </div>
 
           <a name="ce"></a>
@@ -70,7 +73,7 @@ int main()
           </div>
           <div class="faq_content_A">
             <span class="A">A</span>：不同的编译器之间有一些语法的差异，请使用相应的编译器进行提交。<br>
-            另外，我们的OJ对编译器所使用的资源有所限制，限制是：CPU时间<strong>5000 ms</strong>，内存<strong>256 MB</strong>;<br>
+            另外，我们的OJ对编译器所使用的资源有所限制，限制是：CPU时间<strong>5000 ms</strong>，内存<strong>256 MB</strong>。<br>
             如果你使用的编译器在编译你的程序时超过这个资源限制，将被判为CE。<br>
             <p class="text-warning">当你使用G++、GCC时<code>main()</code>函数返回值必须是<code>int</code>，否则你可能会得到CE。</p>
           </div>
@@ -96,7 +99,7 @@ int main()
                 <center>
                   <table class="table table-bordered">
                     <tr align=center>
-                      <td>语言</td>
+                      <td>编译器</td>
                       <td>GCC/G++</td>
                       <td>Pascal</td>
                       <td>VC/VC++</td>
@@ -105,7 +108,7 @@ int main()
                       <td>类型名称</td>
                       <td>long long</td>
                       <td>int64</td>
-                      <td>__int64<br>long long
+                      <td>__int64(非标准)<br>long long
                       </td>
                     </tr>
                     <tr align=center>
@@ -131,7 +134,7 @@ int main()
                 <center>
                   <table class="table table-bordered">
                     <tr align=center>
-                      <td>语言</td>
+                      <td>编译器</td>
                       <td>GCC/G++</td>
                       <td>Pascal</td>
                       <td>VC/VC++</td>
@@ -140,7 +143,7 @@ int main()
                       <td>类型名称</td>
                       <td>unsigned long long</td>
                       <td>qword</td>
-                      <td>unsigned __int64<br>unsigned long long
+                      <td>unsigned __int64(非标准)<br>unsigned long long
                       </td>
                     </tr>
                     <tr align=center>
@@ -184,7 +187,7 @@ int main()
               <dt id="MLE">Memory Limit Exceed</dt>
               <dd>你的程序尝试使用超过题目限制的内存。</dd>
               <dt id="RE">Runtime Error</dt>
-              <dd>你的程序发生了运行时错误。可能是由于除于0、内存访问违规等运行时问题。</dd>
+              <dd>你的程序发生了运行时错误。可能是由于除0、内存访问违规等运行时问题。</dd>
               <dt id="CE">Compile Error</dt>
               <dd>你的程序不能通过编译，请点击该结果可以查看编译器提示。</dd>
               <dt id="OLE">Output Limit Exceed</dt>
@@ -208,10 +211,10 @@ int main()
           <div class="faq_content_A">
             <span class="A">A</span>： 下面是提交页面的快捷键:
             <dl class="dl-horizontal">
-              <dt>ALT+L</dt> <dd>语言选项</dd>
-              <dt>ALT+C</dt> <dd>源代码</dd>
-              <dt>ALT+H</dt> <dd>代码高亮</dd>
-              <dt>ALT+S</dt> <dd>提交</dd>
+              <dt>ALT+L</dt> <dd>语言（编译器）选项</dd>
+              <dt>ALT+C</dt> <dd>定位到代码编辑器</dd>
+              <dt>ALT+H</dt> <dd>切换代码编辑器</dd>
+              <dt>ALT+S</dt> <dd>提交代码</dd>
             </dl>
           </div>
 

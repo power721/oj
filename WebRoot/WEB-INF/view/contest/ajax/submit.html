@@ -39,8 +39,10 @@
 <script type="text/javascript">   
     $().ready(function() {
       setTimeout(function() {$('#syntax').trigger('click');}, 200);
+      <#if !(solution.language)??>
       if ($.cookie && $.cookie("program_language") != null) {
         $('#inputLanguage').val($.cookie("program_language"));
       }
+      </#if>
     });
 </script>

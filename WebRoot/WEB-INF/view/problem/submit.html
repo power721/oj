@@ -64,9 +64,11 @@
   <script src='assets/ideone/ideone-common.js' type='text/javascript'></script>
   <script type="text/javascript">   
     $().ready(function() {
+      <#if !(solution.language)??>
       if ($.cookie && $.cookie("program_language") != null) {
         $('#inputLanguage').val($.cookie("program_language"));
       }
+      </#if>
       $("#submitForm").validate();
     });
   </script>

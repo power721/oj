@@ -42,7 +42,7 @@
           <td class="result"><#if Problem.status??><i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i></#if>
           </td>
           <td class="pid">
-            <#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></#if>
+            <#if adminUser??><a href="problem/show/${Problem.pid!}" target="_blank">${Problem.pid!}</a></#if>
             <a href="contest/problem/${contest.cid!}-${Problem.id!}" data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a>
           </td>
           <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
