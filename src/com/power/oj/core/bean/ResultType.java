@@ -64,11 +64,6 @@ public class ResultType
     this.longName = longName;
   }
   
-  public String toString()
-  {
-    return longName;
-  }
-  
   public String toJson()
   {
     return Printf.str("{id:\"%d\", name:\"%s\", longName:\"%s\"}", id, name, longName);

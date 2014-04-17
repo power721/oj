@@ -44,15 +44,14 @@ var config = {
 
 $(document).ready(function() {
   $('li.disabled a').removeAttr('href');
-  
-  $('.timestamp').each( function() {
-      var that = $(this);
-      that.html(parseTimestamp(that.attr('data')));
-    });
-  
-  $("marquee").css("margin-top", $("#oj-navbar").height()+5);
-  /*$("#marqueepos").css("height", $("marquee").height()+$("#oj-navbar").height()-70);*/
-  
+
+  $('.timestamp').each(function() {
+    var that = $(this);
+    that.html(parseTimestamp(that.attr('data')));
+  });
+
+  $("marquee").css("margin-top", $("#oj-navbar").height() + 5);
+
   $('.toLogin').click(function() {
     $('#signupModal').modal("hide");
     $('#loginModal').modal("show");
@@ -78,22 +77,30 @@ $(document).ready(function() {
       }
     });
   });
-  
+
   $('#page_trace_open').click(function() {
     $(this).hide();
     $('#debug').show();
     $('#page_trace_close').show();
   });
-  
+
   if ($.cookie) {
-    $("#selstyle").val($.cookie("oj_style")==null?"original":$.cookie("oj_style"));
+    $("#selstyle").val($.cookie("oj_style") == null ? "original" : $.cookie("oj_style"));
     $("#selstyle").change(function() {
-      $.cookie("oj_style", $(this).val(), { expires: 7, path: '/' });
+      $.cookie("oj_style", $(this).val(), {
+        expires: 7,
+        path: '/'
+      });
       window.location.reload();
     });
     $("#selwidth").change(function() {
-      if ($(this).prop("checked")) $.cookie("oj_fluid_width",true, { expires: 7, path: '/' });
-      else $.removeCookie("oj_fluid_width", { path: '/' });
+      if ($(this).prop("checked")) $.cookie("oj_fluid_width", true, {
+        expires: 7,
+        path: '/'
+      });
+      else $.removeCookie("oj_fluid_width", {
+        path: '/'
+      });
       window.location.reload();
     });
   }
@@ -104,29 +111,28 @@ $(document).ready(function() {
   if (config.globe.navbarInverse) {
     $("#oj-navbar").addClass("navbar-inverse");
   }
-  
+
   if ($.fn.ajaxForm) {
     $('#loginForm').ajaxForm({
-        beforeSubmit: function (formData, loginForm, options) {
-          $("#loginMsg").removeClass().addClass('alert').html('<img style="height:20px" src="assets/images/ajax-loader.gif" /> Validating....').fadeIn(300);
-          $("input:submit,button:submit,.btn", loginForm).attr("disabled", "disabled").addClass("disabled");
-        },
-        success: function(data, statusText, xhr, loginForm) {
-          if (data.success) {
-            $("#loginMsg",loginForm).fadeTo(100, 0.1, function() {
-              $(this).removeClass().addClass('alert alert-success').html('Login success.').fadeTo(100, 1, function() {
-                window.location.reload();
-              });
+      beforeSubmit: function(formData, loginForm, options) {
+        $("#loginMsg").removeClass().addClass('alert').html('<img style="height:20px" src="assets/images/ajax-loader.gif" /> Validating....').fadeIn(300);
+        $("input:submit,button:submit,.btn", loginForm).attr("disabled", "disabled").addClass("disabled");
+      },
+      success: function(data, statusText, xhr, loginForm) {
+        if (data.success) {
+          $("#loginMsg", loginForm).fadeTo(100, 0.1, function() {
+            $(this).removeClass().addClass('alert alert-success').html('Login success.').fadeTo(100, 1, function() {
+              window.location.reload();
             });
-          }
-          else {
-            $("#loginMsg",loginForm).fadeTo(100, 0.1, function() {
-              $(this).removeClass().addClass('alert alert-error').html(data.result).fadeTo(300, 1);
-            });
-            $("input:submit,button:submit,.btn", loginForm).removeAttr("disabled", "disabled").removeClass("disabled");
-          }
+          });
+        } else {
+          $("#loginMsg", loginForm).fadeTo(100, 0.1, function() {
+            $(this).removeClass().addClass('alert alert-error').html(data.result).fadeTo(300, 1);
+          });
+          $("input:submit,button:submit,.btn", loginForm).removeAttr("disabled", "disabled").removeClass("disabled");
         }
-      });
+      }
+    });
   }
 });
 

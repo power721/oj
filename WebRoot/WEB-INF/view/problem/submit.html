@@ -39,16 +39,19 @@
       <div id="file_parent" style="padding: 10px;">
         <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="120" required accesskey="c">${(solution.source)!}</textarea>
       </div>
+      <div class="syntax-box">
+        <input type="hidden" name="syntax" value="0">
+        <label for="syntax" class="checkbox"><input type="checkbox" name="syntax" id="syntax" value="1" checked="checked" accesskey="h"> <span>syntax highlight</span></label>
+      </div>
     </div>
   </div>
   <div class="control-group">
     <div class="controls">
-      <div class="syntax-box">
-      <input type="hidden" name="syntax" value="0">
-      <label for="syntax" class="checkbox"><input type="checkbox" name="syntax" id="syntax" value="1" checked="checked" accesskey="h"> <span>syntax highlight</span></label>
-      </div>
       <button type="submit" id="Submit" class="btn btn-primary" accesskey="s">Submit</button>
       <button type="reset" class="btn btn-info" accesskey="r">Reset</button>
+    </div>
+    <div class="pull-right">
+      <p class="text-error" id="error"></p>
     </div>
   </div>
 </form>
