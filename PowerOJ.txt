@@ -138,3 +138,19 @@ diff文件
 查看代码、编辑tag、编辑帖子、编辑题目、上传、头像
 
 
+--------------------------- return code --------------------
+0  Success
+1  Bad Parameter
+2  Miss Parameter
+3  Permission Denied / Forbidden
+4  Target Not Exists / Not Found
+5  Duplicate Target
+6  User Not Login / Unauthorized
+7  Type Mismatch
+8  Format Mismatch
+9  Length Mismatch
+10 IO Error
+11 DB Error
+12 Configuration Error
+13 System Error
+255 Unknown

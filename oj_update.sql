@@ -213,4 +213,4 @@ ALTER TABLE contest_solution ADD `mtime` int(11) NOT NULL AFTER `ctime`,
                               ADD `test` tinyint(3) NOT NULL DEFAULT '0' AFTER `mtime`;
 #2014-04-16
 ALTER TABLE solution ADD `status` tinyint(1) NOT NULL DEFAULT '1';
-ALTER TABLE ALTER TABLE solution ADD `status` tinyint(1) NOT NULL DEFAULT '1'; ADD `status` tinyint(1) NOT NULL DEFAULT '1';
+ALTER TABLE contest_solution ADD `status` tinyint(1) NOT NULL DEFAULT '1';
