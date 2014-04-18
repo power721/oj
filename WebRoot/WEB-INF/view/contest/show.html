@@ -2,7 +2,11 @@
 <div class="progress" id="contest-progress">
   <div class="bar" id="contest-bar" style="width:<#if (serverTime > contest.endTime)>100%</#if>"></div>
 </div>
-<h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
+<#assign type="Private<sup>${contest.type}</sup>">
+<#if contest.type==0>
+<#assign type="Public">
+</#if>
+<h3 class="text-center">${type} Contest - ${contest.title!}</h3>
 <div class="row text-center">
   <div class="span6 offset3">
     <#if adminUser??>
@@ -11,10 +15,12 @@
       <a href="contest/admin/${contest.cid!}" class="btn btn-primary">Manage</a>
     </div>
     </#if>
-    <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> 
-    <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
-    <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span> 
-    <span>Contest Status</span>: <span class="status ${status!}">${status!}</span><br>
+    <div class="well">
+      <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> 
+      <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span> 
+      <span>Contest Status</span>: <span class="status ${status!}">${status!}</span>
+    </div>
   </div>
 </div>
 <div class="row text-center">

@@ -350,6 +350,7 @@ public class ContestController extends OjController
     {
       char id = getPara(1, "A").toUpperCase().charAt(0);
       num = id - 'A';
+      setAttr("pid", num);
     }
     
     setAttr("contestProblems", contestService.getContestProblems(cid, 0));

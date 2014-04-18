@@ -46,10 +46,10 @@
       <div class="modal-body">
         <input type="hidden" name="cid" value="${cid!}">
         <#if contestProblems??>
-        <select class="input-medium" id="inputProblem" name="num">
+        <select class="input-large" id="inputProblem" name="num">
         <option value="">Problem</option>
         <#list contestProblems as Problem>
-        <option value="${Problem.num!}"<#if pid?? && pid==Problem.id>selected</#if>>${Problem.id!}. ${Problem.title!}</option> 
+        <option value="${Problem.num!}"<#if pid?? && pid==Problem.num>selected</#if>>${Problem.id!}. ${Problem.title!}</option> 
         </#list>
         </select>
         </#if>
