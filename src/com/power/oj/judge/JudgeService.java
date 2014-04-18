@@ -124,13 +124,14 @@ public class JudgeService
   public void rejudgeContestSolution(Integer sid)
   {
     ContestSolutionModel contestSolutionModel = solutionService.findContestSolution(sid);
+    int result = contestSolutionModel.getResult();
+    
     contestSolutionModel.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
     contestSolutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
     contestSolutionModel.update();
     
     SolutionModel solutionModel = solutionService.build(contestSolutionModel);
-    // revert problem accepted/solved
-    //problemService.revertAccepted(solutionModel);
+    solutionModel.put("originalResult", result);
     
     rejudge(solutionModel);
   }

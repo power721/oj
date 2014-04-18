@@ -290,7 +290,14 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      contestService.updateBoard(solutionModel);
+      if (solutionModel.get("originalResult") != null)
+      {
+        contestService.updateBoard4Rejudge(solutionModel);
+      }
+      else
+      {
+        contestService.updateBoard(solutionModel);
+      }
       return true;
     }
     return false;

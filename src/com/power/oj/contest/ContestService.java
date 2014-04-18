@@ -828,7 +828,7 @@ public class ContestService
       Db.save("board", board);
       board = Db.findById("board", board.get("id"));
     }
-    Integer wrongSubmits = board.getInt(c + "_WrongNum");
+    Integer wrongSubmissions = board.getInt(c + "_WrongNum");
     
     if (solutionModel.getResult() == ResultType.AC)
     {
@@ -850,14 +850,80 @@ public class ContestService
         acTime = submitTime - contestStartTime;
         board.set(c+"_SolvedTime", acTime);
         board.set("solved", board.getInt("solved") + 1);
-        board.set("penalty", board.getInt("penalty") + acTime + wrongSubmits * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
+        board.set("penalty", board.getInt("penalty") + acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
       }
     }
     else
     {
-      board.set(c+"_WrongNum", wrongSubmits + 1);
+      board.set(c+"_WrongNum", wrongSubmissions + 1);
     }
     
+    return Db.update("board", board);
+  }
+  
+  public boolean updateBoard4Rejudge(SolutionModel solutionModel)
+  {
+    int result = solutionModel.getInt("originalResult");
+    if (result == ResultType.AC)
+    {
+      return true; // should not rejudge AC in contest!
+    }
+    
+    if (solutionModel.getResult() != ResultType.AC)
+    {
+      return true; // still not AC
+    }
+    
+    int sid = solutionModel.getSid();
+    Integer cid = solutionModel.getCid();
+    Integer uid = solutionModel.getUid();
+    Integer num = solutionModel.getNum();
+    if (Db.queryLong("SELECT 1 FROM contest_solution WHERE cid=? AND num=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1", cid, num, uid, sid, ResultType.AC) != null)
+    {
+      return true; // already AC
+    }
+    
+    // Not-AC --> AC
+    Integer submitTime = solutionModel.getCtime();
+    char c = (char) (num + 'A');
+    Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
+    ContestProblemModel contestProblem = ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
+    ContestModel contestModle = getContest(cid);
+    Integer contestStartTime = contestModle.getStartTime();
+    Integer acTime = submitTime - contestStartTime;
+    Long wrongSubmissions = Db.queryLong("SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=? AND uid=? AND sid<? AND result!=? AND status=1", cid, num, uid, sid, ResultType.AC);
+    board.set(c + "_WrongNum", wrongSubmissions);
+    board.set(c+"_SolvedTime", acTime);
+    
+    if (Db.queryLong("SELECT 1 FROM contest_solution WHERE cid=? AND num=? AND uid=? AND sid>? AND result=? AND status=1 LIMIT 1", cid, num, uid, sid, ResultType.AC) != null)
+    {
+      // update AC time and penalty, maybe fb
+      if (contestProblem.getFirstBloodTime() > acTime)
+      {
+        contestProblem.setFirstBloodUid(uid);
+        contestProblem.setFirstBloodTime(acTime);
+        contestProblem.update();
+      }
+      
+      long penalty = board.getInt(c+"_SolvedTime") + 
+          board.getLong(c+"_WrongNum") * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
+      board.set("penalty", board.getInt("penalty") - penalty + acTime + 
+          wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
+    }
+    else
+    {
+      // almost same as normal submit, except wrongSubmissions
+      if (contestProblem.getFirstBloodUid() == 0 || contestProblem.getFirstBloodTime() > acTime)
+      {
+        contestProblem.setFirstBloodUid(uid);
+        contestProblem.setFirstBloodTime(acTime);
+      }
+      contestProblem.setAccepted(contestProblem.getAccepted() + 1);
+      contestProblem.update();
+      
+      board.set("solved", board.getInt("solved") + 1);
+      board.set("penalty", board.getInt("penalty") + acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
+    }
     return Db.update("board", board);
   }
   

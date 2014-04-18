@@ -1,5 +1,6 @@
 package com.power.oj.solution;
 
+import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Model;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -36,7 +37,14 @@ public class SolutionModel extends Model<SolutionModel>
   {
     for (String filed : contestSolution.getAttrNames())
     {
-      set(filed, contestSolution.get(filed));
+      try
+      {
+        set(filed, contestSolution.get(filed));
+      }
+      catch (ActiveRecordException e)
+      {
+        put(filed, contestSolution.get(filed));
+      }
     }
     return this;
   }

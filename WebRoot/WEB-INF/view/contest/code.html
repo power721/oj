@@ -18,7 +18,7 @@
     <h2>Source Code</h2>
     <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">Copy to Clipboard</a></span> <span id="message"></span> 
     <span class="pull-right">
-    <#if adminUser?? && (resultName=="SE" || resultName=="WAIT")>
+    <#if adminUser?? && resultName!="AC">
     <a class="btn btn-danger" href="contest/rejudgeCode/${solution.cid!}-${solution.sid!}">Rejudge</a>
     </#if>
     <#if running>
