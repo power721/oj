@@ -35,7 +35,7 @@
       <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realName??>data-toggle="tooltip" title="${(User.realName)!}"</#if>>${User.name!}</a></td>
       <td class="user">${User.nick!}</td>
       <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
-      <td data="${User.penalty!}" class="penalty">${(User.penalty/60)?int!}</td> 
+      <td data="${User.penalty!}" class="penalty"><span>${(User.penalty/60)?int!}</span></td> 
       <#list contestProblems as Problem> 
         <#assign ac=(User["${Problem.id}_SolvedTime"]/60)?int>
         <#assign wa=User["${Problem.id}_WrongNum"]>
@@ -44,7 +44,6 @@
         <#if ac!=0 && wa==0><#assign class="ac"></#if>
         <#if ac!=0 && wa!=0><#assign class="ac ac1"></#if>
         <#if Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
-        <#--允许多个First Boold： Problem.firstBloodTime == ac -->
       <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (ac>0)><span>${ac}</span><#if (wa>0)><br></#if></#if><#if (wa>0)>(-${wa})</#if>
       </td> 
       </#list>
@@ -86,22 +85,13 @@
       return time;
     }
 
-    $('.ac').mouseover(function() {
+    $('.ac, .penalty').mouseover(function() {
       var data = secondToDate($(this).attr('data'));
       $(this).children('span').html(data);
     });
-    $('.ac').mouseleave(function() {
+    $('.ac, .penalty').mouseleave(function() {
       var data = parseInt($(this).attr('data') / 60);
       $(this).children('span').html(data);
-    });
-
-    $('.penalty').mouseover(function() {
-      var data = secondToDate($(this).attr('data'));
-      $(this).html(data);
-    });
-    $('.penalty').mouseleave(function() {
-      var data = parseInt($(this).attr('data') / 60);
-      $(this).html(data);
     });
 
     <#if oj_style != "slate">

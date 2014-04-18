@@ -499,10 +499,10 @@ public class ContestController extends OjController
 
   @ClearInterceptor
   @RequiresPermissions("contest:build")
-  public void buildRank()
+  public void build()
   {
     Integer cid = getParaToInt(0);
-    contestService.buildRank(cid);
+    contestService.build(cid);
 
     redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(), new FlashMessage(getText("contest.buildRank.success")));
   }

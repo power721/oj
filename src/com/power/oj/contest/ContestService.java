@@ -963,12 +963,14 @@ public class ContestService
     return true;
   }
 
-  public boolean buildRank(Integer cid)
+  public boolean build(Integer cid)
   {
     Db.update("DELETE FROM board WHERE cid=?", cid);
     ContestModel contestModel = getContest(cid);
     int contestStartTime = contestModel.getStartTime();
-    List<ContestSolutionModel> solutions = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
+    int problemNum = Db.queryInt("SELECT MAX(num) FROM contest_problem WHERE cid=?", cid) + 1;
+    List<ContestSolutionModel> solutions = ContestSolutionModel.dao.
+        find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
     HashMap<Integer, UserInfo> userRank = new HashMap<Integer, UserInfo>();
     UserInfo userInfo = null;
     int uid = 0;
@@ -976,12 +978,12 @@ public class ContestService
     int result = 0;
     int ctime = 0;
     int penalty = 0;
-    int firstBooldUid[] = new int[26];
-    int firstBooldTime[] = new int[26];
-    for (int i = 0; i < 26; ++i)
+    int firstBooldUid[] = new int[problemNum];
+    int firstBooldTime[] = new int[problemNum];
+    for (int i = 0; i < problemNum; ++i)
       firstBooldTime[i] = -1;
-    int accepted[] = new int[26];
-    int submission[] = new int[26];
+    int accepted[] = new int[problemNum];
+    int submission[] = new int[problemNum];
     
     for (ContestSolutionModel solution : solutions)
     {
@@ -998,13 +1000,16 @@ public class ContestService
         firstBooldUid[num] = uid;
         firstBooldTime[num] = elapseTime;
       }
+      if (result == ResultType.AC)
+      {
+        ++accepted[num];
+      }
       if (userInfo == null)
       {
         userInfo = new UserInfo(uid);
         if (result == ResultType.AC)
         {
           ++userInfo.solved;
-          ++accepted[num];
           userInfo.acTime[num] = elapseTime;
           userInfo.penalty += penalty;
         } else if (result < ResultType.SE)
@@ -1017,7 +1022,6 @@ public class ContestService
         if (result == ResultType.AC)
         {
           ++userInfo.solved;
-          ++accepted[num];
           userInfo.acTime[num] = elapseTime;
           penalty += userInfo.waNum[num] * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
           userInfo.penalty += penalty;
@@ -1037,7 +1041,7 @@ public class ContestService
       board.setSolved(userInfo.getSolved());
       board.setPenalty(userInfo.getPenalty());
 
-      for (int i = 0; i < 26; ++i)
+      for (int i = 0; i < problemNum; ++i)
       {
         if (userInfo.getAcTime(i) > 0)
         {
@@ -1051,10 +1055,10 @@ public class ContestService
       }
       board.save();
     }
-    for (int i = 0; i < OjConstants.MAX_PROBLEMS_IN_CONTEST; ++i)
+    for (int i = 0; i < problemNum; ++i)
     {
-      Db.update("UPDATE contest_problem SET firstBloodUid=?,firstBloodTime=?,accepted=?,submission=? WHERE cid=? AND num=?", firstBooldUid[i], firstBooldTime[i],
-          accepted[i], submission[i], cid, i);
+      Db.update("UPDATE contest_problem SET firstBloodUid=?,firstBloodTime=?,accepted=?,submission=? WHERE cid=? AND num=?",
+          firstBooldUid[i], firstBooldTime[i], accepted[i], submission[i], cid, i);
     }
 
     return true;
