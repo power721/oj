@@ -1,11 +1,17 @@
 <@override name="content">
-<h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
+<#assign type="Private<sup>${contest.type}</sup>">
+<#if contest.type==0>
+<#assign type="Public">
+</#if>
+<h3 class="text-center">${type} Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div clas="span4 offset4">
-    <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> 
-    <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
-    <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span>
-    <span id="reminder"></span>
+    <div class="well">
+      <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> 
+      <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span>
+      <span id="reminder"></span>
+    </div>
     <div class="countdown"></div>
   </div>
 </div>

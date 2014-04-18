@@ -6,6 +6,8 @@ import java.util.List;
 import jodd.util.StringUtil;
 
 import com.jfinal.plugin.activerecord.Page;
+import com.power.oj.contest.ContestService;
+import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
@@ -241,6 +243,12 @@ public class SolutionService
   public Page<ContestSolutionModel> getProblemStatusPageForContest(int pageNumber, int pageSize, int language, int cid, int num)
   {
     String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
+    ContestModel contestModel = ContestService.me().getContest(cid);
+    if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD && 
+        contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp)
+    {
+      sql = "SELECT sid,s.uid,u.name,pid,result,s.language,s.ctime,l.name AS language";
+    }
     StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=0");
 
     List<Object> paras = new ArrayList<Object>();

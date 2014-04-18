@@ -194,7 +194,12 @@ public class ContestController extends OjController
       }
     }
     String userName = getPara("name");
-    // TODO force userName ad current user name
+    ContestModel contestModel = contestService.getContest(cid);
+    if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD && 
+        contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp)
+    {
+      userName = userService.getCurrentUser().getName();
+    }
     StringBuilder query = new StringBuilder().append("?cid=").append(cid);
 
     if (result > -1)
