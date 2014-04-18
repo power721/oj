@@ -853,7 +853,7 @@ public class ContestService
         board.set("penalty", board.getInt("penalty") + acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
       }
     }
-    else
+    else if (solutionModel.getResult() < ResultType.SE)
     {
       board.set(c+"_WrongNum", wrongSubmissions + 1);
     }
@@ -891,7 +891,8 @@ public class ContestService
     ContestModel contestModle = getContest(cid);
     Integer contestStartTime = contestModle.getStartTime();
     Integer acTime = submitTime - contestStartTime;
-    Long wrongSubmissions = Db.queryLong("SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=? AND uid=? AND sid<? AND result!=? AND status=1", cid, num, uid, sid, ResultType.AC);
+    Long wrongSubmissions = Db.queryLong("SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=? AND uid=? AND sid<? AND result!=? AND result<? AND status=1", 
+        cid, num, uid, sid, ResultType.AC, ResultType.SE);
     board.set(c + "_WrongNum", wrongSubmissions);
     board.set(c+"_SolvedTime", acTime);
     
@@ -978,7 +979,7 @@ public class ContestService
           ++accepted[num];
           userInfo.acTime[num] = elapseTime;
           userInfo.penalty += penalty;
-        } else if (result != ResultType.SE)
+        } else if (result < ResultType.SE)
         {
           ++userInfo.waNum[num];
         }
@@ -992,7 +993,7 @@ public class ContestService
           userInfo.acTime[num] = elapseTime;
           penalty += userInfo.waNum[num] * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
           userInfo.penalty += penalty;
-        } else if (result != ResultType.SE)
+        } else if (result < ResultType.SE)
         {
           ++userInfo.waNum[num];
         }

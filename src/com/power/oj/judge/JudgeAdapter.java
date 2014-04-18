@@ -292,6 +292,7 @@ public abstract class JudgeAdapter implements Runnable
     {
       if (solutionModel.get("originalResult") != null)
       {
+        log.info("updateBoard4Rejudge");
         contestService.updateBoard4Rejudge(solutionModel);
       }
       else
