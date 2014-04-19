@@ -829,6 +829,7 @@ public class ContestService
       board = Db.findById("board", board.get("id"));
     }
     Integer wrongSubmissions = board.getInt(c + "_WrongNum");
+    Integer acTime = board.getInt(c + "_SolvedTime");
     
     if (solutionModel.getResult() == ResultType.AC)
     {
@@ -844,7 +845,6 @@ public class ContestService
       contestProblem.setAccepted(contestProblem.getAccepted()+1);
       contestProblem.update();
       
-      Integer acTime = board.getInt(c + "_SolvedTime");
       if (acTime == null || acTime == 0)
       {
         acTime = submitTime - contestStartTime;
@@ -853,7 +853,7 @@ public class ContestService
         board.set("penalty", board.getInt("penalty") + acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
       }
     }
-    else if (solutionModel.getResult() < ResultType.SE)
+    else if ((acTime == null || acTime == 0) && solutionModel.getResult() < ResultType.SE)
     {
       board.set(c+"_WrongNum", wrongSubmissions + 1);
     }
