@@ -1,5 +1,5 @@
 <#macro paginate currentPage totalPage actionUrl urlParas="">
-  <#if (totalPage <= 0) || (currentPage > totalPage)><#return></#if>
+  <#if (totalPage <= 0)><#return></#if>
   <#local startPage = currentPage - 4>
   <#if (startPage < 1)><#local startPage = 1></#if>
   
@@ -23,7 +23,7 @@
       <li><a href="${actionUrl}#{i}${urlParas!}">#{i}</a></li>
     </#if>
   </#list>
-  <#if (currentPage != totalPage)>
+  <#if (currentPage < totalPage)>
       <li><a href="${actionUrl}#{currentPage + 1}${urlParas!}">Next</a></li>
       <li><a href="${actionUrl}#{totalPage}${urlParas!}">&gt;&gt;</a></li>
   </#if>
