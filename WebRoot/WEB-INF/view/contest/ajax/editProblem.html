@@ -5,22 +5,23 @@
 <div class="control-group problem <#if titleMsg??>error</#if>">
   <label class="control-label" for="inputTitle">Title</label>
   <div class="controls">
-    <textarea id="inputTitle" name="title" rows="1" cols="130" required>${problem.title!}</textarea>
-    <!--<input class="input-xxlarge" type="text" id="inputTitle" name="title" value="${problem.title!}" required>-->
+    <!--<textarea id="inputTitle" name="title" rows="1" cols="130" required>${problem.title!}</textarea>-->
+    <input class="input-xxlarge" type="text" id="inputTitle" name="title" value="${problem.title!}" required>
+    <span class="help-inline">This title just for contest problem.</span>
     <p class="text-error">${titleMsg!}</p>
   </div>
 </div>
 <div class="control-group problem">
   <label class="control-label" for="inputTimeLimit">Time Limit</label>
   <div class="controls input-append">
-    <input class="input-mini" type="number" id="inputTimeLimit" name="problem.timeLimit" value="${problem.timeLimit!}" required>
+    <input class="input-small" type="number" id="inputTimeLimit" name="problem.timeLimit" value="${problem.timeLimit!}" required>
     <span class="add-on">MS</span>
   </div>
 </div>
 <div class="control-group problem">
   <label class="control-label" for="inputMemoryLimit">Memory Limit</label>
   <div class="controls input-append">
-    <input class="input-mini" type="number" id="inputMemoryLimit" name="problem.memoryLimit" value="${problem.memoryLimit!}" required>
+    <input class="input-small" type="number" id="inputMemoryLimit" name="problem.memoryLimit" value="${problem.memoryLimit!}" required>
     <span class="add-on">KB</span>
   </div>
 </div>

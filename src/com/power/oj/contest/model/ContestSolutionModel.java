@@ -1,12 +1,11 @@
 package com.power.oj.contest.model;
 
-import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Model;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.solution.SolutionModel;
+import com.power.oj.core.bean.Solution;
 
-public class ContestSolutionModel extends Model<ContestSolutionModel>
+public class ContestSolutionModel extends Model<ContestSolutionModel> implements Solution
 {
   private static final long serialVersionUID = 1L;
   
@@ -31,23 +30,6 @@ public class ContestSolutionModel extends Model<ContestSolutionModel>
   public static final String SYSTEM_ERROR = "systemError";
   public static final String STATUS = "status";
 
-  public ContestSolutionModel() {}
-  
-  public ContestSolutionModel(SolutionModel solutionModel)
-  {
-    for (String filed : solutionModel.getAttrNames())
-    {
-      try
-      {
-        set(filed, solutionModel.get(filed));
-      }
-      catch (ActiveRecordException e)
-      {
-        put(filed, solutionModel.get(filed));
-      }
-    }
-  }
-  
   public boolean addSolution()
   {
     setCtime(OjConfig.timeStamp);

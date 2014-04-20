@@ -305,13 +305,13 @@ public class SolutionService
 
   public List<ContestSolutionModel> getSolutionListForContest(Integer cid)
   {
-    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=? AND status=1", cid);
+    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
     return solutionList;
   }
 
   public List<ContestSolutionModel> getSolutionListForContestProblem(Integer cid, Integer num)
   {
-    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM solution WHERE cid=? AND num=? AND status=1", cid, num);
+    List<ContestSolutionModel> solutionList = ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND num=? AND status=1 ORDER BY sid", cid, num);
     return solutionList;
   }
   
@@ -339,8 +339,4 @@ public class SolutionService
     return 0;
   }
   
-  public SolutionModel build(ContestSolutionModel contestSolution)
-  {
-    return dao.build(contestSolution);
-  }
 }

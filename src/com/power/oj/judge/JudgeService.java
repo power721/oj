@@ -2,11 +2,12 @@ package com.power.oj.judge;
 
 import java.util.List;
 
-//import com.jfinal.log.Logger;
+import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.bean.Solution;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
@@ -14,7 +15,7 @@ import com.power.oj.user.UserService;
 
 public class JudgeService
 {
-  //private final Logger log = Logger.getLogger(JudgeService.class);
+  private final Logger log = Logger.getLogger(JudgeService.class);
   private static final JudgeService me = new JudgeService();
   private static final ContestService contestService = ContestService.me();
   private static final ProblemService problemService = ProblemService.me();
@@ -28,7 +29,7 @@ public class JudgeService
     return me;
   }
   
-  public void judge(SolutionModel solutionModel)
+  public void judge(Solution solutionModel)
   {
     Integer uid = solutionModel.getUid();
     Integer pid = solutionModel.getPid();
@@ -60,18 +61,27 @@ public class JudgeService
     }
   }
 
-  public void rejudge(SolutionModel solutionModel)
+  public void rejudge(Solution solutionModel)
   {
     // revert user accepted/solved
     if (solutionModel.getCid() == null)
     {
-      userService.revertAccepted(solutionModel);
+      userService.revertAccepted((SolutionModel)solutionModel);
     }
     solutionModel.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
     solutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
-    solutionModel.update();
+    if (solutionModel instanceof SolutionModel)
+    {
+      ((SolutionModel)solutionModel).update();
+    }
+    else
+    {
+      ((ContestSolutionModel)solutionModel).update();
+    }
     
+    //log.info(solutionModel.toJson());
     JudgeAdapter.addSolution(solutionModel);
+    log.info("Add: " + String.valueOf(JudgeAdapter.size()));
     if (JudgeAdapter.size() <= 1)
     {
       JudgeAdapter judge = null;
@@ -130,19 +140,23 @@ public class JudgeService
     contestSolutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
     contestSolutionModel.update();
     
-    SolutionModel solutionModel = solutionService.build(contestSolutionModel);
-    solutionModel.put("originalResult", result);
+    contestSolutionModel.put("originalResult", result);
     
-    rejudge(solutionModel);
+    rejudge(contestSolutionModel);
   }
   
   public void rejudgeContest(Integer cid)
   {
     contestService.reset(cid);
     List<ContestSolutionModel> solutionList = solutionService.getSolutionListForContest(cid);
+    System.out.println("total: " + solutionList.size());
+    int num = 0;
     for (ContestSolutionModel solutionModel: solutionList)
     {
-      rejudge(solutionService.build(solutionModel));
+      rejudge(solutionModel);
+      num++;
+      if (num == 20)
+        break;
     }
   }
 
