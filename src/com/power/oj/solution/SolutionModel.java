@@ -1,11 +1,10 @@
 package com.power.oj.solution;
 
-import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Model;
-import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
-public class SolutionModel extends Model<SolutionModel>
+import com.power.oj.core.bean.Solution;
+public class SolutionModel extends Model<SolutionModel> implements Solution
 {
   /**
    * 
@@ -33,22 +32,6 @@ public class SolutionModel extends Model<SolutionModel>
   public static final String SYSTEM_ERROR = "systemError";
   public static final String STATUS = "status";
 
-  public SolutionModel build(ContestSolutionModel contestSolution)
-  {
-    for (String filed : contestSolution.getAttrNames())
-    {
-      try
-      {
-        set(filed, contestSolution.get(filed));
-      }
-      catch (ActiveRecordException e)
-      {
-        put(filed, contestSolution.get(filed));
-      }
-    }
-    return this;
-  }
-  
   public boolean addSolution()
   {
     setCtime(OjConfig.timeStamp);

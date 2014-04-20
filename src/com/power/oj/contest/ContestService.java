@@ -34,8 +34,6 @@ import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
-import com.power.oj.solution.SolutionModel;
-import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
 
@@ -586,8 +584,7 @@ public class ContestService
       Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
       
       contestSolution = ContestSolutionModel.dao.findById(contestSolution.getSid());
-      SolutionModel solutionModel = SolutionService.me().build(contestSolution);
-      judgeService.judge(solutionModel);
+      judgeService.judge(contestSolution);
     } else
     {
       return -2;
@@ -816,7 +813,7 @@ public class ContestService
     return false;
   }
   
-  public boolean updateBoard(SolutionModel solutionModel)
+  public boolean updateBoard(ContestSolutionModel solutionModel)
   {
     Integer cid = solutionModel.getCid();
     Integer uid = solutionModel.getUid();
@@ -866,7 +863,7 @@ public class ContestService
     return Db.update("board", board);
   }
   
-  public boolean updateBoard4Rejudge(SolutionModel solutionModel)
+  public boolean updateBoard4Rejudge(ContestSolutionModel solutionModel)
   {
     int result = solutionModel.getInt("originalResult");
     boolean ac = true;

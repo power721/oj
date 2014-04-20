@@ -316,6 +316,15 @@ public class ContestController extends OjController
     setTitle(getText("solution.show.title"));
   }
 
+  @RequiresPermissions("contest:rejudge")
+  public void rejudge()
+  {
+    Integer cid = getParaToInt(0);
+    judgeService.rejudgeContest(cid);
+    
+    redirect("/contest/show/" + cid, new FlashMessage("Server got your rejudge request."));
+  }
+
   @RequiresPermissions("code:rejudge")
   public void rejudgeCode()
   {
@@ -465,6 +474,7 @@ public class ContestController extends OjController
     boolean ajax = getParaToBoolean("ajax", false);
     
     setAttr("cid", cid);
+    setAttr("id", id);
     setAttr("num", num);
     setAttr("problem", contestService.getProblem(cid, num));
     setTitle(new StringBuilder(4).append(getText("problem.edit.title")).append(cid).append("-").append(num).toString());

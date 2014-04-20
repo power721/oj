@@ -17,6 +17,7 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.bean.Solution;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
@@ -29,10 +30,10 @@ public abstract class JudgeAdapter implements Runnable
   protected static final ContestService contestService = ContestService.me();
   protected static final UserService userService = UserService.me();
   protected static final ProblemService problemService = ProblemService.me();
-  protected static ConcurrentLinkedQueue<SolutionModel> judgeList = new ConcurrentLinkedQueue<SolutionModel>();
+  protected static ConcurrentLinkedQueue<Solution> judgeList = new ConcurrentLinkedQueue<Solution>();
   
   protected final Logger log = Logger.getLogger(getClass());
-  protected SolutionModel solutionModel;
+  protected Solution solutionModel;
   protected ProblemModel problemModel;
   protected ProgramLanguageModel programLanguage;
   protected int totalRunTime;
@@ -57,9 +58,9 @@ public abstract class JudgeAdapter implements Runnable
     while (!judgeList.isEmpty())
     {
       log.info(Printf.str("Judge threads: %d", judgeList.size()));
-      solutionModel = judgeList.poll();
       synchronized (JudgeAdapter.class)
       {
+        solutionModel = judgeList.poll();
         try
         {
           prepare();
@@ -85,6 +86,7 @@ public abstract class JudgeAdapter implements Runnable
   
   protected void prepare() throws IOException
   {
+    log.info(String.valueOf(solutionModel.getSid()));
     Integer cid = solutionModel.getCid();
     programLanguage = OjConfig.language_type.get(solutionModel.getLanguage());
     if (cid != null && cid > 0)
@@ -171,10 +173,9 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
+      return ((ContestSolutionModel)solutionModel).update();
     }
-    return solutionModel.update();
+    return ((SolutionModel)solutionModel).update();
   }
 
   protected boolean updateRuntimeError(String error)
@@ -184,10 +185,9 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
+      return ((ContestSolutionModel)solutionModel).update();
     }
-    return solutionModel.update();
+    return ((SolutionModel)solutionModel).update();
   }
 
   protected boolean updateSystemError(String error)
@@ -198,10 +198,9 @@ public abstract class JudgeAdapter implements Runnable
     log.info(solutionModel.toString());
     if (cid != null && cid > 0)
     {
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
+      return ((ContestSolutionModel)solutionModel).update();
     }
-    return solutionModel.update();
+    return ((SolutionModel)solutionModel).update();
   }
   
   protected boolean updateResult(int result, int time, int memory)
@@ -211,10 +210,9 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
+      return ((ContestSolutionModel)solutionModel).update();
     }
-    return solutionModel.update();
+    return ((SolutionModel)solutionModel).update();
   }
 
   protected boolean updateResult(boolean ac, Integer test)
@@ -232,10 +230,9 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
+      return ((ContestSolutionModel)solutionModel).update();
     }
-    return solutionModel.update();
+    return ((SolutionModel)solutionModel).update();
   }
 
   protected boolean setResult(int result, int time, int memory)
@@ -267,10 +264,9 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
+      return ((ContestSolutionModel)solutionModel).update();
     }
-    return solutionModel.update();
+    return ((SolutionModel)solutionModel).update();
   }
   
   protected boolean updateUser()
@@ -285,7 +281,7 @@ public abstract class JudgeAdapter implements Runnable
     {
       return false;
     }
-    return userService.incAccepted(solutionModel);
+    return userService.incAccepted((SolutionModel)solutionModel);
   }
 
   protected boolean updateProblem()
@@ -295,7 +291,7 @@ public abstract class JudgeAdapter implements Runnable
       return false;
     }
 
-    return problemService.incAccepted(solutionModel);
+    return problemService.incAccepted((SolutionModel)solutionModel);
   }
 
   protected boolean updateContest()
@@ -303,21 +299,21 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solutionModel.getCid();
     if (cid != null && cid > 0)
     {
-      if (solutionModel.get("originalResult") != null)
+      if (((ContestSolutionModel)solutionModel).get("originalResult") != null)
       {
         log.info("updateBoard4Rejudge");
-        contestService.updateBoard4Rejudge(solutionModel);
+        contestService.updateBoard4Rejudge((ContestSolutionModel)solutionModel);
       }
       else
       {
-        contestService.updateBoard(solutionModel);
+        contestService.updateBoard((ContestSolutionModel)solutionModel);
       }
       return true;
     }
     return false;
   }
 
-  public static void addSolution(SolutionModel solutionModel)
+  public static void addSolution(Solution solutionModel)
   {
     judgeList.add(solutionModel);
   }
