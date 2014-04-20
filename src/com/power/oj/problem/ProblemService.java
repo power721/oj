@@ -559,10 +559,10 @@ public class ProblemService
       throw new ProblemException("Problem is not exist!");
     }
     
-    long accepted = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=0 AND status=1 LIMIT 1", pid);
+    long accepted = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND result=? AND status=1 LIMIT 1", pid, ResultType.AC);
     long submission = Db.queryLong("SELECT COUNT(*) AS count FROM solution WHERE pid=? AND status=1 LIMIT 1", pid);
     long submitUser = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND status=1 LIMIT 1", pid);
-    long solved = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=0 AND status=1 LIMIT 1", pid);
+    long solved = Db.queryLong("SELECT COUNT(uid) AS count FROM solution WHERE pid=? AND result=? AND status=1 LIMIT 1", pid, ResultType.AC);
 
     problemModel.setSubmission((int) submission);
     problemModel.setAccepted((int) accepted);

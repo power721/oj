@@ -221,10 +221,11 @@ public class SolutionService
   {
     // TODO check user permission for view source code
     String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
-    StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=0");
+    StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=?");
 
     List<Object> paras = new ArrayList<Object>();
-
+    paras.add(ResultType.AC);
+    
     if (language != null && language > 0)
     {
       sb.append(" AND s.language=?");
@@ -242,17 +243,22 @@ public class SolutionService
 
   public Page<ContestSolutionModel> getProblemStatusPageForContest(int pageNumber, int pageSize, int language, int cid, int num)
   {
-    String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
+    String sql = null;
     ContestModel contestModel = ContestService.me().getContest(cid);
     if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD && 
         contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp)
     {
       sql = "SELECT sid,s.uid,u.name,pid,result,s.language,s.ctime,l.name AS language";
     }
-    StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=0");
+    else
+    {
+      sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
+    }
+    StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=?");
 
     List<Object> paras = new ArrayList<Object>();
-
+    paras.add(ResultType.AC);
+    
     if (language > 0)
     {
       sb.append(" AND s.language=?");

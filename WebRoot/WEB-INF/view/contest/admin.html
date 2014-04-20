@@ -159,47 +159,47 @@
           function(data) {
             switch(data.result)
             {
-              case 0:
-                var html = '<tr class="problem" pid="' + pid + '">' +
-                          '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>' +
-                          '<td class="pid">' +
-                          '<a href="problem/show/' + pid + '">' + pid + '</a>' +
-                          '</td>' +
-                          '<td class="title"><a href="contest/problem/' + cid + '-' + pid + '">' + title + '</a></td>' +
-                          '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
-                          '</tr>';
-                that.parent().before(html);
-                updateId();
-                break;
-              case 1:
-                $.dialog({
-                  content: 'Too many problems in this contest.',
-                  time: 1.5
-                });
-                break;
-              case 2:
-                $.dialog({
-                  content: 'Duplicate problems for this contest.',
-                  time: 1.5
-                });
-                break;
-              case 3:
-                $.dialog({
-                  content: 'This problem does not exist.',
-                  time: 1.5
-                });
-                break;
-              case 4:
-                $.dialog({
-                  content: 'Contest already finished.',
-                  time: 1.5
-                });
-                break;
               case -1:
                 $.dialog({
                   content: 'Db error.',
                   time: 1.5
                 });
+                break;
+              case -2:
+                $.dialog({
+                  content: 'Too many problems in this contest.',
+                  time: 1.5
+                });
+                break;
+              case -3:
+                $.dialog({
+                  content: 'Duplicate problems for this contest.',
+                  time: 1.5
+                });
+                break;
+              case -4:
+                $.dialog({
+                  content: 'This problem does not exist.',
+                  time: 1.5
+                });
+                break;
+              case -5:
+                $.dialog({
+                  content: 'Contest already finished.',
+                  time: 1.5
+                });
+                break;
+              default:
+                var html = '<tr class="problem" pid="' + pid + '">' +
+                          '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>' +
+                          '<td class="pid">' +
+                          '<a href="problem/show/' + pid + '">' + pid + '</a>' +
+                          '</td>' +
+                          '<td class="title"><a href="contest/problem/' + cid + '-' + String.fromCharCode(65+data.result) + '">' + title + '</a></td>' +
+                          '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
+                          '</tr>';
+                that.parent().before(html);
+                updateId();
                 break;
             }
           });

@@ -136,7 +136,7 @@ public class ContestService
       problem.setTitle(title);
     
     long submitUser = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND status=1", cid, num);
-    long solved = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE result=0 AND cid=? AND num=? AND status=1", cid, num);
+    long solved = Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND result=? AND status=1", cid, num, ResultType.AC);
     problem.setAccepted(record.getInt("accepted"));
     problem.setSubmission(record.getInt("submission"));
     problem.setSubmitUser((int) submitUser);
@@ -652,27 +652,23 @@ public class ContestService
   {
     if (isContestFinished(cid))
     {
-      return 4;
+      return -5;
     }
     
     if(problemService.findProblem(pid) == null)
     {
-      return 3;
+      return -4;
     }
     
     if (Db.queryInt("SELECT id FROM contest_problem WHERE cid=? AND pid=?", cid, pid) != null)
     {
-      return 2;
+      return -3;
     }
     
-    Long num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
-    if (num == null)
-    {
-      num = 0L;
-    }
+    long num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
     if (num >= OjConstants.MAX_PROBLEMS_IN_CONTEST)
     {
-      return 1;
+      return -2;
     }
     
     Record record = new Record();
@@ -683,7 +679,7 @@ public class ContestService
     
     if (Db.save("contest_problem", record))
     {
-      return 0;
+      return (int)num;
     }
     return -1;
   }
