@@ -562,7 +562,7 @@ public class ContestService
     Integer cid = contestSolution.getCid();
     Integer uid = userService.getCurrentUid();
     Integer pid = getPid(contestSolution.getCid(), contestSolution.getNum());
-    ProblemModel problemModel = problemService.findProblem(pid);
+    ProblemModel problemModel = problemService.findProblemForContest(pid);
     
     if (problemModel == null)
     {

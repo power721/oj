@@ -82,8 +82,17 @@ public class ProblemService
 
   public ProblemModel findProblemForContest(Integer pid)
   {
-    ProblemModel problemModel = findProblem(pid);
-    
+    ProblemModel problemModel = null;
+
+    if (OjConfig.getDevMode())
+    {
+      problemModel = dao.findById(pid);
+    }
+    else
+    {
+      problemModel = dao.findFirstByCache("problem", pid, "SELECT * FROM problem WHERE pid=?", pid);
+    }
+
     if (problemModel == null)
       return null;
     

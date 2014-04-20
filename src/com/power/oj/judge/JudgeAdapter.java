@@ -85,9 +85,17 @@ public abstract class JudgeAdapter implements Runnable
   
   protected void prepare() throws IOException
   {
-    programLanguage = OjConfig.language_type.get(solutionModel.getLanguage());
-    problemModel = problemService.findProblem(solutionModel.getPid());
     Integer cid = solutionModel.getCid();
+    programLanguage = OjConfig.language_type.get(solutionModel.getLanguage());
+    if (cid != null && cid > 0)
+    {
+      problemModel = problemService.findProblemForContest(solutionModel.getPid());
+    }
+    else
+    {
+      problemModel = problemService.findProblem(solutionModel.getPid());
+    }
+    
     workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
     if (cid != null && cid > 0)
     {
@@ -272,6 +280,11 @@ public abstract class JudgeAdapter implements Runnable
       return false;
     }
     
+    Integer cid = solutionModel.getCid();
+    if (cid != null && cid > 0)
+    {
+      return false;
+    }
     return userService.incAccepted(solutionModel);
   }
 
