@@ -455,6 +455,38 @@ public class ContestController extends OjController
     redirect(new StringBuilder(2).append("/contest/admin/").append(contestModel.getInt("cid")).toString());
   }
   
+  @RequiresPermissions("problem:edit")
+  public void editProblem()
+  {
+    Integer cid = getParaToInt(0);
+    String problem_id = getPara(1, "A");
+    char id = problem_id.toUpperCase().charAt(0);
+    Integer num = id - 'A';
+    boolean ajax = getParaToBoolean("ajax", false);
+    
+    setAttr("cid", cid);
+    setAttr("num", num);
+    setAttr("problem", contestService.getProblem(cid, num));
+    setTitle(new StringBuilder(4).append(getText("problem.edit.title")).append(cid).append("-").append(num).toString());
+
+    render(ajax ? "ajax/editProblem.html" : "editProblem.html");
+  }
+
+  @ClearInterceptor
+  @Before(POST.class)
+  @RequiresPermissions("problem:edit")
+  public void updateProblem()
+  {
+    Integer cid = getParaToInt("cid");
+    Integer num = getParaToInt("num");
+    String title = getPara("title");
+    ProblemModel problemModel = getModel(ProblemModel.class, "problem");
+    contestService.updateProblem(problemModel, cid, num, title);
+
+    String redirectURL = new StringBuilder(4).append("/contest/problem/").append(cid).append("-").append((char)(num+'A')).toString();
+    redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
+  }
+  
   @RequiresPermissions("contest:addProblem")
   public void admin()
   {

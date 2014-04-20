@@ -41,7 +41,7 @@
             <a href="user/profile/${User.name!}" title="${User.realName!}">${User.uid!}</a>
           </td>
           <td class="name"><a href="user/profile/${User.name!}">${User.name!}</a></td>
-          <td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" uid="${User.uid!}">Remove</button></#if></td>
+          <td class="admin"><button class="btn btn-danger remove" uid="${User.uid!}">Remove</button></td>
         </tr>
         </#list>
         </#if>

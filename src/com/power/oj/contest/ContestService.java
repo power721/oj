@@ -146,6 +146,15 @@ public class ContestService
 
     return problem;
   }
+  
+  public boolean updateProblem(ProblemModel problemModel, int cid, int num, String title)
+  {
+    Record record = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
+    record.set("title", title);
+    Db.update("contest_problem", record);
+    
+    return problemService.updateProblem(problemModel);
+  }
 
   public Integer getPid(Integer cid, Integer num)
   {
