@@ -31,11 +31,11 @@ public class UestcJudgeAdapter extends JudgeAdapter
     long timeLimit = problemModel.getTimeLimit();
     long memoryLimit = problemModel.getMemoryLimit();
     long outputLimit = OjConfig.getInt("outputLimit", 8192);
-    boolean isSpj = problemService.checkSpj(solutionModel.getPid());
+    boolean isSpj = problemService.checkSpj(solution.getPid());
     
     if (numOfData < 1)
     {
-      log.warn("No data file for problem " + solutionModel.getPid());
+      log.warn("No data file for problem " + solution.getPid());
     }
     boolean isAccepted = true;
     totalRunTime = 0;
@@ -73,7 +73,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       isAccepted = checkResult(resultStr, sb.toString());
     }
 
-    log.info(Printf.str("Total run time: %d ms, max run time: %d ms", totalRunTime, solutionModel.getTime()));
+    log.info(Printf.str("Total run time: %d ms, max run time: %d ms", totalRunTime, solution.getTime()));
     synchronized (JudgeAdapter.class)
     {
       updateResult(isAccepted, i);
@@ -97,11 +97,11 @@ public class UestcJudgeAdapter extends JudgeAdapter
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(OjConfig.getString("runShell"));
     stringBuilder.append(" -u ");
-    stringBuilder.append(solutionModel.getSid());
+    stringBuilder.append(solution.getSid());
     stringBuilder.append(" -s ");
     stringBuilder.append(sourceFile.getName());
     stringBuilder.append(" -n ");
-    stringBuilder.append(solutionModel.getPid());
+    stringBuilder.append(solution.getPid());
     stringBuilder.append(" -D ");
     stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("dataPath")));
     stringBuilder.append(" -d ");
@@ -115,7 +115,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     if (isSpj)
       stringBuilder.append(" -S");
     stringBuilder.append(" -l ");
-    stringBuilder.append(solutionModel.getLanguage());
+    stringBuilder.append(solution.getLanguage());
     stringBuilder.append(" -I ");
     stringBuilder.append(inputFile);
     stringBuilder.append(" -O ");
@@ -161,11 +161,11 @@ public class UestcJudgeAdapter extends JudgeAdapter
       isAccepted = false;
     }
     
-    if (solutionModel.getResult() == ResultType.CE)
+    if (solution.getResult() == ResultType.CE)
     {
       updateCompileError(readError("stderr_compiler.txt"));
     }
-    else if (solutionModel.getResult() == ResultType.RE)
+    else if (solution.getResult() == ResultType.RE)
     {
       if (StringUtil.isBlank(errorOut))
       {

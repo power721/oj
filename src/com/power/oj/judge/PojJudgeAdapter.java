@@ -20,7 +20,7 @@ public class PojJudgeAdapter extends JudgeAdapter
 
   public boolean Compile() throws IOException
   {
-    log.info(solutionModel.getSid() + " Start compiling...");
+    log.info(solution.getSid() + " Start compiling...");
     
     String comShellName = OjConfig.getString("compileShell");
     String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, OjConstants.SOURCE_FILE_NAME, programLanguage.getExt());
@@ -70,7 +70,7 @@ public class PojJudgeAdapter extends JudgeAdapter
 
   public boolean RunProcess() throws IOException, InterruptedException
   {
-    log.info(solutionModel.getSid() + " RunProcess...");
+    log.info(solution.getSid() + " RunProcess...");
     /*
      * execute run command
      */
@@ -100,7 +100,7 @@ public class PojJudgeAdapter extends JudgeAdapter
     log.info("data files: " + numOfData);
     if (numOfData < 1)
     {
-      log.warn("No data file for problem " + solutionModel.getPid());
+      log.warn("No data file for problem " + solution.getPid());
     }
     for (int i = 0; i < numOfData; ++i)
     {
@@ -180,10 +180,10 @@ public class PojJudgeAdapter extends JudgeAdapter
   {
     for (int i = 1000; i < 1010; ++i)
     {
-      SolutionModel solutionModel = SolutionService.me().findSolution(i);
+      SolutionModel solution = SolutionService.me().findSolution(i);
       //synchronized (JudgeAdapter.class)
       {
-        JudgeAdapter.addSolution(solutionModel);
+        JudgeAdapter.addSolution(solution);
         if (JudgeAdapter.size() <= 1)
         {
           JudgeAdapter judge = new PojJudgeAdapter();

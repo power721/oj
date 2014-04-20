@@ -33,7 +33,7 @@ public abstract class JudgeAdapter implements Runnable
   protected static ConcurrentLinkedQueue<Solution> judgeList = new ConcurrentLinkedQueue<Solution>();
   
   protected final Logger log = Logger.getLogger(getClass());
-  protected Solution solutionModel;
+  protected Solution solution;
   protected ProblemModel problemModel;
   protected ProgramLanguageModel programLanguage;
   protected int totalRunTime;
@@ -60,7 +60,7 @@ public abstract class JudgeAdapter implements Runnable
       log.info(Printf.str("Judge threads: %d", judgeList.size()));
       synchronized (JudgeAdapter.class)
       {
-        solutionModel = judgeList.poll();
+        solution = judgeList.poll();
         try
         {
           prepare();
@@ -86,16 +86,16 @@ public abstract class JudgeAdapter implements Runnable
   
   protected void prepare() throws IOException
   {
-    log.info(String.valueOf(solutionModel.getSid()));
-    Integer cid = solutionModel.getCid();
-    programLanguage = OjConfig.language_type.get(solutionModel.getLanguage());
+    //log.info(String.valueOf(solution.getSid()));
+    Integer cid = solution.getCid();
+    programLanguage = OjConfig.language_type.get(solution.getLanguage());
     if (cid != null && cid > 0)
     {
-      problemModel = problemService.findProblemForContest(solutionModel.getPid());
+      problemModel = problemService.findProblemForContest(solution.getPid());
     }
     else
     {
-      problemModel = problemService.findProblem(solutionModel.getPid());
+      problemModel = problemService.findProblem(solution.getPid());
     }
     
     workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
@@ -105,7 +105,7 @@ public abstract class JudgeAdapter implements Runnable
     }
     else if (OjConfig.getBoolean("deleteTmpFile", false))
     {
-      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid() - 5).toString());
+      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid() - 5).toString());
       if (prevWorkDir.isDirectory())
       {
         FileUtil.deleteDir(prevWorkDir);
@@ -113,7 +113,7 @@ public abstract class JudgeAdapter implements Runnable
       }
     }
     
-    File workDir = new File(new StringBuilder(2).append(workPath).append(solutionModel.getSid()).toString());
+    File workDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid()).toString());
     if (workDir.isDirectory())
     {
       FileUtil.cleanDir(workDir);
@@ -123,17 +123,17 @@ public abstract class JudgeAdapter implements Runnable
       FileUtil.mkdirs(workDir);
     }
     workDirPath = workDir.getAbsolutePath();
-    log.info("mkdirs workDir: " + workDirPath);
+    //log.info("mkdirs workDir: " + workDirPath);
     
     sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).
         append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
-    FileUtil.writeString(sourceFile, solutionModel.getSource());
+    FileUtil.writeString(sourceFile, solution.getSource());
   }
 
   protected int getDataFiles() throws IOException
   {
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(solutionModel.getPid()).toString());
+    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(solution.getPid()).toString());
     if (!dataDir.isDirectory())
     {
       throw new IOException("Data files does not exist.");
@@ -168,92 +168,92 @@ public abstract class JudgeAdapter implements Runnable
   
   protected boolean updateCompileError(String error)
   {
-    solutionModel.setResult(ResultType.CE).setError(error);
+    solution.setResult(ResultType.CE).setError(error);
     
-    Integer cid = solutionModel.getCid();
+    Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solutionModel).update();
+      return ((ContestSolutionModel)solution).update();
     }
-    return ((SolutionModel)solutionModel).update();
+    return ((SolutionModel)solution).update();
   }
 
   protected boolean updateRuntimeError(String error)
   {
-    solutionModel.setResult(ResultType.RE).setError(error);
+    solution.setResult(ResultType.RE).setError(error);
     
-    Integer cid = solutionModel.getCid();
+    Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solutionModel).update();
+      return ((ContestSolutionModel)solution).update();
     }
-    return ((SolutionModel)solutionModel).update();
+    return ((SolutionModel)solution).update();
   }
 
   protected boolean updateSystemError(String error)
   {
-    solutionModel.setResult(ResultType.SE).setSystemError(error);
+    solution.setResult(ResultType.SE).setSystemError(error);
 
-    Integer cid = solutionModel.getCid();
-    log.info(solutionModel.toString());
+    Integer cid = solution.getCid();
+    //log.info(solution.toString());
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solutionModel).update();
+      return ((ContestSolutionModel)solution).update();
     }
-    return ((SolutionModel)solutionModel).update();
+    return ((SolutionModel)solution).update();
   }
   
   protected boolean updateResult(int result, int time, int memory)
   {
-    solutionModel.setResult(result).setTime(time).setMemory(memory);
+    solution.setResult(result).setTime(time).setMemory(memory);
 
-    Integer cid = solutionModel.getCid();
+    Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solutionModel).update();
+      return ((ContestSolutionModel)solution).update();
     }
-    return ((SolutionModel)solutionModel).update();
+    return ((SolutionModel)solution).update();
   }
 
   protected boolean updateResult(boolean ac, Integer test)
   {
     if (ac)
     {
-      solutionModel.setResult(ResultType.AC);
-      solutionModel.setTime(totalRunTime);
+      solution.setResult(ResultType.AC);
+      solution.setTime(totalRunTime);
     }
-    else if (solutionModel.getResult() != ResultType.CE && solutionModel.getResult() != ResultType.RF)
+    else if (solution.getResult() != ResultType.CE && solution.getResult() != ResultType.RF)
     {
-      solutionModel.setTest(test);
+      solution.setTest(test);
     }
     
-    Integer cid = solutionModel.getCid();
+    Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solutionModel).update();
+      return ((ContestSolutionModel)solution).update();
     }
-    return ((SolutionModel)solutionModel).update();
+    return ((SolutionModel)solution).update();
   }
 
   protected boolean setResult(int result, int time, int memory)
   {
-    boolean needUpdate = (result != solutionModel.getResult());
-    solutionModel.setResult(result);
-    if (solutionModel.getTime() == null)
+    boolean needUpdate = (result != solution.getResult());
+    solution.setResult(result);
+    if (solution.getTime() == null)
     {
-      solutionModel.setTime(time);
+      solution.setTime(time);
     }
     else
     {
-      solutionModel.setTime(Math.max(time, solutionModel.getTime()));
+      solution.setTime(Math.max(time, solution.getTime()));
     }
-    if (solutionModel.getMemory() == null)
+    if (solution.getMemory() == null)
     {
-      solutionModel.setMemory(memory);
+      solution.setMemory(memory);
     }
     else
     {
-      solutionModel.setMemory(Math.max(memory, solutionModel.getMemory()));
+      solution.setMemory(Math.max(memory, solution.getMemory()));
     }
     
     if (!needUpdate)
@@ -261,61 +261,60 @@ public abstract class JudgeAdapter implements Runnable
       return true;
     }
     
-    Integer cid = solutionModel.getCid();
+    Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solutionModel).update();
+      return ((ContestSolutionModel)solution).update();
     }
-    return ((SolutionModel)solutionModel).update();
+    return ((SolutionModel)solution).update();
   }
   
   protected boolean updateUser()
   {
-    if (solutionModel.getResult() != ResultType.AC)
+    if (solution.getResult() != ResultType.AC)
     {
       return false;
     }
     
-    Integer cid = solutionModel.getCid();
+    Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
       return false;
     }
-    return userService.incAccepted((SolutionModel)solutionModel);
+    return userService.incAccepted((SolutionModel)solution);
   }
 
   protected boolean updateProblem()
   {
-    if (solutionModel.getResult() != ResultType.AC)
+    if (solution.getResult() != ResultType.AC)
     {
       return false;
     }
 
-    return problemService.incAccepted((SolutionModel)solutionModel);
+    return problemService.incAccepted((SolutionModel)solution);
   }
 
   protected boolean updateContest()
   {
-    Integer cid = solutionModel.getCid();
+    Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      if (((ContestSolutionModel)solutionModel).get("originalResult") != null)
+      if (((ContestSolutionModel)solution).get("originalResult") != null)
       {
-        log.info("updateBoard4Rejudge");
-        contestService.updateBoard4Rejudge((ContestSolutionModel)solutionModel);
+        contestService.updateBoard4Rejudge((ContestSolutionModel)solution);
       }
       else
       {
-        contestService.updateBoard((ContestSolutionModel)solutionModel);
+        contestService.updateBoard((ContestSolutionModel)solution);
       }
       return true;
     }
     return false;
   }
 
-  public static void addSolution(Solution solutionModel)
+  public static void addSolution(Solution solution)
   {
-    judgeList.add(solutionModel);
+    judgeList.add(solution);
   }
   
   public static int size()

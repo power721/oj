@@ -28,6 +28,11 @@ import com.power.oj.util.CryptUtils;
 @Before({ContestPasswordInterceptor.class, ContestInterceptor.class})
 public class ContestController extends OjController
 {
+  public ContestController()
+  {
+    System.out.println("ContestController " + Thread.currentThread().getId());
+  }
+  
   @ClearInterceptor
   public void index()
   {
@@ -317,8 +322,9 @@ public class ContestController extends OjController
   }
 
   @RequiresPermissions("contest:rejudge")
-  public void rejudge()
+  public void rejudgeContest()
   {
+    log.info("rejudge: " + Thread.currentThread().getId());
     Integer cid = getParaToInt(0);
     judgeService.rejudgeContest(cid);
     

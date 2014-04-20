@@ -2,7 +2,7 @@ package com.power.oj.judge;
 
 import java.util.List;
 
-import com.jfinal.log.Logger;
+//import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -15,7 +15,7 @@ import com.power.oj.user.UserService;
 
 public class JudgeService
 {
-  private final Logger log = Logger.getLogger(JudgeService.class);
+  //private final Logger log = Logger.getLogger(JudgeService.class);
   private static final JudgeService me = new JudgeService();
   private static final ContestService contestService = ContestService.me();
   private static final ProblemService problemService = ProblemService.me();
@@ -29,11 +29,11 @@ public class JudgeService
     return me;
   }
   
-  public void judge(Solution solutionModel)
+  public void judge(Solution solution)
   {
-    Integer uid = solutionModel.getUid();
-    Integer pid = solutionModel.getPid();
-    Integer cid = solutionModel.getCid();
+    Integer uid = solution.getUid();
+    Integer pid = solution.getPid();
+    Integer cid = solution.getCid();
     
     if (cid == null || cid == 0)
     {
@@ -43,7 +43,7 @@ public class JudgeService
     
     synchronized (JudgeAdapter.class)
     {
-      JudgeAdapter.addSolution(solutionModel);
+      JudgeAdapter.addSolution(solution);
       if (JudgeAdapter.size() <= 1)
       {
         JudgeAdapter judge = null;
@@ -61,50 +61,49 @@ public class JudgeService
     }
   }
 
-  public void rejudge(Solution solutionModel)
+  public void rejudge(Solution solution)
   {
-    // revert user accepted/solved
-    if (solutionModel.getCid() == null)
+    if (solution.getCid() == null)
     {
-      userService.revertAccepted((SolutionModel)solutionModel);
+      userService.revertAccepted((SolutionModel)solution);
     }
-    solutionModel.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
-    solutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
-    if (solutionModel instanceof SolutionModel)
+    solution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
+    solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
+    if (solution instanceof SolutionModel)
     {
-      ((SolutionModel)solutionModel).update();
+      ((SolutionModel)solution).update();
     }
     else
     {
-      ((ContestSolutionModel)solutionModel).update();
+      ((ContestSolutionModel)solution).update();
     }
     
-    //log.info(solutionModel.toJson());
-    JudgeAdapter.addSolution(solutionModel);
-    log.info("Add: " + String.valueOf(JudgeAdapter.size()));
-    if (JudgeAdapter.size() <= 1)
+    synchronized (JudgeAdapter.class)
     {
-      JudgeAdapter judge = null;
-      if (OjConfig.isLinux())
+      JudgeAdapter.addSolution(solution);
+      if (JudgeAdapter.size() <= 1)
       {
-        judge = new UestcJudgeAdapter();
+        JudgeAdapter judge = null;
+        if (OjConfig.isLinux())
+        {
+          judge = new UestcJudgeAdapter();
+        }
+        else
+        {
+          judge = new PojJudgeAdapter();
+        }
+        new Thread(judge).start();
       }
-      else
-      {
-        judge = new PojJudgeAdapter();
-      }
-      
-      new Thread(judge).start();
     }
   }
   
   public void rejudgeSolution(Integer sid)
   {
-    SolutionModel solutionModel = solutionService.findSolution(sid);
-    // revert problem accepted/solved
-    problemService.revertAccepted(solutionModel);
+    SolutionModel solution = solutionService.findSolution(sid);
     
-    rejudge(solutionModel);
+    problemService.revertAccepted(solution);
+    
+    rejudge(solution);
   }
   
   public void rejudgeProblem(Integer pid)
@@ -113,9 +112,9 @@ public class JudgeService
     List<SolutionModel> solutionList = solutionService.getSolutionListForProblem(pid);
     
     // TODO lock this problem
-    for (SolutionModel solutionModel: solutionList)
+    for (SolutionModel solution: solutionList)
     {
-      rejudge(solutionModel);
+      rejudge(solution);
     }
   }
 
@@ -124,10 +123,10 @@ public class JudgeService
     List<SolutionModel> solutionList = solutionService.getWaitSolutionListForProblem(pid);
     
     // TODO lock this problem
-    for (SolutionModel solutionModel: solutionList)
+    for (SolutionModel solution: solutionList)
     {
-      problemService.revertAccepted(solutionModel);
-      rejudge(solutionModel);
+      problemService.revertAccepted(solution);
+      rejudge(solution);
     }
   }
 
@@ -144,19 +143,15 @@ public class JudgeService
     
     rejudge(contestSolutionModel);
   }
-  
+
   public void rejudgeContest(Integer cid)
   {
     contestService.reset(cid);
     List<ContestSolutionModel> solutionList = solutionService.getSolutionListForContest(cid);
-    System.out.println("total: " + solutionList.size());
-    int num = 0;
+    
     for (ContestSolutionModel solutionModel: solutionList)
     {
       rejudge(solutionModel);
-      num++;
-      if (num == 20)
-        break;
     }
   }
 
@@ -165,79 +160,5 @@ public class JudgeService
     // revert contest problem
     // build contest rank
   }
-/*
-  public boolean updateCompileError(SolutionModel solutionModel, String error)
-  {
-    solutionModel.setResult(ResultType.CE).setError(error);
-    
-    Integer cid = solutionModel.getCid();
-    if (cid != null && cid > 0)
-    {
-      log.info("updateCompileError");
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
-    }
-    return solutionModel.update();
-  }
 
-  public boolean updateSystemError(SolutionModel solutionModel, String error)
-  {
-    solutionModel.setResult(ResultType.SE).setSystemError(error);
-
-    Integer cid = solutionModel.getCid();
-    log.info(solutionModel.toString());
-    if (cid != null && cid > 0)
-    {
-      log.info("updateSystemError");
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
-    }
-    return solutionModel.update();
-  }
-  
-  public boolean updateResult(SolutionModel solutionModel, int result, int time, int memory)
-  {
-    solutionModel.setResult(result).setTime(time).setMemory(memory);
-
-    Integer cid = solutionModel.getCid();
-    if (cid != null && cid > 0)
-    {
-      log.info("updateResult");
-      ContestSolutionModel contestSolution = new ContestSolutionModel(solutionModel);
-      return contestSolution.update();
-    }
-    return solutionModel.update();
-  }
-  
-  public boolean updateUser(SolutionModel solutionModel)
-  {
-    if (solutionModel.getResult() != ResultType.AC)
-    {
-      return false;
-    }
-    
-    return userService.incAccepted(solutionModel);
-  }
-
-  public boolean updateProblem(SolutionModel solutionModel)
-  {
-    if (solutionModel.getResult() != ResultType.AC)
-    {
-      return false;
-    }
-
-    return problemService.incAccepted(solutionModel);
-  }
-
-  public boolean updateContest(SolutionModel solutionModel)
-  {
-    Integer cid = solutionModel.getCid();
-    if (cid != null && cid > 0)
-    {
-      contestService.updateBoard(solutionModel);
-      return true;
-    }
-    return false;
-  }
-*/
 }
