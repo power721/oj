@@ -961,7 +961,16 @@ public class ContestService
   public boolean reset(Integer cid)
   {
     Db.update("DELETE FROM board WHERE cid=?", cid);
-    Db.update("UPDATE contest_problem SET accepted=0,submission=0");
+    //Db.update("UPDATE contest_problem SET accepted=0,submission=0 WHERE cid=?", cid);
+    List<ContestProblemModel> contestProblems = ContestProblemModel.
+        dao.find("SELECT * FROM contest_problem WHERE cid=?", cid);
+    for (ContestProblemModel problem : contestProblems)
+    {
+      long submission = Db.queryLong("SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=?", cid, problem.getNum());
+      problem.setAccepted(0);
+      problem.setSubmission((int) submission);
+      problem.update();
+    }
     return true;
   }
 
