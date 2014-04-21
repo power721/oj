@@ -146,12 +146,11 @@ public abstract class JudgeAdapter implements Runnable
     return ((SolutionModel) solution).update();
   }
 
-  protected boolean updateResult(boolean ac, Integer test, Integer totalRunTime)
+  protected boolean updateResult(boolean ac, Integer test)
   {
     if (ac)
     {
       solution.setResult(ResultType.AC);
-      solution.setTime(totalRunTime);
     } else if (solution.getResult() != ResultType.CE && solution.getResult() != ResultType.RF)
     {
       solution.setTest(test);
@@ -173,7 +172,7 @@ public abstract class JudgeAdapter implements Runnable
       solution.setTime(time);
     } else
     {
-      solution.setTime(Math.max(time, solution.getTime()));
+      solution.setTime(time + solution.getTime());
     }
     if (solution.getMemory() == null)
     {
