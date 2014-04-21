@@ -6,13 +6,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import jodd.util.StringUtil;
 
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
+import com.power.oj.core.model.ProgramLanguageModel;
+import com.power.oj.problem.ProblemModel;
 
 public class PojJudgeAdapter extends JudgeAdapter
 {
@@ -31,6 +36,8 @@ public class PojJudgeAdapter extends JudgeAdapter
   {
     log.info(solution.getSid() + " Start compiling...");
 
+    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    String workDirPath = judgeService.getWorkDirPath(solution);
     String comShellName = OjConfig.getString("compileShell");
     String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, OjConstants.SOURCE_FILE_NAME, programLanguage.getExt());
     log.info("compileCmd: " + compileCmdName);
@@ -81,15 +88,29 @@ public class PojJudgeAdapter extends JudgeAdapter
   public boolean RunProcess() throws IOException, InterruptedException
   {
     log.info(solution.getSid() + " RunProcess...");
+    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    String workDirPath = judgeService.getWorkDirPath(solution);
+    
     /*
      * execute run command
      */
     Process runProcess = Runtime.getRuntime().exec(OjConfig.getString("runShell"));
     OutputStream runProcessOutputStream = runProcess.getOutputStream();
     log.info("runProcess: " + OjConfig.getString("runShell"));
-
-    int numOfData = getDataFiles();
-
+    
+    ProblemModel problemModel;
+    if (solution instanceof ContestSolutionModel)
+    {
+      problemModel = problemService.findProblemForContest(solution.getPid());
+    } else
+    {
+      problemModel = problemService.findProblem(solution.getPid());
+    }
+    
+    List<String> inFiles = new ArrayList<String>();
+    List<String> outFiles = new ArrayList<String>();
+    int numOfData = judgeService.getDataFiles(solution.getPid(), inFiles, outFiles);
+    
     long timeLimit = problemModel.getTimeLimit() * programLanguage.getTimeFactor() + numOfData * programLanguage.getExtTime();
     long caseTimeLimit = problemModel.getTimeLimit() * programLanguage.getTimeFactor() + programLanguage.getExtTime();
     runProcessOutputStream.write((timeLimit + "\n").getBytes());

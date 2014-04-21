@@ -2,13 +2,7 @@ package com.power.oj.judge;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
-import jodd.format.Printf;
-import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
 
 import com.jfinal.log.Logger;
@@ -19,7 +13,6 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.core.model.ProgramLanguageModel;
-import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
@@ -27,23 +20,15 @@ import com.power.oj.user.UserService;
 public abstract class JudgeAdapter implements Runnable
 {
 
+  protected static final JudgeService judgeService = JudgeService.me();
   protected static final ContestService contestService = ContestService.me();
   protected static final UserService userService = UserService.me();
   protected static final ProblemService problemService = ProblemService.me();
-  protected static ConcurrentLinkedQueue<Solution> judgeList = new ConcurrentLinkedQueue<Solution>();
 
   protected final Logger log = Logger.getLogger(getClass());
+  private final ThreadLocal<Solution> solutionLocal = new ThreadLocal<Solution>();
   protected Solution solution;
-  protected ProblemModel problemModel;
-  protected ProgramLanguageModel programLanguage;
-  protected int totalRunTime;
-  protected String workPath;
-  protected String workDirPath;
-  protected File sourceFile;
-
-  protected List<String> inFiles = new ArrayList<String>();
-  protected List<String> outFiles = new ArrayList<String>();
-
+  
   public JudgeAdapter()
   {
     super();
@@ -52,6 +37,7 @@ public abstract class JudgeAdapter implements Runnable
   public JudgeAdapter(Solution solution)
   {
     this();
+    solutionLocal.set(solution);
     this.solution = solution;
   }
 
@@ -62,53 +48,35 @@ public abstract class JudgeAdapter implements Runnable
   @Override
   public void run()
   {
-    while (!judgeList.isEmpty())
+    synchronized (JudgeAdapter.class)
     {
-      log.info(Printf.str("Judge threads: %d", judgeList.size()));
-      synchronized (JudgeAdapter.class)
+      try
       {
-        solution = judgeList.poll();
-        try
+        prepare();
+        if (Compile())
         {
-          prepare();
-          if (Compile())
-          {
-            RunProcess();
-          }
-          else
-          {
-            log.warn("Compile failed.");
-          }
-        } catch (Exception e)
+          RunProcess();
+        } else
         {
-          updateSystemError(e.getLocalizedMessage());
-          
-          if (OjConfig.getDevMode())
-            e.printStackTrace();
-          log.error(e.getLocalizedMessage());
+          log.warn("Compile failed.");
         }
+      } catch (Exception e)
+      {
+        updateSystemError(e.getLocalizedMessage());
+  
+        if (OjConfig.getDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
       }
     }
   }
-  
+
   protected void prepare() throws IOException
   {
-    // log.info(String.valueOf(solution.getSid()));
-    Integer cid = solution.getCid();
-    programLanguage = OjConfig.language_type.get(solution.getLanguage());
-    if (solution instanceof ContestSolutionModel)
-    {
-      problemModel = problemService.findProblemForContest(solution.getPid());
-    } else
-    {
-      problemModel = problemService.findProblem(solution.getPid());
-    }
-
-    workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
-    if (solution instanceof ContestSolutionModel)
-    {
-      workPath = new StringBuilder(4).append(workPath).append("c").append(cid).append(File.separator).toString();
-    } else if (OjConfig.getBoolean("deleteTmpFile", false))
+    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    
+    String workPath = judgeService.getWorkPath(solution);
+    if (solution instanceof SolutionModel && OjConfig.getBoolean("deleteTmpFile", false))
     {
       File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid() - 5).toString());
       if (prevWorkDir.isDirectory())
@@ -126,48 +94,15 @@ public abstract class JudgeAdapter implements Runnable
     {
       FileUtil.mkdirs(workDir);
     }
-    workDirPath = workDir.getAbsolutePath();
-    // log.info("mkdirs workDir: " + workDirPath);
+    String workDirPath = workDir.getAbsolutePath();
 
-    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".")
+    FileUtil.appendString(workPath + "run.log", solution.getSid() + "\n"); // DEBUG
+    FileUtil.appendString(workPath + "thread.log", Thread.currentThread().getId() + " " + solution.getSid() + "\n"); // DEBUG
+    
+    File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".")
         .append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solution.getSource());
-  }
-
-  protected int getDataFiles() throws IOException
-  {
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(solution.getPid()).toString());
-    if (!dataDir.isDirectory())
-    {
-      throw new IOException("Data files does not exist.");
-    }
-
-    inFiles = new ArrayList<String>();
-    outFiles = new ArrayList<String>();
-    File[] arrayOfFile = dataDir.listFiles();
-    if (arrayOfFile.length > 3)
-    {
-      Arrays.sort(arrayOfFile);
-    }
-
-    for (int i = 0; i < arrayOfFile.length; i++)
-    {
-      File in_file = arrayOfFile[i];
-      if (!in_file.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN))
-        continue;
-      File out_file = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
-          .append(in_file.getName().substring(0, in_file.getName().length() - OjConstants.DATA_EXT_IN.length())).append(OjConstants.DATA_EXT_OUT).toString());
-      if (!out_file.isFile())
-      {
-        log.warn(Printf.str("Output file for input file does not exist: %s", in_file.getAbsolutePath()));
-        continue;
-      }
-      inFiles.add(in_file.getAbsolutePath());
-      outFiles.add(out_file.getAbsolutePath());
-    }
-
-    return inFiles.size();
   }
 
   protected boolean updateCompileError(String error)
@@ -214,7 +149,7 @@ public abstract class JudgeAdapter implements Runnable
     return ((SolutionModel) solution).update();
   }
 
-  protected boolean updateResult(boolean ac, Integer test)
+  protected boolean updateResult(boolean ac, Integer test, Integer totalRunTime)
   {
     if (ac)
     {
@@ -304,14 +239,4 @@ public abstract class JudgeAdapter implements Runnable
     return false;
   }
 
-  public static void addSolution(Solution solution)
-  {
-    judgeList.add(solution);
-  }
-  
-  public static int size()
-  {
-    return judgeList.size();
-  }
-  
 }

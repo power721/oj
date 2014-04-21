@@ -5,14 +5,20 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import jodd.format.Printf;
 import jodd.io.FileNameUtil;
 import jodd.util.StringUtil;
 
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
+import com.power.oj.core.model.ProgramLanguageModel;
+import com.power.oj.problem.ProblemModel;
 
 public class UestcJudgeAdapter extends JudgeAdapter
 {
@@ -36,8 +42,19 @@ public class UestcJudgeAdapter extends JudgeAdapter
   @Override
   protected boolean RunProcess() throws IOException, InterruptedException
   {
-    int numOfData = getDataFiles();
-
+    ProblemModel problemModel;
+    if (solution instanceof ContestSolutionModel)
+    {
+      problemModel = problemService.findProblemForContest(solution.getPid());
+    } else
+    {
+      problemModel = problemService.findProblem(solution.getPid());
+    }
+    
+    List<String> inFiles = new ArrayList<String>();
+    List<String> outFiles = new ArrayList<String>();
+    int numOfData = judgeService.getDataFiles(solution.getPid(), inFiles, outFiles);
+    
     int i;
     long timeLimit = problemModel.getTimeLimit();
     long memoryLimit = problemModel.getMemoryLimit();
@@ -49,7 +66,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       log.warn("No data file for problem " + solution.getPid());
     }
     boolean isAccepted = true;
-    totalRunTime = 0;
+    Integer totalRunTime = 0;
     setResult(ResultType.RUN, 0, 0);
     for (i = 0; isAccepted && i < numOfData; ++i)
     {
@@ -80,13 +97,13 @@ public class UestcJudgeAdapter extends JudgeAdapter
         updateSystemError(sb.toString());
         return false;
       }
-      isAccepted = checkResult(resultStr, sb.toString());
+      isAccepted = checkResult(resultStr, sb.toString(), totalRunTime);
     }
 
-    log.info(Printf.str("Total run time: %d ms, max run time: %d ms", totalRunTime, solution.getTime()));
+    log.info(Printf.str("%d: Total run time: %d ms, max run time: %d ms", solution.getSid(), totalRunTime, solution.getTime()));
     synchronized (JudgeAdapter.class)
     {
-      updateResult(isAccepted, i);
+      updateResult(isAccepted, i, totalRunTime);
       updateUser();
       if (!updateContest())
       {
@@ -103,12 +120,16 @@ public class UestcJudgeAdapter extends JudgeAdapter
    */
   private String buildCommand(long timeLimit, long memoryLimit, long outputLimit, boolean isSpj, String inputFile, String outputFile, boolean firstCase)
   {
+    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    String sourceFileName = OjConstants.SOURCE_FILE_NAME + "." + programLanguage.getExt();
+    String workPath = judgeService.getWorkPath(solution);
+    
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(OjConfig.getString("runShell"));
     stringBuilder.append(" -u ");
     stringBuilder.append(solution.getSid());
     stringBuilder.append(" -s ");
-    stringBuilder.append(sourceFile.getName());
+    stringBuilder.append(sourceFileName);
     stringBuilder.append(" -n ");
     stringBuilder.append(solution.getPid());
     stringBuilder.append(" -D ");
@@ -135,7 +156,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     return stringBuilder.toString();
   }
 
-  private boolean checkResult(String[] resultStr, String errorOut)
+  private boolean checkResult(String[] resultStr, String errorOut, Integer totalRunTime)
   {
     boolean isAccepted = true;
     if (resultStr != null && resultStr.length >= 3)
@@ -176,7 +197,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     {
       if (StringUtil.isBlank(errorOut))
       {
-        errorOut = readError("stderr_executive.txt");
+        errorOut = readError( "stderr_executive.txt");
       }
       updateRuntimeError(errorOut);
     }
@@ -185,11 +206,12 @@ public class UestcJudgeAdapter extends JudgeAdapter
 
   private String readError(String fileName)
   {
+    String workPath = judgeService.getWorkPath(solution);
     StringBuilder sb = new StringBuilder();
     BufferedReader br = null;
     try
     {
-      br = new BufferedReader(new FileReader(workDirPath + "/" + fileName));
+      br = new BufferedReader(new FileReader(judgeService.getWorkDirPath(solution) + fileName));
       String line;
       while ((line = br.readLine()) != null)
       {
