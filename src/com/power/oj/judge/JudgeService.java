@@ -35,14 +35,10 @@ public class JudgeService
   
   public void judge(Solution solution)
   {
-    Integer uid = solution.getUid();
-    Integer pid = solution.getPid();
-    Integer cid = solution.getCid();
-    
-    if (cid == null || cid == 0)
+    if (solution instanceof SolutionModel)
     {
-      problemService.incSubmission(pid);
-      userService.incSubmission(uid);
+      problemService.incSubmission(solution.getPid());
+      userService.incSubmission(solution.getUid());
     }
     
     JudgeAdapter judgeThread = null;
@@ -59,7 +55,7 @@ public class JudgeService
 
   public void rejudge(Solution solution)
   {
-    if (solution.getCid() == null)
+    if (solution instanceof SolutionModel)
     {
       userService.revertAccepted((SolutionModel)solution);
     }

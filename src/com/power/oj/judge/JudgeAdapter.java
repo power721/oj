@@ -84,7 +84,7 @@ public abstract class JudgeAdapter implements Runnable
     // log.info(String.valueOf(solution.getSid()));
     Integer cid = solution.getCid();
     programLanguage = OjConfig.language_type.get(solution.getLanguage());
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       problemModel = problemService.findProblemForContest(solution.getPid());
     } else
@@ -93,7 +93,7 @@ public abstract class JudgeAdapter implements Runnable
     }
 
     workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       workPath = new StringBuilder(4).append(workPath).append("c").append(cid).append(File.separator).toString();
     } else if (OjConfig.getBoolean("deleteTmpFile", false))
@@ -162,8 +162,7 @@ public abstract class JudgeAdapter implements Runnable
   {
     solution.setResult(ResultType.CE).setError(error);
 
-    Integer cid = solution.getCid();
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       return ((ContestSolutionModel) solution).update();
     }
@@ -174,8 +173,7 @@ public abstract class JudgeAdapter implements Runnable
   {
     solution.setResult(ResultType.RE).setError(error);
 
-    Integer cid = solution.getCid();
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       return ((ContestSolutionModel) solution).update();
     }
@@ -186,9 +184,7 @@ public abstract class JudgeAdapter implements Runnable
   {
     solution.setResult(ResultType.SE).setSystemError(error);
 
-    Integer cid = solution.getCid();
-    // log.info(solution.toString());
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       return ((ContestSolutionModel) solution).update();
     }
@@ -199,8 +195,7 @@ public abstract class JudgeAdapter implements Runnable
   {
     solution.setResult(result).setTime(time).setMemory(memory);
 
-    Integer cid = solution.getCid();
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       return ((ContestSolutionModel) solution).update();
     }
@@ -218,8 +213,7 @@ public abstract class JudgeAdapter implements Runnable
       solution.setTest(test);
     }
 
-    Integer cid = solution.getCid();
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       return ((ContestSolutionModel) solution).update();
     }
@@ -250,8 +244,7 @@ public abstract class JudgeAdapter implements Runnable
       return true;
     }
 
-    Integer cid = solution.getCid();
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       return ((ContestSolutionModel) solution).update();
     }
@@ -285,8 +278,7 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateContest()
   {
-    Integer cid = solution.getCid();
-    if (cid != null && cid > 0)
+    if (solution instanceof ContestSolutionModel)
     {
       if (((ContestSolutionModel) solution).get("originalResult") != null)
       {
