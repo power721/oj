@@ -30,6 +30,7 @@ public class OjConfig
   public static String uploadPath = null;
   public static String downloadPath = null;
 
+  public static int judgeThreadsNum = 1;
   public static int contestPageSize = 20;
   public static int contestRankPageSize = 50;
   public static int problemPageSize = 50;
@@ -68,6 +69,21 @@ public class OjConfig
   public static boolean isLinux()
   {
     return isLinux;
+  }
+  
+  public static void setJudgeThreadsNum(Integer num)
+  {
+    if (num == null || num < 1)
+    {
+      num = 1;
+    }
+    
+    int processors = Runtime.getRuntime().availableProcessors();
+    if (num > processors + 1)
+    {
+      num = processors + 1;
+    }
+    judgeThreadsNum = num;
   }
   
   public static void loadConfig()

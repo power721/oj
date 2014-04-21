@@ -12,10 +12,21 @@ import jodd.util.StringUtil;
 
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.bean.Solution;
 
 public class UestcJudgeAdapter extends JudgeAdapter
 {
 
+  public UestcJudgeAdapter() 
+  {
+    super();
+  }
+  
+  public UestcJudgeAdapter(Solution solution)
+  {
+    super(solution);
+  }
+  
   @Override
   protected boolean Compile() throws IOException
   {

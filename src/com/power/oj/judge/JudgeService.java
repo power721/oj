@@ -1,8 +1,10 @@
 package com.power.oj.judge;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-//import com.jfinal.log.Logger;
+import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -15,17 +17,19 @@ import com.power.oj.user.UserService;
 
 public class JudgeService
 {
-  //private final Logger log = Logger.getLogger(JudgeService.class);
+  private static final Logger log = Logger.getLogger(JudgeService.class);
   private static final JudgeService me = new JudgeService();
   private static final ContestService contestService = ContestService.me();
   private static final ProblemService problemService = ProblemService.me();
   private static final SolutionService solutionService = SolutionService.me();
   private static final UserService userService = UserService.me();
+  private static final ExecutorService executorPool = Executors.newFixedThreadPool(OjConfig.judgeThreadsNum);
   
   private JudgeService() {}
   
   public static JudgeService me()
   {
+    log.info("Judge Thread Pool: " + OjConfig.judgeThreadsNum);
     return me;
   }
   
@@ -41,24 +45,16 @@ public class JudgeService
       userService.incSubmission(uid);
     }
     
-    synchronized (JudgeAdapter.class)
+    JudgeAdapter judgeThread = null;
+    if (OjConfig.isLinux())
     {
-      JudgeAdapter.addSolution(solution);
-      if (JudgeAdapter.size() <= 1)
-      {
-        JudgeAdapter judge = null;
-        if (OjConfig.isLinux())
-        {
-          judge = new UestcJudgeAdapter();
-        }
-        else
-        {
-          judge = new PojJudgeAdapter();
-        }
-        
-        new Thread(judge).start();
-      }
+      judgeThread = new UestcJudgeAdapter(solution);
     }
+    else
+    {
+      judgeThread = new PojJudgeAdapter(solution);
+    }
+    executorPool.execute(judgeThread);
   }
 
   public void rejudge(Solution solution)
@@ -77,24 +73,17 @@ public class JudgeService
     {
       ((ContestSolutionModel)solution).update();
     }
-    
-    synchronized (JudgeAdapter.class)
+
+    JudgeAdapter judgeThread = null;
+    if (OjConfig.isLinux())
     {
-      JudgeAdapter.addSolution(solution);
-      if (JudgeAdapter.size() <= 1)
-      {
-        JudgeAdapter judge = null;
-        if (OjConfig.isLinux())
-        {
-          judge = new UestcJudgeAdapter();
-        }
-        else
-        {
-          judge = new PojJudgeAdapter();
-        }
-        new Thread(judge).start();
-      }
+      judgeThread = new UestcJudgeAdapter(solution);
     }
+    else
+    {
+      judgeThread = new PojJudgeAdapter(solution);
+    }
+    executorPool.execute(judgeThread);
   }
   
   public void rejudgeSolution(Integer sid)

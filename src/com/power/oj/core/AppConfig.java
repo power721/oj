@@ -239,6 +239,7 @@ public class AppConfig extends JFinalConfig
    */
   public void afterJFinalStart()
   {
+    OjConfig.setJudgeThreadsNum(getPropertyToInt("judgeThreads", 1));
     OjConfig.initJudgeResult();
     OjConfig.loadConfig();
     

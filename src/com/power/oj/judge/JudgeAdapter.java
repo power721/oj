@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import jodd.format.Printf;
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
@@ -26,12 +24,11 @@ import com.power.oj.user.UserService;
 
 public abstract class JudgeAdapter implements Runnable
 {
-  
+
   protected static final ContestService contestService = ContestService.me();
   protected static final UserService userService = UserService.me();
   protected static final ProblemService problemService = ProblemService.me();
-  protected static ConcurrentLinkedQueue<Solution> judgeList = new ConcurrentLinkedQueue<Solution>();
-  
+
   protected final Logger log = Logger.getLogger(getClass());
   protected Solution solution;
   protected ProblemModel problemModel;
@@ -40,7 +37,7 @@ public abstract class JudgeAdapter implements Runnable
   protected String workPath;
   protected String workDirPath;
   protected File sourceFile;
-  
+
   protected List<String> inFiles = new ArrayList<String>();
   protected List<String> outFiles = new ArrayList<String>();
 
@@ -48,62 +45,58 @@ public abstract class JudgeAdapter implements Runnable
   {
     super();
   }
-  
+
+  public JudgeAdapter(Solution solution)
+  {
+    this();
+    this.solution = solution;
+  }
+
   protected abstract boolean Compile() throws IOException;
-  
+
   protected abstract boolean RunProcess() throws IOException, InterruptedException;
 
+  @Override
   public void run()
   {
-    while (!judgeList.isEmpty())
+    try
     {
-      log.info(Printf.str("Judge threads: %d", judgeList.size()));
-      synchronized (JudgeAdapter.class)
+      prepare();
+      if (Compile())
       {
-        solution = judgeList.poll();
-        try
-        {
-          prepare();
-          if (Compile())
-          {
-            RunProcess();
-          }
-          else
-          {
-            log.warn("Compile failed.");
-          }
-        } catch (Exception e)
-        {
-          updateSystemError(e.getLocalizedMessage());
-          
-          if (OjConfig.getDevMode())
-            e.printStackTrace();
-          log.error(e.getLocalizedMessage());
-        }
+        RunProcess();
+      } else
+      {
+        log.warn("Compile failed.");
       }
+    } catch (Exception e)
+    {
+      updateSystemError(e.getLocalizedMessage());
+
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
     }
   }
-  
+
   protected void prepare() throws IOException
   {
-    //log.info(String.valueOf(solution.getSid()));
+    // log.info(String.valueOf(solution.getSid()));
     Integer cid = solution.getCid();
     programLanguage = OjConfig.language_type.get(solution.getLanguage());
     if (cid != null && cid > 0)
     {
       problemModel = problemService.findProblemForContest(solution.getPid());
-    }
-    else
+    } else
     {
       problemModel = problemService.findProblem(solution.getPid());
     }
-    
+
     workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
     if (cid != null && cid > 0)
     {
       workPath = new StringBuilder(4).append(workPath).append("c").append(cid).append(File.separator).toString();
-    }
-    else if (OjConfig.getBoolean("deleteTmpFile", false))
+    } else if (OjConfig.getBoolean("deleteTmpFile", false))
     {
       File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid() - 5).toString());
       if (prevWorkDir.isDirectory())
@@ -112,21 +105,20 @@ public abstract class JudgeAdapter implements Runnable
         log.info("Delete previous work directory " + prevWorkDir.getAbsolutePath());
       }
     }
-    
+
     File workDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid()).toString());
     if (workDir.isDirectory())
     {
       FileUtil.cleanDir(workDir);
-    }
-    else
+    } else
     {
       FileUtil.mkdirs(workDir);
     }
     workDirPath = workDir.getAbsolutePath();
-    //log.info("mkdirs workDir: " + workDirPath);
-    
-    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).
-        append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExt()).toString());
+    // log.info("mkdirs workDir: " + workDirPath);
+
+    sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".")
+        .append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solution.getSource());
   }
@@ -138,7 +130,7 @@ public abstract class JudgeAdapter implements Runnable
     {
       throw new IOException("Data files does not exist.");
     }
-    
+
     inFiles = new ArrayList<String>();
     outFiles = new ArrayList<String>();
     File[] arrayOfFile = dataDir.listFiles();
@@ -146,7 +138,7 @@ public abstract class JudgeAdapter implements Runnable
     {
       Arrays.sort(arrayOfFile);
     }
-    
+
     for (int i = 0; i < arrayOfFile.length; i++)
     {
       File in_file = arrayOfFile[i];
@@ -162,32 +154,32 @@ public abstract class JudgeAdapter implements Runnable
       inFiles.add(in_file.getAbsolutePath());
       outFiles.add(out_file.getAbsolutePath());
     }
-    
+
     return inFiles.size();
   }
-  
+
   protected boolean updateCompileError(String error)
   {
     solution.setResult(ResultType.CE).setError(error);
-    
+
     Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solution).update();
+      return ((ContestSolutionModel) solution).update();
     }
-    return ((SolutionModel)solution).update();
+    return ((SolutionModel) solution).update();
   }
 
   protected boolean updateRuntimeError(String error)
   {
     solution.setResult(ResultType.RE).setError(error);
-    
+
     Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solution).update();
+      return ((ContestSolutionModel) solution).update();
     }
-    return ((SolutionModel)solution).update();
+    return ((SolutionModel) solution).update();
   }
 
   protected boolean updateSystemError(String error)
@@ -195,14 +187,14 @@ public abstract class JudgeAdapter implements Runnable
     solution.setResult(ResultType.SE).setSystemError(error);
 
     Integer cid = solution.getCid();
-    //log.info(solution.toString());
+    // log.info(solution.toString());
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solution).update();
+      return ((ContestSolutionModel) solution).update();
     }
-    return ((SolutionModel)solution).update();
+    return ((SolutionModel) solution).update();
   }
-  
+
   protected boolean updateResult(int result, int time, int memory)
   {
     solution.setResult(result).setTime(time).setMemory(memory);
@@ -210,9 +202,9 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solution).update();
+      return ((ContestSolutionModel) solution).update();
     }
-    return ((SolutionModel)solution).update();
+    return ((SolutionModel) solution).update();
   }
 
   protected boolean updateResult(boolean ac, Integer test)
@@ -221,18 +213,17 @@ public abstract class JudgeAdapter implements Runnable
     {
       solution.setResult(ResultType.AC);
       solution.setTime(totalRunTime);
-    }
-    else if (solution.getResult() != ResultType.CE && solution.getResult() != ResultType.RF)
+    } else if (solution.getResult() != ResultType.CE && solution.getResult() != ResultType.RF)
     {
       solution.setTest(test);
     }
-    
+
     Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solution).update();
+      return ((ContestSolutionModel) solution).update();
     }
-    return ((SolutionModel)solution).update();
+    return ((SolutionModel) solution).update();
   }
 
   protected boolean setResult(int result, int time, int memory)
@@ -242,46 +233,44 @@ public abstract class JudgeAdapter implements Runnable
     if (solution.getTime() == null)
     {
       solution.setTime(time);
-    }
-    else
+    } else
     {
       solution.setTime(Math.max(time, solution.getTime()));
     }
     if (solution.getMemory() == null)
     {
       solution.setMemory(memory);
-    }
-    else
+    } else
     {
       solution.setMemory(Math.max(memory, solution.getMemory()));
     }
-    
+
     if (!needUpdate)
     {
       return true;
     }
-    
+
     Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      return ((ContestSolutionModel)solution).update();
+      return ((ContestSolutionModel) solution).update();
     }
-    return ((SolutionModel)solution).update();
+    return ((SolutionModel) solution).update();
   }
-  
+
   protected boolean updateUser()
   {
     if (solution.getResult() != ResultType.AC)
     {
       return false;
     }
-    
+
     Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
       return false;
     }
-    return userService.incAccepted((SolutionModel)solution);
+    return userService.incAccepted((SolutionModel) solution);
   }
 
   protected boolean updateProblem()
@@ -291,7 +280,7 @@ public abstract class JudgeAdapter implements Runnable
       return false;
     }
 
-    return problemService.incAccepted((SolutionModel)solution);
+    return problemService.incAccepted((SolutionModel) solution);
   }
 
   protected boolean updateContest()
@@ -299,27 +288,16 @@ public abstract class JudgeAdapter implements Runnable
     Integer cid = solution.getCid();
     if (cid != null && cid > 0)
     {
-      if (((ContestSolutionModel)solution).get("originalResult") != null)
+      if (((ContestSolutionModel) solution).get("originalResult") != null)
       {
-        contestService.updateBoard4Rejudge((ContestSolutionModel)solution);
-      }
-      else
+        contestService.updateBoard4Rejudge((ContestSolutionModel) solution);
+      } else
       {
-        contestService.updateBoard((ContestSolutionModel)solution);
+        contestService.updateBoard((ContestSolutionModel) solution);
       }
       return true;
     }
     return false;
   }
 
-  public static void addSolution(Solution solution)
-  {
-    judgeList.add(solution);
-  }
-  
-  public static int size()
-  {
-    return judgeList.size();
-  }
-  
 }
