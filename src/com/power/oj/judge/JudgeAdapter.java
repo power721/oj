@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import jodd.format.Printf;
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
@@ -28,6 +30,7 @@ public abstract class JudgeAdapter implements Runnable
   protected static final ContestService contestService = ContestService.me();
   protected static final UserService userService = UserService.me();
   protected static final ProblemService problemService = ProblemService.me();
+  protected static ConcurrentLinkedQueue<Solution> judgeList = new ConcurrentLinkedQueue<Solution>();
 
   protected final Logger log = Logger.getLogger(getClass());
   protected Solution solution;
@@ -59,26 +62,35 @@ public abstract class JudgeAdapter implements Runnable
   @Override
   public void run()
   {
-    try
+    while (!judgeList.isEmpty())
     {
-      prepare();
-      if (Compile())
+      log.info(Printf.str("Judge threads: %d", judgeList.size()));
+      synchronized (JudgeAdapter.class)
       {
-        RunProcess();
-      } else
-      {
-        log.warn("Compile failed.");
+        solution = judgeList.poll();
+        try
+        {
+          prepare();
+          if (Compile())
+          {
+            RunProcess();
+          }
+          else
+          {
+            log.warn("Compile failed.");
+          }
+        } catch (Exception e)
+        {
+          updateSystemError(e.getLocalizedMessage());
+          
+          if (OjConfig.getDevMode())
+            e.printStackTrace();
+          log.error(e.getLocalizedMessage());
+        }
       }
-    } catch (Exception e)
-    {
-      updateSystemError(e.getLocalizedMessage());
-
-      if (OjConfig.getDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
     }
   }
-
+  
   protected void prepare() throws IOException
   {
     // log.info(String.valueOf(solution.getSid()));
@@ -292,4 +304,14 @@ public abstract class JudgeAdapter implements Runnable
     return false;
   }
 
+  public static void addSolution(Solution solution)
+  {
+    judgeList.add(solution);
+  }
+  
+  public static int size()
+  {
+    return judgeList.size();
+  }
+  
 }

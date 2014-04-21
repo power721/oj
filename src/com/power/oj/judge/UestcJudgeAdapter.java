@@ -17,16 +17,16 @@ import com.power.oj.core.bean.Solution;
 public class UestcJudgeAdapter extends JudgeAdapter
 {
 
-  public UestcJudgeAdapter() 
+  public UestcJudgeAdapter()
   {
     super();
   }
-  
+
   public UestcJudgeAdapter(Solution solution)
   {
     super(solution);
   }
-  
+
   @Override
   protected boolean Compile() throws IOException
   {
@@ -43,7 +43,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     long memoryLimit = problemModel.getMemoryLimit();
     long outputLimit = OjConfig.getInt("outputLimit", 8192);
     boolean isSpj = problemService.checkSpj(solution.getPid());
-    
+
     if (numOfData < 1)
     {
       log.warn("No data file for problem " + solution.getPid());
@@ -53,8 +53,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     setResult(ResultType.RUN, 0, 0);
     for (i = 0; isAccepted && i < numOfData; ++i)
     {
-      String cmd = buildCommand(timeLimit, memoryLimit, outputLimit, isSpj,
-          FileNameUtil.getName(inFiles.get(i)), FileNameUtil.getName(outFiles.get(i)), i == 0);
+      String cmd = buildCommand(timeLimit, memoryLimit, outputLimit, isSpj, FileNameUtil.getName(inFiles.get(i)), FileNameUtil.getName(outFiles.get(i)), i == 0);
       Process process = Runtime.getRuntime().exec(cmd);
       InputStream inputStream = process.getInputStream();
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -102,8 +101,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
    * 
    * @return command line content
    */
-  private String buildCommand(long timeLimit, long memoryLimit, long outputLimit, boolean isSpj, String inputFile, String outputFile,
-      boolean firstCase)
+  private String buildCommand(long timeLimit, long memoryLimit, long outputLimit, boolean isSpj, String inputFile, String outputFile, boolean firstCase)
   {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(OjConfig.getString("runShell"));
@@ -148,8 +146,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
         if (result == ResultType.AC)
         {
           result = ResultType.RUN;
-        }
-        else
+        } else
         {
           isAccepted = false;
         }
@@ -157,10 +154,10 @@ public class UestcJudgeAdapter extends JudgeAdapter
         int memory = Integer.parseInt(resultStr[2]);
         totalRunTime += time;
         setResult(result, time, memory);
-      } catch (NumberFormatException e) 
+      } catch (NumberFormatException e)
       {
         updateSystemError(e.getLocalizedMessage());
-        
+
         if (OjConfig.getDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
@@ -171,12 +168,11 @@ public class UestcJudgeAdapter extends JudgeAdapter
       updateSystemError(errorOut);
       isAccepted = false;
     }
-    
+
     if (solution.getResult() == ResultType.CE)
     {
       updateCompileError(readError("stderr_compiler.txt"));
-    }
-    else if (solution.getResult() == ResultType.RE)
+    } else if (solution.getResult() == ResultType.RE)
     {
       if (StringUtil.isBlank(errorOut))
       {
@@ -186,74 +182,88 @@ public class UestcJudgeAdapter extends JudgeAdapter
     }
     return isAccepted;
   }
-  
+
   private String readError(String fileName)
   {
     StringBuilder sb = new StringBuilder();
     BufferedReader br = null;
-    try {
+    try
+    {
       br = new BufferedReader(new FileReader(workDirPath + "/" + fileName));
       String line;
-      while ((line = br.readLine()) != null) {
-        if (line.trim().startsWith(workPath)) {
+      while ((line = br.readLine()) != null)
+      {
+        if (line.trim().startsWith(workPath))
+        {
           line = line.substring(workPath.length());
         }
         sb.append(line).append('\n');
       }
-    } catch (Exception e) {
+    } catch (Exception e)
+    {
       e.printStackTrace();
-    } finally {
-      if (br != null) {
-        try {
+    } finally
+    {
+      if (br != null)
+      {
+        try
+        {
           br.close();
-        } catch (IOException ignored) {
+        } catch (IOException ignored)
+        {
         }
       }
     }
-    
-    return sb.length()>0 ? sb.toString() : null;
+
+    return sb.length() > 0 ? sb.toString() : null;
   }
-  
+
   private int convertResult(int result)
   {
     /*
-    const int OJ_WAIT           = 0; //Queue
-    const int OJ_AC             = 1; //Accepted
-    const int OJ_PE             = 2; //Presentation Error
-    const int OJ_TLE            = 3; //Time Limit Exceeded
-    const int OJ_MLE            = 4; //Memory Limit Exceeded
-    const int OJ_WA             = 5; //Wrong Answer
-    const int OJ_OLE            = 6; //Output Limit Exceeded
-    const int OJ_CE             = 7; //Compilation Error
-    const int OJ_RE_SEGV        = 8; //Segment Violation
-    const int OJ_RE_FPE         = 9; //FPU Error
-    const int OJ_RE_BUS         = 10;//Bus Error
-    const int OJ_RE_ABRT        = 11;//Abort
-    const int OJ_RE_UNKNOWN     = 12;//Unknow
-    const int OJ_RF             = 13;//Restricted Function
-    const int OJ_SE             = 14;//System Error
-    const int OJ_RE_JAVA        = 15;//JAVA Run Time Exception
-    */
+     * const int OJ_WAIT = 0; //Queue const int OJ_AC = 1; //Accepted const int
+     * OJ_PE = 2; //Presentation Error const int OJ_TLE = 3; //Time Limit
+     * Exceeded const int OJ_MLE = 4; //Memory Limit Exceeded const int OJ_WA =
+     * 5; //Wrong Answer const int OJ_OLE = 6; //Output Limit Exceeded const int
+     * OJ_CE = 7; //Compilation Error const int OJ_RE_SEGV = 8; //Segment
+     * Violation const int OJ_RE_FPE = 9; //FPU Error const int OJ_RE_BUS =
+     * 10;//Bus Error const int OJ_RE_ABRT = 11;//Abort const int OJ_RE_UNKNOWN
+     * = 12;//Unknow const int OJ_RF = 13;//Restricted Function const int OJ_SE
+     * = 14;//System Error const int OJ_RE_JAVA = 15;//JAVA Run Time Exception
+     */
     switch (result)
     {
-      case 0: return ResultType.RUN;
-      case 1: return ResultType.AC;
-      case 2: return ResultType.PE;
-      case 3: return ResultType.TLE;
-      case 4: return ResultType.MLE;
-      case 5: return ResultType.WA;
-      case 6: return ResultType.OLE;
-      case 7: return ResultType.CE;
-      case 8:
-      case 9:
-      case 10:
-      case 11:
-      case 12: return ResultType.RE;
-      case 13: return ResultType.RF;
-      case 14: return ResultType.SE;
-      case 15: return ResultType.RE;
-      default: return ResultType.SE;
+    case 0:
+      return ResultType.RUN;
+    case 1:
+      return ResultType.AC;
+    case 2:
+      return ResultType.PE;
+    case 3:
+      return ResultType.TLE;
+    case 4:
+      return ResultType.MLE;
+    case 5:
+      return ResultType.WA;
+    case 6:
+      return ResultType.OLE;
+    case 7:
+      return ResultType.CE;
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+      return ResultType.RE;
+    case 13:
+      return ResultType.RF;
+    case 14:
+      return ResultType.SE;
+    case 15:
+      return ResultType.RE;
+    default:
+      return ResultType.SE;
     }
   }
-  
+
 }

@@ -16,21 +16,21 @@ import com.power.oj.core.bean.Solution;
 
 public class PojJudgeAdapter extends JudgeAdapter
 {
-  
+
   public PojJudgeAdapter()
   {
     super();
   }
-  
+
   public PojJudgeAdapter(Solution solution)
   {
     super(solution);
   }
-  
+
   public boolean Compile() throws IOException
   {
     log.info(solution.getSid() + " Start compiling...");
-    
+
     String comShellName = OjConfig.getString("compileShell");
     String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, OjConstants.SOURCE_FILE_NAME, programLanguage.getExt());
     log.info("compileCmd: " + compileCmdName);
@@ -64,7 +64,8 @@ public class PojJudgeAdapter extends JudgeAdapter
       log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
     }
 
-    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExe()).toString());
+    File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".")
+        .append(programLanguage.getExe()).toString());
     log.info(mainProgram.getAbsolutePath());
     boolean success = mainProgram.isFile();
 
@@ -100,7 +101,8 @@ public class PojJudgeAdapter extends JudgeAdapter
     log.info("caseTimeLimit: " + caseTimeLimit);
     log.info("memoryLimit: " + memoryLimit);
 
-    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".").append(programLanguage.getExe()).append("\n").toString();
+    String mainProgram = new StringBuilder(6).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".")
+        .append(programLanguage.getExe()).append("\n").toString();
     runProcessOutputStream.write(mainProgram.getBytes());
     runProcessOutputStream.write((workDirPath + "\n").getBytes());
     log.info("mainProgram: " + mainProgram);
@@ -169,7 +171,7 @@ public class PojJudgeAdapter extends JudgeAdapter
       {
         updateProblem();
       }
-      
+
       return ret;
     }
   }
@@ -184,10 +186,10 @@ public class PojJudgeAdapter extends JudgeAdapter
 
     return compileCmd;
   }
-  
+
   public static void main(String[] args)
   {
-    
+
   }
 
 }
