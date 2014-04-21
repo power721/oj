@@ -63,6 +63,7 @@ public class JudgeService
     {
       userService.revertAccepted((SolutionModel)solution);
     }
+    
     solution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
     solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
     if (solution instanceof SolutionModel)

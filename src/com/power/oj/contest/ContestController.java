@@ -322,9 +322,8 @@ public class ContestController extends OjController
   }
 
   @RequiresPermissions("contest:rejudge")
-  public void rejudgeContest()
+  public void rejudge()
   {
-    log.info("rejudge: " + Thread.currentThread().getId());
     Integer cid = getParaToInt(0);
     judgeService.rejudgeContest(cid);
     
