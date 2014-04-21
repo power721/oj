@@ -84,15 +84,7 @@ public class JudgeService
       ((ContestSolutionModel) solution).update();
     }
 
-    try
-    {
-      FileUtil.appendString(getWorkPath(solution) + "solution.log", solution.getSid() + "\n");
-    } catch (IOException e)
-    {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } // DEBUG
-    synchronized (JudgeAdapter.class)
+    //synchronized (JudgeAdapter.class)
     {
       JudgeAdapter judgeThread = null;
       if (OjConfig.isLinux())

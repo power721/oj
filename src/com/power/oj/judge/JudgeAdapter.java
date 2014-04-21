@@ -96,9 +96,6 @@ public abstract class JudgeAdapter implements Runnable
     }
     String workDirPath = workDir.getAbsolutePath();
 
-    FileUtil.appendString(workPath + "run.log", solution.getSid() + "\n"); // DEBUG
-    FileUtil.appendString(workPath + "thread.log", Thread.currentThread().getId() + " " + solution.getSid() + "\n"); // DEBUG
-    
     File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".")
         .append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
