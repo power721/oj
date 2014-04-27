@@ -58,7 +58,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     int i;
     long timeLimit = problemModel.getTimeLimit();
     long memoryLimit = problemModel.getMemoryLimit();
-    long outputLimit = OjConfig.getInt("outputLimit", 8192);
+    //long outputLimit = OjConfig.getInt("outputLimit", 8192);
     boolean isSpj = problemService.checkSpj(solution.getPid());
 
     if (numOfData < 1)
@@ -69,7 +69,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
     setResult(ResultType.RUN, 0, 0);
     for (i = 0; isAccepted && i < numOfData; ++i)
     {
-      String cmd = buildCommand(timeLimit, memoryLimit, outputLimit, isSpj, FileNameUtil.getName(inFiles.get(i)), FileNameUtil.getName(outFiles.get(i)), i == 0);
+      String cmd = buildCommand(timeLimit, memoryLimit, isSpj, FileNameUtil.getName(inFiles.get(i)), FileNameUtil.getName(outFiles.get(i)), i == 0);
       Process process = Runtime.getRuntime().exec(cmd);
       InputStream inputStream = process.getInputStream();
       BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -117,7 +117,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
    * 
    * @return command line content
    */
-  private String buildCommand(long timeLimit, long memoryLimit, long outputLimit, boolean isSpj, String inputFile, String outputFile, boolean firstCase)
+  private String buildCommand(long timeLimit, long memoryLimit, boolean isSpj, String inputFile, String outputFile, boolean firstCase)
   {
     ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
     String sourceFileName = OjConstants.SOURCE_FILE_NAME + "." + programLanguage.getExt();
@@ -139,8 +139,8 @@ public class UestcJudgeAdapter extends JudgeAdapter
     stringBuilder.append(timeLimit);
     stringBuilder.append(" -m ");
     stringBuilder.append(memoryLimit);
-    stringBuilder.append(" -o ");
-    stringBuilder.append(outputLimit);
+    //stringBuilder.append(" -o ");
+    //stringBuilder.append(outputLimit);
     if (isSpj)
       stringBuilder.append(" -S");
     stringBuilder.append(" -l ");
@@ -241,16 +241,23 @@ public class UestcJudgeAdapter extends JudgeAdapter
   private int convertResult(int result)
   {
     /*
-     * const int OJ_WAIT = 0; //Queue const int OJ_AC = 1; //Accepted const int
-     * OJ_PE = 2; //Presentation Error const int OJ_TLE = 3; //Time Limit
-     * Exceeded const int OJ_MLE = 4; //Memory Limit Exceeded const int OJ_WA =
-     * 5; //Wrong Answer const int OJ_OLE = 6; //Output Limit Exceeded const int
-     * OJ_CE = 7; //Compilation Error const int OJ_RE_SEGV = 8; //Segment
-     * Violation const int OJ_RE_FPE = 9; //FPU Error const int OJ_RE_BUS =
-     * 10;//Bus Error const int OJ_RE_ABRT = 11;//Abort const int OJ_RE_UNKNOWN
-     * = 12;//Unknow const int OJ_RF = 13;//Restricted Function const int OJ_SE
-     * = 14;//System Error const int OJ_RE_JAVA = 15;//JAVA Run Time Exception
-     */
+    const int OJ_WAIT           = 0; //Queue
+    const int OJ_AC             = 1; //Accepted
+    const int OJ_PE             = 2; //Presentation Error
+    const int OJ_TLE            = 3; //Time Limit Exceeded
+    const int OJ_MLE            = 4; //Memory Limit Exceeded
+    const int OJ_WA             = 5; //Wrong Answer
+    const int OJ_OLE            = 6; //Output Limit Exceeded
+    const int OJ_CE             = 7; //Compilation Error
+    const int OJ_RE_SEGV        = 8; //Segment Violation
+    const int OJ_RE_FPE         = 9; //FPU Error
+    const int OJ_RE_BUS         = 10;//Bus Error
+    const int OJ_RE_ABRT        = 11;//Abort
+    const int OJ_RE_UNKNOWN     = 12;//Unknow
+    const int OJ_RF             = 13;//Restricted Function
+    const int OJ_SE             = 14;//System Error
+    const int OJ_RE_JAVA        = 15;//JAVA Run Time Exception
+    */
     switch (result)
     {
     case 0:
@@ -274,13 +281,11 @@ public class UestcJudgeAdapter extends JudgeAdapter
     case 10:
     case 11:
     case 12:
+    case 15:
       return ResultType.RE;
     case 13:
       return ResultType.RF;
     case 14:
-      return ResultType.SE;
-    case 15:
-      return ResultType.RE;
     default:
       return ResultType.SE;
     }
