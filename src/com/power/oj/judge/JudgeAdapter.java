@@ -194,6 +194,20 @@ public abstract class JudgeAdapter implements Runnable
     return ((SolutionModel) solution).update();
   }
 
+  protected boolean setResult(int result, int time, int memory, int test)
+  {
+    solution.setResult(result);
+    solution.setTime(time);
+    solution.setMemory(memory);
+    solution.setTest(test);
+    
+    if (solution instanceof ContestSolutionModel)
+    {
+      return ((ContestSolutionModel) solution).update();
+    }
+    return ((SolutionModel) solution).update();
+  }
+
   protected boolean updateUser()
   {
     if (solution.getResult() != ResultType.AC)

@@ -58,7 +58,7 @@ public class JudgeService
       JudgeAdapter judgeThread = null;
       if (OjConfig.isLinux())
       {
-        judgeThread = new UestcJudgeAdapter(solution);
+        judgeThread = new PowerJudgeAdapter(solution);
       } else
       {
         judgeThread = new PojJudgeAdapter(solution);
@@ -89,7 +89,7 @@ public class JudgeService
       JudgeAdapter judgeThread = null;
       if (OjConfig.isLinux())
       {
-        judgeThread = new UestcJudgeAdapter(solution);
+        judgeThread = new PowerJudgeAdapter(solution);
       } else
       {
         judgeThread = new PojJudgeAdapter(solution);

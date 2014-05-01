@@ -4,19 +4,19 @@ import jodd.format.Printf;
 
 public class ResultType
 {
-  public static final int AC = 0;
-  public static final int PE = 1;
-  public static final int TLE = 2;
-  public static final int MLE = 3;
-  public static final int WA = 4;
-  public static final int RE = 5;
-  public static final int OLE = 6;
-  public static final int CE = 7;
-  public static final int RF = 8;
-  public static final int SE = 98;
-  public static final int VE = 99;
-  public static final int RUN = 100;
-  public static final int WAIT = 10000;
+  public static final int AC   = 0;
+  public static final int PE   = 1;
+  public static final int TLE  = 2;
+  public static final int MLE  = 3;
+  public static final int WA   = 4;
+  public static final int RE   = 5;
+  public static final int OLE  = 6;
+  public static final int CE   = 7;
+  public static final int RF   = 8;
+  public static final int SE   = 9;
+  public static final int VE   = 10;
+  public static final int WAIT = 11;
+  public static final int RUN  = 12;
 
   private int id;
   private String name;

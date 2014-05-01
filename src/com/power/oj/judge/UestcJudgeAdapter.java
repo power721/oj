@@ -221,7 +221,9 @@ public class UestcJudgeAdapter extends JudgeAdapter
       }
     } catch (Exception e)
     {
-      e.printStackTrace();
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.error(e.getLocalizedMessage());
     } finally
     {
       if (br != null)
