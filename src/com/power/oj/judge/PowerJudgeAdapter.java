@@ -12,6 +12,7 @@ import jodd.util.StringUtil;
 
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.problem.ProblemModel;
@@ -70,12 +71,17 @@ public class PowerJudgeAdapter extends JudgeAdapter
     {
       Character c = new Character((char) errorStream.read());
       sb.append(c);
+      if (sb.length() > OjConstants.MAX_ERROR_LENGTH)
+      {
+        break;
+      }
     }
 
     String[] resultStr = stringBuilder.toString().split(" ");
     int exitValue = process.waitFor();
     if (exitValue > 0)
     {
+      log.warn(String.valueOf(exitValue));
       updateSystemError(sb.toString());
       return false;
     }
@@ -171,7 +177,24 @@ public class PowerJudgeAdapter extends JudgeAdapter
         {
           line = line.substring(workPath.length());
         }
+        else if (line.trim().startsWith("at")) // Java RE print stack trace
+        {
+          break;
+        }
+        else if (line.trim().startsWith("Traceback")) // skip Python RE info
+        {
+          break;
+        }
+        /*else if (line.trim().startsWith("File \"<string>\"")) // Python RE print input data
+        {
+          break;
+        }*/
+        
         sb.append(line).append('\n');
+        if (sb.length() > OjConstants.MAX_ERROR_LENGTH)
+        {
+          break;
+        }
       }
     } catch (Exception e)
     {

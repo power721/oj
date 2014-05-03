@@ -268,3 +268,14 @@ ALTER TABLE freeze_board CHANGE `A_WrongNum` `A_WrongNum` tinyint(5) DEFAULT '0'
                   CHANGE `X_WrongNum` `X_WrongNum` tinyint(5) DEFAULT '0',
                   CHANGE `Y_WrongNum` `Y_WrongNum` tinyint(5) DEFAULT '0',
                   CHANGE `Z_WrongNum` `Z_WrongNum` tinyint(5) DEFAULT '0';
+
+#2014-05-01
+UPDATE solution SET `result`=9 WHERE `result`=98;
+UPDATE solution SET `result`=10 WHERE `result`=99;
+UPDATE solution SET `result`=12 WHERE `result`=100;
+UPDATE solution SET `result`=11 WHERE `result`=10000;
+
+UPDATE contest_solution SET `result`=9 WHERE `result`=98;
+UPDATE contest_solution SET `result`=10 WHERE `result`=99;
+UPDATE contest_solution SET `result`=12 WHERE `result`=100;
+UPDATE contest_solution SET `result`=11 WHERE `result`=10000;

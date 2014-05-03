@@ -20,6 +20,7 @@ public interface OjConstants
   long VERIFY_EMAIL_EXPIRES_TIME = 60 * 60 * 1000; // 60 minutes
   long DAY_TIMESTAMP = 24 * 60 * 60 * 1000; // 24 hours
   int PENALTY_FOR_WRONG_SUBMISSION = 20 * 60; // 20 minutes
+  int MAX_ERROR_LENGTH = 8192;
   int MAX_PROBLEMS_IN_CONTEST = 26;
   int AVATAR_WIDTH = 100;
   int AVATAR_HEIGHT = 100;

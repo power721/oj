@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import jodd.io.FileUtil;
+import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
@@ -104,7 +105,11 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateCompileError(String error)
   {
-    solution.setResult(ResultType.CE).setError(error);
+    solution.setResult(ResultType.CE);
+    if (StringUtil.isNotBlank(error))
+    {
+      solution.setError(error);
+    }
 
     if (solution instanceof ContestSolutionModel)
     {
@@ -115,7 +120,11 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateRuntimeError(String error)
   {
-    solution.setResult(ResultType.RE).setError(error);
+    solution.setResult(ResultType.RE);
+    if (StringUtil.isNotBlank(error))
+    {
+      solution.setError(error);
+    }
 
     if (solution instanceof ContestSolutionModel)
     {
@@ -126,7 +135,11 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean updateSystemError(String error)
   {
-    solution.setResult(ResultType.SE).setSystemError(error);
+    solution.setResult(ResultType.SE);
+    if (StringUtil.isNotBlank(error))
+    {
+      solution.setSystemError(error);
+    }
 
     if (solution instanceof ContestSolutionModel)
     {
