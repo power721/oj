@@ -23,6 +23,7 @@ import jodd.util.StringUtil;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.subject.Subject;
 
 import com.jfinal.kit.PathKit;
@@ -863,7 +864,16 @@ public class UserService
 
   public boolean isAdmin()
   {
-    return ShiroKit.hasPermission("admin");
+    try
+    {
+      return ShiroKit.hasPermission("admin");
+    } catch (UnknownSessionException e)
+    {
+      if (OjConfig.getDevMode())
+        e.printStackTrace();
+      log.warn(e.getLocalizedMessage());
+    }
+    return false;
   }
 
   public boolean containsEmailExceptThis(Integer uid, String email)
