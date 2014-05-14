@@ -20,7 +20,7 @@ import com.power.oj.service.VisitCountService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
-public class ProblemService
+public final class ProblemService
 {
   private static final Logger log = Logger.getLogger(ProblemService.class);
   private static final ProblemService me = new ProblemService();
@@ -38,7 +38,7 @@ public class ProblemService
   {
     ProblemModel problemModel = null;
     
-    if (OjConfig.getDevMode())
+    if (OjConfig.isDevMode())
     {
       problemModel = dao.findById(pid);
     }
@@ -66,15 +66,15 @@ public class ProblemService
     if (problemModel == null)
       return null;
     
-    int sample_input_rows = 1;
+    int sampleInputRows = 1;
     if (StringUtil.isNotBlank(problemModel.getSampleInput()))
-      sample_input_rows = StringUtil.count(problemModel.getSampleInput(), '\n') + 1;
-    problemModel.put("sample_input_rows", sample_input_rows);
+      sampleInputRows = StringUtil.count(problemModel.getSampleInput(), '\n') + 1;
+    problemModel.put("sample_input_rows", sampleInputRows);
     
-    int sample_output_rows = 1;
+    int sampleOutputRows = 1;
     if (StringUtil.isNotBlank(problemModel.getSampleOutput()))
-      sample_output_rows = StringUtil.count(problemModel.getSampleOutput(), '\n') + 1;
-    problemModel.put("sample_output_rows", sample_output_rows);
+      sampleOutputRows = StringUtil.count(problemModel.getSampleOutput(), '\n') + 1;
+    problemModel.put("sample_output_rows", sampleOutputRows);
     problemModel.setView(VisitCountService.get(VisitCountService.problemViewCount, pid));
 
     return problemModel;
@@ -84,7 +84,7 @@ public class ProblemService
   {
     ProblemModel problemModel = null;
 
-    if (OjConfig.getDevMode())
+    if (OjConfig.isDevMode())
     {
       problemModel = dao.findById(pid);
     }
@@ -188,7 +188,7 @@ public class ProblemService
   public List<Record> getUserProblemResult(Integer uid)
   {
     List<Record> records = null;
-    if (OjConfig.getDevMode())
+    if (OjConfig.isDevMode())
     {
       records = Db.find("SELECT pid,MIN(result) AS result FROM solution WHERE uid=? AND status=1 GROUP BY pid", uid);
     }
@@ -289,12 +289,12 @@ public class ProblemService
     {
       try
       {
-        ResultType resultType = OjConfig.result_type.get(record.getInt("result"));
+        ResultType resultType = OjConfig.resultType.get(record.getInt("result"));
         record.put("longName", resultType.getLongName());
         record.put("name", resultType.getName());
       } catch (NullPointerException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.warn(e.getLocalizedMessage());
       }
@@ -366,7 +366,7 @@ public class ProblemService
         Runtime.getRuntime().exec(cmd);
       } catch (IOException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         return false;
@@ -383,7 +383,7 @@ public class ProblemService
         Runtime.getRuntime().exec(cmd);
       } catch (IOException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         return false;

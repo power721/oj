@@ -96,16 +96,16 @@ public class OnlineListener implements HttpSessionListener, HttpSessionAttribute
       List<SessionModel> sessions = SessionModel.dao.find("SELECT session_id, ip_address, user_agent, last_activity, session_expires FROM session WHERE uid=?", uid);
       for (SessionModel sessionRecord : sessions)
       {
-        String session_id = sessionRecord.getStr("session_id");
-        HttpSession prevSession = httpSession.get(session_id);
+        String sessionId = sessionRecord.getStr("session_id");
+        HttpSession prevSession = httpSession.get(sessionId);
         if (prevSession != null)
         {
           prevSession.invalidate();
-          log.warn("Session " + session_id + " invalidate.");
+          log.warn("Session " + sessionId + " invalidate.");
         } else
         {
-          SessionModel.dao.deleteById(session_id);
-          log.warn("Session " + session_id + " deleted.");
+          SessionModel.dao.deleteById(sessionId);
+          log.warn("Session " + sessionId + " deleted.");
         }
       }
 

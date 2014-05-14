@@ -70,7 +70,7 @@ public class ProblemController extends OjController
       return;
     }
 
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("language", getParaToInt("language"));
     setAttr("problem", problemModel);
@@ -142,7 +142,7 @@ public class ProblemController extends OjController
     }
     
     setAttr("problem", problemModel);
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     
     if (isParaExists("s"))
     {
@@ -225,7 +225,7 @@ public class ProblemController extends OjController
       redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getPid()).toString();
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getMessage());
       

@@ -74,7 +74,7 @@ public class ProblemAdminController extends OjController
       redirectURL = new StringBuilder(2).append("/admin/problem/data/").append(problemModel.getPid()).toString();
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getMessage());
       
@@ -191,7 +191,7 @@ public class ProblemAdminController extends OjController
       filename = adminService.uploadData(pid, filename, file);
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
       

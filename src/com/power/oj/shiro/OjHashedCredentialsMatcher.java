@@ -22,7 +22,7 @@ public class OjHashedCredentialsMatcher extends HashedCredentialsMatcher
       UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
       String password = new String(token.getPassword());
       String hashedPassword = info.getCredentials().toString();
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
       {
         log.info(authenticationToken.toString());
         log.info(info.toString());

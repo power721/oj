@@ -32,7 +32,7 @@ public class AddContestValidator extends Validator
       }
     } catch (ParseException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
     }
     addError("timeMsg", "Contest time is incorrect!");

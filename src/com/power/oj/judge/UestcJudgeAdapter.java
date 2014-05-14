@@ -34,13 +34,13 @@ public class UestcJudgeAdapter extends JudgeAdapter
   }
 
   @Override
-  protected boolean Compile() throws IOException
+  protected boolean compile() throws IOException
   {
     return true;
   }
 
   @Override
-  protected boolean RunProcess() throws IOException, InterruptedException
+  protected boolean runProcess() throws IOException, InterruptedException
   {
     ProblemModel problemModel;
     if (solution instanceof ContestSolutionModel)
@@ -119,7 +119,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
    */
   private String buildCommand(long timeLimit, long memoryLimit, boolean isSpj, String inputFile, String outputFile, boolean firstCase)
   {
-    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    ProgramLanguageModel programLanguage = OjConfig.languageType.get(solution.getLanguage());
     String sourceFileName = OjConstants.SOURCE_FILE_NAME + "." + programLanguage.getExt();
     String workPath = judgeService.getWorkPath(solution);
     
@@ -177,7 +177,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       {
         updateSystemError(e.getLocalizedMessage());
 
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         isAccepted = false;
@@ -221,7 +221,7 @@ public class UestcJudgeAdapter extends JudgeAdapter
       }
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     } finally

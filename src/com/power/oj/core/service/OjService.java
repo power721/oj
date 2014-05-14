@@ -15,7 +15,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.util.Tool;
 import com.power.oj.util.freemarker.FreemarkerKit;
 
-public class OjService
+public final class OjService
 {
   private static final Logger log = Logger.getLogger(OjService.class);
   private static final OjService me = new OjService();

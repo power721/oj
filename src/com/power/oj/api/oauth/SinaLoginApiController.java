@@ -22,7 +22,7 @@ public class SinaLoginApiController extends OjController
       redirect(sina.getAuthorizeUrl());
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
       redirect("/");
@@ -79,7 +79,7 @@ public class SinaLoginApiController extends OjController
       }
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
       setFlashMessage(new FlashMessage(getText("user.signin.error"), MessageType.ERROR, getText("message.error.title")));

@@ -8,7 +8,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 
-public class SocialService
+public final class SocialService
 {
   private static final SocialService me = new SocialService();
   public static final FriendGroupModel dao = FriendGroupModel.dao;
@@ -28,9 +28,9 @@ public class SocialService
         .find(
             "(SELECT g.id,g.uid,g.name,COUNT(f.userId) AS count,g.ctime FROM friend_group g LEFT JOIN friend f ON f.userId=? AND f.gid=g.id WHERE g.uid=0) UNION (SELECT * FROM friend_group WHERE uid=? ORDER BY id)",
             uid, uid);
-    if (groupList.size() > 0 && StringUtil.isEmpty(groupList.get(0).getStr("name")))
+    if (!groupList.isEmpty() && StringUtil.isEmpty(groupList.get(0).getStr("name")))
     {
-      groupList.get(0).set("name", "未分组");
+      groupList.get(0).set("name", "No Group");
     }
     return groupList;
   }

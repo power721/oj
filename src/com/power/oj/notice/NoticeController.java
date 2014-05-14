@@ -62,7 +62,7 @@ public class NoticeController extends OjController
       noticeModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
     } catch (ParseException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
@@ -102,7 +102,7 @@ public class NoticeController extends OjController
       noticeModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
     } catch (ParseException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }

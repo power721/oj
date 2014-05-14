@@ -56,7 +56,7 @@ public class ContestService
   public ContestModel getContest(Integer cid)
   {
     ContestModel contestModel = null;
-    if (OjConfig.getDevMode())
+    if (OjConfig.isDevMode())
     {
       contestModel = dao.findFirst(
         "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
@@ -408,7 +408,7 @@ public class ContestService
   {
     String json = null;
     
-    if (!OjConfig.getDevMode())
+    if (!OjConfig.isDevMode())
     {
       json = CacheKit.get("contest", "recent");
     }
@@ -421,7 +421,7 @@ public class ContestService
         html = HttpUtil.doGet("http://contests.acmicpc.info/contests.json");
       } catch(HttpHostConnectException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.info(e.getLocalizedMessage());
       }
@@ -433,7 +433,7 @@ public class ContestService
           html = HttpUtil.doGet("http://acm.nankai.edu.cn/contests.json");
         } catch(HttpHostConnectException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.info(e.getLocalizedMessage());
         }
@@ -457,7 +457,7 @@ public class ContestService
           html = HttpUtil.doGet("http://contests.acmicpc.info/contests.json");
         } catch(HttpHostConnectException e1)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e1.printStackTrace();
           log.info(e1.getLocalizedMessage());
         }
@@ -532,11 +532,11 @@ public class ContestService
   public List<Record> getContestStatistics(Integer cid)
   {
     StringBuilder sb = new StringBuilder("SELECT ");
-    for (ProgramLanguageModel language : OjConfig.program_languages)
+    for (ProgramLanguageModel language : OjConfig.programLanguages)
     {
       sb.append("COUNT(IF(language=").append(language.getId()).append(",1,NULL)) AS ").append(language.getExt()).append(",");
     }
-    for (ResultType resultType : OjConfig.judge_result)
+    for (ResultType resultType : OjConfig.judgeResult)
     {
       if (resultType.getId() > ResultType.RF)
         break;
@@ -606,7 +606,7 @@ public class ContestService
       log.info(contestModel.getEndTime().toString());
     } catch (ParseException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       
       log.error(e.getLocalizedMessage());
@@ -626,7 +626,7 @@ public class ContestService
       contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
     } catch (ParseException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
     }
     
@@ -720,9 +720,9 @@ public class ContestService
     int result = 0;
     int i = 0;
     String[] pids = str.split(",");
-    for (String s_pid : pids)
+    for (String sPid : pids)
     {
-      Integer pid = Integer.parseInt(s_pid);
+      Integer pid = Integer.parseInt(sPid);
       result += Db.update("UPDATE contest_problem SET num=? WHERE cid=? AND pid=?", i++, cid, pid);
     }
     return result;

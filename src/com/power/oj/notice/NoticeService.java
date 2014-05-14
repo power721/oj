@@ -7,7 +7,7 @@ import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.user.UserService;
 
-public class NoticeService
+public final class NoticeService
 {
   private static final NoticeModel dao = NoticeModel.dao;
   private static final NoticeService me = new NoticeService();

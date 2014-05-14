@@ -27,8 +27,8 @@ public class ProblemApiController extends OjController
       return;
     }
 
-    setAttr(OjConstants.LANGUAGE_NAME, OjConfig.language_name);
-    setAttr(OjConstants.RESULT_TYPE, OjConfig.result_type);
+    setAttr(OjConstants.LANGUAGE_NAME, OjConfig.languageName);
+    setAttr(OjConstants.RESULT_TYPE, OjConfig.resultType);
     setAttr("userInfo", problemService.getUserInfo(pid, uid));
     
     renderJson(new String[]
@@ -59,7 +59,7 @@ public class ProblemApiController extends OjController
     Record userResult = problemService.getUserResult(pid, uid);
     if (userResult != null && userResult.getInt("result") != null)
     {
-      userResult.set("result", OjConfig.result_type.get(userResult.getInt("result")));
+      userResult.set("result", OjConfig.resultType.get(userResult.getInt("result")));
     }
     
     renderJson(userResult);
@@ -79,7 +79,7 @@ public class ProblemApiController extends OjController
     int pageSize = getParaToInt("s", OjConfig.statusPageSize);
     Integer language = getParaToInt("language", 0);
     
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("language", language);
     setAttr("user", userService.getCurrentUser());

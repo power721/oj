@@ -69,13 +69,13 @@ public class ContestPasswordInterceptor implements Interceptor
     }
 
     Integer cid = contestModle.getCid();
-    String token_name = new StringBuilder("cid-").append(cid).toString();
-    String token = controller.getSessionAttr(token_name);
+    String tokenName = new StringBuilder("cid-").append(cid).toString();
+    String token = controller.getSessionAttr(tokenName);
     if (token != null)
     {
       try
       {
-        token = CryptUtils.decrypt(token, token_name);
+        token = CryptUtils.decrypt(token, tokenName);
         log.info(token);
         if (contestModle.checkPassword(token))
         {
@@ -83,7 +83,7 @@ public class ContestPasswordInterceptor implements Interceptor
         }
       } catch (Exception e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getMessage());
       }

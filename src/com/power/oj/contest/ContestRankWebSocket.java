@@ -75,7 +75,7 @@ public class ContestRankWebSocket
         }
       } catch (IOException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.warn("WebSocket Error: Failed to send message to client", e);
         connections.remove(client);

@@ -31,13 +31,13 @@ public class PowerJudgeAdapter extends JudgeAdapter
   }
   
   @Override
-  protected boolean Compile() throws IOException
+  protected boolean compile() throws IOException
   {
     return true;
   }
 
   @Override
-  protected boolean RunProcess() throws IOException, InterruptedException
+  protected boolean runProcess() throws IOException, InterruptedException
   {
     ProblemModel problemModel;
     if (solution instanceof ContestSolutionModel)
@@ -140,7 +140,7 @@ public class PowerJudgeAdapter extends JudgeAdapter
       {
         updateSystemError(e.getLocalizedMessage());
 
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
       }
@@ -198,7 +198,7 @@ public class PowerJudgeAdapter extends JudgeAdapter
       }
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     } finally

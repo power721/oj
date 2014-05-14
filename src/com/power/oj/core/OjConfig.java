@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.Map;
 import jodd.util.SystemUtil;
 
 import com.jfinal.core.JFinal;
@@ -45,29 +45,29 @@ public class OjConfig
   public static long startGlobalHandlerTime;
 
   public static boolean variableChanged = false;
-  public static List<ProgramLanguageModel> program_languages;
-  public static HashMap<Integer, ProgramLanguageModel> language_type;
-  public static HashMap<Integer, String> language_name;
-  public static HashMap<Integer, ResultType> result_type;
-  public static List<ResultType> judge_result;
+  public static List<ProgramLanguageModel> programLanguages;
+  public static Map<Integer, ProgramLanguageModel> languageType;
+  public static Map<Integer, String> languageName;
+  public static Map<Integer, ResultType> resultType;
+  public static List<ResultType> judgeResult;
   public static List<Integer> level;
 
-  private static HashMap<String, VariableModel> variable = new HashMap<String, VariableModel>();
-  private static boolean isLinux;
+  private static Map<String, VariableModel> variable;
+  private static boolean vIsLinux;
   static
   {
-    isLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
+    vIsLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
   }
   // TODO use enChahe
 
-  public static boolean getDevMode()
+  public static boolean isDevMode()
   {
     return JFinal.me().getConstants().getDevMode();
   }
   
   public static boolean isLinux()
   {
-    return isLinux;
+    return vIsLinux;
   }
   
   public static void loadConfig()
@@ -102,13 +102,13 @@ public class OjConfig
   
   public static void loadLanguage()
   {
-    language_type = new HashMap<Integer, ProgramLanguageModel>();
-    language_name = new HashMap<Integer, String>();
-    program_languages = ProgramLanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
-    for (ProgramLanguageModel Language : program_languages)
+    languageType = new HashMap<Integer, ProgramLanguageModel>();
+    languageName = new HashMap<Integer, String>();
+    programLanguages = ProgramLanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
+    for (ProgramLanguageModel language : programLanguages)
     {
-      language_type.put(Language.getId(), Language);
-      language_name.put(Language.getId(), Language.getName());
+      languageType.put(language.getId(), language);
+      languageName.put(language.getId(), language.getName());
     }
   }
 
@@ -124,26 +124,26 @@ public class OjConfig
   
   public static void initJudgeResult()
   {
-    judge_result = new ArrayList<ResultType>();
-    judge_result.add(new ResultType(ResultType.AC, "AC", "Accepted"));
-    judge_result.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
-    judge_result.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
-    judge_result.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
-    judge_result.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
-    judge_result.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
-    judge_result.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
-    judge_result.add(new ResultType(ResultType.RF, "RF", "Restricted Function"));
-    judge_result.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
-    judge_result.add(new ResultType(ResultType.SE, "SE", "System Error"));
-    judge_result.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
-    judge_result.add(new ResultType(ResultType.RUN, "RUN", "Runing"));
-    judge_result.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
+    judgeResult = new ArrayList<ResultType>();
+    judgeResult.add(new ResultType(ResultType.AC, "AC", "Accepted"));
+    judgeResult.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
+    judgeResult.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
+    judgeResult.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
+    judgeResult.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
+    judgeResult.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
+    judgeResult.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
+    judgeResult.add(new ResultType(ResultType.RF, "RF", "Restricted Function"));
+    judgeResult.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
+    judgeResult.add(new ResultType(ResultType.SE, "SE", "System Error"));
+    judgeResult.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
+    judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Runing"));
+    judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
 
-    result_type = new HashMap<Integer, ResultType>();
-    for (Iterator<ResultType> it = judge_result.iterator(); it.hasNext();)
+    resultType = new HashMap<Integer, ResultType>();
+    for (Iterator<ResultType> it = judgeResult.iterator(); it.hasNext();)
     {
-      ResultType resultType = it.next();
-      result_type.put(resultType.getId(), resultType);
+      ResultType result = it.next();
+      resultType.put(result.getId(), result);
     }
   }
 

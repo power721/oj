@@ -61,7 +61,7 @@ public class UserApiController extends OjController
         userModel = userService.signup(email, webLogin);
       } catch (MailException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         
@@ -69,7 +69,7 @@ public class UserApiController extends OjController
         return;
       } catch (Exception e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         
@@ -220,7 +220,7 @@ public class UserApiController extends OjController
         }
       } catch (Exception e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         
@@ -268,7 +268,7 @@ public class UserApiController extends OjController
       setCookie("oj_userimg", fileName, OjConstants.COOKIE_AGE);
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
       

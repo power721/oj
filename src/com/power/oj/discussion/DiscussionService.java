@@ -7,7 +7,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.user.UserService;
 
-public class DiscussionService
+public final class DiscussionService
 {
   private static final TopicModel dao = TopicModel.dao;
   private static final DiscussionService me = new DiscussionService();

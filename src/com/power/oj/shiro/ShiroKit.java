@@ -5,7 +5,7 @@ import org.apache.shiro.subject.Subject;
 
 public class ShiroKit
 {
-  private static String NAMES_DELIMETER = ",";
+  private static final String NAMES_DELIMETER = ",";
 
   public static Subject getSubject()
   {

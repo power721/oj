@@ -50,8 +50,8 @@ public class SolutionController extends OjController
     }
 
     setAttr("solutionList", solutionService.getPage(pageNumber, pageSize, result, language, pid, userName));
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
-    setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+    setAttr(OjConstants.JUDGE_RESULT, OjConfig.judgeResult);
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("result", result);
     setAttr("language", language);
@@ -69,7 +69,7 @@ public class SolutionController extends OjController
     Integer sid = getParaToInt(0);
     boolean isAdmin = userService.isAdmin();
     SolutionModel solutionModel = solutionService.findSolution(sid);
-    ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
+    ResultType resultType = OjConfig.resultType.get(solutionModel.getResult());
     Integer uid = solutionModel.getUid();
     Integer loginUid = userService.getCurrentUid();
     if (!uid.equals(loginUid) && !isAdmin)
@@ -111,7 +111,7 @@ public class SolutionController extends OjController
       log.warn(e.getLocalizedMessage());
     }
     
-    setAttr("language", OjConfig.language_name.get(solutionModel.getLanguage()));
+    setAttr("language", OjConfig.languageName.get(solutionModel.getLanguage()));
     setAttr("resultLongName", resultType.getLongName());
     setAttr("resultName", resultType.getName());
     setAttr("solution", solutionModel);

@@ -42,9 +42,9 @@ public abstract class JudgeAdapter implements Runnable
     this.solution = solution;
   }
 
-  protected abstract boolean Compile() throws IOException;
+  protected abstract boolean compile() throws IOException;
 
-  protected abstract boolean RunProcess() throws IOException, InterruptedException;
+  protected abstract boolean runProcess() throws IOException, InterruptedException;
 
   @Override
   public void run()
@@ -54,9 +54,9 @@ public abstract class JudgeAdapter implements Runnable
       try
       {
         prepare();
-        if (Compile())
+        if (compile())
         {
-          RunProcess();
+          runProcess();
         } else
         {
           log.warn("Compile failed.");
@@ -65,7 +65,7 @@ public abstract class JudgeAdapter implements Runnable
       {
         updateSystemError(e.getLocalizedMessage());
   
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
       }
@@ -74,7 +74,7 @@ public abstract class JudgeAdapter implements Runnable
 
   protected void prepare() throws IOException
   {
-    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    ProgramLanguageModel programLanguage = OjConfig.languageType.get(solution.getLanguage());
     
     String workPath = judgeService.getWorkPath(solution);
     if (solution instanceof SolutionModel && OjConfig.getBoolean("deleteTmpFile", false))

@@ -45,7 +45,7 @@ import com.power.oj.solution.SolutionModel;
 import com.power.oj.util.FileKit;
 import com.power.oj.util.Tool;
 
-public class UserService
+public final class UserService
 {
   private static final Logger log = Logger.getLogger(UserService.class);
   private static final UserModel dao = UserModel.dao;
@@ -93,7 +93,7 @@ public class UserService
       }
     } catch (AuthenticationException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn("User signin failed.");
       
@@ -132,7 +132,7 @@ public class UserService
       }
     } catch (AuthenticationException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn("User signin failed.");
       
@@ -497,7 +497,7 @@ public class UserService
       }
     }
     
-    if (OjConfig.getDevMode())
+    if (OjConfig.isDevMode())
     {
       log.info(name + " " + token);
       log.info(userModel.toString());
@@ -684,7 +684,7 @@ public class UserService
       String problemDir = new StringBuilder(3).append(userDir).append(File.separator).append(code.get("pid")).toString();
       FileUtil.mkdirs(problemDir);
       
-      String ext = OjConfig.language_type.get(code.get("language")).getExt();
+      String ext = OjConfig.languageType.get(code.get("language")).getExt();
       StringBuilder sb = new StringBuilder(10).append(problemDir).append(File.separator).append(code.get("sid")).append("_");
       sb.append(code.get("time")).append("MS_").append(code.get("memory")).append("KB").append(".").append(ext);
       
@@ -723,7 +723,7 @@ public class UserService
   
   public UserModel getUser(Integer uid)
   {
-    if (OjConfig.getDevMode())
+    if (OjConfig.isDevMode())
     {
       return getUserByUid(uid);
     }
@@ -848,8 +848,8 @@ public class UserService
   
   public boolean checkPassword(Integer uid, String password)
   {
-    String stored_hash = dao.findById(uid).getPassword();
-    return BCrypt.checkpw(password, stored_hash);
+    String storedHash = dao.findById(uid).getPassword();
+    return BCrypt.checkpw(password, storedHash);
   }
 
   public boolean containsEmail(String email)
@@ -869,7 +869,7 @@ public class UserService
       return ShiroKit.hasPermission("admin");
     } catch (UnknownSessionException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn(e.getLocalizedMessage());
     }

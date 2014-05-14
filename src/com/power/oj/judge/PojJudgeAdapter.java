@@ -32,11 +32,11 @@ public class PojJudgeAdapter extends JudgeAdapter
     super(solution);
   }
 
-  public boolean Compile() throws IOException
+  public boolean compile() throws IOException
   {
     log.info(solution.getSid() + " Start compiling...");
 
-    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    ProgramLanguageModel programLanguage = OjConfig.languageType.get(solution.getLanguage());
     String workDirPath = judgeService.getWorkDirPath(solution);
     String comShellName = OjConfig.getString("compileShell");
     String compileCmdName = getCompileCmd(programLanguage.getCompileCmd(), workDirPath, OjConstants.SOURCE_FILE_NAME, programLanguage.getExt());
@@ -66,7 +66,7 @@ public class PojJudgeAdapter extends JudgeAdapter
       ret = compileProcess.waitFor();
     } catch (InterruptedException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
     }
@@ -85,10 +85,10 @@ public class PojJudgeAdapter extends JudgeAdapter
     return success;
   }
 
-  public boolean RunProcess() throws IOException, InterruptedException
+  public boolean runProcess() throws IOException, InterruptedException
   {
     log.info(solution.getSid() + " RunProcess...");
-    ProgramLanguageModel programLanguage = OjConfig.language_type.get(solution.getLanguage());
+    ProgramLanguageModel programLanguage = OjConfig.languageType.get(solution.getLanguage());
     String workDirPath = judgeService.getWorkDirPath(solution);
     
     /*

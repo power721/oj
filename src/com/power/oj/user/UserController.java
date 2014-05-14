@@ -186,7 +186,7 @@ public class UserController extends OjController
     } catch (IOException e)
     {
       log.warn(e.getLocalizedMessage());
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       
       redirect(sessionService.getLastAccessURL());
@@ -220,7 +220,7 @@ public class UserController extends OjController
     } catch (Exception e)
     {
       setAttr("error", "true");
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
@@ -246,7 +246,7 @@ public class UserController extends OjController
       userService.saveAvatar(getPara("imageSource"), x1, y1, x2, y2);
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
       msg = new FlashMessage(getText("user.avatar.error"), MessageType.ERROR, getText("message.error.title"));
@@ -369,7 +369,7 @@ public class UserController extends OjController
   @RequiresAuthentication
   public void edit()
   {
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     
     setTitle(getText("user.edit.title"));
   }

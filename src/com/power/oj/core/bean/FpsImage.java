@@ -38,7 +38,7 @@ public class FpsImage
       FileUtil.writeBytes(imageFile, decodeBuffer);
     } catch (IOException e1)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e1.printStackTrace();
       log.error(e1.getLocalizedMessage());
     }

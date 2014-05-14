@@ -100,7 +100,7 @@ public class FpsProblem
       FileUtil.mkdirs(dataDir);
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
@@ -252,7 +252,7 @@ public class FpsProblem
       addTestData(item);
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
@@ -281,7 +281,7 @@ public class FpsProblem
       addSpj(item);
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
@@ -366,7 +366,7 @@ public class FpsProblem
     {
       Element solution = item.addElement("solution");
       solution.addCDATA(solutionModel.getSource());
-      solution.addAttribute("language", ext2lang(OjConfig.language_type.get(solutionModel.getLanguage()).getExt()));
+      solution.addAttribute("language", ext2lang(OjConfig.languageType.get(solutionModel.getLanguage()).getExt()));
     }
     
     return item;
@@ -458,7 +458,7 @@ public class FpsProblem
           url = new URL(src);
         } catch (MalformedURLException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
           continue;
@@ -473,7 +473,7 @@ public class FpsProblem
           base64 = Base64.encodeBase64String(baos.toByteArray());
         } catch (IOException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
           continue;
@@ -486,7 +486,7 @@ public class FpsProblem
           base64 = Base64.encodeBase64String(FileUtils.readFileToByteArray(new File(rootPath + src)));
         } catch (IOException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
           continue;
@@ -548,7 +548,7 @@ public class FpsProblem
       FileUtil.writeString(sourceFile, source);
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
@@ -592,7 +592,7 @@ public class FpsProblem
             }
         } catch (IOException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
         }
@@ -614,7 +614,7 @@ public class FpsProblem
       FileUtil.writeString(dataInFile, problemModel.getSampleInput());
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }

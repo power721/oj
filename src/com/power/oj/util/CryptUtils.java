@@ -50,7 +50,7 @@ public class CryptUtils
       return cipher.doFinal(src);
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       throw new RuntimeException(e);
     }
@@ -87,7 +87,7 @@ public class CryptUtils
       return cipher.doFinal(src);
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       throw new RuntimeException(e);
     }
@@ -124,7 +124,7 @@ public class CryptUtils
         return byte2hex(encrypt(data.getBytes(), key.getBytes()));
       } catch (Exception e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         throw new RuntimeException(e);
       }

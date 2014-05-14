@@ -16,8 +16,8 @@ import freemarker.template.TemplateModelException;
  */
 public class DirectiveUtils {
 	
-	public static String BLOCK = "__ftl_override__";
-	public static String OVERRIDE_CURRENT_NODE = "__ftl_override_current_node";
+	public static final String BLOCK = "__ftl_override__";
+	public static final String OVERRIDE_CURRENT_NODE = "__ftl_override_current_node";
 	
 	public static String getOverrideVariableName(String name) {
 		return BLOCK + name;

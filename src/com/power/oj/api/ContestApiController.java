@@ -32,7 +32,7 @@ public class ContestApiController extends OjController
 
     Page<ContestSolutionModel> solutionList = solutionService.getProblemStatusPageForContest(pageNumber, pageSize, language, cid, num);
 
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     setAttr("solutionList", solutionList);
     setAttr("language", language);
     setAttr("user", userService.getCurrentUser());
@@ -143,7 +143,7 @@ public class ContestApiController extends OjController
       renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
       return;
     }
-    ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
+    ResultType resultType = OjConfig.resultType.get(solutionModel.getResult());
     Integer cid = solutionModel.getCid();
     Integer uid = solutionModel.getUid();
     Integer loginUid = userService.getCurrentUid();
@@ -167,7 +167,7 @@ public class ContestApiController extends OjController
 
     int num = solutionModel.getNum();
     setAttr("success", true);
-    setAttr("language", OjConfig.language_name.get(solutionModel.getLanguage()));
+    setAttr("language", OjConfig.languageName.get(solutionModel.getLanguage()));
     setAttr("alpha", (char) (num + 'A'));
     setAttr("problemTitle", contestService.getProblemTitle(cid, num));
     setAttr("resultLongName", resultType.getLongName());

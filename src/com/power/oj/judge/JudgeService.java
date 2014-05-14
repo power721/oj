@@ -25,7 +25,7 @@ import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 
-public class JudgeService
+public final class JudgeService
 {
   private static final Logger log = Logger.getLogger(JudgeService.class);
   private static final JudgeService me = new JudgeService();
@@ -170,7 +170,7 @@ public class JudgeService
           FileUtil.deleteDir(getWorkPath(cid));
         } catch (IOException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
         }
@@ -211,18 +211,18 @@ public class JudgeService
 
     for (int i = 0; i < arrayOfFile.length; i++)
     {
-      File in_file = arrayOfFile[i];
-      if (!in_file.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN))
+      File inFile = arrayOfFile[i];
+      if (!inFile.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN))
         continue;
-      File out_file = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
-          .append(in_file.getName().substring(0, in_file.getName().length() - OjConstants.DATA_EXT_IN.length())).append(OjConstants.DATA_EXT_OUT).toString());
-      if (!out_file.isFile())
+      File outFile = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
+          .append(inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length())).append(OjConstants.DATA_EXT_OUT).toString());
+      if (!outFile.isFile())
       {
-        log.warn(Printf.str("Output file for input file does not exist: %s", in_file.getAbsolutePath()));
+        log.warn(Printf.str("Output file for input file does not exist: %s", inFile.getAbsolutePath()));
         continue;
       }
-      inFiles.add(in_file.getAbsolutePath());
-      outFiles.add(out_file.getAbsolutePath());
+      inFiles.add(inFile.getAbsolutePath());
+      outFiles.add(outFile.getAbsolutePath());
     }
 
     return inFiles.size();

@@ -10,7 +10,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.util.Tool;
 
-public class MailService
+public final class MailService
 {
   private static final MailService me = new MailService();
   private static final MailModel dao = MailModel.dao;
@@ -81,9 +81,9 @@ public class MailService
     UserExtModel userExtModel = UserExtModel.dao.findById(uid);
     int timestamp = Tool.getDayTimestamp();
     int drift = userExtModel.getGetDriftNum();
-    int last_drift = userExtModel.getLastGetDrift();
+    int lastDrift = userExtModel.getLastGetDrift();
     
-    if (last_drift + OjConstants.DAY_TIMESTAMP < timestamp)
+    if (lastDrift + OjConstants.DAY_TIMESTAMP < timestamp)
       drift = 0;
     
     if (drift < 5)

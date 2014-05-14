@@ -22,7 +22,7 @@ import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
-public class SessionService
+public final class SessionService
 {
   private static final Logger log = Logger.getLogger(SessionService.class);
   private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
@@ -49,7 +49,7 @@ public class SessionService
     if (StringUtil.isBlank(lastAccessURL))
       lastAccessURL = "/";
     
-    if (OjConfig.getDevMode())
+    if (OjConfig.isDevMode())
     {
       log.info(lastAccessURL);
     }

@@ -16,7 +16,7 @@ import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 
-public class SolutionService
+public final class SolutionService
 {
   private static final SolutionModel dao = SolutionModel.dao;
   private static final SolutionService me = new SolutionService();
@@ -75,9 +75,9 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", (OjConfig.language_type.get(solution.getLanguage())).get("name"));
+      solution.put("languageName", (OjConfig.languageType.get(solution.getLanguage())).get("name"));
 
-      ResultType resultType = OjConfig.result_type.get(solution.getResult());
+      ResultType resultType = OjConfig.resultType.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
 
@@ -98,7 +98,7 @@ public class SolutionService
   public SolutionModel getSolutionResult(Integer sid)
   {
     SolutionModel solutionModel = dao.findFirst("SELECT sid,time,memory,result FROM solution WHERE sid=? AND status=1 LIMIT 1", sid);
-    solutionModel.set("result", OjConfig.result_type.get(solutionModel.getResult()));
+    solutionModel.set("result", OjConfig.resultType.get(solutionModel.getResult()));
     return solutionModel;
   }
   
@@ -117,7 +117,7 @@ public class SolutionService
     // TODO check permission
     ContestSolutionModel solutionModel = ContestSolutionModel.dao.
         findFirst("SELECT cid,sid,time,memory,result FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1", cid, sid);
-    solutionModel.set("result", OjConfig.result_type.get(solutionModel.getResult()));
+    solutionModel.set("result", OjConfig.resultType.get(solutionModel.getResult()));
     return solutionModel;
   }
   
@@ -166,9 +166,9 @@ public class SolutionService
 
     for (ContestSolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", OjConfig.language_name.get(solution.getLanguage()));
+      solution.put("languageName", OjConfig.languageName.get(solution.getLanguage()));
 
-      ResultType resultType = OjConfig.result_type.get(solution.getResult());
+      ResultType resultType = OjConfig.resultType.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
       solution.put("alpha", (char) (solution.getNum() + 'A'));
@@ -207,9 +207,9 @@ public class SolutionService
 
     for (SolutionModel solution : solutionList.getList())
     {
-      solution.put("languageName", OjConfig.language_name.get(solution.getLanguage()));
+      solution.put("languageName", OjConfig.languageName.get(solution.getLanguage()));
 
-      ResultType resultType = OjConfig.result_type.get(solution.getResult());
+      ResultType resultType = OjConfig.resultType.get(solution.getResult());
       solution.put("resultName", resultType.getName());
       solution.put("resultLongName", resultType.getLongName());
     }
@@ -283,7 +283,7 @@ public class SolutionService
     
     for (ContestSolutionModel record : resultList)
     {
-      ResultType resultType = OjConfig.result_type.get(record.getResult());
+      ResultType resultType = OjConfig.resultType.get(record.getResult());
       record.put("longName", resultType.getLongName());
       record.put("name", resultType.getName());
     }

@@ -47,9 +47,9 @@ public class UeditorController extends OjController
     String title = getPara("pictitle");
     String state = "SUCCESS";
     String url = file.getFile().getAbsolutePath().replace(rootPath, "").replace("\\", "/");
-    System.out.println("originalName: " + originalName);
-    System.out.println("file: " + file.getFileName());
-    System.out.println(file.getFile().getAbsolutePath());
+    log.info("originalName: " + originalName);
+    log.info("file: " + file.getFileName());
+    log.info(file.getFile().getAbsolutePath());
 
     renderJson("{'original':'" + originalName + "','url':'" + url + "','title':'" + title + "','state':'" + state + "'}");
   }
@@ -64,9 +64,9 @@ public class UeditorController extends OjController
     String title = getPara("pictitle");
     String state = "SUCCESS";
     String url = file.getFile().getAbsolutePath().replace(rootPath, "").replace("\\", "/");
-    System.out.println("originalName: " + originalName);
-    System.out.println("file: " + file.getFileName());
-    System.out.println(file.getFile().getAbsolutePath());
+    log.info("originalName: " + originalName);
+    log.info("file: " + file.getFileName());
+    log.info(file.getFile().getAbsolutePath());
 
     String fileName = new StringBuilder(3).append(OjConfig.problemImagePath).append(File.separator).append(originalName).toString();
     File imageFile = new File(fileName);
@@ -77,7 +77,7 @@ public class UeditorController extends OjController
       url = imageFile.getAbsolutePath().replace(rootPath, "").replace("\\", "/");
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn(e.getLocalizedMessage());
       state = "IO Exception";
@@ -119,7 +119,7 @@ public class UeditorController extends OjController
       ro.close();
     } catch (Exception e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn(e.getLocalizedMessage());
       state = "IO Exception";

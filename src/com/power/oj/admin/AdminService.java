@@ -40,7 +40,7 @@ import jodd.io.FileUtil;
 import jodd.util.BCrypt;
 import jodd.util.SystemUtil;
 
-public class AdminService
+public final class AdminService
 {
   private final Logger log = Logger.getLogger(AdminService.class);
   private static final AdminService me = new AdminService();
@@ -82,7 +82,7 @@ public class AdminService
     
     ojInfo.put("webRootPath", rootPath);
     ojInfo.put("baseViewPath", AppConfig.getBaseViewPath());
-    ojInfo.put("devMode", OjConfig.getDevMode());
+    ojInfo.put("devMode", OjConfig.isDevMode());
     ojInfo.put("siteTitle", OjConfig.siteTitle);
     ojInfo.put("userAvatarPath", OjConfig.userAvatarPath.replace(rootPath, ""));
     ojInfo.put("problemImagePath", OjConfig.problemImagePath.replace(rootPath, ""));
@@ -215,7 +215,7 @@ public class AdminService
         return content;
       } catch (IOException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         return "cannot read file.";
@@ -241,7 +241,7 @@ public class AdminService
         return content;
       } catch (IOException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         return null;
@@ -268,7 +268,7 @@ public class AdminService
         }
       } catch (IOException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
         return false;
@@ -291,7 +291,7 @@ public class AdminService
       FileUtil.moveFile(srcFile, destFile);
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
       return false;
@@ -311,7 +311,7 @@ public class AdminService
       document = saxReader.read(file);
     } catch (DocumentException e1)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e1.printStackTrace();
       log.error(e1.getLocalizedMessage());
       return problemList;
@@ -322,7 +322,7 @@ public class AdminService
       FileUtil.mkdirs(OjConfig.problemImagePath);
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }
@@ -370,7 +370,7 @@ public class AdminService
           problem.problemToItem(item, replace);
         } catch (NumberFormatException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
           return null;
@@ -386,7 +386,7 @@ public class AdminService
           end = Integer.parseInt(pids[1]);
         } catch (NumberFormatException e)
         {
-          if (OjConfig.getDevMode())
+          if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
           return null;
@@ -476,7 +476,7 @@ public class AdminService
       xmlWriter.close();
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
     }

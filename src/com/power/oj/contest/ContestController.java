@@ -70,13 +70,13 @@ public class ContestController extends OjController
   public void problem()
   {
     Integer cid = getParaToInt(0);
-    String problem_id = getPara(1);
-    if (problem_id == null)
+    String problemId = getPara(1);
+    if (problemId == null)
     {
       forwardAction("/contest/allProblems/" + cid);
       return;
     }
-    char id = problem_id.toUpperCase().charAt(0);
+    char id = problemId.toUpperCase().charAt(0);
     Integer num = id - 'A';
 
     ProblemModel problemModel = contestService.getProblem(cid, num);
@@ -105,8 +105,8 @@ public class ContestController extends OjController
   public void submit()
   {
     Integer cid = getParaToInt(0);
-    String problem_id = getPara(1, "A");
-    char id = problem_id.toUpperCase().charAt(0);
+    String problemId = getPara(1, "A");
+    char id = problemId.toUpperCase().charAt(0);
     Integer num = id - 'A';
     boolean ajax = getParaToBoolean("ajax", false);
 
@@ -131,7 +131,7 @@ public class ContestController extends OjController
     }
 
     setAttr("problem", problemModel);
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     
     setTitle(new StringBuilder(6).append(getText("contest.problem.title")).append(cid).append("-").append(id).append(": ").append(problemModel.getTitle()).toString());
     if (ajax)
@@ -223,8 +223,8 @@ public class ContestController extends OjController
     //setAttr("contest", contestService.getContestById(cid));
     setAttr("contestProblems", contestService.getContestProblems(cid, 0));
     setAttr("solutionList", solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
-    setAttr(OjConstants.JUDGE_RESULT, OjConfig.judge_result);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+    setAttr(OjConstants.JUDGE_RESULT, OjConfig.judgeResult);
     setAttr("result", result);
     setAttr("language", language);
     setAttr("pid", getPara("pid"));
@@ -248,7 +248,7 @@ public class ContestController extends OjController
       return;
     }
 
-    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.language_name);
+    setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     setAttr("language", getParaToInt("language"));
     setAttr("pageSize", OjConfig.statusPageSize);
     setAttr("resultList", solutionService.getProblemStatusForContest(cid, num));
@@ -264,7 +264,7 @@ public class ContestController extends OjController
     Integer sid = getParaToInt(1);
     boolean isAdmin = userService.isAdmin();
     ContestSolutionModel solutionModel = solutionService.findContestSolution(sid);
-    ResultType resultType = OjConfig.result_type.get(solutionModel.getResult());
+    ResultType resultType = OjConfig.resultType.get(solutionModel.getResult());
     Integer uid = solutionModel.getUid();
     Integer loginUid = userService.getCurrentUid();
     if (!uid.equals(loginUid) && !isAdmin)
@@ -301,7 +301,7 @@ public class ContestController extends OjController
       log.warn(e.getLocalizedMessage());
     }
     
-    ProgramLanguageModel language = OjConfig.language_type.get(solutionModel.getLanguage());
+    ProgramLanguageModel language = OjConfig.languageType.get(solutionModel.getLanguage());
     setAttr("language", language.getName());
     setAttr("resultLongName", resultType.getLongName());
     setAttr("resultName", resultType.getName());
@@ -341,7 +341,7 @@ public class ContestController extends OjController
     Integer cid = getParaToInt(0);
     List<String> resultName = new ArrayList<String>();
     
-    for (ResultType resultType : OjConfig.judge_result)
+    for (ResultType resultType : OjConfig.judgeResult)
     {
       if (resultType.getId() > ResultType.RF)
         break;
@@ -350,7 +350,7 @@ public class ContestController extends OjController
     resultName.add("Others");
     
     setAttr("resultName", resultName);
-    setAttr("languageList", OjConfig.program_languages); // need ext
+    setAttr("languageList", OjConfig.programLanguages); // need ext
     setAttr("statistics", contestService.getContestStatistics(cid));
 
     setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());
@@ -402,9 +402,9 @@ public class ContestController extends OjController
     
     if (contestService.checkContestPassword(cid, password))
     {
-      String token_name = new StringBuilder("cid-").append(cid).toString();
-      String token_token = CryptUtils.encrypt(password, token_name);
-      setSessionAttr(token_name, token_token);
+      String tokenName = new StringBuilder("cid-").append(cid).toString();
+      String tokenToken = CryptUtils.encrypt(password, tokenName);
+      setSessionAttr(tokenName, tokenToken);
       redirect(SessionService.me().getLastAccessURL());
       return;
     }
@@ -469,8 +469,8 @@ public class ContestController extends OjController
   public void editProblem()
   {
     Integer cid = getParaToInt(0);
-    String problem_id = getPara(1, "A");
-    char id = problem_id.toUpperCase().charAt(0);
+    String problemId = getPara(1, "A");
+    char id = problemId.toUpperCase().charAt(0);
     Integer num = id - 'A';
     boolean ajax = getParaToBoolean("ajax", false);
     

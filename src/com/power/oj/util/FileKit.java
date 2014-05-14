@@ -222,7 +222,7 @@ public class FileKit
         FileUtil.mkdirs(file);
       } catch (IOException e)
       {
-        if (OjConfig.getDevMode())
+        if (OjConfig.isDevMode())
           e.printStackTrace();
       }
     }

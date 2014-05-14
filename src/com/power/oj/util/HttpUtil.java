@@ -69,12 +69,12 @@ public class HttpUtil
 
     } catch (ClientProtocolException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn(e.getLocalizedMessage());
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn(e.getLocalizedMessage());
     } finally
@@ -118,12 +118,12 @@ public class HttpUtil
 
     } catch (ClientProtocolException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn(e.getLocalizedMessage());
     } catch (IOException e)
     {
-      if (OjConfig.getDevMode())
+      if (OjConfig.isDevMode())
         e.printStackTrace();
       log.warn(e.getLocalizedMessage());
     } finally

@@ -22,11 +22,11 @@ public class VisitCountService extends TimerTask
   
   private static final ProblemService problemService = ProblemService.me();
   
-  private final static Logger log = Logger.getLogger(VisitCountService.class);
+  private static final Logger log = Logger.getLogger(VisitCountService.class);
   private static boolean start = false;
   private static VisitCountService daemon;
   private static Timer clickTimer;
-  private final static long INTERVAL = 15 * 60 * 1000;
+  private static final long INTERVAL = 15 * 60 * 1000;
 
   /**
    * 支持统计的对象类型
@@ -36,7 +36,7 @@ public class VisitCountService extends TimerTask
 
   // 内存队列
   @SuppressWarnings("serial")
-  private final static ConcurrentHashMap<Byte, ConcurrentHashMap<Integer, Integer>> queues = new ConcurrentHashMap<Byte, ConcurrentHashMap<Integer, Integer>>() {
+  private static final ConcurrentHashMap<Byte, ConcurrentHashMap<Integer, Integer>> queues = new ConcurrentHashMap<Byte, ConcurrentHashMap<Integer, Integer>>() {
     {
       for (byte type : TYPES)
         put(type, new ConcurrentHashMap<Integer, Integer>());
@@ -47,24 +47,24 @@ public class VisitCountService extends TimerTask
    * 记录访问统计
    * 
    * @param type
-   * @param obj_id
+   * @param objId
    */
-  public static void record(byte type, Integer obj_id)
+  public static void record(byte type, Integer objId)
   {
     ConcurrentHashMap<Integer, Integer> queue = queues.get(type);
     if (queue != null)
     {
-      Integer nCount = queue.get(obj_id);
+      Integer nCount = queue.get(objId);
       if (nCount == null)
       {
         switch(type)
         {
-          case problemViewCount: nCount = problemService.getViewCount(obj_id);break;
+          case problemViewCount: nCount = problemService.getViewCount(objId);break;
           default: nCount = 1;
         }
       }
 
-      queue.put(obj_id, nCount + 1);
+      queue.put(objId, nCount + 1);
     }
   }
   
