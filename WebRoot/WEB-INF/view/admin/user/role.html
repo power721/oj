@@ -17,15 +17,13 @@
       <div class="row-fluid">
         <div class="well">
           <div id="container">
-            <table id="user-list" class="table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0" width="100%">
+            <table id="role-list" class="table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0" width="100%">
               <thead>
                 <tr>
                   <th width="5%">Id</th>
-                  <th width="15%">User</th>
-                  <th width="30%">Nick Name</th>
-                  <th width="5%">Solved</th>
-                  <th width="5%">Submit</th>
-                  <th width="15%">Register Time</th>
+                  <th width="30%">Name</th>
+                  <th width="45%">Descript</th>
+                  <th width="5%">Status</th>
                   <th width="15%">Action</th>
                 </tr>
               </thead>
@@ -43,47 +41,27 @@
     <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
     <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
     <script type="text/javascript" charset="utf-8">
-        var oTable = $('#user-list').dataTable({
-            "sPaginationType": "bootstrap",
-            "bServerSide": true,
-            "bStateSave": true,
-            "aLengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],
-            "iDisplayLength": 20,
-            "sAjaxSource": "${baseUrl!}/api/admin/userRoleList",
-            'sAjaxDataProp' : "list", // 服务端返回数据的json节点
-            "aoColumns": [
-                { "mData": "uid" },
-                { "mData": "name",
+        var oTable = $('#role-list').jfinalDataTable({
+          "sAjaxSource": "${baseUrl!}/api/admin/userRoleList",
+          "aoColumns": [
+                { "mData": "id" },
+                { "mData": "name" },
+                { "mData": "description",
                   "mRender": function (data, type, full) {
-                    return '<a href="user/profile/' + full.uid + '" target="_blank">' + data + '</a>';
+                     return '<a href="#">' + data + '</a>';
                   }
                 },
-                { "mData": "role",
+                { "mData": "status",
                   "mRender": function (data, type, full) {
-                     return '<a href="user/profile/' + full.uid + '" target="_blank">' + data + '</a>';
+                    return '<a href="#">' + data + '</a>';
                   }
-                },
-                { "mData": "solved",
-                  "mRender": function (data, type, full) {
-                    return '<a href="status/?user=' + full.name + '&result=0" target="_blank">' + data + '</a>';
-                  }
-                },
-                { "mData": "submit",
-                  "mRender": function (data, type, full) {
-                    return '<a href="status/?user=' + full.name + '" target="_blank">' + data + '</a>';
-                  }
-                },
-                { "mData": "ctime",
-                  "mRender": function (data, type, full) {
-                    return parseTimestamp(data);
-                   }
                 },
                 { "mData": null,
                   "bSortable": false,
                   "mRender": function (data, type, full) {
-                    var action = '<button id="user-edit" uid="' + full.uid 
+                    var action = '<button id="role-edit" uid="' + full.id 
                         + '" class="btn btn-success">Edit</button> '
-                        + '<button id="user-toggle" uid="' + full.uid 
+                        + '<button id="role-toggle" uid="' + full.id 
                         + '" class="btn btn-warning">' 
                         + (full.status ? 'Delete' : 'Resume')
                         + '</button> ';
@@ -91,22 +69,6 @@
                   }
                 }
             ],
-            "oLanguage": {
-               "sUrl": "assets/DataTables-1.9.4/zh_CN.json"
-            },
-            "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
-              oSettings.jqXHR = $.ajax( {
-                "dataType": 'json',
-                "type": "POST",
-                "url": sSource,
-                "data": aoData,
-                "success": function(result) {
-                      result.iTotalRecords = result.totalRow;
-                      result.iTotalDisplayRecords = result.totalRow;
-                      fnCallback(result);
-                    }
-              } );
-            }
         });
     </script>
  </@override>
