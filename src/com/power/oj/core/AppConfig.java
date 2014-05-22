@@ -37,6 +37,7 @@ import com.power.oj.api.UserApiController;
 import com.power.oj.api.oauth.QQLoginApiController;
 import com.power.oj.api.oauth.SinaLoginApiController;
 import com.power.oj.api.oauth.WebLoginModel;
+import com.power.oj.bean.model.RoleModel;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.model.BoardModel;
 import com.power.oj.contest.model.ContestClarifyModel;
@@ -176,6 +177,7 @@ public class AppConfig extends JFinalConfig
     arp.setShowSql(getPropertyToBoolean("devMode", false));
     arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
     arp.addMapping("user_ext", "uid", UserExtModel.class);
+    arp.addMapping("role", RoleModel.class);
     arp.addMapping("friend", FriendModel.class);
     arp.addMapping("friend_group", FriendGroupModel.class);
     arp.addMapping("topic", TopicModel.class);

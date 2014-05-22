@@ -1,15 +1,19 @@
 package com.power.oj.core.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jodd.mail.EmailMessage;
 import jodd.util.MimeTypes;
+import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.bean.model.RoleModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.util.Tool;
@@ -134,6 +138,23 @@ public final class OjService
   public List<Record> getRoleList()
   {
     return Db.find("SELECT * FROM role ORDER BY id");
+  }
+  
+  public Page<RoleModel> getRoleList(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
+  {
+    List<Object> param = new ArrayList<Object>();
+    String sql = "SELECT *";
+    StringBuilder sb = new StringBuilder().append("FROM role WHERE 1=1");
+
+    if (StringUtil.isNotEmpty(sSearch))
+    {
+      sb.append(" AND name LIKE ? ");
+      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+    }
+    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", id");
+
+    log.info(sb.toString());
+    return RoleModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
   }
   
   public List<Record> getRolePermission(int rid)

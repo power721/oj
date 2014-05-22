@@ -26,7 +26,7 @@ public class AdminApiController extends OjController
   public void userList()
   {
     int iDisplayStart = getParaToInt("iDisplayStart", 0);
-    int pageSize = getParaToInt("iDisplayLength", OjConfig.problemPageSize);
+    int pageSize = getParaToInt("iDisplayLength", OjConfig.userPageSize);
     int pageNumber = iDisplayStart / pageSize + 1;
     int iSortCol = getParaToInt("iSortCol_0", 0);
     String sSortDir = getPara("sSortDir_0");
@@ -36,10 +36,23 @@ public class AdminApiController extends OjController
     renderJson(userService.getUserRankListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
   }
 
+  public void userRoleList()
+  {
+    int iDisplayStart = getParaToInt("iDisplayStart", 0);
+    int pageSize = getParaToInt("iDisplayLength", OjConfig.userPageSize);
+    int pageNumber = iDisplayStart / pageSize + 1;
+    int iSortCol = getParaToInt("iSortCol_0", 0);
+    String sSortDir = getPara("sSortDir_0");
+    String sSortName = getPara("mDataProp_" + iSortCol);
+    String sSearch = getPara("sSearch");
+    
+    renderJson(ojService.getRoleList(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+  }
+  
   public void contestList()
   {
     int iDisplayStart = getParaToInt("iDisplayStart", 0);
-    int pageSize = getParaToInt("iDisplayLength", OjConfig.problemPageSize);
+    int pageSize = getParaToInt("iDisplayLength", OjConfig.contestPageSize);
     int pageNumber = iDisplayStart / pageSize + 1;
     int iSortCol = getParaToInt("iSortCol_0", 0);
     String sSortDir = getPara("sSortDir_0");

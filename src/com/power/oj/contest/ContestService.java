@@ -253,11 +253,6 @@ public class ContestService
     List<Object> paras = new ArrayList<Object>();
     String sql = "SELECT *";
     StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
-    /*if (type > -1)
-    {
-      sb.append(" AND type=?");
-      paras.add(type);
-    }*/
 
     if ("running".equals(sSearch.toLowerCase()))
     {
@@ -268,6 +263,11 @@ public class ContestService
     } else if ("finished".equals(sSearch.toLowerCase()))
     {
       sb.append(" AND endTime<UNIX_TIMESTAMP()");
+    }
+    else
+    {
+      sb.append(" AND title LIKE ?");
+      paras.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
     }
 
     sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", cid DESC");
