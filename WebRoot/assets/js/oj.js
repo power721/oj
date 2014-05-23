@@ -137,21 +137,21 @@ $(document).ready(function() {
 });
 
 (function($) {
-  $.fn.jfinalDataTable = function(config) {
+  $.fn.jfinalDataTable = function(param) {
     return this.dataTable({
-      "sPaginationType": config.sPaginationType || "bootstrap",
-      "bServerSide": config.bServerSide !== undefined ? config.bServerSide : true,
-      "bStateSave": config.bStateSave !== undefined ? config.bStateSave : true,
-      "aLengthMenu": config.aLengthMenu || [
+      "sPaginationType": param.sPaginationType || "bootstrap",
+      "bServerSide": param.bServerSide !== undefined ? param.bServerSide : true,
+      "bStateSave": param.bStateSave !== undefined ? param.bStateSave : true,
+      "aLengthMenu": param.aLengthMenu || [
         [10, 20, 50, 100],
         [10, 20, 50, 100]
       ],
-      "iDisplayLength": config.iDisplayLength || 20,
-      "sAjaxSource": config.sAjaxSource || "",
-      'sAjaxDataProp': config.sAjaxDataProp || "list", // 服务端返回数据的json节点
-      "aoColumns": config.aoColumns || [],
+      "iDisplayLength": param.iDisplayLength || 20,
+      "sAjaxSource": param.sAjaxSource || "",
+      'sAjaxDataProp': param.sAjaxDataProp || "list", // 服务端返回数据的json节点
+      "aoColumns": param.aoColumns || [],
       "oLanguage": {
-        "sUrl": (config.oLanguage && config.oLanguage.sUrl) || "assets/DataTables-1.9.4/zh_CN.json"
+        "sUrl": (param.oLanguage && param.oLanguage.sUrl) || "assets/DataTables-1.9.4/zh_CN.json"
       },
       "fnServerData": function(sSource, aoData, fnCallback, oSettings) {
         oSettings.jqXHR = $.ajax({

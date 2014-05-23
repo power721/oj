@@ -17,10 +17,48 @@
       <div class="row-fluid">
         <div class="well">
           <div id="container">
-          
+            <#if permissionList??>
+              <#assign prevDeep = 0>
+              <div id="tree">
+                <ul>
+              <#list permissionList as permission>
+                <#assign deep = deepTree.get(permission.id)>
+                <#assign parentDeep = deepTree.get(permission.parentID)>
+                <#if (deep > prevDeep)>
+                  <ul>
+                <#elseif (deep < prevDeep)>
+                  <#list parentDeep..deep as i>
+                      </li>
+                    </ul>
+                  </#list>
+                  <ul>
+                </#if>
+                    <li>
+                      <input type="checkbox" data-id="${permission.id}" data-pid="${permission.parentID}">
+                      <span>${permission.title}</span>
+                <#assign prevDeep=deep>
+              </#list>
+                </ul>
+              </div>
+            </#if>
           </div>
         </div>
       </div>
     </div>
+ </@override>
+ <@override name="styles">
+ <link rel="stylesheet" type="text/css" href="assets/jquery-tree/src/css/jquery.tree.css"/>
+ <link rel="stylesheet" type="text/css" href="assets/jquery-ui-1.10.4.custom/css/start/jquery-ui-1.10.4.custom.min.css"/>
+</@override>
+ <@override name="scripts">
+ <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+ <script type="text/javascript" src="assets/jquery-tree/src/js/jquery.tree.js"></script>
+ <script type="text/javascript">
+  $(document).ready(function() {
+    $( "#tree" ).tree({
+      'dnd': false
+    });
+  });
+ </script>
  </@override>
 <@extends name="../_layout.html"></@extends>
