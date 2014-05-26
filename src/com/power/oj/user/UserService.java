@@ -89,6 +89,7 @@ public final class UserService
   
   public boolean autoLogin(UserModel userModel, boolean rememberMe)
   {
+    boolean success = true;
     String name = userModel.getName();
     String password = userModel.getPassword();
     Subject currentUser = ShiroKit.getSubject();
@@ -99,7 +100,6 @@ public final class UserService
     {
       currentUser.login(token);
 
-      updateLogin(name, true);
       SessionService.me().updateLogin();
     } catch (AuthenticationException e)
     {
@@ -107,11 +107,11 @@ public final class UserService
         e.printStackTrace();
       log.warn("User signin failed.");
       
-      updateLogin(name, false);
-      return false;
+      success = false;
     }
-
-    return true;
+    updateLogin(name, success);
+    
+    return success;
   }
 
   /**
@@ -126,52 +126,6 @@ public final class UserService
     }
 
     ShiroKit.getSubject().logout();
-  }
-  
-  private void addExp(UserExtModel userExtModel, int incExp)
-  {
-    int exp = userExtModel.getExperience() + incExp;
-    int credit = userExtModel.getCredit() + incExp;
-    int level = Arrays.binarySearch(OjConfig.level.toArray(), exp);
-    level = level<0 ? -level : level+2;
-    
-    userExtModel.setCredit(credit).setExperience( exp).setLevel(level); // no update
-  }
-  
-  public int checkin(UserExtModel userExtModel)
-  {
-    int timestamp = Tool.getDayTimestamp();
-    int checkin = userExtModel.getCheckin();
-    int checkinTimes = userExtModel.getCheckinTimes();
-    int level = userExtModel.getLevel();
-    
-    if (checkin < timestamp)
-    {
-      checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
-      int incExp = Math.min(checkinTimes, level);
-      int totalCheckin = userExtModel.getTotalCheckin() + 1;
-      
-      addExp(userExtModel, incExp);
-      userExtModel.setCheckin(OjConfig.timeStamp).setCheckinTimes(checkinTimes).setTotalCheckin(totalCheckin).update();
-      return incExp;
-    }
-    
-    return 0;
-  }
-  
-  public boolean isCheckin(UserModel userModel)
-  {
-    int checkin = userModel.getInt("checkin"); // UserModel does not have "checkin"
-    
-    if (checkin < Tool.getDayTimestamp())
-    {
-      return false;
-    }
-    else
-    {
-      userModel.put("isCheckin", checkin); // use lastCheckin?
-      return true;
-    }
   }
   
   /**
@@ -209,6 +163,13 @@ public final class UserService
     return false;
   }
   
+  /**
+   * signup with external account
+   * @param email
+   * @param webLogin
+   * @return user model
+   * @throws Exception
+   */
   public UserModel signup(String email, WebLoginModel webLogin) throws Exception
   {
     String name = HtmlEncoder.text(email);
@@ -256,7 +217,7 @@ public final class UserService
   /**
    * update user
    * @param userModel
-   * @return
+   * @return true if success
    */
   public boolean updateUser(UserModel userModel)
   {
@@ -289,7 +250,7 @@ public final class UserService
    * Update user login time and loginlog.
    * @param name user name.
    * @param success true if user login sucessfully.
-   * @return
+   * @return true if success
    */
   public boolean updateLogin(String name, boolean success)
   {
@@ -326,7 +287,74 @@ public final class UserService
     
     return userModel.update();
   }
+
+  /* for user center */
+  private void addExp(UserExtModel userExtModel, int incExp)
+  {
+    int exp = userExtModel.getExperience() + incExp;
+    int credit = userExtModel.getCredit() + incExp;
+    int level = Arrays.binarySearch(OjConfig.level.toArray(), exp);
+    level = level<0 ? -level : level+2;
+    
+    userExtModel.setCredit(credit).setExperience( exp).setLevel(level); // no update
+  }
   
+  public int checkin(UserExtModel userExtModel)
+  {
+    int timestamp = Tool.getDayTimestamp();
+    int checkin = userExtModel.getCheckin();
+    int checkinTimes = userExtModel.getCheckinTimes();
+    int level = userExtModel.getLevel();
+    
+    if (checkin < timestamp)
+    {
+      checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
+      int incExp = Math.min(checkinTimes, level);
+      int totalCheckin = userExtModel.getTotalCheckin() + 1;
+      
+      addExp(userExtModel, incExp);
+      userExtModel.setCheckin(OjConfig.timeStamp).setCheckinTimes(checkinTimes).setTotalCheckin(totalCheckin).update();
+      return incExp;
+    }
+    
+    return 0;
+  }
+  
+  public boolean isCheckin(UserModel userModel)
+  {
+    int checkin = userModel.getInt("checkin"); // UserModel does not have "checkin"
+    
+    if (checkin < Tool.getDayTimestamp())
+    {
+      return false;
+    }
+    else
+    {
+      userModel.put("isCheckin", checkin); // use lastCheckin?
+      return true;
+    }
+  }
+  
+  public String saveAvatar(File srcFile) throws Exception
+  {
+    UserModel userModel = getCurrentUser();
+    String rootPath = PathKit.getWebRootPath() + File.separator;
+    String srcFileName = srcFile.getAbsolutePath();
+    String ext = FileKit.getFileType(srcFileName);
+    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userModel.getUid()).append(ext).toString();
+    
+    File destFile = new File(destFileName);
+    
+    FileUtil.moveFile(srcFile, destFile);
+    
+    destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
+    userModel.setAvatar(destFileName).update();
+    updateCache(userModel);
+    
+    return destFileName;
+  } /* for user center end */
+  
+  /* for solution */
   public boolean incSubmission(Integer uid)
   {
     UserModel userModel = getUser(uid);
@@ -353,6 +381,7 @@ public final class UserService
     return userModel.update();
   }
 
+  /* for rejudge */
   public boolean revertAccepted(SolutionModel solutionModel)
   {
     if (solutionModel.getResult() != ResultType.AC)
@@ -372,18 +401,15 @@ public final class UserService
     }
     
     return userModel.update();
-  }
+  } /* for solution end */
 
   /**
    * Build user statistics.
    * @param userModel the user.
-   * @return
+   * @return true if success
    */
   public boolean build(UserModel userModel)
   {
-    if (userModel == null)
-      return false;
-    
     Integer uid = userModel.getUid();
     
     userModel.set("submission", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND status=1 LIMIT 1", uid));
@@ -464,25 +490,6 @@ public final class UserService
     }
     log.info("token invlidate");
     return false;
-  }
-  
-  public String saveAvatar(File srcFile) throws Exception
-  {
-    UserModel userModel = getCurrentUser();
-    String rootPath = PathKit.getWebRootPath() + File.separator;
-    String srcFileName = srcFile.getAbsolutePath();
-    String ext = FileKit.getFileType(srcFileName);
-    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userModel.getUid()).append(ext).toString();
-    
-    File destFile = new File(destFileName);
-    
-    FileUtil.moveFile(srcFile, destFile);
-    
-    destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
-    userModel.setAvatar(destFileName).update();
-    updateCache(userModel);
-    
-    return destFileName;
   }
   
   /**
@@ -780,7 +787,7 @@ public final class UserService
     try
     {
       return ShiroKit.hasPermission("admin");
-    } catch (UnknownSessionException e)
+    } catch (UnknownSessionException e) // occur in new thread when judge
     {
       if (OjConfig.isDevMode())
         e.printStackTrace();

@@ -30,7 +30,7 @@ public final class SocialService
             uid, uid);
     if (!groupList.isEmpty() && StringUtil.isEmpty(groupList.get(0).getStr("name")))
     {
-      groupList.get(0).set("name", "No Group");
+      groupList.get(0).set("name", "未分组");
     }
     return groupList;
   }

@@ -278,7 +278,7 @@ public class UserController extends OjController
   @RequiresGuest
   public void bind()
   {
-    render("bind.html");
+    setTitle("Bind Account");
   }
 
   @ActionKey("/signup")
@@ -341,6 +341,7 @@ public class UserController extends OjController
   @RequiresPermissions("user:online")
   public void online()
   {
+    // TODO refactor for normal users
     setAttr("loginUserNum", sessionService.getUserNumber());
     setAttr(OjConstants.USER_LIST, sessionService.getAccessLog());
     
@@ -355,10 +356,13 @@ public class UserController extends OjController
     String redirectURL = new StringBuilder(2).append("/user/profile/").append(name).toString();
     FlashMessage msg = new FlashMessage(getText("user.build.success"));
     
-    if (!userService.build(userModel))
+    try
     {
+      userService.build(userModel);
+    } catch (Exception e)
+    {
+      log.error(e.getLocalizedMessage());
       msg = new FlashMessage(getText("user.build.error"), MessageType.ERROR, getText("message.error.title"));
-      log.error(msg.getContent());
     }
 
     redirect(redirectURL, msg);
