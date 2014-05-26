@@ -1,6 +1,5 @@
 package com.power.oj.user;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -18,8 +17,6 @@ import com.jfinal.aop.ClearLayer;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.ext.plugin.shiro.ClearShiro;
-import com.jfinal.kit.PathKit;
-import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
@@ -44,7 +41,7 @@ public class UserController extends OjController
     UserModel userModel = userService.getCurrentUserExt();
     userService.isCheckin(userModel);
     
-    setAttr(OjConstants.USER, userModel);
+    setAttr(OjConstants.USER, userModel);  // replace current user model
     
     setTitle(getText("user.index.title"));
   }
@@ -105,7 +102,7 @@ public class UserController extends OjController
     StringBuilder query = new StringBuilder();
     
     query.append("word=").append(word);
-    if (StringUtil.isNotBlank(scope) && "all".equals(scope) == false)
+    if ("all".equals(scope) == false)
     {
       query.append("&scope=").append(scope);
     }
@@ -202,69 +199,6 @@ public class UserController extends OjController
       
       redirect(sessionService.getLastAccessURL());
     }
-  }
-
-  @RequiresPermissions("user:upload:avatar")
-  public void avatar()
-  {
-    // TODO remove
-    setTitle(getText("user.avatar.title"));
-  }
-
-  @Before(POST.class)
-  @RequiresPermissions("user:upload:avatar")
-  public void uploadAvatar()
-  {
-    // TODO remove
-    UploadFile uploadFile = getFile("Filedata", "", 10 * 1024 * 1024, "UTF-8");
-    File file = uploadFile.getFile();
-    String rootPath = PathKit.getWebRootPath() + File.separator;
-    String fileName = file.getAbsolutePath().replace(rootPath, "");
-    int width = 400;
-    int height = 400;
-
-    log.info(file.getAbsolutePath());
-    try
-    {
-      userService.uploadAvatar(file, width, height, this);
-      setAttr("error", "false");
-    } catch (Exception e)
-    {
-      setAttr("error", "true");
-      if (OjConfig.isDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-    }
-
-    setAttr("src", fileName);
-    
-    renderJson(new String[]{ "error", "src", "width", "height" });
-  }
-
-  @Before(POST.class)
-  @RequiresPermissions("user:upload:avatar")
-  public void saveAvatar() throws IOException
-  {
-    // TODO remove
-    int x1 = getParaToInt("x1", 0);
-    int y1 = getParaToInt("y1", 0);
-    int x2 = getParaToInt("x2", OjConstants.AVATAR_WIDTH);
-    int y2 = getParaToInt("y2", OjConstants.AVATAR_HEIGHT);
-    FlashMessage msg = new FlashMessage(getText("user.avatar.success"));
-   
-    try
-    {
-      userService.saveAvatar(getPara("imageSource"), x1, y1, x2, y2);
-    } catch (Exception e)
-    {
-      if (OjConfig.isDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-      msg = new FlashMessage(getText("user.avatar.error"), MessageType.ERROR, getText("message.error.title"));
-    }
-
-    String redirectURL = new StringBuilder(2).append("/user/profile/").append(getAttr(OjConstants.USER_NAME)).toString();
-    redirect(redirectURL, msg);
   }
 
   @RequiresGuest

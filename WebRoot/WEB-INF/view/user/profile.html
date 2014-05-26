@@ -11,7 +11,7 @@
 <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if> warp">
   <div class="row">
     <div class="span6 media">
-      <#if user?? && user.name==userModel.name><a href="user/avatar" class="pull-left" title="click to upload new avatar"></#if>
+      <#if user?? && user.name==userModel.name><a href="user/#area=profile" class="pull-left" title="click to upload new avatar"></#if>
       <img class="pull-left img-polaroid media-object"
         onerror="this.onerror=null;this.src='assets/images/user/default.png'" src="<#if userModel.avatar??>${userModel.avatar}<#else>assets/images/user/default.png</#if>" width="100" height="100" />
       <#if user?? && user.name==userModel.name></a></#if>

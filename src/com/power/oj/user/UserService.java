@@ -1,6 +1,5 @@
 package com.power.oj.user;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -12,8 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import javax.imageio.ImageIO;
 
 import jodd.io.FileUtil;
 import jodd.io.ZipUtil;
@@ -35,11 +32,9 @@ import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
-import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
-import com.power.oj.image.ImageScaleImpl;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.util.FileKit;
@@ -68,6 +63,7 @@ public final class UserService
    */
   public boolean login(String name, String password, boolean rememberMe)
   {
+    boolean success = true;
     Subject currentUser = ShiroKit.getSubject();
     UsernamePasswordToken token = new UsernamePasswordToken(name, password);
     token.setRememberMe(rememberMe);
@@ -77,7 +73,6 @@ public final class UserService
       currentUser.logout();
       currentUser.login(token);
 
-      updateLogin(name, true);
       SessionService.me().updateLogin();
     } catch (AuthenticationException e)
     {
@@ -85,11 +80,11 @@ public final class UserService
         e.printStackTrace();
       log.warn("User signin failed.");
       
-      updateLogin(name, false);
-      return false;
+      success = false;
     }
+    updateLogin(name, success);
 
-    return true;
+    return success;
   }
   
   public boolean autoLogin(UserModel userModel, boolean rememberMe)
@@ -117,6 +112,20 @@ public final class UserService
     }
 
     return true;
+  }
+
+  /**
+   * User logout in Shiro session.
+   */
+  public void logout()
+  {
+    UserModel userModel = getCurrentUser();
+    if (userModel != null)
+    {
+      evictCache(userModel.getUid());
+    }
+
+    ShiroKit.getSubject().logout();
   }
   
   private void addExp(UserExtModel userExtModel, int incExp)
@@ -163,27 +172,6 @@ public final class UserService
       userModel.put("isCheckin", checkin); // use lastCheckin?
       return true;
     }
-  }
-  
-  /**
-   * User logout in Shiro session.
-   */
-  public void logout()
-  {
-    UserModel userModel = getCurrentUser();
-    if (userModel != null)
-    {
-      //int online = userModel.getOnline();
-      //int login = userModel.getLoginTime();
-      
-      //log.info("online: " + online + " login: " + login + " current: " + OjConfig.timeStamp);
-      // TODO online time is incorrect
-      //online += (OjConfig.timeStamp - login) / 60;
-      //userModel.setOnline(online).update();
-      evictCache(userModel.getUid());
-    }
-
-    ShiroKit.getSubject().logout();
   }
   
   /**
@@ -476,53 +464,6 @@ public final class UserService
     }
     log.info("token invlidate");
     return false;
-  }
-  
-  /**
-   * upload and resize user avatar.
-   * @param file file of the avatar.
-   * @param maxWidth max width of the thumbnail.
-   * @param maxHeight max height of the thumbnail.
-   * @param controller the controller to set attr.
-   * @throws Exception
-   */
-  public void uploadAvatar(File file, int maxWidth, int maxHeight, OjController controller) throws Exception
-  {
-    ImageScaleImpl imageScale = new ImageScaleImpl();
-    imageScale.resizeFix(file, file, maxWidth, maxHeight);
-    
-    BufferedImage srcImgBuff = ImageIO.read(file);
-    controller.setAttr("width", srcImgBuff.getWidth());
-    controller.setAttr("height", srcImgBuff.getHeight());
-  }
-  
-  /**
-   * cut and save user avatar.
-   * @param imageSource source of image file.
-   * @param x1 left of selection area.
-   * @param y1 top of selection area.
-   * @param x2 right of selection area.
-   * @param y2 bottom of selection area.
-   * @throws Exception
-   */
-  public void saveAvatar(String imageSource, int x1, int y1, int x2, int y2) throws Exception
-  {
-    int cutWidth = x2 - x1;
-    int catHeight = y2 - y1;
-    UserModel userModel = getCurrentUser();
-    String rootPath = PathKit.getWebRootPath() + File.separator;
-    String srcFileName = rootPath + imageSource;
-    String ext = FileKit.getFileType(srcFileName);
-    String destFileName = new StringBuilder(4).append(OjConfig.userAvatarPath).append(File.separator).append(userModel.getUid()).append(ext).toString();
-    File srcFile = new File(srcFileName);
-    File destFile = new File(destFileName);
-    ImageScaleImpl imageScale = new ImageScaleImpl();
-
-    imageScale.resizeFix(srcFile, destFile, OjConstants.AVATAR_WIDTH, OjConstants.AVATAR_HEIGHT, x1, y1, cutWidth, catHeight);
-    FileUtil.delete(srcFile);
-    destFileName = destFileName.replace(rootPath, "").replace("\\", "/");
-    userModel.setAvatar(destFileName).update();
-    updateCache(userModel);
   }
   
   public String saveAvatar(File srcFile) throws Exception
