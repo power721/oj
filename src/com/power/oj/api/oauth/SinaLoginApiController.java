@@ -2,9 +2,12 @@ package com.power.oj.api.oauth;
 
 import java.util.Map;
 
+import jodd.util.StringUtil;
+
 import org.apache.shiro.authz.annotation.RequiresGuest;
 
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
@@ -72,9 +75,18 @@ public class SinaLoginApiController extends OjController
       //if (status)
       {
         UserModel userModel = UserModel.dao.findById(webLogin.getUid());
-        if (!userService.autoLogin(this, userModel, false))
+        if (!userService.autoLogin(userModel, false))
         {
           setFlashMessage(new FlashMessage("Auto login failed, please inform admin!", MessageType.ERROR, getText("message.error.title")));
+        }
+        else
+        {
+          setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+          setCookie("oj_username", userModel.getName(), OjConstants.COOKIE_AGE);
+          if (StringUtil.isNotBlank(avatar))
+          {
+            setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+          }
         }
       }
     } catch (Exception e)

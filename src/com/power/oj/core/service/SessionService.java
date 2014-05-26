@@ -47,7 +47,9 @@ public final class SessionService
   {
     String lastAccessURL = (String) getSession().getAttribute(OjConstants.LAST_ACCESS_URL);
     if (StringUtil.isBlank(lastAccessURL))
+    {
       lastAccessURL = "/";
+    }
     
     if (OjConfig.isDevMode())
     {
@@ -102,7 +104,7 @@ public final class SessionService
     {
       sessionModel = new SessionModel().setSessionId(id);
     }
-          
+
     sessionModel.setLastActivity(OjConfig.timeStamp).setUri(url);
     return SessionService.me().putModel(id, sessionModel);
   }
@@ -118,7 +120,7 @@ public final class SessionService
 
     SessionService.me().putModel(id, sessionModel);
     SessionService.me().putShiroSession(id, session);
-    
+
     return sessionModel;
   }
   
@@ -130,6 +132,11 @@ public final class SessionService
     SessionService.me().removeShiroSession(id);
     
     return dao.deleteSession(id);
+  }
+
+  public int expiresSession()
+  {
+    return dao.expiresSession();
   }
 
   public SessionModel putModel(SessionModel session)

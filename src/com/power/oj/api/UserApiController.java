@@ -7,6 +7,7 @@ import org.apache.shiro.authz.annotation.RequiresGuest;
 import jodd.mail.MailException;
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
+import jodd.util.StringUtil;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.ClearInterceptor;
@@ -87,7 +88,15 @@ public class UserApiController extends OjController
     webLogin.setStatus(true); // change after email verified?
     if (webLogin.update())
     {
-      userService.autoLogin(this, userModel, false);
+      userService.autoLogin(userModel, false);
+      
+      setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      setCookie("oj_username", userModel.getName(), OjConstants.COOKIE_AGE);
+      String avatar = userModel.getAvatar();
+      if (StringUtil.isNotBlank(avatar))
+      {
+        setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
       renderJson("status", "ok");
       return;
     }
@@ -294,8 +303,16 @@ public class UserApiController extends OjController
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    if (userService.login(this, username, password, rememberMe))
+    if (userService.login(username, password, rememberMe))
     {
+      UserModel userModel = userService.getCurrentUser();
+      String avatar = userModel.getAvatar();
+      setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      setCookie("oj_username", username, OjConstants.COOKIE_AGE);
+      if (StringUtil.isNotBlank(avatar))
+      {
+        setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
       renderJson("{\"success\":true}");
     }
     else
@@ -325,7 +342,9 @@ public class UserApiController extends OjController
   @ClearInterceptor(ClearLayer.ALL)
   public void logout()
   {
-    userService.logout(this);
+    userService.logout();
+    removeCookie("auth_key");
+    removeCookie("oj_userimg");
 
     renderNull();
   }

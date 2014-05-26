@@ -68,6 +68,7 @@ import com.power.oj.notice.NoticeController;
 import com.power.oj.notice.NoticeModel;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.service.ExpiresSessionService;
 import com.power.oj.service.VisitCountService;
 import com.power.oj.shiro.ShiroInViewInterceptor;
 import com.power.oj.shiro.freemarker.ShiroTags;
@@ -246,6 +247,7 @@ public class AppConfig extends JFinalConfig
     
     I18N.init("ojText", Locale.ENGLISH, null);
     VisitCountService.start();
+    ExpiresSessionService.start();
     
     log.info(PathKit.getWebRootPath());
     log.debug("afterJFinalStart finished.");

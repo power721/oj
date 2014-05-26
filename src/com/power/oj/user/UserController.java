@@ -132,8 +132,8 @@ public class UserController extends OjController
     setTitle(getText("user.login.title"));
   }
 
-  @Before(POST.class)
   @ClearShiro
+  @Before(POST.class)
   public void signin()
   {
     if (ShiroKit.isAuthenticated())
@@ -147,8 +147,16 @@ public class UserController extends OjController
     String password = getPara("password");
     boolean rememberMe = getParaToBoolean("rememberMe", false);
 
-    if (userService.login(this, name, password, rememberMe))
+    if (userService.login(name, password, rememberMe))
     {
+      UserModel userModel = userService.getCurrentUser();
+      String avatar = userModel.getAvatar();
+      setCookie("auth_key", String.valueOf(userModel.getUid()), OjConstants.COOKIE_AGE);
+      setCookie("oj_username", name, OjConstants.COOKIE_AGE);
+      if (StringUtil.isNotBlank(avatar))
+      {
+        setCookie("oj_userimg", avatar, OjConstants.COOKIE_AGE);
+      }
       redirect(sessionService.getLastAccessURL());
       return;
     }
@@ -172,7 +180,10 @@ public class UserController extends OjController
       lastAccessURL = getPara("t");
     }
     
-    userService.logout(this);
+    userService.logout();
+    
+    removeCookie("auth_key");
+    removeCookie("oj_userimg");
 
     redirect(lastAccessURL);
   }

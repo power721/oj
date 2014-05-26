@@ -19,8 +19,6 @@ import com.power.oj.notice.NoticeService;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.social.SocialService;
 import com.power.oj.solution.SolutionService;
-import com.power.oj.user.UserInterceptor;
-import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.freemarker.FreemarkerKit;
 
@@ -132,17 +130,6 @@ public class OjController extends Controller
   protected void setTitle(String title)
   {
     setAttr(OjConstants.PAGE_TITLE, title);
-  }
-
-  /**
-   * Get current user from attribute.
-   * 
-   * @see UserInterceptor
-   * @return UserModel.
-   */
-  protected UserModel getCurrentUser()
-  {
-    return getAttr(OjConstants.USER);
   }
 
   /**
