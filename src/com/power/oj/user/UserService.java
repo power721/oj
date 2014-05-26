@@ -74,6 +74,7 @@ public final class UserService
 
     try
     {
+      currentUser.logout();
       currentUser.login(token);
 
       updateLogin(name, true);

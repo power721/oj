@@ -2,7 +2,7 @@
   <div class="pagination pagination-centered">
     <div class="form-inline">
       <form class="form-search" action="status">
-        <input type="number" class="input-small" name="pid" value="${pid!}" placeholder="Problem ID">
+        <input type="number" class="input-small" name="pid" value="${pid!}" min="1000" placeholder="Problem ID">
         <input type="text" class="input-small" name="name" value="${name!}" placeholder="User Name">
         <select class="input-medium" id="inputLanguage" name="language">
           <option value="0">Language</option> 
@@ -55,7 +55,7 @@
       <#list solutionList.list as solution>
       <tr>
         <td class="sid">${solution.sid!}</td>
-        <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
+        <td class="user"><a href="user/profile/${(solution.name)!}" class="name">${(solution.name)!}</a></td>
         <td class="problem">
         <#if !adminUser?? && solution.alpha??> 
         <a href="contest/problem/${solution.cid}-${solution.alpha!}">${solution.cid}-${solution.alpha!}</a>

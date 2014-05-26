@@ -20,6 +20,16 @@ var system = {
   session: {},
   browser: window.Modernizr || {}
 };
+var user = {
+  ver: '0.0.2',
+  lastVer: '0.0.0.0',
+  name: $.cookie('oj_username') || '用户',
+  avatar: $.cookie('oj_userimg') || system.path + '/images/user/default.png',
+  online: 0,
+  uid: -1,
+  group: -1,
+  lastActiveTime: system.st
+};
 var config = {
   ver: '0.0.1',
   globe: {
@@ -43,8 +53,11 @@ var config = {
 };
 
 $(document).ready(function() {
+  $.check("login");
+  /* disale link */
   $('li.disabled a').removeAttr('href');
 
+  /* convert timestamp to date */
   $('.timestamp').each(function() {
     var that = $(this);
     that.html(parseTimestamp(that.attr('data')));
@@ -52,6 +65,7 @@ $(document).ready(function() {
 
   $("marquee").css("margin-top", $("#oj-navbar").height() + 5);
 
+  /* login and singup modal */
   $('.toLogin').click(function() {
     $('#signupModal').modal("hide");
     $('#loginModal').modal("show");
@@ -64,26 +78,55 @@ $(document).ready(function() {
     return false;
   });
 
-  $('td.user a').each(function() {
-    var that = $(this);
-    var name = that.html();
-    that.hoverDelay({
-      hoverEvent: function() {
-        $.getJSON('api/user/info', {
-          'name': name,
-          'ajax': 1
-        }, function(data) {;
-        });
-      }
-    });
-  });
+  /* use info card */
+    /*$("a.name").hovercard({
+        detailsHTML: '<div id="win-info"></div>',
+        onHoverIn: function () {
+            var name = $(this).text();
+            if (user.online && name != user.name) {
+              $.ajax({
+                  url: name.length ? 'api/user/info?name=' + encodeURI(name) : '',
+                  type: 'GET',
+                  dataType: 'json',
+                  beforeSend: function () {
+                    $("#win-info").html('<p class="loading-text">Loading...</p>');
+                  },
+                  success: function (data) {
+                    var a = data;
+                    var name = a.name;
+                    var uid = a.uid || 4;
+                    var gender = !! a.gender ? '♀​' : '♂';
+                    var avatar = a.avatar || system.path + '/images/user/default.png';
+                    var sign = a.sign || '这个人很懒，神马都没有写…';
+                    var location = a.comeFrom ? a.comeFrom.replace(/[\s\,]/g, '') : '未知地理位置';
+                    var lld = !! a.ctime ? $.parseTime(a.ctime * 1000) : '未知时间';
+                    var uclass = !! a.userClass ? '' + a.userClass : '';
+                    var flws = $.parsePts(a.follows);
+                    var flwed = $.parsePts(a.fans);
+                    var arts = $.parsePts(a.posts);
+                    var solved = $.parsePts(a.solved);
+                    var submit = $.parsePts(a.submit);
+                    var followed = a.followed;
+                    var objFollow = !followed ? '<a id="follow-user-info" class="r"><i class="icon icon-white icon-plus-sign"></i>关注</a>' : '<a id="follow-user-info" class="r"><i class="icon icon-white icon-star"></i>已关注</a>';
+                    var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="user/profile/' + name + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="user/profile/' + name + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=solved" target="_blank">解决</a><span class="pts">：' + solved + '</span>' + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=submit" target="_blank">提交</a><span class="pts">：' + submit + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="user/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
+                    $('#win-info').html(html);
+                  },
+                  complete: function () {
+                    $('.loading-text').remove();
+                  }
+              });
+            }
+        }
+    });*/
 
+  /* debug */
   $('#page_trace_open').click(function() {
     $(this).hide();
     $('#debug').show();
     $('#page_trace_close').show();
   });
 
+  /* switch theme */
   if ($.cookie) {
     $("#selstyle").val($.cookie("oj_style") == null ? "original" : $.cookie("oj_style"));
     $("#selstyle").change(function() {
@@ -105,6 +148,7 @@ $(document).ready(function() {
     });
   }
 
+  /* config style */
   if (config.globe.navbarFixedTop) {
     $("#oj-navbar").addClass("navbar-fixed-top");
   }
@@ -112,6 +156,7 @@ $(document).ready(function() {
     $("#oj-navbar").addClass("navbar-inverse");
   }
 
+  /* login form handler */
   if ($.fn.ajaxForm) {
     $('#loginForm').ajaxForm({
       beforeSubmit: function(formData, loginForm, options) {
@@ -136,6 +181,7 @@ $(document).ready(function() {
   }
 });
 
+/* extend data table plugin for jFinal in admin pages */
 (function($) {
   $.fn.jfinalDataTable = function(config) {
     return this.dataTable({
@@ -170,6 +216,70 @@ $(document).ready(function() {
   }
 })(jQuery);
 
+/* delay when hover event triggered */
+(function($) {
+  $.fn.hoverDelay = function(options) {
+    var defaults = {
+      hoverDuring: 500,
+      outDuring: 500,
+      hoverEvent: function() {
+        $.noop();
+      },
+      outEvent: function() {
+        $.noop();
+      }
+    };
+    var sets = $.extend(defaults, options || {});
+    var hoverTimer, outTimer;
+    return $(this).each(function() {
+      $(this).hover(function() {
+        clearTimeout(outTimer);
+        hoverTimer = setTimeout(sets.hoverEvent, sets.hoverDuring);
+      }, function() {
+        clearTimeout(hoverTimer);
+        outTimer = setTimeout(sets.outEvent, sets.outDuring);
+      });
+    });
+  };
+})(jQuery);
+
+/* extend format frunction for Date */
+Date.prototype.format = function(format) {
+  var o = {
+    "M+": this.getMonth() + 1, // month
+    "d+": this.getDate(), // day
+    "h+": this.getHours(), // hour
+    "m+": this.getMinutes(), // minute
+    "s+": this.getSeconds(), // second
+    "q+": Math.floor((this.getMonth() + 3) / 3), // quarter
+    "S": this.getMilliseconds()
+    // millisecond
+  };
+  if (/(y+)/.test(format))
+    format = format.replace(RegExp.$1, (this.getFullYear() + "")
+      .substr(4 - RegExp.$1.length));
+  for (var k in o)
+    if (new RegExp("(" + k + ")").test(format))
+      format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+  return format;
+};
+
+/* convert timestamp to date string */
+function parseTimestamp(nS) {
+  if (!nS || nS == null || nS == "")
+    return "";
+  if (nS > 4294967296) {
+    return new Date(parseInt(nS)).format("yyyy-MM-dd hh:mm:ss");
+  }
+  return new Date(parseInt(nS) * 1000).format("yyyy-MM-dd hh:mm:ss");
+}
+
+function getLocalTime(nS) {
+  return new Date(parseInt(nS) * 1000).toLocaleString().replace(
+    / Years | Month /g, "-").replace(/ Day /g, " ");
+}
+
+/* functions from acFun */
 (function($) {
   $.save = function(param, callback) {
     window.clearTimeout(system.timer.systemSaveDelay);
@@ -235,6 +345,7 @@ $(document).ready(function() {
       1000);
   }
 })(jQuery);
+
 (function($) {
   $.fn.hoverInfo = function(param, callback) {
     var func = {
@@ -600,65 +711,319 @@ $(document).ready(function() {
     })
   }
 })(jQuery);
+
 (function($) {
-  $.fn.hoverDelay = function(options) {
-    var defaults = {
-      hoverDuring: 500,
-      outDuring: 500,
-      hoverEvent: function() {
-        $.noop();
-      },
-      outEvent: function() {
-        $.noop();
+  $.fn.card = function(para, callback) {
+    var func = {
+      name: '$.fn.card()',
+      win: $('#win-info'),
+      mainer: $('#win-info').children('div.mainer'),
+      direction: 'auto'
+    };
+    if ( !! para) {
+      if (typeof(para) == 'string') {
+        func.direction = para;
+        if ($.isFunction(callback)) {
+          func.callback = callback
+        }
+      } else if ($.isFunction(para)) {
+        func.callback = para
+      } else {
+        $.info('debug::[' + func.name + ']参数错误。')
       }
     };
-    var sets = $.extend(defaults, options || {});
-    var hoverTimer, outTimer;
-    return $(this).each(function() {
-      $(this).hover(function() {
-        clearTimeout(outTimer);
-        hoverTimer = setTimeout(sets.hoverEvent, sets.hoverDuring);
-      }, function() {
-        clearTimeout(hoverTimer);
-        outTimer = setTimeout(sets.outEvent, sets.outDuring);
-      });
-    });
-  };
+    if (this && this.length) {
+      return this.each(function() {
+        var obj = $(this);
+        obj.unbind('mouseenter.card').bind('mouseenter.card',
+          function() {
+            window.clearTimeout(system.timer.card);
+            system.timer.card = window.setTimeout(function() {
+                var win = func.win;
+                var inner = func.mainer;
+                if (func.direction == 'left') {
+                  var left = obj.offset().left - win.width() - 24;
+                  var top = obj.offset().top
+                } else if (func.direction == 'right') {
+                  var left = obj.offset().left + obj.width() + 8;
+                  var top = obj.offset().top
+                } else if (func.direction == 'top') {
+                  var left = obj.offset().left;
+                  var top = obj.offset().top - win.height()
+                } else if (func.direction == 'bottom') {
+                  var left = obj.offset().left;
+                  var top = obj.offset().top + obj.height()
+                } else {
+                  if (obj.offset().top + win.height() > $(window).scrollTop() + $(window).innerHeight() - 32) {
+                    var left = obj.offset().left;
+                    var top = obj.offset().top - win.height()
+                  } else {
+                    var left = obj.offset().left;
+                    var top = obj.offset().top + obj.height()
+                  };
+                  if (left + win.width() > $(window).innerWidth() - 16) {
+                    left = $(window).innerWidth() - 16 - win.width()
+                  }
+                };
+                if (obj.hasClass('name') || obj.hasClass('avatar')) {
+                  var name = '';
+                  var uid = 0;
+                  if (obj.hasClass('name')) {
+                    name = obj.text()
+                  } else {
+                    if ( !! obj.data('uid')) {
+                      uid = obj.data('uid')
+                    } else if ( !! obj.data('name')) {
+                      name = obj.data('name')
+                    } else {
+                      $.info('error::[' + func.name + ']未能获取任何合法信息。')
+                    }
+                  };
+                  if (user.online && name != user.name && uid != user.uid) {
+                    var time = !system.browser.cssanimations ? 0 : 200;
+                    name = name.slice(0, 1) == '@' ? name.slice(1) : name;
+                    inner.html('<div class="hint-info">与服务器通信中...</div>');
+                    win.css({
+                      left: left - 16,
+                      top: top,
+                      opacity: 0,
+                      display: 'block'
+                    }).stop(true, false).animate({
+                        opacity: 1,
+                        left: left + 16
+                      },
+                      time).animate({
+                        left: left
+                      },
+                      time);
+                    if (system.port.getUserInfo) {
+                      system.port.getUserInfo.abort()
+                    }
+                    var url = !! uid ? 'api/user/info?uid=' + uid : name.length ? 'api/user/info?name=' + encodeURI(name) : '';
+                    system.port.getUserInfo = $.get(url).done(function(data) {
+                      if ( !! data.success) {
+                        var a = data;
+                        var name = a.name;
+                        var uid = a.uid || 4;
+                        var gender = !! a.gender ? '♀​' : '♂';
+                        var avatar = a.avatar || system.path + '/images/user/default.png';
+                        var sign = a.sign || '这个人很懒，神马都没有写…';
+                        var location = a.comeFrom ? a.comeFrom.replace(/[\s\,]/g, '') : '未知地理位置';
+                        var lld = !! a.ctime ? $.parseTime(a.ctime * 1000) : '未知时间';
+                        var uclass = !! a.userClass ? '' + a.userClass : '';
+                        var flws = $.parsePts(a.follows);
+                        var flwed = $.parsePts(a.fans);
+                        var arts = $.parsePts(a.posts);
+                        var solved = $.parsePts(a.solved);
+                        var submit = $.parsePts(a.submit);
+                        var followed = a.followed;
+                        var objFollow = !followed ? '<a id="follow-user-info" class="r"><i class="icon icon-white icon-plus-sign"></i>关注</a>' : '<a id="follow-user-info" class="r"><i class="icon icon-white icon-star"></i>已关注</a>';
+                        var html = '<div class="l">' + '<a class="thumb thumb-avatar' + uclass + '"href="user/profile/' + name + '"target="_blank">' + '<img class="avatar"src="' + $.parseSafe(avatar) + '">' + '</a>' + '</div>' + '<div class="r">' + '<a class="name name-usercard"href="user/profile/' + name + '"target="_blank"title="注册于 ' + lld + '">' + name + '<span class="gender">' + gender + '</span></a>' + '<p class="location">来自' + $.parseSafe(location) + '</p>' + '<p class="sign">' + $.parseSafe(sign) + '</p>' + '</div>' + '<span class="clearfix"></span>' + '<span class="info-extra">' + '<a href="/u/' + uid + '.aspx#area=following"target="_blank">关注</a>：<span class="pts">' + flws + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=followers" target="_blank">听众</a>：<span class="pts">' + flwed + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=solved" target="_blank">解决</a><span class="pts">：' + solved + '</span>' + '</span>&nbsp;&nbsp;/&nbsp;&nbsp;<a href="/u/' + uid + '.aspx#area=submit" target="_blank">提交</a><span class="pts">：' + submit + '</span>' + '<div class="area area-tool"><a id="mail-user-info" href="user/#area=mail-new;username=' + name + '" target="_blank"><i class="icon white icon-envelope"></i>私信</a>' + objFollow + '</div>';
+                        inner.removeClass('card-video').css({
+                          opacity: 0
+                        }).stop().animate({
+                            'mimiko': 1
+                          },
+                          0,
+                          function() {
+                            inner.html(html);
+                            $('#mail-user-info').click(function(e) {
+                              var btn = $(this);
+                              if (user.online != 1) {
+                                e.preventDefault();
+                                $.info('error::您尚未登录。请先行登录。');
+                                btn.info('您尚未登录。请先行登录。');
+                                if (!$('#win-login').length) {
+                                  btn.call('login')
+                                }
+                              }
+                            });
+                            $('#follow-user-info').click(function() {
+                              var btn = $(this);
+                              if (user.online == 1) {
+                                if (!followed) {
+                                  $.followUser({
+                                    singer: btn,
+                                    uid: uid,
+                                    username: a.name,
+                                    callback: function() {
+                                      var html = '<i class="icon white icon-star"></i>已关注';
+                                      btn.html(html)
+                                    }
+                                  })
+                                } else {
+                                  var text = '您已经关注了[' + a.name + ']';
+                                  $.info(text);
+                                  btn.info(text)
+                                }
+                              } else {
+                                $.info('error::您尚未登录。请先行登录。');
+                                btn.info('您尚未登录。请先行登录。');
+                                if (!$('#win-login').length) {
+                                  btn.call('login')
+                                }
+                              }
+                            });
+                            if (func.callback) {
+                              func.callback()
+                            }
+                          }).delay(50).animate({
+                            opacity: 1
+                          },
+                          200)
+                      } else {
+                        $.info('error::该用户不存在或尚不可用。');
+                        inner.html('<div class="hint-info">不存在的用户。</div>')
+                      }
+                    }).fail(function() {
+                      $.info('error::获取用户信息失败。请稍后重试。');
+                      inner.html('<div class="hint-info">网络连接超时。</div>')
+                    })
+                  }
+                } else if (obj.hasClass('unit') || obj.hasClass('title') || obj.hasClass('preview')) {
+                  var aid = obj.is('[data-aid]') ? obj.attr('data-aid') : obj.closest('div.unit, span.unit, a.unit, li.unit').attr('data-aid');
+                  var time = !system.browser.cssanimations ? 0 : 200;
+                  inner.html('<div class="hint-info">与服务器通信中...</div>');
+                  win.css({
+                    left: left,
+                    top: top,
+                    opacity: 0,
+                    display: 'block'
+                  }).stop(true, false).animate({
+                      opacity: 1
+                    },
+                    time);
+                  if (system.port.getVideoInfo) {
+                    system.port.getVideoInfo.abort()
+                  };
+                  system.port.getVideoInfo = $.get('/videoinfo.aspx?aid=' + aid).done(function(data) {
+                    if ( !! data.success) {
+                      var a = data.contentjson;
+                      var uid = a.authorId || 4;
+                      var title = a.title;
+                      var author = a.author;
+                      var desc = a.desc || '该视频暂无简介。';
+                      var preview = a.preview;
+                      var views = a.views;
+                      var comments = a.comments;
+                      var stows = a.stows;
+                      var shares = a.shares;
+                      var channel = a.channel;
+                      var date = a.date;
+                      var html = '' + '<div class="area-left">' + '<div class="l">' + '<a class="thumb" href="/v/ac' + aid + '">' + '<img class="preview" src="' + preview + '">' + '<div class="cover"></div>' + '<p class="ico-play"></p>' + '</a>' + '</div>' + '<div class="r">' + '<a class="title" href="/v/ac' + aid + '" title="' + title + '">' + $.parseSafe(title) + '</a>' + '<span class="desc">' + $.parseSafe(desc) + '</span>' + '</div>' + '<span class="clearfix"></span>' + '</div>' + '<div class="area-right">' + '<a class="name name-videocard" href="user/user.aspx?uid=' + uid + '" title="Up主"><i class="icon grey icon-user"></i>' + author + '</a>' + '<span class="time" title="发布于' + date + '"><i class="icon grey icon-time">发布日期:</i>' + $.parseTime(date) + '</span>' + '<div id="extra-video-info">' + '<span class="views" title="点击数"><i class="icon grey icon-play-circle">点击:</i>' + $.parsePts(views) + '</span>&nbsp;&nbsp;' + '<span class="comments" title="评论数"><i class="icon grey icon-comment">评论:</i>' + $.parsePts(comments) + '</span>&nbsp;&nbsp;' + '<span class="favors" title="收藏数"><i class="icon grey icon-star">收藏:</i>' + $.parsePts(stows) + '</span>&nbsp;&nbsp;' + '<span class="shares" title="分享数"><i class="icon grey icon-share">分享:</i>' + $.parsePts(shares) + '</span>' + '</div>' + '<a class="channel" target="_blank" href="/v/list' + $.parseChannel(channel) + '/index.htm">' + channel + '</a>' + '</div>';
+                      inner.addClass('card-video').stop().animate({
+                          opacity: 0
+                        },
+                        0,
+                        function() {
+                          inner.html(html)
+                        }).delay(50).animate({
+                          opacity: 1
+                        },
+                        200)
+                    } else {
+                      $.info('error::该视频不存在或尚不可用。');
+                      inner.html('<div class="hint-info">不存在的视频。</div>')
+                    }
+                  }).fail(function() {
+                    $.info('error::获取视频信息失败。请稍后重试。');
+                    inner.html('<div class="hint-info">网络连接超时。</div>')
+                  });
+                  if (func.callback) {
+                    func.callback()
+                  }
+                } else {
+                  $.info('debug::[' + func.name + ']错误参数。')
+                }
+              },
+              400)
+          }).unbind('mouseleave.card').bind('mouseleave.card',
+          function() {
+            $('#win-info').mouseleave()
+          })
+      })
+    } else {
+      $.info('debug::[' + func.name + ']不存在于舞台上的非法元素。')
+    }
+  }
 })(jQuery);
 
-Date.prototype.format = function(format) {
-  var o = {
-    "M+": this.getMonth() + 1, // month
-    "d+": this.getDate(), // day
-    "h+": this.getHours(), // hour
-    "m+": this.getMinutes(), // minute
-    "s+": this.getSeconds(), // second
-    "q+": Math.floor((this.getMonth() + 3) / 3), // quarter
-    "S": this.getMilliseconds()
-    // millisecond
-  };
-  if (/(y+)/.test(format))
-    format = format.replace(RegExp.$1, (this.getFullYear() + "")
-      .substr(4 - RegExp.$1.length));
-  for (var k in o)
-    if (new RegExp("(" + k + ")").test(format))
-      format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
-  return format;
-};
-
-function parseTimestamp(nS) {
-  if (!nS || nS == null || nS == "")
-    return "";
-  if (nS > 4294967296) {
-    return new Date(parseInt(nS)).format("yyyy-MM-dd hh:mm:ss");
+(function($) {
+  $.check = function(param, callback) {
+    var func = {
+      name: '$.check()',
+      token: 'mimiko',
+      type: 'default',
+      callback: callback
+    };
+    if (param) {
+      if ($.type(param) == 'string') {
+        func.type = $.trim(param)
+      } else {
+        $.info('debug::[' + func.name + ']非法参数。')
+      }
+    };
+    var f = {
+      'location': function() {
+        var cid = system.channel || system.cid;
+        $('#guide-header, #guide-footer').find('a.channel-' + cid).addClass('active');
+        if (system.location.search(/location\-channel/) != -1) {
+          $('#guide-channel').find('li.channel-' + cid).add('#tab-area-' + cid).not('.fixed').addClass('active')
+        };
+        if ($.isFunction(func.callback)) {
+          func.callback()
+        }
+      },
+      'login': function() {
+        user.uid = $.cookie('auth_key');
+        if ( !! user.uid) {
+          user.online = 1;
+          user.name = $.cookie('oj_username');
+          user.key = $.cookie('auth_key_oj_sha1');
+          if ($.cookie('oj_time')) {
+            user.group = 0;
+            $.info('debug::用户权限[管理员]。')
+          } else {
+            user.group = 2;
+            $.info('debug::用户权限[会员]。')
+          }
+        } else {
+          user.online = 0;
+          user.group = 1;
+          user.name = '游客';
+          $.info('debug::用户权限[游客]。')
+        };
+        if ($.isFunction(func.callback)) {
+          func.callback()
+        }
+      },
+      'unread': function() {
+        $.get('api/mail/unRead', {
+          uid: user.uid
+        }).done(function(data) {
+          user.unread = {
+            'push': data.newPush,
+            at: data.mention,
+            mail: data.unReadMail,
+            fan: data.newFollowed
+          };
+          if ($.isFunction(func.callback)) {
+            func.callback()
+          }
+        }).fail(function() {
+          $.info('error::[' + func.name + ']获取用户信息失败。')
+        })
+      },
+      'default': function() {
+        $.info('debug::[' + func.name + ']非法参数。')
+      }
+    };
+    system.tv = f[func.type];
+    if ($.isFunction(system.tv)) {
+      system.tv()
+    }
   }
-  return new Date(parseInt(nS) * 1000).format("yyyy-MM-dd hh:mm:ss");
-}
-
-function getLocalTime(nS) {
-  return new Date(parseInt(nS) * 1000).toLocaleString().replace(
-    / Years | Month /g, "-").replace(/ Day /g, " ");
-}
+})(jQuery);
 
 (function($) {
   $.parseColor = function(param) {
@@ -821,6 +1186,7 @@ function getLocalTime(nS) {
     return tsDistance < 0 ? '刚刚' : Math.floor(tsDistance / 1000 / 60 / 60 / 24 / 365) > 0 ? longLongAgo : (dayAgo = tsDistance / 1000 / 60 / 60 / 24) > 3 ? (dt.getFullYear() != dtNow.getFullYear() ? longLongAgo : longAgo) : (dayAgo = (dtNow.getDay() - dt.getDay() + 7) % 7) > 2 ? longAgo : dayAgo > 1 ? '前天 ' + hrMin : (hrAgo = tsDistance / 1000 / 60 / 60) > 12 ? (dt.getDay() != dtNow.getDay() ? '昨天 ' : '今天 ') + hrMin : (hrAgo = Math.floor(tsDistance / 1000 / 60 / 60 % 60)) > 0 ? hrAgo + '小时前' : (minAgo = Math.floor(tsDistance / 1000 / 60 % 60)) > 0 ? minAgo + '分钟前' : (secAgo = Math.floor(tsDistance / 1000 % 60)) > 0 ? secAgo + '秒前' : '刚刚';
   }
 })(jQuery);
+
 try {
   console.log("Welcome to PowerOJ, have fun!");
 } catch (f) {};

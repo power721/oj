@@ -108,6 +108,7 @@
 <script src="assets/acfun/ubb.min.js"></script>
 <script src="assets/acfun/comment.js"></script>
 <script type="text/javascript">
+  var BaseURL = "${baseUrl!}/";
   system.aid = ${topic.id!};
   window.setTimeout(function() {
       readyComm(function() {
@@ -126,5 +127,15 @@
   },
   500);
 </script>
+<script>
+      system.path = "${baseUrl!}/assets";
+      system.date = Math.round(new Date().getTime()/1000);
+      system.location = 'location-member';
+      window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
+    </script>
+    <script type="text/javascript" src="assets/acfun/editor_config.js"></script>
+    <script type="text/javascript" src="assets/ueditor/ueditor.all.min.js"></script>
+    
+    <link rel="stylesheet" href="assets/ueditor/themes/default/css/ueditor.css">
 </@override>
 <@extends name="../common/_layout.html" />
