@@ -706,7 +706,7 @@ INSERT INTO `permission` VALUES ('138', 'code', '1', 'code:edit', '编辑', '132
 INSERT INTO `permission` VALUES ('139', 'code', '1', 'code:edit:self', '自己', '138', '1');
 INSERT INTO `permission` VALUES ('140', 'code', '1', 'code:judge', '评测', '132', '1');
 INSERT INTO `permission` VALUES ('141', 'admin', '1', 'code:rejudge', '重判', '132', '1');
-INSERT INTO `permission` VALUES ('142', 'mail', '1', 'mail', '邮件', '0', '1');
+INSERT INTO `permission` VALUES ('142', 'mail', '1', 'mail', '邮件', '1', '1');
 INSERT INTO `permission` VALUES ('143', '', '1', 'mail:view', '查看', '142', '1');
 INSERT INTO `permission` VALUES ('144', 'mail', '1', 'mail:view:self', '自己', '143', '1');
 INSERT INTO `permission` VALUES ('145', 'mail', '1', 'mail:send', '发送', '142', '1');

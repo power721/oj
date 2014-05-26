@@ -1,6 +1,8 @@
 package com.power.oj.admin;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -34,8 +36,23 @@ public class UserAdminController extends OjController
   {
     List<Record> roleList = ojService.getRoleList();
     List<Record> permissionList = ojService.getPermissionList();
+    Map<Integer, Integer> deepTree = new HashMap<Integer, Integer>();
+    
+    deepTree.put(1, 0);
+    for (Record permission : permissionList)
+    {
+      Integer id = permission.getInt("id");
+      Integer deep = deepTree.get(permission.getInt("parentID"));
+      if (deep == null)
+      {
+        log.info(id + " " + permission.getInt("parentID"));
+        deep = 0;
+      }
+      deepTree.put(id, deep + 1);
+    }
     
     setAttr("roleList", roleList);
+    setAttr("deepTree", deepTree);
     setAttr("permissionList", permissionList);
   }
 

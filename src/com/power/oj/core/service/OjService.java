@@ -167,9 +167,9 @@ public final class OjService
 
   public List<Record> getPermissionList()
   {
-    return Db.find("SELECT * FROM permission ORDER BY id");
+    return Db.find("SELECT * FROM permission WHERE id>1 ORDER BY id");
   }
-  
+
   public List<Record> tagList()
   {
     return Db.find("SELECT tag FROM tag WHERE status=1 GROUP by tag ORDER BY COUNT(tag) DESC");
