@@ -13,9 +13,9 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
-import com.power.oj.bean.model.RoleModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
+import com.power.oj.user.RoleModel;
 import com.power.oj.util.Tool;
 import com.power.oj.util.freemarker.FreemarkerKit;
 
