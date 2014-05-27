@@ -3,6 +3,8 @@ package com.power.oj.discussion;
 import java.util.ArrayList;
 import java.util.List;
 
+import jodd.util.HtmlEncoder;
+
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.user.UserService;
@@ -70,6 +72,7 @@ public final class DiscussionService
   {
     topicModel.setUid(userService.getCurrentUid());
     topicModel.setCtime(OjConfig.timeStamp);
+    topicModel.setContent(HtmlEncoder.text(topicModel.getContent()));
     
     return topicModel.save();
   }
@@ -79,7 +82,7 @@ public final class DiscussionService
     TopicModel newTopic = dao.findById(topicModel.getId());
     
     newTopic.setTitle(topicModel.getTitle());
-    newTopic.setContent(topicModel.getContent());
+    newTopic.setContent(HtmlEncoder.text(topicModel.getContent()));
     newTopic.setMtime(OjConfig.timeStamp);
     
     return newTopic.update();
