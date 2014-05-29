@@ -19,7 +19,6 @@ import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
-import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
@@ -157,7 +156,14 @@ public class UserApiController extends OjController
     // TODO
     Integer uid = getParaToInt("uid");
     String name = getPara("name");
-    SessionService.me().updateOnline(uid, name);
+    try
+    {
+      sessionService.updateOnline(uid, name);
+    }
+    catch (NullPointerException e)
+    {
+      renderJson("{\"success\":false}");
+    }
     
     renderNull();
   }
