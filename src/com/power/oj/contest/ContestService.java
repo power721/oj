@@ -671,7 +671,14 @@ public class ContestService
       return -3;
     }
     
-    long num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
+    long num = 0;
+    try
+    {
+      num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
+    } catch(NullPointerException e)
+    {
+      num = 0;
+    }
     if (num >= OjConstants.MAX_PROBLEMS_IN_CONTEST)
     {
       return -2;

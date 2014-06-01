@@ -28,7 +28,7 @@
     </div>
 </div>
 <div class="row content" id="area-player">
-  <div clas="span4 offset4">
+  <div clas="span4 offset4" id="content">
     ${topic.content!}
   </div>
 </div>
@@ -105,9 +105,13 @@
 <@override name="scripts">
 <link rel="stylesheet" href="assets/acfun/article.css">
 <script src="assets/acfun/core.js"></script>
-<script src="assets/acfun/ubb.min.js"></script>
 <script src="assets/acfun/comment.js"></script>
+<script src="assets/js/ubb.js"></script>
 <script type="text/javascript">
+  $(document).ready(function() {
+    var html = ubb2html($('#content').html());
+    $('#content').html(html);
+  });
   var BaseURL = "${baseUrl!}/";
   system.aid = ${topic.id!};
   window.setTimeout(function() {
@@ -128,14 +132,14 @@
   500);
 </script>
 <script>
-      system.path = "${baseUrl!}/assets";
-      system.date = Math.round(new Date().getTime()/1000);
-      system.location = 'location-member';
-      window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
-    </script>
-    <script type="text/javascript" src="assets/acfun/editor_config.js"></script>
-    <script type="text/javascript" src="assets/ueditor/ueditor.all.min.js"></script>
-    
-    <link rel="stylesheet" href="assets/ueditor/themes/default/css/ueditor.css">
+  system.path = "${baseUrl!}/assets";
+  system.date = Math.round(new Date().getTime()/1000);
+  system.location = 'location-member';
+  window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
+</script>
+<script type="text/javascript" src="assets/acfun/editor_config.js"></script>
+<script type="text/javascript" src="assets/ueditor/ueditor.all.min.js"></script>
+
+<link rel="stylesheet" href="assets/ueditor/themes/default/css/ueditor.css">
 </@override>
 <@extends name="../common/_layout.html" />
