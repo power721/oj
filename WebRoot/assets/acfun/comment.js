@@ -219,7 +219,7 @@ function sendComm(param, callback) {
     token: 'mimiko',
     text: '',
     quoteId: 0,
-    contentId: system.aid,
+    threadId: system.aid,
     mentionList: [],
     topicList: [],
     cooldown: 5000

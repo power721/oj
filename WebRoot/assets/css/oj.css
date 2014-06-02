@@ -70,8 +70,29 @@ a.cureent {
   margin-bottom: 15px;
 }
 
-.problem textarea,.solution textarea,.contest textarea,.notice textarea,textarea.auto-width
-  {
+.topic-open {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  line-height: 16px;
+  vertical-align: text-top;
+  background-image: url("../images/comments-open.gif");
+  background-repeat: no-repeat;
+}
+
+.topic-closed {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  line-height: 16px;
+  vertical-align: text-top;
+  background-image: url("../images/comments-closed.gif");
+  background-repeat: no-repeat;
+}
+
+.problem textarea,.solution textarea,.contest textarea,.notice textarea,textarea.auto-width {
   width: auto;
   overflow: visible;
 }

@@ -26,26 +26,30 @@ public final class DiscussionService
   {
     List<Object> paras = new ArrayList<Object>();
     StringBuilder sb = new StringBuilder();
-    sb.append("FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid");
+    sb.append("FROM `topic`");
     if (pid != null && pid > 0)
     {
-      sb.append(" WHERE pid=?");
+      sb.append(" WHERE t.pid=?");
       paras.add(pid);
     }
-    sb.append(" ORDER BY id DESC");
+    sb.append(" GROUP BY threadId ORDER BY MAX(id) DESC");
     
-    Page<TopicModel> topicPage = dao.paginate(pageNumber, pageSize, "SELECT t.*,u.name", sb.toString(), paras.toArray());
-    
-    for (TopicModel topic : topicPage.getList())
-    {
-      CommentModel comment = CommentModel.dao.findFirst("SELECT COUNT(*) AS reply,MAX(ctime) AS last FROM `comment` WHERE threadId=? LIMIT 1", topic.getId());
-      topic.put("reply", comment.get("reply"));
-      topic.put("last", comment.get("last"));
-    }
+    Page<TopicModel> topicPage = dao.paginate(pageNumber, pageSize, "SELECT *", sb.toString(), paras.toArray());
     
     return topicPage;
   }
   
+  public List<TopicModel> getTopicList(Page<TopicModel> topicPage)
+  {
+    List<TopicModel> topicList = new ArrayList<TopicModel>();
+    
+    for (TopicModel topic : topicPage.getList())
+    {
+      topicList.addAll(dao.find("SELECT t.*,u.name FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE t.threadId=? ORDER BY t.id", topic.getThreadId()));
+    }
+    return topicList;
+  }
+  /*
   public Page<CommentModel> getCommentList(int pageNumber, int pageSize, Integer threadId)
   {
     Page<CommentModel> commentList = CommentModel.dao.paginate(pageNumber, pageSize, 
@@ -54,7 +58,7 @@ public final class DiscussionService
     
     return commentList;
   }
-  
+  */
   public TopicModel findTopic(Integer id)
   {
     return dao.findFirst("SELECT * FROM `topic` WHERE id=?", id);
@@ -62,8 +66,8 @@ public final class DiscussionService
 
   public TopicModel findTopic4Show(Integer id)
   {
-    TopicModel topic = dao.findFirst("SELECT t.*,p.title AS problem,COUNT(c.id) AS reply FROM `topic` t "
-        + "LEFT JOIN problem p ON p.pid=t.pid LEFT JOIN comment c ON c.threadId=t.id WHERE t.id=?", id);
+    TopicModel topic = dao.findFirst("SELECT t.*,p.title AS problem FROM `topic` t "
+                            + "LEFT JOIN problem p ON p.pid=t.pid WHERE t.id=?", id);
     topic.setView(topic.getView() + 1).update();
     return topic;
   }
@@ -74,7 +78,17 @@ public final class DiscussionService
     topicModel.setCtime(OjConfig.timeStamp);
     topicModel.setContent(HtmlEncoder.text(topicModel.getContent()));
     
-    return topicModel.save();
+    if (topicModel.save())
+    {
+      Integer threadId = topicModel.getThreadId();
+      if (threadId == null || threadId == 0)
+      {
+        topicModel.setThreadId(topicModel.getId());
+        return topicModel.update();
+      }
+      return true;
+    }
+    return false;
   }
   
   public boolean updateDiscussion(TopicModel topicModel)

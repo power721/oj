@@ -11,6 +11,8 @@ public class TopicModel extends Model<TopicModel>
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String PID = "pid";
+  public static final String THREAD_ID = "threadId";
+  public static final String PARENT_ID = "parentId";
   public static final String TITLE = "title";
   public static final String CONTENT = "content";
   public static final String VIEW = "view";
@@ -47,6 +49,26 @@ public class TopicModel extends Model<TopicModel>
   public TopicModel setPid(Integer value)
   {
     return set(PID, value);
+  }
+  
+  public Integer getThreadId()
+  {
+    return getInt(THREAD_ID);
+  }
+  
+  public TopicModel setThreadId(Integer value)
+  {
+    return set(THREAD_ID, value);
+  }
+  
+  public Integer getParentId()
+  {
+    return getInt(PARENT_ID);
+  }
+  
+  public TopicModel setParentId(Integer value)
+  {
+    return set(PARENT_ID, value);
   }
   
   public String getTitle()

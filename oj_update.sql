@@ -279,3 +279,7 @@ UPDATE contest_solution SET `result`=9 WHERE `result`=98;
 UPDATE contest_solution SET `result`=10 WHERE `result`=99;
 UPDATE contest_solution SET `result`=12 WHERE `result`=100;
 UPDATE contest_solution SET `result`=11 WHERE `result`=10000;
+
+#2014-06-02
+ALTER TABLE topic ADD `threadId` int(9) DEFAULT 0,
+                  ADD `parentId` int(9) DEFAULT 0;

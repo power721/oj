@@ -10,39 +10,52 @@
     </#if>
   </div>
   <#include "../common/_paginate.html" />
-  <@paginate currentPage=topicList.pageNumber totalPage=topicList.totalPage actionUrl="notice/" />
+  <@paginate currentPage=topicPage.pageNumber totalPage=topicPage.totalPage actionUrl="notice/" />
   <div class="pull-right">
-    <span class="badge badge-info">${topicList.pageNumber}/${topicList.totalPage} Pages</span> 
-    <span class="badge badge-info">${topicList.totalRow} Records</span>
+    <span class="badge badge-info">${topicPage.pageNumber}/${topicPage.totalPage} Pages</span> 
+    <span class="badge badge-info">${topicPage.totalRow} Records</span>
   </div>
 </div>
-
-<table id="topic-list" class="table table-hover table-condensed">
-  <thead>
-    <tr>
-      <th width="10%">Problem</th>
-      <th width="50%">Title</th>
-      <th width="10%">Author</th>
-      <th width="10%">Post Time</th>
-      <th width="10%">Last Reply</th>
-      <th width="10%">Reply</th>
-    </tr>
-  </thead>
-  <tbody>
-    <#if topicList??> 
-    <#list topicList.list as topic>
-      <tr>
-        <td><#if (topic.pid?? && topic.pid>0) ><a href="problem/show/${topic.pid!}">${topic.pid!}</#if></a></td>
-        <td class="title"><a href="discuss/show/${topic.id!}">${topic.title!}</a></td>
-        <td class="user"><a href="user/profile/${topic.name!}">${topic.name!}</a></td>
-        <td class="timestamp" data="${topic.ctime!}"></td>
-        <td class="timestamp" data="${topic.last!}"></td>
-        <td class="pts"">${topic.reply!}</td>
-      </tr>
-    </#list>
+<div class="row">
+  <#if topicList??>
+      <#assign prevDeep = 1>
+      <div id="tree">
+        <ul>
+      <#list topicList as topic>
+        <#assign deep = deepTree.get(topic.id)>
+        <#assign parentDeep = deepTree.get(topic.parentId)>
+        <#if (deep > prevDeep)>
+          <ul>
+        <#elseif (deep < prevDeep)>
+            </li>
+          <#list prevDeep-1..deep as i>
+              </ul>
+            </li>
+          </#list>
+        <#elseif prevDeep==parentDeep>
+          </li>
+        </#if>
+            <li data-deep="${deep}">
+              <i class="topic topic-open"></i>
+              <a href="#" class="topic-title" data-id="${topic.id}">${topic.title}</a>
+              <a href="user/profile/${topic.name}">${topic.name}</a>
+              <span class="timestamp" data="${topic.ctime}"></span>
+              <#if (deep==1 && topic.pid?? && topic.pid>0)>
+              <a href="problem/show/${topic.pid}">Problem ${topic.pid}</a>
+              </#if>
+        <#assign prevDeep=deep>
+      </#list>
+            </li>
+          <#if (prevDeep>1)>
+          <#list prevDeep-1..1 as i>
+              </ul>
+            </li>
+          </#list>
+          </#if>
+        </ul>
+      </div>
     </#if>
-  </tbody>
-</table>
+</div>
 </@override>
 
 <@override name="scripts">
@@ -52,25 +65,23 @@
         var that = $(this);
         that.html(parseTimestamp(that.attr('data')));
       });
-    });
-  </script>
-  
-  <#if oj_style != "slate">
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
-  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $("#topic-list").tablecloth({
-        theme:"stats",
-        condensed:true,
-        sortable:false,
-        striped:true,
-        clean:true
+      $('.topic').click(function() {
+        var that = $(this);
+        if(that.parent().children('ul').size()) {
+          if (that.hasClass('topic-open')) {
+            that.removeClass('topic-open').addClass('topic-closed');
+          } else {
+            that.removeClass('topic-closed').addClass('topic-open');
+          }
+        }
+        that.parent().children("ul").toggle("slow");
+      });
+
+      $('.topic-title').click(function() {
+        return false;
       });
     });
   </script>
-</#if>
 </@override>
 <@extends name="../common/_layout.html" />

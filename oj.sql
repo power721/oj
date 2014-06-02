@@ -977,6 +977,8 @@ CREATE TABLE `topic` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `uid` int(9) NOT NULL,
   `pid` int(9) DEFAULT NULL,
+  `threadId` int(9) DEFAULT 0,
+  `parentId` int(9) DEFAULT 0,
   `title` varchar(255) DEFAULT NULL,
   `content` text,
   `view` int(9) NOT NULL DEFAULT '0',

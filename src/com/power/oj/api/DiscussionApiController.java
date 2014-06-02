@@ -1,15 +1,14 @@
 package com.power.oj.api;
 
-import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 
 public class DiscussionApiController extends OjController
 {
   public void comment()
   {
-    
+    renderNull();
   }
-  
+  /*
   public void commentList()
   {
     Integer threadId = getParaToInt("threadId");
@@ -18,4 +17,5 @@ public class DiscussionApiController extends OjController
     
     renderJson(discussionService.getCommentList(pageNumber, pageSize, threadId));
   }
+  */
 }
