@@ -35,9 +35,9 @@
         <#elseif prevDeep==parentDeep>
           </li>
         </#if>
-            <li data-deep="${deep}">
+            <li class="node" data-deep="${deep}">
               <i class="topic topic-open"></i>
-              <a href="#" class="topic-title" data-id="${topic.id}">${topic.title}</a>
+              <a href="javascript:void(0);" class="topic-title" data-id="${topic.id}">${topic.title}</a>
               <a href="user/profile/${topic.name}">${topic.name}</a>
               <span class="timestamp" data="${topic.ctime}"></span>
               <#if (deep==1 && topic.pid?? && topic.pid>0)>
@@ -56,6 +56,7 @@
       </div>
     </#if>
 </div>
+
 <div class="modal hide fade discussModal" id="postModal">
   <form class="" id="newTopic" action="discuss/save" method="post">
      <div class="modal-header">
@@ -64,14 +65,12 @@
     </div>
     <div class="modal-body">
       <div class="control-group topic <#if titleMsg??>error</#if>">
-        <label class="control-label" for="inputTitle">Title</label>
         <div class="controls">
           <input type="text" id="inputTitle" class="input-xxlarge" name="topic.title" maxlength="64" placeholder="Title" required>
           <p class="text-error">${titleMsg!}</p>
         </div>
       </div>
       <div class="control-group topic <#if problemMsg??>error</#if>">
-        <label class="control-label" for="inputProblem">Problem</label>
         <div class="controls">
           <input type="number" class="input-small" id="inputProblem" name="topic.pid" min="1000" placeholder="Problem ID">
           <span class="help-inline" id="problemTitle"></span>
@@ -79,9 +78,8 @@
         </div>
       </div>
       <div class="control-group notice">
-        <label class="ueditor control-label" for="inputContent">Content</label>
         <div class="controls">
-          <textarea id="inputContent" name="topic.content" rows="13" cols="120" required></textarea>
+          <textarea id="inputContent" name="topic.content" rows="13" cols="120" placeholder="Enter your content here" required></textarea>
         </div>
       </div>
     </div>
@@ -151,36 +149,41 @@
       return true;
     });
 
-    $('.topic-title').click(function() {
+    function showTopic() {
       var that = $(this);
+      var children = that.parent().children('ul').clone();
       var id = that.data("id");
+      var target = $('#topicModal');
 
-      $('#topicModal').modal("show");
+      target.modal("show");
       $.get("api/discuss", { id: id },
         function(data) {
           if (data.success)
           {
             var html = parseTimestamp(data.topic.ctime) 
-                      + ' By <a href="user/profile/' 
-                      + data.topic.name + '">' 
+                      + ' by <a href="user/profile/' 
+                      + data.topic.name + '" target="_blank">' 
                       + data.topic.name + '</a>\n';
             if (data.topic.pid) {
-              html += ' For problem <a href="problem/show/' 
+              html += ' for problem <a href="problem/show/' 
                       + data.topic.pid + '" title="' 
-                      + data.topic.problem + '">' 
+                      + data.topic.problem + '" target="_blank">' 
                       + data.topic.pid + '</a>\n';
             }
             html += '<pre>' + ubb2html(data.topic.content) + '</pre>';
             $('#topicModalLabel').html(data.topic.title);
-            $('#topicModal #content').html(html).removeClass();
+            $('#topicModal #content').html(html).append(children);
+            $('a.topic-title', target).click(showTopic);
           }
           else
           {
             $('#topicModalLabel').html('Error');
-            $('#topicModal #content').html(data.result).removeClass().addClass("alert alert-error");
+            $('#topicModal #content').html(data.result).addClass("alert alert-error");
           }
       });
-    });
+    }
+
+    $('a.topic-title').click(showTopic);
   </script>
   <script type="text/javascript">
     $(document).ready(function() {
