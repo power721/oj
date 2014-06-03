@@ -29,7 +29,7 @@ public final class DiscussionService
     sb.append("FROM `topic`");
     if (pid != null && pid > 0)
     {
-      sb.append(" WHERE t.pid=?");
+      sb.append(" WHERE pid=?");
       paras.add(pid);
     }
     sb.append(" GROUP BY threadId ORDER BY MAX(id) DESC");
@@ -66,9 +66,10 @@ public final class DiscussionService
 
   public TopicModel findTopic4Show(Integer id)
   {
-    TopicModel topic = dao.findFirst("SELECT t.*,p.title AS problem FROM `topic` t "
-                            + "LEFT JOIN problem p ON p.pid=t.pid WHERE t.id=?", id);
-    topic.setView(topic.getView() + 1).update();
+    TopicModel topic = dao.findFirst("SELECT t.*,p.title AS problem,u.name FROM `topic` t "
+                            + "LEFT JOIN problem p ON p.pid=t.pid "
+                            + "LEFT JOIN user u ON u.uid=t.uid WHERE t.id=?", id);
+    //topic.setView(topic.getView() + 1).update();
     return topic;
   }
   
@@ -76,6 +77,7 @@ public final class DiscussionService
   {
     topicModel.setUid(userService.getCurrentUid());
     topicModel.setCtime(OjConfig.timeStamp);
+    topicModel.setTitle(HtmlEncoder.text(topicModel.getTitle()));
     topicModel.setContent(HtmlEncoder.text(topicModel.getContent()));
     
     if (topicModel.save())

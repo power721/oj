@@ -70,7 +70,7 @@ public class DiscussionController extends OjController
     {
       
     }
-    redirect("/discuss/show/" + topicModel.getId());
+    redirect("/discuss");
   }
   
   @RequiresUser

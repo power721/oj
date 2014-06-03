@@ -4,7 +4,7 @@
   <div class="pull-left">
     <a href="notice" class="btn btn-success">Notice List</a>
     <#if user??>
-    <a href="discuss/add" class="btn btn-primary">Post new topic</a>
+    <a href="" class="btn btn-primary" data-toggle="modal" data-target="#postModal">Post new topic</a>
     <#else>
     <a href="" class="btn btn-info" data-toggle="modal" data-target="#loginModal">Post new topic</a>
     </#if>
@@ -56,9 +56,132 @@
       </div>
     </#if>
 </div>
+<div class="modal hide fade discussModal" id="postModal">
+  <form class="" id="newTopic" action="discuss/save" method="post">
+     <div class="modal-header">
+      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+      <h3 id="postModalLabel">Post new topic</h3>
+    </div>
+    <div class="modal-body">
+      <div class="control-group topic <#if titleMsg??>error</#if>">
+        <label class="control-label" for="inputTitle">Title</label>
+        <div class="controls">
+          <input type="text" id="inputTitle" class="input-xxlarge" name="topic.title" maxlength="64" placeholder="Title" required>
+          <p class="text-error">${titleMsg!}</p>
+        </div>
+      </div>
+      <div class="control-group topic <#if problemMsg??>error</#if>">
+        <label class="control-label" for="inputProblem">Problem</label>
+        <div class="controls">
+          <input type="number" class="input-small" id="inputProblem" name="topic.pid" min="1000" placeholder="Problem ID">
+          <span class="help-inline" id="problemTitle"></span>
+          <p class="text-error">${problemMsg!}</p>
+        </div>
+      </div>
+      <div class="control-group notice">
+        <label class="ueditor control-label" for="inputContent">Content</label>
+        <div class="controls">
+          <textarea id="inputContent" name="topic.content" rows="13" cols="120" required></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary" id="post">Post</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+      <button class="btn" data-dismiss="modal" accesskey="x">Cancel</button>
+    </div>
+  </form>
+</div>
+
+<div class="modal hide fade discussModal" id="topicModal">
+    <div class="modal-header">
+      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+      <h3 id="topicModalLabel">
+        <span id="title"></span>
+      </h3>
+    </div>
+    <div class="modal-body">
+      <div id="content">
+        <img src="assets/images/ajax-loader.gif" /> Loading...
+      </div>
+    </div>
+</div>
 </@override>
 
 <@override name="scripts">
+<link href="assets/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet" type="text/css"></link>
+  <script src="assets/bootstrap-wysihtml5/lib/wysihtml5-0.3.0.min.js"></script>  
+  <script src="assets/bootstrap-wysihtml5/bootstrap-wysihtml5-0.0.2.min.js"></script>
+  <script src="assets/js/ubb.js"></script>
+    
+  <script type="text/javascript">  
+    $('#inputContent').wysihtml5({
+      //html: true,
+      //color: true
+    });
+    
+    function getProblemTitle() {
+      var pid = this.value;
+      if (pid >= 1000)
+      {
+        $.get("api/problem/getField", { name: "title", pid: this.value },
+          function(data) {
+            if (data.result)
+            {
+              $("#problemTitle").html('<a href="problem/show/' + pid + '" target="_blank">' + data.result + '</a>');
+            }
+            else
+            {
+              $("#problemTitle").html('');
+            }
+          });
+      }
+      else
+      {
+        $("#problemTitle").html('');
+      }
+    }
+    $("#inputProblem").change(getProblemTitle).keyup(getProblemTitle);
+
+    $("#newTopic").submit(function() {
+      var $content = $('#inputContent');
+      var html = $content.val();
+      html = html2ubb(html);
+      $content.data("wysihtml5").editor.setValue(html);
+      return true;
+    });
+
+    $('.topic-title').click(function() {
+      var that = $(this);
+      var id = that.data("id");
+
+      $('#topicModal').modal("show");
+      $.get("api/discuss", { id: id },
+        function(data) {
+          if (data.success)
+          {
+            var html = parseTimestamp(data.topic.ctime) 
+                      + ' By <a href="user/profile/' 
+                      + data.topic.name + '">' 
+                      + data.topic.name + '</a>\n';
+            if (data.topic.pid) {
+              html += ' For problem <a href="problem/show/' 
+                      + data.topic.pid + '" title="' 
+                      + data.topic.problem + '">' 
+                      + data.topic.pid + '</a>\n';
+            }
+            html += '<pre>' + ubb2html(data.topic.content) + '</pre>';
+            $('#topicModalLabel').html(data.topic.title);
+            $('#topicModal #content').html(html).removeClass();
+          }
+          else
+          {
+            $('#topicModalLabel').html('Error');
+            $('#topicModal #content').html(data.result).removeClass().addClass("alert alert-error");
+          }
+      });
+    });
+  </script>
   <script type="text/javascript">
     $(document).ready(function() {
       $('.timestamp').each( function() {

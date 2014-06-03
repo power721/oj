@@ -643,14 +643,18 @@ public final class UserService
   
   public UserModel getUser(Integer uid)
   {
+    UserModel userModel = null;
     if (OjConfig.isDevMode())
     {
-      return getUserByUid(uid);
+      userModel = getUserByUid(uid);
     }
     else
     {
-      return dao.findFirstByCache("user", uid, "SELECT * FROM user WHERE uid=?", uid);
+      userModel = dao.findFirstByCache("user", uid, "SELECT * FROM user WHERE uid=?", uid);
     }
+    userModel.remove("token").remove("password").remove("data");
+    
+    return userModel;
   }
 
   /**
