@@ -26,6 +26,11 @@ public class UserInterceptor implements Interceptor
     {
       UserModel userModel = UserService.me().getCurrentUser();
       controller.setAttr(OjConstants.USER, userModel);
+      
+      if (UserService.me().isAdmin())
+      {
+        controller.setAttr(OjConstants.ADMIN_USER, userModel.getUid());
+      }
     }
 
     ai.invoke();

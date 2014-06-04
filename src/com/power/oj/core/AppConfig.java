@@ -2,6 +2,10 @@ package com.power.oj.core;
 
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.shiro.SecurityUtils;
+
 import jodd.util.SystemUtil;
 
 import com.alibaba.druid.filter.stat.StatFilter;
@@ -21,6 +25,7 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
+import com.jfinal.plugin.druid.IDruidStatViewAuth;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.power.oj.admin.AdminController;
@@ -69,7 +74,6 @@ import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.ExpiresSessionService;
 import com.power.oj.service.VisitCountService;
-import com.power.oj.shiro.ShiroInViewInterceptor;
 import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.social.FriendGroupModel;
 import com.power.oj.social.FriendModel;
@@ -105,7 +109,7 @@ public class AppConfig extends JFinalConfig
     FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("num2alpha", new Num2AlphaMethod());
     FreeMarkerRender.getConfiguration().setSharedVariable("num2size", new Num2SizeMethod());
-    
+
     me.setDevMode(getPropertyToBoolean("devMode", false));
     baseViewPath = "/WEB-INF/view";
     me.setBaseViewPath(baseViewPath);
@@ -162,8 +166,7 @@ public class AppConfig extends JFinalConfig
       druidPlugin.setTestWhileIdle(true);
       druidPlugin.setTestOnBorrow(true);
       druidPlugin.setTestOnReturn(true);
-    }
-    else
+    } else
     {
       druidPlugin = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"), getProperty("dev.password").trim());
     }
@@ -218,7 +221,7 @@ public class AppConfig extends JFinalConfig
     me.add(new AccessLogInterceptor());
     me.add(new UserInterceptor());
     me.add(new ShiroInterceptor());
-    me.add(new ShiroInViewInterceptor());
+    // me.add(new ShiroInViewInterceptor());
 
     log.debug("configInterceptor finished.");
   }
@@ -231,8 +234,13 @@ public class AppConfig extends JFinalConfig
     me.add(new SessionIdHandler());
     me.add(new BaseUrlHandler());
     me.add(new UrlFilterHandler());
-    //me.add(new ContextPathHandler(OjConstants.BASE_URL));
-    me.add(new DruidStatViewHandler("/druid"));
+    // me.add(new ContextPathHandler(OjConstants.BASE_URL));
+    me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {
+      public boolean isPermitted(HttpServletRequest request)
+      {
+        return SecurityUtils.getSubject().isPermitted("system");
+      }
+    }));
 
     log.debug("configHandler finished.");
   }
@@ -244,11 +252,11 @@ public class AppConfig extends JFinalConfig
   {
     OjConfig.initJudgeResult();
     OjConfig.loadConfig();
-    
+
     I18N.init("ojText", Locale.ENGLISH, null);
     VisitCountService.start();
     ExpiresSessionService.start();
-    
+
     log.info(PathKit.getWebRootPath());
     log.debug("afterJFinalStart finished.");
   }
@@ -260,7 +268,7 @@ public class AppConfig extends JFinalConfig
 
   private boolean isBaeMode()
   {
-      return "/home/bae".equals(SystemUtil.getUserHome());
+    return "/home/bae".equals(SystemUtil.getUserHome());
   }
 
   /**
@@ -271,5 +279,5 @@ public class AppConfig extends JFinalConfig
   {
     JFinal.start("WebRoot", 8000, "/", 5);
   }
-  
+
 }
