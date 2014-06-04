@@ -35,7 +35,7 @@
         <#elseif prevDeep==parentDeep>
           </li>
         </#if>
-            <li class="node" data-deep="${deep}">
+            <li class="node" data-id="${topic.id}" data-deep="${deep}">
               <i class="topic topic-open"></i>
               <a href="javascript:void(${topic.id});" class="topic-title" data-id="${topic.id}">${topic.title}</a>
               Post by <a href="user/profile/${topic.name}">${topic.name}</a>
@@ -58,7 +58,7 @@
 </div>
 
 <div class="modal hide fade discussModal" id="postModal">
-  <form class="" id="newThread" action="discuss/save" method="post">
+  <form class="topicForm" id="newThread" action="discuss/save" method="post">
      <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="postModalLabel">Post new topic</h3>
@@ -81,7 +81,7 @@
       <div class="pull-left">
         <p class="text-error" id="error"></p>
       </div>
-      <button type="submit" class="btn btn-primary" id="post">Post</button>
+      <button type="submit" class="btn btn-primary">Post</button>
       <button type="reset" class="btn btn-info">Reset</button>
       <button class="btn" data-dismiss="modal" accesskey="x">Cancel</button>
     </div>
@@ -89,6 +89,7 @@
 </div>
 
 <div class="modal hide fade discussModal" id="topicModal">
+  <form class="topicForm" id="newTopic" action="discuss/save" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="topicModalLabel">
@@ -99,8 +100,23 @@
       <div id="content">
         <img src="assets/images/ajax-loader.gif" /> Loading...
       </div>
-
+      <div>
+        <input type="hidden" id="topicProblem"  name="topic.pid">
+        <input type="hidden" id="topicThreadId" name="topic.threadId">
+        <input type="hidden" id="topicParentId" name="topic.parentId">
+        <input type="text"   id="topicTitle" class="input-xxlarge" name="topic.title" maxlength="64" placeholder="Title" autofocus required>
+        <textarea id="topicContent" name="topic.content" maxlength="30000" placeholder="Enter your content here" required></textarea>
+      </div>
     </div>
+    <div class="modal-footer">
+      <div class="pull-left">
+        <p class="text-error" id="topic-error"></p>
+      </div>
+      <button type="submit" class="btn btn-primary">Post</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+      <button class="btn" data-dismiss="modal" accesskey="x">Cancel</button>
+    </div>
+  </form>
 </div>
 </@override>
 
@@ -113,8 +129,11 @@
   <script type="text/javascript">
     $(document).ready(function() {
       $('#inputContent').wysihtml5({
-        //html: true,
-        //color: true
+        'font-styles': false
+      });
+
+      $('#topicContent').wysihtml5({
+        'font-styles': false
       });
       
       function getProblemTitle() {
@@ -154,6 +173,20 @@
         return true;
       });
 
+      $("#newTopic").submit(function() {
+        var $content = $('#topicContent');
+        var html = $content.val();
+        if (html.length < 5) {
+          $('#topic-error').html('The content length should between 5 and 30000.').show();
+          setTimeout(function() {
+            $('#topic-error').hide();
+          }, 10000);
+          return false;
+        }
+        $content.data("wysihtml5").editor.setValue(html2ubb(html));
+        return true;
+      });
+
       function showTopic() {
         var that = $(this);
         var id = that.data("id");
@@ -175,21 +208,31 @@
                         + data.topic.pid + '</a>\n';
               }
               html += '<pre>' + ubb2html(data.topic.content) + '</pre>\n';
-              $('#topicModalLabel').html(data.topic.title);
-              $('#topicModal #content').html(html).append(that.parent().children('ul').clone());
+              var title = data.topic.title;
+              if (title.substr(0, 4) !== 'Re: ') {
+                title = 'Re: ' + title;
+              }
+              $('#topicModalLabel', target).html(data.topic.title);
+              $('#content', target).html(html).append($('.node[data-id="' + data.topic.threadId + '"]').clone());
+              $('a[data-id="' + data.topic.id + '"]', target).addClass('strong');
+              $('#topicProblem', target).val(data.topic.pid);
+              $('#topicThreadId', target).val(data.topic.threadId);
+              $('#topicParentId', target).val(data.topic.id);
+              $('#topicTitle', target).val(title);
               $('a.topic-title', target).click(showTopic);
+              $('.topic', target).click(toggleTree);
             }
             else
             {
               $('#topicModalLabel').html('Error');
-              $('#topicModal #content').html(data.result).addClass("alert alert-error");
+              $('#content', target).html(data.result).addClass("alert alert-error");
             }
         });
       }
 
       $('a.topic-title').click(showTopic);
 
-      $('.topic').click(function() {
+      function toggleTree() {
         var that = $(this);
         if(that.parent().children('ul').size()) {
           if (that.hasClass('topic-open')) {
@@ -199,7 +242,9 @@
           }
         }
         that.parent().children("ul").toggle("slow");
-      });
+      };
+
+      $('.topic').click(toggleTree);
     });
   </script>
   <script type="text/javascript">

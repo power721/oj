@@ -35,6 +35,10 @@ a.cureent {
   color: black
 }
 
+.strong {
+  font-weight: bold;
+}
+
 .left {
   float: left;
 }

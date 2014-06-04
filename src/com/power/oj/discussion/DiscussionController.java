@@ -31,6 +31,10 @@ public class DiscussionController extends OjController
     {
       Integer id = topic.getId();
       Integer deep = deepTree.get(topic.getParentId());
+      if (deep == null)
+      {
+        log.info(id + " " + topic.getParentId());
+      }
       deepTree.put(id, deep + 1);
     }
     

@@ -979,6 +979,7 @@ CREATE TABLE `topic` (
   `pid` int(9) DEFAULT NULL,
   `threadId` int(9) DEFAULT 0,
   `parentId` int(9) DEFAULT 0,
+  `orderNum` int(9) DEFAULT 0,
   `title` varchar(255) DEFAULT NULL,
   `content` text,
   `view` int(9) NOT NULL DEFAULT '0',

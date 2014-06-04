@@ -8,11 +8,13 @@ public class TopicModel extends Model<TopicModel>
   
   public static final TopicModel dao = new TopicModel();
   
+  public static final String TABLE_NAME = "topic";
   public static final String ID = "id";
   public static final String UID = "uid";
   public static final String PID = "pid";
   public static final String THREAD_ID = "threadId";
   public static final String PARENT_ID = "parentId";
+  public static final String ORDER_NUM = "orderNum";
   public static final String TITLE = "title";
   public static final String CONTENT = "content";
   public static final String VIEW = "view";
@@ -21,6 +23,9 @@ public class TopicModel extends Model<TopicModel>
   public static final String MTIME = "mtime";
   public static final String STATUS = "status";
 
+  /*
+   * auto generated getter and setter
+   */
   public Integer getId()
   {
     return getInt(ID);
@@ -71,6 +76,16 @@ public class TopicModel extends Model<TopicModel>
     return set(PARENT_ID, value);
   }
   
+  public Integer getOrderNum()
+  {
+    return getInt(ORDER_NUM);
+  }
+  
+  public TopicModel setOrderNum(Integer value)
+  {
+    return set(ORDER_NUM, value);
+  }
+  
   public String getTitle()
   {
     return getStr(TITLE);
@@ -90,7 +105,7 @@ public class TopicModel extends Model<TopicModel>
   {
     return set(CONTENT, value);
   }
-
+  
   public Integer getView()
   {
     return getInt(VIEW);

@@ -167,7 +167,12 @@ $(document).ready(function() {
         if (data.success) {
           $("#loginMsg", loginForm).fadeTo(100, 0.1, function() {
             $(this).removeClass().addClass('alert alert-success').html('Login success.').fadeTo(100, 1, function() {
-              window.location.reload();
+              if (system.callback) {
+                system.callback();
+                system.callback = void 0;
+              } else {
+                window.location.reload();
+              }
             });
           });
         } else {

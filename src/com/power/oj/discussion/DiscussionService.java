@@ -26,15 +26,15 @@ public final class DiscussionService
   {
     List<Object> paras = new ArrayList<Object>();
     StringBuilder sb = new StringBuilder();
-    sb.append("FROM `topic`");
+    sb.append("FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE 1=1");
     if (pid != null && pid > 0)
     {
-      sb.append(" WHERE pid=?");
+      sb.append(" AND pid=?");
       paras.add(pid);
     }
-    sb.append(" GROUP BY threadId ORDER BY MAX(id) DESC");
+    sb.append(" AND parentId=0 ORDER BY orderNum DESC");
     
-    Page<TopicModel> topicPage = dao.paginate(pageNumber, pageSize, "SELECT *", sb.toString(), paras.toArray());
+    Page<TopicModel> topicPage = dao.paginate(pageNumber, pageSize, "SELECT t.*,u.name", sb.toString(), paras.toArray());
     
     return topicPage;
   }
@@ -45,20 +45,25 @@ public final class DiscussionService
     
     for (TopicModel topic : topicPage.getList())
     {
-      topicList.addAll(dao.find("SELECT t.*,u.name FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE t.threadId=? ORDER BY t.id", topic.getThreadId()));
+      topicList.addAll(getTopicTree(topic));
     }
     return topicList;
   }
-  /*
-  public Page<CommentModel> getCommentList(int pageNumber, int pageSize, Integer threadId)
+
+  public List<TopicModel> getTopicTree(TopicModel topic)
   {
-    Page<CommentModel> commentList = CommentModel.dao.paginate(pageNumber, pageSize, 
-        "SELECT c.*,u.name,u.avatar,FROM_UNIXTIME(c.ctime, '%Y-%m-%d %H:%i:%s') AS postDate", 
-        "FROM `comment` c JOIN `user` u ON u.uid=c.uid WHERE threadId=? ORDER BY c.ctime DESC", threadId);
+    List<TopicModel> topicList = new ArrayList<TopicModel>();
     
-    return commentList;
+    topicList.add(topic);
+    List<TopicModel> children = dao.find("SELECT t.*,u.name FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE t.parentId=? ORDER BY t.orderNum DESC,t.id", topic.getId());
+    for (TopicModel child : children)
+    {
+      topicList.addAll(getTopicTree(child));
+    }
+    
+    return topicList;
   }
-  */
+  
   public TopicModel findTopic(Integer id)
   {
     return dao.findFirst("SELECT * FROM `topic` WHERE id=?", id);
@@ -82,13 +87,24 @@ public final class DiscussionService
     
     if (topicModel.save())
     {
+      Integer id = topicModel.getId();
       Integer threadId = topicModel.getThreadId();
+      Integer parentId = topicModel.getParentId();
+      
+      while (parentId != null && parentId != 0)
+      {
+        TopicModel parent = dao.findById(parentId);
+        parent.setOrderNum(id);
+        parentId = parent.getParentId();
+        parent.update();
+      }
+      
+      topicModel.setOrderNum(id);
       if (threadId == null || threadId == 0)
       {
-        topicModel.setThreadId(topicModel.getId());
-        return topicModel.update();
+        topicModel.setThreadId(id);
       }
-      return true;
+      return topicModel.update();
     }
     return false;
   }

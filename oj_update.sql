@@ -283,3 +283,6 @@ UPDATE contest_solution SET `result`=11 WHERE `result`=10000;
 #2014-06-02
 ALTER TABLE topic ADD `threadId` int(9) DEFAULT 0,
                   ADD `parentId` int(9) DEFAULT 0;
+
+#2014-06-04
+ALTER TABLE topic ADD `orderNum` int(9) DEFAULT 0;
