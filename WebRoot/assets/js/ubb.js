@@ -53,8 +53,8 @@ function ubb2html(sUBB) {
     return str;
   });
   sHtml = sHtml.replace(/\[emot\s*=\s*([^\]"]+?)(?:"[^\]]*?)?\s*\/\]/ig, '<img emot="$1" />');
-  sHtml = sHtml.replace(/\[url\]\s*(((?!")[\s\S])*?)(?:"[\s\S]*?)?\s*\[\/url\]/ig, '<a href="$1">$1</a>');
-  sHtml = sHtml.replace(/\[url\s*=\s*([^\]"]+?)(?:"[^\]]*?)?\s*\]\s*([\s\S]*?)\s*\[\/url\]/ig, '<a href="$1">$2</a>');
+  sHtml = sHtml.replace(/\[url\]\s*(((?!")[\s\S])*?)(?:"[\s\S]*?)?\s*\[\/url\]/ig, '<a href="$1" target="_blank">$1</a>');
+  sHtml = sHtml.replace(/\[url\s*=\s*([^\]"]+?)(?:"[^\]]*?)?\s*\]\s*([\s\S]*?)\s*\[\/url\]/ig, '<a href="$1" target="_blank">$2</a>');
   sHtml = sHtml.replace(/\[email\]\s*(((?!")[\s\S])+?)(?:"[\s\S]*?)?\s*\[\/email\]/ig, '<a href="mailto:$1">$1</a>');
   sHtml = sHtml.replace(/\[email\s*=\s*([^\]"]+?)(?:"[^\]]*?)?\s*\]\s*([\s\S]+?)\s*\[\/email\]/ig, '<a href="mailto:$1">$2</a>');
   sHtml = sHtml.replace(/\[quote\]/ig, '<blockquote>');
