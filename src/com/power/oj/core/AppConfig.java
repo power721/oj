@@ -160,7 +160,11 @@ public class AppConfig extends JFinalConfig
   public void configPlugin(Plugins me)
   {
     DruidPlugin druidPlugin = null;
-    if (isBaeMode())
+    if (isAceMode())
+    {
+      druidPlugin = new DruidPlugin(getProperty("ace.jdbcUrl"), getProperty("ace.user"), getProperty("ace.password").trim());
+    }
+    else if (isBaeMode())
     {
       druidPlugin = new DruidPlugin(getProperty("bae.jdbcUrl"), getProperty("bae.user"), getProperty("bae.password").trim());
       druidPlugin.setTestWhileIdle(true);
@@ -264,6 +268,11 @@ public class AppConfig extends JFinalConfig
   public static String getBaseViewPath()
   {
     return baseViewPath;
+  }
+
+  private boolean isAceMode()
+  {
+    return "/home/usera".equals(SystemUtil.getUserHome());
   }
 
   private boolean isBaeMode()

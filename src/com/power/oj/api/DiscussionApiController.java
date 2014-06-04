@@ -11,25 +11,14 @@ public class DiscussionApiController extends OjController
     Integer id = getParaToInt("id");
     TopicModel topic = discussionService.findTopic4Show(id);
     
-    setAttr("success", true);
-    setAttr("topic", topic);
-    setAttr("author", userService.getUser(topic.getUid()));
+    topic.put("success", true);
     
-    renderJson(new String[]{"success", "topic", "author"});
+    renderJson("topic", topic);
   }
   
   public void comment()
   {
     renderNull();
   }
-  /*
-  public void commentList()
-  {
-    Integer threadId = getParaToInt("threadId");
-    int pageNumber = getParaToInt("pageNumber", 1);
-    int pageSize = getParaToInt("pageSize", OjConfig.noticePageSize);
-    
-    renderJson(discussionService.getCommentList(pageNumber, pageSize, threadId));
-  }
-  */
+  
 }

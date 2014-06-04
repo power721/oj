@@ -22,8 +22,8 @@ public class DiscussionController extends OjController
     int pageSize = getParaToInt(1, OjConfig.noticePageSize);
     Integer pid = getParaToInt("pid");
     
-    Page<TopicModel> topicPage = discussionService.getTopicPage(pageNumber, pageSize, pid);
-    List<TopicModel> topicList = discussionService.getTopicList(topicPage);
+    Page<TopicModel> threadList = discussionService.getTopicPage(pageNumber, pageSize, pid);
+    List<TopicModel> topicList = discussionService.getTopicList(threadList);
     Map<Integer, Integer> deepTree = new HashMap<Integer, Integer>();
     
     deepTree.put(0, 0);
@@ -34,9 +34,10 @@ public class DiscussionController extends OjController
       deepTree.put(id, deep + 1);
     }
     
+    setAttr("pid", pid);
     setAttr("pageSize", OjConfig.noticePageSize);
     setAttr("topicList", topicList);
-    setAttr("topicPage", topicPage);
+    setAttr("threadList", threadList);
     setAttr("deepTree", deepTree);
     setTitle(getText("discuss.index.title"));
   }
@@ -47,7 +48,6 @@ public class DiscussionController extends OjController
     TopicModel topic = discussionService.findTopic4Show(id);
     
     setAttr("topic", topic);
-    setAttr("author", userService.getUser(topic.getUid()));
   }
   
   @RequiresUser
