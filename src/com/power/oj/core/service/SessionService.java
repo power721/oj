@@ -39,6 +39,11 @@ public final class SessionService
   {
     return me;
   }
+
+  public static SessionService newInstance()
+  {
+    return new SessionService();
+  }
   
   /**
    * @see AccessLogInterceptor

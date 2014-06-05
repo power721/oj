@@ -19,7 +19,7 @@ public class ExpiresSessionService extends TimerTask
   @Override
   public void run()
   {
-    int numOfExpiresSession = SessionService.me().expiresSession();
+    int numOfExpiresSession = SessionService.newInstance().expiresSession();
     log.info(new StringBuilder(3).append("ExpiresSessionService executed: ").append(numOfExpiresSession).append(" sessions deleted.").toString());
   }
 
