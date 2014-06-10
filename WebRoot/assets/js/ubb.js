@@ -15,14 +15,14 @@ function ubb2html(sUBB) {
     cnum = 0;
   var arrFontsize = ['10px', '13px', '16px', '18px', '24px', '32px', '48px'];
 
-  sHtml = sHtml.replace(/[<>&"]/g, function(c) {
+  /*sHtml = sHtml.replace(/[<>&"]/g, function(c) {
     return {
       '<': '&lt;',
       '>': '&gt;',
       '&': '&amp;',
       '"': '&quot;'
     }[c];
-  });
+  });*/
   sHtml = sHtml.replace(/\r?\n/g, "<br />");
 
   sHtml = sHtml.replace(/\[code\s*(?:=\s*([^\]]+?))?\]([\s\S]*?)\[\/code\]/ig, function(all, t, c) { //code特殊处理
@@ -326,7 +326,7 @@ function html2ubb(sHtml) {
   for (i = 1; i <= cnum; i++) sUBB = sUBB.replace("[\tubbcodeplace_" + i + "\t]", arrcode[i]);
 
   sUBB = sUBB.replace(/<[^<>]+?>/g, ''); //删除所有HTML标签
-  var arrEntities = {
+  /*var arrEntities = {
     'lt': '<',
     'gt': '>',
     'nbsp': ' ',
@@ -335,7 +335,7 @@ function html2ubb(sHtml) {
   };
   sUBB = sUBB.replace(/&(lt|gt|nbsp|amp|quot);/ig, function(all, t) {
     return arrEntities[t];
-  });
+  });*/
 
   //清除空内容的UBB标签
   sUBB = sUBB.replace(/\[([a-z]+)(?:=[^\[\]]+)?\]\s*\[\/\1\]/ig, '');

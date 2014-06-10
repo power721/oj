@@ -106,15 +106,14 @@
         <input type="hidden" id="topicParentId" name="topic.parentId">
         <input type="text"   id="topicTitle" class="input-xxlarge" name="topic.title" maxlength="64" placeholder="Title" autofocus required>
         <textarea id="topicContent" name="topic.content" maxlength="30000" placeholder="Enter your content here" required></textarea>
+        <div class="pull-left">
+          <p class="text-error" id="topic-error"></p>
+        </div>
+        <div class="pull-right">
+          <button type="submit" class="btn btn-primary">Post</button>
+          <button class="btn" data-dismiss="modal" accesskey="x">Cancel</button>
+        </div>
       </div>
-    </div>
-    <div class="modal-footer">
-      <div class="pull-left">
-        <p class="text-error" id="topic-error"></p>
-      </div>
-      <button type="submit" class="btn btn-primary">Post</button>
-      <button type="reset" class="btn btn-info">Reset</button>
-      <button class="btn" data-dismiss="modal" accesskey="x">Cancel</button>
     </div>
   </form>
 </div>
@@ -169,7 +168,8 @@
           }, 10000);
           return false;
         }
-        $content.data("wysihtml5").editor.setValue(html2ubb(html));
+        var ubb = html2ubb(html);
+        $content.data("wysihtml5").editor.setValue(ubb);
         return true;
       });
 
@@ -183,11 +183,12 @@
           }, 10000);
           return false;
         }
-        $content.data("wysihtml5").editor.setValue(html2ubb(html));
+        var ubb = html2ubb(html);
+        $content.data("wysihtml5").editor.setValue(ubb);
         return true;
       });
 
-      function showTopic() {
+      $('a.topic-title').click(function () {
         var that = $(this);
         var id = that.data("id");
         var target = $('#topicModal');
@@ -213,14 +214,12 @@
                 title = 'Re: ' + title;
               }
               $('#topicModalLabel', target).html(data.topic.title);
-              $('#content', target).html(html).append($('.node[data-id="' + data.topic.threadId + '"]').clone());
+              $('#content', target).html(html).append($('.node[data-id="' + data.topic.threadId + '"]').clone(true, true));
               $('a[data-id="' + data.topic.id + '"]', target).addClass('strong');
               $('#topicProblem', target).val(data.topic.pid);
               $('#topicThreadId', target).val(data.topic.threadId);
               $('#topicParentId', target).val(data.topic.id);
               $('#topicTitle', target).val(title);
-              $('a.topic-title', target).click(showTopic);
-              $('.topic', target).click(toggleTree);
             }
             else
             {
@@ -228,11 +227,9 @@
               $('#content', target).html(data.result).addClass("alert alert-error");
             }
         });
-      }
+      });
 
-      $('a.topic-title').click(showTopic);
-
-      function toggleTree() {
+      $('.topic').click(function () {
         var that = $(this);
         if(that.parent().children('ul').size()) {
           if (that.hasClass('topic-open')) {
@@ -242,9 +239,7 @@
           }
         }
         that.parent().children("ul").toggle("slow");
-      };
-
-      $('.topic').click(toggleTree);
+      });
     });
   </script>
   <script type="text/javascript">

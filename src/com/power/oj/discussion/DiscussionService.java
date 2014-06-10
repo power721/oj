@@ -83,7 +83,7 @@ public final class DiscussionService
     topicModel.setUid(userService.getCurrentUid());
     topicModel.setCtime(OjConfig.timeStamp);
     topicModel.setTitle(HtmlEncoder.text(topicModel.getTitle()));
-    topicModel.setContent(HtmlEncoder.text(topicModel.getContent()));
+    topicModel.setContent(topicModel.getContent());
     
     if (topicModel.save())
     {
