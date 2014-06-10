@@ -53,7 +53,7 @@
         <tr>
           <form class="form-inline" id="addProblem" action="api/contest/addProblem" method="post">
           <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
-          <td><input type="number" name="pid" class="input-small" placeholder="Problem ID" required></td>
+          <td><input type="number" name="pid" class="input-small" min="1000" placeholder="Problem ID" required></td>
           <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
           <td>
             <button type="submit" class="btn btn-success">Add</button> <#if serverTime<contest.startTime><a class="btn btn-info hidden" id="reorder">Save</a></#if></td>

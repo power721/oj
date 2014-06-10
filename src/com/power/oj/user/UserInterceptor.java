@@ -2,9 +2,8 @@ package com.power.oj.user;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
-import com.jfinal.log.Logger;
+import com.jfinal.core.Controller;
 import com.power.oj.core.OjConstants;
-import com.power.oj.core.OjController;
 import com.power.oj.shiro.ShiroKit;
 
 /**
@@ -15,12 +14,11 @@ import com.power.oj.shiro.ShiroKit;
  */
 public class UserInterceptor implements Interceptor
 {
-  protected static final Logger log = Logger.getLogger(UserInterceptor.class);
 
   @Override
   public void intercept(ActionInvocation ai)
   {
-    OjController controller = (OjController) ai.getController();
+    Controller controller = ai.getController();
     
     if (ShiroKit.isUser()) // if user is logined, set user information in controller
     {
