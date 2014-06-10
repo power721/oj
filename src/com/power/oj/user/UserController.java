@@ -35,6 +35,7 @@ import com.power.oj.user.validator.UpdateUserValidator;
  */
 public class UserController extends OjController
 {
+  
   @RequiresUser
   public void index()
   {
@@ -74,12 +75,6 @@ public class UserController extends OjController
     setAttr("userModel", userModel);
     
     setTitle(getText("user.profile.title"));
-  }
-  
-  @RequiresUser
-  public void option()
-  {
-    // TODO
   }
   
   @RequiresUser

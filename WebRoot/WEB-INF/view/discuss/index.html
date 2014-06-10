@@ -6,7 +6,7 @@
     <#if user??>
     <a href="" class="btn btn-primary" data-toggle="modal" data-target="#postModal">Post new topic</a>
     <#else>
-    <a href="" class="btn btn-info" data-toggle="modal" data-target="#loginModal">Post new topic</a>
+    <a href="" class="btn btn-info" id="postBtn" data-toggle="modal" data-target="#loginModal">Post new topic</a>
     </#if>
   </div>
   <#include "../common/_paginate.html" />
@@ -247,6 +247,12 @@
       $('.timestamp').each( function() {
         var that = $(this);
         that.html(parseTimestamp(that.attr('data')));
+      });
+      $('#postBtn').click(function() {
+        system.callback = function() {
+          $('#loginModal').modal('hide');
+          $('#postModal').modal('show');
+        };
       });
     });
   </script>
