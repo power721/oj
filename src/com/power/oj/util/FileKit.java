@@ -69,11 +69,9 @@ public class FileKit
   {
     String[] fileType =
     { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp" };
-    Iterator<String> type = Arrays.asList(fileType).iterator();
-    while (type.hasNext())
+    for (String t : fileType)
     {
-      String t = type.next();
-      if (fileName.endsWith(t))
+      if (fileName.toLowerCase().endsWith(t))
       {
         return t;
       }
@@ -144,10 +142,8 @@ public class FileKit
    */
   public boolean checkFileType(String fileName)
   {
-    Iterator<String> type = Arrays.asList(getAllowFiles()).iterator();
-    while (type.hasNext())
+    for (String ext : getAllowFiles())
     {
-      String ext = type.next();
       if (fileName.toLowerCase().endsWith(ext))
       {
         return true;
@@ -190,11 +186,6 @@ public class FileKit
   public static String[] getAllowFiles()
   {
     return allowFiles;
-  }
-
-  public void setAllowFiles(String[] allowFiles)
-  {
-    FileKit.allowFiles = allowFiles;
   }
 
   public static String parsePath(String path)

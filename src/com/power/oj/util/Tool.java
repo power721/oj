@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 
-import javax.servlet.http.HttpServletRequest;
-
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
 import jodd.mail.MailException;
@@ -16,7 +14,6 @@ import jodd.util.MimeTypes;
 import jodd.util.StringTemplateParser;
 import jodd.util.StringTemplateParser.MacroResolver;
 
-import com.jfinal.kit.StringKit;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 
@@ -45,26 +42,6 @@ public class Tool
     while (url != null && url.endsWith("/"))
       url = url.substring(0, url.length() - 1);
     return url;
-  }
-
-  /**
-   * Get the client IP address.
-   * 
-   * @param request
-   *          the HttpServletRequest object.
-   * @return the IP address.
-   */
-  public static String getRemoteAddr(HttpServletRequest request)
-  {
-    if (StringKit.notBlank(request.getHeader("X-Real-IP")))
-    {
-      return request.getHeader("X-Real-IP");
-    } else if (StringKit.notBlank(request.getHeader("x-forwarded-for")))
-    {
-      return request.getHeader("x-forwarded-for");
-    }
-
-    return request.getRemoteAddr();
   }
 
   /**
