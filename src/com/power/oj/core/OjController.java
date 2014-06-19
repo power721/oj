@@ -32,17 +32,17 @@ public class OjController extends Controller
 {
   protected final Logger log = Logger.getLogger(getClass());
   
-  protected static final ContestService contestService = ContestService.me();
-  protected static final DiscussionService discussionService = DiscussionService.me();
-  protected static final JudgeService judgeService = JudgeService.me();
-  protected static final MailService mailService = MailService.me();
-  protected static final NoticeService noticeService = NoticeService.me();
-  protected static final OjService ojService = OjService.me();
-  protected static final ProblemService problemService = ProblemService.me();
-  protected static final SessionService sessionService = SessionService.me();
-  protected static final SocialService socialService = SocialService.me();
-  protected static final SolutionService solutionService = SolutionService.me();
-  protected static final UserService userService = UserService.me();
+  protected static ContestService contestService = ContestService.me();
+  protected static DiscussionService discussionService = DiscussionService.me();
+  protected static JudgeService judgeService = JudgeService.me();
+  protected static MailService mailService = MailService.me();
+  protected static NoticeService noticeService = NoticeService.me();
+  protected static OjService ojService = OjService.me();
+  protected static ProblemService problemService = ProblemService.me();
+  protected static SessionService sessionService = SessionService.me();
+  protected static SocialService socialService = SocialService.me();
+  protected static SolutionService solutionService = SolutionService.me();
+  protected static UserService userService = UserService.me();
 
   /**
    * Redirect to url with flash message。

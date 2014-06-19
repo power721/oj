@@ -53,10 +53,10 @@ public class OjConfig
   public static List<Integer> level;
 
   private static Map<String, VariableModel> variable;
-  private static boolean vIsLinux;
+  private static boolean bIsLinux;
   static
   {
-    vIsLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
+    bIsLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
   }
   // TODO use enChahe
 
@@ -67,7 +67,7 @@ public class OjConfig
   
   public static boolean isLinux()
   {
-    return vIsLinux;
+    return bIsLinux;
   }
   
   public static void loadConfig()

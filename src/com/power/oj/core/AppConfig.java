@@ -92,9 +92,9 @@ import com.power.oj.util.freemarker.OverrideDirective;
 
 public class AppConfig extends JFinalConfig
 {
-  private static final Logger log = Logger.getLogger(AppConfig.class);
+  private static String baseViewPath = "/WEB-INF/view";
+  private final Logger log = Logger.getLogger(AppConfig.class);
   private Routes routes;
-  private static String baseViewPath;
 
   /**
    * 配置常量
@@ -111,7 +111,6 @@ public class AppConfig extends JFinalConfig
     FreeMarkerRender.getConfiguration().setSharedVariable("num2size", new Num2SizeMethod());
 
     me.setDevMode(getPropertyToBoolean("devMode", false));
-    baseViewPath = "/WEB-INF/view";
     me.setBaseViewPath(baseViewPath);
     me.setError401View(baseViewPath + "/error/401.html");
     me.setError403View(baseViewPath + "/error/403.html");
@@ -164,13 +163,7 @@ public class AppConfig extends JFinalConfig
     {
       druidPlugin = new DruidPlugin(getProperty("ace.jdbcUrl"), getProperty("ace.user"), getProperty("ace.password").trim());
     }
-    else if (isBaeMode())
-    {
-      druidPlugin = new DruidPlugin(getProperty("bae.jdbcUrl"), getProperty("bae.user"), getProperty("bae.password").trim());
-      druidPlugin.setTestWhileIdle(true);
-      druidPlugin.setTestOnBorrow(true);
-      druidPlugin.setTestOnReturn(true);
-    } else
+    else
     {
       druidPlugin = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"), getProperty("dev.password").trim());
     }
@@ -225,7 +218,6 @@ public class AppConfig extends JFinalConfig
     me.add(new AccessLogInterceptor());
     me.add(new UserInterceptor());
     me.add(new ShiroInterceptor());
-    // me.add(new ShiroInViewInterceptor());
 
     log.debug("configInterceptor finished.");
   }
@@ -273,11 +265,6 @@ public class AppConfig extends JFinalConfig
   private boolean isAceMode()
   {
     return "/home/usera".equals(SystemUtil.getUserHome());
-  }
-
-  private boolean isBaeMode()
-  {
-    return "/home/bae".equals(SystemUtil.getUserHome());
   }
 
   /**
