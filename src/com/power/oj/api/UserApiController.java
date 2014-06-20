@@ -53,7 +53,6 @@ public class UserApiController extends OjController
     }
     
     UserModel userModel = userService.getUserByEmail(email);
-    // TODO data from old OJ contains duplicate emails
     if (userModel == null)
     {
       try
@@ -106,7 +105,6 @@ public class UserApiController extends OjController
   {
     UserModel userModel = userService.getCurrentUser();
     userModel.put("success", true);
-    //userModel.remove("token").remove("password").remove("data");
     renderJson(userModel);
   }
 

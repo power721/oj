@@ -63,7 +63,7 @@
                 <tr>
                 <td>${file_index+1}</td>
                 <td class="file"><a href="admin/problem/viewData/${pid}?name=${file.name}" target="_blank">${file.name}</a></td>
-                <td class="size" size="${file.size}">${num2size(file.size)}</td>
+                <td class="size" size="${file.size}"></td>
                 <td class="timestamp" data="${file.modifyTime}"></td>
                 <td class="action" name="${file.name}">
                   <i class="btn btn-primary edit">Edit</i>
@@ -150,6 +150,10 @@
         striped:true,
         clean:true
       });
+
+      $('.size').each(function() {
+        $(this).html(num2size($(this).attr('size')));
+      });
     });
   </script>
 
@@ -226,6 +230,17 @@
     });
 
     uploader.init();
+
+    function num2size(size)
+    {
+      if (size >= 1048576) {
+        return (size / 1048576.0).toFixed(2) + ' MB';
+      } else if (size >= 1024) {
+        return (size / 1024.0).toFixed(2) + ' KB';
+      } else {
+        return size + ' B';
+      }
+    }
   </script>
 </@override>
 <@extends name="../_layout.html"></@extends>

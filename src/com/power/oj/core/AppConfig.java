@@ -55,7 +55,6 @@ import com.power.oj.core.handler.SessionIdHandler;
 import com.power.oj.core.handler.UrlFilterHandler;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
-import com.power.oj.core.interceptor.I18NInterceptor;
 import com.power.oj.core.interceptor.OjVariableInterceptor;
 import com.power.oj.core.interceptor.SessionAttrInterceptor;
 import com.power.oj.core.interceptor.TimingInterceptor;
@@ -74,7 +73,6 @@ import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.ExpiresSessionService;
 import com.power.oj.service.VisitCountService;
-import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.social.FriendGroupModel;
 import com.power.oj.social.FriendModel;
 import com.power.oj.solution.SolutionController;
@@ -87,13 +85,12 @@ import com.power.oj.user.UserModel;
 import com.power.oj.util.freemarker.Num2AlphaMethod;
 import com.power.oj.util.freemarker.BlockDirective;
 import com.power.oj.util.freemarker.ExtendsDirective;
-import com.power.oj.util.freemarker.Num2SizeMethod;
 import com.power.oj.util.freemarker.OverrideDirective;
 
 public class AppConfig extends JFinalConfig
 {
-  private static String baseViewPath = "/WEB-INF/view";
-  private final Logger log = Logger.getLogger(AppConfig.class);
+  private static final String BASE_VIEW_PATH = "/WEB-INF/view";
+  private static final Logger log = Logger.getLogger(AppConfig.class);
   private Routes routes;
 
   /**
@@ -103,19 +100,18 @@ public class AppConfig extends JFinalConfig
   {
     loadPropertyFile("oj.properties");
 
-    FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
+    //FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
     FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("num2alpha", new Num2AlphaMethod());
-    FreeMarkerRender.getConfiguration().setSharedVariable("num2size", new Num2SizeMethod());
 
     me.setDevMode(getPropertyToBoolean("devMode", false));
-    me.setBaseViewPath(baseViewPath);
-    me.setError401View(baseViewPath + "/error/401.html");
-    me.setError403View(baseViewPath + "/error/403.html");
-    me.setError404View(baseViewPath + "/error/404.html");
-    me.setError500View(baseViewPath + "/error/500.html");
+    me.setBaseViewPath(BASE_VIEW_PATH);
+    me.setError401View(BASE_VIEW_PATH + "/error/401.html");
+    me.setError403View(BASE_VIEW_PATH + "/error/403.html");
+    me.setError404View(BASE_VIEW_PATH + "/error/404.html");
+    me.setError500View(BASE_VIEW_PATH + "/error/500.html");
 
     log.debug("configConstant finished.");
   }
@@ -211,7 +207,7 @@ public class AppConfig extends JFinalConfig
   public void configInterceptor(Interceptors me)
   {
     me.add(new TimingInterceptor());
-    me.add(new I18NInterceptor());
+    //me.add(new I18NInterceptor());
     me.add(new GlobalInterceptor());
     me.add(new OjVariableInterceptor());
     me.add(new SessionAttrInterceptor());
@@ -267,7 +263,7 @@ public class AppConfig extends JFinalConfig
   
   public static String getBaseViewPath()
   {
-    return baseViewPath;
+    return BASE_VIEW_PATH;
   }
 
   private boolean isAceMode()
