@@ -1,10 +1,7 @@
 package com.power.oj.core.service;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import javax.servlet.http.HttpSession;
 
 import jodd.util.StringUtil;
@@ -14,6 +11,8 @@ import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 
 import com.jfinal.log.Logger;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
@@ -25,8 +24,6 @@ import com.power.oj.user.UserService;
 public final class SessionService
 {
   private static final Logger log = Logger.getLogger(SessionService.class);
-  private static ConcurrentHashMap<String, SessionModel> accessLog = new ConcurrentHashMap<String, SessionModel>();
-  private static ConcurrentHashMap<String, Session> shiroSession = new ConcurrentHashMap<String, Session>();
   private static final SessionService me = new SessionService();
   private static final SessionModel dao = SessionModel.dao;
   
@@ -87,56 +84,79 @@ public final class SessionService
     int uid = userModel.getUid();
     String name = userModel.getName();
     
-    SessionModel sessionModel = dao.findById(id);
+    SessionModel sessionModel = getSessionModel(id);
     sessionModel.setUid(uid).setName(name).update();
-    SessionService.me().putModel(id, sessionModel);
+    updateCache(sessionModel);
   }
 
   public void updateOnline(Integer uid, String name)
   {
     String id = (String) ShiroKit.getSubject().getSession().getId();
    
-    SessionModel sessionModel = dao.findById(id);
-    sessionModel.setUid(uid).setName(name).update();
-    SessionService.me().putModel(id, sessionModel);
+    SessionModel sessionModel = getSessionModel(id);
+    sessionModel.setUid(uid).setName(name);//.update();
+    updateCache(sessionModel);
   }
   
   public SessionModel updateSession(HttpSession session, String url)
   {
     String id = (String) session.getId();
-    SessionModel sessionModel = SessionService.me().getModel(id);
+    SessionModel sessionModel = getSessionModel(id);
     if (sessionModel == null)
     {
+      log.info("create new session!");
       sessionModel = new SessionModel().setSessionId(id);
+    }
+    if (sessionModel.getBoolean("first") != null && sessionModel.getUid() == null)
+    {
+      UserModel userModel = UserService.me().getCurrentUser();
+      if (userModel != null)
+      {
+        sessionModel.setUid(userModel.getUid()).setName(userModel.getName());
+        sessionModel.remove("first");
+      }
     }
 
     sessionModel.setLastActivity(OjConfig.timeStamp).setUri(url);
-    return SessionService.me().putModel(id, sessionModel);
+    updateCache(sessionModel);
+    return sessionModel;
   }
   
   public SessionModel saveSession(Session session)
   {
+    int timeStamp = (int) (System.currentTimeMillis() / 1000);
     String id = (String) session.getId();
     
-    SessionModel sessionModel = new SessionModel().setSessionId(id).setIpAddress(session.getHost());//.set("user_agent", agent);
-    sessionModel.setCtime(OjConfig.timeStamp).setLastActivity(OjConfig.timeStamp);
-    sessionModel.setSessionExpires((int) (OjConfig.timeStamp + session.getTimeout()));
+    SessionModel sessionModel = new SessionModel().setSessionId(id).setIpAddress(session.getHost());
+    sessionModel.setCtime(timeStamp).setLastActivity(timeStamp);
+    sessionModel.setSessionExpires((int) (timeStamp + session.getTimeout()));
     sessionModel.save();
 
-    SessionService.me().putModel(id, sessionModel);
-    SessionService.me().putShiroSession(id, session);
+    sessionModel.put("first", true);
+    updateCache(sessionModel);
 
     return sessionModel;
   }
   
-  public int deleteSession(Session session)
+  public boolean deleteSession(Session session)
   {
     String id = (String) session.getId();
     
-    SessionService.me().removeModel(id);
-    SessionService.me().removeShiroSession(id);
+    evictCache(id);
     
-    return dao.deleteSession(id);
+    return dao.deleteById(id);
+  }
+
+  public boolean deleteSession(String id)
+  {
+    evictCache(id);
+    
+    return dao.deleteById(id);
+  }
+  
+  public int deleteAllSession()
+  {
+    return Db.update("DELETE FROM session");
   }
 
   public int expiresSession()
@@ -144,73 +164,44 @@ public final class SessionService
     return dao.expiresSession();
   }
 
-  public SessionModel putModel(SessionModel session)
-  {
-    return accessLog.put(session.getId(), session);
-  }
-  
-  public SessionModel putModel(String id, SessionModel session)
-  {
-    return accessLog.put(id, session);
-  }
-  
-  public SessionModel getModel(String id)
-  {
-    return accessLog.get(id);
-  }
-  
-  public SessionModel removeModel(String id)
-  {
-    return accessLog.remove(id);
-  }
-
   public List<SessionModel> getAccessLog()
   {
-    List<SessionModel> sessions = new ArrayList<SessionModel>();
-    for (Enumeration<SessionModel> e = accessLog.elements(); e.hasMoreElements();)
-      sessions.add(e.nextElement());
+    List<SessionModel> oldSessions = dao.find("SELECT * FROM session ORDER BY ctime DESC");
+    List<SessionModel> sessions = new ArrayList<SessionModel>(oldSessions.size());
+    SessionModel newSession;
+    
+    for (SessionModel session : oldSessions)
+    {
+      newSession = getSessionModel(session.getId());
+      sessions.add(newSession);
+    }
     
     return sessions;
   }
   
-  public int size()
+  public long size()
   {
-    return accessLog.size();
+    return Db.queryLong("SELECT COUNT(*) FROM session");
   }
   
-  public Session putShiroSession(Session session)
+  public long getUserNumber()
   {
-    return shiroSession.put((String) session.getId(), session);
+    return Db.queryLong("SELECT COUNT(*) FROM session WHERE uid != 0");
+  }
+
+  private SessionModel getSessionModel(String id)
+  {
+    return dao.findFirstByCache("session", id, "SELECT * FROM session WHERE sessionId=?", id);
   }
   
-  public Session putShiroSession(String id, Session session)
+  private void updateCache(SessionModel session)
   {
-    return shiroSession.put(id, session);
+    CacheKit.put("session", session.getId(), session);
   }
   
-  public Session getShiroSession(String id)
+  private void evictCache(String id)
   {
-    return shiroSession.get(id);
-  }
-  
-  public Session removeShiroSession(String id)
-  {
-    return shiroSession.remove(id);
-  }
-  
-  public int getUserNumber()
-  {
-    int number = 0;
-    for (Enumeration<SessionModel> e = accessLog.elements(); e.hasMoreElements();)
-    {
-      SessionModel sessionModel = e.nextElement();
-      if (sessionModel.getUid() != null)
-      {
-        number++;
-      }
-    }
-    
-    return number;
+    CacheKit.remove("session", id);
   }
   
 }

@@ -22,10 +22,10 @@
                 <tr>
                   <th>No.</th>
                   <th>User</th>
-                  <th>Create</th>
+                  <th>Create Time</th>
                   <th>Last Activity</th>
+                  <th>Expires Time</th>
                   <th>IP</th>
-                  <th>Agent</th>
                   <th>URI</th>
                 </tr>
               </thead>
@@ -38,14 +38,17 @@
                   </td>
                   <td class="timestamp" data="${User.ctime!}"></td>
                   <td class="timestamp" data="${User.lastActivity!}"></td>
+                  <td class="timestamp" data="${User.sessionExpires!}"></td>
                   <td>${User.ipAddress!}</td>
-                  <td>${User.userAgent!}</td>
-                  <td><a href="${User.uri!}">${User.uri!}</a></td>
+                  <td><a href="${baseUrl!}${User.uri!}" target="_blank">${User.uri!}</a></td>
                 </tr>
                 </#list> 
                 </#if>
               </tbody>
             </table>
+            <div class="row-fluid">
+              <button class="btn btn-info" id="expires">Expires</button>
+            </div>
           </div>
         </div>
       </div>
@@ -53,6 +56,8 @@
 </@override>
 
 <@override name="scripts">
+  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+  <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
   <#if oj_style != "slate">
   <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
@@ -66,6 +71,23 @@
         $(this).html(getLocalTime($(this).attr('data')));
       });
       
+      $('#expires').click(function() {
+        $.post('api/admin/expiresSession', function(data) {
+          $.pnotify({
+                    title: 'Expires Session',
+                    text: data.expiresSession + ' sessions deleted!',
+                    history: false,
+                    type: data.expiresSession > 0 ? 'success' : 'info'
+                    });
+          if (data.expiresSession > 0) {
+            setTimeout(function() {
+                window.location.reload();
+              },
+              2000);
+          }
+        });
+      });
+
       <#if oj_style != "slate">
       $("#onlineuser").tablecloth({
         theme:"stats",

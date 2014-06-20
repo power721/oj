@@ -70,7 +70,7 @@ public final class UserService
 
     try
     {
-      currentUser.logout();
+      //currentUser.logout();
       currentUser.login(token);
 
       SessionService.me().updateLogin();
@@ -274,6 +274,12 @@ public final class UserService
     return Db.save("loginlog", loginLog);
   }
   
+  /**
+   * @param userModel
+   * @param email
+   * @return
+   * @throws Exception
+   */
   public boolean updateEmail(UserModel userModel, String email) throws Exception
   {
     String name = userModel.getName();
@@ -299,6 +305,10 @@ public final class UserService
     userExtModel.setCredit(credit).setExperience( exp).setLevel(level); // no update
   }
   
+  /**
+   * @param userExtModel
+   * @return
+   */
   public int checkin(UserExtModel userExtModel)
   {
     int timestamp = Tool.getDayTimestamp();
@@ -308,7 +318,7 @@ public final class UserService
     
     if (checkin < timestamp)
     {
-      checkinTimes = (checkin + OjConstants.DAY_TIMESTAMP < timestamp) ? 1 : checkinTimes + 1;
+      checkinTimes = checkin + OjConstants.DAY_TIMESTAMP < timestamp ? 1 : checkinTimes + 1;
       int incExp = Math.min(checkinTimes, level);
       int totalCheckin = userExtModel.getTotalCheckin() + 1;
       
@@ -320,6 +330,10 @@ public final class UserService
     return 0;
   }
   
+  /**
+   * @param userModel
+   * @return
+   */
   public boolean isCheckin(UserModel userModel)
   {
     int checkin = userModel.getInt("checkin"); // UserModel does not have "checkin"
@@ -335,6 +349,11 @@ public final class UserService
     }
   }
   
+  /**
+   * @param srcFile
+   * @return
+   * @throws Exception
+   */
   public String saveAvatar(File srcFile) throws Exception
   {
     UserModel userModel = getCurrentUser();
@@ -355,6 +374,10 @@ public final class UserService
   } /* for user center end */
   
   /* for solution */
+  /**
+   * @param uid
+   * @return
+   */
   public boolean incSubmission(Integer uid)
   {
     UserModel userModel = getUser(uid);
@@ -364,6 +387,10 @@ public final class UserService
     return userModel.update();
   }
 
+  /**
+   * @param solutionModel
+   * @return
+   */
   public boolean incAccepted(SolutionModel solutionModel)
   {
     Integer pid = solutionModel.getPid();
@@ -382,6 +409,10 @@ public final class UserService
   }
 
   /* for rejudge */
+  /**
+   * @param solutionModel
+   * @return
+   */
   public boolean revertAccepted(SolutionModel solutionModel)
   {
     if (solutionModel.getResult() != ResultType.AC)
@@ -459,6 +490,11 @@ public final class UserService
     return false;
   }
   
+  /**
+   * @param name
+   * @param token
+   * @return
+   */
   public boolean verifyEmail(String name, String token)
   {
     UserModel userModel = dao.getUserByName(name);
@@ -632,15 +668,23 @@ public final class UserService
   {
     Subject currentUser = ShiroKit.getSubject();
     if (currentUser == null)
+    {
       return null;
+    }
 
     Object principal = currentUser.getPrincipal();
     if (principal == null)
+    {
       return null;
+    }
     
     return (Integer) principal;
   }
   
+  /**
+   * @param uid
+   * @return
+   */
   public UserModel getUser(Integer uid)
   {
     UserModel userModel = null;
@@ -652,7 +696,10 @@ public final class UserService
     {
       userModel = dao.findFirstByCache("user", uid, "SELECT * FROM user WHERE uid=?", uid);
     }
-    userModel.remove("token").remove("password").remove("data");
+    if (userModel != null)
+    {
+      userModel.remove("token").remove("password").remove("data");
+    }
     
     return userModel;
   }
@@ -666,6 +713,9 @@ public final class UserService
     return getUser(getCurrentUid());
   }
   
+  /**
+   * @return user
+   */
   public UserModel getCurrentUserExt()
   {
     UserModel userModel = dao.getUserExt(getCurrentUid());

@@ -244,6 +244,7 @@ public class AppConfig extends JFinalConfig
   /**
    * 初始化常量
    */
+  @Override
   public void afterJFinalStart()
   {
     OjConfig.initJudgeResult();
@@ -256,7 +257,14 @@ public class AppConfig extends JFinalConfig
     log.info(PathKit.getWebRootPath());
     log.debug("afterJFinalStart finished.");
   }
-
+  
+  @Override
+  public void beforeJFinalStop()
+  {
+    //SessionService.me().deleteAllSession();
+    //log.info("beforeJFinalStop");
+  }
+  
   public static String getBaseViewPath()
   {
     return baseViewPath;

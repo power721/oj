@@ -95,4 +95,15 @@ public class AdminApiController extends OjController
     }
   }
   
+  public void expiresSession()
+  {
+    renderJson("expiresSession", sessionService.expiresSession());
+  }
+  
+  public void deleteSession()
+  {
+    String id = getPara("id");
+    
+    renderJson("success", sessionService.deleteSession(id));
+  }
 }

@@ -67,6 +67,15 @@
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900" />
 
+    <cache name="session"
+           maxEntriesLocalHeap="1000"
+           overflowToDisk="true"
+           eternal="false"
+           timeToLiveSeconds="1800"
+           timeToIdleSeconds="1800"
+           diskPersistent="true"
+           diskExpiryThreadIntervalSeconds="900" />
+    
     <cache name="userResult"
            maxEntriesLocalHeap="1000"
            overflowToDisk="true"

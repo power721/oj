@@ -38,14 +38,9 @@ public class SessionModel extends Model<SessionModel>
     return Db.update("UPDATE session SET uid=?,name=? WHERE sessionId=?", uid, name, sessionID);
   }
   
-  public int deleteSession(String sessionID)
-  {
-    return Db.update("DELETE FROM session WHERE sessionId=?", sessionID);
-  }
-  
   public int expiresSession()
   {
-    return Db.update("DELETE FROM session WHERE sessionExpires <= UNIX_TIMESTAMP()");
+    return Db.update("DELETE FROM session WHERE sessionExpires <= UNIX_TIMESTAMP() OR lastActivity + 1800 < UNIX_TIMESTAMP()");
   }
 
   public String getSessionId()
