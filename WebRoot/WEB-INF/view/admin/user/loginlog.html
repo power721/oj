@@ -39,7 +39,7 @@
                   <tr>
                     <td>${(logs.pageNumber-1) * logs.pageSize + log_index + 1}</td>
                     <td>${log.uid!0}</td>
-                    <td>${log.name!}</td>
+                    <td><a href="user/profile/${log.name!}" target="_blank">${log.name!}</a></td>
                     <td>${log.ip!}</td>
                     <td class="timestamp" data="${log.ctime}"></td>
                     <td>${log.success?string('<span class="label label-success">Y</span>', '<span class="label label-important">N</span>')}</td>

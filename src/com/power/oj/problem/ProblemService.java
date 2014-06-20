@@ -16,7 +16,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.service.VisitCountService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
@@ -64,18 +63,33 @@ public final class ProblemService
     ProblemModel problemModel = findProblem(pid);
     
     if (problemModel == null)
+    {
       return null;
+    }
     
     int sampleInputRows = 1;
     if (StringUtil.isNotBlank(problemModel.getSampleInput()))
+    {
       sampleInputRows = StringUtil.count(problemModel.getSampleInput(), '\n') + 1;
+    }
     problemModel.put("sample_input_rows", sampleInputRows);
     
     int sampleOutputRows = 1;
     if (StringUtil.isNotBlank(problemModel.getSampleOutput()))
+    {
       sampleOutputRows = StringUtil.count(problemModel.getSampleOutput(), '\n') + 1;
+    }
     problemModel.put("sample_output_rows", sampleOutputRows);
-    problemModel.setView(VisitCountService.get(VisitCountService.problemViewCount, pid));
+    
+    problemModel.setView(problemModel.getView() + 1);
+    if (OjConfig.isDevMode())
+    {
+      problemModel.update();
+    }
+    else
+    {
+      updateCache(problemModel);
+    }
 
     return problemModel;
   }
@@ -94,18 +108,23 @@ public final class ProblemService
     }
 
     if (problemModel == null)
+    {
       return null;
+    }
     
-    int sample_input_rows = 1;
+    int sampleInputRows = 1;
     if (StringUtil.isNotBlank(problemModel.getSampleInput()))
-      sample_input_rows = StringUtil.count(problemModel.getSampleInput(), '\n') + 1;
-    problemModel.put("sample_input_rows", sample_input_rows);
+    {
+      sampleInputRows = StringUtil.count(problemModel.getSampleInput(), '\n') + 1;
+    }
+    problemModel.put("sample_input_rows", sampleInputRows);
     
-    int sample_output_rows = 1;
+    int sampleOutputRows = 1;
     if (StringUtil.isNotBlank(problemModel.getSampleOutput()))
-      sample_output_rows = StringUtil.count(problemModel.getSampleOutput(), '\n') + 1;
-    problemModel.put("sample_output_rows", sample_output_rows);
-    problemModel.setView(VisitCountService.get(VisitCountService.problemViewCount, pid));
+    {
+      sampleOutputRows = StringUtil.count(problemModel.getSampleOutput(), '\n') + 1;
+    }
+    problemModel.put("sample_output_rows", sampleOutputRows);
 
     return problemModel;
   }

@@ -71,8 +71,8 @@ import com.power.oj.notice.NoticeController;
 import com.power.oj.notice.NoticeModel;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.service.EhcacheService;
 import com.power.oj.service.ExpiresSessionService;
-import com.power.oj.service.VisitCountService;
 import com.power.oj.social.FriendGroupModel;
 import com.power.oj.social.FriendModel;
 import com.power.oj.solution.SolutionController;
@@ -244,7 +244,10 @@ public class AppConfig extends JFinalConfig
     OjConfig.loadConfig();
 
     I18N.init("ojText", Locale.ENGLISH, null);
-    VisitCountService.start();
+    if (!OjConfig.isDevMode())
+    {
+      EhcacheService.start();
+    }
     ExpiresSessionService.start();
 
     log.info(PathKit.getWebRootPath());

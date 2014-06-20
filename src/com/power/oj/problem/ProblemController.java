@@ -14,7 +14,6 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
-import com.power.oj.service.VisitCountService;
 
 public class ProblemController extends OjController
 {
@@ -53,9 +52,6 @@ public class ProblemController extends OjController
     setAttr("spj", problemService.checkSpj(pid));
     setCookie("pageNumber", String.valueOf(problemService.getPageNumber(pid, OjConfig.problemPageSize)), OjConstants.COOKIE_AGE);
 
-    //problemModel.incViewCount();
-    VisitCountService.record(VisitCountService.problemViewCount, pid);
-    
     setTitle(new StringBuilder(3).append(pid).append(": ").append(problemModel.getStr("title")).toString());
   }
 
