@@ -66,7 +66,7 @@ public final class OjService
   public boolean sendVerifyEmail(String name, String email, String token)
   {
     Map<String, Object> paras = new HashMap<String, Object>();
-    paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+    paras.put(OjConstants.BASE_URL, OjConfig.getBaseUrl());
     paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
     paras.put("name", name);
     paras.put("token", token);
@@ -106,7 +106,7 @@ public final class OjService
     final String adminEmail = OjConfig.getString("adminEmail");
     
     Map<String, Object> paras = new HashMap<String, Object>();
-    paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+    paras.put(OjConstants.BASE_URL, OjConfig.getBaseUrl());
     paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
     paras.put("name", name);
     paras.put("token", token);

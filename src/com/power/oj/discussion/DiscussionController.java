@@ -33,6 +33,7 @@ public class DiscussionController extends OjController
       Integer deep = deepTree.get(topic.getParentId());
       if (deep == null)
       {
+        deep = 0;
         log.info(id + " " + topic.getParentId());
       }
       deepTree.put(id, deep + 1);
@@ -90,7 +91,7 @@ public class DiscussionController extends OjController
     }
     else
     {
-      redirect("/discuss/show/" + topicModel.getId(), new FlashMessage("Access Denied.", MessageType.ERROR, getText("message.error.title")));
+      redirect("/discuss/show/" + id, new FlashMessage("Access Denied.", MessageType.ERROR, getText("message.error.title")));
     }
   }
   

@@ -21,7 +21,7 @@ public class SinaOauth extends Oauth
     super();
     setClientId(OjConfig.getString("openid_sina"));
     setClientSecret(OjConfig.getString("openkey_sina"));
-    setRedirectUri(OjConfig.baseUrl + "/" + REDIRECT_URI);
+    setRedirectUri(OjConfig.getBaseUrl() + "/" + REDIRECT_URI);
   }
 
   public String getAuthorizeUrl()

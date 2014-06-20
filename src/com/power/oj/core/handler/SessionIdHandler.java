@@ -11,7 +11,7 @@ public class SessionIdHandler extends Handler
   @Override
   public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled)
   {
-    int pos = target.indexOf(";");
+    int pos = target.indexOf(';');
     if (pos != -1) {
         target = target.substring(0, pos);
     }

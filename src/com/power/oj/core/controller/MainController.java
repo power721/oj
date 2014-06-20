@@ -14,59 +14,39 @@ import com.power.oj.core.OjController;
  */
 public class MainController extends OjController
 {
-  /**
-   * The index page.
-   */
+
   public void index()
   {
     setAttr("problemsNumber", problemService.getProblemsNumber());
     setTitle(getText("page.index.title"));
   }
 
-  /**
-   * The about page.
-   */
   public void about()
   {
     setTitle(getText("page.about.title"));
   }
 
-  /**
-   * contact me page.
-   */
   public void contact()
   {
     setTitle(getText("page.contact.title"));
   }
 
-  /**
-   * OJ changelog page.
-   */
   public void changelog()
   {
     setTitle(getText("page.changelog.title"));
   }
 
-  /**
-   * Frequently Asked Questions page.
-   */
   public void faq()
   {
     setTitle(getText("page.faq.title"));
   }
 
-  /**
-   * Show hot tags of the problems.
-   */
   public void tag()
   {
     setAttr("tagList", ojService.tagList());
     setTitle(getText("page.tag.title"));
   }
 
-  /**
-   * Generate captcha image.
-   */
   @ClearInterceptor(ClearLayer.ALL)
   public void captcha()
   {

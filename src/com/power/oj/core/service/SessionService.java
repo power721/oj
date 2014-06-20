@@ -205,7 +205,9 @@ public final class SessionService
     {
       SessionModel sessionModel = e.nextElement();
       if (sessionModel.getUid() != null)
+      {
         number++;
+      }
     }
     
     return number;

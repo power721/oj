@@ -184,7 +184,7 @@ public class UeditorController extends OjController
       } catch (Exception e)
       {
         e.printStackTrace();
-        System.err.println("页面无法访问");
+        log.warn("页面无法访问");
       }
     }
 

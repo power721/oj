@@ -33,7 +33,7 @@ public class FpsImage
     
     try
     {
-      byte[] decodeBuffer = (new BASE64Decoder()).decodeBuffer(base64);
+      byte[] decodeBuffer = new BASE64Decoder().decodeBuffer(base64);
       FileUtil.touch(imageFile);
       FileUtil.writeBytes(imageFile, decodeBuffer);
     } catch (IOException e1)

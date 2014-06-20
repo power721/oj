@@ -153,8 +153,10 @@ public class CryptUtils
 
   private static byte[] hex2byte(byte[] b)
   {
-    if ((b.length % 2) != 0)
+    if (b.length % 2 != 0)
+    {
       throw new IllegalArgumentException();
+    }
     byte[] b2 = new byte[b.length / 2];
     for (int n = 0; n < b.length; n += 2)
     {

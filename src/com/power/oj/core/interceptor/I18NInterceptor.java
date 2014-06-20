@@ -42,7 +42,7 @@ public class I18NInterceptor implements Interceptor
       if (view == null)
         return;
 
-      if (!view.startsWith("/"))
+      if (view.charAt(0) != '/')
       {
         view = ai.getViewPath() + view;
       }

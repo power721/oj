@@ -20,6 +20,7 @@ import com.power.oj.core.bean.Solution;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.problem.ProblemModel;
 
+@Deprecated
 public class UestcJudgeAdapter extends JudgeAdapter
 {
 

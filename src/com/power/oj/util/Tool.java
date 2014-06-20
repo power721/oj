@@ -40,7 +40,9 @@ public class Tool
   public static String formatBaseURL(String url)
   {
     while (url != null && url.endsWith("/"))
+    {
       url = url.substring(0, url.length() - 1);
+    }
     return url;
   }
 
@@ -129,9 +131,10 @@ public class Tool
   public static String randomPassword(int count)
   {
     StringBuilder sb = new StringBuilder();
+    Random rand = new Random();
     for (int i = 0; i < count; i++)
     {
-      sb.append(CHAR_STR[new Random().nextInt(CHAR_STR.length)]);
+      sb.append(CHAR_STR[rand.nextInt(CHAR_STR.length)]);
     }
     return sb.toString();
   }

@@ -1,5 +1,6 @@
 package com.power.oj.core.bean;
 
+// actual class should extend Model
 public interface Solution
 {
 

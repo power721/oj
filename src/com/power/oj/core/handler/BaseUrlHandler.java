@@ -17,13 +17,13 @@ public class BaseUrlHandler extends Handler
     
     if (request.getServerPort() != 80)
     {
-      sb.append(":").append(request.getServerPort());
+      sb.append(':').append(request.getServerPort());
     }
     sb.append(request.getContextPath());
 
-    OjConfig.baseUrl = sb.toString();
+    OjConfig.setBaseUrl(sb.toString());
     
-    request.setAttribute(OjConstants.BASE_URL, OjConfig.baseUrl);
+    request.setAttribute(OjConstants.BASE_URL, OjConfig.getBaseUrl());
     nextHandler.handle(target, request, response, isHandled);
   }
 

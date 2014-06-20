@@ -121,7 +121,6 @@ public class PowerJudgeAdapter extends JudgeAdapter
     stringBuilder.append(" -D ");
     stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(dataPath));
 
-    System.out.println(stringBuilder.toString());
     return stringBuilder.toString();
   }
 

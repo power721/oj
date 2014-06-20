@@ -147,16 +147,16 @@ public final class JudgeService
 
   public void rejudgeContestSolution(Integer sid)
   {
-    ContestSolutionModel contestSolutionModel = solutionService.findContestSolution(sid);
-    int result = contestSolutionModel.getResult();
+    ContestSolutionModel contestSolution = solutionService.findContestSolution(sid);
+    int result = contestSolution.getResult();
 
-    contestSolutionModel.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
-    contestSolutionModel.setMemory(0).setTime(0).setError(null).setSystemError(null);
-    contestSolutionModel.update();
+    contestSolution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
+    contestSolution.setMemory(0).setTime(0).setError(null).setSystemError(null);
+    contestSolution.update();
 
-    contestSolutionModel.put("originalResult", result);
+    contestSolution.put("originalResult", result);
 
-    rejudge(contestSolutionModel);
+    rejudge(contestSolution);
   }
 
   public void rejudgeContest(final Integer cid)
@@ -213,7 +213,9 @@ public final class JudgeService
     {
       File inFile = arrayOfFile[i];
       if (!inFile.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN))
+      {
         continue;
+      }
       File outFile = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
           .append(inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length())).append(OjConstants.DATA_EXT_OUT).toString());
       if (!outFile.isFile())

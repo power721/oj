@@ -241,11 +241,11 @@ public class FpsProblem
       output.addCDATA(outputValue);
     }
 
-    Element sample_input = item.addElement("sample_input");
-    sample_input.addCDATA(problemModel.getSampleInput());
+    Element sampleInput = item.addElement("sample_input");
+    sampleInput.addCDATA(problemModel.getSampleInput());
 
-    Element sample_output = item.addElement("sample_output");
-    sample_output.addCDATA(problemModel.getSampleOutput());
+    Element sampleOutput = item.addElement("sample_output");
+    sampleOutput.addCDATA(problemModel.getSampleOutput());
 
     try
     {

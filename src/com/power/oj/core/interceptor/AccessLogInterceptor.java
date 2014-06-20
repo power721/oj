@@ -32,12 +32,12 @@ public class AccessLogInterceptor implements Interceptor
     {
       StringBuilder sb = new StringBuilder(actionKey);
       if (controller.getPara() != null)
-        sb.append("/").append(controller.getPara());
+        sb.append('/').append(controller.getPara());
 
       String query = controller.getRequest().getQueryString();
       if (query != null)
       {
-        sb.append("?").append(query);
+        sb.append('?').append(query);
       }
 
       String url = sb.toString();

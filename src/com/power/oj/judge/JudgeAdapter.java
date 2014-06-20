@@ -178,7 +178,7 @@ public abstract class JudgeAdapter implements Runnable
 
   protected boolean setResult(int result, int time, int memory)
   {
-    boolean needUpdate = (result != solution.getResult());
+    boolean needUpdate = result != solution.getResult();
     solution.setResult(result);
     if (solution.getTime() == null)
     {

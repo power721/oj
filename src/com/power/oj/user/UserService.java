@@ -198,7 +198,7 @@ public final class UserService
       userExt.setUid(uid).save();
       
       Map<String, Object> paras = new HashMap<String, Object>();
-      paras.put(OjConstants.BASE_URL, OjConfig.baseUrl);
+      paras.put(OjConstants.BASE_URL, OjConfig.getBaseUrl());
       paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
       paras.put("nick", webLogin.getNick());
       paras.put("type", webLogin.getType());

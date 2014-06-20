@@ -48,7 +48,7 @@ public class DataFile
     this.pid = pid;
     this.file = file;
     
-    if (exists())
+    if (file.exists())
     {
       name = file.getName();
     }

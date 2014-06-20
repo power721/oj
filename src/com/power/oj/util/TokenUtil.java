@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSONObject;
 public class TokenUtil
 {
 
+   private TokenUtil() {}
   /**
    * 参考自 qq sdk
    * 
@@ -57,7 +58,9 @@ public class TokenUtil
     String openid = null;
     Matcher m = Pattern.compile("\"openid\"\\s*:\\s*\"(\\w+)\"").matcher(string);
     if (m.find())
+    {
       openid = m.group(1);
+    }
     return openid;
   }
 
