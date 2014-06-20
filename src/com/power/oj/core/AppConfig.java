@@ -100,7 +100,6 @@ public class AppConfig extends JFinalConfig
   {
     loadPropertyFile("oj.properties");
 
-    //FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags());
     FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
     FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
@@ -124,27 +123,27 @@ public class AppConfig extends JFinalConfig
     this.routes = me;
 
     me.add("/", MainController.class, "/common/");
-    me.add("/ueditor", UeditorController.class, "/common/");
     me.add("/admin", AdminController.class);
     me.add("/admin/contest", ContestAdminController.class);
     me.add("/admin/problem", ProblemAdminController.class);
     me.add("/admin/user", UserAdminController.class);
-    me.add("/discuss", DiscussionController.class);
+    me.add("/api/admin", AdminApiController.class, "/admin/");
+    me.add("/api/contest", ContestApiController.class, "/contest/");
+    me.add("/api/discuss", DiscussionApiController.class, "/discuss/");
+    me.add("/api/friend", FriendApiController.class, "/user/");
+    me.add("/api/mail", MailApiController.class, "/mail/");
+    me.add("/api/oauth/qq", QQLoginApiController.class, "/user/");
+    me.add("/api/oauth/sina", SinaLoginApiController.class, "/user/");
+    me.add("/api/problem", ProblemApiController.class, "/problem/");
+    me.add("/api/user", UserApiController.class, "/user/");
     me.add("/contest", ContestController.class);
+    me.add("/discuss", DiscussionController.class);
     me.add("/mail", MailController.class);
     me.add("/notice", NoticeController.class);
     me.add("/problem", ProblemController.class);
     me.add("/solution", SolutionController.class);
+    me.add("/ueditor", UeditorController.class, "/common/");
     me.add("/user", UserController.class);
-    me.add("/api/admin", AdminApiController.class, "/admin/");
-    me.add("/api/contest", ContestApiController.class, "/contest/");
-    me.add("/api/discuss", DiscussionApiController.class, "/discuss/");
-    me.add("/api/mail", MailApiController.class, "/mail/");
-    me.add("/api/problem", ProblemApiController.class, "/problem/");
-    me.add("/api/user", UserApiController.class, "/user/");
-    me.add("/api/friend", FriendApiController.class, "/user/");
-    me.add("/api/oauth/qq", QQLoginApiController.class, "/user/");
-    me.add("/api/oauth/sina", SinaLoginApiController.class, "/user/");
 
     log.debug("configRoute finished.");
   }
@@ -172,27 +171,27 @@ public class AppConfig extends JFinalConfig
     // 配置ActiveRecord插件
     ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
     arp.setShowSql(getPropertyToBoolean("devMode", false));
-    arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
-    arp.addMapping("user_ext", "uid", UserExtModel.class);
-    arp.addMapping("role", RoleModel.class);
-    arp.addMapping("friend", FriendModel.class);
-    arp.addMapping("friend_group", FriendGroupModel.class);
-    arp.addMapping("topic", TopicModel.class);
+    arp.addMapping("board", BoardModel.class);
     arp.addMapping("comment", CommentModel.class);
-    arp.addMapping("notice", NoticeModel.class);
-    arp.addMapping("problem", "pid", ProblemModel.class);
-    arp.addMapping("solution", "sid", SolutionModel.class);
     arp.addMapping("contest", "cid", ContestModel.class);
     arp.addMapping("contest_clarify", ContestClarifyModel.class);
     arp.addMapping("contest_problem", ContestProblemModel.class);
     arp.addMapping("contest_solution", "sid", ContestSolutionModel.class);
-    arp.addMapping("board", BoardModel.class);
-    arp.addMapping("session", "sessionId", SessionModel.class);
+    arp.addMapping("friend", FriendModel.class);
+    arp.addMapping("friend_group", FriendGroupModel.class);
     arp.addMapping("mail", MailModel.class);
     arp.addMapping("mail_content", MailContentModel.class);
+    arp.addMapping("notice", NoticeModel.class);
+    arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("program_language", ProgramLanguageModel.class);
-    arp.addMapping("web_login", WebLoginModel.class);
+    arp.addMapping("role", RoleModel.class);
+    arp.addMapping("session", "sessionId", SessionModel.class);
+    arp.addMapping("solution", "sid", SolutionModel.class);
+    arp.addMapping("topic", TopicModel.class);
+    arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
+    arp.addMapping("user_ext", "uid", UserExtModel.class);
     arp.addMapping("variable", VariableModel.class);
+    arp.addMapping("web_login", WebLoginModel.class);
     me.add(arp);
 
     me.add(new EhCachePlugin());
@@ -207,7 +206,6 @@ public class AppConfig extends JFinalConfig
   public void configInterceptor(Interceptors me)
   {
     me.add(new TimingInterceptor());
-    //me.add(new I18NInterceptor());
     me.add(new GlobalInterceptor());
     me.add(new OjVariableInterceptor());
     me.add(new SessionAttrInterceptor());
@@ -226,7 +224,6 @@ public class AppConfig extends JFinalConfig
     me.add(new SessionIdHandler());
     me.add(new BaseUrlHandler());
     me.add(new UrlFilterHandler());
-    // me.add(new ContextPathHandler(OjConstants.BASE_URL));
     me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {
       public boolean isPermitted(HttpServletRequest request)
       {
@@ -258,7 +255,7 @@ public class AppConfig extends JFinalConfig
   public void beforeJFinalStop()
   {
     //SessionService.me().deleteAllSession();
-    //log.info("beforeJFinalStop");
+    log.debug("beforeJFinalStop");
   }
   
   public static String getBaseViewPath()

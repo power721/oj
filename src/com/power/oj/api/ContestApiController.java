@@ -16,7 +16,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
 
 
-@Before(GuestInterceptor.class)
+@Before(CheckGuestInterceptor.class)
 public class ContestApiController extends OjController
 {
   @ClearInterceptor(ClearLayer.ALL)

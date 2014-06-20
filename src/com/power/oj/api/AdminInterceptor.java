@@ -2,7 +2,7 @@ package com.power.oj.api;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
-import com.power.oj.core.OjController;
+import com.jfinal.core.Controller;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserService;
 
@@ -12,7 +12,7 @@ public class AdminInterceptor implements Interceptor
   @Override
   public void intercept(ActionInvocation ai)
   {
-    OjController controller = (OjController) ai.getController();
+    Controller controller = ai.getController();
     
     if (ShiroKit.isGuest())
     {

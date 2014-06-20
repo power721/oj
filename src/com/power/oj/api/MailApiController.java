@@ -8,7 +8,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.mail.MailModel;
 
-@Before(GuestInterceptor.class)
+@Before(CheckGuestInterceptor.class)
 public class MailApiController extends OjController
 {
   public void unRead()

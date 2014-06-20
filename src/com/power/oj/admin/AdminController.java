@@ -10,6 +10,7 @@ import com.power.oj.core.OjController;
 public class AdminController extends OjController
 {
   private static final AdminService adminService = AdminService.me();
+  
   public void index()
   {
     setAttrs(adminService.getSystemInfo());
@@ -29,4 +30,5 @@ public class AdminController extends OjController
     
     redirect("/admin");
   }
+  
 }

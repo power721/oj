@@ -4,7 +4,7 @@ import com.jfinal.aop.Before;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 
-@Before(GuestInterceptor.class)
+@Before(CheckGuestInterceptor.class)
 public class FriendApiController extends OjController
 {
   public void getGroupList()

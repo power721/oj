@@ -23,7 +23,7 @@ import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
 
-@Before(GuestInterceptor.class)
+@Before(CheckGuestInterceptor.class)
 public class UserApiController extends OjController
 {
   public void splash()

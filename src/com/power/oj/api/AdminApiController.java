@@ -8,7 +8,6 @@ import com.power.oj.core.OjController;
 @Before(AdminInterceptor.class)
 public class AdminApiController extends OjController
 {
-  private static final AdminService adminService = AdminService.me();
   
   public void problemList()
   {
@@ -83,7 +82,7 @@ public class AdminApiController extends OjController
     String name = getPara("name");
     String value = getPara("value");
     String type = getPara("type", "string");
-    int result = adminService.updateConfig(name, value, type);
+    int result = AdminService.me().updateConfig(name, value, type);
     
     if (result == 0)
     {

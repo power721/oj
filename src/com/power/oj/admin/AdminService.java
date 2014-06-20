@@ -42,10 +42,12 @@ import jodd.util.SystemUtil;
 
 public final class AdminService
 {
-  private final Logger log = Logger.getLogger(AdminService.class);
+  private static final int MAX_EDIT_DATA_SIZE = 2 * 1024 * 1024;
+  private static final Logger log = Logger.getLogger(AdminService.class);
   private static final AdminService me = new AdminService();
   
   private AdminService() {}
+  
   public static AdminService me()
   {
     return me;
@@ -103,10 +105,14 @@ public final class AdminService
   {
     switch(type)
     {
-      case "var":OjConfig.loadVariable();break;
-      case "lang":OjConfig.loadLanguage();break;
-      case "level":OjConfig.loadLevel();break;
-      default:OjConfig.loadConfig();
+      case "var":
+        OjConfig.loadVariable();break;
+      case "lang":
+        OjConfig.loadLanguage();break;
+      case "level":
+        OjConfig.loadLevel();break;
+      default:
+        OjConfig.loadConfig();
     }
   }
   
@@ -121,11 +127,16 @@ public final class AdminService
     
     switch (type)
     {
-      case "string":variable.setStringValue(value);break;
-      case "boolean":variable.setBooleanValue(Boolean.valueOf(value));break;
-      case "int":variable.setIntValue(Integer.parseInt(value));break;
-      case "text":variable.setTextValue(value);break;
-      default:return -2;
+      case "string":
+        variable.setStringValue(value);break;
+      case "boolean":
+        variable.setBooleanValue(Boolean.valueOf(value));break;
+      case "int":
+        variable.setIntValue(Integer.parseInt(value));break;
+      case "text":
+        variable.setTextValue(value);break;
+      default:
+        return -2;
     }
     variable.setType(type);
     
@@ -147,9 +158,8 @@ public final class AdminService
   
   public Page<Record> getLoginlog(int pageNumber, int pageSize)
   {
-    Page<Record> logs = Db.paginate(pageNumber, pageSize, "SELECT *",
-                        "FROM loginlog ORDER BY ctime DESC");
-    return logs;
+    return Db.paginate(pageNumber, pageSize, 
+        "SELECT *", "FROM loginlog ORDER BY ctime DESC");
   }
   
   public List<DataFile> getDataFiles(Integer pid)
@@ -182,7 +192,7 @@ public final class AdminService
     File destFile = new DataFile(pid, filename).getFile();
     
     FileUtil.moveFile(srcFile, destFile);
-    log.info(destFile.getAbsolutePath());
+    log.debug(destFile.getAbsolutePath());
     
     return destFile.getName();
   }
@@ -218,6 +228,7 @@ public final class AdminService
         if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
+        
         return "cannot read file.";
       }
     }
@@ -234,7 +245,7 @@ public final class AdminService
       try
       {
         String content = dataFile.readString();
-        if (content != null && content.length() >= 2 * 1024 * 1024)
+        if (content != null && content.length() >= MAX_EDIT_DATA_SIZE)
         {
           content = null;
         }
@@ -244,6 +255,7 @@ public final class AdminService
         if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
+        
         return null;
       }
     }
@@ -271,6 +283,7 @@ public final class AdminService
         if (OjConfig.isDevMode())
           e.printStackTrace();
         log.error(e.getLocalizedMessage());
+        
         return false;
       }
     }
@@ -294,6 +307,7 @@ public final class AdminService
       if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
+      
       return false;
     }
     
@@ -314,6 +328,7 @@ public final class AdminService
       if (OjConfig.isDevMode())
         e1.printStackTrace();
       log.error(e1.getLocalizedMessage());
+      
       return problemList;
     }
     
@@ -325,6 +340,7 @@ public final class AdminService
       if (OjConfig.isDevMode())
         e.printStackTrace();
       log.error(e.getLocalizedMessage());
+      // why continue?
     }
 
     Element root = document.getRootElement();
@@ -373,6 +389,7 @@ public final class AdminService
           if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
+          
           return null;
         }
       }
@@ -389,6 +406,7 @@ public final class AdminService
           if (OjConfig.isDevMode())
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
+          
           return null;
         }
         

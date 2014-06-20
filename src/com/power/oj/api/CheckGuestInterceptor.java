@@ -5,7 +5,7 @@ import com.jfinal.core.ActionInvocation;
 import com.power.oj.core.OjController;
 import com.power.oj.shiro.ShiroKit;
 
-public class GuestInterceptor implements Interceptor
+public class CheckGuestInterceptor implements Interceptor
 {
 
   @Override

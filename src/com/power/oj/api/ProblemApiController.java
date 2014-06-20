@@ -12,7 +12,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.user.UserService;
 
-@Before(GuestInterceptor.class)
+@Before(CheckGuestInterceptor.class)
 public class ProblemApiController extends OjController
 {
   @ClearInterceptor(ClearLayer.ALL)
