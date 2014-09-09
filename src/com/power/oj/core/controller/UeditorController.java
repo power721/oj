@@ -16,7 +16,7 @@ import jodd.util.StringUtil;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
-import sun.misc.BASE64Decoder;
+import org.apache.commons.codec.binary.Base64;
 
 import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
@@ -100,13 +100,12 @@ public class UeditorController extends OjController
 
     String state = "SUCCESS";
     String base64Data = getPara("content");
-    BASE64Decoder decoder = new BASE64Decoder();
     File outFile = new File(new StringBuilder(3).append(OjConfig.uploadPath).append(File.separator).append(FileKit.getNewName("test.png")).toString());
     OutputStream ro;
     try
     {
       ro = new FileOutputStream(outFile);
-      byte[] b = decoder.decodeBuffer(base64Data);
+      byte[] b = Base64.decodeBase64(base64Data);
       for (int i = 0; i < b.length; ++i)
       {
         if (b[i] < 0)

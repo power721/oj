@@ -11,7 +11,7 @@ import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 
-import sun.misc.BASE64Decoder;
+import org.apache.commons.codec.binary.Base64;
 
 public class FpsImage
 {
@@ -33,7 +33,7 @@ public class FpsImage
     
     try
     {
-      byte[] decodeBuffer = new BASE64Decoder().decodeBuffer(base64);
+      byte[] decodeBuffer = Base64.decodeBase64(base64);
       FileUtil.touch(imageFile);
       FileUtil.writeBytes(imageFile, decodeBuffer);
     } catch (IOException e1)
