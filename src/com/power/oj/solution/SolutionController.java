@@ -1,6 +1,7 @@
 package com.power.oj.solution;
 
 import jodd.util.StringUtil;
+import jodd.util.HtmlEncoder;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
@@ -110,6 +111,7 @@ public class SolutionController extends OjController
     {
       log.warn(e.getLocalizedMessage());
     }
+    solutionModel.setError(HtmlEncoder.text(solutionModel.getError()));
     
     setAttr("language", OjConfig.languageName.get(solutionModel.getLanguage()));
     setAttr("resultLongName", resultType.getLongName());
