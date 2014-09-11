@@ -1,0 +1,20 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'jetty'
+
+repositories {
+   flatDir {
+        dirs 'WebRoot/WEB-INF/lib'
+    }
+    mavenCentral()
+}
+
+dependencies {
+   providedCompile 'javax.servlet:servlet-api:2.5'
+   runtime 'javax.servlet:jstl:1.1.2'
+}
+
+war {
+    webAppDirName = 'WebRoot'
+}

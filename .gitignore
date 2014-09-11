@@ -4,3 +4,6 @@
 *.war
 *.ear
 *.log
+build/
+.gradle/
+
