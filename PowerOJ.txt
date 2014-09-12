@@ -1,4 +1,4 @@
-用户注册    OK
+﻿用户注册    OK
 用户登录    OK
 用户退出    OK
 用户信息    -OK
@@ -137,7 +137,7 @@ diff文件
 用户权限：
 查看代码、编辑tag、编辑帖子、编辑题目、上传、头像
 
-
+chenxian test
 --------------------------- return code --------------------
 0  Success
 1  Bad Parameter
