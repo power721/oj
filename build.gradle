@@ -1,20 +1,44 @@
 apply plugin: 'java'
 apply plugin: 'war'
-apply plugin: 'eclipse'
-apply plugin: 'jetty'
 
+// Depending upon the fact that one uses default
+// WebRoot folder to store web resources. Change
+// name to name of WebRoot folder appropriately.
+def webRoot = "WebRoot"
+def webInfPath = webRoot + "/" + "WEB-INF"
+ 
+// Repositories accessed from local directory
 repositories {
-   flatDir {
-        dirs 'WebRoot/WEB-INF/lib'
+    flatDir { 
+        dirs webInfPath + "/" + "lib"
     }
     mavenCentral()
 }
-
-dependencies {
-   providedCompile 'javax.servlet:servlet-api:2.5'
-   runtime 'javax.servlet:jstl:1.1.2'
+ 
+// Source folder defined as Eclipse stores Java source code
+// in non-maven based folder structure
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src'
+        }
+    }
 }
 
+dependencies {
+    providedCompile 'javax.servlet:servlet-api:2.5'
+    providedCompile 'javax.websocket:javax.websocket-api:1.0'
+    // Compile time dependencies read from local directory
+    compile fileTree(dir: webInfPath + "/" + "lib", include: '*.jar')
+    runtime 'javax.servlet:jstl:1.1.2'
+}
+ 
 war {
-    webAppDirName = 'WebRoot'
+    webInf { from webInfPath } // adds a file-set to the WEB-INF dir.
+    from(webRoot) { fileTree(dir: 'assets/*') } //Copy assets folder to WEB-INF level
+    // classpath fileTree(webInfPath + "/" + "lib") // adds a file-set to the WEB-INF/lib dir.
+    // webXml = file(webInfPath + "/" + "web.xml") // copies a file to WEB-INF/web.xml
 }
