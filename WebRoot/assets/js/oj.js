@@ -98,6 +98,7 @@ $(document).ready(function() {
           $("#loginMsg", loginForm).fadeTo(100, 0.1, function() {
             $(this).removeClass().addClass('alert alert-error').html(data.result).fadeTo(300, 1);
           });
+          $("input#inputPassword", loginForm).val("")
           $("input:submit,button:submit,.btn", loginForm).removeAttr("disabled", "disabled").removeClass("disabled");
         }
       }
