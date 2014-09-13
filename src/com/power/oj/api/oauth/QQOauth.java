@@ -24,7 +24,7 @@ public class QQOauth extends Oauth
     super();
     setClientId(OjConfig.getString("openid_qq"));
     setClientSecret(OjConfig.getString("openkey_qq"));
-    setRedirectUri(OjConfig.getBaseUrl() + "/" + REDIRECT_URI);
+    setRedirectUri(OjConfig.getBaseURL() + "/" + REDIRECT_URI);
   }
 
   public String getAuthorizeUrl()

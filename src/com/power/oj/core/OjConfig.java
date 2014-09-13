@@ -23,7 +23,7 @@ import com.power.oj.util.FileKit;
  */
 public class OjConfig
 {
-  private static String baseUrl = null;
+  private static String baseURL = null;
   public static String siteTitle = null;
   public static String userAvatarPath = null;
   public static String problemImagePath = null;
@@ -147,14 +147,14 @@ public class OjConfig
     }
   }
 
-  public static String getBaseUrl()
+  public static String getBaseURL()
   {
-    return baseUrl;
+    return baseURL;
   }
 
-  public static void setBaseUrl(String baseUrl)
+  public static void setBaseURL(String baseUrl)
   {
-    OjConfig.baseUrl = baseUrl;
+    OjConfig.baseURL = baseUrl;
   }
 
   /*

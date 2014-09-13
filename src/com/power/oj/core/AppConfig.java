@@ -247,6 +247,9 @@ public class AppConfig extends JFinalConfig
     if (!OjConfig.isDevMode())
     {
       EhcacheService.start();
+      
+      loadPropertyFile("oj.properties");
+      OjConfig.setBaseURL(getProperty("baseURL", null));
     }
     ExpiresSessionService.start();
 
