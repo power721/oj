@@ -286,3 +286,6 @@ ALTER TABLE topic ADD `threadId` int(9) DEFAULT 0,
 
 #2014-06-04
 ALTER TABLE topic ADD `orderNum` int(9) DEFAULT 0;
+
+#2014-09-14
+ALTER TABLE session CHANGE `ipAddress` `ipAddress` varchar(45) NULL DEFAULT '';

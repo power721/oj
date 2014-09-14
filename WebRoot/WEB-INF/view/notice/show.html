@@ -1,7 +1,11 @@
 <@override name="content">
+<div>
+<a href="notice">Notice List</a> &gt;&gt; <a href="notice/show/${notice.id!}">${notice.title!}</a>
+</div>
+<hr>
 <h3 class="text-center">${notice.title!}</h3>
 <div class="row text-center">
-  <div class="span4 offset4">
+  <div class="span8 offset2">
     <#if adminUser??>
     <div class="notice-admin">
       <a href="notice/edit/${notice.id!}" class="btn btn-primary">Edit</a> 
@@ -14,7 +18,7 @@
   </div>
 </div>
 <div class="row content" id="notice-content">
-  <div class="span4 offset4">
+  <div class="span8 offset2">
     <pre>${notice.content!}</pre>
   </div>
 </div>
