@@ -60,11 +60,11 @@
 </@override>
 
 <@override name="scripts">
-<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   $(document).ready(function() {
     document.onkeydown=nextpage;
     var prevpage="contest/rank/${cid!}-${contestRank.pageNumber-1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"

@@ -2,7 +2,7 @@
 <div class="row">
   <div class="span4">
     <h4>Statistics</h4>
-    <table id="problem-status" class="table table-hover table-condensed table-bordered">
+    <table id="problem-statistics" class="table table-hover table-condensed table-bordered">
       <tbody>
         <tr>
           <td>Total Submissions</td>
@@ -83,7 +83,7 @@
 
 <@override name="scripts">
   <#if oj_style != "slate">
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
@@ -245,7 +245,7 @@
       problemStatus(url);
       
       <#if oj_style != "slate">
-      $("table#problem-status").tablecloth({
+      $("table#problem-status, table#problem-statistics").tablecloth({
         theme:"stats",
         condensed:true,
         sortable:false,

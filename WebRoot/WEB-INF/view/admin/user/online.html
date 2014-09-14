@@ -58,16 +58,16 @@
 </@override>
 
 <@override name="scripts">
-  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' type="text/css">
   <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
   <#if oj_style != "slate">
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
   </#if>
 
-  <script type="text/javascript" charset="utf-8">
+  <script type="text/javascript">
     $(document).ready(function() {
       $('.timestamp').each(function() {
         $(this).html(getLocalTime($(this).attr('data')));

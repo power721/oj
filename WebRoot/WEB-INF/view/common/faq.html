@@ -5,11 +5,11 @@
     <div class="box">
       <div class="faq">
         <div class="faq_title">
-          <img width="32px" height="32px" src="assets/images/search.gif" />
+          <img width="32" height="32" alt="search" src="assets/images/search.gif" />
           <b> Frequently Asked Questions</b>
         </div>
         <div class="faq_content">
-          <a name="io"></a>
+          <a id="io"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：我的程序要在哪里输入和输出数据？
           </div>
@@ -21,7 +21,7 @@
             <p class="text-warning">注意：不要在程序中输出任何题目未要求的提示信息。</p>
           </div>
           
-          <a name="multi-io"></a>
+          <a id="multi-io"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：当有多组测试数据时,该如何判断循环结束呢?
           </div>
@@ -46,7 +46,7 @@ int main()
 <br>
 </div>
 -->
-          <a name="compiler"></a>
+          <a id="compiler"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：本OnlineJudge提供哪些编译器？编译环境是怎么样的？
           </div>
@@ -67,7 +67,7 @@ int main()
             </ul>
           </div>
 
-          <a name="ce"></a>
+          <a id="ce"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：为什么我得到了CE？而在我的电脑上运行的很好？
           </div>
@@ -79,16 +79,16 @@ int main()
             <p class="text-warning">当你使用G++、GCC时<code>main()</code>函数返回值必须是<code>int</code>，否则你可能会得到CE。</p>
           </div>
 
-          <a name="spj"></a>
+          <a id="spj"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：有些题目上面有<span class="badge badge-important">SPJ</span>是什么意思？
           </div>
           <div class="faq_content_A">
-            <span class="A">A</span>：SPJ(Special Judged)是指本题可能有多个正确的解。你的程序输出的答案将被一个SPJ的程序检测，以判断你的程序是否正确。</br> 
+            <span class="A">A</span>：SPJ(Special Judged)是指本题可能有多个正确的解。你的程序输出的答案将被一个SPJ的程序检测，以判断你的程序是否正确。<br/> 
             <p class="text-warning">请注意：SPJ的题目一般不会判出PE，所以请确保你的程序输出格式正确。</p>
           </div>
 
-          <a name="int64"></a>
+          <a id="int64"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：我要怎么使用64位整数？
           </div>
@@ -97,22 +97,21 @@ int main()
             在C/C++和Pascal语言中，你可以用以下方法使用64位整数：
             <ul>
               <li>有符号64位整数，取值范围为：-9223372036854775808 到 9223372036854775807。
-                <center>
                   <table class="table table-bordered">
-                    <tr align=center>
+                    <tr class="center">
                       <td>编译器</td>
                       <td>GCC/G++</td>
                       <td>Pascal</td>
                       <td>VC/VC++</td>
                     </tr>
-                    <tr align=center>
+                    <tr class="center">
                       <td>类型名称</td>
                       <td>long long</td>
                       <td>int64</td>
                       <td>__int64(非标准)<br>long long
                       </td>
                     </tr>
-                    <tr align=center>
+                    <tr class="center">
                       <td>输入方法</td>
                       <td>scanf("%lld", &amp;x);<br>cin >> x;
                       </td>
@@ -120,7 +119,7 @@ int main()
                       <td>scanf("%lld", &amp;x);<br>cin >> x;
                       </td>
                     </tr>
-                    <tr align=center>
+                    <tr class="center">
                       <td>输出方法</td>
                       <td>printf("%lld", x);<br>cout &lt;&lt; x;
                       </td>
@@ -129,25 +128,23 @@ int main()
                       </td>
                     </tr>
                   </table>
-                </center>
               </li>
               <li>无符号64位整数，取值范围为：0 到 18446744073709551615。
-                <center>
                   <table class="table table-bordered">
-                    <tr align=center>
+                    <tr class="center">
                       <td>编译器</td>
                       <td>GCC/G++</td>
                       <td>Pascal</td>
                       <td>VC/VC++</td>
                     </tr>
-                    <tr align=center>
+                    <tr class="center">
                       <td>类型名称</td>
                       <td>unsigned long long</td>
                       <td>qword</td>
                       <td>unsigned __int64(非标准)<br>unsigned long long
                       </td>
                     </tr>
-                    <tr align=center>
+                    <tr class="center">
                       <td>输入方法</td>
                       <td>scanf("%llu", &x);<br>cin >> x;
                       </td>
@@ -155,7 +152,7 @@ int main()
                       <td>scanf("%llu", &x);<br>cin >> x;
                       </td>
                     </tr>
-                    <tr align=center>
+                    <tr class="center">
                       <td>输出方法</td>
                       <td>printf("%llu", x);<br>cout &lt;&lt; x;
                       </td>
@@ -164,13 +161,12 @@ int main()
                       </td>
                     </tr>
                   </table>
-                </center>
               </li>
             </ul>
             <p class="text-warning">请注意：GCC/G++不能使用__int64。</p>
           </div>
 
-          <a name="result"></a>
+          <a id="result"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：OJ返回的结果分别是什么意思？
           </div>
@@ -207,7 +203,7 @@ int main()
             <p class="text-warning">注意：对于Java语言，有极少部分可能将RF或RE误判成WA。</p>
           </div>
 
-          <a name="key"></a>
+          <a id="key"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：我提交代码时能使用快捷键吗？
           </div>
@@ -221,7 +217,7 @@ int main()
             </dl>
           </div>
 
-          <a name="sample"></a>
+          <a id="sample"></a>
           <div class="faq_content_Q">
             <span class="Q">Q</span>：1000题A+B怎么解答？
           </div>
@@ -324,13 +320,13 @@ int main()
 </@override>
 
 <@override name="scripts">
-<link href="assets/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
-<link href="assets/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+<link href="assets/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css">
+<link href="assets/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css">
 <script src='assets/syntaxhighlighter/scripts/shCore.js' type='text/javascript'></script>
 <script src='assets/syntaxhighlighter/scripts/shBrushCpp.js' type='text/javascript'></script>
 <script src='assets/syntaxhighlighter/scripts/shBrushJava.js' type='text/javascript'></script>
 <script src='assets/syntaxhighlighter/scripts/shBrushDelphi.js' type='text/javascript'></script>
 <script src='assets/syntaxhighlighter/scripts/shBrushPython.js' type='text/javascript'></script>
-<script language='javascript' type='text/javascript'>SyntaxHighlighter.config.tagName = 'textarea';SyntaxHighlighter.all();</script>
+<script type='text/javascript'>SyntaxHighlighter.config.tagName = 'textarea';SyntaxHighlighter.all();</script>
 </@override>
 <@extends name="../common/_layout.html" />
