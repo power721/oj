@@ -40,9 +40,9 @@
                   <td class="timestamp" data="${User.ctime!}"></td>
                   <td class="timestamp" data="${User.lastActivity!}"></td>
                   <td class="timestamp" data="${User.sessionExpires!}"></td>
-                  <td>${User.ipAddress!}</td>
+                  <td class="ip">${User.ipAddress!}</td>
                   <td>${User.userAgent!}</td>
-                  <td><a href="${baseUrl!}${User.uri!}" target="_blank">${User.uri!}</a></td>
+                  <td class="uri"><a href="${baseUrl!}${User.uri!}" target="_blank">${User.uri!}</a></td>
                 </tr>
                 </#list> 
                 </#if>
