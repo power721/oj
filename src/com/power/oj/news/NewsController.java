@@ -19,7 +19,7 @@ public class NewsController extends OjController {
 	private static final NewsModel dao = NewsModel.dao;
 
 	public void index() {
-		int pageNumber = 1;
+		/*int pageNumber = 1;
 		int pageSize = OjConfig.noticePageSize;
 		setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
 		setAttr("problemsNumber", problemService.getProblemsNumber());
@@ -32,18 +32,21 @@ public class NewsController extends OjController {
 		pageSize = OjConfig.newsPageSize;
 		pageNumber = getParaToInt(0, 1);
 		setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
-	}
-
-	public void show() {
+		*/
 		int pageSize = 20;
 		int pageNumber = getParaToInt(0, 1);
 		setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
 	}
 
-	public void each() {
+	public void show() {
+		/*int pageSize = 20;
+		int pageNumber = getParaToInt(0, 1);
+		setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
+		*/
 		int id = getParaToInt(0);
 		setAttr("news", newsService.getNews(id));
 	}
+
 
 	@RequiresPermissions("news:add")
 	public void add() {
@@ -59,14 +62,14 @@ public class NewsController extends OjController {
 	@RequiresPermissions("news:add")
 	public void save() {
 		String author = getPara("author");
-		String iconPath = getPara("iconPath");
+		String imagePath = getPara("imagePath");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		NewsModel newsModel = getModel(NewsModel.class, "news");
 		try {
 			Date newDate = new Date();
 			String publishTime = sdf.format(newDate);
 			newsModel.setAuthor(author);
-			newsModel.setIcon(iconPath);
+			newsModel.setImage(imagePath);
 			newsModel.setTime((int) (sdf.parse(publishTime).getTime() / 1000));
 		} catch (ParseException e) {
 			if (OjConfig.isDevMode())
@@ -81,7 +84,7 @@ public class NewsController extends OjController {
 					MessageType.ERROR, getText("message.error.title")));
 		}
 
-		redirect("/news/show");
+		redirect("/news");
 	}
 
 	@RequiresPermissions("news:edit")
@@ -95,14 +98,14 @@ public class NewsController extends OjController {
 	@RequiresPermissions("news:edit")
 	public void update() {
 		String author = getPara("author");
-		String iconPath = getPara("iconPath");
+		String imagePath = getPara("imagePath");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		NewsModel newsModel = getModel(NewsModel.class, "news");
 		try {
 			Date newDate = new Date();
 			String publishTime = sdf.format(newDate);
 			newsModel.setAuthor(author);
-			newsModel.setIcon(iconPath);
+			newsModel.setImage(imagePath);
 			newsModel.setTime((int) (sdf.parse(publishTime).getTime() / 1000));
 		} catch (ParseException e) {
 			if (OjConfig.isDevMode())
@@ -117,18 +120,18 @@ public class NewsController extends OjController {
 					MessageType.ERROR, getText("message.error.title")));
 		}
 
-		redirect("/news/each/" + newsModel.getId());
+		redirect("/news/show/" + newsModel.getId());
 	}
 	
 	@RequiresPermissions("news:show")
-	public void delect(){
+	public void delete(){
 		Integer id = getParaToInt("id");
-		if(newsService.delectNews(id)){
-			setFlashMessage(new FlashMessage("Delect news successful!"));
+		if(newsService.deleteNews(id)){
+			setFlashMessage(new FlashMessage("Delete news successful!"));
 		} else {
-			setFlashMessage(new FlashMessage("Delect news failed!",
+			setFlashMessage(new FlashMessage("Delete news failed!",
 					MessageType.ERROR, getText("message.error.title")));
 		}
-		redirect("/news/show");
+		redirect("/news");
 	}
 }

@@ -1,68 +1,26 @@
 <@override name="content">
-
-<div class="pagination pagination-centered">
-  <#if adminUser??>
-  <div class="pull-left notice-admin">
-    <a href="news/add" class="btn btn-primary">Add a news</a> 
+<h3 class="text-center">${news.title!}</h3>
+<div class="row text-center">
+  <div clas="span4 offset4">
+    <#if adminUser??>
+    <div class="notice-admin">
+      <a href="news/edit/${news.id!}" class="btn btn-primary">Edit</a> 
+    </div>
+    </#if>
+    <span>Published time</span>: <span class="time">${news.publishTime!}</span><br>
+    <span>Author</span>: <span class="name">${news.author!}</span>
+    <span>View</span>: <span class="pts">${news.view!}</span><br>
   </div>
-  </#if>
-  <#include "../common/_paginate.html" />
-  <@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/show/" />
-  <div class="pull-right">
-    <span class="badge badge-info">${newsList.pageNumber}/${newsList.totalPage} Pages</span> 
-    <span class="badge badge-info">${newsList.totalRow} Records</span>
+</div>
+<div class="row content" id="notice-content">
+  <div clas="span4 offset4">
+ 	 
+    <pre><div class="cxImage" ><img src="${news.image}"></div></br>${news.content!}</pre>
   </div>
 </div>
 
-<table id="news-list" class="table table-hover table-condensed">
-  <thead>
-    <tr>
-      <th width="10%">No.</th>
-      <th width="60%">Title</th>
-      <th width="10%">Author</th>
-      <th width="10%">Published Time</th>
-      <th width="10%">Delect</th>
-    </tr>
-  </thead>
-  <tbody>
-    <#if newsList??> 
-    <#list newsList.list as news>
-      <tr>
-        <td><a href="news/each/${news.id!}">${news.id!}</a></td>
-        <td class="title"><a href="news/each/${news.id!}">${news.title!}</a></td>
-        <td class="user">${news.author!}</td>
-        <td class="timestamp" data="${news.time!}"></td>
-        <td ><a href="news/delect?id=${news.id}"><i class="icon-remove"></i></a></td>
-      </tr>
-    </#list>
-    </#if>
-  </tbody>
-</table>
 </@override>
 
 <@override name="scripts">
-  
-  <#if oj_style != "slate">
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
-  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-
-  <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-      $('.timestamp').each( function() {
-        var that = $(this);
-        that.html(parseTimestamp(that.attr('data')));
-      });
-      
-      $("#news-list").tablecloth({
-        theme:"stats",
-        condensed:true,
-        sortable:false,
-        striped:true,
-        clean:true
-      });
-    });
-  </script>
-</#if>
 </@override>
 <@extends name="../common/_layout.html" />

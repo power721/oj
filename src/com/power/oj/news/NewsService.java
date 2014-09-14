@@ -40,7 +40,7 @@ public class NewsService
     newNews.setTitle(newsModel.getTitle());
     newNews.setTime(newsModel.getTime());
     newNews.setContent(newsModel.getContent());
-    newNews.setIcon(newsModel.getIcon());
+    newNews.setImage(newsModel.getImage());
     newNews.setAuthor(newsModel.getAuthor());
     return newNews.save();
   }
@@ -55,11 +55,11 @@ public class NewsService
     newNews.setTime(newsModel.getTime());
     newNews.setContent(newsModel.getContent());
     newNews.setAuthor(newsModel.getAuthor());
-    newNews.setIcon(newsModel.getIcon());
+    newNews.setImage(newsModel.getImage());
     return newNews.update();
   }
   
-  public boolean delectNews(Integer id){
+  public boolean deleteNews(Integer id){
 	  return dao.deleteById(id);
   }
 }

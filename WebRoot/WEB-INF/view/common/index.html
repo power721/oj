@@ -31,7 +31,7 @@
 	<ul class="slides">
 		<#list newsList.list as news>
 		<li>
-			<div class="titlepimg">${news.title!}</div> <img src="${news.icon}" />
+			<div class="titlepimg">${news.title!}</div> <img src="${news.image}" />
 		</li> </#list>
 	</ul>
 </div>
@@ -40,7 +40,7 @@
 <#if newsList?? & (newsList.list.size() > 0) > 
 <#list newsList.list as news>
 <div class="news">
-	<a href="news/each/${news.id}"><h3 class="title">${news.title!}</h3></a>
+	<a href="news/show/${news.id}"><h3 class="title">${news.title!}</h3></a>
 	<p style="text-align: right;position:relative;top:-10px">
 		On <span class="timestamp" data="${news.time!}"></span> By <span
 			class="author">${news.author!}</span>

@@ -1,79 +1,72 @@
 <@override name="content">
-<div class="hero-unit">
-	<h1>Welcome to PowerOJ 2.0!</h1>
-	<p>
-		IE 7+, Opera 11+, Safari 5+, Firefox 5+ and Chrome 14+ are <span
-			class="badge badge-important"><b>REQUIRED</b></span> according to <a
-			href="https://github.com/twitter/bootstrap/wiki/browser-Compatibility"
-			target='_blank'>bootstrap compatibility page</a>.<br> If you
-		have none of them, click <a href='http://www.oj.swust.edu.cn/oj/'
-			target='_blank'>here</a> for the original PowerOJ.<br> Enjoy and
-		have fun!
-	</p>
+
+<div class="pagination pagination-centered">
+  <#if adminUser??>
+  <div class="pull-left notice-admin">
+    <a href="news/add" class="btn btn-primary">Add a news</a> 
+  </div>
+  </#if>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
+  <div class="pull-right">
+    <span class="badge badge-info">${newsList.pageNumber}/${newsList.totalPage} Pages</span> 
+    <span class="badge badge-info">${newsList.totalRow} Records</span>
+  </div>
 </div>
 
-<div class="cxboard">
-	<a href="notice"><h3 class="title">Notice公告</h3></a>
-	<table class="entry">
-		<#if noticeList?? & (noticeList.list.size()>0) > 
-		<#list noticeList.list as notice> 
-		<tr>
-		<td>
-		<a href="notice/show/${notice.id!}">${notice.title!}</a>
-		</td> 
-		</tr>
-		<#if (notice_index > 8)><#break></#if>
-		</#list> 
-		</#if>
-	</table>
+<table id="news-list" class="table table-hover table-condensed">
+  <thead>
+    <tr>
+      <th width="10%">No.</th>
+      <th width="60%">Title</th>
+      <th width="10%">Author</th>
+      <th width="10%">Published Time</th>
+      <th width="10%">Delete</th>
+    </tr>
+  </thead>
+  <tbody>
+    <#if newsList??> 
+    <#list newsList.list as news>
+      <tr>
+        <td><a href="news/show/${news.id!}">${news.id!}</a></td>
+        <td class="title"><a href="news/show/${news.id!}">${news.title!}</a></td>
+        <td class="user">${news.author!}</td>
+        <td class="timestamp" data="${news.time!}"></td>
+        <td >
+        <#if adminUser??>
+        <a href="news/delete?id=${news.id}"><i class="icon-remove"></i></a>
+        </#if>
+        </td>
+      </tr>
+    </#list>
+    </#if>
+  </tbody>
+</table>
+</@override>
 
-	<a href="contest"><h3 class="title">Contest比賽預告</h3></a>
-	<table class="entry">
-		<#if contestList?? & (contestList.list.size()>0) > 
-		<#list contestList.list as Contest> 
-		<#if (Contest.cstatus == "Pending") >
-		<tr>
-		<td>
-		<a href="contest/show/${Contest.cid!}">${Contest.title!}-- ${Contest.startDateTime!}</a>
-		</td> 
-		</tr>
-		</#if> 
-		</#list> 
-		</#if>
-	</table>
+<@override name="scripts">
+  
+  <#if oj_style != "slate">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-</div>
-
-<#if newsList?? & (newsList.list.size() > 0) >
-<div class="flexslider">
-	<ul class="slides">
-		<#list newsList.list as news>
-		<li>
-			<div class="titlepimg">${news.title!}</div> <img src="${news.icon}" />
-		</li> </#list>
-	</ul>
-</div>
-</#if> 
-
-<#if newsList?? & (newsList.list.size() > 0) > 
-<#list newsList.list as news>
-<div class="news">
-	<a href="news/each/${news.id}"><h3 class="title">${news.title!}</h3></a>
-	<p style="text-align: right;position:relative;top:-10px">
-		On <span class="timestamp" data="${news.time!}"></span> By <span
-			class="author">${news.author!}</span>
-	</p>
-	<p class="entry">${news.content?substring(0,34)}...</p>
-</div>
-</#list>
-
-<div class="pagination pagination-centered" style="position:relative;top:50px;float:left;left:32%">
-	<#include "../common/_paginate.html" /> 
-	<@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
-</div>
-</#if> 
-
-</@override> 
-<@override name="scripts"> 
-</@override> 
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+      $('.timestamp').each( function() {
+        var that = $(this);
+        that.html(parseTimestamp(that.attr('data')));
+      });
+      
+      $("#news-list").tablecloth({
+        theme:"stats",
+        condensed:true,
+        sortable:false,
+        striped:true,
+        clean:true
+      });
+    });
+  </script>
+</#if>
+</@override>
 <@extends name="../common/_layout.html" />

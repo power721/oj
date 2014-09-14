@@ -14,7 +14,7 @@ public class NewsModel extends Model<NewsModel> {
 	public static final String CONTENT = "content";
 	public static final String TIME = "time";
 	public static final String AUTHOR = "author";
-	public static final String ICON = "icon";
+	public static final String IMAGE = "image";
 	public static final String VIEW = "view";
 	
 	public Integer getId()
@@ -77,13 +77,13 @@ public class NewsModel extends Model<NewsModel> {
 	    return set(VIEW, value);
 	  }
 	  
-	  public String getIcon()
+	  public String getImage()
 	  {
-		  return getStr(ICON);
+		  return getStr(IMAGE);
 	  }
 	  
-	  public NewsModel setIcon(String value)
+	  public NewsModel setImage(String value)
 	  {
-		  return set(ICON, value);
+		  return set(IMAGE, value);
 	  }
 }
