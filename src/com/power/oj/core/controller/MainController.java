@@ -3,6 +3,7 @@ package com.power.oj.core.controller;
 import com.jfinal.aop.ClearInterceptor;
 import com.jfinal.aop.ClearLayer;
 import com.jfinal.ext.render.CaptchaRender;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 
@@ -19,6 +20,15 @@ public class MainController extends OjController
   {
     setAttr("problemsNumber", problemService.getProblemsNumber());
     setTitle(getText("page.index.title"));
+    int pageNumber = getParaToInt(0, 1);
+    int pageSize = getParaToInt(1, OjConfig.noticePageSize);
+    Integer type = getParaToInt("type", -1);
+    Integer status = getParaToInt("status", 0);
+    setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
+    pageSize = OjConfig.contestPageSize;
+    setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status));
+    pageSize = OjConfig.newsPageSize;
+    setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
   }
 
   public void about()

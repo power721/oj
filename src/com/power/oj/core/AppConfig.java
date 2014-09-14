@@ -69,6 +69,10 @@ import com.power.oj.mail.MailController;
 import com.power.oj.mail.MailModel;
 import com.power.oj.notice.NoticeController;
 import com.power.oj.notice.NoticeModel;
+import com.power.oj.honor.HonorController;
+import com.power.oj.honor.HonorModel;
+import com.power.oj.news.NewsModel;
+import com.power.oj.news.NewsController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.EhcacheService;
@@ -140,6 +144,8 @@ public class AppConfig extends JFinalConfig
     me.add("/discuss", DiscussionController.class);
     me.add("/mail", MailController.class);
     me.add("/notice", NoticeController.class);
+    me.add("/honor", HonorController.class);
+    me.add("/news", NewsController.class);
     me.add("/problem", ProblemController.class);
     me.add("/solution", SolutionController.class);
     me.add("/ueditor", UeditorController.class, "/common/");
@@ -182,6 +188,8 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("mail", MailModel.class);
     arp.addMapping("mail_content", MailContentModel.class);
     arp.addMapping("notice", NoticeModel.class);
+    arp.addMapping("honors", HonorModel.class);
+    arp.addMapping("news", NewsModel.class);
     arp.addMapping("problem", "pid", ProblemModel.class);
     arp.addMapping("program_language", ProgramLanguageModel.class);
     arp.addMapping("role", RoleModel.class);

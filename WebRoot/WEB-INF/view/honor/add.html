@@ -1,0 +1,48 @@
+<@override name="content">
+<form class="form-horizontal" action="honor/save" method="post">
+  <div class="control-group notice <#if titleMsg??>error</#if>">
+    <label class="ueditor control-label" for="inputLevel">Level</label>
+    <div class="controls">
+      <textarea id="inputTitle" name="honor.level" rows="1" cols="100" required></textarea>
+      <p class="text-error">${titleMsg!}</p>
+    </div>
+  </div>
+  <div class="control-group notice">
+    <label class="control-label" for="inputContest">Contest</label>
+    <div class="controls" id="Contest">
+      <input size="50" type="text" name="honor.contest" id="inputContest">
+    </div>
+  </div>
+  
+  <div class="control-group notice">
+    <label class="control-label" for="inputTeam">Team</label>
+    <div class="controls" id="team">
+      <input size="30" type="text" name="honor.team" id="inputTeam">
+    </div>
+  </div>
+  
+  <div class="control-group notice">
+    <label class="control-label" for="inputPlayer">Team Members</label>
+    <div class="controls" id="members">
+      <input size="30" type="text" name="honor.player" id="inputPlayer">
+    </div>
+  </div>
+  
+  <div class="control-group notice">
+    <label class="control-label" for="inputPrize">Prize</label>
+    <div class="controls" id="prize">
+      <input size="15" type="text" name="honor.prize" id="inputPrize">
+    </div>
+  </div>
+  
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="reset" class="btn btn-info">Reset</button>
+    </div>
+  </div>
+</form>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

@@ -16,6 +16,7 @@ import com.power.oj.discussion.DiscussionService;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.mail.MailService;
 import com.power.oj.notice.NoticeService;
+import com.power.oj.news.NewsService;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.social.SocialService;
 import com.power.oj.solution.SolutionService;
@@ -37,6 +38,7 @@ public class OjController extends Controller
   protected static JudgeService judgeService = JudgeService.me();
   protected static MailService mailService = MailService.me();
   protected static NoticeService noticeService = NoticeService.me();
+  protected static NewsService newsService = NewsService.me();
   protected static OjService ojService = OjService.me();
   protected static ProblemService problemService = ProblemService.me();
   protected static SessionService sessionService = SessionService.me();

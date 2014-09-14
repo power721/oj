@@ -1,0 +1,79 @@
+<@override name="content">
+<div class="hero-unit">
+	<h1>Welcome to PowerOJ 2.0!</h1>
+	<p>
+		IE 7+, Opera 11+, Safari 5+, Firefox 5+ and Chrome 14+ are <span
+			class="badge badge-important"><b>REQUIRED</b></span> according to <a
+			href="https://github.com/twitter/bootstrap/wiki/browser-Compatibility"
+			target='_blank'>bootstrap compatibility page</a>.<br> If you
+		have none of them, click <a href='http://www.oj.swust.edu.cn/oj/'
+			target='_blank'>here</a> for the original PowerOJ.<br> Enjoy and
+		have fun!
+	</p>
+</div>
+
+<div class="cxboard">
+	<a href="notice"><h3 class="title">Notice公告</h3></a>
+	<table class="entry">
+		<#if noticeList?? & (noticeList.list.size()>0) > 
+		<#list noticeList.list as notice> 
+		<tr>
+		<td>
+		<a href="notice/show/${notice.id!}">${notice.title!}</a>
+		</td> 
+		</tr>
+		<#if (notice_index > 8)><#break></#if>
+		</#list> 
+		</#if>
+	</table>
+
+	<a href="contest"><h3 class="title">Contest比賽預告</h3></a>
+	<table class="entry">
+		<#if contestList?? & (contestList.list.size()>0) > 
+		<#list contestList.list as Contest> 
+		<#if (Contest.cstatus == "Pending") >
+		<tr>
+		<td>
+		<a href="contest/show/${Contest.cid!}">${Contest.title!}-- ${Contest.startDateTime!}</a>
+		</td> 
+		</tr>
+		</#if> 
+		</#list> 
+		</#if>
+	</table>
+
+</div>
+
+<#if newsList?? & (newsList.list.size() > 0) >
+<div class="flexslider">
+	<ul class="slides">
+		<#list newsList.list as news>
+		<li>
+			<div class="titlepimg">${news.title!}</div> <img src="${news.icon}" />
+		</li> </#list>
+	</ul>
+</div>
+</#if> 
+
+<#if newsList?? & (newsList.list.size() > 0) > 
+<#list newsList.list as news>
+<div class="news">
+	<a href="news/each/${news.id}"><h3 class="title">${news.title!}</h3></a>
+	<p style="text-align: right;position:relative;top:-10px">
+		On <span class="timestamp" data="${news.time!}"></span> By <span
+			class="author">${news.author!}</span>
+	</p>
+	<p class="entry">${news.content?substring(0,34)}...</p>
+</div>
+</#list>
+
+<div class="pagination pagination-centered" style="position:relative;top:50px;float:left;left:32%">
+	<#include "../common/_paginate.html" /> 
+	<@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
+</div>
+</#if> 
+
+</@override> 
+<@override name="scripts"> 
+</@override> 
+<@extends name="../common/_layout.html" />

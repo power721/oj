@@ -1,0 +1,38 @@
+.cxboard {
+	position: relative;
+	background-color: #DCDCDC;
+	margin: 0;
+	padding: 0;
+	height: 900px;
+	width: 30%;
+	float:left;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;	
+}
+
+.cxboard .title {
+	color: #666666;
+	text-align: left;
+	text-transform: capitalize;
+	line-height: 1.5;
+	font-weight: 900;
+	font-size: 20px;
+	position:relative;
+	top:10px;
+	left: 5%;
+}
+
+.cxboard .entry
+{
+color:#0066FF;
+padding-left:1cm;
+word-wrap: break-word;
+text-transform:capitalize;
+line-height:2;
+font-size:18px;
+list-style-position:out;
+position:relative;
+	top:10px;
+	left: -2%;
+} 

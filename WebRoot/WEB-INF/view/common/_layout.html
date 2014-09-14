@@ -11,7 +11,12 @@
 <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
 
 <!-- ============================== styles ============================== -->
+<link href="assets/css/cxImage.css" type="text/css" rel="stylesheet">
+<link href="assets/css/honor.css" type="text/css" rel="stylesheet">
+<link href="assets/css/news.css" type="text/css" rel="stylesheet">
+<link href="assets/css/board.css" type="text/css" rel="stylesheet">
 <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="assets/css/flexslider.css" media="screen" />
 <#if oj_style?? && oj_style!="original"><link href="assets/bootstrap/theme/bootstrap.${oj_style}.min.css" rel="stylesheet"></#if>
 <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 <link href="assets/css/oj.css" type="text/css" rel="stylesheet">
@@ -54,6 +59,15 @@
             <li class="<#if actionKey?? && actionKey=="faq">active</#if>"> 
               <a href="faq"><i class="icon-question-sign"></i>F.A.Qs</a>
             </li>
+            <li> 
+              <a href="honor"><i class="icon-star"></i>Honor</a>
+            </li>
+    
+            <#if adminUser??>
+            <li>
+            	<a href="news/show"><i class="icon-user"></i>Admin</a>
+            </li>
+            </#if>
           </ul>
           <ul class="nav pull-right">
           <#if user??>
@@ -87,11 +101,7 @@
 
   <div class="marquee">
     <marquee class="hidden-phone" direction="left" behavior="alternate" scrollamount="2" style="margin-top: 45px;">
-    <#if controllerKey?? && controllerKey != "notice" && noticeList??>
-    <#list noticeList as notice>
-      <p><a href="notice/show/${notice.id!}">${notice.title!}</a></p>
-    </#list>
-    </#if>
+   
     </marquee>
   </div>
   
@@ -245,6 +255,16 @@
   <script type="text/javascript" src="assets/js/jquery.form.js"></script>
   <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
   <script type="text/javascript" src="assets/js/oj.js"></script>
+  <script src="assets/js/jquery.flexslider.js"></script>
+  <script type="text/javascript">
+		
+		$(window).load(function() {
+			$('.flexslider').flexslider({
+				animation: "slide"
+				
+			});
+		});
+	</script>
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
     <script type="text/javascript" src="assets/js/placeholders.min.js"></script>

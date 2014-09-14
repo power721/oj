@@ -39,6 +39,7 @@ public class OjConfig
   public static int mailGroupPageSize = 10;
   public static int mailPageSize = 20;
   public static int noticePageSize = 20;
+  public static int newsPageSize = 4;
 
   public static int timeStamp;
   public static long startInterceptorTime;
