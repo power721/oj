@@ -26,6 +26,7 @@
                   <th>Last Activity</th>
                   <th>Expires Time</th>
                   <th>IP</th>
+                  <th>User Agent</th>
                   <th>URI</th>
                 </tr>
               </thead>
@@ -33,13 +34,14 @@
                 <#if userList??> 
                 <#list userList as User>
                 <tr>
-                  <td>${User_index+1}</td>
+                  <td data-session-id="${User.sessionId!}">${User_index+1}</td>
                   <td><#if User.name??><a href="user/profile/${User.name!}" class="user" data="${User.uid!}">${User.name}</a><#else>Guest</#if>
                   </td>
                   <td class="timestamp" data="${User.ctime!}"></td>
                   <td class="timestamp" data="${User.lastActivity!}"></td>
                   <td class="timestamp" data="${User.sessionExpires!}"></td>
                   <td>${User.ipAddress!}</td>
+                  <td>${User.userAgent!}</td>
                   <td><a href="${baseUrl!}${User.uri!}" target="_blank">${User.uri!}</a></td>
                 </tr>
                 </#list> 

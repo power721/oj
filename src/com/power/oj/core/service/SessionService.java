@@ -2,6 +2,7 @@ package com.power.oj.core.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import jodd.util.StringUtil;
@@ -20,6 +21,7 @@ import com.power.oj.core.model.SessionModel;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
+import com.power.oj.util.Tool;
 
 public final class SessionService
 {
@@ -127,7 +129,10 @@ public final class SessionService
     int timeStamp = (int) (System.currentTimeMillis() / 1000);
     String id = (String) session.getId();
     
-    SessionModel sessionModel = new SessionModel().setSessionId(id).setIpAddress(session.getHost());
+    SessionModel sessionModel = new SessionModel();
+    sessionModel.setSessionId(id);
+    sessionModel.setIpAddress(Tool.getIpAddr());
+    sessionModel.setUserAgent(Tool.getUserAgent());
     sessionModel.setCtime(timeStamp).setLastActivity(timeStamp);
     sessionModel.setSessionExpires((int) (timeStamp + session.getTimeout()));
     sessionModel.save();
