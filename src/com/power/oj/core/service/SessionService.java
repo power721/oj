@@ -72,6 +72,11 @@ public final class SessionService
     return SecurityUtils.getSubject().getSession();
   }
 
+  public String getHost()
+  {
+    return getSession().getHost();
+  }
+
   public void updateLogin()
   {
     Subject currentUser = ShiroKit.getSubject();
