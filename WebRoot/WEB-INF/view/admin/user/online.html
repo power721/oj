@@ -24,8 +24,9 @@
                   <th>User</th>
                   <th>Create Time</th>
                   <th>Last Activity</th>
-                  <th>Expires Time</th>
+                  <!-- <th>Expires Time</th> -->
                   <th>IP</th>
+                  <th>User Agent</th>
                   <th>URI</th>
                 </tr>
               </thead>
@@ -33,14 +34,15 @@
                 <#if userList??> 
                 <#list userList as User>
                 <tr>
-                  <td>${User_index+1}</td>
+                  <td data-session-id="${User.sessionId!}">${User_index+1}</td>
                   <td><#if User.name??><a href="user/profile/${User.name!}" class="user" data="${User.uid!}">${User.name}</a><#else>Guest</#if>
                   </td>
                   <td class="timestamp" data="${User.ctime!}"></td>
                   <td class="timestamp" data="${User.lastActivity!}"></td>
-                  <td class="timestamp" data="${User.sessionExpires!}"></td>
-                  <td>${User.ipAddress!}</td>
-                  <td><a href="${baseUrl!}${User.uri!}" target="_blank">${User.uri!}</a></td>
+                  <!-- <td class="timestamp" data="${User.sessionExpires!}"></td> -->
+                  <td class="ip">${User.ipAddress!}</td>
+                  <td>${User.userAgent!}</td>
+                  <td class="uri"><a href="${baseUrl!}${User.uri!}" target="_blank">${User.uri!}</a></td>
                 </tr>
                 </#list> 
                 </#if>
@@ -56,16 +58,16 @@
 </@override>
 
 <@override name="scripts">
-  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' type="text/css">
   <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
   <#if oj_style != "slate">
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
   </#if>
 
-  <script type="text/javascript" charset="utf-8">
+  <script type="text/javascript">
     $(document).ready(function() {
       $('.timestamp').each(function() {
         $(this).html(getLocalTime($(this).attr('data')));

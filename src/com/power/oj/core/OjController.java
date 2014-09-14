@@ -4,8 +4,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
-
 import com.jfinal.core.Controller;
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
@@ -132,24 +130,6 @@ public class OjController extends Controller
   protected void setTitle(String title)
   {
     setAttr(OjConstants.PAGE_TITLE, title);
-  }
-
-  /**
-   * Set the cookie in safe way.
-   * 
-   * @param name
-   * @param value
-   * @param maxAgeInSeconds
-   * @return this OjController.
-   */
-  protected OjController setCookieHttpOnly(String name, String value, int maxAgeInSeconds)
-  {
-    Cookie cookie = new Cookie(name, value);
-    cookie.setMaxAge(maxAgeInSeconds);
-    cookie.setPath("/");
-    cookie.setHttpOnly(true);
-    setCookie(cookie);
-    return this;
   }
 
 }

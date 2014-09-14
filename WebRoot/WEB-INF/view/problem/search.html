@@ -55,13 +55,13 @@
 
 <@override name="scripts">
   <#if oj_style != "slate">
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
   <script src="assets/tablecloth/js/jquery.metadata.js"></script>
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
   </#if>
   
-  <script type="text/javascript" charset="utf-8">
+  <script type="text/javascript">
     $(document).ready(function() {
       var prevpage="problem/search/${problemList.pageNumber-1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"
       var nextpage="problem/search/${problemList.pageNumber+1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"

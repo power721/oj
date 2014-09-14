@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<#if solution.error??>
+<#if solution.error?has_content>
 <div class="row">
   <div class="span12">
     <h3><#if resultName=="CE">Compile Error<#else>Runtime Error</#if></h3>

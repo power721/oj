@@ -18,7 +18,7 @@
   </div>
 </div>
 <div class="row text-center">
-  <div clas="span4 offset4">
+  <div class="span4 offset4">
     <p>${contest.description!}</p>
   </div>
 </div>
@@ -64,17 +64,17 @@
 </@override>
 
 <@override name="styles">
-  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css" type="text/css">
 </@override>
 <@override name="scripts">
-<link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet">
+<link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet" type="text/css">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
 
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   $(document).ready(function() {
     var current_time = ${serverTime!}*1000;
     function updateTime() {

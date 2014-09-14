@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
 import jodd.mail.MailException;
@@ -13,9 +15,11 @@ import jodd.mail.SmtpServer;
 import jodd.util.MimeTypes;
 import jodd.util.StringTemplateParser;
 import jodd.util.StringTemplateParser.MacroResolver;
+import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.service.SessionService;
 
 /**
  * Utils for common usage.
@@ -139,4 +143,55 @@ public class Tool
     return sb.toString();
   }
 
+  public static String getIpAddr(HttpServletRequest request)
+  {
+    if (request == null)
+    {
+      return SessionService.me().getHost();
+    }
+    
+    String ip = request.getHeader("x-forwarded-for");
+    if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
+    {
+      ip = request.getHeader("Proxy-Client-IP");
+    }
+    if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
+    {
+      ip = request.getHeader("X-Forwarded-For");
+    }
+    if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
+    {
+      ip = request.getHeader("WL-Proxy-Client-IP");
+    }
+    if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
+    {
+      ip = request.getHeader("X-Real-IP");
+    }
+    if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip))
+    {
+      ip = request.getRemoteAddr();
+    }
+    
+    return ip;
+  }
+  
+  public static String getIpAddr()
+  {
+    return getIpAddr(OjConfig.request);
+  }
+  
+  public static String getUserAgent(HttpServletRequest request)
+  {
+    if (request == null)
+    {
+      return "unknown";
+    }
+    return request.getHeader("User-Agent");
+  }
+  
+  public static String getUserAgent()
+  {
+    return getUserAgent(OjConfig.request);
+  }
+  
 }

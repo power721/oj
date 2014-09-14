@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import jodd.util.SystemUtil;
 
 import com.jfinal.core.JFinal;
@@ -52,6 +55,7 @@ public class OjConfig
   public static Map<Integer, ResultType> resultType;
   public static List<ResultType> judgeResult;
   public static List<Integer> level;
+  public static HttpServletRequest request;
 
   private static Map<String, VariableModel> variable;
   private static boolean bIsLinux;

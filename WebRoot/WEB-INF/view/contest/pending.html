@@ -5,7 +5,7 @@
 </#if>
 <h3 class="text-center">${type} Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
-  <div clas="span4 offset4">
+  <div class="span4 offset4">
     <div class="well">
       <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> 
       <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
@@ -20,7 +20,7 @@
 <link href="assets/jcountdown/jcountdown.css" type="text/css" rel="stylesheet">
 <script src="assets/js/jquery-migrate-1.2.1.min.js"></script>
 <script src="assets/jcountdown/jquery.jcountdown.min.js"></script>
-<script type="text/javascript" charset="utf-8">
+<script type="text/javascript">
   $(document).ready(function() {
     var current_time = ${serverTime!}*1000;
     function updateTime() {
