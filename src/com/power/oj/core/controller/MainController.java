@@ -50,7 +50,12 @@ public class MainController extends OjController
   {
     setTitle(getText("page.faq.title"));
   }
-
+  
+  public void downloads()
+  {
+	  setTitle(getText("page.downloads.title"));
+  }
+  
   public void tag()
   {
     setAttr("tagList", ojService.tagList());
