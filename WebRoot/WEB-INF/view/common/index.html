@@ -7,7 +7,7 @@
 		<li>
 		<a href="notice/show/${notice.id!}">${notice.title!}</a>
 		</li> 
-		<#if (notice_index > 8)><#break></#if>
+		<#if (notice_index > 3)><#break></#if>
 		</#list> 
 		</#if>
 	</ul>
@@ -19,7 +19,7 @@
 		<li>
 		<a href="contest/show/${Contest.cid!}">${Contest.title!}-- ${Contest.startDateTime!}</a>
 		</li> 
-		<#if (Contest_index > 8)><#break></#if>
+		<#if (Contest_index > 3)><#break></#if>
 		</#list> 
 		</#if>
 	</ul>
