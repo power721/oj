@@ -55,6 +55,7 @@ public class PowerJudgeAdapter extends JudgeAdapter
     String cmd = buildCommand(timeLimit, memoryLimit);
     
     Process process = Runtime.getRuntime().exec(cmd);
+    log.info("Execute Judge process: " + cmd);
     InputStream inputStream = process.getInputStream();
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
     String line;

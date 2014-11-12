@@ -29,6 +29,7 @@ public abstract class JudgeAdapter implements Runnable
   protected final Logger log = Logger.getLogger(getClass());
   private final ThreadLocal<Solution> solutionLocal = new ThreadLocal<Solution>();
   protected Solution solution;
+  private static final int RESERVED_TEMP_DIRS = 25;
   
   public JudgeAdapter()
   {
@@ -61,6 +62,13 @@ public abstract class JudgeAdapter implements Runnable
         {
           log.warn("Compile failed.");
         }
+      } catch (IOException e)
+      {
+        updateSystemError(e.getLocalizedMessage());
+
+        if (OjConfig.isDevMode())
+          e.printStackTrace();
+        log.error(e.getLocalizedMessage());
       } catch (Exception e)
       {
         updateSystemError(e.getLocalizedMessage());
@@ -79,7 +87,7 @@ public abstract class JudgeAdapter implements Runnable
     String workPath = judgeService.getWorkPath(solution);
     if (solution instanceof SolutionModel && OjConfig.getBoolean("deleteTmpFile", false))
     {
-      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid() - 5).toString());
+      File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid() - RESERVED_TEMP_DIRS).toString());
       if (prevWorkDir.isDirectory())
       {
         FileUtil.deleteDir(prevWorkDir);
@@ -91,15 +99,18 @@ public abstract class JudgeAdapter implements Runnable
     if (workDir.isDirectory())
     {
       FileUtil.cleanDir(workDir);
+      log.info("Clean directory: " + workDir);
     } else
     {
       FileUtil.mkdirs(workDir);
+      log.info("Make directory: " + workDir);
     }
     String workDirPath = workDir.getAbsolutePath();
 
     File sourceFile = new File(new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME).append(".")
         .append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
+    log.info("Create source file: " + sourceFile);
     FileUtil.writeString(sourceFile, solution.getSource());
   }
 
