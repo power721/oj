@@ -39,6 +39,7 @@ public class PowerJudgeAdapter extends JudgeAdapter
   @Override
   protected boolean runProcess() throws IOException, InterruptedException
   {
+    log.info("runProcess"); // DEBUG
     ProblemModel problemModel;
     if (solution instanceof ContestSolutionModel)
     {
@@ -54,8 +55,8 @@ public class PowerJudgeAdapter extends JudgeAdapter
     int memoryLimit = problemModel.getMemoryLimit();
     String cmd = buildCommand(timeLimit, memoryLimit);
     
+    log.info("Ready to execute Judge process: " + cmd);
     Process process = Runtime.getRuntime().exec(cmd);
-    log.info("Execute Judge process: " + cmd);
     InputStream inputStream = process.getInputStream();
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
     String line;
