@@ -14,7 +14,7 @@ public class ExpiresSessionService extends TimerTask
   private static boolean start = false;
   private static ExpiresSessionService daemon;
   private static Timer click_timer;
-  private final static long INTERVAL = 30 * 60 * 1000;
+  private final static long INTERVAL = 15 * 60 * 1000;
 
   @Override
   public void run()
@@ -32,6 +32,15 @@ public class ExpiresSessionService extends TimerTask
       click_timer.schedule(daemon, INTERVAL, INTERVAL);
       start = true;
       log.info("ExpiresSessionService started.");
+    }
+  }
+  
+  public static void stop()
+  {
+    if (start)
+    {
+      click_timer.cancel();
+      start = false;
     }
   }
 

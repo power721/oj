@@ -269,6 +269,8 @@ public class AppConfig extends JFinalConfig
   public void beforeJFinalStop()
   {
     //SessionService.me().deleteAllSession();
+    ExpiresSessionService.stop();
+    EhcacheService.destroy();
     log.debug("beforeJFinalStop");
   }
   

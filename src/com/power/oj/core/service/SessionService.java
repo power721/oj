@@ -171,7 +171,7 @@ public final class SessionService
 
   public List<SessionModel> getAccessLog()
   {
-    List<SessionModel> oldSessions = dao.find("SELECT * FROM session ORDER BY ctime DESC");
+    List<SessionModel> oldSessions = dao.find("SELECT * FROM session ORDER BY lastActivity DESC, ctime DESC");
     List<SessionModel> sessions = new ArrayList<SessionModel>(oldSessions.size());
     SessionModel newSession;
     
