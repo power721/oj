@@ -20,15 +20,21 @@ public class MainController extends OjController
   {
     setAttr("problemsNumber", problemService.getProblemsNumber());
     setTitle(getText("page.index.title"));
-    int pageNumber = getParaToInt(0, 1);
-    int pageSize = getParaToInt(1, OjConfig.noticePageSize);
-    Integer type = getParaToInt("type", -1);
-    Integer status = getParaToInt("status", 0);
-    setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
-    pageSize = OjConfig.contestPageSize;
-    setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status));
-    pageSize = OjConfig.newsPageSize;
-    setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
+    try
+    {
+      int pageNumber = getParaToInt(0, 1);
+      int pageSize = getParaToInt(1, OjConfig.noticePageSize);
+      Integer type = getParaToInt("type", -1);
+      Integer status = getParaToInt("status", 0);
+      setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
+      pageSize = OjConfig.contestPageSize;
+      setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status));
+      pageSize = OjConfig.newsPageSize;
+      setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
+    } catch (NumberFormatException e)
+    {
+      redirect301("/");
+    }
   }
 
   public void about()
