@@ -53,7 +53,7 @@ public final class JudgeService
       userService.incSubmission(solution.getUid());
     }
 
-    //synchronized (JudgeAdapter.class)
+    synchronized (JudgeAdapter.class)
     {
       JudgeAdapter judgeThread = null;
       if (OjConfig.isLinux())
@@ -63,7 +63,9 @@ public final class JudgeService
       {
         judgeThread = new PojJudgeAdapter(solution);
       }
-      judgeExecutor.execute(judgeThread);
+      //judgeExecutor.execute(judgeThread);  // this will store session in the thread
+      Thread thread = new Thread(judgeThread);
+      thread.start();
     }
   }
 
@@ -94,7 +96,7 @@ public final class JudgeService
       {
         judgeThread = new PojJudgeAdapter(solution);
       }
-      judgeExecutor.execute(judgeThread);
+      rejudgeExecutor.execute(judgeThread);
     }
   }
 
