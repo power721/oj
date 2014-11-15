@@ -190,5 +190,12 @@
 
 </@override>
 <@override name="scripts">
+  <script type="text/javascript">
+    $(document).ready(function() {
+      jQuery.ajaxSetup({
+        cache: true
+      });
+    });
+  </script>
 </@override>
 <@extends name="_layout.html" />

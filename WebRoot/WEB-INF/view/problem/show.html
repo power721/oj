@@ -199,6 +199,9 @@
 <@override name="scripts">
   <script type="text/javascript">
     $(document).ready(function() {
+      jQuery.ajaxSetup({
+        cache: true
+      });
       var prevpage = "${baseUrl}/problem/show/${prevPid!}";
       var nextpage = "${baseUrl}/problem/show/${nextPid!}";
       $(document).keydown(function(event) {
