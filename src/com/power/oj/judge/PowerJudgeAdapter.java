@@ -48,14 +48,16 @@ public class PowerJudgeAdapter extends JudgeAdapter
     {
       problemModel = problemService.findProblem(solution.getPid());
     }
+    log.info("get problem model: " + solution.getPid());  // DEBUG
     
     setResult(ResultType.RUN, 0, 0);
+    log.info("set result");  // DEBUG
     
     int timeLimit = problemModel.getTimeLimit();
     int memoryLimit = problemModel.getMemoryLimit();
     String cmd = buildCommand(timeLimit, memoryLimit);
     
-    log.info("Ready to execute Judge process: " + cmd);
+    log.info("Ready to execute Judge process: " + cmd);  // DEBUG
     Process process = Runtime.getRuntime().exec(cmd);
     InputStream inputStream = process.getInputStream();
     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));

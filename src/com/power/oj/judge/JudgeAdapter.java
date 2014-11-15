@@ -75,8 +75,8 @@ public abstract class JudgeAdapter implements Runnable
         updateSystemError(e.getLocalizedMessage());
         // backupTempDir4SE();
   
-        if (OjConfig.isDevMode())
-          e.printStackTrace();
+        //if (OjConfig.isDevMode())  // DEBUG
+          e.printStackTrace(System.err);
         log.error(e.toString());  // DEBUG
       }
     }
@@ -93,7 +93,7 @@ public abstract class JudgeAdapter implements Runnable
       if (prevWorkDir.isDirectory())
       {
         FileUtil.deleteDir(prevWorkDir);
-        log.info("Delete previous work directory " + prevWorkDir.getAbsolutePath());
+        log.debug("Delete previous work directory " + prevWorkDir.getAbsolutePath());
       }
     }
 
@@ -101,11 +101,11 @@ public abstract class JudgeAdapter implements Runnable
     if (workDir.isDirectory())
     {
       FileUtil.cleanDir(workDir);
-      log.info("Clean directory: " + workDir);  // DEBUG
+      log.debug("Clean directory: " + workDir);
     } else
     {
       FileUtil.mkdirs(workDir);
-      log.info("Make directory: " + workDir);  // DEBUG
+      log.debug("Make directory: " + workDir);
     }
     String workDirPath = workDir.getAbsolutePath();
 
@@ -113,7 +113,7 @@ public abstract class JudgeAdapter implements Runnable
         .append(programLanguage.getExt()).toString());
     FileUtil.touch(sourceFile);
     FileUtil.writeString(sourceFile, solution.getSource());
-    log.info("Create source file: " + sourceFile);  // DEBUG
+    log.debug("Create source file: " + sourceFile);
   }
 
   protected boolean updateCompileError(String error)
