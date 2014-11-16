@@ -289,3 +289,25 @@ ALTER TABLE topic ADD `orderNum` int(9) DEFAULT 0;
 
 #2014-09-14
 ALTER TABLE session CHANGE `ipAddress` `ipAddress` varchar(45) NULL DEFAULT '';
+
+#2014-11-16
+CREATE TABLE `news` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `title` varchar(1000) NOT NULL DEFAULT '',
+  `content` varchar(10000) DEFAULT '',
+  `time` int(11) NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `view` int(9) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1005 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `honors` (
+  `level` varchar(255) NOT NULL,
+  `contest` varchar(255) NOT NULL,
+  `team` varchar(255) DEFAULT NULL,
+  `player` varchar(255) NOT NULL DEFAULT '',
+  `prize` varchar(255) NOT NULL DEFAULT '',
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1015 DEFAULT CHARSET=utf8;
