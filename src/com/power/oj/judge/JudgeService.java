@@ -33,7 +33,7 @@ public final class JudgeService
   private static final ProblemService problemService = ProblemService.me();
   private static final SolutionService solutionService = SolutionService.me();
   private static final UserService userService = UserService.me();
-  private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
+  //private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
   private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
 
   private JudgeService()

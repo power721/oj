@@ -1,19 +1,12 @@
 package com.power.oj.honor;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
-import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
-import com.power.oj.news.NewsModel;
-import com.power.oj.notice.NoticeModel;
 
 public class HonorController extends OjController {
 	

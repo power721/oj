@@ -5,7 +5,6 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.core.ActionInvocation;
 import com.jfinal.core.Controller;
 import com.power.oj.core.OjConstants;
-import com.power.oj.news.NewsService;
 import com.power.oj.notice.NoticeService;
 
 /**

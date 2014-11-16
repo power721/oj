@@ -1,18 +1,11 @@
 package com.power.oj.news;
 
-import java.util.List;
-
 import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.ehcache.CacheKit;
-import com.power.oj.core.OjConfig;
-import com.power.oj.notice.NoticeModel;
-import com.power.oj.user.UserService;
 
 public class NewsService
 {
   private static final NewsModel dao = NewsModel.dao;
   private static final NewsService me = new NewsService();
-  private static final UserService userService = UserService.me();
   
   private NewsService() {}
   public static NewsService me()

@@ -1,7 +1,6 @@
 package com.power.oj.news;
 
 import com.jfinal.plugin.activerecord.Model;
-import com.power.oj.notice.NoticeModel;
 
 public class NewsModel extends Model<NewsModel> {
 	private static final long serialVersionUID = 1L;

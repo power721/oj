@@ -12,11 +12,8 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
-import com.power.oj.notice.NoticeModel;
 
 public class NewsController extends OjController {
-
-	private static final NewsModel dao = NewsModel.dao;
 
 	public void index() {
 		/*int pageNumber = 1;

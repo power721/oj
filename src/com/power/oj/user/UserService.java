@@ -20,7 +20,6 @@ import jodd.util.StringUtil;
 
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.session.UnknownSessionException;
 import org.apache.shiro.subject.Subject;
 
 import com.jfinal.kit.PathKit;

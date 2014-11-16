@@ -122,12 +122,12 @@ public class SessionModel extends Model<SessionModel>
   {
     return set(SESSION_EXPIRES, value);
   }
-  
+/*  
   public Integer getCtime()
   {
     return getInt(CTIME);
   }
-  
+  */
   public SessionModel setCtime(Integer value)
   {
     return set(CTIME, value);
