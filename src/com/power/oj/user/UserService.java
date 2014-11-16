@@ -841,7 +841,7 @@ public final class UserService
     try
     {
       return ShiroKit.hasPermission("admin");
-    } catch (UnknownSessionException e) // occur in new thread when judge
+    } catch (Exception e) // occur in new thread when judge
     {
       if (OjConfig.isDevMode())
         e.printStackTrace();
