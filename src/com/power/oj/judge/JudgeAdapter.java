@@ -29,6 +29,8 @@ public abstract class JudgeAdapter implements Runnable
   protected final Logger log = Logger.getLogger(getClass());
   private final ThreadLocal<Solution> solutionLocal = new ThreadLocal<Solution>();
   protected Solution solution;
+  private File workDir;
+  private boolean deleteTempDir = false;
   private static final int RESERVED_TEMP_DIRS = 25;
   
   public JudgeAdapter()
@@ -79,6 +81,16 @@ public abstract class JudgeAdapter implements Runnable
           e.printStackTrace(System.err);
         log.error(e.toString());
       }
+      
+      if (needDeleteTempDir())
+      {
+        try {
+          FileUtil.deleteDir(workDir);
+          log.debug("Delete directory: " + workDir);
+        } catch (IOException e) {
+          log.info("Cannot delete directory: " + workDir);
+        }
+      }
     }
   }
 
@@ -87,7 +99,7 @@ public abstract class JudgeAdapter implements Runnable
     ProgramLanguageModel programLanguage = OjConfig.languageType.get(solution.getLanguage());
     
     String workPath = judgeService.getWorkPath(solution);
-    if (solution instanceof SolutionModel && OjConfig.getBoolean("deleteTmpFile", false))
+    if (solution instanceof SolutionModel && !needDeleteTempDir() && OjConfig.getBoolean("deleteTmpFile", false))
     {
       File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid() - RESERVED_TEMP_DIRS).toString());
       if (prevWorkDir.isDirectory())
@@ -97,7 +109,7 @@ public abstract class JudgeAdapter implements Runnable
       }
     }
 
-    File workDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid()).toString());
+    workDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid()).toString());
     if (workDir.isDirectory())
     {
       FileUtil.cleanDir(workDir);
@@ -273,6 +285,14 @@ public abstract class JudgeAdapter implements Runnable
       return true;
     }
     return false;
+  }
+
+  public boolean needDeleteTempDir() {
+    return deleteTempDir;
+  }
+
+  public void setDeleteTempDir(boolean deleteTempDir) {
+    this.deleteTempDir = deleteTempDir;
   }
 
 }

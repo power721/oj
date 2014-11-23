@@ -69,7 +69,7 @@ public final class JudgeService
     }
   }
 
-  public void rejudge(Solution solution)
+  public void rejudge(Solution solution, boolean deleteTempDir)
   {
     if (solution instanceof SolutionModel)
     {
@@ -96,8 +96,14 @@ public final class JudgeService
       {
         judgeThread = new PojJudgeAdapter(solution);
       }
+      judgeThread.setDeleteTempDir(deleteTempDir);
       rejudgeExecutor.execute(judgeThread);
     }
+  }
+  
+  public void rejudge(Solution solution)
+  {
+    rejudge(solution, false);
   }
 
   public void rejudgeSolution(Integer sid)
@@ -121,7 +127,7 @@ public final class JudgeService
         // TODO lock this problem
         for (SolutionModel solution : solutionList)
         {
-          rejudge(solution);
+          rejudge(solution, true);
         }
       }
     });
