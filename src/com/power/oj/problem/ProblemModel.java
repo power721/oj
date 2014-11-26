@@ -39,6 +39,15 @@ public class ProblemModel extends Model<ProblemModel>
   public static final String VIEW = "view";
   public static final String STATUS = "status";
 
+  public ProblemModel merge(ProblemModel newProblemModel)
+  {
+    for (String key : newProblemModel.getAttrNames())
+    {
+        set(key, newProblemModel.get(key));
+    }
+    return this;
+  }
+  
   public Integer getPid()
   {
     return getInt(PID);
