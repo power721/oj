@@ -474,8 +474,10 @@ public final class ProblemService
     return problemModel.setMtime(mtime).update();
   }
 
-  public boolean updateProblem(ProblemModel problemModel)
+  public boolean updateProblem(ProblemModel newProblemModel)
   {
+    ProblemModel problemModel = findProblem(newProblemModel.getPid());
+    problemModel.merge(newProblemModel);
     problemModel.setMtime(OjConfig.timeStamp);
     if (problemModel.getStatus() == null)
     {
