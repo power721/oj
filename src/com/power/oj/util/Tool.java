@@ -6,6 +6,9 @@ import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
+
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
 import jodd.mail.MailException;
@@ -19,7 +22,6 @@ import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.service.SessionService;
 
 /**
  * Utils for common usage.
@@ -147,7 +149,7 @@ public class Tool
   {
     if (request == null)
     {
-      return SessionService.me().getHost();
+      return SecurityUtils.getSubject().getSession().getHost();
     }
     
     String ip = request.getHeader("x-forwarded-for");
@@ -177,7 +179,13 @@ public class Tool
   
   public static String getIpAddr()
   {
-    return getIpAddr(OjConfig.request);
+    try
+    {
+      return getIpAddr(OjConfig.request);
+    } catch (UnavailableSecurityManagerException e)
+    {
+      return null;
+    }
   }
   
   public static String getUserAgent(HttpServletRequest request)

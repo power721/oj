@@ -93,17 +93,5 @@ public class AdminApiController extends OjController
       renderJson("success:false, result:" + result);
     }
   }
-  
-  public void expiresSession()
-  {
-    renderJson("expiresSession", sessionService.expiresSession());
-  }
-  
-  public void deleteSession()
-  {
-    String id = getPara("id");
-    
-    renderJson("success", sessionService.deleteSession(id));
-  }
-  
+
 }

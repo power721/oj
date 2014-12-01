@@ -1,7 +1,5 @@
 package com.power.oj.core.interceptor;
 
-import javax.servlet.http.HttpSession;
-
 import jodd.util.StringUtil;
 
 import com.jfinal.aop.Interceptor;
@@ -24,7 +22,6 @@ public class AccessLogInterceptor implements Interceptor
   public void intercept(ActionInvocation ai)
   {
     Controller controller = ai.getController();
-    HttpSession session = controller.getSession();
     String actionKey = ai.getActionKey();
     boolean isPOST = "POST".equalsIgnoreCase(controller.getRequest().getMethod().toUpperCase());
 
@@ -42,9 +39,9 @@ public class AccessLogInterceptor implements Interceptor
 
       String url = sb.toString();
       if (url.indexOf("ajax=1") == -1 && url.indexOf("api/") == -1)
+      {
         SessionService.me().setLastAccessURL(url);
-
-      SessionService.me().updateSession(session, url);
+      }
     }
 
     ai.invoke();

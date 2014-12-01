@@ -76,7 +76,6 @@ import com.power.oj.news.NewsController;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.EhcacheService;
-import com.power.oj.service.ExpiresSessionService;
 import com.power.oj.social.FriendGroupModel;
 import com.power.oj.social.FriendModel;
 import com.power.oj.solution.SolutionController;
@@ -259,7 +258,6 @@ public class AppConfig extends JFinalConfig
       loadPropertyFile("oj.properties");
       OjConfig.setBaseURL(getProperty("baseURL", null));
     }
-    ExpiresSessionService.start();
 
     log.info(PathKit.getWebRootPath());
     log.debug("afterJFinalStart finished.");
@@ -269,7 +267,6 @@ public class AppConfig extends JFinalConfig
   public void beforeJFinalStop()
   {
     //SessionService.me().deleteAllSession();
-    ExpiresSessionService.stop();
     EhcacheService.destroy();
     log.debug("beforeJFinalStop");
   }
