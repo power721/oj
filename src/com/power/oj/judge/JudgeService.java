@@ -86,7 +86,7 @@ public final class JudgeService
       ((ContestSolutionModel) solution).update();
     }
 
-    //synchronized (JudgeAdapter.class)
+    synchronized (JudgeAdapter.class)
     {
       JudgeAdapter judgeThread = null;
       if (OjConfig.isLinux())
@@ -97,7 +97,8 @@ public final class JudgeService
         judgeThread = new PojJudgeAdapter(solution);
       }
       judgeThread.setDeleteTempDir(deleteTempDir);
-      rejudgeExecutor.execute(judgeThread);
+      Thread thread = new Thread(judgeThread);
+      thread.start();
     }
   }
   
