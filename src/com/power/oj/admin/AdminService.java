@@ -1,11 +1,7 @@
 package com.power.oj.admin;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,9 +14,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.SAXReader;
-import org.dom4j.io.XMLWriter;
 
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
@@ -32,9 +25,11 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.DataFile;
 import com.power.oj.core.bean.FpsProblem;
 import com.power.oj.core.model.VariableModel;
+import com.power.oj.core.service.FpsService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
+import com.power.oj.util.XmlUtil;
 
 import jodd.io.FileUtil;
 import jodd.util.BCrypt;
@@ -316,18 +311,19 @@ public final class AdminService
   
   public List<FpsProblem> importProblems(File file, Integer outputLimit, Boolean status)
   {
-    SAXReader saxReader = new SAXReader();
     Document document = null;
     List<FpsProblem> problemList = new ArrayList<FpsProblem>();
     
     try
     {
-      document = saxReader.read(file);
-    } catch (DocumentException e1)
+      document = XmlUtil.readDocument(file);
+    } catch (DocumentException e)
     {
       if (OjConfig.isDevMode())
-        e1.printStackTrace();
-      log.error(e1.getLocalizedMessage());
+      {
+    	  log.warn("read xml failed!", e);
+      }
+      log.error(e.getLocalizedMessage());
       
       return problemList;
     }
@@ -338,17 +334,21 @@ public final class AdminService
     } catch (IOException e)
     {
       if (OjConfig.isDevMode())
-        e.printStackTrace();
+      {
+    	  log.warn("mkdir for problem image failed!", e);
+      }
       log.error(e.getLocalizedMessage());
       // why continue?
     }
 
+    FpsService fpsService = new FpsService();
     Element root = document.getRootElement();
     for (Iterator<?> i = root.elementIterator("item"); i.hasNext();)
     {
       Element ele = (Element) i.next();
       FpsProblem problem = new FpsProblem(outputLimit * 1024, status);
-      problem.itemToProblem(ele);
+      fpsService.setFpsProblem(problem);
+      fpsService.itemToProblem(ele);
       problemList.add(problem);
     }
 
@@ -359,7 +359,8 @@ public final class AdminService
   {
     String[] pidStr = problems.split(",");
     Document document = DocumentHelper.createDocument();
-    Element rootElement = createXmlRootElement(document);
+    Element rootElement = XmlUtil.createXmlRootElement(document);
+    FpsService fpsService = new FpsService();
     
     for (String pidPar : pidStr)
     {
@@ -383,11 +384,14 @@ public final class AdminService
           
           item.addAttribute("pid", String.valueOf(problemModel.getPid()));
           FpsProblem problem = new FpsProblem(problemModel);
-          problem.problemToItem(item, replace);
+          fpsService.setFpsProblem(problem);
+          fpsService.problemToItem(item, replace);
         } catch (NumberFormatException e)
         {
           if (OjConfig.isDevMode())
-            e.printStackTrace();
+          {
+        	  log.warn("incorrect problem id to export!", e);
+          }
           log.error(e.getLocalizedMessage());
           
           return null;
@@ -404,7 +408,9 @@ public final class AdminService
         } catch (NumberFormatException e)
         {
           if (OjConfig.isDevMode())
-            e.printStackTrace();
+          {
+        	  log.warn("incorrect problem id to export!", e);
+          }
           log.error(e.getLocalizedMessage());
           
           return null;
@@ -428,15 +434,15 @@ public final class AdminService
             Element item = rootElement.addElement("item");
             item.addAttribute("pid", String.valueOf(problemModel.getPid()));
             FpsProblem problem = new FpsProblem(problemModel);
-            problem.problemToItem(item, replace);
+            fpsService.setFpsProblem(problem);
+            fpsService.problemToItem(item, replace);
           }
         }
       }
     }
 
-    String fileName = new StringBuilder(4).append("PowerOJ").append("-")
-        .append(problems.replaceAll(",", "_")).append(".xml").toString();
-    return exportXmlFile(document, fileName);
+	String fileName = "PowerOJ-" + problems.replaceAll(",", "_") + ".xml";
+    return XmlUtil.exportXmlFile(document, fileName);
   }
   
   public File exportProblems(Integer start, Integer end, Boolean status, Boolean replace)
@@ -445,8 +451,10 @@ public final class AdminService
     {
       return null;
     }
+    
     Document document = DocumentHelper.createDocument();
-    Element rootElement = createXmlRootElement(document);
+    Element rootElement = XmlUtil.createXmlRootElement(document);
+    FpsService fpsService = new FpsService();
     
     List<ProblemModel> problemList = ProblemModel.dao.
         find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=?", start, end, status ? 1 : 0);
@@ -455,50 +463,12 @@ public final class AdminService
       Element item = rootElement.addElement("item");
       item.addAttribute("pid", String.valueOf(problemModel.getPid()));
       FpsProblem problem = new FpsProblem(problemModel);
-      problem.problemToItem(item, replace);
+      fpsService.setFpsProblem(problem);
+      fpsService.problemToItem(item, replace);
     }
-    
-    String fileName = new StringBuilder(6).append("PowerOJ").append("-").
-        append(start).append("-").append(end).append(".xml").toString();
-    return exportXmlFile(document, fileName);
-  }
-  
-  private Element createXmlRootElement(Document document)
-  {
-    document.addDocType("fps", "-//FreeProblemSet//EN", "http://freeproblemset.googlecode.com/svn/trunk/fps.current.dtd");
-    Element rootElement = document.addElement("fps");
-    rootElement.addAttribute("version", "1.1");
-    rootElement.addAttribute("url", "http://code.google.com/p/freeproblemset/");
-    
-    Element generator = rootElement.addElement("generator");
-    generator.addAttribute("name", OjConfig.getString("siteTitle", "PowerOJ"));
-    generator.addAttribute("url", OjConfig.getString("domaiNname", "http://git.oschina.net/power/oj"));
-    
-    return rootElement;
-  }
-  
-  private File exportXmlFile(Document document, String fileName)
-  {
-    String filePath = new StringBuilder(8).append(OjConfig.downloadPath).
-        append(File.separator).append(fileName).toString();
-    try
-    {
-      OutputFormat format = OutputFormat.createPrettyPrint();
-      format.setEncoding("UTF-8");
-      OutputStream out = new FileOutputStream(filePath);
-      Writer fileWriter = new OutputStreamWriter(out, "UTF-8");
-      XMLWriter xmlWriter = new XMLWriter(fileWriter, format);
-      
-      xmlWriter.write(document);
-      xmlWriter.flush();
-      xmlWriter.close();
-    } catch (IOException e)
-    {
-      if (OjConfig.isDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-    }
-    return new File(filePath);
+
+	String fileName = "PowerOJ-" + start + "-" + end + ".xml";
+    return XmlUtil.exportXmlFile(document, fileName);
   }
   
 }
