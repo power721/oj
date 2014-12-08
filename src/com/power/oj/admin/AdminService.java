@@ -321,7 +321,7 @@ public final class AdminService
     {
       if (OjConfig.isDevMode())
       {
-    	  log.warn("read xml failed!", e);
+        log.warn("read xml failed!", e);
       }
       log.error(e.getLocalizedMessage());
       
@@ -335,7 +335,7 @@ public final class AdminService
     {
       if (OjConfig.isDevMode())
       {
-    	  log.warn("mkdir for problem image failed!", e);
+        log.warn("mkdir for problem image failed!", e);
       }
       log.error(e.getLocalizedMessage());
       // why continue?
@@ -390,7 +390,7 @@ public final class AdminService
         {
           if (OjConfig.isDevMode())
           {
-        	  log.warn("incorrect problem id to export!", e);
+            log.warn("incorrect problem id to export!", e);
           }
           log.error(e.getLocalizedMessage());
           
@@ -409,7 +409,7 @@ public final class AdminService
         {
           if (OjConfig.isDevMode())
           {
-        	  log.warn("incorrect problem id to export!", e);
+            log.warn("incorrect problem id to export!", e);
           }
           log.error(e.getLocalizedMessage());
           
@@ -441,7 +441,7 @@ public final class AdminService
       }
     }
 
-	String fileName = "PowerOJ-" + problems.replaceAll(",", "_") + ".xml";
+    String fileName = "PowerOJ-" + problems.replace(",", "_") + ".xml";
     return XmlUtil.exportXmlFile(document, fileName);
   }
   
@@ -467,7 +467,7 @@ public final class AdminService
       fpsService.problemToItem(item, replace);
     }
 
-	String fileName = "PowerOJ-" + start + "-" + end + ".xml";
+    String fileName = "PowerOJ-" + start + "-" + end + ".xml";
     return XmlUtil.exportXmlFile(document, fileName);
   }
   
