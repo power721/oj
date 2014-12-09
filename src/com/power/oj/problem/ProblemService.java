@@ -479,7 +479,7 @@ public final class ProblemService
     ProblemModel problemModel = findProblem(newProblemModel.getPid());
     problemModel.merge(newProblemModel);
     problemModel.setMtime(OjConfig.timeStamp);
-    if (problemModel.getStatus() == null)
+    if (newProblemModel.getStatus() == null)
     {
       problemModel.setStatus(false);
     }
