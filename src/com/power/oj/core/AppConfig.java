@@ -51,7 +51,7 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.controller.MainController;
 import com.power.oj.core.controller.UeditorController;
 import com.power.oj.core.handler.BaseUrlHandler;
-import com.power.oj.core.handler.SessionIdHandler;
+import com.power.oj.core.handler.SessionHandler;
 import com.power.oj.core.handler.UrlFilterHandler;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
 import com.power.oj.core.interceptor.GlobalInterceptor;
@@ -228,7 +228,7 @@ public class AppConfig extends JFinalConfig
    */
   public void configHandler(Handlers me)
   {
-    me.add(new SessionIdHandler());
+    me.add(new SessionHandler());
     me.add(new BaseUrlHandler());
     me.add(new UrlFilterHandler());
     me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {

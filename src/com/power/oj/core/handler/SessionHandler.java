@@ -4,8 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jfinal.handler.Handler;
+import com.power.oj.core.service.SessionService;
 
-public class SessionIdHandler extends Handler
+public class SessionHandler extends Handler
 {
 
   @Override
@@ -15,6 +16,11 @@ public class SessionIdHandler extends Handler
     if (pos != -1) {
         target = target.substring(0, pos);
     }
+    
+    SessionService.me().setHost(request);
+    SessionService.me().setUserAgent(request);
+    SessionService.me().checkAndSetSession();
+    
     nextHandler.handle(target, request, response, isHandled);
   }
 

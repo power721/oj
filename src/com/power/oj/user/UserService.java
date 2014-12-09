@@ -254,7 +254,7 @@ public final class UserService
   public boolean updateLogin(String name, boolean success)
   {
     Record loginLog = new Record();
-    String ip = Tool.getIpAddr();
+    String ip = SessionService.me().getHost();
     
     if (success)
     {

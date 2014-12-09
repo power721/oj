@@ -7,7 +7,6 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.UnavailableSecurityManagerException;
 
 import jodd.mail.Email;
 import jodd.mail.EmailMessage;
@@ -176,18 +175,7 @@ public class Tool
     
     return ip;
   }
-  
-  public static String getIpAddr()
-  {
-    try
-    {
-      return getIpAddr(OjConfig.request);
-    } catch (UnavailableSecurityManagerException e)
-    {
-      return null;
-    }
-  }
-  
+
   public static String getUserAgent(HttpServletRequest request)
   {
     if (request == null)
@@ -196,10 +184,5 @@ public class Tool
     }
     return request.getHeader("User-Agent");
   }
-  
-  public static String getUserAgent()
-  {
-    return getUserAgent(OjConfig.request);
-  }
-  
+
 }
