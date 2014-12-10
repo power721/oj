@@ -460,7 +460,11 @@ public final class ProblemService
     }
     
     int mtime = OjConfig.timeStamp;
-    if (StringUtil.equalsOne(name, new String[]{"timeLimit", "memoryLimit", "status"}) != -1)
+    if ("status".equals(name))
+    {
+    	problemModel.set(name, Boolean.valueOf(value));
+    }
+    else if ("timeLimit".equals(name) || "memoryLimit".equals(name))
     {
       Integer intValue = Integer.parseInt(value);
       problemModel.set(name, intValue);
