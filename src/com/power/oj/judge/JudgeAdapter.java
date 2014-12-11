@@ -104,16 +104,28 @@ public abstract class JudgeAdapter implements Runnable
       File prevWorkDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid() - RESERVED_TEMP_DIRS).toString());
       if (prevWorkDir.isDirectory())
       {
-        FileUtil.deleteDir(prevWorkDir);
-        log.debug("Delete previous work directory " + prevWorkDir.getAbsolutePath());
+    	  try
+    	  {
+    		  FileUtil.deleteDir(prevWorkDir);
+    		  log.debug("Delete previous work directory " + prevWorkDir.getAbsolutePath());
+    	  } catch (IOException e)
+    	  {
+    		  log.warn("Delete previous work directory failed!", e);
+    	  }
       }
     }
 
     workDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid()).toString());
     if (workDir.isDirectory())
     {
-      FileUtil.cleanDir(workDir);
-      log.debug("Clean directory: " + workDir);
+    	try
+    	{
+    		FileUtil.cleanDir(workDir);
+	      	log.debug("Clean directory: " + workDir);
+	    } catch (IOException e)
+    	{
+	    	log.warn("Clean directory failed!", e);
+    	}
     } else
     {
       FileUtil.mkdirs(workDir);

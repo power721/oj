@@ -100,7 +100,7 @@
     $("input[name='uid']").change(getUserName).keyup(getUserName);
     $("input[name='name']").keyup(function() {
       var name = this.value;
-      if (name.length >= 5) // 'root' always has permission
+      if (name.length >= 4) // for old user name, e.g: 'test'
       {
         $.get("api/user/getUid", { name: this.value },
           function(data) {
