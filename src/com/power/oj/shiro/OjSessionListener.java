@@ -6,33 +6,27 @@ import org.apache.shiro.session.SessionListener;
 import com.jfinal.log.Logger;
 import com.power.oj.core.service.SessionService;
 
-public class OjSessionListener implements SessionListener
-{
+public class OjSessionListener implements SessionListener {
 
-  private static final Logger log = Logger.getLogger(OjSessionListener.class);
-  
-  @Override
-  public void onExpiration(Session session)
-  {
-    SessionService.me().deleteSession(session);
-    
-    log.info(session.toString());
-  }
+	private static final Logger log = Logger.getLogger(OjSessionListener.class);
 
-  @Override
-  public void onStart(Session session)
-  {
-    SessionService.me().saveSession(session);
-    
-    log.info(session.toString());
-  }
+	@Override
+	public void onExpiration(Session session) {
+		SessionService.me().deleteSession(session);
 
-  @Override
-  public void onStop(Session session)
-  {
-    SessionService.me().deleteSession(session);
-    
-    log.info(session.toString());
-  }
+		log.info(session.toString());
+	}
+
+	@Override
+	public void onStop(Session session) {
+		SessionService.me().deleteSession(session);
+
+		log.info(session.toString());
+	}
+
+	@Override
+	public void onStart(Session session) {
+
+	}
 
 }
