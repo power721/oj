@@ -35,6 +35,27 @@
         </div>
       </div>
     </div>
+
+    <div class="modal hide fade contestModal" id="editModal">
+      <form class="" action="contest/update" id="editContestForm" method="post">
+        <div class="modal-header">
+          <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+          <h3 id="editModalLabel">
+            Edit contest <span id="cid"></span>:
+            <span id="contest"></span>
+          </h3>
+        </div>
+        <div class="modal-body">
+          <div id="content">
+            <img src="assets/images/ajax-loader.gif" /> Loading...
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button class="btn" data-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
    </@override>
     
     <@override name="scripts">
@@ -47,10 +68,14 @@
                 [ 0, "desc" ]
               ],
               "aoColumns": [
-                  { "mData": "cid" },
-                  { "mData": "title",
+                  { "mData": "cid",
                     "mRender": function (data, type, full) {
                       return '<a href="contest/show/' + full.cid + '" target="_blank">' + data + '</a>';
+                    }
+                  },
+                  { "mData": "title",
+                    "mRender": function (data, type, full) {
+                      return '<a href="contest/admin/' + full.cid + '" target="_blank">' + data + '</a>';
                     }
                   },
                   { "mData": "startTime",
@@ -68,10 +93,10 @@
                   { "mData": null,
                     "bSortable": false,
                     "mRender": function (data, type, full) {
-                      var action = '<button id="contest-edit" cid="' + full.cid 
-                          + '" class="btn btn-success">Edit</button> '
-                          + '<button id="contest-toggle" cid="' + full.cid 
-                          + '" class="btn btn-warning">' 
+                      var action = '<button cid="' + full.cid 
+                          + '" class="btn btn-success contest-edit">Edit</button> '
+                          + '<button cid="' + full.cid 
+                          + '" class="btn btn-warning contest-toggle">' 
                           + (full.status ? 'Delete' : 'Resume')
                           + '</button> ';
                       return action;
@@ -79,6 +104,17 @@
                   }
               ]
           });
+
+        $('table').on('click', '.contest-edit', function() {
+          var cid = $(this).attr('cid');
+          $('span#cid').html(cid);
+          //$('span#contest').html('<a href="contest/edit/' + cid + '">' + title + '</a>');
+          $('#editModal').modal("show");
+          $.get("contest/edit/" + cid + "?ajax=1", {},
+            function(data) {
+              $('#editModal #content').html(data);
+          });
+        });
       </script>
    </@override>
 <@extends name="../_layout.html"></@extends>
