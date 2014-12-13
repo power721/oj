@@ -6,7 +6,7 @@ apply plugin: 'war'
 // name to name of WebRoot folder appropriately.
 def webRoot = "WebRoot"
 def webInfPath = webRoot + "/" + "WEB-INF"
- 
+
 // Repositories accessed from local directory
 repositories {
     flatDir { 
@@ -14,7 +14,7 @@ repositories {
     }
     mavenCentral()
 }
- 
+
 // Source folder defined as Eclipse stores Java source code
 // in non-maven based folder structure
 sourceSets {
@@ -35,7 +35,7 @@ dependencies {
     compile fileTree(dir: webInfPath + "/" + "lib", include: '*.jar')
     runtime 'javax.servlet:jstl:1.1.2'
 }
- 
+
 war {
     webInf { from webInfPath } // adds a file-set to the WEB-INF dir.
     from(webRoot) { fileTree(dir: 'assets/*') } //Copy assets folder to WEB-INF level
