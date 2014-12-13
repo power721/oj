@@ -26,7 +26,7 @@ public class OjSessionListener implements SessionListener {
 
 	@Override
 	public void onStart(Session session) {
-
+		log.info(session.toString());
 	}
 
 }
