@@ -83,7 +83,7 @@ public class Tool
    *          EmailMessage of email body.
    * @throws Exception
    */
-  public static void sendEmail(String from, String to, String subject, EmailMessage content) throws MailException
+  public static void sendEmail(String from, String to, String subject, EmailMessage content)
   {
     // TODO: create new thread to send mail
     Email email = new Email();
@@ -104,7 +104,11 @@ public class Tool
       session.open();
       session.sendMail(email);
       log.info("Send mail from: " + from + " to: " + to + " subject: " + subject);
-    } finally
+    } catch (MailException e)
+    {
+    	log.error("send email failed!", e);
+    }
+    finally
     {
       session.close();
     }
