@@ -841,6 +841,7 @@ CREATE TABLE `role` (
 -- ----------------------------
 INSERT INTO `role` VALUES ('1', 'root', 'root', '1');
 INSERT INTO `role` VALUES ('2', 'admin', 'administrator', '1');
+INSERT INTO `role` VALUES ('3', 'user', 'normal user', '1');
 
 -- ----------------------------
 -- Table structure for `role_permission`
