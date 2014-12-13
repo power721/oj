@@ -118,6 +118,12 @@ public final class SessionService {
 		final String id = (String) session.getId();
 
 		if (!sessions.containsKey(id)) {
+			UserModel userModel = UserService.me().getCurrentUser();
+
+			if (userModel != null) {
+				session.setAttribute(OjConstants.USER_NAME, userModel.getName());
+			}
+
 			sessions.put(id, session);
 			return true;
 		} else {
@@ -132,18 +138,26 @@ public final class SessionService {
 	public List<SessionView> getAccessLog() {
 		List<SessionView> list = new ArrayList<SessionView>();
 
-		for (Session session : sessions.values()) {
+		for (Iterator<Entry<String, Session>> it = sessions.entrySet().iterator(); it.hasNext();) {
 			SessionView sessionView = new SessionView();
-			String id = (String) session.getId();
-			sessionView.setId(id);
-			sessionView.setName((String) session.getAttribute(OjConstants.USER_NAME));
-			sessionView.setUri((String) session.getAttribute(OjConstants.LAST_ACCESS_URL));
-			sessionView.setIpAddress(getHost(id));
-			sessionView.setUserAgent(getUserAgent(id));
-			sessionView.setCtime(session.getStartTimestamp());
-			sessionView.setLastActivity(session.getLastAccessTime());
+			Entry<String, Session> entry = it.next();
+			Session session = entry.getValue();
+			String id = entry.getKey();
 
-			list.add(sessionView);
+			try {
+				sessionView.setId(id);
+				sessionView.setName((String) session.getAttribute(OjConstants.USER_NAME));
+				sessionView.setUri((String) session.getAttribute(OjConstants.LAST_ACCESS_URL));
+				sessionView.setIpAddress(getHost(id));
+				sessionView.setUserAgent(getUserAgent(id));
+				sessionView.setCtime(session.getStartTimestamp());
+				sessionView.setLastActivity(session.getLastAccessTime());
+
+				list.add(sessionView);
+			} catch (ExpiredSessionException e) {
+				log.warn("ExpiredSessionException: " + id, e);
+				it.remove();
+			}
 		}
 
 		return list;
