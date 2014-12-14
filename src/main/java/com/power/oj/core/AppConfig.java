@@ -90,205 +90,193 @@ import com.power.oj.util.freemarker.BlockDirective;
 import com.power.oj.util.freemarker.ExtendsDirective;
 import com.power.oj.util.freemarker.OverrideDirective;
 
-public class AppConfig extends JFinalConfig
-{
-  private static final String BASE_VIEW_PATH = "/WEB-INF/view";
-  private static final Logger log = Logger.getLogger(AppConfig.class);
-  private Routes routes;
+public class AppConfig extends JFinalConfig {
+	private static final String BASE_VIEW_PATH = "/WEB-INF/view";
+	private static final Logger log = Logger.getLogger(AppConfig.class);
+	private Routes routes;
 
-  /**
-   * 配置常量
-   */
-  public void configConstant(Constants me)
-  {
-    loadPropertyFile("oj.properties");
+	/**
+	 * 配置常量
+	 */
+	public void configConstant(Constants me) {
+		loadPropertyFile("oj.properties");
 
-    FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
-    FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
-    FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
-    FreeMarkerRender.getConfiguration().setSharedVariable("num2alpha", new Num2AlphaMethod());
+		FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
+		FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
+		FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
+		FreeMarkerRender.getConfiguration().setSharedVariable("num2alpha", new Num2AlphaMethod());
 
-    OjConfig.staticDirectory = getProperty("staticDirectory", null);
-    me.setDevMode(getPropertyToBoolean("devMode", false));
-    me.setBaseViewPath(BASE_VIEW_PATH);
-    me.setError401View(BASE_VIEW_PATH + "/error/401.html");
-    me.setError403View(BASE_VIEW_PATH + "/error/403.html");
-    me.setError404View(BASE_VIEW_PATH + "/error/404.html");
-    me.setError500View(BASE_VIEW_PATH + "/error/500.html");
+		OjConfig.staticDirectory = getProperty("staticDirectory", null);
+		me.setDevMode(getPropertyToBoolean("devMode", false));
+		me.setBaseViewPath(BASE_VIEW_PATH);
+		me.setError401View(BASE_VIEW_PATH + "/error/401.html");
+		me.setError403View(BASE_VIEW_PATH + "/error/403.html");
+		me.setError404View(BASE_VIEW_PATH + "/error/404.html");
+		me.setError500View(BASE_VIEW_PATH + "/error/500.html");
 
-    log.debug("configConstant finished.");
-  }
+		log.debug("configConstant finished.");
+	}
 
-  /**
-   * 配置路由
-   */
-  public void configRoute(Routes me)
-  {
-    this.routes = me;
+	/**
+	 * 配置路由
+	 */
+	public void configRoute(Routes me) {
+		this.routes = me;
 
-    me.add("/", MainController.class, "/common/");
-    me.add("/admin", AdminController.class);
-    me.add("/admin/contest", ContestAdminController.class);
-    me.add("/admin/problem", ProblemAdminController.class);
-    me.add("/admin/user", UserAdminController.class);
-    me.add("/api/admin", AdminApiController.class, "/admin/");
-    me.add("/api/contest", ContestApiController.class, "/contest/");
-    me.add("/api/discuss", DiscussionApiController.class, "/discuss/");
-    me.add("/api/friend", FriendApiController.class, "/user/");
-    me.add("/api/mail", MailApiController.class, "/mail/");
-    me.add("/api/oauth/qq", QQLoginApiController.class, "/user/");
-    me.add("/api/oauth/sina", SinaLoginApiController.class, "/user/");
-    me.add("/api/problem", ProblemApiController.class, "/problem/");
-    me.add("/api/user", UserApiController.class, "/user/");
-    me.add("/contest", ContestController.class);
-    me.add("/discuss", DiscussionController.class);
-    me.add("/mail", MailController.class);
-    me.add("/notice", NoticeController.class);
-    me.add("/honor", HonorController.class);
-    me.add("/news", NewsController.class);
-    me.add("/problem", ProblemController.class);
-    me.add("/solution", SolutionController.class);
-    me.add("/ueditor", UeditorController.class, "/common/");
-    me.add("/user", UserController.class);
+		me.add("/", MainController.class, "/common/");
+		me.add("/admin", AdminController.class);
+		me.add("/admin/contest", ContestAdminController.class);
+		me.add("/admin/problem", ProblemAdminController.class);
+		me.add("/admin/user", UserAdminController.class);
+		me.add("/api/admin", AdminApiController.class, "/admin/");
+		me.add("/api/contest", ContestApiController.class, "/contest/");
+		me.add("/api/discuss", DiscussionApiController.class, "/discuss/");
+		me.add("/api/friend", FriendApiController.class, "/user/");
+		me.add("/api/mail", MailApiController.class, "/mail/");
+		me.add("/api/oauth/qq", QQLoginApiController.class, "/user/");
+		me.add("/api/oauth/sina", SinaLoginApiController.class, "/user/");
+		me.add("/api/problem", ProblemApiController.class, "/problem/");
+		me.add("/api/user", UserApiController.class, "/user/");
+		me.add("/contest", ContestController.class);
+		me.add("/discuss", DiscussionController.class);
+		me.add("/mail", MailController.class);
+		me.add("/notice", NoticeController.class);
+		me.add("/honor", HonorController.class);
+		me.add("/news", NewsController.class);
+		me.add("/problem", ProblemController.class);
+		me.add("/solution", SolutionController.class);
+		me.add("/ueditor", UeditorController.class, "/common/");
+		me.add("/user", UserController.class);
 
-    log.debug("configRoute finished.");
-  }
+		log.debug("configRoute finished.");
+	}
 
-  /**
-   * 配置插件
-   */
-  public void configPlugin(Plugins me)
-  {
-    DruidPlugin druidPlugin = null;
-    if (isAceMode())
-    {
-      druidPlugin = new DruidPlugin(getProperty("ace.jdbcUrl"), getProperty("ace.user"), getProperty("ace.password").trim());
-    }
-    else
-    {
-      druidPlugin = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"), getProperty("dev.password").trim());
-    }
-    druidPlugin.addFilter(new StatFilter());
-    WallFilter wall = new WallFilter();
-    wall.setDbType("mysql");
-    druidPlugin.addFilter(wall);
-    me.add(druidPlugin);
+	/**
+	 * 配置插件
+	 */
+	public void configPlugin(Plugins me) {
+		DruidPlugin druidPlugin = null;
+		if (isAceMode()) {
+			druidPlugin = new DruidPlugin(getProperty("ace.jdbcUrl"), getProperty("ace.user"), getProperty("ace.password")
+					.trim());
+		} else {
+			druidPlugin = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"), getProperty("dev.password")
+					.trim());
+		}
+		druidPlugin.addFilter(new StatFilter());
+		WallFilter wall = new WallFilter();
+		wall.setDbType("mysql");
+		druidPlugin.addFilter(wall);
+		me.add(druidPlugin);
 
-    // 配置ActiveRecord插件
-    ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
-    arp.setShowSql(getPropertyToBoolean("devMode", false));
-    arp.addMapping("board", BoardModel.class);
-    arp.addMapping("comment", CommentModel.class);
-    arp.addMapping("contest", "cid", ContestModel.class);
-    arp.addMapping("contest_clarify", ContestClarifyModel.class);
-    arp.addMapping("contest_problem", ContestProblemModel.class);
-    arp.addMapping("contest_solution", "sid", ContestSolutionModel.class);
-    arp.addMapping("friend", FriendModel.class);
-    arp.addMapping("friend_group", FriendGroupModel.class);
-    arp.addMapping("mail", MailModel.class);
-    arp.addMapping("mail_content", MailContentModel.class);
-    arp.addMapping("notice", NoticeModel.class);
-    arp.addMapping("honors", HonorModel.class);
-    arp.addMapping("news", NewsModel.class);
-    arp.addMapping("problem", "pid", ProblemModel.class);
-    arp.addMapping("program_language", ProgramLanguageModel.class);
-    arp.addMapping("role", RoleModel.class);
-    arp.addMapping("session", "sessionId", SessionModel.class);
-    arp.addMapping("solution", "sid", SolutionModel.class);
-    arp.addMapping("topic", TopicModel.class);
-    arp.addMapping("user", "uid", UserModel.class); // 映射user表到 User模型,主键是uid
-    arp.addMapping("user_ext", "uid", UserExtModel.class);
-    arp.addMapping("variable", VariableModel.class);
-    arp.addMapping("web_login", WebLoginModel.class);
-    me.add(arp);
+		// 配置ActiveRecord插件
+		ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
+		arp.setShowSql(getPropertyToBoolean("devMode", false));
+		arp.addMapping("board", BoardModel.class);
+		arp.addMapping("comment", CommentModel.class);
+		arp.addMapping("contest", "cid", ContestModel.class);
+		arp.addMapping("contest_clarify", ContestClarifyModel.class);
+		arp.addMapping("contest_problem", ContestProblemModel.class);
+		arp.addMapping("contest_solution", "sid", ContestSolutionModel.class);
+		arp.addMapping("friend", FriendModel.class);
+		arp.addMapping("friend_group", FriendGroupModel.class);
+		arp.addMapping("mail", MailModel.class);
+		arp.addMapping("mail_content", MailContentModel.class);
+		arp.addMapping("notice", NoticeModel.class);
+		arp.addMapping("honors", HonorModel.class);
+		arp.addMapping("news", NewsModel.class);
+		arp.addMapping("problem", "pid", ProblemModel.class);
+		arp.addMapping("program_language", ProgramLanguageModel.class);
+		arp.addMapping("role", RoleModel.class);
+		arp.addMapping("session", "sessionId", SessionModel.class);
+		arp.addMapping("solution", "sid", SolutionModel.class);
+		arp.addMapping("topic", TopicModel.class);
+		arp.addMapping("user", "uid", UserModel.class); // 映射user表到
+														// User模型,主键是uid
+		arp.addMapping("user_ext", "uid", UserExtModel.class);
+		arp.addMapping("variable", VariableModel.class);
+		arp.addMapping("web_login", WebLoginModel.class);
+		me.add(arp);
 
-    me.add(new EhCachePlugin());
-    me.add(new ShiroPlugin(routes));
+		me.add(new EhCachePlugin());
+		me.add(new ShiroPlugin(routes));
 
-    log.debug("configPlugin finished.");
-  }
+		log.debug("configPlugin finished.");
+	}
 
-  /**
-   * 配置全局拦截器
-   */
-  public void configInterceptor(Interceptors me)
-  {
-    me.add(new TimingInterceptor());
-    me.add(new GlobalInterceptor());
-    me.add(new OjVariableInterceptor());
-    me.add(new SessionAttrInterceptor());
-    me.add(new AccessLogInterceptor());
-    me.add(new UserInterceptor());
-    me.add(new ShiroInterceptor());
+	/**
+	 * 配置全局拦截器
+	 */
+	public void configInterceptor(Interceptors me) {
+		me.add(new TimingInterceptor());
+		me.add(new GlobalInterceptor());
+		me.add(new OjVariableInterceptor());
+		me.add(new SessionAttrInterceptor());
+		me.add(new AccessLogInterceptor());
+		me.add(new UserInterceptor());
+		me.add(new ShiroInterceptor());
 
-    log.debug("configInterceptor finished.");
-  }
+		log.debug("configInterceptor finished.");
+	}
 
-  /**
-   * 配置处理器
-   */
-  public void configHandler(Handlers me)
-  {
-    me.add(new SessionHandler());
-    me.add(new BaseUrlHandler());
-    me.add(new UrlFilterHandler());
-    me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {
-      public boolean isPermitted(HttpServletRequest request)
-      {
-        return SecurityUtils.getSubject().isPermitted("system");
-      }
-    }));
+	/**
+	 * 配置处理器
+	 */
+	public void configHandler(Handlers me) {
+		me.add(new SessionHandler());
+		me.add(new BaseUrlHandler());
+		me.add(new UrlFilterHandler());
+		me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {
+			public boolean isPermitted(HttpServletRequest request) {
+				return SecurityUtils.getSubject().isPermitted("system");
+			}
+		}));
 
-    log.debug("configHandler finished.");
-  }
+		log.debug("configHandler finished.");
+	}
 
-  /**
-   * 初始化常量
-   */
-  @Override
-  public void afterJFinalStart()
-  {
-    OjConfig.initJudgeResult();
-    OjConfig.loadConfig();
+	/**
+	 * 初始化常量
+	 */
+	@Override
+	public void afterJFinalStart() {
+		OjConfig.initJudgeResult();
+		OjConfig.loadConfig();
 
-    I18N.init("ojText", Locale.ENGLISH, null);
-    if (!OjConfig.isDevMode())
-    {
-      EhcacheService.start();
-      
-      loadPropertyFile("oj.properties");
-      OjConfig.setBaseURL(getProperty("baseURL", null));
-    }
+		I18N.init("ojText", Locale.ENGLISH, null);
+		if (!OjConfig.isDevMode()) {
+			EhcacheService.start();
 
-    log.info(PathKit.getWebRootPath());
-    log.debug("afterJFinalStart finished.");
-  }
-  
-  @Override
-  public void beforeJFinalStop()
-  {
-    //SessionService.me().deleteAllSession();
-    EhcacheService.destroy();
-    log.debug("beforeJFinalStop");
-  }
-  
-  public static String getBaseViewPath()
-  {
-    return BASE_VIEW_PATH;
-  }
+			loadPropertyFile("oj.properties");
+			OjConfig.setBaseURL(getProperty("baseURL", null));
+		}
 
-  private boolean isAceMode()
-  {
-    return "/home/usera".equals(SystemUtil.getUserHome());
-  }
+		log.info(PathKit.getWebRootPath());
+		log.debug("afterJFinalStart finished.");
+	}
 
-  /**
-   * 建议使用 JFinal 手册推荐的方式启动项目 运行此 main 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此
-   * 使用内置的Jetty容器， 基于Tomcat开发，需要将jetty.jar删除
-   */
-  public static void main(String[] args)
-  {
-    JFinal.start("WebRoot", 8000, "/", 5);
-  }
+	@Override
+	public void beforeJFinalStop() {
+		// SessionService.me().deleteAllSession();
+		EhcacheService.destroy();
+		log.debug("beforeJFinalStop");
+	}
+
+	public static String getBaseViewPath() {
+		return BASE_VIEW_PATH;
+	}
+
+	private boolean isAceMode() {
+		return "/home/usera".equals(SystemUtil.getUserHome());
+	}
+
+	/**
+	 * 建议使用 JFinal 手册推荐的方式启动项目 运行此 main
+	 * 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此 使用内置的Jetty容器，
+	 * 基于Tomcat开发，需要将jetty.jar删除
+	 */
+	public static void main(String[] args) {
+		JFinal.start("WebRoot", 8000, "/", 5);
+	}
 
 }

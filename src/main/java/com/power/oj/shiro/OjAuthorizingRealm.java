@@ -22,88 +22,76 @@ import com.power.oj.core.service.OjService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
-public class OjAuthorizingRealm extends AuthorizingRealm
-{
+public class OjAuthorizingRealm extends AuthorizingRealm {
 
-  private static final Logger log = Logger.getLogger(OjAuthorizingRealm.class);
-  
-  @Override
-  protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
-  {
-    Integer uid = (Integer) principals.fromRealm(getName()).iterator().next();
+	private static final Logger log = Logger.getLogger(OjAuthorizingRealm.class);
 
-    if (uid != null)
-    {
-      log.info(uid.toString());
-      List<Record> roleList = OjService.me().getUserRoles(uid);
-      
-      if (roleList != null && roleList.size() > 0)
-      {
-        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        Set<String> roles = new HashSet<String>();
-        Set<String> pers = new HashSet<String>();
+	@Override
+	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		Integer uid = (Integer) principals.fromRealm(getName()).iterator().next();
 
-        for (Record record : roleList)
-        {
-          roles.add(record.getStr("role"));
-          log.info("role: " + record.getStr("role"));
-          
-          List<Record> permissionList = OjService.me().getRolePermission(record.getInt("rid"));
-          for (Record permissionRecord : permissionList)
-          {
-            pers.add(permissionRecord.getStr("permission"));
-            log.info("permission: " + permissionRecord.getStr("permission"));
-          }
-        }
-        info.setRoles(roles);
-        info.setStringPermissions(pers);
-        
-        return info;
-      }
-    }
+		if (uid != null) {
+			log.info(uid.toString());
+			List<Record> roleList = OjService.me().getUserRoles(uid);
 
-    return null;
-  }
+			if (roleList != null && roleList.size() > 0) {
+				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+				Set<String> roles = new HashSet<String>();
+				Set<String> pers = new HashSet<String>();
 
-  @Override
-  protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException
-  {
-    UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-    UserModel userModel = UserService.me().getUserByName(token.getUsername());
+				for (Record record : roleList) {
+					roles.add(record.getStr("role"));
+					log.info("role: " + record.getStr("role"));
 
-    if (userModel != null)
-    {
-      AuthenticationInfo info = new SimpleAuthenticationInfo(userModel.getUid(), userModel.getPassword(), getName());
-      clearCachedAuthorizationInfo(info.getPrincipals());
-      log.info("clearCachedAuthorizationInfo" + info.getPrincipals());
-      return info;
-    }
+					List<Record> permissionList = OjService.me().getRolePermission(record.getInt("rid"));
+					for (Record permissionRecord : permissionList) {
+						pers.add(permissionRecord.getStr("permission"));
+						log.info("permission: " + permissionRecord.getStr("permission"));
+					}
+				}
+				info.setRoles(roles);
+				info.setStringPermissions(pers);
 
-    return null;
-  }
+				return info;
+			}
+		}
 
-  /**
-   * 更新用户授权信息缓存.
-   */
-  public void clearCachedAuthorizationInfo(String principal)
-  {
-    SimplePrincipalCollection principals = new SimplePrincipalCollection(principal, getName());
-    clearCachedAuthorizationInfo(principals);
-  }
+		return null;
+	}
 
-  /**
-   * 清除所有用户授权信息缓存.
-   */
-  public void clearAllCachedAuthorizationInfo()
-  {
-    Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
-    if (cache != null)
-    {
-      for (Object key : cache.keys())
-      {
-        cache.remove(key);
-      }
-    }
-  }
+	@Override
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
+		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+		UserModel userModel = UserService.me().getUserByName(token.getUsername());
+
+		if (userModel != null) {
+			AuthenticationInfo info = new SimpleAuthenticationInfo(userModel.getUid(), userModel.getPassword(), getName());
+			clearCachedAuthorizationInfo(info.getPrincipals());
+			log.info("clearCachedAuthorizationInfo" + info.getPrincipals());
+			return info;
+		}
+
+		return null;
+	}
+
+	/**
+	 * 更新用户授权信息缓存.
+	 */
+	public void clearCachedAuthorizationInfo(String principal) {
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(principal, getName());
+		clearCachedAuthorizationInfo(principals);
+	}
+
+	/**
+	 * 清除所有用户授权信息缓存.
+	 */
+	public void clearAllCachedAuthorizationInfo() {
+		Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
+		if (cache != null) {
+			for (Object key : cache.keys()) {
+				cache.remove(key);
+			}
+		}
+	}
 
 }

@@ -35,8 +35,7 @@ public abstract class XmlUtil {
 
 		Element generator = rootElement.addElement("generator");
 		generator.addAttribute("name", OjConfig.getString("siteTitle", "PowerOJ"));
-		generator.addAttribute("url",
-				OjConfig.getString("domaiNname", "http://git.oschina.net/power/oj"));
+		generator.addAttribute("url", OjConfig.getString("domaiNname", "http://git.oschina.net/power/oj"));
 
 		return rootElement;
 	}

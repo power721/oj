@@ -19,159 +19,141 @@ import com.power.oj.user.RoleModel;
 import com.power.oj.util.Tool;
 import com.power.oj.util.freemarker.FreemarkerKit;
 
-public final class OjService
-{
-  private static final Logger log = Logger.getLogger(OjService.class);
-  private static final OjService me = new OjService();
-  
-  private OjService() {}
-  
-  public static OjService me()
-  {
-    return me;
-  }
-  
-  public void loadVariable()
-  {
-    OjConfig.loadVariable();
-  }
-  
-  public void loadLanguage()
-  {
-    OjConfig.loadLanguage();
-  }
-  
-  public void initJudgeResult()
-  {
-    OjConfig.initJudgeResult();
-  }
-  
-  public boolean checkEmailConf()
-  {
-    if (OjConfig.getString("adminEmail") == null)
-    {
-      return false;
-    }
-    
-    String emailServer = OjConfig.getString("emailServer");
-    String emailUser = OjConfig.getString("emailUser");
-    String emailPass = OjConfig.getString("emailPass");
-    if (emailServer == null || emailUser == null || emailPass == null)
-    {
-      return false;
-    }
-    return true;
-  }
+public final class OjService {
+	private static final Logger log = Logger.getLogger(OjService.class);
+	private static final OjService me = new OjService();
 
-  public boolean sendVerifyEmail(String name, String email, String token)
-  {
-    Map<String, Object> paras = new HashMap<String, Object>();
-    paras.put(OjConstants.BASE_URL, OjConfig.getBaseURL());
-    paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
-    paras.put("name", name);
-    paras.put("token", token);
-    paras.put("ctime", OjConfig.timeStamp);
-    paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+	private OjService() {
+	}
 
-    sendVerifyEmail(name, email, paras);
-    
-    log.info("Account recovery email send to user " + name);
-    return true;
-  }
+	public static OjService me() {
+		return me;
+	}
 
-  public boolean sendVerifyEmail(String name, final String email, Map<String, Object> paras)
-  {
-    final String adminEmail = OjConfig.getString("adminEmail");
-    if (adminEmail == null)
-    {
-      return false;
-    }
-    
-    String html = FreemarkerKit.processString("tpl/verifyEmail.html", paras);
-    final EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
-    
-    new Thread(new Runnable() {
-      @Override
-      public void run()
-      {
-        Tool.sendEmail(adminEmail, email, "Confirm PowerOJ account!", htmlMessage);
-      }}).start();
-    
-    log.info("Account recovery email send to user " + name);
-    return true;
-  }
+	public void loadVariable() {
+		OjConfig.loadVariable();
+	}
 
-  public boolean sendResetPasswordEmail(String name, final String email, String token)
-  {
-    final String adminEmail = OjConfig.getString("adminEmail");
-    
-    Map<String, Object> paras = new HashMap<String, Object>();
-    paras.put(OjConstants.BASE_URL, OjConfig.getBaseURL());
-    paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
-    paras.put("name", name);
-    paras.put("token", token);
-    paras.put("ctime", OjConfig.timeStamp);
-    paras.put("expires", OjConstants.RESET_PASSWORD_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
-    
-    String html = FreemarkerKit.processString("/tpl/resetEmail.html", paras);
-    final EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
-    
-    new Thread(new Runnable() {
-      @Override
-      public void run()
-      {
-        Tool.sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
-      }}).start();
-    
-    log.info("Account recovery email send to user " + name);
-    return true;
-  }
+	public void loadLanguage() {
+		OjConfig.loadLanguage();
+	}
 
-  public List<Record> getUserRoles(int uid)
-  {
-    String sql = "SELECT r.name AS role, r.id AS rid FROM role r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
-    List<Record> roleList = Db.find(sql, uid);
-    
-    return roleList;
-  }
+	public void initJudgeResult() {
+		OjConfig.initJudgeResult();
+	}
 
-  public List<Record> getRoleList()
-  {
-    return Db.find("SELECT * FROM role ORDER BY id");
-  }
-  
-  public Page<RoleModel> getRoleList(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch)
-  {
-    List<Object> param = new ArrayList<Object>();
-    String sql = "SELECT *";
-    StringBuilder sb = new StringBuilder().append("FROM role WHERE 1=1");
+	public boolean checkEmailConf() {
+		if (OjConfig.getString("adminEmail") == null) {
+			return false;
+		}
 
-    if (StringUtil.isNotEmpty(sSearch))
-    {
-      sb.append(" AND name LIKE ? ");
-      param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
-    }
-    sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", id");
+		String emailServer = OjConfig.getString("emailServer");
+		String emailUser = OjConfig.getString("emailUser");
+		String emailPass = OjConfig.getString("emailPass");
+		if (emailServer == null || emailUser == null || emailPass == null) {
+			return false;
+		}
+		return true;
+	}
 
-    log.info(sb.toString());
-    return RoleModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
-  }
-  
-  public List<Record> getRolePermission(int rid)
-  {
-    String sql = "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
-    List<Record> permissionList = Db.find(sql, rid);
-    
-    return permissionList;
-  }
+	public boolean sendVerifyEmail(String name, String email, String token) {
+		Map<String, Object> paras = new HashMap<String, Object>();
+		paras.put(OjConstants.BASE_URL, OjConfig.getBaseURL());
+		paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+		paras.put("name", name);
+		paras.put("token", token);
+		paras.put("ctime", OjConfig.timeStamp);
+		paras.put("expires", OjConstants.VERIFY_EMAIL_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
 
-  public List<Record> getPermissionList()
-  {
-    return Db.find("SELECT * FROM permission WHERE id>1 ORDER BY id");
-  }
+		sendVerifyEmail(name, email, paras);
 
-  public List<Record> tagList()
-  {
-    return Db.find("SELECT tag FROM tag WHERE status=1 GROUP by tag ORDER BY COUNT(tag) DESC");
-  }
+		log.info("Account recovery email send to user " + name);
+		return true;
+	}
+
+	public boolean sendVerifyEmail(String name, final String email, Map<String, Object> paras) {
+		final String adminEmail = OjConfig.getString("adminEmail");
+		if (adminEmail == null) {
+			return false;
+		}
+
+		String html = FreemarkerKit.processString("tpl/verifyEmail.html", paras);
+		final EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Tool.sendEmail(adminEmail, email, "Confirm PowerOJ account!", htmlMessage);
+			}
+		}).start();
+
+		log.info("Account recovery email send to user " + name);
+		return true;
+	}
+
+	public boolean sendResetPasswordEmail(String name, final String email, String token) {
+		final String adminEmail = OjConfig.getString("adminEmail");
+
+		Map<String, Object> paras = new HashMap<String, Object>();
+		paras.put(OjConstants.BASE_URL, OjConfig.getBaseURL());
+		paras.put(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+		paras.put("name", name);
+		paras.put("token", token);
+		paras.put("ctime", OjConfig.timeStamp);
+		paras.put("expires", OjConstants.RESET_PASSWORD_EXPIRES_TIME / OjConstants.MINUTE_IN_MILLISECONDS);
+
+		String html = FreemarkerKit.processString("/tpl/resetEmail.html", paras);
+		final EmailMessage htmlMessage = new EmailMessage(html, MimeTypes.MIME_TEXT_HTML);
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Tool.sendEmail(adminEmail, email, "Reset PowerOJ account!", htmlMessage);
+			}
+		}).start();
+
+		log.info("Account recovery email send to user " + name);
+		return true;
+	}
+
+	public List<Record> getUserRoles(int uid) {
+		String sql = "SELECT r.name AS role, r.id AS rid FROM role r LEFT JOIN user_role ur ON ur.rid = r.id WHERE ur.uid = ?";
+		List<Record> roleList = Db.find(sql, uid);
+
+		return roleList;
+	}
+
+	public List<Record> getRoleList() {
+		return Db.find("SELECT * FROM role ORDER BY id");
+	}
+
+	public Page<RoleModel> getRoleList(int pageNumber, int pageSize, String sSortName, String sSortDir, String sSearch) {
+		List<Object> param = new ArrayList<Object>();
+		String sql = "SELECT *";
+		StringBuilder sb = new StringBuilder().append("FROM role WHERE 1=1");
+
+		if (StringUtil.isNotEmpty(sSearch)) {
+			sb.append(" AND name LIKE ? ");
+			param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+		}
+		sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", id");
+
+		log.info(sb.toString());
+		return RoleModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
+	}
+
+	public List<Record> getRolePermission(int rid) {
+		String sql = "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
+		List<Record> permissionList = Db.find(sql, rid);
+
+		return permissionList;
+	}
+
+	public List<Record> getPermissionList() {
+		return Db.find("SELECT * FROM permission WHERE id>1 ORDER BY id");
+	}
+
+	public List<Record> tagList() {
+		return Db.find("SELECT tag FROM tag WHERE status=1 GROUP by tag ORDER BY COUNT(tag) DESC");
+	}
 }

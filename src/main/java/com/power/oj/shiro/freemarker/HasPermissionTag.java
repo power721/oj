@@ -7,10 +7,8 @@ package com.power.oj.shiro.freemarker;
  * 
  * @since 0.1
  */
-public class HasPermissionTag extends PermissionTag
-{
-  protected boolean showTagBody(String p)
-  {
-    return isPermitted(p);
-  }
+public class HasPermissionTag extends PermissionTag {
+	protected boolean showTagBody(String p) {
+		return isPermitted(p);
+	}
 }

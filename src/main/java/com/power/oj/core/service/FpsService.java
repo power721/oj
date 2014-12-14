@@ -46,8 +46,7 @@ public class FpsService {
 		int memoryLimit = 65536;
 		String unit;
 
-		File dataDir = new File(OjConfig.getString("dataPath") + File.separator
-				+ problem.getModel().getPid());
+		File dataDir = new File(OjConfig.getString("dataPath") + File.separator + problem.getModel().getPid());
 		problem.setDataDir(dataDir);
 		try {
 			FileUtil.mkdirs(dataDir);
@@ -111,8 +110,8 @@ public class FpsService {
 			if (name.equalsIgnoreCase("solution")) {
 				problem.setSolution(value);
 				problem.setSolutionLang(e.attributeValue("language"));
-				saveSourceCodeToFile(String.valueOf(problem.getModel().getPid()),
-						problem.getSolutionLang(), problem.getSolution());
+				saveSourceCodeToFile(String.valueOf(problem.getModel().getPid()), problem.getSolutionLang(),
+						problem.getSolution());
 			}
 			if (name.equalsIgnoreCase("spj")) {
 				String lang = e.attributeValue("language");
@@ -217,8 +216,7 @@ public class FpsService {
 	}
 
 	private Element addTestData(Element item) throws IOException {
-		File dataDir = new File(OjConfig.getString("dataPath") + File.separator
-				+ problem.getModel().getPid());
+		File dataDir = new File(OjConfig.getString("dataPath") + File.separator + problem.getModel().getPid());
 		problem.setDataDir(dataDir);
 
 		if (!dataDir.isDirectory()) {
@@ -238,8 +236,7 @@ public class FpsService {
 				continue;
 			}
 
-			File outFile = new File(dataDir.getAbsolutePath() + File.separator
-					+ getOutDataFileName(inFile));
+			File outFile = new File(dataDir.getAbsolutePath() + File.separator + getOutDataFileName(inFile));
 			if (!outFile.isFile()) {
 				log.warn("Output file for input file does not exist: " + inFile.getAbsolutePath());
 				continue;
@@ -270,15 +267,13 @@ public class FpsService {
 			}
 		}
 
-		SolutionModel solutionModel = SolutionModel.dao
-				.findFirst(
-						"SELECT * FROM solution s WHERE pid=? AND result=? AND s.status=1 ORDER BY time,memory LIMIT 1",
-						problem.getModel().getPid(), ResultType.AC);
+		SolutionModel solutionModel = SolutionModel.dao.findFirst(
+				"SELECT * FROM solution s WHERE pid=? AND result=? AND s.status=1 ORDER BY time,memory LIMIT 1", problem
+						.getModel().getPid(), ResultType.AC);
 		if (solutionModel != null) {
 			Element solution = item.addElement("solution");
 			solution.addCDATA(solutionModel.getSource());
-			solution.addAttribute("language",
-					ext2lang(OjConfig.languageType.get(solutionModel.getLanguage()).getExt()));
+			solution.addAttribute("language", ext2lang(OjConfig.languageType.get(solutionModel.getLanguage()).getExt()));
 		}
 
 		return item;
@@ -287,8 +282,7 @@ public class FpsService {
 	private Element addSpj(Element item) throws IOException {
 		File spjFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + "spj");
 		if (!spjFile.isFile()) {
-			spjFile = new File(problem.getDataDir().getAbsolutePath() + File.separator
-					+ "Validate.exe");
+			spjFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + "Validate.exe");
 		}
 
 		if (spjFile.isFile()) {
@@ -324,8 +318,7 @@ public class FpsService {
 		String src;
 		String base64;
 		String rootPath = PathKit.getWebRootPath() + File.separator;
-		Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]?([^'\"]+)['\"]?[^>]*>",
-				Pattern.CASE_INSENSITIVE);
+		Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]?([^'\"]+)['\"]?[^>]*>", Pattern.CASE_INSENSITIVE);
 		Matcher m = p.matcher(text);
 
 		while (m.find()) {
@@ -357,8 +350,7 @@ public class FpsService {
 				}
 			} else {
 				try {
-					base64 = Base64.encodeBase64String(FileUtils.readFileToByteArray(new File(
-							rootPath + src)));
+					base64 = Base64.encodeBase64String(FileUtils.readFileToByteArray(new File(rootPath + src)));
 				} catch (IOException e) {
 					if (OjConfig.isDevMode()) {
 						log.warn("read image file failed!", e);
@@ -396,8 +388,7 @@ public class FpsService {
 
 		String originalSrc = e.elementText("src");
 		String base64 = e.elementText("base64");
-		StringBuilder sb = new StringBuilder(6).append(OjConfig.problemImagePath).append(
-				File.separator);
+		StringBuilder sb = new StringBuilder(6).append(OjConfig.problemImagePath).append(File.separator);
 		sb.append(pid).append("_").append(num).append(".png");
 		File imageFile = new File(sb.toString());
 		String src = imageFile.getAbsolutePath().replace(PathKit.getWebRootPath(), "").substring(1);
@@ -429,8 +420,7 @@ public class FpsService {
 			ext = "py";
 		}
 
-		File sourceFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + name
-				+ "." + ext);
+		File sourceFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + name + "." + ext);
 
 		try {
 			FileUtil.touch(sourceFile);
@@ -479,10 +469,9 @@ public class FpsService {
 	}
 
 	private void saveSampleData() {
-		File dataInFile = new File(problem.getDataDir().getAbsolutePath() + File.separator
-				+ "sample" + OjConstants.DATA_EXT_IN);
-		File dataOutFile = new File(problem.getDataDir().getAbsolutePath() + File.separator
-				+ "sample" + OjConstants.DATA_EXT_OUT);
+		File dataInFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + "sample" + OjConstants.DATA_EXT_IN);
+		File dataOutFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + "sample"
+				+ OjConstants.DATA_EXT_OUT);
 
 		try {
 			FileUtil.touch(dataOutFile);
@@ -503,8 +492,7 @@ public class FpsService {
 	}
 
 	private String getOutDataFileName(File inFile) {
-		return inFile.getName().substring(0,
-				inFile.getName().length() - OjConstants.DATA_EXT_IN.length())
+		return inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length())
 				+ OjConstants.DATA_EXT_OUT;
 	}
 

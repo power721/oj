@@ -26,10 +26,10 @@ public class HonorModel extends Model<HonorModel> {
 		return getStr(CONTEST);
 	}
 
-	public HonorModel setContest(String value){
-		return set(CONTEST , value);
+	public HonorModel setContest(String value) {
+		return set(CONTEST, value);
 	}
-	
+
 	public String getTeam() {
 		return getStr(TEAM);
 	}

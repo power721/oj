@@ -17,204 +17,172 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.problem.ProblemModel;
 
-public class PowerJudgeAdapter extends JudgeAdapter
-{
+public class PowerJudgeAdapter extends JudgeAdapter {
 
-  public PowerJudgeAdapter()
-  {
-    super();
-  }
-  
-  public PowerJudgeAdapter(Solution solution)
-  {
-    super(solution);
-  }
-  
-  @Override
-  protected boolean compile() throws IOException
-  {
-    return true;
-  }
+	public PowerJudgeAdapter() {
+		super();
+	}
 
-  @Override
-  protected boolean runProcess() throws IOException, InterruptedException
-  {
-    ProblemModel problemModel;
-    if (solution instanceof ContestSolutionModel)
-    {
-      problemModel = problemService.findProblemForContest(solution.getPid());
-    } else
-    {
-      problemModel = problemService.findProblem(solution.getPid());
-    }
-    
-    setResult(ResultType.RUN, 0, 0);
-    
-    int timeLimit = problemModel.getTimeLimit();
-    int memoryLimit = problemModel.getMemoryLimit();
-    String cmd = buildCommand(timeLimit, memoryLimit);
-    
-    log.debug("Ready to execute Judge process: " + cmd);  // DEBUG
-    Process process = Runtime.getRuntime().exec(cmd);
-    InputStream inputStream = process.getInputStream();
-    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-    String line;
-    StringBuilder stringBuilder = new StringBuilder();
-    while ((line = bufferedReader.readLine()) != null)
-    {
-      stringBuilder.append(line);
-    }
-    bufferedReader.close();
+	public PowerJudgeAdapter(Solution solution) {
+		super(solution);
+	}
 
-    StringBuilder sb = new StringBuilder();
-    InputStream errorStream = process.getErrorStream();
-    while (errorStream.available() > 0)
-    {
-      Character c = new Character((char) errorStream.read());
-      sb.append(c);
-      if (sb.length() > OjConstants.MAX_ERROR_LENGTH)
-      {
-        break;
-      }
-    }
+	@Override
+	protected boolean compile() throws IOException {
+		return true;
+	}
 
-    String[] resultStr = stringBuilder.toString().split(" ");
-    int exitValue = process.waitFor();
-    if (exitValue > 0)
-    {
-      log.warn(String.valueOf(exitValue));
-      updateSystemError(sb.toString());
-      return false;
-    }
-    checkResult(resultStr, sb.toString());
+	@Override
+	protected boolean runProcess() throws IOException, InterruptedException {
+		ProblemModel problemModel;
+		if (solution instanceof ContestSolutionModel) {
+			problemModel = problemService.findProblemForContest(solution.getPid());
+		} else {
+			problemModel = problemService.findProblem(solution.getPid());
+		}
 
-    log.info(Printf.str("%d: Total run time: %d ms", solution.getSid(), solution.getTime()));
-    synchronized (JudgeAdapter.class)
-    {
-      updateUser();
-      if (!updateContest())
-      {
-        updateProblem();
-      }
-    }
-    return true;
-  }
-  
-  private String buildCommand(int timeLimit, int memoryLimit)
-  {
-    String workPath = judgeService.getWorkPath(solution);
-    String dataPath = OjConfig.getString("dataPath");
-    
-    StringBuilder stringBuilder = new StringBuilder();
-    stringBuilder.append("/usr/local/bin/powerjudge");
-    stringBuilder.append(" -s ");
-    stringBuilder.append(solution.getSid());
-    stringBuilder.append(" -p ");
-    stringBuilder.append(solution.getPid());
-    stringBuilder.append(" -l ");
-    stringBuilder.append(solution.getLanguage());
-    stringBuilder.append(" -t ");
-    stringBuilder.append(timeLimit);
-    stringBuilder.append(" -m ");
-    stringBuilder.append(memoryLimit);
-    stringBuilder.append(" -d ");
-    stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(workPath));
-    stringBuilder.append(" -D ");
-    stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(dataPath));
+		setResult(ResultType.RUN, 0, 0);
 
-    return stringBuilder.toString();
-  }
+		int timeLimit = problemModel.getTimeLimit();
+		int memoryLimit = problemModel.getMemoryLimit();
+		String cmd = buildCommand(timeLimit, memoryLimit);
 
-  private void checkResult(String[] resultStr, String errorOut)
-  {
-    if (resultStr != null && resultStr.length >= 4)
-    {
-      try
-      {
-        int result = Integer.parseInt(resultStr[0]);
-        int time = Integer.parseInt(resultStr[1]);
-        int memory = Integer.parseInt(resultStr[2]);
-        int test = Integer.parseInt(resultStr[3]);
-        setResult(result, time, memory, test);
-      } catch (NumberFormatException e)
-      {
-        updateSystemError(e.getLocalizedMessage());
+		log.debug("Ready to execute Judge process: " + cmd); // DEBUG
+		Process process = Runtime.getRuntime().exec(cmd);
+		InputStream inputStream = process.getInputStream();
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+		String line;
+		StringBuilder stringBuilder = new StringBuilder();
+		while ((line = bufferedReader.readLine()) != null) {
+			stringBuilder.append(line);
+		}
+		bufferedReader.close();
 
-        if (OjConfig.isDevMode())
-          e.printStackTrace();
-        log.error(e.getLocalizedMessage());
-      }
-    } else
-    {
-      updateSystemError(errorOut);
-    }
+		StringBuilder sb = new StringBuilder();
+		InputStream errorStream = process.getErrorStream();
+		while (errorStream.available() > 0) {
+			Character c = new Character((char) errorStream.read());
+			sb.append(c);
+			if (sb.length() > OjConstants.MAX_ERROR_LENGTH) {
+				break;
+			}
+		}
 
-    if (solution.getResult() == ResultType.CE)
-    {
-      updateCompileError(readError("stderr_compiler.txt"));
-    } else if (solution.getResult() == ResultType.RE)
-    {
-      if (StringUtil.isBlank(errorOut))
-      {
-        errorOut = readError("stderr_executive.txt");
-      }
-      updateRuntimeError(errorOut);
-    }
-  }
+		String[] resultStr = stringBuilder.toString().split(" ");
+		int exitValue = process.waitFor();
+		if (exitValue > 0) {
+			log.warn(String.valueOf(exitValue));
+			updateSystemError(sb.toString());
+			return false;
+		}
+		checkResult(resultStr, sb.toString());
 
-  private String readError(String fileName)
-  {
-    String workPath = judgeService.getWorkPath(solution);
-    StringBuilder sb = new StringBuilder();
-    BufferedReader br = null;
-    try
-    {
-      br = new BufferedReader(new FileReader(judgeService.getWorkDirPath(solution) + fileName));
-      String line;
-      while ((line = br.readLine()) != null)
-      {
-        if (line.trim().startsWith(workPath))
-        {
-          line = line.substring(workPath.length());
-        }
-        else if (line.trim().startsWith("at")) // Java RE print stack trace
-        {
-          break;
-        }
-        else if (line.trim().startsWith("Traceback")) // skip Python RE info
-        {
-          break;
-        }
-        /*else if (line.trim().startsWith("File \"<string>\"")) // Python RE print input data
-        {
-          break;
-        }*/
-        
-        sb.append(line).append('\n');
-        if (sb.length() > OjConstants.MAX_ERROR_LENGTH)
-        {
-          break;
-        }
-      }
-    } catch (Exception e)
-    {
-      if (OjConfig.isDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
-    } finally
-    {
-      if (br != null)
-      {
-        try
-        {
-          br.close();
-        } catch (IOException ignored)
-        {
-        }
-      }
-    }
+		log.info(Printf.str("%d: Total run time: %d ms", solution.getSid(), solution.getTime()));
+		synchronized (JudgeAdapter.class) {
+			updateUser();
+			if (!updateContest()) {
+				updateProblem();
+			}
+		}
+		return true;
+	}
 
-    return sb.length() > 0 ? sb.toString() : null;
-  }
+	private String buildCommand(int timeLimit, int memoryLimit) {
+		String workPath = judgeService.getWorkPath(solution);
+		String dataPath = OjConfig.getString("dataPath");
+
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("/usr/local/bin/powerjudge");
+		stringBuilder.append(" -s ");
+		stringBuilder.append(solution.getSid());
+		stringBuilder.append(" -p ");
+		stringBuilder.append(solution.getPid());
+		stringBuilder.append(" -l ");
+		stringBuilder.append(solution.getLanguage());
+		stringBuilder.append(" -t ");
+		stringBuilder.append(timeLimit);
+		stringBuilder.append(" -m ");
+		stringBuilder.append(memoryLimit);
+		stringBuilder.append(" -d ");
+		stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(workPath));
+		stringBuilder.append(" -D ");
+		stringBuilder.append(FileNameUtil.normalizeNoEndSeparator(dataPath));
+
+		return stringBuilder.toString();
+	}
+
+	private void checkResult(String[] resultStr, String errorOut) {
+		if (resultStr != null && resultStr.length >= 4) {
+			try {
+				int result = Integer.parseInt(resultStr[0]);
+				int time = Integer.parseInt(resultStr[1]);
+				int memory = Integer.parseInt(resultStr[2]);
+				int test = Integer.parseInt(resultStr[3]);
+				setResult(result, time, memory, test);
+			} catch (NumberFormatException e) {
+				updateSystemError(e.getLocalizedMessage());
+
+				if (OjConfig.isDevMode())
+					e.printStackTrace();
+				log.error(e.getLocalizedMessage());
+			}
+		} else {
+			updateSystemError(errorOut);
+		}
+
+		if (solution.getResult() == ResultType.CE) {
+			updateCompileError(readError("stderr_compiler.txt"));
+		} else if (solution.getResult() == ResultType.RE) {
+			if (StringUtil.isBlank(errorOut)) {
+				errorOut = readError("stderr_executive.txt");
+			}
+			updateRuntimeError(errorOut);
+		}
+	}
+
+	private String readError(String fileName) {
+		String workPath = judgeService.getWorkPath(solution);
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(judgeService.getWorkDirPath(solution) + fileName));
+			String line;
+			while ((line = br.readLine()) != null) {
+				if (line.trim().startsWith(workPath)) {
+					line = line.substring(workPath.length());
+				} else if (line.trim().startsWith("at")) // Java RE print stack
+															// trace
+				{
+					break;
+				} else if (line.trim().startsWith("Traceback")) // skip Python
+																// RE info
+				{
+					break;
+				}
+				/*
+				 * else if (line.trim().startsWith("File \"<string>\"")) //
+				 * Python RE print input data { break; }
+				 */
+
+				sb.append(line).append('\n');
+				if (sb.length() > OjConstants.MAX_ERROR_LENGTH) {
+					break;
+				}
+			}
+		} catch (Exception e) {
+			if (OjConfig.isDevMode())
+				e.printStackTrace();
+			log.error(e.getLocalizedMessage());
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException ignored) {
+				}
+			}
+		}
+
+		return sb.length() > 0 ? sb.toString() : null;
+	}
 
 }

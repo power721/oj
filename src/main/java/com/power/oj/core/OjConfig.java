@@ -22,208 +22,182 @@ import com.power.oj.util.FileKit;
  * @author power
  * 
  */
-public class OjConfig
-{
-  private static String baseURL = null;
-  public static String siteTitle = null;
-  public static String staticDirectory = null;
-  public static String userAvatarPath = null;
-  public static String problemImagePath = null;
-  public static String uploadPath = null;
-  public static String downloadPath = null;
+public class OjConfig {
+	private static String baseURL = null;
+	public static String siteTitle = null;
+	public static String staticDirectory = null;
+	public static String userAvatarPath = null;
+	public static String problemImagePath = null;
+	public static String uploadPath = null;
+	public static String downloadPath = null;
 
-  public static int contestPageSize = 20;
-  public static int contestRankPageSize = 50;
-  public static int problemPageSize = 50;
-  public static int userPageSize = 20;
-  public static int friendPageSize = 10;
-  public static int statusPageSize = 20;
-  public static int mailGroupPageSize = 10;
-  public static int mailPageSize = 20;
-  public static int noticePageSize = 20;
-  public static int newsPageSize = 4;
+	public static int contestPageSize = 20;
+	public static int contestRankPageSize = 50;
+	public static int problemPageSize = 50;
+	public static int userPageSize = 20;
+	public static int friendPageSize = 10;
+	public static int statusPageSize = 20;
+	public static int mailGroupPageSize = 10;
+	public static int mailPageSize = 20;
+	public static int noticePageSize = 20;
+	public static int newsPageSize = 4;
 
-  public static int timeStamp;
-  public static long startInterceptorTime;
-  public static long startGlobalHandlerTime;
+	public static int timeStamp;
+	public static long startInterceptorTime;
+	public static long startGlobalHandlerTime;
 
-  public static boolean variableChanged = false;
-  public static List<ProgramLanguageModel> programLanguages;
-  public static Map<Integer, ProgramLanguageModel> languageType;
-  public static Map<Integer, String> languageName;
-  public static Map<Integer, ResultType> resultType;
-  public static List<ResultType> judgeResult;
-  public static List<Integer> level;
+	public static boolean variableChanged = false;
+	public static List<ProgramLanguageModel> programLanguages;
+	public static Map<Integer, ProgramLanguageModel> languageType;
+	public static Map<Integer, String> languageName;
+	public static Map<Integer, ResultType> resultType;
+	public static List<ResultType> judgeResult;
+	public static List<Integer> level;
 
-  private static Map<String, VariableModel> variable;
-  private static boolean bIsLinux;
-  static
-  {
-    bIsLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
-  }
-  // TODO use enChahe
+	private static Map<String, VariableModel> variable;
+	private static boolean bIsLinux;
+	static {
+		bIsLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
+	}
 
-  public static boolean isDevMode()
-  {
-    return JFinal.me().getConstants().getDevMode();
-  }
-  
-  public static boolean isLinux()
-  {
-    return bIsLinux;
-  }
-  
-  public static void loadConfig()
-  {
-    loadVariable();
-    loadLanguage();
-    loadLevel();
-  }
-  
-  public static void loadVariable()
-  {
-    variable = new HashMap<String, VariableModel>();
-    for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable"))
-    {
-      variable.put(variableModel.getName(), variableModel);
-    }
-    
-    siteTitle = getString("siteTitle", "Power OJ");
+	// TODO use enChahe
 
-    uploadPath = FileKit.parsePath(staticDirectory, getString("uploadPath", "upload/"), true);
-    downloadPath = FileKit.parsePath(staticDirectory, getString("downloadPath", "download/"), true);
-    userAvatarPath = FileKit.parsePath(staticDirectory, getString("userAvatarPath", "upload/image/user/"), true);
-    problemImagePath = FileKit.parsePath(staticDirectory, getString("problemImagePath", "upload/image/problem/"), true);
-    
-    contestPageSize = getInt("contestPageSize", 20);
-    contestRankPageSize = getInt("contestRankPageSize", 50);
-    problemPageSize = getInt("problemPageSize", 50);
-    userPageSize = getInt("userPageSize", 20);
-    statusPageSize = getInt("statusPageSize", 20);
-    variableChanged = false;
-  }
-  
-  public static void loadLanguage()
-  {
-    languageType = new HashMap<Integer, ProgramLanguageModel>();
-    languageName = new HashMap<Integer, String>();
-    programLanguages = ProgramLanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
-    for (ProgramLanguageModel language : programLanguages)
-    {
-      languageType.put(language.getId(), language);
-      languageName.put(language.getId(), language.getName());
-    }
-  }
+	public static boolean isDevMode() {
+		return JFinal.me().getConstants().getDevMode();
+	}
 
-  public static void loadLevel()
-  {
-    level = new ArrayList<Integer>();
-    List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
-    for (Record record : levels)
-    {
-      level.add(record.getInt("exp"));
-    }
-  }
-  
-  public static void initJudgeResult()
-  {
-    judgeResult = new ArrayList<ResultType>();
-    judgeResult.add(new ResultType(ResultType.AC, "AC", "Accepted"));
-    judgeResult.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
-    judgeResult.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
-    judgeResult.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
-    judgeResult.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
-    judgeResult.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
-    judgeResult.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
-    judgeResult.add(new ResultType(ResultType.RF, "RF", "Restricted Function"));
-    judgeResult.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
-    judgeResult.add(new ResultType(ResultType.SE, "SE", "System Error"));
-    judgeResult.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
-    judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Runing"));
-    judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
+	public static boolean isLinux() {
+		return bIsLinux;
+	}
 
-    resultType = new HashMap<Integer, ResultType>();
-    for (Iterator<ResultType> it = judgeResult.iterator(); it.hasNext();)
-    {
-      ResultType result = it.next();
-      resultType.put(result.getId(), result);
-    }
-  }
+	public static void loadConfig() {
+		loadVariable();
+		loadLanguage();
+		loadLevel();
+	}
 
-  public static String getBaseURL()
-  {
-    return baseURL;
-  }
+	public static void loadVariable() {
+		variable = new HashMap<String, VariableModel>();
+		for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable")) {
+			variable.put(variableModel.getName(), variableModel);
+		}
 
-  public static void setBaseURL(String baseUrl)
-  {
-    OjConfig.baseURL = baseUrl;
-  }
+		siteTitle = getString("siteTitle", "Power OJ");
 
-  /*
-   * get OJ variable from DB cache
-   */
-  public static VariableModel get(String name)
-  {
-    return variable.get(name);
-  }
-  
-  public static String getString(String name)
-  {
-    return getString(name, null);
-  }
-  
-  public static String getString(String name, String defaultValue)
-  {
-    VariableModel model = variable.get(name);
-    if (model != null)
-    {
-      return model.getStringValue();
-    }
-    
-    return defaultValue;
-  }
-  
-  public static Integer getInt(String name)
-  {
-    return getInt(name, null);
-  }
+		uploadPath = FileKit.parsePath(staticDirectory, getString("uploadPath", "upload/"), true);
+		downloadPath = FileKit.parsePath(staticDirectory, getString("downloadPath", "download/"), true);
+		userAvatarPath = FileKit.parsePath(staticDirectory, getString("userAvatarPath", "upload/image/user/"), true);
+		problemImagePath = FileKit.parsePath(staticDirectory, getString("problemImagePath", "upload/image/problem/"), true);
 
-  public static Integer getInt(String name, Integer defaultValue)
-  {
-    VariableModel model = variable.get(name);
-    if (model != null)
-    {
-      return model.getIntValue();
-    }
-    
-    return defaultValue;
-  }
+		contestPageSize = getInt("contestPageSize", 20);
+		contestRankPageSize = getInt("contestRankPageSize", 50);
+		problemPageSize = getInt("problemPageSize", 50);
+		userPageSize = getInt("userPageSize", 20);
+		statusPageSize = getInt("statusPageSize", 20);
+		variableChanged = false;
+	}
 
-  public static Boolean getBoolean(String name)
-  {
-    return getBoolean(name, null);
-  }
+	public static void loadLanguage() {
+		languageType = new HashMap<Integer, ProgramLanguageModel>();
+		languageName = new HashMap<Integer, String>();
+		programLanguages = ProgramLanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
+		for (ProgramLanguageModel language : programLanguages) {
+			languageType.put(language.getId(), language);
+			languageName.put(language.getId(), language.getName());
+		}
+	}
 
-  public static Boolean getBoolean(String name, Boolean defaultValue)
-  {
-    VariableModel model = variable.get(name);
-    if (model != null)
-    {
-      return model.getBooleanValue();
-    }
-    
-    return defaultValue;
-  }
+	public static void loadLevel() {
+		level = new ArrayList<Integer>();
+		List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
+		for (Record record : levels) {
+			level.add(record.getInt("exp"));
+		}
+	}
 
-  public static String getText(String name)
-  {
-    return variable.get(name).getTextValue();
-  }
+	public static void initJudgeResult() {
+		judgeResult = new ArrayList<ResultType>();
+		judgeResult.add(new ResultType(ResultType.AC, "AC", "Accepted"));
+		judgeResult.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
+		judgeResult.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
+		judgeResult.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
+		judgeResult.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
+		judgeResult.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
+		judgeResult.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
+		judgeResult.add(new ResultType(ResultType.RF, "RF", "Restricted Function"));
+		judgeResult.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
+		judgeResult.add(new ResultType(ResultType.SE, "SE", "System Error"));
+		judgeResult.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
+		judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Runing"));
+		judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
 
-  public static String getType(String name)
-  {
-    return variable.get(name).getType();
-  }
+		resultType = new HashMap<Integer, ResultType>();
+		for (Iterator<ResultType> it = judgeResult.iterator(); it.hasNext();) {
+			ResultType result = it.next();
+			resultType.put(result.getId(), result);
+		}
+	}
+
+	public static String getBaseURL() {
+		return baseURL;
+	}
+
+	public static void setBaseURL(String baseUrl) {
+		OjConfig.baseURL = baseUrl;
+	}
+
+	/*
+	 * get OJ variable from DB cache
+	 */
+	public static VariableModel get(String name) {
+		return variable.get(name);
+	}
+
+	public static String getString(String name) {
+		return getString(name, null);
+	}
+
+	public static String getString(String name, String defaultValue) {
+		VariableModel model = variable.get(name);
+		if (model != null) {
+			return model.getStringValue();
+		}
+
+		return defaultValue;
+	}
+
+	public static Integer getInt(String name) {
+		return getInt(name, null);
+	}
+
+	public static Integer getInt(String name, Integer defaultValue) {
+		VariableModel model = variable.get(name);
+		if (model != null) {
+			return model.getIntValue();
+		}
+
+		return defaultValue;
+	}
+
+	public static Boolean getBoolean(String name) {
+		return getBoolean(name, null);
+	}
+
+	public static Boolean getBoolean(String name, Boolean defaultValue) {
+		VariableModel model = variable.get(name);
+		if (model != null) {
+			return model.getBooleanValue();
+		}
+
+		return defaultValue;
+	}
+
+	public static String getText(String name) {
+		return variable.get(name).getTextValue();
+	}
+
+	public static String getType(String name) {
+		return variable.get(name).getType();
+	}
 
 }

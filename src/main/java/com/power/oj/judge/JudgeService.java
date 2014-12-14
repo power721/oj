@@ -25,254 +25,218 @@ import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 
-public final class JudgeService
-{
-  private static final Logger log = Logger.getLogger(JudgeService.class);
-  private static final JudgeService me = new JudgeService();
-  private static final ContestService contestService = ContestService.me();
-  private static final ProblemService problemService = ProblemService.me();
-  private static final SolutionService solutionService = SolutionService.me();
-  private static final UserService userService = UserService.me();
-  //private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
-  private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
+public final class JudgeService {
+	private static final Logger log = Logger.getLogger(JudgeService.class);
+	private static final JudgeService me = new JudgeService();
+	private static final ContestService contestService = ContestService.me();
+	private static final ProblemService problemService = ProblemService.me();
+	private static final SolutionService solutionService = SolutionService.me();
+	private static final UserService userService = UserService.me();
+	// private static final ExecutorService judgeExecutor =
+	// Executors.newSingleThreadExecutor();
+	private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
 
-  private JudgeService()
-  {
-  }
+	private JudgeService() {
+	}
 
-  public static JudgeService me()
-  {
-    return me;
-  }
+	public static JudgeService me() {
+		return me;
+	}
 
-  public void judge(Solution solution)
-  {
-    if (solution instanceof SolutionModel)
-    {
-      problemService.incSubmission(solution.getPid());
-      userService.incSubmission(solution.getUid());
-    }
+	public void judge(Solution solution) {
+		if (solution instanceof SolutionModel) {
+			problemService.incSubmission(solution.getPid());
+			userService.incSubmission(solution.getUid());
+		}
 
-    synchronized (JudgeAdapter.class)
-    {
-      JudgeAdapter judgeThread = null;
-      if (OjConfig.isLinux())
-      {
-        judgeThread = new PowerJudgeAdapter(solution);
-      } else
-      {
-        judgeThread = new PojJudgeAdapter(solution);
-      }
-      //judgeExecutor.execute(judgeThread);  // this will store session in the thread
-      Thread thread = new Thread(judgeThread);
-      thread.start();
-    }
-  }
+		synchronized (JudgeAdapter.class) {
+			JudgeAdapter judgeThread = null;
+			if (OjConfig.isLinux()) {
+				judgeThread = new PowerJudgeAdapter(solution);
+			} else {
+				judgeThread = new PojJudgeAdapter(solution);
+			}
+			// judgeExecutor.execute(judgeThread); // this will store session in
+			// the thread
+			Thread thread = new Thread(judgeThread);
+			thread.start();
+		}
+	}
 
-  public void rejudge(Solution solution, boolean deleteTempDir)
-  {
-    if (solution instanceof SolutionModel)
-    {
-      userService.revertAccepted((SolutionModel) solution);
-    }
+	public void rejudge(Solution solution, boolean deleteTempDir) {
+		if (solution instanceof SolutionModel) {
+			userService.revertAccepted((SolutionModel) solution);
+		}
 
-    solution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
-    solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
-    if (solution instanceof SolutionModel)
-    {
-      ((SolutionModel) solution).update();
-    } else
-    {
-      ((ContestSolutionModel) solution).update();
-    }
+		solution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
+		solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
+		if (solution instanceof SolutionModel) {
+			((SolutionModel) solution).update();
+		} else {
+			((ContestSolutionModel) solution).update();
+		}
 
-    synchronized (JudgeAdapter.class)
-    {
-      JudgeAdapter judgeThread = null;
-      if (OjConfig.isLinux())
-      {
-        judgeThread = new PowerJudgeAdapter(solution);
-      } else
-      {
-        judgeThread = new PojJudgeAdapter(solution);
-      }
-      judgeThread.setDeleteTempDir(deleteTempDir);
-      Thread thread = new Thread(judgeThread);
-      thread.start();
-    }
-  }
-  
-  public void rejudge(Solution solution)
-  {
-    rejudge(solution, false);
-  }
+		synchronized (JudgeAdapter.class) {
+			JudgeAdapter judgeThread = null;
+			if (OjConfig.isLinux()) {
+				judgeThread = new PowerJudgeAdapter(solution);
+			} else {
+				judgeThread = new PojJudgeAdapter(solution);
+			}
+			judgeThread.setDeleteTempDir(deleteTempDir);
+			Thread thread = new Thread(judgeThread);
+			thread.start();
+		}
+	}
 
-  public void rejudgeSolution(Integer sid)
-  {
-    SolutionModel solution = solutionService.findSolution(sid);
+	public void rejudge(Solution solution) {
+		rejudge(solution, false);
+	}
 
-    problemService.revertAccepted(solution);
+	public void rejudgeSolution(Integer sid) {
+		SolutionModel solution = solutionService.findSolution(sid);
 
-    rejudge(solution);
-  }
+		problemService.revertAccepted(solution);
 
-  public void rejudgeProblem(final Integer pid)
-  {
-    Thread rejudgeThread = new Thread(new Runnable() {
-      @Override
-      public void run()
-      {
-        problemService.reset(pid);
-        List<SolutionModel> solutionList = solutionService.getSolutionListForProblem(pid);
+		rejudge(solution);
+	}
 
-        // TODO lock this problem
-        for (SolutionModel solution : solutionList)
-        {
-          rejudge(solution, true);
-        }
-      }
-    });
-    rejudgeExecutor.execute(rejudgeThread);
-  }
+	public void rejudgeProblem(final Integer pid) {
+		Thread rejudgeThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				problemService.reset(pid);
+				List<SolutionModel> solutionList = solutionService.getSolutionListForProblem(pid);
 
-  public void rejudgeProblem4Wait(final Integer pid)
-  {
-    Thread rejudgeThread = new Thread(new Runnable() {
-      @Override
-      public void run()
-      {
-        List<SolutionModel> solutionList = solutionService.getWaitSolutionListForProblem(pid);
+				// TODO lock this problem
+				for (SolutionModel solution : solutionList) {
+					rejudge(solution, true);
+				}
+			}
+		});
+		rejudgeExecutor.execute(rejudgeThread);
+	}
 
-        // TODO lock this problem
-        for (SolutionModel solution : solutionList)
-        {
-          problemService.revertAccepted(solution);
-          rejudge(solution);
-        }
-      }
-    });
-    rejudgeExecutor.execute(rejudgeThread);
-  }
+	public void rejudgeProblem4Wait(final Integer pid) {
+		Thread rejudgeThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				List<SolutionModel> solutionList = solutionService.getWaitSolutionListForProblem(pid);
 
-  public void rejudgeContestSolution(Integer sid)
-  {
-    ContestSolutionModel contestSolution = solutionService.findContestSolution(sid);
-    int result = contestSolution.getResult();
+				// TODO lock this problem
+				for (SolutionModel solution : solutionList) {
+					problemService.revertAccepted(solution);
+					rejudge(solution);
+				}
+			}
+		});
+		rejudgeExecutor.execute(rejudgeThread);
+	}
 
-    contestSolution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
-    contestSolution.setMemory(0).setTime(0).setError(null).setSystemError(null);
-    contestSolution.update();
+	public void rejudgeContestSolution(Integer sid) {
+		ContestSolutionModel contestSolution = solutionService.findContestSolution(sid);
+		int result = contestSolution.getResult();
 
-    contestSolution.put("originalResult", result);
+		contestSolution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
+		contestSolution.setMemory(0).setTime(0).setError(null).setSystemError(null);
+		contestSolution.update();
 
-    rejudge(contestSolution);
-  }
+		contestSolution.put("originalResult", result);
 
-  public void rejudgeContest(final Integer cid)
-  {
-    Thread rejudgeThread = new Thread(new Runnable() {
-      @Override
-      public void run()
-      {
-        try
-        {
-          FileUtil.deleteDir(getWorkPath(cid));
-        } catch (IOException e)
-        {
-          if (OjConfig.isDevMode())
-            e.printStackTrace();
-          log.error(e.getLocalizedMessage());
-        }
-        contestService.reset(cid);
-        List<ContestSolutionModel> solutionList = Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
-        synchronized(solutionList)
-        {
-          Iterator<ContestSolutionModel> it = solutionList.iterator();
-          while (it.hasNext())
-          {
-            rejudge(it.next());
-          }
-        }
-      }
-    });
-    rejudgeExecutor.execute(rejudgeThread);
-  }
+		rejudge(contestSolution);
+	}
 
-  public void rejudgeContestProblem(Integer cid, Integer pid)
-  {
-    // revert contest problem
-    // build contest rank
-  }
+	public void rejudgeContest(final Integer cid) {
+		Thread rejudgeThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					FileUtil.deleteDir(getWorkPath(cid));
+				} catch (IOException e) {
+					if (OjConfig.isDevMode())
+						e.printStackTrace();
+					log.error(e.getLocalizedMessage());
+				}
+				contestService.reset(cid);
+				List<ContestSolutionModel> solutionList = Collections.synchronizedList(solutionService
+						.getSolutionListForContest(cid));
+				synchronized (solutionList) {
+					Iterator<ContestSolutionModel> it = solutionList.iterator();
+					while (it.hasNext()) {
+						rejudge(it.next());
+					}
+				}
+			}
+		});
+		rejudgeExecutor.execute(rejudgeThread);
+	}
 
-  public int getDataFiles(Integer pid, List<String> inFiles, List<String> outFiles) throws IOException
-  {
-    File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid).toString());
-    if (!dataDir.isDirectory())
-    {
-      throw new IOException("Data files does not exist.");
-    }
+	public void rejudgeContestProblem(Integer cid, Integer pid) {
+		// revert contest problem
+		// build contest rank
+	}
 
-    File[] arrayOfFile = dataDir.listFiles();
-    if (arrayOfFile.length > 3)
-    {
-      Arrays.sort(arrayOfFile);
-    }
+	public int getDataFiles(Integer pid, List<String> inFiles, List<String> outFiles) throws IOException {
+		File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid)
+				.toString());
+		if (!dataDir.isDirectory()) {
+			throw new IOException("Data files does not exist.");
+		}
 
-    for (int i = 0; i < arrayOfFile.length; i++)
-    {
-      File inFile = arrayOfFile[i];
-      if (!inFile.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN))
-      {
-        continue;
-      }
-      File outFile = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
-          .append(inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length())).append(OjConstants.DATA_EXT_OUT).toString());
-      if (!outFile.isFile())
-      {
-        log.warn(Printf.str("Output file for input file does not exist: %s", inFile.getAbsolutePath()));
-        continue;
-      }
-      inFiles.add(inFile.getAbsolutePath());
-      outFiles.add(outFile.getAbsolutePath());
-    }
+		File[] arrayOfFile = dataDir.listFiles();
+		if (arrayOfFile.length > 3) {
+			Arrays.sort(arrayOfFile);
+		}
 
-    return inFiles.size();
-  }
+		for (int i = 0; i < arrayOfFile.length; i++) {
+			File inFile = arrayOfFile[i];
+			if (!inFile.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN)) {
+				continue;
+			}
+			File outFile = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
+					.append(inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length()))
+					.append(OjConstants.DATA_EXT_OUT).toString());
+			if (!outFile.isFile()) {
+				log.warn(Printf.str("Output file for input file does not exist: %s", inFile.getAbsolutePath()));
+				continue;
+			}
+			inFiles.add(inFile.getAbsolutePath());
+			outFiles.add(outFile.getAbsolutePath());
+		}
 
-  public String getWorkPath(Integer cid)
-  {
-    String workPath = new StringBuilder(5).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")))
-        .append(File.separator).append("c").append(cid).append(File.separator).toString();
-    
-    return workPath;
-  }
+		return inFiles.size();
+	}
 
-  public String getWorkPath(Solution solution)
-  {
-    String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
-    if (solution instanceof ContestSolutionModel)
-    {
-      workPath = new StringBuilder(4).append(workPath).append("c").append(solution.getCid()).append(File.separator).toString();
-    }
-    
-    return workPath;
-  }
+	public String getWorkPath(Integer cid) {
+		String workPath = new StringBuilder(5).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")))
+				.append(File.separator).append("c").append(cid).append(File.separator).toString();
 
-  public String getWorkDirPath(Solution solution)
-  {
-    String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath"))).append(File.separator).toString();
-    if (solution instanceof ContestSolutionModel)
-    {
-      workPath = new StringBuilder(6).append(workPath).append("c").append(solution.getCid()).append(File.separator)
-          .append(solution.getSid()).append(File.separator).toString();
-    }
-    else
-    {
-      workPath = new StringBuilder(4).append(workPath).append(File.separator)
-          .append(solution.getSid()).append(File.separator).toString();
-    }
-    
-    return workPath;
-  }
-  
+		return workPath;
+	}
+
+	public String getWorkPath(Solution solution) {
+		String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")))
+				.append(File.separator).toString();
+		if (solution instanceof ContestSolutionModel) {
+			workPath = new StringBuilder(4).append(workPath).append("c").append(solution.getCid()).append(File.separator)
+					.toString();
+		}
+
+		return workPath;
+	}
+
+	public String getWorkDirPath(Solution solution) {
+		String workPath = new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")))
+				.append(File.separator).toString();
+		if (solution instanceof ContestSolutionModel) {
+			workPath = new StringBuilder(6).append(workPath).append("c").append(solution.getCid()).append(File.separator)
+					.append(solution.getSid()).append(File.separator).toString();
+		} else {
+			workPath = new StringBuilder(4).append(workPath).append(File.separator).append(solution.getSid())
+					.append(File.separator).toString();
+		}
+
+		return workPath;
+	}
+
 }

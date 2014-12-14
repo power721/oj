@@ -12,26 +12,24 @@ import com.power.oj.shiro.ShiroKit;
  * @author power
  * 
  */
-public class UserInterceptor implements Interceptor
-{
+public class UserInterceptor implements Interceptor {
 
-  @Override
-  public void intercept(ActionInvocation ai)
-  {
-    Controller controller = ai.getController();
-    
-    if (ShiroKit.isUser()) // if user is logined, set user information in controller
-    {
-      UserModel userModel = UserService.me().getCurrentUser();
-      controller.setAttr(OjConstants.USER, userModel);
-      
-      if (UserService.me().isAdmin())
-      {
-        controller.setAttr(OjConstants.ADMIN_USER, userModel.getUid());
-      }
-    }
+	@Override
+	public void intercept(ActionInvocation ai) {
+		Controller controller = ai.getController();
 
-    ai.invoke();
-  }
+		if (ShiroKit.isUser()) // if user is logined, set user information in
+								// controller
+		{
+			UserModel userModel = UserService.me().getCurrentUser();
+			controller.setAttr(OjConstants.USER, userModel);
+
+			if (UserService.me().isAdmin()) {
+				controller.setAttr(OjConstants.ADMIN_USER, userModel.getUid());
+			}
+		}
+
+		ai.invoke();
+	}
 
 }

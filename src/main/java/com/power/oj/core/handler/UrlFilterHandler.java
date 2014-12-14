@@ -13,17 +13,14 @@ import com.power.oj.core.OjConstants;
  * @author power
  * 
  */
-public class UrlFilterHandler extends Handler
-{
+public class UrlFilterHandler extends Handler {
 
-  public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled)
-  {
-    int index = target.indexOf(".ws");
-    if (index == -1)
-    {
-      request.setAttribute(OjConstants.SITE_TITLE, OjConfig.siteTitle);
-      nextHandler.handle(target, request, response, isHandled);
-    }
-  }
+	public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
+		int index = target.indexOf(".ws");
+		if (index == -1) {
+			request.setAttribute(OjConstants.SITE_TITLE, OjConfig.siteTitle);
+			nextHandler.handle(target, request, response, isHandled);
+		}
+	}
 
 }

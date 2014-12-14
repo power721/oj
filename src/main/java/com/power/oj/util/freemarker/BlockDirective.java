@@ -1,4 +1,4 @@
-package com.power.oj.util.freemarker; 
+package com.power.oj.util.freemarker;
 
 import java.io.IOException;
 import java.util.Map;
@@ -14,23 +14,22 @@ import freemarker.template.TemplateModel;
 /**
  * @author badqiu
  */
-public class BlockDirective implements TemplateDirectiveModel{
+public class BlockDirective implements TemplateDirectiveModel {
 	public final static String DIRECTIVE_NAME = "block";
-	
+
 	@SuppressWarnings("rawtypes")
-  public void execute(Environment env,
-            Map params, TemplateModel[] loopVars,
-            TemplateDirectiveBody body) throws TemplateException, IOException {
+	public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body)
+			throws TemplateException, IOException {
 		String name = DirectiveUtils.getRequiredParam(params, "name");
 		TemplateDirectiveBodyOverrideWraper overrideBody = DirectiveUtils.getOverrideBody(env, name);
-		if(overrideBody == null) {
-			if(body != null) {
+		if (overrideBody == null) {
+			if (body != null) {
 				body.render(env.getOut());
 			}
-		}else {
-			DirectiveUtils.setTopBodyForParentBody(env, new TemplateDirectiveBodyOverrideWraper(body,env), overrideBody);
+		} else {
+			DirectiveUtils.setTopBodyForParentBody(env, new TemplateDirectiveBodyOverrideWraper(body, env), overrideBody);
 			overrideBody.render(env.getOut());
 		}
 	}
-		
+
 }

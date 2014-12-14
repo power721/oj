@@ -10,24 +10,22 @@ import freemarker.template.SimpleHash;
  * </p>
  */
 
-public class ShiroTags extends SimpleHash
-{
-  /**
+public class ShiroTags extends SimpleHash {
+	/**
    * 
    */
-  private static final long serialVersionUID = -724290975679296422L;
+	private static final long serialVersionUID = -724290975679296422L;
 
-  public ShiroTags()
-  {
-    put("authenticated", new AuthenticatedTag());
-    put("guest", new GuestTag());
-    put("hasAnyRoles", new HasAnyRolesTag());
-    put("hasPermission", new HasPermissionTag());
-    put("hasRole", new HasRoleTag());
-    put("lacksPermission", new LacksPermissionTag());
-    put("lacksRole", new LacksRoleTag());
-    put("notAuthenticated", new NotAuthenticatedTag());
-    put("principal", new PrincipalTag());
-    put("user", new UserTag());
-  }
+	public ShiroTags() {
+		put("authenticated", new AuthenticatedTag());
+		put("guest", new GuestTag());
+		put("hasAnyRoles", new HasAnyRolesTag());
+		put("hasPermission", new HasPermissionTag());
+		put("hasRole", new HasRoleTag());
+		put("lacksPermission", new LacksPermissionTag());
+		put("lacksRole", new LacksRoleTag());
+		put("notAuthenticated", new NotAuthenticatedTag());
+		put("principal", new PrincipalTag());
+		put("user", new UserTag());
+	}
 }
