@@ -1,44 +1,34 @@
-apply plugin: 'java'
-apply plugin: 'war'
+apply plugin: 'java' 
+apply plugin: 'war' 
+apply plugin: 'jetty' 
+apply plugin: 'eclipse-wtp'
 
-// Depending upon the fact that one uses default
-// WebRoot folder to store web resources. Change
-// name to name of WebRoot folder appropriately.
-def webRoot = "WebRoot"
-def webInfPath = webRoot + "/" + "WEB-INF"
+sourceCompatibility = 1.7
 
-// Repositories accessed from local directory
 repositories {
-    flatDir { 
-        dirs webInfPath + "/" + "lib"
-    }
+    maven { url 'http://maven.oschina.net/content/groups/public' }
     mavenCentral()
-}
-
-// Source folder defined as Eclipse stores Java source code
-// in non-maven based folder structure
-sourceSets {
-    main {
-        java {
-            srcDir 'src'
-        }
-        resources {
-            srcDir 'src'
-        }
-    }
 }
 
 dependencies {
     providedCompile 'javax.servlet:servlet-api:2.5'
-    providedCompile 'javax.websocket:javax.websocket-api:1.0'
-    // Compile time dependencies read from local directory
-    compile fileTree(dir: webInfPath + "/" + "lib", include: '*.jar')
+    compile 'com.alibaba:druid:1.0.11'
+    compile 'com.alibaba:fastjson:1.2.3'
+    compile 'com.jfinal:jfinal:1.9'
+    compile 'com.jfinal:jfinal-ext:3.1.2'
+    compile 'commons-codec:commons-codec:1.10'
+    compile 'dom4j:dom4j:1.6'
+    compile 'log4j:log4j:1.2.17'
+    compile 'mysql:mysql-connector-java:5.1.34'
+    compile 'org.apache.commons:commons-io:1.3.2'
+    compile 'org.apache.httpcomponents:httpcore:4.3.3'
+    compile 'org.apache.httpcomponents:httpclient:4.3.3'
+    compile 'org.apache.shiro:shiro-core:1.2.3'
+    compile 'org.apache.shiro:shiro-web:1.2.3'
+    compile 'org.apache.shiro:shiro-ehcache:1.2.3'
+    compile 'org.freemarker:freemarker:2.3.21'
+    compile 'org.jodd:jodd-core:3.6.3'
+    compile 'org.jodd:jodd-mail:3.6.3'
+    compile 'javax.websocket:javax.websocket-api:1.1'
     runtime 'javax.servlet:jstl:1.1.2'
-}
-
-war {
-    webInf { from webInfPath } // adds a file-set to the WEB-INF dir.
-    from(webRoot) { fileTree(dir: 'assets/*') } //Copy assets folder to WEB-INF level
-    // classpath fileTree(webInfPath + "/" + "lib") // adds a file-set to the WEB-INF/lib dir.
-    // webXml = file(webInfPath + "/" + "web.xml") // copies a file to WEB-INF/web.xml
 }
