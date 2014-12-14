@@ -33,7 +33,7 @@
 
     <cache name="user"
            maxEntriesLocalHeap="1000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="900"
            timeToIdleSeconds="900"
@@ -42,16 +42,16 @@
 
     <cache name="problem"
            maxEntriesLocalHeap="1000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
-           timeToLiveSeconds="0"
-           timeToIdleSeconds="0"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="3600"
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900" />
 
     <cache name="contest"
            maxEntriesLocalHeap="1000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="3600"
            timeToIdleSeconds="3600"
@@ -60,25 +60,16 @@
 
     <cache name="notice"
            maxEntriesLocalHeap="1000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="60"
            timeToIdleSeconds="60"
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900" />
 
-    <cache name="session"
-           maxEntriesLocalHeap="1000"
-           overflowToDisk="true"
-           eternal="false"
-           timeToLiveSeconds="1800"
-           timeToIdleSeconds="1800"
-           diskPersistent="true"
-           diskExpiryThreadIntervalSeconds="900" />
-    
     <cache name="userResult"
            maxEntriesLocalHeap="1000"
-           overflowToDisk="true"
+           overflowToDisk="false"
            eternal="false"
            timeToLiveSeconds="60"
            timeToIdleSeconds="60"
