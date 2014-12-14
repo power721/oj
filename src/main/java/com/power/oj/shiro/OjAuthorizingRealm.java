@@ -18,6 +18,7 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.service.OjService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
@@ -31,7 +32,9 @@ public class OjAuthorizingRealm extends AuthorizingRealm {
 		Integer uid = (Integer) principals.fromRealm(getName()).iterator().next();
 
 		if (uid != null) {
-			log.info(uid.toString());
+			if (OjConfig.isDevMode()) {
+				log.info(uid.toString());
+			}
 			List<Record> roleList = OjService.me().getUserRoles(uid);
 
 			if (roleList != null && roleList.size() > 0) {
@@ -41,12 +44,16 @@ public class OjAuthorizingRealm extends AuthorizingRealm {
 
 				for (Record record : roleList) {
 					roles.add(record.getStr("role"));
-					log.info("role: " + record.getStr("role"));
+					if (OjConfig.isDevMode()) {
+						log.info("role: " + record.getStr("role"));
+					}
 
 					List<Record> permissionList = OjService.me().getRolePermission(record.getInt("rid"));
 					for (Record permissionRecord : permissionList) {
 						pers.add(permissionRecord.getStr("permission"));
-						log.info("permission: " + permissionRecord.getStr("permission"));
+						if (OjConfig.isDevMode()) {
+							log.info("permission: " + permissionRecord.getStr("permission"));
+						}
 					}
 				}
 				info.setRoles(roles);
@@ -67,7 +74,9 @@ public class OjAuthorizingRealm extends AuthorizingRealm {
 		if (userModel != null) {
 			AuthenticationInfo info = new SimpleAuthenticationInfo(userModel.getUid(), userModel.getPassword(), getName());
 			clearCachedAuthorizationInfo(info.getPrincipals());
-			log.info("clearCachedAuthorizationInfo" + info.getPrincipals());
+			if (OjConfig.isDevMode()) {
+				log.info("clearCachedAuthorizationInfo: " + info.getPrincipals());
+			}
 			return info;
 		}
 
@@ -90,6 +99,9 @@ public class OjAuthorizingRealm extends AuthorizingRealm {
 		if (cache != null) {
 			for (Object key : cache.keys()) {
 				cache.remove(key);
+				if (OjConfig.isDevMode()) {
+					log.info("clearAllCachedAuthorizationInfo:" + cache + " key: " + key);
+				}
 			}
 		}
 	}
