@@ -27,6 +27,11 @@
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
 		</attributes>
 	</classpathentry>
+	<classpathentry sourcepath="/home/power/.gradle/caches/modules-2/files-2.1/com.jfinal/cos/26Dec2008/5f5f2cbd6684930f24b3e08323953bb3a2f409c3/cos-26Dec2008-sources.jar" kind="lib" path="/home/power/.gradle/caches/modules-2/files-2.1/com.jfinal/cos/26Dec2008/ad479d68e7ad40d4e6d475a06f5a4b6e217ef91a/cos-26Dec2008.jar" exported="true">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
 	<classpathentry sourcepath="/home/power/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.10/11fb3d88ae7e3b757d70237064210ceb954a5a04/commons-codec-1.10-sources.jar" kind="lib" path="/home/power/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.10/4b95f4897fa13f2cd904aee711aeafc0c5295cd8/commons-codec-1.10.jar" exported="true">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.nondependency" value=""/>

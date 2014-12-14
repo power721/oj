@@ -6,6 +6,7 @@
 *.ear
 *.log
 build/
+src/main/webapp/upload/
 .gradle/
 
 /bin/

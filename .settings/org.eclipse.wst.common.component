@@ -17,6 +17,9 @@
 		<dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/power/.gradle/caches/modules-2/files-2.1/com.jfinal/jfinal-ext/3.1.2/b02034743d22a5553923988b21be734c9ddb4c8b/jfinal-ext-3.1.2.jar">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
+		<dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/power/.gradle/caches/modules-2/files-2.1/com.jfinal/cos/26Dec2008/ad479d68e7ad40d4e6d475a06f5a4b6e217ef91a/cos-26Dec2008.jar">
+			<dependency-type>uses</dependency-type>
+		</dependent-module>
 		<dependent-module deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/power/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.10/4b95f4897fa13f2cd904aee711aeafc0c5295cd8/commons-codec-1.10.jar">
 			<dependency-type>uses</dependency-type>
 		</dependent-module>
