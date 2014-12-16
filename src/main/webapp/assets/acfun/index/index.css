@@ -156,7 +156,7 @@
 	bottom:16px;
 	width:270px;
 	height:64px;
-	background:url(http://static.acfun.tv/dotnet/20130418/style/image/pic/btn-public-header.png) left top no-repeat;
+	background:url(image/btn-public-header.png) left top no-repeat;
 	cursor:pointer
 }
 #btn-public-header:hover {
