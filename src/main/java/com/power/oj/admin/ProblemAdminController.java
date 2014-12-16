@@ -66,9 +66,11 @@ public class ProblemAdminController extends OjController {
 			}
 			redirectURL = new StringBuilder(2).append("/admin/problem/data/").append(problemModel.getPid()).toString();
 		} catch (IOException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("create data directory failed!", e);
+			} else {
+				log.error(e.getMessage());
+			}
 
 			FlashMessage msg = new FlashMessage(getText("problem.save.error"), MessageType.ERROR, getText("message.error.title"));
 			redirect(redirectURL, msg);
@@ -168,9 +170,11 @@ public class ProblemAdminController extends OjController {
 		try {
 			filename = adminService.uploadData(pid, filename, file);
 		} catch (IOException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("upload data file failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 
 			renderJson("error", "Move file to data directory failed.");
 			return;

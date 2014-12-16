@@ -18,9 +18,9 @@ public class DBConn {
 			p.load(DBConn.class.getResourceAsStream("/createEntity.properties"));
 			Class.forName(p.getProperty("className"));
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 

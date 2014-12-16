@@ -54,7 +54,7 @@ public final class UserService {
 
 	/**
 	 * User login with name and password.
-	 * 
+	 *
 	 * @param name
 	 *            user name.
 	 * @param password
@@ -128,7 +128,7 @@ public final class UserService {
 
 	/**
 	 * user signup
-	 * 
+	 *
 	 * @param userModel
 	 * @return
 	 * @throws Exception
@@ -162,7 +162,7 @@ public final class UserService {
 
 	/**
 	 * signup with external account
-	 * 
+	 *
 	 * @param email
 	 * @param webLogin
 	 * @return user model
@@ -212,7 +212,7 @@ public final class UserService {
 
 	/**
 	 * update user
-	 * 
+	 *
 	 * @param userModel
 	 * @return true if success
 	 */
@@ -243,7 +243,7 @@ public final class UserService {
 
 	/**
 	 * Update user login time and loginlog.
-	 * 
+	 *
 	 * @param name
 	 *            user name.
 	 * @param success
@@ -422,7 +422,7 @@ public final class UserService {
 
 	/**
 	 * Build user statistics.
-	 * 
+	 *
 	 * @param userModel
 	 *            the user.
 	 * @return true if success
@@ -442,7 +442,7 @@ public final class UserService {
 
 	/**
 	 * Reset user password for recover account.
-	 * 
+	 *
 	 * @param name
 	 *            user name.
 	 * @param password
@@ -458,7 +458,7 @@ public final class UserService {
 
 	/**
 	 * Check if the token is valid for reset password.
-	 * 
+	 *
 	 * @param name
 	 *            user name.
 	 * @param token
@@ -513,7 +513,7 @@ public final class UserService {
 
 	/**
 	 * Search user by key word in scope.
-	 * 
+	 *
 	 * @param scope
 	 *            "all", "name", "nick", "school", "email".
 	 * @param word
@@ -554,7 +554,7 @@ public final class UserService {
 
 	/**
 	 * get user profile by name.
-	 * 
+	 *
 	 * @param name
 	 *            string of user name.
 	 * @return UseModel with submitted problems.
@@ -581,7 +581,7 @@ public final class UserService {
 
 	/**
 	 * get user's login logs.
-	 * 
+	 *
 	 * @param pageNumber
 	 * @param pageSize
 	 * @return
@@ -598,7 +598,7 @@ public final class UserService {
 
 	/**
 	 * archive user source code.
-	 * 
+	 *
 	 * @return zip file.
 	 * @throws IOException
 	 */
@@ -636,7 +636,7 @@ public final class UserService {
 
 	/**
 	 * Get current uid form Shiro.
-	 * 
+	 *
 	 * @return the uid of current user or null.
 	 */
 	public Integer getCurrentUid() {
@@ -673,7 +673,7 @@ public final class UserService {
 
 	/**
 	 * Get current user by uid.
-	 * 
+	 *
 	 * @return current user or null.
 	 */
 	public UserModel getCurrentUser() {

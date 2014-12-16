@@ -153,9 +153,11 @@ public final class JudgeService {
 				try {
 					FileUtil.deleteDir(getWorkPath(cid));
 				} catch (IOException e) {
-					if (OjConfig.isDevMode())
-						e.printStackTrace();
-					log.error(e.getLocalizedMessage());
+					if (OjConfig.isDevMode()) {
+						log.error("delete directory failed!", e);
+					} else {
+						log.error(e.getLocalizedMessage());
+					}
 				}
 				contestService.reset(cid);
 				List<ContestSolutionModel> solutionList = Collections.synchronizedList(solutionService

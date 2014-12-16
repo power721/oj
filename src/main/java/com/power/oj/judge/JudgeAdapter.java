@@ -60,9 +60,11 @@ public abstract class JudgeAdapter implements Runnable {
 				updateSystemError(e.getLocalizedMessage());
 				// backupTempDir4SE();
 
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error("IOException: " + e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("judge failed!", e);
+				} else {
+					log.error("IOException: " + e.getLocalizedMessage());
+				}
 			} catch (Exception e) {
 				updateSystemError(e.getLocalizedMessage());
 				// backupTempDir4SE();

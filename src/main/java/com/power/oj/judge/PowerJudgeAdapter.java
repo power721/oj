@@ -122,9 +122,11 @@ public class PowerJudgeAdapter extends JudgeAdapter {
 			} catch (NumberFormatException e) {
 				updateSystemError(e.getLocalizedMessage());
 
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("check result failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 			}
 		} else {
 			updateSystemError(errorOut);
@@ -170,9 +172,11 @@ public class PowerJudgeAdapter extends JudgeAdapter {
 				}
 			}
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("read error message failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 		} finally {
 			if (br != null) {
 				try {

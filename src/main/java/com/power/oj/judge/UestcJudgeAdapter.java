@@ -159,8 +159,6 @@ public class UestcJudgeAdapter extends JudgeAdapter {
 			} catch (NumberFormatException e) {
 				updateSystemError(e.getLocalizedMessage());
 
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
 				log.error(e.getLocalizedMessage());
 				isAccepted = false;
 			}
@@ -194,8 +192,6 @@ public class UestcJudgeAdapter extends JudgeAdapter {
 				sb.append(line).append('\n');
 			}
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
 			log.error(e.getLocalizedMessage());
 		} finally {
 			if (br != null) {

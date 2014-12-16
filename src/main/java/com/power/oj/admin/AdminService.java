@@ -204,12 +204,14 @@ public final class AdminService {
 				}
 				return content;
 			} catch (IOException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
-
-				return "cannot read file.";
+				if (OjConfig.isDevMode()) {
+					log.error("read data file failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 			}
+
+			return "cannot read file.";
 		}
 
 		return "file not exists.";
@@ -226,9 +228,11 @@ public final class AdminService {
 				}
 				return content;
 			} catch (IOException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("read data file failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 
 				return null;
 			}
@@ -249,9 +253,11 @@ public final class AdminService {
 					FileUtil.move(srcFile.getFile(), destFile.getFile());
 				}
 			} catch (IOException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("update data file failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 
 				return false;
 			}
@@ -268,9 +274,11 @@ public final class AdminService {
 		try {
 			FileUtil.moveFile(srcFile, destFile);
 		} catch (IOException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("delete data file failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 
 			return false;
 		}
@@ -286,9 +294,10 @@ public final class AdminService {
 			document = XmlUtil.readDocument(file);
 		} catch (DocumentException e) {
 			if (OjConfig.isDevMode()) {
-				log.warn("read xml failed!", e);
+				log.error("read xml failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
 			}
-			log.error(e.getLocalizedMessage());
 
 			return problemList;
 		}
@@ -297,9 +306,10 @@ public final class AdminService {
 			FileUtil.mkdirs(OjConfig.problemImagePath);
 		} catch (IOException e) {
 			if (OjConfig.isDevMode()) {
-				log.warn("mkdir for problem image failed!", e);
+				log.error("mkdir for problem image failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
 			}
-			log.error(e.getLocalizedMessage());
 			// why continue?
 		}
 
@@ -341,9 +351,10 @@ public final class AdminService {
 					fpsService.problemToItem(item, replace);
 				} catch (NumberFormatException e) {
 					if (OjConfig.isDevMode()) {
-						log.warn("incorrect problem id to export!", e);
+						log.error("incorrect problem id to export!", e);
+					} else {
+						log.error(e.getLocalizedMessage());
 					}
-					log.error(e.getLocalizedMessage());
 
 					return null;
 				}
@@ -355,9 +366,10 @@ public final class AdminService {
 					end = Integer.parseInt(pids[1]);
 				} catch (NumberFormatException e) {
 					if (OjConfig.isDevMode()) {
-						log.warn("incorrect problem id to export!", e);
+						log.error("incorrect problem id to export!", e);
+					} else {
+						log.error(e.getLocalizedMessage());
 					}
-					log.error(e.getLocalizedMessage());
 
 					return null;
 				}

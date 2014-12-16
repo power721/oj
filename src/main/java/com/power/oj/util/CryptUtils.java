@@ -7,6 +7,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
+import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 
 /**
@@ -16,6 +17,7 @@ import com.power.oj.core.OjConfig;
  */
 public class CryptUtils {
 
+	private static final Logger log = Logger.getLogger(CryptUtils.class);
 	private final static String DES = "DES";
 
 	/**
@@ -46,8 +48,9 @@ public class CryptUtils {
 			// 正式执行加密操作
 			return cipher.doFinal(src);
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
+			if (OjConfig.isDevMode()) {
+				log.error("encrypt failed!", e);
+			}
 			throw new RuntimeException(e);
 		}
 	}
@@ -80,8 +83,9 @@ public class CryptUtils {
 			// 正式执行解密操作
 			return cipher.doFinal(src);
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
+			if (OjConfig.isDevMode()) {
+				log.error("decrypt failed!", e);
+			}
 			throw new RuntimeException(e);
 		}
 	}
@@ -113,8 +117,9 @@ public class CryptUtils {
 			try {
 				return byte2hex(encrypt(data.getBytes(), key.getBytes()));
 			} catch (Exception e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
+				if (OjConfig.isDevMode()) {
+					log.error("encrypt failed!", e);
+				}
 				throw new RuntimeException(e);
 			}
 		return null;

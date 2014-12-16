@@ -4,12 +4,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import com.jfinal.core.Controller;
+import com.jfinal.log.Logger;
 import com.jfinal.validate.Validator;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 
 public class AddContestValidator extends Validator {
+
+	private static final Logger log = Logger.getLogger(AddContestValidator.class);
 
 	@Override
 	protected void validate(Controller c) {
@@ -26,8 +29,9 @@ public class AddContestValidator extends Validator {
 				return;
 			}
 		} catch (ParseException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
+			if (OjConfig.isDevMode()) {
+				log.error("add contest validate failed!", e);
+			}
 		}
 		addError("timeMsg", "Contest time is incorrect!");
 	}

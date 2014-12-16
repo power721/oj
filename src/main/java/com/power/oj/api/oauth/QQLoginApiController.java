@@ -21,9 +21,11 @@ public class QQLoginApiController extends OjController {
 			QQOauth qq = new QQOauth();
 			redirect(qq.getAuthorizeUrl());
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("get authorize url failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 			redirect("/");
 		}
 	}
@@ -78,9 +80,11 @@ public class QQLoginApiController extends OjController {
 				}
 			}
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("QQ login failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 			setFlashMessage(new FlashMessage(getText("user.signin.error"), MessageType.ERROR, getText("message.error.title")));
 		}
 		redirect(SessionService.me().getLastAccessURL());

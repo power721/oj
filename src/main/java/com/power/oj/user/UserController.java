@@ -170,8 +170,9 @@ public class UserController extends OjController {
 			renderFile(userService.archiveCode());
 		} catch (IOException e) {
 			log.warn(e.getLocalizedMessage());
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
+			if (OjConfig.isDevMode()) {
+				log.error("archive code failed!", e);
+			}
 
 			redirect(sessionService.getLastAccessURL());
 		}

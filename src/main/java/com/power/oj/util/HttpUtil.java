@@ -63,13 +63,17 @@ public class HttpUtil {
 			html = httpclient.execute(httpGet, responseHandler);
 
 		} catch (ClientProtocolException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.warn(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("get url failed!", e);
+			} else {
+				log.warn(e.getLocalizedMessage());
+			}
 		} catch (IOException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.warn(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("get url failed!", e);
+			} else {
+				log.warn(e.getLocalizedMessage());
+			}
 		} finally {
 			httpclient.getConnectionManager().shutdown();
 		}
@@ -104,13 +108,17 @@ public class HttpUtil {
 			html = httpclient.execute(httpPost, responseHandler);
 
 		} catch (ClientProtocolException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.warn(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("post failed!", e);
+			} else {
+				log.warn(e.getLocalizedMessage());
+			}
 		} catch (IOException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.warn(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("post failed!", e);
+			} else {
+				log.warn(e.getLocalizedMessage());
+			}
 		} finally {
 			httpclient.getConnectionManager().shutdown();
 		}

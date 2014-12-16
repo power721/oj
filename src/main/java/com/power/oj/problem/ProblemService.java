@@ -269,9 +269,11 @@ public final class ProblemService {
 				record.put("longName", resultType.getLongName());
 				record.put("name", resultType.getName());
 			} catch (NullPointerException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.warn(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("get problem status failed!", e);
+				} else {
+					log.warn(e.getLocalizedMessage());
+				}
 			}
 		}
 
@@ -330,9 +332,11 @@ public final class ProblemService {
 			try {
 				Runtime.getRuntime().exec(cmd);
 			} catch (IOException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("check SPJ failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 				return false;
 			}
 			return true;
@@ -345,9 +349,11 @@ public final class ProblemService {
 			try {
 				Runtime.getRuntime().exec(cmd);
 			} catch (IOException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("check SPJ failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 				return false;
 			}
 			return true;

@@ -21,9 +21,11 @@ public class SinaLoginApiController extends OjController {
 			SinaOauth sina = new SinaOauth();
 			redirect(sina.getAuthorizeUrl());
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("get authorize url failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 			redirect("/");
 		}
 	}
@@ -78,9 +80,11 @@ public class SinaLoginApiController extends OjController {
 				}
 			}
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("sina login failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 			setFlashMessage(new FlashMessage(getText("user.signin.error"), MessageType.ERROR, getText("message.error.title")));
 		}
 		redirect(SessionService.me().getLastAccessURL());

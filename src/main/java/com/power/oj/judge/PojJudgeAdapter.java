@@ -61,9 +61,11 @@ public class PojJudgeAdapter extends JudgeAdapter {
 		try {
 			ret = compileProcess.waitFor();
 		} catch (InterruptedException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("compile failed!", e);
+			} else {
+				log.warn("Compile Process is interrupted: " + e.getLocalizedMessage());
+			}
 		}
 
 		File mainProgram = new File(new StringBuilder(4).append(workDirPath).append(File.separator)

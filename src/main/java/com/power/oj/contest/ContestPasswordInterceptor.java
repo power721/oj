@@ -70,9 +70,11 @@ public class ContestPasswordInterceptor implements Interceptor {
 					return true;
 				}
 			} catch (Exception e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("check password failed!", e);
+				} else {
+					log.error(e.getMessage());
+				}
 			}
 		}
 

@@ -64,9 +64,11 @@ public class ContestRankWebSocket {
 					client.session.getBasicRemote().sendText(msg);
 				}
 			} catch (IOException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.warn("WebSocket Error: Failed to send message to client", e);
+				if (OjConfig.isDevMode()) {
+					log.warn("broadcasr message failed!", e);
+				} else {
+					log.warn("WebSocket Error: Failed to send message to client", e);
+				}
 				connections.remove(client);
 				try {
 					client.session.close();

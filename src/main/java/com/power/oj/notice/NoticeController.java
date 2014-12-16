@@ -58,9 +58,11 @@ public class NoticeController extends OjController {
 			noticeModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
 			noticeModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
 		} catch (ParseException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("save notice failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 		}
 
 		if (noticeService.saveNotice(noticeModel)) {
@@ -94,9 +96,11 @@ public class NoticeController extends OjController {
 			noticeModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
 			noticeModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
 		} catch (ParseException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("update notice failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 		}
 
 		if (noticeService.updateNotice(noticeModel)) {

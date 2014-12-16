@@ -68,9 +68,11 @@ public class NewsController extends OjController {
 			newsModel.setImage(imagePath);
 			newsModel.setTime((int) (sdf.parse(publishTime).getTime() / 1000));
 		} catch (ParseException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("save news failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 		}
 
 		if (newsService.saveNews(newsModel)) {
@@ -103,9 +105,11 @@ public class NewsController extends OjController {
 			newsModel.setImage(imagePath);
 			newsModel.setTime((int) (sdf.parse(publishTime).getTime() / 1000));
 		} catch (ParseException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("update news failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 		}
 
 		if (newsService.updateNews(newsModel)) {

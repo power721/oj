@@ -53,16 +53,20 @@ public class UserApiController extends OjController {
 			try {
 				userModel = userService.signup(email, webLogin);
 			} catch (MailException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("send mail failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 
 				renderJson("status", "mail_error");
 				return;
 			} catch (Exception e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("signup failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 
 				renderJson("status", "signup_error");
 				return;
@@ -188,9 +192,11 @@ public class UserApiController extends OjController {
 					renderJson("{\"success\":false, \"result\":\"Update email failed.\"}");
 				}
 			} catch (Exception e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.error(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.error("update email failed!", e);
+				} else {
+					log.error(e.getLocalizedMessage());
+				}
 
 				renderJson("{\"success\":false, \"result\":\"Send verify email failed.\"}");
 			}
@@ -229,9 +235,11 @@ public class UserApiController extends OjController {
 			fileName = userService.saveAvatar(file);
 			setCookie("oj_userimg", fileName, OjConstants.COOKIE_AGE);
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("upload avatar failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 
 			renderJson("{\"success\":false, \"state\":\"FAIL\"}");
 			return;

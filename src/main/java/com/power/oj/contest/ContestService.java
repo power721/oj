@@ -359,18 +359,22 @@ public class ContestService {
 			try {
 				html = HttpUtil.doGet("http://contests.acmicpc.info/contests.json");
 			} catch (HttpHostConnectException e) {
-				if (OjConfig.isDevMode())
-					e.printStackTrace();
-				log.info(e.getLocalizedMessage());
+				if (OjConfig.isDevMode()) {
+					log.warn("get recent contest failed!", e);
+				} else {
+					log.info(e.getLocalizedMessage());
+				}
 			}
 
 			if (html == null) {
 				try {
 					html = HttpUtil.doGet("http://acm.nankai.edu.cn/contests.json");
 				} catch (HttpHostConnectException e) {
-					if (OjConfig.isDevMode())
-						e.printStackTrace();
-					log.info(e.getLocalizedMessage());
+					if (OjConfig.isDevMode()) {
+						log.warn("get recent contest failed!", e);
+					} else {
+						log.info(e.getLocalizedMessage());
+					}
 				}
 			}
 			if (html == null) {
@@ -518,10 +522,11 @@ public class ContestService {
 			contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
 			log.info(contestModel.getEndTime().toString());
 		} catch (ParseException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-
-			log.error(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("add contest failed!", e);
+			} else {
+				log.error(e.getLocalizedMessage());
+			}
 		}
 
 		return contestModel.save();
@@ -535,8 +540,9 @@ public class ContestService {
 			contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
 			contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
 		} catch (ParseException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
+			if (OjConfig.isDevMode()) {
+				log.error("update contest time failed!", e);
+			}
 		}
 
 		if (contestModel.hasPassword()) {

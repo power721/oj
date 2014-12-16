@@ -34,39 +34,40 @@ import static com.jfinal.plugin.activerecord.DbKit.NULL_PARA_ARRAY;
 /**
  * Model.
  * <p>
- * A clever person solves a problem.
- * A wise person avoids it.
- * A stupid person makes it.
+ * A clever person solves a problem. A wise person avoids it. A stupid person
+ * makes it.
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public abstract class Model<M extends Model> implements Serializable {
-	
+
 	private static final long serialVersionUID = 3116455399652810187L;
-	
+
 	/**
 	 * Attributes of this model
 	 */
-	private Map<String, Object> attrs = getAttrsMap();	// getConfig().containerFactory.getAttrsMap();	// new HashMap<String, Object>();
-	
+	private Map<String, Object> attrs = getAttrsMap(); // getConfig().containerFactory.getAttrsMap();
+														// // new
+														// HashMap<String,
+														// Object>();
+
 	private Map<String, Object> getAttrsMap() {
 		Config config = getConfig();
 		if (config == null)
 			return DbKit.brokenConfig.containerFactory.getAttrsMap();
 		return config.containerFactory.getAttrsMap();
 	}
-	
+
 	/**
 	 * Flag of column has been modified. update need this flag
 	 */
 	private Set<String> modifyFlag;
-	
+
 	/*
-	private Set<String> getModifyFlag() {
-		if (modifyFlag == null)
-			modifyFlag = getConfig().containerFactory.getModifyFlagSet();	// new HashSet<String>();
-		return modifyFlag;
-	}*/
-	
+	 * private Set<String> getModifyFlag() { if (modifyFlag == null) modifyFlag
+	 * = getConfig().containerFactory.getModifyFlagSet(); // new
+	 * HashSet<String>(); return modifyFlag; }
+	 */
+
 	private Set<String> getModifyFlag() {
 		if (modifyFlag == null) {
 			Config config = getConfig();
@@ -77,157 +78,172 @@ public abstract class Model<M extends Model> implements Serializable {
 		}
 		return modifyFlag;
 	}
-	
+
 	private Config getConfig() {
 		return DbKit.getConfig(getClass());
 	}
-	
+
 	private Table getTable() {
 		return TableMapping.me().getTable(getClass());
 	}
-	
+
 	/**
 	 * Set attribute to model.
-	 * @param attr the attribute name of the model
-	 * @param value the value of the attribute
+	 * 
+	 * @param attr
+	 *            the attribute name of the model
+	 * @param value
+	 *            the value of the attribute
 	 * @return this model
-	 * @throws ActiveRecordException if the attribute is not exists of the model
+	 * @throws ActiveRecordException
+	 *             if the attribute is not exists of the model
 	 */
 	public M set(String attr, Object value) {
 		if (getTable().hasColumnLabel(attr)) {
 			attrs.put(attr, value);
-			getModifyFlag().add(attr);	// Add modify flag, update() need this flag.
-			return (M)this;
+			getModifyFlag().add(attr); // Add modify flag, update() need this
+										// flag.
+			return (M) this;
 		}
 		throw new ActiveRecordException("The attribute name is not exists: " + attr);
 	}
-	
+
 	/**
-	 * Put key value pair to the model when the key is not attribute of the model.
+	 * Put key value pair to the model when the key is not attribute of the
+	 * model.
 	 */
 	public M put(String key, Object value) {
 		attrs.put(key, value);
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	/**
 	 * Get attribute of any mysql type
 	 */
 	public <T> T get(String attr) {
-		return (T)(attrs.get(attr));
+		return (T) (attrs.get(attr));
 	}
-	
+
 	/**
 	 * Get attribute of any mysql type. Returns defaultValue if null.
 	 */
 	public <T> T get(String attr, Object defaultValue) {
 		Object result = attrs.get(attr);
-		return (T)(result != null ? result : defaultValue);
+		return (T) (result != null ? result : defaultValue);
 	}
-	
+
 	/**
-	 * Get attribute of mysql type: varchar, char, enum, set, text, tinytext, mediumtext, longtext
+	 * Get attribute of mysql type: varchar, char, enum, set, text, tinytext,
+	 * mediumtext, longtext
 	 */
 	public String getStr(String attr) {
-		return (String)attrs.get(attr);
+		return (String) attrs.get(attr);
 	}
-	
+
 	/**
-	 * Get attribute of mysql type: int, integer, tinyint(n) n > 1, smallint, mediumint
+	 * Get attribute of mysql type: int, integer, tinyint(n) n > 1, smallint,
+	 * mediumint
 	 */
 	public Integer getInt(String attr) {
-		return (Integer)attrs.get(attr);
+		return (Integer) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: bigint, unsign int
 	 */
 	public Long getLong(String attr) {
-		return (Long)attrs.get(attr);
+		return (Long) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: unsigned bigint
 	 */
 	public java.math.BigInteger getBigInteger(String attr) {
-		return (java.math.BigInteger)attrs.get(attr);
+		return (java.math.BigInteger) attrs.get(attr);
 	}
-	
+
 	// java.util.Data never returned
 	// public java.util.Date getDate(String attr) {
-		// return attrs.get(attr);
-	//}
-	
+	// return attrs.get(attr);
+	// }
+
 	/**
 	 * Get attribute of mysql type: date, year
 	 */
 	public java.sql.Date getDate(String attr) {
-		return (java.sql.Date)attrs.get(attr);
+		return (java.sql.Date) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: time
 	 */
 	public java.sql.Time getTime(String attr) {
-		return (java.sql.Time)attrs.get(attr);
+		return (java.sql.Time) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: timestamp, datetime
 	 */
 	public java.sql.Timestamp getTimestamp(String attr) {
-		return (java.sql.Timestamp)attrs.get(attr);
+		return (java.sql.Timestamp) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: real, double
 	 */
 	public Double getDouble(String attr) {
-		return (Double)attrs.get(attr);
+		return (Double) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: float
 	 */
 	public Float getFloat(String attr) {
-		return (Float)attrs.get(attr);
+		return (Float) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: bit, tinyint(1)
 	 */
 	public Boolean getBoolean(String attr) {
-		return (Boolean)attrs.get(attr);
+		return (Boolean) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of mysql type: decimal, numeric
 	 */
 	public java.math.BigDecimal getBigDecimal(String attr) {
-		return (java.math.BigDecimal)attrs.get(attr);
+		return (java.math.BigDecimal) attrs.get(attr);
 	}
-	
+
 	/**
-	 * Get attribute of mysql type: binary, varbinary, tinyblob, blob, mediumblob, longblob
+	 * Get attribute of mysql type: binary, varbinary, tinyblob, blob,
+	 * mediumblob, longblob
 	 */
 	public byte[] getBytes(String attr) {
-		return (byte[])attrs.get(attr);
+		return (byte[]) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Get attribute of any type that extends from Number
 	 */
 	public Number getNumber(String attr) {
-		return (Number)attrs.get(attr);
+		return (Number) attrs.get(attr);
 	}
-	
+
 	/**
 	 * Paginate.
-	 * @param pageNumber the page number
-	 * @param pageSize the page size
-	 * @param select the select part of the sql statement 
-	 * @param sqlExceptSelect the sql statement excluded select part
-	 * @param paras the parameters of sql
+	 * 
+	 * @param pageNumber
+	 *            the page number
+	 * @param pageSize
+	 *            the page size
+	 * @param select
+	 *            the select part of the sql statement
+	 * @param sqlExceptSelect
+	 *            the sql statement excluded select part
+	 * @param paras
+	 *            the parameters of sql
 	 * @return Page
 	 */
 	public Page<M> paginate(int pageNumber, int pageSize, String select, String sqlExceptSelect, Object... paras) {
@@ -242,73 +258,79 @@ public abstract class Model<M extends Model> implements Serializable {
 			config.close(conn);
 		}
 	}
-	
-	private Page<M> paginate(Config config, Connection conn, int pageNumber, int pageSize, String select, String sqlExceptSelect, Object... paras) throws Exception {
+
+	private Page<M> paginate(Config config, Connection conn, int pageNumber, int pageSize, String select,
+			String sqlExceptSelect, Object... paras) throws Exception {
 		if (pageNumber < 1 || pageSize < 1)
 			throw new ActiveRecordException("pageNumber and pageSize must be more than 0");
-		
+
 		if (config.dialect.isTakeOverModelPaginate())
 			return config.dialect.takeOverModelPaginate(conn, getClass(), pageNumber, pageSize, select, sqlExceptSelect, paras);
-		
+
 		long totalRow = 0;
 		int totalPage = 0;
 		List result = Db.query(config, conn, "select count(*) " + DbKit.replaceFormatSqlOrderBy(sqlExceptSelect), paras);
 		int size = result.size();
 		if (size == 1)
-			totalRow = ((Number)result.get(0)).longValue();		// totalRow = (Long)result.get(0);
+			totalRow = ((Number) result.get(0)).longValue(); // totalRow =
+																// (Long)result.get(0);
 		else if (size > 1)
 			totalRow = result.size();
 		else
-			return new Page<M>(new ArrayList<M>(0), pageNumber, pageSize, 0, 0);	// totalRow = 0;
-		
+			return new Page<M>(new ArrayList<M>(0), pageNumber, pageSize, 0, 0); // totalRow
+																					// =
+																					// 0;
+
 		totalPage = (int) (totalRow / pageSize);
 		if (totalRow % pageSize != 0) {
 			totalPage++;
 		}
-		
+
 		// --------
 		StringBuilder sql = new StringBuilder();
 		config.dialect.forPaginate(sql, pageNumber, pageSize, select, sqlExceptSelect);
 		List<M> list = find(conn, sql.toString(), paras);
-		return new Page<M>(list, pageNumber, pageSize, totalPage, (int)totalRow);
+		return new Page<M>(list, pageNumber, pageSize, totalPage, (int) totalRow);
 	}
-	
+
 	/**
 	 * @see #paginate(int, int, String, String, Object...)
 	 */
 	public Page<M> paginate(int pageNumber, int pageSize, String select, String sqlExceptSelect) {
 		return paginate(pageNumber, pageSize, select, sqlExceptSelect, NULL_PARA_ARRAY);
 	}
-	
+
 	/**
 	 * Return attribute Map.
 	 * <p>
-	 * Danger! The update method will ignore the attribute if you change it directly.
-	 * You must use set method to change attribute that update method can handle it.
+	 * Danger! The update method will ignore the attribute if you change it
+	 * directly. You must use set method to change attribute that update method
+	 * can handle it.
 	 */
 	protected Map<String, Object> getAttrs() {
 		return attrs;
 	}
-	
+
 	/**
 	 * Return attribute Set.
 	 */
 	public Set<Entry<String, Object>> getAttrsEntrySet() {
 		return attrs.entrySet();
 	}
-	
+
 	/**
 	 * Save model.
 	 */
 	public boolean save() {
 		Config config = getConfig();
 		Table table = getTable();
-		
+
 		StringBuilder sql = new StringBuilder();
 		List<Object> paras = new ArrayList<Object>();
 		config.dialect.forModelSave(table, attrs, sql, paras);
-		// if (paras.size() == 0)	return false;	// The sql "insert into tableName() values()" works fine, so delete this line
-		
+		// if (paras.size() == 0) return false; // The sql
+		// "insert into tableName() values()" works fine, so delete this line
+
 		// --------
 		Connection conn = null;
 		PreparedStatement pst = null;
@@ -316,10 +338,10 @@ public abstract class Model<M extends Model> implements Serializable {
 		try {
 			conn = config.getConnection();
 			if (config.dialect.isOracle())
-				pst = conn.prepareStatement(sql.toString(), new String[]{table.getPrimaryKey()});
+				pst = conn.prepareStatement(sql.toString(), new String[] { table.getPrimaryKey() });
 			else
 				pst = conn.prepareStatement(sql.toString(), Statement.RETURN_GENERATED_KEYS);
-			
+
 			config.dialect.fillStatement(pst, paras);
 			result = pst.executeUpdate();
 			getGeneratedKey(pst, table);
@@ -331,7 +353,7 @@ public abstract class Model<M extends Model> implements Serializable {
 			config.close(pst, conn);
 		}
 	}
-	
+
 	/**
 	 * Get id after save method.
 	 */
@@ -346,12 +368,13 @@ public abstract class Model<M extends Model> implements Serializable {
 				else if (colType == Long.class || colType == long.class)
 					set(pKey, rs.getLong(1));
 				else
-					set(pKey, rs.getObject(1));		// It returns Long object for int colType
+					set(pKey, rs.getObject(1)); // It returns Long object for
+												// int colType
 				rs.close();
 			}
 		}
 	}
-	
+
 	/**
 	 * Delete model.
 	 */
@@ -362,10 +385,12 @@ public abstract class Model<M extends Model> implements Serializable {
 			throw new ActiveRecordException("You can't delete model without id.");
 		return deleteById(table, id);
 	}
-	
+
 	/**
 	 * Delete model by id.
-	 * @param id the id value of the model
+	 * 
+	 * @param id
+	 *            the id value of the model
 	 * @return true if delete succeed otherwise false
 	 */
 	public boolean deleteById(Object id) {
@@ -373,7 +398,7 @@ public abstract class Model<M extends Model> implements Serializable {
 			throw new IllegalArgumentException("id can not be null");
 		return deleteById(getTable(), id);
 	}
-	
+
 	private boolean deleteById(Table table, Object id) {
 		Config config = getConfig();
 		Connection conn = null;
@@ -387,29 +412,29 @@ public abstract class Model<M extends Model> implements Serializable {
 			config.close(conn);
 		}
 	}
-	
+
 	/**
 	 * Update model.
 	 */
 	public boolean update() {
 		if (getModifyFlag().isEmpty())
 			return false;
-		
+
 		Table table = getTable();
 		String pKey = table.getPrimaryKey();
 		Object id = attrs.get(pKey);
 		if (id == null)
 			throw new ActiveRecordException("You can't update model without Primary Key.");
-		
+
 		Config config = getConfig();
 		StringBuilder sql = new StringBuilder();
 		List<Object> paras = new ArrayList<Object>();
 		config.dialect.forModelUpdate(table, attrs, getModifyFlag(), pKey, id, sql, paras);
-		
-		if (paras.size() <= 1) {	// Needn't update
+
+		if (paras.size() <= 1) { // Needn't update
 			return false;
 		}
-		
+
 		// --------
 		Connection conn = null;
 		try {
@@ -426,7 +451,7 @@ public abstract class Model<M extends Model> implements Serializable {
 			config.close(conn);
 		}
 	}
-	
+
 	/**
 	 * Find model.
 	 */
@@ -435,7 +460,7 @@ public abstract class Model<M extends Model> implements Serializable {
 		Class<? extends Model> modelClass = getClass();
 		if (config.devMode)
 			checkTableName(modelClass, sql);
-		
+
 		PreparedStatement pst = conn.prepareStatement(sql);
 		config.dialect.fillStatement(pst, paras);
 		ResultSet rs = pst.executeQuery();
@@ -443,11 +468,15 @@ public abstract class Model<M extends Model> implements Serializable {
 		DbKit.closeQuietly(rs, pst);
 		return result;
 	}
-	
+
 	/**
 	 * Find model.
-	 * @param sql an SQL statement that may contain one or more '?' IN parameter placeholders
-	 * @param paras the parameters of sql
+	 * 
+	 * @param sql
+	 *            an SQL statement that may contain one or more '?' IN parameter
+	 *            placeholders
+	 * @param paras
+	 *            the parameters of sql
 	 * @return the list of Model
 	 */
 	public List<M> find(String sql, Object... paras) {
@@ -462,56 +491,66 @@ public abstract class Model<M extends Model> implements Serializable {
 			config.close(conn);
 		}
 	}
-	
+
 	/**
 	 * Check the table name. The table name must in sql.
 	 */
 	private void checkTableName(Class<? extends Model> modelClass, String sql) {
 		Table table = TableMapping.me().getTable(modelClass);
-		if (! sql.toLowerCase().contains(table.getName().toLowerCase()))
+		if (!sql.toLowerCase().contains(table.getName().toLowerCase()))
 			throw new ActiveRecordException("The table name: " + table.getName() + " not in your sql.");
 	}
-	
+
 	/**
 	 * @see #find(String, Object...)
 	 */
 	public List<M> find(String sql) {
 		return find(sql, NULL_PARA_ARRAY);
 	}
-	
+
 	/**
 	 * Find first model. I recommend add "limit 1" in your sql.
-	 * @param sql an SQL statement that may contain one or more '?' IN parameter placeholders
-	 * @param paras the parameters of sql
+	 * 
+	 * @param sql
+	 *            an SQL statement that may contain one or more '?' IN parameter
+	 *            placeholders
+	 * @param paras
+	 *            the parameters of sql
 	 * @return Model
 	 */
 	public M findFirst(String sql, Object... paras) {
 		List<M> result = find(sql, paras);
 		return result.size() > 0 ? result.get(0) : null;
 	}
-	
+
 	/**
 	 * @see #findFirst(String, Object...)
-	 * @param sql an SQL statement
+	 * @param sql
+	 *            an SQL statement
 	 */
 	public M findFirst(String sql) {
 		List<M> result = find(sql, NULL_PARA_ARRAY);
 		return result.size() > 0 ? result.get(0) : null;
 	}
-	
+
 	/**
 	 * Find model by id.
-	 * @param id the id value of the model
+	 * 
+	 * @param id
+	 *            the id value of the model
 	 */
 	public M findById(Object id) {
 		return findById(id, "*");
 	}
-	
+
 	/**
-	 * Find model by id. Fetch the specific columns only.
-	 * Example: User user = User.dao.findById(15, "name, age");
-	 * @param id the id value of the model
-	 * @param columns the specific columns separate with comma character ==> ","
+	 * Find model by id. Fetch the specific columns only. Example: User user =
+	 * User.dao.findById(15, "name, age");
+	 * 
+	 * @param id
+	 *            the id value of the model
+	 * @param columns
+	 *            the specific columns separate with comma character ==> ","
 	 */
 	public M findById(Object id, String columns) {
 		Table table = getTable();
@@ -519,41 +558,49 @@ public abstract class Model<M extends Model> implements Serializable {
 		List<M> result = find(sql, id);
 		return result.size() > 0 ? result.get(0) : null;
 	}
-	
+
 	/**
 	 * Set attributes with other model.
-	 * @param model the Model
+	 * 
+	 * @param model
+	 *            the Model
 	 * @return this Model
 	 */
 	public M setAttrs(M model) {
 		return setAttrs(model.getAttrs());
 	}
-	
+
 	/**
 	 * Set attributes with Map.
-	 * @param attrs attributes of this model
+	 * 
+	 * @param attrs
+	 *            attributes of this model
 	 * @return this Model
 	 */
 	public M setAttrs(Map<String, Object> attrs) {
 		for (Entry<String, Object> e : attrs.entrySet())
 			set(e.getKey(), e.getValue());
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	/**
 	 * Remove attribute of this model.
-	 * @param attr the attribute name of the model
+	 * 
+	 * @param attr
+	 *            the attribute name of the model
 	 * @return this model
 	 */
 	public M remove(String attr) {
 		attrs.remove(attr);
 		getModifyFlag().remove(attr);
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	/**
 	 * Remove attributes of this model.
-	 * @param attrs the attribute names of the model
+	 * 
+	 * @param attrs
+	 *            the attribute names of the model
 	 * @return this model
 	 */
 	public M remove(String... attrs) {
@@ -562,11 +609,12 @@ public abstract class Model<M extends Model> implements Serializable {
 				this.attrs.remove(a);
 				this.getModifyFlag().remove(a);
 			}
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	/**
 	 * Remove attributes if it is null.
+	 * 
 	 * @return this model
 	 */
 	public M removeNullValueAttrs() {
@@ -577,42 +625,50 @@ public abstract class Model<M extends Model> implements Serializable {
 				getModifyFlag().remove(e.getKey());
 			}
 		}
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	/**
 	 * Keep attributes of this model and remove other attributes.
-	 * @param attrs the attribute names of the model
+	 * 
+	 * @param attrs
+	 *            the attribute names of the model
 	 * @return this model
 	 */
 	public M keep(String... attrs) {
 		if (attrs != null && attrs.length > 0) {
 			Config config = getConfig();
-			Map<String, Object> newAttrs = config.containerFactory.getAttrsMap();	// new HashMap<String, Object>(attrs.length);
-			Set<String> newModifyFlag = config.containerFactory.getModifyFlagSet();	// new HashSet<String>();
+			Map<String, Object> newAttrs = config.containerFactory.getAttrsMap(); // new
+																					// HashMap<String,
+																					// Object>(attrs.length);
+			Set<String> newModifyFlag = config.containerFactory.getModifyFlagSet(); // new
+																					// HashSet<String>();
 			for (String a : attrs) {
-				if (this.attrs.containsKey(a))	// prevent put null value to the newColumns
+				if (this.attrs.containsKey(a)) // prevent put null value to the
+												// newColumns
 					newAttrs.put(a, this.attrs.get(a));
 				if (this.getModifyFlag().contains(a))
 					newModifyFlag.add(a);
 			}
 			this.attrs = newAttrs;
 			this.modifyFlag = newModifyFlag;
-		}
-		else {
+		} else {
 			this.attrs.clear();
 			this.getModifyFlag().clear();
 		}
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	/**
 	 * Keep attribute of this model and remove other attributes.
-	 * @param attr the attribute name of the model
+	 * 
+	 * @param attr
+	 *            the attribute name of the model
 	 * @return this model
 	 */
 	public M keep(String attr) {
-		if (attrs.containsKey(attr)) {	// prevent put null value to the newColumns
+		if (attrs.containsKey(attr)) { // prevent put null value to the
+										// newColumns
 			Object keepIt = attrs.get(attr);
 			boolean keepFlag = getModifyFlag().contains(attr);
 			attrs.clear();
@@ -620,24 +676,24 @@ public abstract class Model<M extends Model> implements Serializable {
 			attrs.put(attr, keepIt);
 			if (keepFlag)
 				getModifyFlag().add(attr);
-		}
-		else {
+		} else {
 			attrs.clear();
 			getModifyFlag().clear();
 		}
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	/**
 	 * Remove all attributes of this model.
+	 * 
 	 * @return this model
 	 */
 	public M clear() {
 		attrs.clear();
 		getModifyFlag().clear();
-		return (M)this;
+		return (M) this;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.toString()).append(" {");
@@ -647,7 +703,7 @@ public abstract class Model<M extends Model> implements Serializable {
 				first = false;
 			else
 				sb.append(", ");
-			
+
 			Object value = e.getValue();
 			if (value != null)
 				value = value.toString();
@@ -656,24 +712,27 @@ public abstract class Model<M extends Model> implements Serializable {
 		sb.append("}");
 		return sb.toString();
 	}
-	
+
 	public boolean equals(Object o) {
 		if (!(o instanceof Model))
-            return false;
+			return false;
 		if (o == this)
 			return true;
-		return this.attrs.equals(((Model)o).attrs);
+		return this.attrs.equals(((Model) o).attrs);
 	}
-	
+
 	public int hashCode() {
 		return (attrs == null ? 0 : attrs.hashCode()) ^ (getModifyFlag() == null ? 0 : getModifyFlag().hashCode());
 	}
-	
+
 	/**
 	 * Find model by cache.
+	 * 
 	 * @see #find(String, Object...)
-	 * @param cacheName the cache name
-	 * @param key the key used to get date from cache
+	 * @param cacheName
+	 *            the cache name
+	 * @param key
+	 *            the key used to get date from cache
 	 * @return the list of Model
 	 */
 	public List<M> findByCache(String cacheName, Object key, String sql, Object... paras) {
@@ -685,7 +744,7 @@ public abstract class Model<M extends Model> implements Serializable {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * @see #findByCache(String, Object, String, Object...)
 	 */
@@ -693,38 +752,45 @@ public abstract class Model<M extends Model> implements Serializable {
 		return findByCache(cacheName, key, sql, NULL_PARA_ARRAY);
 	}
 
-  /**
-   * Find model by cache.
-   * @see #findFirst(String, Object...)
-   * @param cacheName the cache name
-   * @param key the key used to get date from cache
-   * @return the Model
-   */
-  public M findFirstByCache(String cacheName, Object key, String sql, Object... paras) {
-    ICache cache = getConfig().getCache();
-    M result = cache.get(cacheName, key);
-    if (result == null) {
-      result = findFirst(sql, paras);
-      cache.put(cacheName, key, result);
-    }
-    return result;
-  }
-  
-  /**
-   * @see #findByCache(String, Object, String, Object...)
-   */
-  public M findFirstByCache(String cacheName, Object key, String sql) {
-    return findFirstByCache(cacheName, key, sql, NULL_PARA_ARRAY);
-  }
-  
+	/**
+	 * Find model by cache.
+	 * 
+	 * @see #findFirst(String, Object...)
+	 * @param cacheName
+	 *            the cache name
+	 * @param key
+	 *            the key used to get date from cache
+	 * @return the Model
+	 */
+	public M findFirstByCache(String cacheName, Object key, String sql, Object... paras) {
+		ICache cache = getConfig().getCache();
+		M result = cache.get(cacheName, key);
+		if (result == null) {
+			result = findFirst(sql, paras);
+			cache.put(cacheName, key, result);
+		}
+		return result;
+	}
+
+	/**
+	 * @see #findByCache(String, Object, String, Object...)
+	 */
+	public M findFirstByCache(String cacheName, Object key, String sql) {
+		return findFirstByCache(cacheName, key, sql, NULL_PARA_ARRAY);
+	}
+
 	/**
 	 * Paginate by cache.
+	 * 
 	 * @see #paginate(int, int, String, String, Object...)
-	 * @param cacheName the cache name
-	 * @param key the key used to get date from cache
+	 * @param cacheName
+	 *            the cache name
+	 * @param key
+	 *            the key used to get date from cache
 	 * @return Page
 	 */
-	public Page<M> paginateByCache(String cacheName, Object key, int pageNumber, int pageSize, String select, String sqlExceptSelect, Object... paras) {
+	public Page<M> paginateByCache(String cacheName, Object key, int pageNumber, int pageSize, String select,
+			String sqlExceptSelect, Object... paras) {
 		ICache cache = getConfig().getCache();
 		Page<M> result = cache.get(cacheName, key);
 		if (result == null) {
@@ -733,14 +799,16 @@ public abstract class Model<M extends Model> implements Serializable {
 		}
 		return result;
 	}
-	
+
 	/**
-	 * @see #paginateByCache(String, Object, int, int, String, String, Object...)
+	 * @see #paginateByCache(String, Object, int, int, String, String,
+	 *      Object...)
 	 */
-	public Page<M> paginateByCache(String cacheName, Object key, int pageNumber, int pageSize, String select, String sqlExceptSelect) {
+	public Page<M> paginateByCache(String cacheName, Object key, int pageNumber, int pageSize, String select,
+			String sqlExceptSelect) {
 		return paginateByCache(cacheName, key, pageNumber, pageSize, select, sqlExceptSelect, NULL_PARA_ARRAY);
 	}
-	
+
 	/**
 	 * Return attribute names of this model.
 	 */
@@ -748,7 +816,7 @@ public abstract class Model<M extends Model> implements Serializable {
 		Set<String> attrNameSet = attrs.keySet();
 		return attrNameSet.toArray(new String[attrNameSet.size()]);
 	}
-	
+
 	/**
 	 * Return attribute values of this model.
 	 */
@@ -756,7 +824,7 @@ public abstract class Model<M extends Model> implements Serializable {
 		java.util.Collection<Object> attrValueCollection = attrs.values();
 		return attrValueCollection.toArray(new Object[attrValueCollection.size()]);
 	}
-	
+
 	/**
 	 * Return json string of this model.
 	 */
@@ -764,5 +832,3 @@ public abstract class Model<M extends Model> implements Serializable {
 		return com.jfinal.kit.JsonKit.toJson(attrs, 4);
 	}
 }
-
-

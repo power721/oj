@@ -198,9 +198,11 @@ public class ProblemController extends OjController {
 			}
 			redirectURL = new StringBuilder(2).append("/problem/show/").append(problemModel.getPid()).toString();
 		} catch (IOException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.error(e.getMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("add problem data directory failed!", e);
+			} else {
+				log.error(e.getMessage());
+			}
 
 			FlashMessage msg = new FlashMessage(getText("problem.save.error"), MessageType.ERROR, getText("message.error.title"));
 			redirect(redirectURL, msg);

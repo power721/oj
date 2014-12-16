@@ -72,9 +72,11 @@ public class UeditorController extends OjController {
 			FileUtil.moveFile(file.getFile(), imageFile);
 			url = imageFile.getAbsolutePath().replace(rootPath, "").replace("\\", "/");
 		} catch (IOException e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.warn(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("upload problem image failed!", e);
+			} else {
+				log.warn(e.getLocalizedMessage());
+			}
 			state = "IO Exception";
 		}
 
@@ -108,9 +110,11 @@ public class UeditorController extends OjController {
 			ro.flush();
 			ro.close();
 		} catch (Exception e) {
-			if (OjConfig.isDevMode())
-				e.printStackTrace();
-			log.warn(e.getLocalizedMessage());
+			if (OjConfig.isDevMode()) {
+				log.error("upload scrawl failed!", e);
+			} else {
+				log.warn(e.getLocalizedMessage());
+			}
 			state = "IO Exception";
 		}
 		renderJson("{'url':'" + outFile.getName() + "',state:'" + state + "'}");
@@ -163,8 +167,11 @@ public class UeditorController extends OjController {
 				is.close();
 				// 这里处理 inputStream
 			} catch (Exception e) {
-				e.printStackTrace();
-				log.warn("页面无法访问");
+				if (OjConfig.isDevMode()) {
+					log.error("get remote image failed!", e);
+				} else {
+					log.warn("页面无法访问");
+				}
 			}
 		}
 
