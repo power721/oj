@@ -1,7 +1,6 @@
 package com.power.oj.util;
 
 import java.util.Calendar;
-import java.util.Map;
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,11 +12,8 @@ import jodd.mail.EmailMessage;
 import jodd.mail.MailAddress;
 import jodd.mail.MailException;
 import jodd.mail.SendMailSession;
-import jodd.mail.SimpleAuthenticator;
 import jodd.mail.SmtpServer;
 import jodd.util.MimeTypes;
-import jodd.util.StringTemplateParser;
-import jodd.util.StringTemplateParser.MacroResolver;
 import jodd.util.StringUtil;
 
 import com.jfinal.log.Logger;
@@ -106,17 +102,6 @@ public class Tool {
 		} finally {
 			session.close();
 		}
-	}
-
-	public static String parseStringTemplate(final String template, final Map<String, String> map) {
-		StringTemplateParser stp = new StringTemplateParser();
-		String result = stp.parse(template, new MacroResolver() {
-			public String resolve(String macroName) {
-				return map.get(macroName);
-			}
-		});
-
-		return result;
 	}
 
 	public static int getDayTimestamp() {
