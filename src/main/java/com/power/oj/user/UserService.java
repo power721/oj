@@ -416,6 +416,7 @@ public final class UserService {
 		if (lastAccepted == null) {
 			userModel.setSolved(userModel.getSolved() - 1);
 		}
+		updateCache(userModel);
 
 		return userModel.update();
 	} /* for solution end */
@@ -453,6 +454,8 @@ public final class UserService {
 		UserModel userModel = dao.getUserByName(name);
 
 		userModel.setToken(null).setEmailVerified(true).setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+		updateCache(userModel);
+
 		return userModel.update();
 	}
 
@@ -473,6 +476,7 @@ public final class UserService {
 				return true;
 			} else {
 				userModel.setToken(null).update();
+				updateCache(userModel);
 			}
 		}
 
