@@ -416,6 +416,7 @@ public final class UserService {
 		if (lastAccepted == null) {
 			userModel.setSolved(userModel.getSolved() - 1);
 		}
+		updateCache(userModel);
 
 		return userModel.update();
 	} /* for solution end */
@@ -453,7 +454,25 @@ public final class UserService {
 		UserModel userModel = dao.getUserByName(name);
 
 		userModel.setToken(null).setEmailVerified(true).setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+		updateCache(userModel);
 		return userModel.update();
+	}
+
+	/**
+	 * generate token for reset password.
+	 * 
+	 * @param name
+	 *            user name
+	 * @return the token
+	 */
+	public String genToken(String name) {
+		String token = UUID.randomUUID().toString();
+		UserModel userModel = getUserByName(name);
+
+		userModel.setToken(token).setMtime(OjConfig.timeStamp).update();
+		updateCache(userModel);
+
+		return token;
 	}
 
 	/**
@@ -473,6 +492,7 @@ public final class UserService {
 				return true;
 			} else {
 				userModel.setToken(null).update();
+				updateCache(userModel);
 			}
 		}
 

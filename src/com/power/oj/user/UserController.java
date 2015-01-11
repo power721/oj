@@ -1,7 +1,6 @@
 package com.power.oj.user;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
@@ -213,12 +212,9 @@ public class UserController extends OjController
   {
     String name = getPara("name");
     String email = getPara("email");
-    String token = UUID.randomUUID().toString();
-    UserModel userModel = userService.getUserByName(name);
+    String token = userService.genToken(name);
     FlashMessage msg = new FlashMessage(getText("user.recover.success"));
     
-    // TODO move to UserService
-    userModel.setToken(token).setMtime(OjConfig.timeStamp).update();
     ojService.sendResetPasswordEmail(name, email, token);
     
     redirect(sessionService.getLastAccessURL(), msg);
@@ -229,7 +225,7 @@ public class UserController extends OjController
   {
     String name = getPara("name");
     String token = getPara("token");
-   
+
     if (userService.checkResetToken(name, token))
     {
       setSessionAttr("name", name);
