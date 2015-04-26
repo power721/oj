@@ -37,6 +37,7 @@
               </h2>
               <div class="problem-admin">
                 <a href="admin/problem/data/${problem.pid!}" class="btn btn-primary">Data</a>
+                <a href="admin/problem/edit/${problem.pid!}" class="btn btn-danger">Edit</a>
                 <a href="problem/rejudge/${problem.pid!}" class="btn btn-danger">Rejudge</a>
               </div>
               <div class="problem-info">
@@ -52,7 +53,7 @@
               </div>
               <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal" data-target="#submitModal">Submit</a>
               <a href="problem/status/${problem.pid!}" class="btn btn-info" target="_blank">Status</a>
-              <a href="bbs/?pid=${problem.pid!}" class="btn btn-info" target="_blank">Discuss</a>
+              <a href="discuss/?pid=${problem.pid!}" class="btn btn-info" target="_blank">Discuss</a>
             </div>
             
             <!--<div class="modal hide fade problemModal" id="editModal">

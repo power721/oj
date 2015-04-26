@@ -11,6 +11,10 @@
         <a href="admin/problem">题目管理</a>
         <span class="divider">/</span>
       </li>
+      <li>
+        <a href="admin/problem/show/${problem.pid!}">${problem.pid!}</a>
+        <span class="divider">/</span>
+      </li>
       <li class="active">编辑题目</li>
     </ul>
     <div class="container-fluid">
@@ -96,7 +100,7 @@
                   </label>
                   <button type="submit" class="btn btn-primary">Save</button>
                   <button type="reset" class="btn btn-info">Reset</button>
-                  <a class="btn btn-warning" href="problem/show/${problem.pid!}">Cancel</a>
+                  <a class="btn btn-warning" href="admin/problem/show/${problem.pid!}">Cancel</a>
                 </div>
               </div>
             </form>
