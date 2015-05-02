@@ -564,6 +564,12 @@ public class ContestService
     return ContestSolutionModel.dao.findFirst(sb.toString(), sid, cid);
   }
 
+  public List<ContestSolutionModel> getContestProblemSolutions(Integer cid, Integer pid) {
+    String sql = "SELECT * FROM contest_solution WHERE cid=? AND pid=?";
+
+    return ContestSolutionModel.dao.find(sql, cid, pid);
+  }
+
   public int submitSolution(ContestSolutionModel contestSolution)
   {
     Integer cid = contestSolution.getCid();
