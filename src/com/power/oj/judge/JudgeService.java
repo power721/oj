@@ -154,18 +154,22 @@ public final class JudgeService
     rejudgeExecutor.execute(rejudgeThread);
   }
 
-  public void rejudgeContestSolution(Integer sid)
+  public void rejudgeContestSolution(ContestSolutionModel contestSolution)
   {
-    ContestSolutionModel contestSolution = solutionService.findContestSolution(sid);
     int result = contestSolution.getResult();
 
-    contestSolution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
-    contestSolution.setMemory(0).setTime(0).setError(null).setSystemError(null);
     contestSolution.update();
 
     contestSolution.put("originalResult", result);
 
     rejudge(contestSolution);
+  }
+
+  public void rejudgeContestSolution(Integer sid)
+  {
+    ContestSolutionModel contestSolution = solutionService.findContestSolution(sid);
+
+    rejudgeContestSolution(contestSolution);
   }
 
   public void rejudgeContest(final Integer cid)
@@ -183,14 +187,14 @@ public final class JudgeService
             e.printStackTrace();
           log.error(e.getLocalizedMessage());
         }
-        contestService.reset(cid);
+        // contestService.reset(cid);
         List<ContestSolutionModel> solutionList = Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
         synchronized(solutionList)
         {
           Iterator<ContestSolutionModel> it = solutionList.iterator();
           while (it.hasNext())
           {
-            rejudge(it.next());
+            rejudgeContestSolution(it.next());
           }
         }
       }
@@ -198,10 +202,20 @@ public final class JudgeService
     rejudgeExecutor.execute(rejudgeThread);
   }
 
-  public void rejudgeContestProblem(Integer cid, Integer pid)
+  public void rejudgeContestProblem(final Integer cid, final Integer pid)
   {
-    // revert contest problem
-    // build contest rank
+    Thread rejudgeThread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        List<ContestSolutionModel> solutions = contestService.getContestProblemSolutions(cid, pid);
+        
+        for (ContestSolutionModel solution : solutions) {
+          rejudgeContestSolution(solution);
+        }
+      }
+    });
+
+    rejudgeExecutor.execute(rejudgeThread);
   }
 
   public int getDataFiles(Integer pid, List<String> inFiles, List<String> outFiles) throws IOException

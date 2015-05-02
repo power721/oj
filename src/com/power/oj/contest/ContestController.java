@@ -321,9 +321,37 @@ public class ContestController extends OjController
   public void rejudge()
   {
     Integer cid = getParaToInt(0);
+    if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
+      redirect("/contest/show/" + cid, new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
+      return;
+    }
+    
     judgeService.rejudgeContest(cid);
     
     redirect("/contest/show/" + cid, new FlashMessage("Server got your rejudge request."));
+  }
+
+  @RequiresPermissions("contest:rejudge")
+  public void rejudgeProblem() {
+    Integer cid = getParaToInt(0);
+    char id = getPara(1, "A").toUpperCase().charAt(0);
+    if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
+      redirect("/contest/problem/" + cid + "-" + id, new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
+      return;
+    }
+    
+    Integer num = id - 'A';
+    ProblemModel problemModel = contestService.getProblem(cid, num);
+
+    if (problemModel == null) {
+      FlashMessage msg = new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+      redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
+      return;
+    }
+
+    judgeService.rejudgeContestProblem(cid, problemModel.getPid());
+
+    redirect("/contest/problem/" + cid + "-" + id, new FlashMessage("Server got your rejudge request."));
   }
 
   @RequiresPermissions("code:rejudge")
