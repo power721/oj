@@ -852,12 +852,14 @@ CREATE TABLE `role_permission` (
   `rid` int(9) NOT NULL,
   `pid` int(9) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role_permission
 -- ----------------------------
 INSERT INTO `role_permission` VALUES ('1', '1', '1');
+INSERT INTO `role_permission` VALUES ('2', '2', '2');
+INSERT INTO `role_permission` VALUES ('3', '3', '77');
 
 -- ----------------------------
 -- Table structure for `session`

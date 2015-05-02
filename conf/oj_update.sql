@@ -311,3 +311,8 @@ CREATE TABLE `honors` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1015 DEFAULT CHARSET=utf8;
+
+
+#2015-05-02
+INSERT INTO `role_permission` VALUES ('2', '2', '2');
+INSERT INTO `role_permission` VALUES ('3', '3', '77');
