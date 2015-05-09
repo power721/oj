@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.power.oj.contest.model.*;
 import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
 
@@ -22,11 +23,6 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.ehcache.CacheKit;
-import com.power.oj.contest.model.BoardModel;
-import com.power.oj.contest.model.ContestClarifyModel;
-import com.power.oj.contest.model.ContestModel;
-import com.power.oj.contest.model.ContestProblemModel;
-import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
@@ -314,7 +310,13 @@ public class ContestService
 
   public Page<Record> getContestRank(int pageNumber, int pageSize, Integer cid)
   {
-    String sql = "FROM board b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY solved DESC,penalty";
+    String tableName;
+    if (!userService.isAdmin() && checkFreezeBoard(cid)) {
+      tableName = "freeze_board";
+    } else {
+      tableName = "board";
+    }
+    String sql = "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY solved DESC,penalty";
     Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realName", sql, cid);
     
     return userRank;
@@ -598,6 +600,18 @@ public class ContestService
 
     return 0;
   }
+
+  private boolean checkFreezeBoard(Integer cid) {
+    ContestModel contestModel = getContest(cid);
+    
+    if (contestModel.getFreeze()) {
+      int timeDiff = contestModel.getEndTime() - OjConfig.timeStamp;
+
+      log.info("timeDiff: " + timeDiff + " " + contestModel.getFreeze());
+      return (timeDiff >= 0 && timeDiff <= 3600);
+    }
+    return false;
+  }
   
   public boolean addContest(ContestModel contestModel, String startTime, String endTime)
   {
@@ -833,7 +847,9 @@ public class ContestService
     Integer num = solutionModel.getNum();
     Integer submitTime = solutionModel.getCtime();
     char c = (char) (num + 'A');
-    Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
+    Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
+    Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
+    boolean isFreeze = checkFreezeBoard(cid);
     
     if (board == null)
     {
@@ -842,6 +858,12 @@ public class ContestService
       board.set("uid", uid);
       Db.save("board", board);
       board = Db.findById("board", board.get("id"));
+
+      if (!isFreeze) {
+        freezeBoard = new Record();
+        freezeBoard.setColumns(board.getColumns());
+        Db.save("freeze_board", freezeBoard);
+      }
     }
     Integer wrongSubmissions = board.getInt(c + "_WrongNum");
     Integer acTime = board.getInt(c + "_SolvedTime");
@@ -872,7 +894,12 @@ public class ContestService
     {
       board.set(c+"_WrongNum", wrongSubmissions + 1);
     }
-    
+
+    if (!isFreeze) {
+      freezeBoard.setColumns(board.getColumns());
+      Db.update("freeze_board", freezeBoard);
+    }
+
     return Db.update("board", board);
   }
   
@@ -911,6 +938,8 @@ public class ContestService
     Integer submitTime = solutionModel.getCtime();
     char c = (char) (num + 'A');
     Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
+    Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=?", cid, uid);
+    boolean isFreeze = checkFreezeBoard(cid);
     ContestProblemModel contestProblem = ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
     ContestModel contestModle = getContest(cid);
     Integer contestStartTime = contestModle.getStartTime();
@@ -968,6 +997,12 @@ public class ContestService
         board.set(c + "_WrongNum", board.getInt(c + "_WrongNum") + 1);
       }
     }
+
+    if (!isFreeze) {
+      freezeBoard.setColumns(board.getColumns());
+      Db.update("freeze_board", freezeBoard);
+    }
+
     return Db.update("board", board);
   }
   
@@ -1082,6 +1117,106 @@ public class ContestService
     {
       Db.update("UPDATE contest_problem SET firstBloodUid=?,firstBloodTime=?,accepted=?,submission=? WHERE cid=? AND num=?",
           firstBooldUid[i], firstBooldTime[i], accepted[i], submission[i], cid, i);
+    }
+
+    if (contestModel.getFreeze()) {
+      buildFreezeBoard(contestModel);
+    }
+    return true;
+  }
+
+  public boolean buildFreezeBoard(ContestModel contestModel)
+  {
+    int cid = contestModel.getCid();
+    Db.update("DELETE FROM freeze_board WHERE cid=?", cid);
+    int contestStartTime = contestModel.getStartTime();
+    int contestFreezeTime = contestModel.getEndTime() - 3600;
+    int problemNum = Db.queryInt("SELECT MAX(num) FROM contest_problem WHERE cid=?", cid) + 1;
+    List<ContestSolutionModel> solutions = ContestSolutionModel.dao.
+        find("SELECT * FROM contest_solution WHERE cid=? AND ctime<=? AND status=1 ORDER BY sid", cid, contestFreezeTime);
+    HashMap<Integer, UserInfo> userRank = new HashMap<Integer, UserInfo>();
+    UserInfo userInfo = null;
+    int uid = 0;
+    int num = 0;
+    int result = 0;
+    int ctime = 0;
+    int penalty = 0;
+    int firstBooldUid[] = new int[problemNum];
+    int firstBooldTime[] = new int[problemNum];
+    for (int i = 0; i < problemNum; ++i)
+      firstBooldTime[i] = -1;
+    int accepted[] = new int[problemNum];
+    int submission[] = new int[problemNum];
+    
+    for (ContestSolutionModel solution : solutions)
+    {
+      uid = solution.getUid();
+      num = solution.getNum();
+      result = solution.getResult();
+      ctime = solution.getCtime();
+      ++submission[num];
+      userInfo = userRank.get(uid);
+      int elapseTime = ctime - contestStartTime;
+      penalty = elapseTime;
+      if (result == ResultType.AC && firstBooldUid[num] == 0)
+      {
+        firstBooldUid[num] = uid;
+        firstBooldTime[num] = elapseTime;
+      }
+      if (result == ResultType.AC)
+      {
+        ++accepted[num];
+      }
+      if (userInfo == null)
+      {
+        userInfo = new UserInfo(uid);
+        if (result == ResultType.AC)
+        {
+          ++userInfo.solved;
+          userInfo.acTime[num] = elapseTime;
+          userInfo.penalty += penalty;
+        } else if (result < ResultType.SE)
+        {
+          ++userInfo.waNum[num];
+        }
+        userRank.put(uid, userInfo);
+      } else if (userInfo.acTime[num] == 0)
+      {
+        if (result == ResultType.AC)
+        {
+          ++userInfo.solved;
+          userInfo.acTime[num] = elapseTime;
+          penalty += userInfo.waNum[num] * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
+          userInfo.penalty += penalty;
+        } else if (result < ResultType.SE)
+        {
+          ++userInfo.waNum[num];
+        }
+      }
+    }
+
+    for (Map.Entry<Integer, UserInfo> entry : userRank.entrySet())
+    {
+      userInfo = entry.getValue();
+      FreezeBoardModel board = new FreezeBoardModel();
+      board.setCid(cid);
+      board.setUid(userInfo.getUid());
+      board.setSolved(userInfo.getSolved());
+      board.setPenalty(userInfo.getPenalty());
+
+      for (int i = 0; i < problemNum; ++i)
+      {
+        if (userInfo.getAcTime(i) > 0)
+        {
+          board.setSolvedTime(i, userInfo.getAcTime(i));
+        }
+
+        if (userInfo.getWaNum(i) > 0)
+        {
+          board.setWrongNum(i, userInfo.getWaNum(i));
+        }
+      }
+      board.save();
     }
 
     return true;

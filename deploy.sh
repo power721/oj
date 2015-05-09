@@ -41,11 +41,16 @@ sudo cp build/libs/oj.war $TOMCAT
 
 echo "waiting war deploy..."
 sleep 10
+while [ ! -e $TOMCAT/oj/upload/ ]; do
+    echo "Please start the tomcat service!"
+    sleep 5
+done
 
 sudo rm -rf $TOMCAT/oj/assets/
 sudo mv $TOMCAT/oj/upload/ /var/www/ 2>&1 >/dev/null
 sudo mv $TOMCAT/oj/download/ /var/www/ 2>&1 >/dev/null
 
+sudo chown -R $USER:$GROUP /var/www/assets
 sudo chown -R $USER:$GROUP /var/www/upload
 sudo chown -R $USER:$GROUP /var/www/download
 

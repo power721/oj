@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.power.oj.contest.model.*;
 import org.apache.shiro.SecurityUtils;
 
 import jodd.util.SystemUtil;
@@ -43,11 +44,6 @@ import com.power.oj.api.oauth.QQLoginApiController;
 import com.power.oj.api.oauth.SinaLoginApiController;
 import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.contest.ContestController;
-import com.power.oj.contest.model.BoardModel;
-import com.power.oj.contest.model.ContestClarifyModel;
-import com.power.oj.contest.model.ContestModel;
-import com.power.oj.contest.model.ContestProblemModel;
-import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.controller.MainController;
 import com.power.oj.core.controller.UeditorController;
 import com.power.oj.core.handler.BaseUrlHandler;
@@ -182,6 +178,7 @@ public class AppConfig extends JFinalConfig
     arp.addMapping("contest_clarify", ContestClarifyModel.class);
     arp.addMapping("contest_problem", ContestProblemModel.class);
     arp.addMapping("contest_solution", "sid", ContestSolutionModel.class);
+    arp.addMapping(FreezeBoardModel.TABLE_NAME, FreezeBoardModel.class);
     arp.addMapping("friend", FriendModel.class);
     arp.addMapping("friend_group", FriendGroupModel.class);
     arp.addMapping("mail", MailModel.class);
