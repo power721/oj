@@ -312,7 +312,10 @@ CREATE TABLE `honors` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1015 DEFAULT CHARSET=utf8;
 
-
 #2015-05-02
 INSERT INTO `role_permission` VALUES ('2', '2', '2');
 INSERT INTO `role_permission` VALUES ('3', '3', '77');
+
+ALTER TABLE team CHANGE `stuId1` `stuId1` varchar(16) NOT NULL,
+                 CHANGE `stuId2` `stuId2` varchar(16) NULL DEFAULT '',
+                 CHANGE `stuId3` `stuId3` varchar(16) NULL DEFAULT '';
