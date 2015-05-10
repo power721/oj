@@ -69,17 +69,13 @@ public abstract class JudgeAdapter implements Runnable
         updateSystemError(e.getLocalizedMessage());
         // backupTempDir4SE();
 
-        if (OjConfig.isDevMode())
-          e.printStackTrace();
-        log.error("IOException: " + e.getLocalizedMessage());
+        log.error("IOException in judge.", e);
       } catch (Exception e)
       {
         updateSystemError(e.getLocalizedMessage());
         // backupTempDir4SE();
   
-        if (OjConfig.isDevMode())
-          e.printStackTrace(System.err);
-        log.error(e.toString());
+        log.error("Exception in judge.", e);
       }
       
       if (needDeleteTempDir())
@@ -88,7 +84,7 @@ public abstract class JudgeAdapter implements Runnable
           FileUtil.deleteDir(workDir);
           log.debug("Delete directory: " + workDir);
         } catch (IOException e) {
-          log.info("Cannot delete directory: " + workDir);
+          log.info("Cannot delete directory: " + workDir + " reason:" + e.getMessage());
         }
       }
     }

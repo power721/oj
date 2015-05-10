@@ -140,9 +140,7 @@ public class PowerJudgeAdapter extends JudgeAdapter
       {
         updateSystemError(e.getLocalizedMessage());
 
-        if (OjConfig.isDevMode())
-          e.printStackTrace();
-        log.error(e.getLocalizedMessage());
+        log.error("Check result failed.", e);
       }
     } else
     {
@@ -198,9 +196,7 @@ public class PowerJudgeAdapter extends JudgeAdapter
       }
     } catch (Exception e)
     {
-      if (OjConfig.isDevMode())
-        e.printStackTrace();
-      log.error(e.getLocalizedMessage());
+      log.error("readError failed.", e);
     } finally
     {
       if (br != null)

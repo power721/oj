@@ -601,14 +601,28 @@ public class ContestService
     return 0;
   }
 
+  private boolean checkFreezeBoard(Integer cid, int submitTime) {
+    ContestModel contestModel = getContest(cid);
+    
+    if (contestModel.getFreeze()) {
+      int timeDiff = contestModel.getEndTime() - submitTime;
+      boolean isFreeze = timeDiff <= 3600;
+
+      log.info("contest-" + cid + " submitTime: " + submitTime + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
+      return isFreeze;
+    }
+    return false;
+  }
+  
   private boolean checkFreezeBoard(Integer cid) {
     ContestModel contestModel = getContest(cid);
     
     if (contestModel.getFreeze()) {
       int timeDiff = contestModel.getEndTime() - OjConfig.timeStamp;
+      boolean isFreeze = (timeDiff >= 0 && timeDiff <= 3600);
 
-      log.info("timeDiff: " + timeDiff + " " + contestModel.getFreeze());
-      return (timeDiff >= 0 && timeDiff <= 3600);
+      log.info("contest-" + cid + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
+      return isFreeze;
     }
     return false;
   }
@@ -849,7 +863,7 @@ public class ContestService
     char c = (char) (num + 'A');
     Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
     Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
-    boolean isFreeze = checkFreezeBoard(cid);
+    boolean isFreeze = checkFreezeBoard(cid, submitTime);
     
     if (board == null)
     {
@@ -939,7 +953,7 @@ public class ContestService
     char c = (char) (num + 'A');
     Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
     Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=?", cid, uid);
-    boolean isFreeze = checkFreezeBoard(cid);
+    boolean isFreeze = checkFreezeBoard(cid, submitTime);
     ContestProblemModel contestProblem = ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
     ContestModel contestModle = getContest(cid);
     Integer contestStartTime = contestModle.getStartTime();
@@ -1119,7 +1133,7 @@ public class ContestService
           firstBooldUid[i], firstBooldTime[i], accepted[i], submission[i], cid, i);
     }
 
-    if (contestModel.getFreeze()) {
+    if (checkFreezeBoard(cid)) {
       buildFreezeBoard(contestModel);
     }
     return true;
