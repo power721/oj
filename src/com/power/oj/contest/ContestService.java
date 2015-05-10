@@ -311,7 +311,7 @@ public class ContestService
   public Page<Record> getContestRank(int pageNumber, int pageSize, Integer cid)
   {
     String tableName;
-    if (!userService.isAdmin() && checkFreezeBoard(cid)) {
+    if (!userService.isAdmin() && checkFreezeBoard4Rank(cid)) {
       tableName = "freeze_board";
     } else {
       tableName = "board";
@@ -614,14 +614,27 @@ public class ContestService
     return false;
   }
   
-  private boolean checkFreezeBoard(Integer cid) {
+  private boolean checkFreezeBoard4Rank(Integer cid) {
+    ContestModel contestModel = getContest(cid);
+    
+    if (contestModel.getFreeze()) {
+      int timeDiff = contestModel.getEndTime() - OjConfig.timeStamp;
+      boolean isFreeze = (timeDiff >= -1800 && timeDiff <= 3600);
+
+      log.info("contest-" + cid + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
+      return isFreeze;
+    }
+    return false;
+  }
+
+  private boolean checkFreezeBoard4Build(Integer cid) {
     ContestModel contestModel = getContest(cid);
     
     if (contestModel.getFreeze()) {
       int timeDiff = contestModel.getEndTime() - OjConfig.timeStamp;
       boolean isFreeze = (timeDiff >= 0 && timeDiff <= 3600);
 
-      log.info("contest-" + cid + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
+      log.info("build contest-" + cid + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
       return isFreeze;
     }
     return false;
@@ -1133,7 +1146,7 @@ public class ContestService
           firstBooldUid[i], firstBooldTime[i], accepted[i], submission[i], cid, i);
     }
 
-    if (checkFreezeBoard(cid)) {
+    if (checkFreezeBoard4Build(cid)) {
       buildFreezeBoard(contestModel);
     }
     return true;
