@@ -12,9 +12,16 @@ read -p "Input the mysql password, press enter to use default value: " PASSWORD
 [ -n "$USERNAME" ] && sed -i "s/dev.user=.*/dev.user=$USERNAME/" WebRoot/WEB-INF/oj.properties
 [ -n "$PASSWORD" ] && sed -i "s/dev.password=.*/dev.password=$PASSWORD/" WebRoot/WEB-INF/oj.properties
 
-USER=tomcat7
-GROUP=tomcat7
-TOMCAT=/usr/share/tomcat7/webapps
+if [ $# -gt 0 ]; then
+    TOMCAT=$1
+    USER=`stat -c '%U' $TOMCAT/`
+    GROUP=`stat -c '%G' $TOMCAT/`
+else
+    USER=tomcat7
+    GROUP=tomcat7
+    TOMCAT=/usr/share/tomcat7/webapps
+fi
+
 if [ ! -d $TOMCAT ]; then
     USER=tomcat8
     GROUP=tomcat8
@@ -33,17 +40,28 @@ fi
 echo "Use tomcat webapps: $TOMCAT"
 
 # find -type d -name assets -exec sudo cp -r {} /var/www/ \;
+
 sudo cp -r WebRoot/assets/ /var/www/
 
 gradle build
 [ $? -ne 0 ] && exit 1
+
+sudo rm -rf $TOMCAT/oj/upload
+sudo rm -rf $TOMCAT/oj/download
+
 sudo cp build/libs/oj.war $TOMCAT
 
 echo "waiting war deploy..."
 sleep 10
+CNT=0
 while [ ! -e $TOMCAT/oj/upload/ ]; do
     echo "Please start the tomcat service!"
+    ((CNT++))
     sleep 5
+    if [ $CNT -eq 5 ]; then
+        sudo touch $TOMCAT/oj.war
+        CNT=0
+    fi
 done
 
 sudo rm -rf $TOMCAT/oj/assets/
