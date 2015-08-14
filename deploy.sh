@@ -47,8 +47,10 @@ while [ ! -e $TOMCAT/oj/upload/ ]; do
 done
 
 sudo rm -rf $TOMCAT/oj/assets/
-sudo mv $TOMCAT/oj/upload/ /var/www/ 2>&1 >/dev/null
-sudo mv $TOMCAT/oj/download/ /var/www/ 2>&1 >/dev/null
+sudo cp -r $TOMCAT/oj/upload/ /var/www/ 2>&1 >/dev/null
+rm -rf $TOMCAT/oj/upload/
+sudo cp -r $TOMCAT/oj/download/ /var/www/ 2>&1 >/dev/null
+rm -rf $TOMCAT/oj/download/
 
 sudo chown -R $USER:$GROUP /var/www/assets
 sudo chown -R $USER:$GROUP /var/www/upload
