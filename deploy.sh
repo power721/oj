@@ -13,10 +13,12 @@ read -p "Input the mysql password, press enter to use default value: " PASSWORD
 [ -n "$PASSWORD" ] && sed -i "s/dev.password=.*/dev.password=$PASSWORD/" WebRoot/WEB-INF/oj.properties
 
 if [ $# -gt 0 ]; then
-    TOMCAT=$1
+    TOMCAT=$1/webapps
     USER=`stat -c '%U' $TOMCAT/`
     GROUP=`stat -c '%G' $TOMCAT/`
-else
+fi
+
+if [ ! -d $TOMCAT ]; then
     USER=tomcat7
     GROUP=tomcat7
     TOMCAT=/usr/share/tomcat7/webapps
@@ -43,12 +45,18 @@ echo "Use tomcat webapps: $TOMCAT"
 
 sudo cp -r WebRoot/assets/ /var/www/
 
+#export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
+
 gradle build
 [ $? -ne 0 ] && exit 1
 
+sudo mkdir -p ~/oj_backup/upload/image/
+echo "backup /var/www/upload/image/ to ~/oj_backup/upload/image/"
+sudo rsync -r /var/www/upload/image/ ~/oj_backup/upload/image/
 sudo rm -rf $TOMCAT/oj/upload
 sudo rm -rf $TOMCAT/oj/download
 
+echo "copy build/libs/oj.war to $TOMCAT/"
 sudo cp build/libs/oj.war $TOMCAT
 
 echo "waiting war deploy..."
@@ -64,18 +72,25 @@ while [ ! -e $TOMCAT/oj/upload/ ]; do
     fi
 done
 
+echo "remove $TOMCAT/oj/assets/"
 sudo rm -rf $TOMCAT/oj/assets/
 sudo cp -r $TOMCAT/oj/upload/ /var/www/ 2>&1 >/dev/null
 sudo rm -rf $TOMCAT/oj/upload/
 sudo cp -r $TOMCAT/oj/download/ /var/www/ 2>&1 >/dev/null
 sudo rm -rf $TOMCAT/oj/download/
 
+echo "change owner to $USER:$GROUP"
 sudo chown -R $USER:$GROUP /var/www/assets
 sudo chown -R $USER:$GROUP /var/www/upload
 sudo chown -R $USER:$GROUP /var/www/download
+echo "/var/www/"
+ls -l --color=auto /var/www/
 
+echo "make soft link"
 sudo ln -sf /var/www/assets $TOMCAT/oj/assets
 sudo ln -sf /var/www/upload $TOMCAT/oj/upload
 sudo ln -sf /var/www/download $TOMCAT/oj/download
+echo "$TOMCAT/oj/"
+ls -l --color=auto $TOMCAT/oj/
 
 echo "OJ deploy completed."
