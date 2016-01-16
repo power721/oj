@@ -19,9 +19,7 @@ public class QQLoginApiController extends OjController {
             QQOauth qq = new QQOauth();
             redirect(qq.getAuthorizeUrl());
         } catch (Exception e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
-            log.error(e.getLocalizedMessage());
+            log.error("redirect QQ sign in failed!", e);
             redirect("/");
         }
     }
@@ -76,9 +74,7 @@ public class QQLoginApiController extends OjController {
                 }
             }
         } catch (Exception e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
-            log.error(e.getLocalizedMessage());
+            log.error("QQ sign in failed!", e);
             setFlashMessage(
                 new FlashMessage(getText("user.signin.error"), MessageType.ERROR, getText("message.error.title")));
         }
