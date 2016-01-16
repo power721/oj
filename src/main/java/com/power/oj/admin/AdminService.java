@@ -206,12 +206,9 @@ public final class AdminService {
                 }
                 return content;
             } catch (IOException e) {
-                if (OjConfig.isDevMode())
-                    e.printStackTrace();
-                log.error(e.getLocalizedMessage());
-
-                return "cannot read file.";
+                log.error("view data failed!", e);
             }
+            return "cannot read file.";
         }
 
         return "file not exists.";
@@ -228,9 +225,7 @@ public final class AdminService {
                 }
                 return content;
             } catch (IOException e) {
-                if (OjConfig.isDevMode())
-                    e.printStackTrace();
-                log.error(e.getLocalizedMessage());
+                log.error("edit data failed!", e);
 
                 return null;
             }
@@ -251,9 +246,7 @@ public final class AdminService {
                     FileUtil.move(srcFile.getFile(), destFile.getFile());
                 }
             } catch (IOException e) {
-                if (OjConfig.isDevMode())
-                    e.printStackTrace();
-                log.error(e.getLocalizedMessage());
+                log.error("update data failed!", e);
 
                 return false;
             }
@@ -270,9 +263,7 @@ public final class AdminService {
         try {
             FileUtil.moveFile(srcFile, destFile);
         } catch (IOException e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
-            log.error(e.getLocalizedMessage());
+            log.error("delete data failed!", e);
 
             return false;
         }
