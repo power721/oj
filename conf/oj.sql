@@ -1135,6 +1135,7 @@ INSERT INTO `variable` VALUES ('24', 'emailUser', '', null, null, null, 'string'
 INSERT INTO `variable` VALUES ('25', 'emailPass', '', null, null, null, 'string', null);
 INSERT INTO `variable` VALUES ('26', 'version', '20140221', null, null, null, 'string', null);
 INSERT INTO `variable` VALUES ('27', 'siteTitle', 'Power OJ', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('28', 'webRootPath', '/var/www/', null, null, null, 'string', null);
 
 -- ----------------------------
 -- Table structure for `web_login`

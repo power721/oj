@@ -1,0 +1,316 @@
+<!DOCTYPE HTML>
+<html lang="en" class="no-js">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
+<meta name="author" content="power721">
+<@block name="meta"></@block>
+<base href="${baseUrl!}/" />
+<title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
+
+<!-- ============================== styles ============================== -->
+<link href="assets/css/cxImage.css" type="text/css" rel="stylesheet">
+<link href="assets/css/honor.css" type="text/css" rel="stylesheet">
+<link href="assets/css/news.css" type="text/css" rel="stylesheet">
+<link href="assets/css/board.css" type="text/css" rel="stylesheet">
+<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="assets/css/flexslider.css" media="screen" />
+<#if oj_style?? && oj_style!="original"><link href="assets/bootstrap/theme/bootstrap.${oj_style}.min.css" rel="stylesheet"></#if>
+<link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="assets/css/oj.css" type="text/css" rel="stylesheet">
+
+<@block name="styles"></@block>
+<script type="text/javascript">
+  var baseUrl = '${baseUrl!}/';
+</script>
+</head>
+
+<body>
+
+  <!-- ============================== Navbar ============================== -->
+  <div class="navbar navbar-fixed-top" id="oj-navbar">
+    <div class="navbar-inner">
+      <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span> 
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="./">PowerOJ</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>"> 
+              <a href="problem"><i class="icon-list"></i>Problem</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="status">active</#if>"> 
+              <a href="status"><i class="icon-check"></i>Status</a>
+            </li>
+            <li class="<#if controllerKey?? && controllerKey=="contest">active</#if>"> 
+              <a href="contest"><i class="icon-fire"></i>Contest</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="rank">active</#if>"> 
+              <a href="rank"><i class="icon-signal"></i>Ranklist</a>
+            </li>
+            <li class="<#if controllerKey?? && controllerKey?? && controllerKey=="discuss">active</#if>"> 
+              <a href="discuss"><i class="icon-comment"></i>Discuss</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="faq">active</#if>"> 
+              <a href="faq"><i class="icon-question-sign"></i>F.A.Q</a>
+            </li>
+            <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
+              <a href="honor"><i class="icon-star"></i>Honor</a>
+            </li>
+    		  <li class="<#if controllerKey?? && controllerKey=="download">active</#if>">
+    		  	<a href="downloads"><i class="icon-download-alt"></i>Download</a>
+    		  </li>
+            <#if adminUser??>
+            <li class="<#if controllerKey?? && controllerKey=="news">active</#if>">
+            	<a href="news"><i class="icon-user"></i>News</a>
+            </li>
+            </#if>
+          </ul>
+          <ul class="nav pull-right">
+          <#if user??>
+            <li class="dropdown active">
+            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i class="icon-user"></i>${user.name!"user"}<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="user/#area=splash">Profile</a></li>
+                <li><a href="user/#area=mail">Mail</a></li>
+                <li><a href="user/loginlog">Login Log</a></li>
+                <li class="divider"></li>
+                <li class="nav-header">Admin</li>
+                <li><a href="user/#area=profile">Edit</a></li>
+                <li><a href="user/archive">Archive</a></li>
+                <#if adminUser??><li><a href="admin">Admin</a></li></#if>
+              </ul>
+            </li>
+            <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
+          <#else>
+            <li class="<#if actionKey?? && actionKey=="login">active</#if>">
+              <a href="#" id="login" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+            </li>
+            <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
+              <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal"><i class="icon-star"></i>Signup</a>
+            </li>
+          </#if>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee">
+    <marquee class="hidden-phone" direction="left" behavior="alternate" scrollamount="2" style="margin-top: 45px;">
+   
+    </marquee>
+  </div>
+  
+  <!-- ======================= main content ======================= -->
+  <div class="main <#if oj_fluid_width??>container-fluid<#else>container</#if>">
+    <div class="row-fluid">
+      <div class="span12">
+        <#if msg??>
+        <div class="row">
+          <div class="span5 offset4">
+            <div class="alert alert-${msgType!"success"}">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              <h4>${msgTitle!"Success"}</h4>
+              ${msg!}
+            </div>
+          </div>
+        </div>
+        </#if>
+        <@block name="content"></@block>
+      </div><!-- span -->
+    </div><!-- row -->
+  </div><!-- container -->
+
+  <#if !user??>
+  <div class="modal hide fade userModal" id="loginModal">
+    <form id="loginForm" class="form-horizontal" action="api/user/signin" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="loginModalLabel">
+          <a href="login" title="Login in another page" data-toggle="tooltip" data-placement="bottom">Login</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <div class="control-group">
+          <div class="controls">
+            <span class="help-block">Don't have an account? <a href="signup" class="toSignup">Sign up here</a>
+            </span>
+          </div>
+        </div>
+        <div class="control-group
+            <#if nameMsg??>error</#if>">
+          <label class="control-label" for="inputAccount">Account</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-user"></i></span>
+              <input type="text" id="inputAccount" name="name" value="${name!}" placeholder="User name" autofocus required>
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPassword"> Password </label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-lock"></i> </span>
+              <input type="password" id="inputPassword" name="password" placeholder="Password" required>
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <span class="help-block"><a href="user/forget">Forgot Password</a> </span>
+          </div>
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <label class="checkbox inline"> <input type="checkbox" name="rememberMe" value="1"> Remember me
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <#if enable_qq_login??>
+        <a class="left" href="api/oauth/qq">
+          <img src="assets/images/QQ_Connect_logo_7.png" alt="QQ Login"/>
+        </a>
+        </#if>
+        <span id="loginMsg"></span>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="modal hide fade userModal" id="signupModal">
+    <form class="" action="user/save" id="signupForm" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+        <h3 id="signupModalLabel">
+          Signup:
+          <a href="signup" title="Signup in another page" data-toggle="tooltip" data-placement="bottom">Create a account</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <a href="signup" class="btn btn-primary">Signup</a>
+      </div>
+      <div class="modal-footer">
+        <a href="login" class="btn btn-info pull-left toLogin">Login</a>
+        <button type="submit" class="btn btn-primary">Signup</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  </#if>
+
+  <!-- ========================= Footer ========================= -->
+  <footer class="footer">
+    <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
+      <div class="copyright">
+        ©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="balnk">PowerOJ Rev.${version!}</a>
+      </div>
+      <ul class="footer-links">
+        <li><a href="http://git.oschina.net/power/oj" target="balnk">Source</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="faq">F.A.Q</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="contact">Contact</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="changelog">Changelog</a></li>
+      </ul>
+    </div>
+    <form class="form-inline">
+      <label class="select">
+        Select Style: <select class="input-medium" id="selstyle">
+          <option value="original">Original</option>
+          <option value="amelia">Amelia</option>
+          <option value="cerulean">Cerulean</option>
+          <option value="cosmo">Cosmo</option>
+          <option value="cyborg">Cyborg</option>
+          <option value="darkening">Darkening</option>
+          <option value="flatly">Flatly</option>
+          <option value="journal">Journal</option>
+          <option value="metro">Metro</option>
+          <option value="readable">Readable</option>
+          <option value="simplex">Simplex</option>
+          <option value="slate">Slate</option>
+          <option value="spacelab">Spacelab</option>
+          <option value="spruce">Spruce</option>
+          <option value="superhero">Superhero</option>
+          <option value="todc">Google</option>
+          <option value="united">United</option>
+        </select>
+      </label>
+      <label class="checkbox"> <input type="checkbox" id="selwidth" <#if oj_fluid_width??>checked</#if> >Fluid Width?</label>
+    </form>
+  </footer>
+
+  <!-- ======================= javascript ======================= -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.cookie.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.form.js"></script>
+  <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/js/oj.js"></script>
+  <script src="assets/js/jquery.flexslider.js"></script>
+  <script type="text/javascript">
+		
+		$(window).load(function() {
+			$('.flexslider').flexslider({
+				animation: "slide"
+				
+			});
+		});
+	</script>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
+    <script src="assets/js/html5shiv.js"></script>
+  <![endif]-->
+  
+  <@block name="scripts"></@block>
+  
+  <#if gaAccount?? && domaiNname??>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+    ga('create', '${gaAccount}', '${domaiNname}');
+    ga('send', 'pageview');
+  
+  </script>
+  </#if>
+
+  <#if dev?? && dev>
+  <section id="dev">
+    <div id="page_trace_close" style="display:none;text-align:right;height:15px;position:absolute;top:10px;right:12px;cursor: pointer;">
+    </div>
+    <div id="page_trace_open" style="height:30px;float:right;text-align: right;overflow:hidden;position:fixed;bottom:0;right:0;color:#000;line-height:30px;cursor:pointer;">
+    <div style="background:#232323;color:#FFF;padding:0 6px;float:right;line-height:30px;font-size:14px">${invokeTime!0} ms</div>
+    </div>
+    <div id="debug" class="debug hide">
+    <table class="table table-hover table-condensed table-bordered">
+    <thead>
+      <tr>
+      <th>Key</th><th>Value</th>
+      </tr>
+    </thead>
+    <#list .data_model.keySet() as key>
+        <#if key?is_string && .data_model.get(key)?is_string>
+        <tr><td>${key}</td><td>${.data_model.get(key)}</td></tr>
+        </#if>
+    </#list>
+    </table>
+    </div>
+  </section>
+  </#if>
+
+</body>
+</html>
