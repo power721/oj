@@ -809,6 +809,34 @@ CREATE TABLE `variable` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+INSERT INTO `variable` VALUES ('1', 'workPath', '/home/power/oj/temp', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('2', 'dataPath', '/home/power/oj/data', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('3', 'runShell', 'C:\\power\\oj\\JudgeOnline\\bin\\run.exe', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('4', 'compileShell', 'C:\\power\\oj\\JudgeOnline\\bin\\com.exe', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('5', 'adminName', 'root', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('6', 'adminMail', 'root@localhost.com', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('7', 'debugFile', 'debug.log', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('8', 'errorFile', 'error.log', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('9', 'deleteTmpFile', '1', '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('10', 'debug', '0', '0', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('11', 'enableLogin', '1', '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('12', 'enableMail', '1', '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('13', 'enableSource', '1', '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('14', 'enableArchive', '1', '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('15', 'openid_qq', '', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('16', 'openkey_qq', '', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('17', 'redirect_qq', 'http://power-oj.com/api/oauth/qq/callback', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('18', 'enable_qq_login', '1', '1', null, null, 'boolean', null);
+INSERT INTO `variable` VALUES ('19', 'openid_sina', '', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('20', 'openkey_sina', '', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('21', 'redirect_sina', 'http://power-oj.com/api/oauth/sina/callback', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('22', 'adminEmail', 'swust_acm@163.com', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('23', 'emailServer', 'smtp.163.com', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('24', 'emailUser', '', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('25', 'emailPass', '', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('26', 'version', '20140221', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('27', 'siteTitle', 'Power OJ', null, null, null, 'string', null);
+INSERT INTO `variable` VALUES ('28', 'webRootPath', '/var/www/', null, null, null, 'string', null);
 
 --
 -- Table structure for table `web_login`

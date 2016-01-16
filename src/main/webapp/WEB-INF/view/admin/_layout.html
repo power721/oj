@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
+<meta name="author" content="power721">
+<@block name="meta"></@block>
+<base href="${baseUrl!}/" />
+<title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!} Admin</title>
+
+<!-- ============================== styles ============================== -->
+<link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+<link href="assets/css/admin.css" type="text/css" rel="stylesheet">
+<link href="assets/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+<!--[if lt IE 8]>
+  <link href="assets/font-awesome/css/font-awesome-ie7.min.css" type="text/css" rel="stylesheet">
+<![endif]-->
+
+<@block name="styles"></@block>
+
+<script type="text/javascript">
+  var baseUrl = '${baseUrl!}/';
+</script>
+</head>
+
+<body>
+  <!-- ============================== Navbar ============================== -->
+  <div class="navbar">
+    <div class="navbar-inner">
+      <ul class="nav pull-right">
+        <li id="fat-menu" class="dropdown">
+          <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"> 
+            <i class="icon-user"> </i> ${user.name} <i class="icon-caret-down"> </i>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a tabindex="-1" href="user" target="_blank"> 用户中心 </a></li>
+            <li class="divider"></li>
+            <li class="divider visible-phone"></li>
+            <li><a tabindex="-1" href="logout"> 退出 </a></li>
+          </ul>
+        </li>
+      </ul>
+      <a class="brand" href="./"> 
+        <span class="first"> 
+          <span class="x">Power</span>OJ 
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="sidebar-nav">
+    <a class="nav-header" data-toggle="collapse" href="#dashboard-menu"> 
+      <i class="icon-file"> </i> 管理
+    </a>
+    <ul id="dashboard-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin">in</#if>">
+      <li><a href="admin"> 首页 </a></li>
+      <li><a href="admin/info"> OJ详情 </a></li>
+      <li><a href="admin/druid/index.html" target="_blank"> 数据库 </a></li>
+    </ul>
+    <a class="nav-header" data-toggle="collapse" href="#accounts-menu"> <i class="icon-user"> 
+    </i> 用户管理 <i class="icon-chevron-up"> </i>
+    </a>
+    <ul id="accounts-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin/user">in</#if>">
+      <li><a href="admin/user"> 用户列表 </a></li>
+      <li><a href="admin/user/loginlog"> 登陆日志 </a></li>
+      <li><a href="admin/user/online"> 在线列表 </a></li>
+      <li><a href="admin/user/role"> 角色管理 </a></li>
+      <li><a href="admin/user/permission"> 权限管理 </a></li>
+    </ul>
+    <a class="nav-header collapsed" data-toggle="collapse" href="#problem-menu"> 
+      <i class="icon-book"> </i> 题目管理 <i class="icon-chevron-up"> </i>
+    </a>
+    <ul id="problem-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin/problem">in</#if>">
+      <li><a href="admin/problem"> 题目列表 </a></li>
+      <li><a href="admin/problem/add"> 添加题目 </a></li>
+      <li><a href="admin/problem/import"> 导入题目 </a></li>
+      <li><a href="admin/problem/export"> 导出题目 </a></li>
+    </ul>
+    <a class="nav-header collapsed" data-toggle="collapse" href="#contest-menu"> 
+      <i class="icon-trophy"> </i> 比赛管理 
+      <#if currentContest??>
+      <span class="label label-important"> +${currentContest} </span>
+      <#else>
+      <i class="icon-chevron-up"> </i>
+      </#if>
+    </a>
+    <ul id="contest-menu" class="nav nav-list collapse <#if controllerKey?? && controllerKey=="admin/contest">in</#if>">
+      <li><a href="admin/contest"> 比赛列表 </a></li>
+      <li><a href="admin/contest/add"> 添加比赛 </a></li>
+    </ul>
+    <!-- <a class="nav-header collapsed" data-toggle="collapse" href="#tags-menu"> 
+      <i class="icon-tags"> </i> 标签管理 <i class="icon-chevron-up"> </i>
+    </a>
+    <ul id="tags-menu" class="nav nav-list collapse <#if actionKey?? && actionKey=="admin/tag">in</#if>">
+      <li><a href="admin/tags"> 标签列表 </a></li>
+    </ul>
+    <a class="nav-header collapsed" data-toggle="collapse" href="#wechat-menu"> 
+      <i class="icon-comment"> </i> 评论管理 <i class="icon-chevron-up"> </i>
+    </a>
+    <ul id="wechat-menu" class="nav nav-list collapse <#if actionKey?? && actionKey=="admin/comment">in</#if>">
+      <li><a href="admin/wechat"> 规则列表 </a></li>
+      <li><a href="admin/wechat/leave_msgs"> 留言列表 </a></li>
+    </ul>
+    <a class="nav-header collapsed" data-toggle="collapse" href="#options-menu"> 
+      <i class="icon-cog"> </i> 网站设置 <i class="icon-chevron-up"> </i>
+    </a>
+    <ul id="options-menu" class="nav nav-list collapse <#if actionKey?? && actionKey=="admin/other">in</#if>">
+      <li><a href="admin/options"> 网站信息 </a></li>
+      <li><a href="admin/links"> 友链管理 </a></li>
+    </ul> -->
+  </div>
+  
+  <!-- ======================= main content ======================= -->
+  <div class="content">
+    <@block name="content"></@block>
+  </div>
+
+  <!-- ========================= Footer ========================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="#copyright">
+        ©Copyright 2013 <a href="http://git.oschina.net/power/oj" target="_balnk">PowerOJ Rev.${version!}</a>
+      </div>
+      <ul class="footer-links">
+        <li><a href="http://git.oschina.net/power/oj" target="_balnk">Source</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="contact">Contact</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="changelog">Changelog</a></li>
+        <li class="muted">&middot;</li>
+        <li><a href="faq">F.A.Q</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ======================= javascript ======================= -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script type="text/javascript" src="assets/js/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="assets/js/jquery.cookie.js"></script>
+  <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+  <script type="text/javascript" src="assets/js/oj.js"></script>
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="assets/js/html5shiv.js"></script>
+  <![endif]-->
+  
+  <@block name="scripts"></@block>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('.nav-list a').each(function() {
+        if ($(this).attr('href') == '${actionKey!}') {
+          $(this).addClass('x');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
