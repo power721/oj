@@ -1,6 +1,5 @@
 package com.power.oj.user;
 
-import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -339,7 +338,7 @@ public final class UserService {
      */
     public String saveAvatar(File srcFile) throws IOException {
         UserModel userModel = getCurrentUser();
-//        String rootPath = PathKit.getWebRootPath() + File.separator;
+        //        String rootPath = PathKit.getWebRootPath() + File.separator;
         String srcFileName = srcFile.getAbsolutePath();
         String ext = FileKit.getFileType(srcFileName);
         String destFileName = OjConfig.userAvatarPath + File.separator + userModel.getUid() + ext;
