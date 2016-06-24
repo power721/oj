@@ -12,6 +12,8 @@
     <url>http://git.oschina.net/power/oj</url>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jfinal.version>2.1</jfinal.version>
         <jfinal.ext.version>2.0.3</jfinal.ext.version>
         <servlet.api.version>2.5</servlet.api.version>
