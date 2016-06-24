@@ -2,7 +2,7 @@
   <#if (totalPage <= 0)><#return></#if>
   <#local startPage = currentPage - 4>
   <#if (startPage < 1)><#local startPage = 1></#if>
-  
+
   <#local endPage = currentPage + 4>
   <#if (endPage > totalPage)><#local endPage = totalPage></#if>
   <#if (currentPage <= 4)>
@@ -11,7 +11,7 @@
   <#if ((totalPage - currentPage) < 4)>
     <#local endPage = totalPage>
   </#if>
-  <ul>
+<ul>
   <#if (currentPage > 1)>
     <li><a href="${actionUrl}#{1}${urlParas!}">&lt;&lt;</a></li>
     <li><a href="${actionUrl}#{currentPage - 1}${urlParas!}">Prev</a></li>
@@ -24,8 +24,8 @@
     </#if>
   </#list>
   <#if (currentPage < totalPage)>
-      <li><a href="${actionUrl}#{currentPage + 1}${urlParas!}">Next</a></li>
-      <li><a href="${actionUrl}#{totalPage}${urlParas!}">&gt;&gt;</a></li>
+    <li><a href="${actionUrl}#{currentPage + 1}${urlParas!}">Next</a></li>
+    <li><a href="${actionUrl}#{totalPage}${urlParas!}">&gt;&gt;</a></li>
   </#if>
-  </ul>
+</ul>
 </#macro>

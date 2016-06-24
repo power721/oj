@@ -3,8 +3,10 @@
 <h3 class="text-center">Contest ${contest.cid!}: ${contest.title!}</h3>
 <div class="row text-center">
   <div class="span4 offset4">
-    <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
-    <span>Current System Time</span>: <span class="time" id="current"></span> <span>Contest Status</span>: <span class="${status!}">${status!}</span><br>
+    <span>Start time</span>: <span class="time">${contest.startDateTime!}</span> <span>End time</span>: <span
+          class="time">${contest.endDateTime!}</span><br>
+    <span>Current System Time</span>: <span class="time" id="current"></span> <span>Contest Status</span>: <span
+          class="${status!}">${status!}</span><br>
   </div>
 </div>
 <div class="row text-center">
@@ -17,21 +19,22 @@
   <div class="span8 offset2">
     <table id="problem-list" class="table table-hover table-condensed">
       <thead>
-        <tr>
-          <th></th>
-          <th>Problem ID</th>
-          <th>Title</th>
-          <th>AC</th>
-          <th>Submit</th>
-        </tr>
+      <tr>
+        <th></th>
+        <th>Problem ID</th>
+        <th>Title</th>
+        <th>AC</th>
+        <th>Submit</th>
+      </tr>
       </thead>
       <tbody>
         <#if contestProblems??> <#list contestProblems as Problem>
         <tr>
           <td><#if Problem.status??><i class="<#if Problem.status==0>oj-tick<#else>oj-delete</#if>"></i></#if>
           </td>
-          <td><#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a> </#if><a href="contest/problem/${contest.cid!}-${Problem.id!}"
-            data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a></td>
+          <td><#if adminUser??><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a> </#if><a
+                  href="contest/problem/${contest.cid!}-${Problem.id!}"
+                  data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a></td>
           <td><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
           <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}&result=0">${Problem.accept!}</a></td>
           <td><a href="contest/status/${contest.cid!}?id=${Problem.id!}">${Problem.submit!}</a></td>
@@ -43,14 +46,14 @@
 </div>
 
 <script type="text/javascript" language="javascript">
-        var timeDiff = ${ctime!} - new Date().valueOf();
-        
-        function updateTime() {
-            $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-    </script>
+  var timeDiff = ${ctime!} -new Date().valueOf();
+
+  function updateTime() {
+    $("#current").html(new Date(new Date().valueOf() + timeDiff).format("yyyy-MM-dd hh:mm:ss"));
+  }
+  updateTime();
+  setInterval(updateTime, 1000);
+</script>
 
 <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
 <script src="assets/tablecloth/js/jquery.metadata.js"></script>
@@ -58,17 +61,17 @@
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#problem-list").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
+  $(document).ready(function () {
+
+    $("#problem-list").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
     });
-    </script>
+  });
+</script>
 
 </@override>
 <@override name="scripts">

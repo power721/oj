@@ -4,8 +4,9 @@
   <div class="span6 offset4 text-center">
     <ul class="nav nav-pills">
       <#list contestProblems as Problem>
-      <li class="<#if problem.id==Problem.id>active</#if>"><a href="contest/problem/${cid}-${Problem.id}" data-toggle="tooltip" data-placement="bottom"
-        title="${Problem.title}">${Problem.id}</a> </#list>
+      <li class="<#if problem.id==Problem.id>active</#if>"><a href="contest/problem/${cid}-${Problem.id}"
+                                                              data-toggle="tooltip" data-placement="bottom"
+                                                              title="${Problem.title}">${Problem.id}</a> </#list>
     </ul>
   </div>
 </div>
@@ -13,50 +14,58 @@
 <div class="text-center">
   <h2>
     <#if userResult??>
-    <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>" />
+      <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>"/>
     </#if> <span class="black">${problem.id!}:</span> <#if problem.status==false>
-    <del>
-      </#if> <#if adminUser??> <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}">${problem.title!} <#else>
-        ${problem.title!} </#if> <#if problem.status==false>
-    </del>
-    </#if>
+  <del>
+  </#if> <#if adminUser??> <a href="problem/show/${problem.pid!}" data-toggle="tooltip"
+                              title="Problem ${problem.pid!}">${problem.title!} <#else>
+  ${problem.title!} </#if> <#if problem.status==false>
+  </del>
+  </#if>
     <!--<span class="label label-important">SPJ</span>-->
   </h2>
-  <#if adminUser??><a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal" class="btn btn-primary">Edit</a> <a href="#"
-    class="btn btn-danger">Rejudge</a><br></#if> Time Limit:<span class="blue">${problem.time_limit!}MS</span> Memory Limit:<span class="blue">${problem.memory_limit!}KB</span><br>
-  Total Submit:<a href="contest/status/${cid!}?id=${problem.id!}">${problem.submit!}</a> Accepted:<a href="contest/status/${cid!}?id=${problem.id!}&result=0">${problem.accept!}</a>
+  <#if adminUser??><a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal"
+                      class="btn btn-primary">Edit</a> <a href="#"
+                                                          class="btn btn-danger">Rejudge</a><br></#if>
+  Time Limit:<span class="blue">${problem.time_limit!}MS</span> Memory Limit:<span class="blue">${problem.memory_limit!}
+  KB</span><br>
+  Total Submit:<a href="contest/status/${cid!}?id=${problem.id!}">${problem.submit!}</a> Accepted:<a
+        href="contest/status/${cid!}?id=${problem.id!}&result=0">${problem.accept!}</a>
   Page View:<span class="blue">${problem.view!}</span><br> <br> <#if cstatus?? && cstatus==1> [<a
-    href="contest/submit/${cid!}-${problem.id!}<#if user??>?ajax=1</#if>"<#if user??> data-toggle="modal" data-target="#submitModal"</#if>>Submit</a>]
-  </#if> [<a href="problem/status/?cid=${cid!}&id=${problem.id!}">Status</a>] [<a href="#">Discuss</a>]
+        href="contest/submit/${cid!}-${problem.id!}<#if user??>?ajax=1</#if>"<#if user??> data-toggle="modal"
+        data-target="#submitModal"</#if>>Submit</a>]
+</#if> [<a href="problem/status/?cid=${cid!}&id=${problem.id!}">Status</a>] [<a href="#">Discuss</a>]
 </div>
 
-<#if adminUser??>
-<div class="modal hide fade problemModal" id="editModal">
-  <form class="" action="problem/update" id="editPorblemForm" method="post">
-    <div class="modal-header">
-      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-      <h3 id="editModalLabel">
-        Edit Problem ${problem.pid!}:<a href="problem/edit/${problem.pid!}" title="Edit in another page" data-toggle="tooltip" data-placement="bottom">${problem.title!}</a>
-      </h3>
-    </div>
-    <div class="modal-body">
-      <a href="problem/edit/${problem.pid!}" class="btn btn-primary">Edit</a>
-    </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-primary">Save</button>
-      <button type="reset" class="btn btn-info">Reset</button>
-      <button class="btn" data-dismiss="modal">Cancel</button>
-    </div>
-  </form>
-</div>
-</#if> <#if user??>
+  <#if adminUser??>
+  <div class="modal hide fade problemModal" id="editModal">
+    <form class="" action="problem/update" id="editPorblemForm" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="editModalLabel">
+          Edit Problem ${problem.pid!}:<a href="problem/edit/${problem.pid!}" title="Edit in another page"
+                                          data-toggle="tooltip" data-placement="bottom">${problem.title!}</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <a href="problem/edit/${problem.pid!}" class="btn btn-primary">Edit</a>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-info">Reset</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  </#if> <#if user??>
 <div class="modal hide fade problemModal" id="submitModal">
   <form class="" id="submitForm" action="solution/save" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="submitModalLabel">
-        Submit Problem ${cid!}-${problem.id!}:<a href="contest/submit/${cid!}-${problem.id!}" title="Submit in another page" data-toggle="tooltip"
-          data-placement="bottom">${problem.title!}</a>
+        Submit Problem ${cid!}-${problem.id!}:<a href="contest/submit/${cid!}-${problem.id!}"
+                                                 title="Submit in another page" data-toggle="tooltip"
+                                                 data-placement="bottom">${problem.title!}</a>
       </h3>
     </div>
     <div class="modal-body">
@@ -132,7 +141,8 @@
         <pre>${problem.sample_input!}</pre>
       </div>
       <div class="tab-pane" id="tab2">
-        <textarea id="sample_input" class="auto-width" rows="${problem.sample_input_rows!12}" cols="185">${problem.sample_input!}</textarea>
+        <textarea id="sample_input" class="auto-width" rows="${problem.sample_input_rows!12}"
+                  cols="185">${problem.sample_input!}</textarea>
       </div>
     </div>
   </div>
@@ -153,43 +163,46 @@
         <pre>${problem.sample_output!}</pre>
       </div>
       <div class="tab-pane" id="tab4">
-        <textarea id="sample_output" class="auto-width" rows="${problem.sample_output_rows!12}" cols="185">${problem.sample_output!}</textarea>
+        <textarea id="sample_output" class="auto-width" rows="${problem.sample_output_rows!12}"
+                  cols="185">${problem.sample_output!}</textarea>
       </div>
     </div>
   </div>
 </section>
 
-<#if problem.hint?? && problem.hint!="">
-<section id="hint">
-  <div class="page-header">
-    <h4>Hint</h4>
-  </div>
-  <div class="content" id="hint">
-    <pre>${problem.hint!}</pre>
-  </div>
-</section>
-</#if> <#if adminUser??>
+  <#if problem.hint?? && problem.hint!="">
+  <section id="hint">
+    <div class="page-header">
+      <h4>Hint</h4>
+    </div>
+    <div class="content" id="hint">
+      <pre>${problem.hint!}</pre>
+    </div>
+  </section>
+  </#if> <#if adminUser??>
 <section id="source">
   <div class="page-header">
     <h4>Source</h4>
   </div>
   <div class="content" id="source">
     <pre>
-      <a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip" title="Search other problems">${problem.source!}</a>
+      <a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip"
+         title="Search other problems">${problem.source!}</a>
     </pre>
   </div>
 </section>
 
-<#if tagList??>
-<section id="tag">
-  <div class="page-header">
-    <h4>Tag</h4>
-  </div>
-  <div class="content" id="tag">
-    <pre><#list tagList as Tag><a href="problem/search?word=${Tag.tag!}&scope=tag" title="${Tag.name!}" data-toggle="tooltip">${Tag.tag!}</a> </#list></pre>
-  </div>
-</section>
-</#if>
+  <#if tagList??>
+  <section id="tag">
+    <div class="page-header">
+      <h4>Tag</h4>
+    </div>
+    <div class="content" id="tag">
+      <pre><#list tagList as Tag><a href="problem/search?word=${Tag.tag!}&scope=tag" title="${Tag.name!}"
+                                    data-toggle="tooltip">${Tag.tag!}</a> </#list></pre>
+    </div>
+  </section>
+  </#if>
 
 <form class="form-inline" action="problem/tag">
   <input type="hidden" name="op" value="add">
@@ -200,8 +213,10 @@
 </#if>
 
 <div class="text-center">
-  <#if cstatus?? && cstatus==1> [<a href="contest/submit/${cid!}-${problem.id!}<#if user??>?ajax=1</#if>"<#if user??> data-toggle="modal"
-    data-target="#submitModal"</#if>>Submit</a>] </#if> [<a href="problem/status?cid=${cid!}&id=${problem.id!}">Status</a>] [<a href="#">Discuss</a>]
+  <#if cstatus?? && cstatus==1> [<a href="contest/submit/${cid!}-${problem.id!}<#if user??>?ajax=1</#if>"<#if user??>
+                                    data-toggle="modal"
+                                    data-target="#submitModal"</#if>>Submit</a>] </#if> [<a
+        href="problem/status?cid=${cid!}&id=${problem.id!}">Status</a>] [<a href="#">Discuss</a>]
 </div>
 
 </@override>

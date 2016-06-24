@@ -34,40 +34,42 @@
       </a>
     </div><!-- .banner -->
     <div class="mainer">
-    
+
       <#include "../common/_paginate.html" />
       <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/" />
-      
-        <!--
-        <form id="area-search-guide" method="get" action="problem/search" class="l">
-          <input type="hidden" name="scope" value="title">
-          <input type="text" name="word" value="搜索" autocomplete="off" x-webkit-speech class="ipt-search"> 
-          <input type="submit" value="" title="搜索" class="btn-search">
-          <ul class="menu menu-search"></ul>
-        </form>
-        -->
-      
+
+      <!--
+      <form id="area-search-guide" method="get" action="problem/search" class="l">
+        <input type="hidden" name="scope" value="title">
+        <input type="text" name="word" value="搜索" autocomplete="off" x-webkit-speech class="ipt-search">
+        <input type="submit" value="" title="搜索" class="btn-search">
+        <ul class="menu menu-search"></ul>
+      </form>
+      -->
+
       <div id="block-list-pic">
 
         <table id="problem-list" class="table table-hover table-condensed">
           <thead>
-            <tr>
-              <th></th>
-              <th>ID</th>
-              <th>Title</th>
-              <th>AC</th>
-              <th>Submit</th>
-              <th>Ratio</th>
-              <th>Date</th>
-            </tr>
+          <tr>
+            <th></th>
+            <th>ID</th>
+            <th>Title</th>
+            <th>AC</th>
+            <th>Submit</th>
+            <th>Ratio</th>
+            <th>Date</th>
+          </tr>
           </thead>
           <tbody>
             <#if problemList??> <#list problemList.list as Problem>
             <tr>
-              <td class="result"><#if Problem.userResult??><image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>" /></#if>
+              <td class="result"><#if Problem.userResult??>
+                <image src="assets/images/<#if Problem.userResult==0>accepted.gif<#else>wrong.gif</#if>"/></#if>
               </td>
               <td class="pid"><a href="problem/show/${Problem.pid!}">${Problem.pid!}</a></td>
-              <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false><del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
+              <td class="title"><a href="problem/show/${Problem.pid!}"><#if Problem.status==false>
+              <del></#if>${Problem.title!}<#if Problem.status==false></del></#if>
               </a></td>
               <td class="accept"><a href="status/?pid=${Problem.pid!}&result=0">${Problem.accept!}</a></td>
               <td class="submit"><a href="status/?pid=${Problem.pid!}">${Problem.submit!}</a></td>
@@ -96,7 +98,7 @@
       </div>
       <div class="mainer">
         <p class="hint">
-         | 该功能目前正在测试中。 
+          | 该功能目前正在测试中。
         </p>
       </div>
     </div>
@@ -112,7 +114,7 @@
       <div class="mainer">
         <div class="item">
           <a href="problem/1001" target="_blank" title="A+B again!!(入门)"
-          data-pid="1001" class="item-tabb title">
+             data-pid="1001" class="item-tabb title">
             A+B again!!(入门)
           </a>
         </div>
@@ -136,126 +138,125 @@
       </div><!-- .mainer -->
     </div><!-- .block -->
     <div id="area-fixed-pic">
-        <div id="block-about-pic" class="block">
-          <div class="banner">
-            <p class="tab fixed">
-              关于我们
+      <div id="block-about-pic" class="block">
+        <div class="banner">
+          <p class="tab fixed">
+            关于我们
               <span class="hint">
                 About
               </span>
-            </p>
-          </div>
-          <div class="mainer">
-            <div class="a">
-              <div class="l">
-                <a href="http://e.weibo.com/PowerOJ" target="_blank" class="thumb">
-                  <img src="assets/images/power-oj.gif" class="avatar">
-                </a>
-              </div>
-              <div class="r">
-                <a href="http://e.weibo.com/PowerOJ" target="_blank" class="name">
-                  PowerOJ
-                </a>
-                <div class="b">
-                  <a href="http://e.weibo.com/PowerOJ" target="_blank" class="btn info">
-                    新浪微博
-                  </a>
-                  <a href="http://t.qq.com/PowerOJ" target="_blank" class="btn info">
-                    腾讯微博
-                  </a>
-                </div>
-              </div>
-              <span class="clearfix">
-              </span>
-            </div>
-            <div class="c">
-              <div class="l">
-                <a href="info#page=help" target="_blank">
-                  <i class="icon grey icon-question-sign">
-                  </i>
-                  使用帮助
-                </a>
-              </div>
-              <!--<div class="r">
-                <a href="app/" target="_blank">
-                  <i class="icon grey icon-download">
-                  </i>
-                  客户端下载
-                </a>
-              </div>-->
-              <span class="clearfix">
-              </span>
-            </div>
-            <p class="d">
-              如果您在使用中发现问题，或有好的意见和建议，请
-              <a href="feedback">
-                [反馈]
-              </a>
-              给我们，这将有助于我们改善相关功能。
-            </p>
-          </div>
+          </p>
         </div>
-        <!--<div id="block-function-pic" class="block">
-          <div class="banner">
-            <p class="tab fixed">
-              快捷功能
-              <span class="hint">
-                Function
+        <div class="mainer">
+          <div class="a">
+            <div class="l">
+              <a href="http://e.weibo.com/PowerOJ" target="_blank" class="thumb">
+                <img src="assets/images/power-oj.gif" class="avatar">
+              </a>
+            </div>
+            <div class="r">
+              <a href="http://e.weibo.com/PowerOJ" target="_blank" class="name">
+                PowerOJ
+              </a>
+              <div class="b">
+                <a href="http://e.weibo.com/PowerOJ" target="_blank" class="btn info">
+                  新浪微博
+                </a>
+                <a href="http://t.qq.com/PowerOJ" target="_blank" class="btn info">
+                  腾讯微博
+                </a>
+              </div>
+            </div>
+              <span class="clearfix">
               </span>
-            </p>
           </div>
-          <div class="mainer">
-            <a href="javascript:void(function(d,i,o){o=d.createElement('script');o.id=i;o.src='http://www.acfun.tv/dotnet/date/script/pic/pick.js?date='+new Date().getTime();o.setAttribute('charset','utf-8');d.body.appendChild(o)}(document,'js-p-p-ac'));"
-            onclick="$('#btn-public-header').click();return false;" title="请将本链接存为书签后使用"
-            class="btn primary">
-              <i class="icon white icon-share">
-              </i>
-              发布至AcFun
+          <div class="c">
+            <div class="l">
+              <a href="info#page=help" target="_blank">
+                <i class="icon grey icon-question-sign">
+                </i>
+                使用帮助
+              </a>
+            </div>
+            <!--<div class="r">
+              <a href="app/" target="_blank">
+                <i class="icon grey icon-download">
+                </i>
+                客户端下载
+              </a>
+            </div>-->
+              <span class="clearfix">
+              </span>
+          </div>
+          <p class="d">
+            如果您在使用中发现问题，或有好的意见和建议，请
+            <a href="feedback">
+              [反馈]
             </a>
-            <span class="clearfix">
-            </span>
-            <p class="hint">
-              将上方左侧按钮拖放至书签栏后，即可在站外快速发布图片。
-            </p>
-          </div>
-        </div>-->
+            给我们，这将有助于我们改善相关功能。
+          </p>
+        </div>
       </div>
+      <!--<div id="block-function-pic" class="block">
+        <div class="banner">
+          <p class="tab fixed">
+            快捷功能
+            <span class="hint">
+              Function
+            </span>
+          </p>
+        </div>
+        <div class="mainer">
+          <a href="javascript:void(function(d,i,o){o=d.createElement('script');o.id=i;o.src='http://www.acfun.tv/dotnet/date/script/pic/pick.js?date='+new Date().getTime();o.setAttribute('charset','utf-8');d.body.appendChild(o)}(document,'js-p-p-ac'));"
+          onclick="$('#btn-public-header').click();return false;" title="请将本链接存为书签后使用"
+          class="btn primary">
+            <i class="icon white icon-share">
+            </i>
+            发布至AcFun
+          </a>
+          <span class="clearfix">
+          </span>
+          <p class="hint">
+            将上方左侧按钮拖放至书签栏后，即可在站外快速发布图片。
+          </p>
+        </div>
+      </div>-->
     </div>
+  </div>
     <span class="clearfix">
     </span>
-  </div><!-- #area-unfixed-pic -->
+</div><!-- #area-unfixed-pic -->
 </div><!-- #area-mainer-right -->
 </@override>
 
 <@override name="scripts">
-  <!--<script type="text/javascript" src="assets/js/placeholders.min.js"></script>-->
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
-  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
-  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
-  <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-      var prevpage="problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
-      var nextpage="problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
-      $(document).keydown(function(event) {
-          <#if problemList.pageNumber&gt;1>if(event.keyCode==37)window.location=prevpage;</#if>
-          <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
-      });
-      
-      $("#problem-list").tablecloth({
-        theme:"stats",
-        condensed:true,
-        sortable:true,
-        striped:true,
-        clean:true
-      });
+<!--<script type="text/javascript" src="assets/js/placeholders.min.js"></script>-->
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<script type="text/javascript" charset="utf-8">
+  $(document).ready(function () {
+    var prevpage = "problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+    var nextpage = "problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+    $(document).keydown(function (event) {
+        <#if problemList.pageNumber&gt;1>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if problemList.pageNumber<problemList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>
+    });
 
-      <#if user??>
-      $('td.pid').each(function(i) {
+    $("#problem-list").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
+    });
+
+    <#if user??>
+      $('td.pid').each(function (i) {
         var result = $(this).prev('.result');
-        $.getJSON('api/problem/userResult?pid=' + $(this).text(), function(data) {
-          if (data.result)
-          {
+        $.getJSON('api/problem/userResult?pid=' + $(this).text(), function (data) {
+          if (data.result) {
             if (data.result.id)
               result.addClass('wa').html('<img src="assets/images/wrong.gif"/>');
             else
@@ -263,8 +264,8 @@
           }
         });
       });
-      </#if>
+    </#if>
   });
-  </script>
+</script>
 </@override>
 <@extends name="../common/_layout.html" />

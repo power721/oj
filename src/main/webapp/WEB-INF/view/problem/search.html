@@ -18,25 +18,25 @@
   <#include "../common/_paginate.html" />
   <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/search/" urlParas="?word=${word!}&scope=${scope!}" />
   <div class="pull-right">
-    <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span> 
+    <span class="badge badge-info">${problemList.pageNumber}/${problemList.totalPage} Pages</span>
     <span class="badge badge-info">${problemList.totalRow}Problems</span>
   </div>
 </div>
 
 <table id="problem-list" class="table table-hover table-condensed">
-    <thead>
-      <tr>
-        <th></th>
-        <th>ID</th>
-        <th>Title</th>
-        <th>AC</th>
-        <th>Submit</th>
-        <th>Source</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <#if problemList??> 
+  <thead>
+  <tr>
+    <th></th>
+    <th>ID</th>
+    <th>Title</th>
+    <th>AC</th>
+    <th>Submit</th>
+    <th>Source</th>
+    <th>Date</th>
+  </tr>
+  </thead>
+  <tbody>
+    <#if problemList??>
       <#list problemList.list as Problem>
       <tr>
         <td class="result" pid="${Problem.pid!}"></td>
@@ -47,10 +47,10 @@
         <td class="source"><a href="problem/search?word=${Problem.source!}&scope=source">${Problem.source!}</a></td>
         <td class="ctime">${Problem.ctime_t!}</td>
       </tr>
-      </#list> 
-      </#if>
-    </tbody>
-  </table>
+      </#list>
+    </#if>
+  </tbody>
+</table>
 </@override>
 
 <@override name="scripts">
@@ -60,40 +60,40 @@
   <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
   <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
   </#if>
-  
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var prevpage="problem/search/${problemList.pageNumber-1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"
-      var nextpage="problem/search/${problemList.pageNumber+1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"
-      $(document).keydown(function(event) {
-        <#if (problemList.pageNumber>1)>if(event.keyCode==37)window.location=prevpage;</#if>
-        <#if problemList.pageNumber<problemList.totalPage>if(event.keyCode==39)window.location=nextpage;</#if>
-      });
 
-      <#if oj_style != "slate">
+<script type="text/javascript">
+  $(document).ready(function () {
+    var prevpage = "problem/search/${problemList.pageNumber-1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"
+    var nextpage = "problem/search/${problemList.pageNumber+1}?word=${word}&scope=${scope}<#if problemList.pageSize!=pageSize>&s=${problemList.pageSize}</#if>"
+    $(document).keydown(function (event) {
+        <#if (problemList.pageNumber>1)>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if problemList.pageNumber<problemList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>
+    });
+
+    <#if oj_style != "slate">
       $("#problem-list").tablecloth({
-        theme:"stats",
-        condensed:true,
-        sortable:true,
-        striped:true,
-        clean:true
+        theme: "stats",
+        condensed: true,
+        sortable: true,
+        striped: true,
+        clean: true
       });
-      </#if>
+    </#if>
 
-      <#if user??>
-      $.getJSON('api/problem/userResult', function(data) {
-          if (data.userResult) {
-            for (var i = 0; i < data.userResult.length; ++i) {
-              var problem = data.userResult[i];
-              if (problem.result != data.acType)
-                  $('.result[pid=' + problem.pid + ']').addClass('wa').html('<span class="label label-important">N</span>');
-              else
-                 $('.result[pid=' + problem.pid + ']').addClass('ac').html('<span class="label label-success">Y</span>');
-            }
+    <#if user??>
+      $.getJSON('api/problem/userResult', function (data) {
+        if (data.userResult) {
+          for (var i = 0; i < data.userResult.length; ++i) {
+            var problem = data.userResult[i];
+            if (problem.result != data.acType)
+              $('.result[pid=' + problem.pid + ']').addClass('wa').html('<span class="label label-important">N</span>');
+            else
+              $('.result[pid=' + problem.pid + ']').addClass('ac').html('<span class="label label-success">Y</span>');
           }
-        });
-      </#if>
+        }
+      });
+    </#if>
   });
-  </script>
+</script>
 </@override>
 <@extends name="../common/_layout.html" />

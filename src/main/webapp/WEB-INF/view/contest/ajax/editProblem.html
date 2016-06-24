@@ -1,4 +1,3 @@
-
 <input type="hidden" name="problem.pid" value="${problem.pid!}">
 <input type="hidden" name="cid" value="${cid!}">
 <input type="hidden" name="num" value="${num!}">
@@ -14,14 +13,16 @@
 <div class="control-group problem">
   <label class="control-label" for="inputTimeLimit">Time Limit</label>
   <div class="controls input-append">
-    <input class="input-small" type="number" id="inputTimeLimit" name="problem.timeLimit" value="${problem.timeLimit!}" required>
+    <input class="input-small" type="number" id="inputTimeLimit" name="problem.timeLimit" value="${problem.timeLimit!}"
+           required>
     <span class="add-on">MS</span>
   </div>
 </div>
 <div class="control-group problem">
   <label class="control-label" for="inputMemoryLimit">Memory Limit</label>
   <div class="controls input-append">
-    <input class="input-small" type="number" id="inputMemoryLimit" name="problem.memoryLimit" value="${problem.memoryLimit!}" required>
+    <input class="input-small" type="number" id="inputMemoryLimit" name="problem.memoryLimit"
+           value="${problem.memoryLimit!}" required>
     <span class="add-on">KB</span>
   </div>
 </div>
@@ -69,7 +70,8 @@
 </div>
 <div class="control-group">
   <div class="controls">
-    <label class="checkbox"> <input type="checkbox" name="problem.status" value="true"<#if problem.status==true>checked</#if>>Active
+    <label class="checkbox"> <input type="checkbox" name="problem.status" value="true"
+                                    <#if problem.status==true>checked</#if>>Active
     </label>
   </div>
 </div>

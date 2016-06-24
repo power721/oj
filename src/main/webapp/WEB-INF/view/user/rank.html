@@ -11,27 +11,29 @@
   <#include "../common/_paginate.html" />
   <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="rank/" />
   <div class="pull-right">
-    <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span> <span class="badge badge-info">${userList.totalRow} Users</span>
+    <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span> <span
+          class="badge badge-info">${userList.totalRow} Users</span>
   </div>
 </div>
 
 <table id="user-rank" class="table table-hover table-condensed">
   <thead>
-    <tr>
-      <th>Rank</th>
-      <th>User</th>
-      <th>Nick Name</th>
-      <th>Solved</th>
-      <th>Submit</th>
-      <th>Ratio</th>
-    </tr>
+  <tr>
+    <th>Rank</th>
+    <th>User</th>
+    <th>Nick Name</th>
+    <th>Solved</th>
+    <th>Submit</th>
+    <th>Ratio</th>
+  </tr>
   </thead>
   <tbody>
     <#if userList??> <#list userList.list as User>
     <tr>
       <td>${User.rank!}</td>
-      <td class="user"><a href="user/profile/${User.name!}" class="user"<#if adminUser?? && User.realName??>data-toggle="tooltip"
-          title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+      <td class="user"><a href="user/profile/${User.name!}" class="user"
+                          <#if adminUser?? && User.realName??>data-toggle="tooltip"
+                          title="${(User.realName)!}"</#if>>${User.name!}</a></td>
       <td>${User.nick!}</td>
       <td><a href="status?name=${User.name!}&result=0">${User.solved!}</a></td>
       <td><a href="status?name=${User.name!}">${User.submission!}</a></td>
@@ -43,30 +45,30 @@
 </@override>
 
 <@override name="scripts">
-  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
-  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
-  <script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
-  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
-  <script type="text/javascript">
-    $(document).ready(function() {
-      var prevpage="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-      var nextpage="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-      $(document).keydown(function(event) {
-          <#if (userList.pageNumber>1)>if(event.keyCode==37)location=prevpage;</#if>
-          <#if userList.pageNumber<userList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-      });
-              
-      <#if oj_style != "slate">
+<script type="text/javascript">
+  $(document).ready(function () {
+    var prevpage = "rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+    var nextpage = "rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+    $(document).keydown(function (event) {
+        <#if (userList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
+        <#if userList.pageNumber<userList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>
+    });
+
+    <#if oj_style != "slate">
       $("#user-rank").tablecloth({
-        theme:"stats",
-        condensed:true,
-        sortable:true,
-        striped:true,
-        clean:true
+        theme: "stats",
+        condensed: true,
+        sortable: true,
+        striped: true,
+        clean: true
       });
-      </#if>
+    </#if>
   });
-  </script>
+</script>
 </@override>
 <@extends name="../common/_layout.html" />

@@ -1,87 +1,94 @@
 <@override name="content">
-    <div class="header">
-      <h1 class="page-title">用户列表</h1>
-    </div>
-    <ul class="breadcrumb">
-      <li>
-        <a href="admin">首页</a>
-        <span class="divider">/</span>
-      </li>
-      <li class="active">用户管理</li>
-    </ul>
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="well">
-          <div id="container">
-            <table id="user-list" class="table table-hover table-striped cf basetable dataTable" cellpadding="0" cellspacing="0" border="0" width="100%">
-              <thead>
-                <tr>
-                  <th width="5%">Id</th>
-                  <th width="15%">User</th>
-                  <th width="30%">Nick Name</th>
-                  <th width="5%">Solved</th>
-                  <th width="5%">Submit</th>
-                  <th width="15%">Register Time</th>
-                  <th width="15%">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
+<div class="header">
+  <h1 class="page-title">用户列表</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">用户管理</li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <table id="user-list" class="table table-hover table-striped cf basetable dataTable" cellpadding="0"
+               cellspacing="0" border="0" width="100%">
+          <thead>
+          <tr>
+            <th width="5%">Id</th>
+            <th width="15%">User</th>
+            <th width="30%">Nick Name</th>
+            <th width="5%">Solved</th>
+            <th width="5%">Submit</th>
+            <th width="15%">Register Time</th>
+            <th width="15%">Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
+  </div>
+</div>
 </@override>
-    
-    <@override name="scripts">
-      <link href="assets/DataTables-1.9.4/media/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet">
-      <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
-      <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
-      <script type="text/javascript">
-        var oTable = $('#user-list').jfinalDataTable({
-          "sAjaxSource": "${baseUrl!}/api/admin/userList",
-          "aoColumns": [
-                { "mData": "uid" },
-                { "mData": "name",
-                  "mRender": function (data, type, full) {
-                    return '<a href="user/profile/' + full.name + '" target="_blank">' + data + '</a>';
-                  }
-                },
-                { "mData": "nick",
-                  "mRender": function (data, type, full) {
-                     return '<a href="user/profile/' + full.name + '" target="_blank">' + (data || 'ACMer') + '</a>';
-                  }
-                },
-                { "mData": "solved",
-                  "mRender": function (data, type, full) {
-                    return '<a href="status/?user=' + full.name + '&result=0" target="_blank">' + data + '</a>';
-                  }
-                },
-                { "mData": "submission",
-                  "mRender": function (data, type, full) {
-                    return '<a href="status/?user=' + full.name + '" target="_blank">' + data + '</a>';
-                  }
-                },
-                { "mData": "ctime",
-                  "mRender": function (data, type, full) {
-                    return parseTimestamp(data);
-                   }
-                },
-                { "mData": null,
-                  "bSortable": false,
-                  "mRender": function (data, type, full) {
-                    var action = '<button id="user-edit" uid="' + full.uid 
-                        + '" class="btn btn-success">Edit</button> '
-                        + '<button id="user-toggle" uid="' + full.uid 
-                        + '" class="btn btn-warning">' 
-                        + (full.status ? 'Delete' : 'Resume')
-                        + '</button> ';
-                    return action;
-                  }
-                }
-            ]
-          });
-      </script>
-   </@override>
+
+<@override name="scripts">
+<link href="assets/DataTables-1.9.4/media/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
+<script type="text/javascript">
+  var oTable = $('#user-list').jfinalDataTable({
+    "sAjaxSource": "${baseUrl!}/api/admin/userList",
+    "aoColumns": [
+      {"mData": "uid"},
+      {
+        "mData": "name",
+        "mRender": function (data, type, full) {
+          return '<a href="user/profile/' + full.name + '" target="_blank">' + data + '</a>';
+        }
+      },
+      {
+        "mData": "nick",
+        "mRender": function (data, type, full) {
+          return '<a href="user/profile/' + full.name + '" target="_blank">' + (data || 'ACMer') + '</a>';
+        }
+      },
+      {
+        "mData": "solved",
+        "mRender": function (data, type, full) {
+          return '<a href="status/?user=' + full.name + '&result=0" target="_blank">' + data + '</a>';
+        }
+      },
+      {
+        "mData": "submission",
+        "mRender": function (data, type, full) {
+          return '<a href="status/?user=' + full.name + '" target="_blank">' + data + '</a>';
+        }
+      },
+      {
+        "mData": "ctime",
+        "mRender": function (data, type, full) {
+          return parseTimestamp(data);
+        }
+      },
+      {
+        "mData": null,
+        "bSortable": false,
+        "mRender": function (data, type, full) {
+          var action = '<button id="user-edit" uid="' + full.uid
+                  + '" class="btn btn-success">Edit</button> '
+                  + '<button id="user-toggle" uid="' + full.uid
+                  + '" class="btn btn-warning">'
+                  + (full.status ? 'Delete' : 'Resume')
+                  + '</button> ';
+          return action;
+        }
+      }
+    ]
+  });
+</script>
+</@override>
 <@extends name="../_layout.html"></@extends>

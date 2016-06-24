@@ -4,14 +4,15 @@
   <div class="control-group contest <#if titleMsg??>error</#if>">
     <label class="control-label" for="inputTitle">Title</label>
     <div class="controls">
-      <textarea id="inputTitle" name="contest.title" rows="1" cols="120"required>${contest.title!}</textarea>
+      <textarea id="inputTitle" name="contest.title" rows="1" cols="120" required>${contest.title!}</textarea>
       <p class="text-error">${titleMsg!}</p>
     </div>
   </div>
   <div class="control-group contest">
     <label class="control-label" for="inputStartTime">Start Time</label>
     <div class="controls input-append date form_datetime" id="startTime">
-      <input size="16" type="text" name="startTime" id="inputStartTime" value="${contest.startDateTime!}" readonly required>
+      <input size="16" type="text" name="startTime" id="inputStartTime" value="${contest.startDateTime!}" readonly
+             required>
       <span class="add-on"><i class="icon-th"></i></span>
     </div>
   </div>
@@ -55,7 +56,7 @@
   </div>
   <div class="control-group">
     <div class="controls">
-      <label class="checkbox"> 
+      <label class="checkbox">
         <input type="checkbox" name="contest.freeze" value="1"<#if contest.freeze??> checked</#if>>Freeze
       </label>
       <button type="submit" class="btn btn-primary">Submit</button>
@@ -67,60 +68,65 @@
 
 <@override name="scripts">
 <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
-<script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"
+        charset="UTF-8"></script>
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#inputType").change(function() {
-            var val = $(this).val();
-            if(val == 1) {
-                $("div#password").show();
-                $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.password" placeholder="Current password is: ${contest.password!}">');
-            }
-            else {
-              $("div#contest-password").html('');
-                $("div#password").hide();
-            }
-        });
-        $("#inputType").trigger('change');
+  $(document).ready(function () {
+    $("#inputType").change(function () {
+      var val = $(this).val();
+      if (val == 1) {
+        $("div#password").show();
+        $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.password" placeholder="Current password is: ${contest.password!}">');
+      }
+      else {
+        $("div#contest-password").html('');
+        $("div#password").hide();
+      }
     });
+    $("#inputType").trigger('change');
+  });
 
-        $('#startTime').datetimepicker({
-            format: "yyyy-mm-dd hh:ii",
-            autoclose: true,
-            todayBtn: true,
-            pickerPosition: "bottom-left",
-            //minuteStep: 30
+  $('#startTime').datetimepicker({
+    format: "yyyy-mm-dd hh:ii",
+    autoclose: true,
+    todayBtn: true,
+    pickerPosition: "bottom-left",
+    //minuteStep: 30
 
-        }).on('changeDate', function(ev){
-            var time = ev.date.valueOf();
-            var date = formatDate(new Date(time + 3600000));
-            var endDate = formatDate(new Date(time + 18000000));
-            
-            $('#inputEndTime').val(endDate);
-            $('#endTime').datetimepicker('setStartDate', date);
-        });
+  }).on('changeDate', function (ev) {
+    var time = ev.date.valueOf();
+    var date = formatDate(new Date(time + 3600000));
+    var endDate = formatDate(new Date(time + 18000000));
 
-        $("#endTime").datetimepicker({
-            format: "yyyy-mm-dd hh:ii",
-            autoclose: true,
-            todayBtn: true,
-            pickerPosition: "bottom-left",
-            startDate: "${contest.startDateTime!}",
-            //minuteStep: 30
-        });
+    $('#inputEndTime').val(endDate);
+    $('#endTime').datetimepicker('setStartDate', date);
+  });
 
-        function formatDate(now) {
-          var year=now.getUTCFullYear();
-          var month=now.getUTCMonth()+1; month = (month < 10 ? '0' : '') + month;
-          var date=now.getUTCDate(); date = (date < 10 ? '0' : '') + date;
-          var hour=now.getUTCHours(); hour = (hour < 10 ? '0' : '') + hour;
-          var minute=now.getUTCMinutes(); minute = (minute < 10 ? '0' : '') + minute;
-          return year+"-"+month+"-"+date+" "+hour+":"+minute;
-        }
-        function getLocalTime(time) {     
-           return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");      
-        }
-    </script>
+  $("#endTime").datetimepicker({
+    format: "yyyy-mm-dd hh:ii",
+    autoclose: true,
+    todayBtn: true,
+    pickerPosition: "bottom-left",
+    startDate: "${contest.startDateTime!}",
+    //minuteStep: 30
+  });
+
+  function formatDate(now) {
+    var year = now.getUTCFullYear();
+    var month = now.getUTCMonth() + 1;
+    month = (month < 10 ? '0' : '') + month;
+    var date = now.getUTCDate();
+    date = (date < 10 ? '0' : '') + date;
+    var hour = now.getUTCHours();
+    hour = (hour < 10 ? '0' : '') + hour;
+    var minute = now.getUTCMinutes();
+    minute = (minute < 10 ? '0' : '') + minute;
+    return year + "-" + month + "-" + date + " " + hour + ":" + minute;
+  }
+  function getLocalTime(time) {
+    return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+  }
+</script>
 </@override>
 <@extends name="_layout.html" />

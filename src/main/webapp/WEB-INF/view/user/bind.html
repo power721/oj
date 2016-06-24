@@ -5,7 +5,7 @@
       <div class="dialog">
         <div class="block">
           <p class="block-heading">
-            <img src="${avatar!}"  width="100" height="100">
+            <img src="${avatar!}" width="100" height="100">
             您好：${nickname!}，来自${type!}的朋友！
           </p>
           <div class="block-body">
@@ -14,7 +14,7 @@
                 <#if nouser??>请绑定您的邮箱帐号：<#else>请使用邮箱激活帐号：</#if>
               </label>
               <input class="span12" name="email" value="" original-title="推荐使用网易或QQ邮箱，&lt;br /&gt;部分邮箱可能收不到邮件！"
-              required="required" type="email">
+                     required="required" type="email">
               <input name="id" value="${id!1}" required="required" type="hidden">
               <input class="btn btn-primary pull-right" value="确认" type="submit">
               <div class="clearfix">
@@ -28,62 +28,62 @@
 </div>
 </@override>
 <@override name="styles">
-  <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
-  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+<link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
+<link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
 </@override>
 
 <@override name="scripts">
-  <script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
-  <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
-  <script type="text/javascript">
-    $("[rel=tooltip]").tooltip();
-    $('input').tipsy({
-      gravity: 'w',
-      fade: true,
-      html: true
+<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script type="text/javascript">
+  $("[rel=tooltip]").tooltip();
+  $('input').tipsy({
+    gravity: 'w',
+    fade: true,
+    html: true
+  });
+  $(function () {
+    $('#bind').submit(function () {
+      var email = $('input[name="email"]').val();
+      if (/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(email)) {
+        var dialog = $.dialog();
+        $.post($(this).attr("action"), $('#bind').serialize(),
+                function (data) {
+                  if (data.status == 'ok') {
+                    dialog.content('邮箱发送成功，请进入邮箱按提示完成绑定！').lock().time(2);
+                    var email_url = 'user/#area=profile';
+                    /*if (email.indexOf('mail') > 0) {
+                      email_url = 'http://' + email.substr(email.indexOf('@') + 1, email.length);
+                    } else {
+                      email_url = 'http://mail.' + email.substr(email.indexOf('@') + 1, email.length);
+                    }*/
+                    setTimeout(function () {
+                              location.href = email_url;
+                            },
+                            2000);
+                  } else if (data.status == 'mail_error') {
+                    dialog.title('提示！');
+                    dialog.content('邮件发送失败，请重试！').lock().time(2);
+                  } else if (data.status == 'mail_exist') {
+                    dialog.title('提示！');
+                    dialog.content('邮箱已经被其他用户绑定，请更换重试！').lock().time(2);
+                  } else {
+                    dialog.content('请尝试重新登陆！').lock().time(1);
+                    setTimeout(function () {
+                              location.href = "login";
+                            },
+                            1000);
+                  }
+                });
+      } else {
+        $.dialog({
+          content: "邮箱格式不正确！",
+          time: 1
+        });
+      }
+      return false;
     });
-    $(function() {
-      $('#bind').submit(function() {
-        var email = $('input[name="email"]').val();
-        if (/^(\w)+(\.\w+)*@(\w)+((\.\w+)+)$/.test(email)) {
-          var dialog = $.dialog();
-          $.post($(this).attr("action"), $('#bind').serialize(),
-          function(data) {
-            if (data.status == 'ok') {
-              dialog.content('邮箱发送成功，请进入邮箱按提示完成绑定！').lock().time(2);
-              var email_url = 'user/#area=profile';
-              /*if (email.indexOf('mail') > 0) {
-                email_url = 'http://' + email.substr(email.indexOf('@') + 1, email.length);
-              } else {
-                email_url = 'http://mail.' + email.substr(email.indexOf('@') + 1, email.length);
-              }*/
-              setTimeout(function() {
-                location.href = email_url;
-              },
-              2000);
-            } else if (data.status == 'mail_error') {
-              dialog.title('提示！');
-              dialog.content('邮件发送失败，请重试！').lock().time(2);
-            } else if (data.status == 'mail_exist') {
-              dialog.title('提示！');
-              dialog.content('邮箱已经被其他用户绑定，请更换重试！').lock().time(2);
-            } else {
-              dialog.content('请尝试重新登陆！').lock().time(1);
-              setTimeout(function() {
-                location.href = "login";
-              },
-              1000);
-            }
-          });
-        } else {
-          $.dialog({
-            content: "邮箱格式不正确！",
-            time: 1
-          });
-        }
-        return false;
-      });
-    });
-  </script>
+  });
+</script>
 </@override>
 <@extends name="../common/_layout.html" />

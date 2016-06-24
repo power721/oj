@@ -1,63 +1,63 @@
 <@override name="content">
-    <div class="header">
-      <h1 class="page-title">权限管理</h1>
-    </div>
-    <ul class="breadcrumb">
-      <li>
-        <a href="admin">首页</a>
-        <span class="divider">/</span>
-      </li>
-      <li>
-        <a href="admin/user">用户管理</a>
-        <span class="divider">/</span>
-      </li>
-      <li class="active">权限管理</li>
-    </ul>
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="well">
-          <div id="container">
-            <#if permissionList??>
-              <#assign prevDeep = 1>
-              <div id="tree">
-                <ul>
+<div class="header">
+  <h1 class="page-title">权限管理</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="admin/user">用户管理</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">权限管理</li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <#if permissionList??>
+          <#assign prevDeep = 1>
+          <div id="tree">
+            <ul>
               <#list permissionList as permission>
                 <#assign deep = deepTree.get(permission.id)>
                 <#assign parentDeep = deepTree.get(permission.parentID)>
                 <#if (deep > prevDeep)>
-                  <ul>
+                <ul>
                 <#elseif (deep < prevDeep)>
-                    </li>
+                  </li>
                   <#list prevDeep-1..deep as i>
-                      </ul>
+                  </ul>
                     </li>
                   </#list>
                 <#elseif prevDeep==parentDeep>
                   </li>
                 </#if>
-                    <li>
-                      <#if deep==1><i class="node icon-minus"></i></#if>
-                      <input type="checkbox" data-id="${permission.id}" data-pid="${permission.parentID}">
-                      <span>${permission.title}</span>
+              <li>
+                <#if deep==1><i class="node icon-minus"></i></#if>
+                <input type="checkbox" data-id="${permission.id}" data-pid="${permission.parentID}">
+                <span>${permission.title}</span>
                 <#assign prevDeep=deep>
               </#list>
-                </ul>
-              </div>
-            </#if>
+            </ul>
           </div>
-        </div>
+        </#if>
       </div>
     </div>
- </@override>
- <@override name="styles">
+  </div>
+</div>
 </@override>
- <@override name="scripts">
- <script type="text/javascript">
-  $(document).ready(function() {
-    
-    $('.node').click(function() {
+<@override name="styles">
+</@override>
+<@override name="scripts">
+<script type="text/javascript">
+  $(document).ready(function () {
+
+    $('.node').click(function () {
       var that = $(this);
-      if(that.parent().children('ul').size()) {
+      if (that.parent().children('ul').size()) {
         if (that.hasClass('icon-plus')) {
           that.removeClass('icon-plus').addClass('icon-minus');
         } else {
@@ -66,8 +66,8 @@
       }
       that.parent().children("ul").toggle("slow");
     });
-    
+
   });
- </script>
- </@override>
+</script>
+</@override>
 <@extends name="../_layout.html"></@extends>

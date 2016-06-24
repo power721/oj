@@ -1,98 +1,101 @@
 <@override name="content">
 <div id="area-title"><!--Title-->
-    <h1 id="title-article" class="title">${topic.title!}</h1>
+  <h1 id="title-article" class="title">${topic.title!}</h1>
 
-    <p id="subtitle-article">
-        <a href="/">Home</a>
-        &nbsp;&gt;&nbsp;
-        <a id="channel-article-title" href="a/list110/index.htm">综合</a>
-        &nbsp;/&nbsp;
-        <a class="name" href="user/profile/${author.name!}">${author.name!}</a>
-        &nbsp;/&nbsp;Post at&nbsp;
-        <span class="time timestamp" data="${topic.ctime!}"></span>
-        &nbsp;/&nbsp;
+  <p id="subtitle-article">
+    <a href="/">Home</a>
+    &nbsp;&gt;&nbsp;
+    <a id="channel-article-title" href="a/list110/index.htm">综合</a>
+    &nbsp;/&nbsp;
+    <a class="name" href="user/profile/${author.name!}">${author.name!}</a>
+    &nbsp;/&nbsp;Post at&nbsp;
+    <span class="time timestamp" data="${topic.ctime!}"></span>
+    &nbsp;/&nbsp;
         <span id="info-title">
           View:<span class="pts">${topic.view!0}</span>&nbsp;&nbsp;
           Comments:<span class="pts">${topic.reply!0}</span>&nbsp;&nbsp;
           Favors:<span class="pts">${topic.favor!0}</span>
         </span>
-        <!--&nbsp;/&nbsp;
+    <!--&nbsp;/&nbsp;
         <a id="report-title" onclick="javascript:window.open(encodeURI('report#name=${author.name!};from=' + self.location.href.replace(/\#.*/g, '') + ';type=投稿;desc=${topic.id!} 文章内容违规。;proof=${topic.title!}));return false;">举报文章</a>-->
-    </p>
+  </p>
 
-    <div id="area-tool">
-        <div id="btn-favor" class="item-tool" title="收藏视频"><p class="pts hidden">${topic.favor!0}</p></div>
-        <a id="btn-mail" class="item-tool" data-name="${author.name!}" href="user/#area=mail-new;username=${author.name!}" target="_blank"></a>
-        <div id="btn-comm" class="item-tool" title="发表评论"><p class="pts">${topic.reply!0}</p></div>
-        <div id="btn-share" class="item-tool" title="分享视频"></div>
-    </div>
+  <div id="area-tool">
+    <div id="btn-favor" class="item-tool" title="收藏视频"><p class="pts hidden">${topic.favor!0}</p></div>
+    <a id="btn-mail" class="item-tool" data-name="${author.name!}" href="user/#area=mail-new;username=${author.name!}"
+       target="_blank"></a>
+    <div id="btn-comm" class="item-tool" title="发表评论"><p class="pts">${topic.reply!0}</p></div>
+    <div id="btn-share" class="item-tool" title="分享视频"></div>
+  </div>
 </div>
 <div class="row content" id="area-player">
   <div class="span4 offset4" id="content">
-    ${topic.content!}
+  ${topic.content!}
   </div>
 </div>
 
 <div id="area-article-bottom" class="area">
-    <div class="area-left"><!--Left-->
-        <div id="share-article">
-            <span class="hint">分享到：</span>
+  <div class="area-left"><!--Left-->
+    <div id="share-article">
+      <span class="hint">分享到：</span>
 
-            <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
-                <a class="bds_tsina" title="分享到新浪微博" href="#">新浪微博</a>
-                <a class="bds_tqq" title="分享到腾讯微博" href="#">腾讯微博</a>
-                <a class="bds_qzone" title="分享到QQ空间" href="#">QQ空间</a>
-                <a class="bds_renren" title="分享到人人网" href="#">人人网</a>
-                <a class="shareCount" href="#" title="累计分享0次">0</a>
-            </div>
+      <div id="bdshare" class="bdshare_t bds_tools get-codes-bdshare">
+        <a class="bds_tsina" title="分享到新浪微博" href="#">新浪微博</a>
+        <a class="bds_tqq" title="分享到腾讯微博" href="#">腾讯微博</a>
+        <a class="bds_qzone" title="分享到QQ空间" href="#">QQ空间</a>
+        <a class="bds_renren" title="分享到人人网" href="#">人人网</a>
+        <a class="shareCount" href="#" title="累计分享0次">0</a>
+      </div>
 
-            <div id="area-article-info">
-                <span class="item">收藏用户：<span class="pts">${topic.favor!0}</span></span>
-                <span class="item">浏览次数：<span class="pts">${topic.view!0}</span></span>
-            </div>
-        </div>
-        <div id="area-desc">
-            <h3 id="desc-article">${topic.title!}</h3>
-        </div>
-        <!--Desc-->
-        <div id="area-tag"><!--Tag-->
-            <span class="hint">Tags：</span>
+      <div id="area-article-info">
+        <span class="item">收藏用户：<span class="pts">${topic.favor!0}</span></span>
+        <span class="item">浏览次数：<span class="pts">${topic.view!0}</span></span>
+      </div>
+    </div>
+    <div id="area-desc">
+      <h3 id="desc-article">${topic.title!}</h3>
+    </div>
+    <!--Desc-->
+    <div id="area-tag"><!--Tag-->
+      <span class="hint">Tags：</span>
               <span class="tag pop">
                 <a href="/tag/33655.aspx" target="_blank" data-tid="33655">DOTA2<span class="pts">(11622)</span></a>
               </span>
-        </div>
-        <!--Tag-->
     </div>
-    <!--Left-->
-    <div class="area-right"><!--Right-->
-        <div id="block-author-card" class="block">
-        <div class="mainer">
-          <a id="thumb-avatar-author" target="_blank" class="thumb" href="user/profile/${author.name!}">
-            <img id="avatar-author" class="avatar avatar-article-author" src="${author.avatar!}">
-          </a>
-          <div id="area-author-info">
-            <a id="name-author" target="_blank" class="name" href="user/#area=mail-new;username=${author.name!}">${author.name!}</a>
-            <p class="divider"></p>
-            <p id="sign-author" class="sign">${author.signature!"这个人很懒，神马都没有写…"}</p>
+    <!--Tag-->
+  </div>
+  <!--Left-->
+  <div class="area-right"><!--Right-->
+    <div id="block-author-card" class="block">
+      <div class="mainer">
+        <a id="thumb-avatar-author" target="_blank" class="thumb" href="user/profile/${author.name!}">
+          <img id="avatar-author" class="avatar avatar-article-author" src="${author.avatar!}">
+        </a>
+        <div id="area-author-info">
+          <a id="name-author" target="_blank" class="name"
+             href="user/#area=mail-new;username=${author.name!}">${author.name!}</a>
+          <p class="divider"></p>
+          <p id="sign-author" class="sign">${author.signature!"这个人很懒，神马都没有写…"}</p>
+        </div>
+        <span class="clearfix"></span>
+        <div id="function-user">
+          <div class="area btn-group">
+            <a id="follow-author" class="btn btn-mini btn-success" title="${author.name!}">关注</a>
+            <a id="mail-author" class="btn btn-mini btn-info" data-name="${author.name!}"
+               href="user/#area=mail-new;username=${author.name!}" target="_blank">私信</a>
           </div>
-          <span class="clearfix"></span>
-          <div id="function-user">
-            <div class="area btn-group">
-              <a id="follow-author" class="btn btn-mini btn-success" title="${author.name!}">关注</a>
-              <a id="mail-author" class="btn btn-mini btn-info" data-name="${author.name!}" href="user/#area=mail-new;username=${author.name!}" target="_blank">私信</a>
-            </div>
-            <div id="area-pts">
-              <a href="user/profile/${author.name!}#area=post-history" target="_blank">Solved</a>:
-              <span class="pts">${author.solved!0}</span>
-              &nbsp;/&nbsp;
-              <a href="user/profile/${author.name!}#area=followers" target="_blank">Submission</a>:
-              <span class="pts">${author.submission!0}</span>
-              <span class="clearfix"></span>
-            </div>
+          <div id="area-pts">
+            <a href="user/profile/${author.name!}#area=post-history" target="_blank">Solved</a>:
+            <span class="pts">${author.solved!0}</span>
+            &nbsp;/&nbsp;
+            <a href="user/profile/${author.name!}#area=followers" target="_blank">Submission</a>:
+            <span class="pts">${author.submission!0}</span>
+            <span class="clearfix"></span>
           </div>
         </div>
       </div>
-<!--Author Info-->
+    </div>
+    <!--Author Info-->
   </div>
   <div class="clearfix"></div>
   <div class="tail"></div>
@@ -108,32 +111,32 @@
 <script src="assets/acfun/comment.js"></script>
 <script src="assets/js/ubb.js"></script>
 <script type="text/javascript">
-  $(document).ready(function() {
+  $(document).ready(function () {
     var html = ubb2html($('#content').html());
     $('#content').html(html);
   });
   var BaseURL = "${baseUrl!}/";
   system.aid = ${topic.id!};
-  window.setTimeout(function() {
-      readyComm(function() {
-        var btn = $('#btn-showComm');
-        if (config.comment.autoShowCommentAllowed) {
-          window.setTimeout(function() {
-            btn.click()
+  window.setTimeout(function () {
+            readyComm(function () {
+              var btn = $('#btn-showComm');
+              if (config.comment.autoShowCommentAllowed) {
+                window.setTimeout(function () {
+                          btn.click()
+                        },
+                        50)
+              } else {
+                btn.css({
+                  display: 'block'
+                })
+              }
+            })
           },
-          50)
-        } else {
-          btn.css({
-            display: 'block'
-          })
-        }
-      })
-  },
-  500);
+          500);
 </script>
 <script>
   system.path = "${baseUrl!}/assets";
-  system.date = Math.round(new Date().getTime()/1000);
+  system.date = Math.round(new Date().getTime() / 1000);
   system.location = 'location-member';
   window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
 </script>

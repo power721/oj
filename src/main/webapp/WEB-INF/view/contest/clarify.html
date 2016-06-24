@@ -1,38 +1,45 @@
 <@override name="contest_content">
 <div>
-<#if privateClarifyList?? && (privateClarifyList?size > 0)>
-<h4>Private Message</h4>
-<#list privateClarifyList as clarify>
-  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> /  
-  Post at <span class="timestamp" data="${clarify.ctime}"></span> 
-  <#if clarify.num??>/ Problem <a href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}: ${clarify.title!}</a></#if>
-  <pre class="question">${clarify.question!}</pre>
-  <span class="name">Administrator</span> 
-  <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if> 
-  <pre class="reply">${clarify.reply!}</pre>
-  <hr>
-</#list>
-</#if>
+  <#if privateClarifyList?? && (privateClarifyList?size > 0)>
+    <h4>Private Message</h4>
+    <#list privateClarifyList as clarify>
+      <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> /
+      Post at <span class="timestamp" data="${clarify.ctime}"></span>
+      <#if clarify.num??>/ Problem <a
+              href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}
+        : ${clarify.title!}</a></#if>
+      <pre class="question">${clarify.question!}</pre>
+      <span class="name">Administrator</span>
+      <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if>
+      <pre class="reply">${clarify.reply!}</pre>
+      <hr>
+    </#list>
+  </#if>
 </div>
 <div>
-<#if publicClarifyList?? && (publicClarifyList?size > 0)>
-<h4>Public Message</h4>
-<#list publicClarifyList as clarify>
-  <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> / 
-  Post at <span class="timestamp" data="${clarify.ctime}"></span> 
-  <#if clarify.num??>/ Problem <a href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}: ${clarify.title!}</a></#if>
-  <pre class="question">${clarify.question!}</pre>
-  <span class="name">Administrator</span> 
-  <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if> <pre class="reply">${clarify.reply!}</pre>
-  <hr>
-</#list>
-</#if>
+  <#if publicClarifyList?? && (publicClarifyList?size > 0)>
+    <h4>Public Message</h4>
+    <#list publicClarifyList as clarify>
+      <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> /
+      Post at <span class="timestamp" data="${clarify.ctime}"></span>
+      <#if clarify.num??>/ Problem <a
+              href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}
+        : ${clarify.title!}</a></#if>
+      <pre class="question">${clarify.question!}</pre>
+      <span class="name">Administrator</span>
+      <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if>
+      <pre class="reply">${clarify.reply!}</pre>
+      <hr>
+    </#list>
+  </#if>
 </div>
-<#if serverTime<contest.endTime>
-<div class="text-center">
-  <button class="btn btn-primary" id="newQuestion" data-toggle="modal" data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post New Question</button>
-</div>
-</#if>
+  <#if serverTime<contest.endTime>
+  <div class="text-center">
+    <button class="btn btn-primary" id="newQuestion" data-toggle="modal"
+            data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post New Question
+    </button>
+  </div>
+  </#if>
 
   <#if user??>
   <div class="modal hide fade contestModal" id="postModal">
@@ -40,18 +47,20 @@
       <div class="modal-header">
         <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h3 id="postModalLabel">
-          <a href="contest/post/${cid!}" title="Post in another page" data-toggle="tooltip" data-placement="bottom">Post New Question</a>
+          <a href="contest/post/${cid!}" title="Post in another page" data-toggle="tooltip" data-placement="bottom">Post
+            New Question</a>
         </h3>
       </div>
       <div class="modal-body">
         <input type="hidden" name="cid" value="${cid!}">
         <#if contestProblems??>
-        <select class="input-large" id="inputProblem" name="num">
-        <option value="">Problem</option>
-        <#list contestProblems as Problem>
-        <option value="${Problem.num!}"<#if pid?? && pid==Problem.num>selected</#if>>${Problem.id!}. ${Problem.title!}</option> 
-        </#list>
-        </select>
+          <select class="input-large" id="inputProblem" name="num">
+            <option value="">Problem</option>
+            <#list contestProblems as Problem>
+              <option value="${Problem.num!}"<#if pid?? && pid==Problem.num>selected</#if>>${Problem.id!}
+                . ${Problem.title!}</option>
+            </#list>
+          </select>
         </#if>
         <textarea name="question" rows="10"></textarea>
       </div>
@@ -65,34 +74,34 @@
 </@override>
 
 <@override name="styles">
-  <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
-  <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+<link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
+<link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
 </@override>
 
 <@override name="scripts">
-  <script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
-  <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
-  <script type="text/javascript">
-    $(function() {
-      $('#postForm').submit(function() {
-          $.post($(this).attr("action"), $('#postForm').serialize(),
-          function(data) {
-            if (data.success) {
-              $.dialog().content('Ok, please wait admin reply.').lock().time(2);
-              setTimeout(function() {
-                window.location.reload();
-              },
-              2000);
-            } else {
-              $.dialog({
-                  content: data.result || 'Post question failed!',
-                  time: 1.5
-                });
-            }
-          });
-        return false;
-      });
+<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script type="text/javascript">
+  $(function () {
+    $('#postForm').submit(function () {
+      $.post($(this).attr("action"), $('#postForm').serialize(),
+              function (data) {
+                if (data.success) {
+                  $.dialog().content('Ok, please wait admin reply.').lock().time(2);
+                  setTimeout(function () {
+                            window.location.reload();
+                          },
+                          2000);
+                } else {
+                  $.dialog({
+                    content: data.result || 'Post question failed!',
+                    time: 1.5
+                  });
+                }
+              });
+      return false;
     });
- </script>
+  });
+</script>
 </@override>
 <@extends name="_layout.html" />

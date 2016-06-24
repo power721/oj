@@ -1,15 +1,15 @@
 <@override name="content">
 
 <script type="text/javascript">
-    $(document).ready(function(){
-        var prevpage="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-        var nextpage="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-        $(document).keydown(function(event) {
-            <#if userList.pageNumber&gt;1>if(event.keyCode==37)location=prevpage;</#if>
-            <#if userList.pageNumber<userList.totalPage>if(event.keyCode==39)location=nextpage;</#if>
-        });
-      });
-    </script>
+  $(document).ready(function () {
+    var prevpage = "rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+    var nextpage = "rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+    $(document).keydown(function (event) {
+        <#if userList.pageNumber&gt;1>if (event.keyCode == 37)location = prevpage;</#if>
+        <#if userList.pageNumber<userList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>
+    });
+  });
+</script>
 
 <div class="pagination pagination-centered">
   <div class="pull-left">
@@ -21,42 +21,49 @@
     </form>
   </div>
   <ul>
-    <li class="<#if userList.pageNumber==1>disabled</#if>"><a href="rank/1<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">&lt;&lt;</a></li> <#if
-    userList.pageNumber&gt;1>
-    <li><a href="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">Prev</a></li></#if> <#if userList??> <#assign
-    start=userList.pageNumber-3> <#assign end=userList.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
-    end&gt;userList.totalPage ><#assign start=start-(end-userList.totalPage)-1><#if start<1><#assign start=1></#if><#assign end=userList.totalPage></#if> <#if
-    end
-    <start><#assign end=start></#if> <#list start..end as x>
-    <li class="<#if x==userList.pageNumber>active</#if>"><a href="rank/${x}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">${x}</a></li>
-    </#list> </#if> <#if userList.pageNumber<userList.totalPage>
-    <li><a href="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">Next</a></li>
-    </#if>
+    <li class="<#if userList.pageNumber==1>disabled</#if>"><a
+            href="rank/1<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">&lt;&lt;</a></li> <#if
+  userList.pageNumber&gt;1>
+    <li><a href="rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">Prev</a>
+    </li></#if> <#if userList??> <#assign
+  start=userList.pageNumber-3> <#assign end=userList.pageNumber+3> <#if start<1><#assign end=end-start+1><#assign start=1></#if> <#if
+  end&gt;userList.totalPage ><#assign start=start-(end-userList.totalPage)-1><#if start<1><#assign start=1></#if><#assign end=userList.totalPage></#if> <#if
+  end
+  <start><#assign end=start></#if> <#list start..end as x>
+    <li class="<#if x==userList.pageNumber>active</#if>"><a
+            href="rank/${x}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">${x}</a></li>
+  </#list> </#if> <#if userList.pageNumber<userList.totalPage>
+    <li><a href="rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">Next</a>
+    </li>
+  </#if>
     <li class="<#if userList.pageNumber&gt;=userList.totalPage>disabled</#if>"><a
-      href="rank/${userList.totalPage}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">&gt;&gt;</a></li>
+            href="rank/${userList.totalPage}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>">&gt;&gt;</a>
+    </li>
   </ul>
   <div class="pull-right">
-    <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span> <span class="badge badge-info">${userList.totalRow} Users</span>
+    <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span> <span
+          class="badge badge-info">${userList.totalRow} Users</span>
   </div>
 </div>
 
 <table id="user-rank" class="table table-hover table-condensed">
   <thead>
-    <tr>
-      <th>Rank</th>
-      <th>User</th>
-      <th>Nick Name</th>
-      <th>Solved</th>
-      <th>Submit</th>
-      <th>Ratio</th>
-    </tr>
+  <tr>
+    <th>Rank</th>
+    <th>User</th>
+    <th>Nick Name</th>
+    <th>Solved</th>
+    <th>Submit</th>
+    <th>Ratio</th>
+  </tr>
   </thead>
   <tbody>
     <#if userList??> <#list userList.list as User>
     <tr>
       <td>${User.rank!}</td>
-      <td class="user"><a href="user/profile/${User.name!}" class="user"<#if adminUser?? && User.realName??>data-toggle="tooltip"
-          title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+      <td class="user"><a href="user/profile/${User.name!}" class="user"
+                          <#if adminUser?? && User.realName??>data-toggle="tooltip"
+                          title="${(User.realName)!}"</#if>>${User.name!}</a></td>
       <td>${User.nick!}</td>
       <td><a href="status?name=${User.name!}&result=0">${User.solved!}</a></td>
       <td><a href="status?name=${User.name!}">${User.submit!}</a></td>
@@ -74,17 +81,17 @@
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-      $(document).ready(function() {
-                
-        $("#user-rank").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
+  $(document).ready(function () {
+
+    $("#user-rank").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
     });
-    </script>
+  });
+</script>
 
 </@override>
 <@override name="scripts">

@@ -1,4 +1,3 @@
-
 <@override name="content">
 <div id="login-box" class="row">
   <div class="span5 offset3">
@@ -33,9 +32,11 @@
         <div class="controls">
           <div class="input-prepend">
             <span class="add-on"><i class="icon-check"></i></span>
-            <input type="text" minlength="6" maxlength="6" id="inputCaptcha" class="input-small" name="captcha" required>
-            <span id="captcha"><a id="captcha" onclick="getCaptcha();" href="javascript:;" title="click to change another one"><img id="captcha"
-                src="captcha" /></a></span>
+            <input type="text" minlength="6" maxlength="6" id="inputCaptcha" class="input-small" name="captcha"
+                   required>
+            <span id="captcha"><a id="captcha" onclick="getCaptcha();" href="javascript:;"
+                                  title="click to change another one"><img id="captcha"
+                                                                           src="captcha"/></a></span>
           </div>
           <p class="text-error">${captchaMsg!}</p>
         </div>

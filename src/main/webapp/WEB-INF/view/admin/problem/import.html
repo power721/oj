@@ -1,52 +1,52 @@
 <@override name="content">
-    <div class="header">
-      <h1 class="page-title">导入题目</h1>
-    </div>
-    <ul class="breadcrumb">
-      <li>
-        <a href="admin">首页</a>
-        <span class="divider">/</span>
-      </li>
-      <li>
-        <a href="admin/problem">题目管理</a>
-        <span class="divider">/</span>
-      </li>
-      <li class="active">导入题目</li>
-    </ul>
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="well">
-          <div id="container">
-            <h3>Import Problem:</h3>
-            <p class="text-warning">Import FPS data ,please make sure your XML file is smaller than 100 MB.</p>
-            <form class="form-horizontal" action="admin/problem/importProblems" method="post" enctype="multipart/form-data">
-              <div class="control-group problem">
-                <label class="control-label" for="inputFile">File</label>
-                <div class="controls">
-                  <input type="file" id="inputFile" name="xmlFile" accept="text/xml, application/xml" required></input>
-                </div>
-              </div>
-              <div class="control-group problem">
-                <label class="control-label" for="inputOutputLimit">Output File Limit</label>
-                <div class="controls input-append">
-                  <input class="input-mini" type="number" id="inputOutputLimit" name="outputLimit" value="65536" required>
-                  <span class="add-on">KB</span>
-                </div>
-              </div>
-              <div class="control-group">
-                <div class="controls">
-                  <label class="checkbox"> <input type="checkbox" name="status" value="true" checked>Active
-                  </label>
-                  <button type="submit" class="btn btn-primary">Import</button>
-                </div>
-              </div>
-            </form>
-            <p class="text-info">free problem set FPS-xml can be download at 
-              <a href="http://code.google.com/p/freeproblemset/downloads/list" target="_blank">FPS-Google code</a></p>
+<div class="header">
+  <h1 class="page-title">导入题目</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="admin/problem">题目管理</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">导入题目</li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h3>Import Problem:</h3>
+        <p class="text-warning">Import FPS data ,please make sure your XML file is smaller than 100 MB.</p>
+        <form class="form-horizontal" action="admin/problem/importProblems" method="post" enctype="multipart/form-data">
+          <div class="control-group problem">
+            <label class="control-label" for="inputFile">File</label>
+            <div class="controls">
+              <input type="file" id="inputFile" name="xmlFile" accept="text/xml, application/xml" required></input>
+            </div>
           </div>
-        </div>
+          <div class="control-group problem">
+            <label class="control-label" for="inputOutputLimit">Output File Limit</label>
+            <div class="controls input-append">
+              <input class="input-mini" type="number" id="inputOutputLimit" name="outputLimit" value="65536" required>
+              <span class="add-on">KB</span>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <label class="checkbox"> <input type="checkbox" name="status" value="true" checked>Active
+              </label>
+              <button type="submit" class="btn btn-primary">Import</button>
+            </div>
+          </div>
+        </form>
+        <p class="text-info">free problem set FPS-xml can be download at
+          <a href="http://code.google.com/p/freeproblemset/downloads/list" target="_blank">FPS-Google code</a></p>
       </div>
     </div>
+  </div>
+</div>
 </@override>
 
 <@override name="scripts">
