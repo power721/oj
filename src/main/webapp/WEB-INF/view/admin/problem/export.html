@@ -1,51 +1,52 @@
 <@override name="content">
-    <div class="header">
-      <h1 class="page-title">导出题目</h1>
-    </div>
-    <ul class="breadcrumb">
-      <li>
-        <a href="admin">首页</a>
-        <span class="divider">/</span>
-      </li>
-      <li>
-        <a href="admin/problem">题目管理</a>
-        <span class="divider">/</span>
-      </li>
-      <li class="active">导出题目</li>
-    </ul>
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="well">
-          <div id="container">
-            <h3>Export Problem:</h3>
-            <form class="form-horizontal" action="admin/problem/exportProblems" method="post">
-              <div class="control-group">
-                <div class="controls">
-                  From pid: <input class="input-mini" type="number" id="inputStart" name="start" value="1000">
-                  To pid: <input class="input-mini" type="number" id="inputEnd" name="end" value="1000">
-                </div>
-              </div>
-              <div class="control-group">
-                <div class="controls">
-                  Or in: <input type="text" size="40" name="in" value="">
-                </div>
-              </div>
-              <div class="control-group">
-                <div class="controls">
-                  <label class="checkbox"> <input type="checkbox" name="status" value="true" checked>Only Active Problems</label>
-                  <label class="checkbox"> <input type="checkbox" name="replace" value="true" checked>Replace '\n' with "&lt;br&gt;"</label>
-                  <button type="submit" class="btn btn-primary">Export</button>
-                </div>
-              </div>
-            </form>
-            <p class="text-warning">From-To works only if IN is empty</p>
-            <p class="text-info">IN can go with "," seperated problem ids like [1000,1020,1030-1050]</p>
-            <p class="text-info">free problem set FPS-xml can be download at 
-              <a href="http://code.google.com/p/freeproblemset/downloads/list" target="_blank">FPS-Google code</a></p>
+<div class="header">
+  <h1 class="page-title">导出题目</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="admin/problem">题目管理</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">导出题目</li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h3>Export Problem:</h3>
+        <form class="form-horizontal" action="admin/problem/exportProblems" method="post">
+          <div class="control-group">
+            <div class="controls">
+              From pid: <input class="input-mini" type="number" id="inputStart" name="start" value="1000">
+              To pid: <input class="input-mini" type="number" id="inputEnd" name="end" value="1000">
+            </div>
           </div>
-        </div>
+          <div class="control-group">
+            <div class="controls">
+              Or in: <input type="text" size="40" name="in" value="">
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <label class="checkbox"> <input type="checkbox" name="status" value="true" checked>Only Active
+                Problems</label>
+              <label class="checkbox"> <input type="checkbox" name="replace" value="true" checked>Replace '\n' with "&lt;br&gt;"</label>
+              <button type="submit" class="btn btn-primary">Export</button>
+            </div>
+          </div>
+        </form>
+        <p class="text-warning">From-To works only if IN is empty</p>
+        <p class="text-info">IN can go with "," seperated problem ids like [1000,1020,1030-1050]</p>
+        <p class="text-info">free problem set FPS-xml can be download at
+          <a href="http://code.google.com/p/freeproblemset/downloads/list" target="_blank">FPS-Google code</a></p>
       </div>
     </div>
+  </div>
+</div>
 </@override>
 
 <@override name="scripts">

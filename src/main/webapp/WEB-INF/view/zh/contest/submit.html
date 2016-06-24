@@ -29,16 +29,18 @@
   <div class="control-group">
     <label class="control-label" for="inputLanguage">Language</label>
     <div class="controls">
-      <select class="input-small" id="inputLanguage" name="solution.language"> <#if program_languages??> <#list program_languages as language>
+      <select class="input-small" id="inputLanguage"
+              name="solution.language"> <#if program_languages??> <#list program_languages as language>
         <option value="${language.id!}"<#if (solution.language)??><#if solution.language==language.id>selected</#if><#else><#if
-          user.language==language.id>selected</#if></#if>>${language.name!}</option> </#list> </#if>
+        user.language==language.id>selected</#if></#if>>${language.name!}</option> </#list> </#if>
       </select>
     </div>
   </div>
   <div class="control-group solution">
     <label class="control-label" for="inputSource">Source Code</label>
     <div class="controls">
-      <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="120" required>${(solution.source)!}</textarea>
+      <textarea id="inputSource" minlength="10" maxlength="30000" name="solution.source" rows="20" cols="120"
+                required>${(solution.source)!}</textarea>
     </div>
   </div>
   <div class="control-group">
@@ -50,11 +52,11 @@
 </form>
 
 <script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
-<script type="text/javascript">   
-    $().ready(function() {
-      $("#submitForm").validate();
-    });
-  </script>
+<script type="text/javascript">
+  $().ready(function () {
+    $("#submitForm").validate();
+  });
+</script>
 </@override>
 <@override name="scripts">
 </@override>

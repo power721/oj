@@ -1,53 +1,55 @@
-
 <h4>
   Best solutions of Problem <a href="contest/problem/${cid!}-${id}">${cid!}-${id}</a>
 </h4>
 <div class="pull-left btn-group ajax-loader">
   <a url="contest/problemStatus/${cid!}-${id!}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
-    class="btn ajax-loader<#if !language?? || language==0> active btn-warning<#else> btn-success</#if>">All</a> 
-    <#if program_languages??> 
-    <#list program_languages.keySet() as key>
+     class="btn ajax-loader<#if !language?? || language==0> active btn-warning<#else> btn-success</#if>">All</a>
+<#if program_languages??>
+  <#list program_languages.keySet() as key>
     <a url="contest/problemStatus/${cid!}-${id!}?language=${key!}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
-      class="btn ajax-loader<#if language?? && language==key> active btn-warning<#else> btn-success</#if>" type="a">${program_languages.get(key)!}</a> 
-    </#list> 
-    </#if>
+       class="btn ajax-loader<#if language?? && language==key> active btn-warning<#else> btn-success</#if>"
+       type="a">${program_languages.get(key)!}</a>
+  </#list>
+</#if>
 </div>
 <div class="pull-right">
-  <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span class="badge badge-info">${solutionList.totalRow}
-    Records</span>
+  <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span
+        class="badge badge-info">${solutionList.totalRow}
+  Records</span>
 </div>
 <table id="problem-status" class="table table-hover table-condensed">
   <thead>
-    <tr>
-      <th>Rank</th>
-      <th>Run ID</th>
-      <th>User</th>
-      <th>Time</th>
-      <th>Memory</th>
-      <th>Language</th>
-      <th>Code Length</th>
-      <th>Submit Time</th>
-    </tr>
+  <tr>
+    <th>Rank</th>
+    <th>Run ID</th>
+    <th>User</th>
+    <th>Time</th>
+    <th>Memory</th>
+    <th>Language</th>
+    <th>Code Length</th>
+    <th>Submit Time</th>
+  </tr>
   </thead>
   <tbody>
-    <#if solutionList??> <#list solutionList.list as solution>
-    <tr>
-      <td class="id">${solution_index+1+(solutionList.pageNumber-1)*solutionList.pageSize}</td>
-      <td class="sid">${solution.sid!}</td>
-      <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
-      <td class="time">${solution.time!0} MS</td>
-      <td class="memory">${solution.memory!0} KB</td>
-      <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="contest/code/${cid}-${solution.sid!}" target="_blank" title="show source code"></#if>
-          ${solution.languageName!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
-      </td>
-      <td class="code_len">${solution.codeLen!}B</td>
-      <td class="ctime">${solution.ctime_t!}</td>
-    </tr>
-    </#list> </#if>
+  <#if solutionList??> <#list solutionList.list as solution>
+  <tr>
+    <td class="id">${solution_index+1+(solutionList.pageNumber-1)*solutionList.pageSize}</td>
+    <td class="sid">${solution.sid!}</td>
+    <td class="user"><a href="user/profile/${(solution.name)!}">${(solution.name)!}</a></td>
+    <td class="time">${solution.time!0} MS</td>
+    <td class="memory">${solution.memory!0} KB</td>
+    <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a
+            href="contest/code/${cid}-${solution.sid!}" target="_blank" title="show source code"></#if>
+    ${solution.languageName!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
+    </td>
+    <td class="code_len">${solution.codeLen!}B</td>
+    <td class="ctime">${solution.ctime_t!}</td>
+  </tr>
+  </#list> </#if>
   </tbody>
 </table>
 <div class="pagination pagination-centered ajax-loader">
-  <#include "../../common/_paginate2.html" />
+<#include "../../common/_paginate2.html" />
   <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="contest/problemStatus/${cid!}-${id!}" urlParas="?id=${query!}" />
 </div>
 </div>
@@ -59,24 +61,24 @@
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        <#if oj_style != "slate">
-        $("table#problem-status").tablecloth({
-          theme:"stats",
-          condensed:true,
-          sortable:true,
-          striped:true,
-          clean:true
-        });
-        </#if>
-
-        $('div.ajax-loader a').click(function() {
-            var url = '${baseUrl!}/'+$(this).attr("url");
-            if(url.indexOf('?')>0)
-                url = url+'&ajax=1';
-            else
-                url = url+'?ajax=1';
-            $('div#ajax-container').load(url);
-        });
+  $(document).ready(function () {
+  <#if oj_style != "slate">
+    $("table#problem-status").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
     });
-    </script>
+  </#if>
+
+    $('div.ajax-loader a').click(function () {
+      var url = '${baseUrl!}/' + $(this).attr("url");
+      if (url.indexOf('?') > 0)
+        url = url + '&ajax=1';
+      else
+        url = url + '?ajax=1';
+      $('div#ajax-container').load(url);
+    });
+  });
+</script>

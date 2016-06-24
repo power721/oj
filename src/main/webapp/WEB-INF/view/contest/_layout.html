@@ -1,35 +1,35 @@
 <@override name="content">
 <ul class="nav nav-tabs" id="contest_nav">
-    <li class="<#if actionKey=="contest/show">active</#if>">
+  <li class="<#if actionKey=="contest/show">active</#if>">
     <a href="contest/show/${cid}">Information</a>
-    </li>
-    <li class="<#if methodName=="problem">active</#if>">
+  </li>
+  <li class="<#if methodName=="problem">active</#if>">
     <a href="contest/problem/${cid}-A">Problems</a>
-    </li>
-    <li class="<#if methodName=="rank">active</#if>">
+  </li>
+  <li class="<#if methodName=="rank">active</#if>">
     <a href="contest/rank/${cid!}">Standing</a>
-    </li>
-    <li class="<#if methodName=="status" || methodName== "problem_status" || controllerKey=="solution">active</#if>">
+  </li>
+  <li class="<#if methodName=="status" || methodName== "problem_status" || controllerKey=="solution">active</#if>">
     <a href="contest/status/${cid!}">Status</a>
-    </li>
-    <li class="<#if methodName=="statistics">active</#if>">
+  </li>
+  <li class="<#if methodName=="statistics">active</#if>">
     <a href="contest/statistics/${cid!}">Statistics</a>
-    </li>
-    <li class="<#if methodName=="clarify">active</#if>">
+  </li>
+  <li class="<#if methodName=="clarify">active</#if>">
     <a href="contest/clarify/${cid}">Clarify</a>
+  </li>
+  <#if (serverTime > contest.endTime) && contest.report??>
+    <li class="<#if methodName=="report">active</#if>">
+      <a href="contest/report/${cid}">Report</a>
     </li>
-    <#if (serverTime > contest.endTime) && contest.report??>
-        <li class="<#if methodName=="report">active</#if>">
-    <a href="contest/report/${cid}">Report</a>
-    </li>
-    </#if>
-    <!--
-    <a class="btn btn-info pull-right" id="cset_a">Settings</a>
-    <a class="btn btn-info pull-right" id="contest-clone">Clone</a>
-    -->
+  </#if>
+  <!--
+  <a class="btn btn-info pull-right" id="cset_a">Settings</a>
+  <a class="btn btn-info pull-right" id="contest-clone">Clone</a>
+  -->
 </ul>
 <div id="contest_content">
-    <@block name="contest_content"></@block>
+  <@block name="contest_content"></@block>
 </div>
 </@override>
 <@override name="scripts">

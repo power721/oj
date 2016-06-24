@@ -3,52 +3,55 @@
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
   <div class="pull-right">
-    <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span> 
+    <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span>
     <span class="badge badge-info">${contestRank.totalRow} Users</span>
   </div>
 </div>
 
 <table id="contest-rank" class="table table-condensed table-bordered">
   <thead>
-    <tr>
-      <th width="5%">Rank</th>
-      <th width="10%">User</th>
-      <th width="15%">Nick Name</th>
-      <th width="5%">Solved</th>
-      <th width="10%">Penalty</th> 
-      <#list contestProblems as Problem>
+  <tr>
+    <th width="5%">Rank</th>
+    <th width="10%">User</th>
+    <th width="15%">Nick Name</th>
+    <th width="5%">Solved</th>
+    <th width="10%">Penalty</th>
+    <#list contestProblems as Problem>
       <th>
-        <a href="contest/problem/${cid!}-${Problem.id}" data-toggle="tooltip" title="${Problem.title}"><strong>${Problem.id}</strong></a><br> 
+        <a href="contest/problem/${cid!}-${Problem.id}" data-toggle="tooltip"
+           title="${Problem.title}"><strong>${Problem.id}</strong></a><br>
         <a href="contest/status/${cid!}?pid=${Problem.id}&result=0">${Problem.accepted}</a> /
         <a href="contest/status/${cid!}?pid=${Problem.id}">${Problem.submission}</a>
       </th>
-      </#list>
-    </tr>
+    </#list>
+  </tr>
   </thead>
   <tbody>
-    <#if contestRank??> 
-    <#list contestRank.list as User>
-    <tr>
-      <#assign rank=User_index+1+(contestRank.pageNumber-1)*contestRank.pageSize>
-      <td><#if cstatus==2 && rank<4><i class="oj-medal_${rank}"></i></#if>${rank}
-      </td>
-      <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realName??>data-toggle="tooltip" title="${(User.realName)!}"</#if>>${User.name!}</a></td>
-      <td class="user">${User.nick!}</td>
-      <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
-      <td data="${User.penalty!}" class="penalty"><span>${(User.penalty/60)?int!}</span></td> 
-      <#list contestProblems as Problem> 
-        <#assign ac=(User["${Problem.id}_SolvedTime"]/60)?int>
-        <#assign wa=User["${Problem.id}_WrongNum"]>
-        <#assign class="">
-        <#if ac==0 && wa!=0><#assign class="wa wa${(wa/5)?int}"></#if>
-        <#if ac!=0 && wa==0><#assign class="ac"></#if>
-        <#if ac!=0 && wa!=0><#assign class="ac ac1"></#if>
-        <#if ac!=0 && Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
-      <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (ac>0)><span>${ac}</span><#if (wa>0)><br></#if></#if><#if (wa>0)>(-${wa})</#if>
-      </td> 
+    <#if contestRank??>
+      <#list contestRank.list as User>
+      <tr>
+        <#assign rank=User_index+1+(contestRank.pageNumber-1)*contestRank.pageSize>
+        <td><#if cstatus==2 && rank<4><i class="oj-medal_${rank}"></i></#if>${rank}
+        </td>
+        <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realName??>data-toggle="tooltip"
+               title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+        <td class="user">${User.nick!}</td>
+        <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
+        <td data="${User.penalty!}" class="penalty"><span>${(User.penalty/60)?int!}</span></td>
+        <#list contestProblems as Problem>
+          <#assign ac=(User["${Problem.id}_SolvedTime"]/60)?int>
+          <#assign wa=User["${Problem.id}_WrongNum"]>
+          <#assign class="">
+          <#if ac==0 && wa!=0><#assign class="wa wa${(wa/5)?int}"></#if>
+          <#if ac!=0 && wa==0><#assign class="ac"></#if>
+          <#if ac!=0 && wa!=0><#assign class="ac ac1"></#if>
+          <#if ac!=0 && Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
+          <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (ac>0)><span>${ac}</span><#if (wa>0)>
+            <br></#if></#if><#if (wa>0)>(-${wa})</#if>
+          </td>
+        </#list>
+      </tr>
       </#list>
-    </tr>
-    </#list> 
     </#if>
   </tbody>
 </table>
@@ -65,48 +68,48 @@
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    document.onkeydown=nextpage;
-    var prevpage="contest/rank/${cid!}-${contestRank.pageNumber-1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
-    var nextpage="contest/rank/${cid!}-${contestRank.pageNumber+1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
-    function nextpage(event)
-    {
-      event=event?event:(window.event?window.event:null);
-      <#if (contestRank.pageNumber>1)>if(event.keyCode==37)location=prevpage;</#if>
-      <#if contestRank.pageNumber<contestRank.totalPage>if(event.keyCode==39)location=nextpage;</#if>
+  $(document).ready(function () {
+    document.onkeydown = nextpage;
+    var prevpage = "contest/rank/${cid!}-${contestRank.pageNumber-1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
+    var nextpage = "contest/rank/${cid!}-${contestRank.pageNumber+1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
+
+    function nextpage(event) {
+      event = event ? event : (window.event ? window.event : null);
+        <#if (contestRank.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
+        <#if contestRank.pageNumber<contestRank.totalPage>if (event.keyCode == 39)location = nextpage;</#if>
     }
 
     function secondToDate(second) {
       var time = '';
       var hours = parseInt(second / 3600);
-      time += (hours<10 ? '0' : '') + hours + ':';
+      time += (hours < 10 ? '0' : '') + hours + ':';
       second %= 3600;
       time += new Date(second * 1000).format("mm:ss")
       return time;
     }
 
-    $('.ac, .penalty').mouseover(function() {
+    $('.ac, .penalty').mouseover(function () {
       var data = secondToDate($(this).attr('data'));
       $(this).children('span').html(data);
     });
-    $('.ac, .penalty').mouseleave(function() {
+    $('.ac, .penalty').mouseleave(function () {
       var data = parseInt($(this).attr('data') / 60);
       $(this).children('span').html(data);
     });
 
     <#if oj_style != "slate">
-    $("#contest-rank").tablecloth({
-      theme:"stats",
-      condensed:true,
-      striped:true,
-      clean:true
-    });
+      $("#contest-rank").tablecloth({
+        theme: "stats",
+        condensed: true,
+        striped: true,
+        clean: true
+      });
     </#if>
   });
 </script>
 
-<#if adminUser??>
-  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css' />
+  <#if adminUser??>
+  <link type='text/css' rel='stylesheet' href='assets/pnotify/jquery.pnotify.default.css'/>
   <script src='assets/pnotify/jquery.pnotify.min.js' type='text/javascript'></script>
   <script type="text/javascript">
     /*var ws = null;
@@ -152,6 +155,6 @@
 
     startServer();*/
   </script>
-</#if>
+  </#if>
 </@override>
 <@extends name="_layout.html" />

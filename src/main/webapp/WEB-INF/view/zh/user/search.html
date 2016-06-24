@@ -17,39 +17,41 @@
   </div>
   <ul>
     <li class="<#if userList.pageNumber==1>disabled</#if>">
-      <a href="user/search/1<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">&lt;&lt;</a>
+      <a href="user/search/1<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">
+        &lt;&lt;</a>
     </li>
     <#if userList.pageNumber&gt;1>
-    <li>
-      <a href="user/search/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">Prev</a>
-    </li></#if> <#if userList??> 
+      <li>
+        <a href="user/search/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">Prev</a>
+      </li></#if> <#if userList??>
     <#assign start=userList.pageNumber-3>
     <#assign end=userList.pageNumber+3>
     <#if start<1>
-    <#assign end=end-start+1>
-    <#assign start=1>
+      <#assign end=end-start+1>
+      <#assign start=1>
     </#if>
     <#if end&gt;userList.totalPage >
-    <#assign start=start-(end-userList.totalPage)-1>
+      <#assign start=start-(end-userList.totalPage)-1>
       <#if start<1><#assign start=1></#if>
-    <#assign end=userList.totalPage>
+      <#assign end=userList.totalPage>
     </#if>
     <#if end<start>
-    <#assign end=start>
-    </#if> 
-    <#list start..end as x>
-    <li class="<#if x==userList.pageNumber>active</#if>">
-      <a href="user/search/${x}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">${x}</a>
-    </li>
-    </#list>
+      <#assign end=start>
     </#if>
+    <#list start..end as x>
+      <li class="<#if x==userList.pageNumber>active</#if>">
+        <a href="user/search/${x}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">${x}</a>
+      </li>
+    </#list>
+  </#if>
     <#if userList.pageNumber<userList.totalPage>
-    <li>
-      <a href="user/search/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">Next</a>
-    </li>
+      <li>
+        <a href="user/search/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">Next</a>
+      </li>
     </#if>
     <li class="<#if userList.pageNumber&gt;=userList.totalPage>disabled</#if>">
-      <a href="user/search/${userList.totalPage}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">&gt;&gt;</a>
+      <a href="user/search/${userList.totalPage}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if><#if query??>${query}</#if>">
+        &gt;&gt;</a>
     </li>
   </ul>
   <div class="pull-right">
@@ -60,14 +62,14 @@
 <div class="row">
   <table id="user-list" class="table table-striped table-condensed">
     <thead>
-      <tr>
-        <th>No.</th>
-        <th>User</th>
-        <th>Nick Name</th>
-        <th>School</th>
-        <th>Solved</th>
-        <th>Submit</th>
-      </tr>
+    <tr>
+      <th>No.</th>
+      <th>User</th>
+      <th>Nick Name</th>
+      <th>School</th>
+      <th>Solved</th>
+      <th>Submit</th>
+    </tr>
     </thead>
     <tbody>
       <#if userList??>
@@ -92,14 +94,14 @@
 <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 
 <script type="text/javascript" charset="utf-8">
-  $(document).ready(function() {
+  $(document).ready(function () {
 
     $("#user-list").tablecloth({
-      theme : "stats",
-      condensed : true,
-      sortable : true,
-      striped : true,
-      clean : true
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
     });
   });
 </script>

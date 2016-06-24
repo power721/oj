@@ -5,12 +5,12 @@
   <div class="span5 offset3">
     <form class="form-horizontal" action="user/signin" method="post">
       <#if !user??>
-      <div class="control-group">
-        <div class="controls">
+        <div class="control-group">
+          <div class="controls">
           <span class="help-block">Don't have an account? <a href="signup">Sign up here</a>
           </span>
+          </div>
         </div>
-      </div>
       </#if>
       <div class="control-group
         <#if nameMsg??>error</#if>">
@@ -18,7 +18,8 @@
         <div class="controls">
           <div class="input-prepend">
             <span class="add-on"><i class="icon-user"></i></span>
-            <input type="text" id="inputAccount" name="name" value="${(user.name)!}" placeholder="User name" required <#if !(user.name)??>autofocus</#if>
+                  <input type="text" id="inputAccount" name="name" value="${(user.name)!}" placeholder="User name"
+                         required <#if !(user.name)??>autofocus</#if>
           </div>
           <p class="text-error">${nameMsg!}</p>
         </div>
@@ -28,21 +29,23 @@
         <div class="controls">
           <div class="input-prepend">
             <span class="add-on"><i class="icon-lock"></i> </span>
-            <input type="password" id="inputPassword" name="password" placeholder="Password" required <#if (user.name)??>autofocus</#if>>
+            <input type="password" id="inputPassword" name="password" placeholder="Password" required
+                   <#if (user.name)??>autofocus</#if>>
           </div>
         </div>
       </div>
       <#if !user??>
-      <div class="control-group">
-        <div class="controls">
-          <span class="help-block"><a href="user/forget">Forgot Password</a> </span>
+        <div class="control-group">
+          <div class="controls">
+            <span class="help-block"><a href="user/forget">Forgot Password</a> </span>
+          </div>
         </div>
-      </div>
       </#if>
       <div class="control-group">
         <div class="controls">
           <input type="submit" class="btn btn-success" value="Login">
-          <label class="checkbox inline"> <input type="checkbox" name="rememberMe" value="1" checked="checked"> Remember me
+          <label class="checkbox inline"> <input type="checkbox" name="rememberMe" value="1" checked="checked"> Remember
+            me
           </label>
         </div>
       </div>
