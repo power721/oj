@@ -4,7 +4,6 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.upload.UploadFile;
-import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;

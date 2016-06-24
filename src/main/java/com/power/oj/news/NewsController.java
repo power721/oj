@@ -16,7 +16,7 @@ public class NewsController extends OjController {
 
     public void index() {
         /*int pageNumber = 1;
-		int pageSize = OjConfig.noticePageSize;
+        int pageSize = OjConfig.noticePageSize;
 		setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
 		setAttr("problemsNumber", problemService.getProblemsNumber());
 		setTitle(getText("page.index.title"));
