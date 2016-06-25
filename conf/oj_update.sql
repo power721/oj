@@ -328,6 +328,7 @@ INSERT INTO `role` VALUES (2,'admin','administrator',1);
 INSERT INTO `role` VALUES (3,'member','team member',1);
 INSERT INTO `role` VALUES (10,'user','user',1);
 
+UPDATE `user_role` SET rid=10 WHERE rid=3;
 DELETE FROM `role_permission`;
 INSERT INTO `role_permission` VALUES (1,1,1);
 INSERT INTO `role_permission` VALUES (2,2,2);
