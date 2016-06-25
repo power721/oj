@@ -25,4 +25,5 @@ echo >> conf/oj.sql
 
 mysqldump -u root --password=${PASSWORD} --no-create-info --extended-insert=FALSE --single-transaction oj "${TABLES[@]}" >> conf/oj.sql
 sed -i "s/'emailUser','[^']*'/'emailUser',''/g;s/'emailPass','[^']*'/'emailPass',''/g" conf/oj.sql
-mysqldump -u root --password=${PASSWORD} oj | sed -e "s/\\\'/''/g" > oj-data.sql
+
+#mysqldump -u root --password=${PASSWORD} oj | sed -e "s/\\\'/''/g" > oj-data.sql
