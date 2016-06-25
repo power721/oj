@@ -322,7 +322,16 @@ ALTER TABLE team CHANGE `stuId1` `stuId1` varchar(16) NOT NULL,
 
 #2016-6-25
 INSERT INTO `permission` VALUES (174,'user',1,'user:sp:nick','特殊昵称',45,1);
-INSERT INTO `role` VALUES (4,'member','team member',1);
-INSERT INTO `role_permission` VALUES (4,4,77);
-INSERT INTO `role_permission` VALUES (5,4,174);
-INSERT INTO `role_permission` VALUES (6,2,31);
+DELETE FROM `role`;
+INSERT INTO `role` VALUES (1,'root','root',1);
+INSERT INTO `role` VALUES (2,'admin','administrator',1);
+INSERT INTO `role` VALUES (3,'member','team member',1);
+INSERT INTO `role` VALUES (10,'user','user',1);
+
+DELETE FROM `role_permission`;
+INSERT INTO `role_permission` VALUES (1,1,1);
+INSERT INTO `role_permission` VALUES (2,2,2);
+INSERT INTO `role_permission` VALUES (3,2,31);
+INSERT INTO `role_permission` VALUES (4,3,77);
+INSERT INTO `role_permission` VALUES (5,3,174);
+INSERT INTO `role_permission` VALUES (6,10,77);
