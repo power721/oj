@@ -886,7 +886,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-25 14:18:58
+-- Dump completed on 2016-06-25 15:38:50
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -1219,6 +1219,7 @@ INSERT INTO `permission` VALUES (170,'admin',1,'announcement:edit:time','时间'
 INSERT INTO `permission` VALUES (171,'admin',1,'announcement:delete','删除',168,1);
 INSERT INTO `permission` VALUES (172,'admin',1,'announcement:forbid','禁用',162,1);
 INSERT INTO `permission` VALUES (173,'admin',1,'announcement:resume','启用',162,1);
+INSERT INTO `permission` VALUES (174,'user',1,'user:sp:nick','特殊昵称',45,1);
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1245,6 +1246,7 @@ LOCK TABLES `role` WRITE;
 INSERT INTO `role` VALUES (1,'root','root',1);
 INSERT INTO `role` VALUES (2,'admin','administrator',1);
 INSERT INTO `role` VALUES (3,'user','normal user',1);
+INSERT INTO `role` VALUES (4,'member','team member',1);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1257,6 +1259,8 @@ LOCK TABLES `role_permission` WRITE;
 INSERT INTO `role_permission` VALUES (1,1,1);
 INSERT INTO `role_permission` VALUES (2,2,2);
 INSERT INTO `role_permission` VALUES (3,3,77);
+INSERT INTO `role_permission` VALUES (4,4,77);
+INSERT INTO `role_permission` VALUES (5,4,174);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1309,4 +1313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-25 14:18:58
+-- Dump completed on 2016-06-25 15:38:50
