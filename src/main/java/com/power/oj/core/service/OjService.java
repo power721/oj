@@ -66,7 +66,7 @@ public final class OjService {
 
         sendVerifyEmail(name, email, paras);
 
-        log.info("Account recovery email send to user " + name);
+        log.info("Account recovery email send to " + email + " for user " + name);
         return true;
     }
 
