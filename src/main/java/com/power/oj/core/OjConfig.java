@@ -56,7 +56,7 @@ public class OjConfig {
     private static final Logger LOGGER = Logger.getLogger(OjConfig.class);
 
     static {
-        bIsLinux = SystemUtil.getOsName().indexOf("Linux") != -1;
+        bIsLinux = SystemUtil.getOsName().contains("Linux");
     }
     // TODO use enChahe
 
