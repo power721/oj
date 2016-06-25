@@ -19,11 +19,4 @@ public class AdminController extends OjController {
         setAttrs(adminService.getOjInfo());
     }
 
-    public void reload() {
-        String type = getPara(0, "all");
-        adminService.reloadConfig(type);
-
-        redirect("/admin");
-    }
-
 }
