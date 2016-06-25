@@ -1,5 +1,6 @@
 *.class
 *.java~
+oj-data.sql
 
 # Package Files #
 *.war
