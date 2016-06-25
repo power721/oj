@@ -319,3 +319,9 @@ INSERT INTO `role_permission` VALUES ('3', '3', '77');
 ALTER TABLE team CHANGE `stuId1` `stuId1` varchar(16) NOT NULL,
                  CHANGE `stuId2` `stuId2` varchar(16) NULL DEFAULT '',
                  CHANGE `stuId3` `stuId3` varchar(16) NULL DEFAULT '';
+
+#2016-6-25
+INSERT INTO `permission` VALUES (174,'user',1,'user:sp:nick','特殊昵称',45,1);
+INSERT INTO `role` VALUES (4,'member','team member',1);
+INSERT INTO `role_permission` VALUES (4,4,77);
+INSERT INTO `role_permission` VALUES (5,4,174);
