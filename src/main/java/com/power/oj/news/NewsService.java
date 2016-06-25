@@ -1,6 +1,8 @@
 package com.power.oj.news;
 
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.ehcache.CacheKit;
+import com.power.oj.core.OjConfig;
 
 public class NewsService {
     private static final NewsModel dao = NewsModel.dao;
@@ -21,8 +23,17 @@ public class NewsService {
     }
 
     public NewsModel getNews(Integer id) {
-        return dao
+        NewsModel newsModel = dao
             .findFirst("SELECT * ,FROM_UNIXTIME(time, '%Y-%m-%d %H:%i:%s') AS publishTime FROM news WHERE id = ?", id);
+        newsModel.setView(newsModel.getView() + 1);
+
+        if (OjConfig.isDevMode()) {
+            newsModel.update();
+        } else {
+            updateCache(newsModel);
+        }
+
+        return newsModel;
     }
 
     public boolean saveNews(NewsModel newsModel) {
@@ -52,4 +63,9 @@ public class NewsService {
     public boolean deleteNews(Integer id) {
         return dao.deleteById(id);
     }
+
+    private void updateCache(NewsModel newsModel) {
+        CacheKit.put("news", newsModel.getId(), newsModel);
+    }
+
 }
