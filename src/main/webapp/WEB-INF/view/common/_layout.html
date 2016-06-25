@@ -297,7 +297,11 @@
 
   ga('create', '${gaAccount}', '${domaiNname}');
   ga('send', 'pageview');
-
+<#if !name??>
+  if ($.cookie && $.cookie("oj_username") != null) {
+    $('#inputAccount').val($.cookie('oj_username'));
+  }
+</#if>
 </script>
 </#if>
 
