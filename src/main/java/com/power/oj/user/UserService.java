@@ -220,7 +220,11 @@ public final class UserService {
         }
 
         newUser.setUid(getCurrentUid());
-        newUser.setNick(HtmlEncoder.text(userModel.getNick()));
+        if (ShiroKit.hasPermission("user:sp:nick")) {
+            newUser.setNick(userModel.getNick());
+        } else {
+            newUser.setNick(HtmlEncoder.text(userModel.getNick()));
+        }
         newUser.setSchool(HtmlEncoder.text(userModel.getSchool()));
         newUser.setRealName(HtmlEncoder.text(userModel.getRealName()));
         newUser.setBlog(HtmlEncoder.text(userModel.getBlog()));
@@ -228,7 +232,7 @@ public final class UserService {
         newUser.setPhone(HtmlEncoder.text(userModel.getPhone()));
         newUser.setGender(HtmlEncoder.text(userModel.getGender()));
         newUser.setLanguage(userModel.getLanguage());
-        newUser.setQQ(userModel.getQQ());
+        newUser.setQQ(HtmlEncoder.text(userModel.getQQ()));
         newUser.setMtime(OjConfig.timeStamp);
         updateCache(newUser);
 
