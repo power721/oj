@@ -781,6 +781,31 @@ public final class UserService {
         return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
     }
 
+    public Page<UserModel> getUserRoleListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
+        String sSearch) {
+        List<Object> param = new ArrayList<Object>();
+        String sql = "SELECT u.uid,u.name,u.nick,r.name AS role,u.ctime,r.id";
+        StringBuilder sb = new StringBuilder().append("FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid LEFT JOIN role r ON r.id=ur.rid WHERE 1=1");
+
+        if (StringUtil.isNotEmpty(sSearch)) {
+            sb.append(" AND (u.name LIKE ? OR u.realName LIKE ?)");
+            param.add("%" + sSearch + "%");
+            param.add("%" + sSearch + "%");
+        }
+        sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", u.uid");
+
+        return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
+    }
+
+    public void changeUserRole(int uid, int rid) {
+        if (uid == 1000) {
+            return;
+        }
+        Db.update("UPDATE user_role SET rid=? WHERE uid=?", rid, uid);
+//        Db.update("DELETE FROM user_role WHERE uid=? AND rid=?", uid);
+//        Db.update("INSERT INTO user_role (uid,rid) VALUES(?,?)", uid, rid);
+    }
+
     public List<Record> getSubmittedProblems(Integer uid) {
         return Db.find(
             "SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid WHERE s.uid=? AND s.status=1 GROUP BY s.pid",
