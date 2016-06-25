@@ -20,10 +20,19 @@ public final class NoticeService {
     }
 
     public NoticeModel getNotice(Integer id) {
-        return dao.findFirstByCache("notice", id,
+        NoticeModel noticeModel = dao.findFirstByCache("notice", id,
             "SELECT n.*,u.name,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
                 + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM notice n "
                 + "LEFT JOIN user u ON u.uid=n.uid WHERE id=? AND n.status=1", id);
+        noticeModel.setView(noticeModel.getView() + 1);
+
+        if (OjConfig.isDevMode()) {
+            noticeModel.update();
+        } else {
+            updateCache(noticeModel);
+        }
+
+        return noticeModel;
     }
 
     public List<NoticeModel> getNoticeList() {
