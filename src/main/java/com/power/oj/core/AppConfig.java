@@ -164,7 +164,7 @@ public class AppConfig extends JFinalConfig {
      * 配置插件
      */
     public void configPlugin(Plugins me) {
-        DruidPlugin druidPlugin = null;
+        DruidPlugin druidPlugin;
         if (isAceMode()) {
             druidPlugin = new DruidPlugin(getProperty("ace.jdbcUrl"), getProperty("ace.user"),
                 getProperty("ace.password").trim());
