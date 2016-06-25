@@ -803,13 +803,14 @@ public final class UserService {
         if (rid == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
             return;
         }
-        int id = Db.queryInt("SELECT rid FROM user_role WHERE uid=?", uid);
+        Integer id = Db.queryInt("SELECT rid FROM user_role WHERE uid=?", uid);
+        if (id == rid) {
+            return;
+        }
         if (id == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
             return;
         }
         Db.update("UPDATE user_role SET rid=? WHERE uid=?", rid, uid);
-//        Db.update("DELETE FROM user_role WHERE uid=? AND rid=?", uid);
-//        Db.update("INSERT INTO user_role (uid,rid) VALUES(?,?)", uid, rid);
     }
 
     public List<Record> getSubmittedProblems(Integer uid) {
