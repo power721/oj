@@ -19,7 +19,8 @@
           <tr>
             <th width="5%">Id</th>
             <th width="15%">User</th>
-            <th width="30%">Nick Name</th>
+            <th width="15%">Nick Name</th>
+            <th width="15%">Real Name</th>
             <th width="5%">Solved</th>
             <th width="5%">Submit</th>
             <th width="15%">Register Time</th>
@@ -54,6 +55,12 @@
         "mData": "nick",
         "mRender": function (data, type, full) {
           return '<a href="user/profile/' + full.name + '" target="_blank">' + (data || 'ACMer') + '</a>';
+        }
+      },
+      {
+        "mData": "realName",
+        "mRender": function (data, type, full) {
+          return (data || '');
         }
       },
       {

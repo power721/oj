@@ -29,57 +29,57 @@ CREATE TABLE `board` (
   `solved` int(5) NOT NULL DEFAULT '0',
   `penalty` int(11) NOT NULL DEFAULT '0',
   `A_SolvedTime` int(11) DEFAULT '0',
-  `A_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `A_WrongNum` tinyint(5) DEFAULT '0',
   `B_SolvedTime` int(11) DEFAULT '0',
-  `B_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `B_WrongNum` tinyint(5) DEFAULT '0',
   `C_SolvedTime` int(11) DEFAULT '0',
-  `C_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `C_WrongNum` tinyint(5) DEFAULT '0',
   `D_SolvedTime` int(11) DEFAULT '0',
-  `D_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `D_WrongNum` tinyint(5) DEFAULT '0',
   `E_SolvedTime` int(11) DEFAULT '0',
-  `E_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `E_WrongNum` tinyint(5) DEFAULT '0',
   `F_SolvedTime` int(11) DEFAULT '0',
-  `F_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `F_WrongNum` tinyint(5) DEFAULT '0',
   `G_SolvedTime` int(11) DEFAULT '0',
-  `G_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `G_WrongNum` tinyint(5) DEFAULT '0',
   `H_SolvedTime` int(11) DEFAULT '0',
-  `H_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `H_WrongNum` tinyint(5) DEFAULT '0',
   `I_SolvedTime` int(11) DEFAULT '0',
-  `I_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `I_WrongNum` tinyint(5) DEFAULT '0',
   `J_SolvedTime` int(11) DEFAULT '0',
-  `J_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `J_WrongNum` tinyint(5) DEFAULT '0',
   `K_SolvedTime` int(11) DEFAULT '0',
-  `K_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `K_WrongNum` tinyint(5) DEFAULT '0',
   `L_SolvedTime` int(11) DEFAULT '0',
-  `L_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `L_WrongNum` tinyint(5) DEFAULT '0',
   `M_SolvedTime` int(11) DEFAULT '0',
-  `M_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `M_WrongNum` tinyint(5) DEFAULT '0',
   `N_SolvedTime` int(11) DEFAULT '0',
-  `N_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `N_WrongNum` tinyint(5) DEFAULT '0',
   `O_SolvedTime` int(11) DEFAULT '0',
-  `O_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `O_WrongNum` tinyint(5) DEFAULT '0',
   `P_SolvedTime` int(11) DEFAULT '0',
-  `P_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `P_WrongNum` tinyint(5) DEFAULT '0',
   `Q_SolvedTime` int(11) DEFAULT '0',
-  `Q_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `Q_WrongNum` tinyint(5) DEFAULT '0',
   `R_SolvedTime` int(11) DEFAULT '0',
-  `R_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `R_WrongNum` tinyint(5) DEFAULT '0',
   `S_SolvedTime` int(11) DEFAULT '0',
-  `S_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `S_WrongNum` tinyint(5) DEFAULT '0',
   `T_SolvedTime` int(11) DEFAULT '0',
-  `T_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `T_WrongNum` tinyint(5) DEFAULT '0',
   `U_SolvedTime` int(11) DEFAULT '0',
-  `U_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `U_WrongNum` tinyint(5) DEFAULT '0',
   `V_SolvedTime` int(11) DEFAULT '0',
-  `V_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `V_WrongNum` tinyint(5) DEFAULT '0',
   `W_SolvedTime` int(11) DEFAULT '0',
-  `W_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `W_WrongNum` tinyint(5) DEFAULT '0',
   `X_SolvedTime` int(11) DEFAULT '0',
-  `X_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `X_WrongNum` tinyint(5) DEFAULT '0',
   `Y_SolvedTime` int(11) DEFAULT '0',
-  `Y_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `Y_WrongNum` tinyint(5) DEFAULT '0',
   `Z_SolvedTime` int(11) DEFAULT '0',
-  `Z_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `Z_WrongNum` tinyint(5) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -178,10 +178,10 @@ DROP TABLE IF EXISTS `contest_problem`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contest_problem` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
-  `cid` int(9) NOT NULL,
-  `pid` int(9) NOT NULL,
+  `cid` int(9) NOT NULL DEFAULT '0',
+  `pid` int(9) NOT NULL DEFAULT '0',
   `title` char(255) NOT NULL,
-  `num` tinyint(5) NOT NULL DEFAULT '0',
+  `num` int(5) NOT NULL DEFAULT '0',
   `accepted` int(5) NOT NULL DEFAULT '0',
   `submission` int(5) NOT NULL DEFAULT '0',
   `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
@@ -203,9 +203,9 @@ CREATE TABLE `contest_solution` (
   `pid` int(9) NOT NULL,
   `cid` int(9) NOT NULL DEFAULT '0',
   `num` int(3) DEFAULT NULL,
-  `result` int(5) NOT NULL,
   `time` int(9) DEFAULT NULL,
   `memory` int(9) DEFAULT NULL,
+  `result` int(5) NOT NULL,
   `language` int(3) NOT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
@@ -249,57 +249,57 @@ CREATE TABLE `freeze_board` (
   `solved` int(5) NOT NULL DEFAULT '0',
   `penalty` int(11) NOT NULL DEFAULT '0',
   `A_SolvedTime` int(11) DEFAULT '0',
-  `A_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `A_WrongNum` tinyint(5) DEFAULT '0',
   `B_SolvedTime` int(11) DEFAULT '0',
-  `B_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `B_WrongNum` tinyint(5) DEFAULT '0',
   `C_SolvedTime` int(11) DEFAULT '0',
-  `C_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `C_WrongNum` tinyint(5) DEFAULT '0',
   `D_SolvedTime` int(11) DEFAULT '0',
-  `D_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `D_WrongNum` tinyint(5) DEFAULT '0',
   `E_SolvedTime` int(11) DEFAULT '0',
-  `E_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `E_WrongNum` tinyint(5) DEFAULT '0',
   `F_SolvedTime` int(11) DEFAULT '0',
-  `F_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `F_WrongNum` tinyint(5) DEFAULT '0',
   `G_SolvedTime` int(11) DEFAULT '0',
-  `G_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `G_WrongNum` tinyint(5) DEFAULT '0',
   `H_SolvedTime` int(11) DEFAULT '0',
-  `H_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `H_WrongNum` tinyint(5) DEFAULT '0',
   `I_SolvedTime` int(11) DEFAULT '0',
-  `I_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `I_WrongNum` tinyint(5) DEFAULT '0',
   `J_SolvedTime` int(11) DEFAULT '0',
-  `J_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `J_WrongNum` tinyint(5) DEFAULT '0',
   `K_SolvedTime` int(11) DEFAULT '0',
-  `K_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `K_WrongNum` tinyint(5) DEFAULT '0',
   `L_SolvedTime` int(11) DEFAULT '0',
-  `L_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `L_WrongNum` tinyint(5) DEFAULT '0',
   `M_SolvedTime` int(11) DEFAULT '0',
-  `M_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `M_WrongNum` tinyint(5) DEFAULT '0',
   `N_SolvedTime` int(11) DEFAULT '0',
-  `N_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `N_WrongNum` tinyint(5) DEFAULT '0',
   `O_SolvedTime` int(11) DEFAULT '0',
-  `O_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `O_WrongNum` tinyint(5) DEFAULT '0',
   `P_SolvedTime` int(11) DEFAULT '0',
-  `P_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `P_WrongNum` tinyint(5) DEFAULT '0',
   `Q_SolvedTime` int(11) DEFAULT '0',
-  `Q_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `Q_WrongNum` tinyint(5) DEFAULT '0',
   `R_SolvedTime` int(11) DEFAULT '0',
-  `R_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `R_WrongNum` tinyint(5) DEFAULT '0',
   `S_SolvedTime` int(11) DEFAULT '0',
-  `S_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `S_WrongNum` tinyint(5) DEFAULT '0',
   `T_SolvedTime` int(11) DEFAULT '0',
-  `T_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `T_WrongNum` tinyint(5) DEFAULT '0',
   `U_SolvedTime` int(11) DEFAULT '0',
-  `U_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `U_WrongNum` tinyint(5) DEFAULT '0',
   `V_SolvedTime` int(11) DEFAULT '0',
-  `V_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `V_WrongNum` tinyint(5) DEFAULT '0',
   `W_SolvedTime` int(11) DEFAULT '0',
-  `W_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `W_WrongNum` tinyint(5) DEFAULT '0',
   `X_SolvedTime` int(11) DEFAULT '0',
-  `X_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `X_WrongNum` tinyint(5) DEFAULT '0',
   `Y_SolvedTime` int(11) DEFAULT '0',
-  `Y_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `Y_WrongNum` tinyint(5) DEFAULT '0',
   `Z_SolvedTime` int(11) DEFAULT '0',
-  `Z_WrongNum` tinyint(5) unsigned DEFAULT '0',
+  `Z_WrongNum` tinyint(5) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -625,9 +625,11 @@ CREATE TABLE `session` (
   `name` varchar(35) DEFAULT NULL,
   `ipAddress` varchar(45) DEFAULT '',
   `userAgent` varchar(255) DEFAULT '',
-  `ctime` int(11) NOT NULL DEFAULT '0' COMMENT 'Session create time.',
+  `ctime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'Session create time.',
   `lastActivity` int(11) NOT NULL DEFAULT '0',
   `sessionExpires` int(11) NOT NULL,
+  `session_data` blob,
+  `user_data` text,
   `uri` varchar(255) DEFAULT '',
   PRIMARY KEY (`sessionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -646,9 +648,9 @@ CREATE TABLE `solution` (
   `pid` int(9) NOT NULL,
   `cid` int(9) NOT NULL DEFAULT '0',
   `num` int(3) DEFAULT NULL,
-  `result` int(5) NOT NULL,
   `time` int(9) DEFAULT NULL,
   `memory` int(9) DEFAULT NULL,
+  `result` int(5) NOT NULL,
   `language` int(3) NOT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
@@ -734,16 +736,16 @@ CREATE TABLE `topic` (
   `id` int(9) NOT NULL AUTO_INCREMENT,
   `uid` int(9) NOT NULL,
   `pid` int(9) DEFAULT NULL,
-  `threadId` int(9) DEFAULT '0',
-  `parentId` int(9) DEFAULT '0',
-  `orderNum` int(9) DEFAULT '0',
   `title` varchar(255) DEFAULT NULL,
   `content` text,
-  `view` int(9) NOT NULL DEFAULT '0',
   `atime` int(11) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL DEFAULT '0',
   `mtime` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
+  `view` int(9) NOT NULL DEFAULT '0',
+  `threadId` int(9) DEFAULT '0',
+  `parentId` int(9) DEFAULT '0',
+  `orderNum` int(9) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -759,7 +761,7 @@ CREATE TABLE `user` (
   `uid` int(9) NOT NULL AUTO_INCREMENT COMMENT 'Unique user ID, internal use.',
   `tid` int(9) NOT NULL DEFAULT '0' COMMENT 'refere team id.',
   `name` varchar(35) NOT NULL COMMENT 'unique user login name.',
-  `password` varchar(128) NOT NULL COMMENT 'User password (hashed).',
+  `password` varchar(128) NOT NULL COMMENT 'User?s password (hashed).',
   `nick` varchar(255) DEFAULT NULL COMMENT 'nick',
   `realName` varchar(35) DEFAULT NULL,
   `regEmail` varchar(64) NOT NULL,
@@ -781,10 +783,15 @@ CREATE TABLE `user` (
   `gender` enum('female','male','secret') NOT NULL DEFAULT 'secret',
   `comeFrom` varchar(35) DEFAULT NULL,
   `online` int(9) NOT NULL DEFAULT '0',
+  `level` int(5) NOT NULL DEFAULT '1',
+  `credit` int(9) NOT NULL DEFAULT '0',
   `shareCode` tinyint(1) NOT NULL DEFAULT '0',
   `avatar` varchar(255) DEFAULT NULL COMMENT 'user avatar path',
   `signature` varchar(255) DEFAULT NULL,
+  `checkin` int(11) NOT NULL DEFAULT '0',
+  `checkin_times` int(5) NOT NULL DEFAULT '0',
   `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT 'Whether the user is active(1) or blocked(0).',
+  `data` blob,
   `token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -869,7 +876,7 @@ CREATE TABLE `web_login` (
   `openId` varchar(64) NOT NULL,
   `uid` int(9) DEFAULT NULL,
   `nick` varchar(64) DEFAULT NULL,
-  `avatar` varchar(255) DEFAULT NULL,
+  `avatar` varchar(512) DEFAULT NULL,
   `type` varchar(64) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `ctime` int(11) NOT NULL,
@@ -886,7 +893,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-25 15:38:50
+-- Dump completed on 2016-06-25 19:11:44
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -902,6 +909,7 @@ ALTER TABLE user AUTO_INCREMENT=1000;
 
 INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, 'admin@local.host', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '0', '127.0.0.1', null, null, null, 'secret', null, '118', '0', '', null, '1', null);
 INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+INSERT INTO `user_role` VALUES (1,1000,1,1);
 
 -- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
@@ -1187,7 +1195,7 @@ INSERT INTO `permission` VALUES (138,'code',1,'code:edit','编辑',132,1);
 INSERT INTO `permission` VALUES (139,'code',1,'code:edit:self','自己',138,1);
 INSERT INTO `permission` VALUES (140,'code',1,'code:judge','评测',132,1);
 INSERT INTO `permission` VALUES (141,'admin',1,'code:rejudge','重判',132,1);
-INSERT INTO `permission` VALUES (142,'mail',1,'mail','邮件',1,1);
+INSERT INTO `permission` VALUES (142,'mail',1,'mail','邮件',0,1);
 INSERT INTO `permission` VALUES (143,'',1,'mail:view','查看',142,1);
 INSERT INTO `permission` VALUES (144,'mail',1,'mail:view:self','自己',143,1);
 INSERT INTO `permission` VALUES (145,'mail',1,'mail:send','发送',142,1);
@@ -1229,11 +1237,11 @@ UNLOCK TABLES;
 
 LOCK TABLES `program_language` WRITE;
 /*!40000 ALTER TABLE `program_language` DISABLE KEYS */;
-INSERT INTO `program_language` VALUES (1,'GCC','',0,996,1,1,'c','exe',1,'C:\\power\\oj\\JudgeOnline\\bin\\gcc\\bin\\gcc.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%','cpp',0,1);
-INSERT INTO `program_language` VALUES (2,'G++','',0,996,1,1,'cc','exe',1,'C:\\power\\oj\\JudgeOnline\\bin\\gcc\\bin\\g++.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%','cpp',0,1);
-INSERT INTO `program_language` VALUES (3,'Pascal','',0,1000,1,1,'pas','exe',0,'C:\\power\\oj\\JudgeOnline\\bin\\fpc\\fpc.exe -Sg -dONLINE_JUDGE %PATH%%NAME%.%EXT%','pascal',0,1);
-INSERT INTO `program_language` VALUES (4,'Java','',0,8000,3,3,'java','class',2,'C:\\power\\oj\\JudgeOnline\\bin\\Java\\Java.bat %PATH%','java',0,1);
-INSERT INTO `program_language` VALUES (5,'Python','',0,7000,4,3,'py','exe',1,'C:\\power\\oj\\JudgeOnline\\bin\\Python\\Python.bat %PATH% %NAME% %EXT%','python',0,1);
+INSERT INTO `program_language` VALUES (1,'GCC','',0,996,1,1,'c','exe',1,'C:\\JudgeOnline\\bin\\gcc\\bin\\gcc.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%','cpp',0,1);
+INSERT INTO `program_language` VALUES (2,'G++','',0,996,1,1,'cc','exe',1,'C:\\JudgeOnline\\bin\\gcc\\bin\\g++.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%','cpp',0,1);
+INSERT INTO `program_language` VALUES (3,'Pascal','',0,1000,1,1,'pas','exe',0,'C:\\JudgeOnline\\bin\\fpc\\fpc.exe -Sg -dONLINE_JUDGE %PATH%%NAME%.%EXT%','pascal',0,1);
+INSERT INTO `program_language` VALUES (4,'Java','',0,8000,3,3,'java','class',2,'C:\\JudgeOnline\\bin\\Java\\Java.bat %PATH%','java',0,1);
+INSERT INTO `program_language` VALUES (5,'Python','',0,7000,4,3,'py','exe',1,'C:\\JudgeOnline\\bin\\Python\\Python.bat %PATH% %NAME% %EXT%','python',0,1);
 /*!40000 ALTER TABLE `program_language` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1245,7 +1253,7 @@ LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 INSERT INTO `role` VALUES (1,'root','root',1);
 INSERT INTO `role` VALUES (2,'admin','administrator',1);
-INSERT INTO `role` VALUES (3,'user','normal user',1);
+INSERT INTO `role` VALUES (3,'user','user',1);
 INSERT INTO `role` VALUES (4,'member','team member',1);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1261,6 +1269,7 @@ INSERT INTO `role_permission` VALUES (2,2,2);
 INSERT INTO `role_permission` VALUES (3,3,77);
 INSERT INTO `role_permission` VALUES (4,4,77);
 INSERT INTO `role_permission` VALUES (5,4,174);
+INSERT INTO `role_permission` VALUES (6,2,31);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1313,4 +1322,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-25 15:38:50
+-- Dump completed on 2016-06-25 19:11:44

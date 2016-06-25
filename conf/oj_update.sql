@@ -325,3 +325,4 @@ INSERT INTO `permission` VALUES (174,'user',1,'user:sp:nick','特殊昵称',45,1
 INSERT INTO `role` VALUES (4,'member','team member',1);
 INSERT INTO `role_permission` VALUES (4,4,77);
 INSERT INTO `role_permission` VALUES (5,4,174);
+INSERT INTO `role_permission` VALUES (6,2,31);
