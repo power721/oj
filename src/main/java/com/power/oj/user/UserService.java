@@ -41,6 +41,8 @@ public final class UserService {
     private static final UserModel dao = UserModel.dao;
     private static final UserService me = new UserService();
     private static final OjService ojService = OjService.me();
+    public static final int ROOT_ROLE_ID = 1;
+    public static final String ROOT_ROLE_NAME = "root";
 
     private UserService() {
     }
@@ -798,7 +800,11 @@ public final class UserService {
     }
 
     public void changeUserRole(int uid, int rid) {
-        if (uid == 1000) {
+        if (rid == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
+            return;
+        }
+        int id = Db.queryInt("SELECT rid FROM user_role WHERE uid=?", uid);
+        if (id == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
             return;
         }
         Db.update("UPDATE user_role SET rid=? WHERE uid=?", rid, uid);

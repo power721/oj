@@ -5,6 +5,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
+import com.power.oj.shiro.ShiroKit;
+import com.power.oj.user.UserService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +55,11 @@ public class AdminApiController extends OjController {
         List<Record> records = ojService.getRoleList();
         Map<Integer, String> rolse = new HashMap<>();
         for (Record record : records) {
-            rolse.put(record.getInt("id"), record.getStr("name"));
+            Integer id = record.getInt("id");
+            if (id == UserService.ROOT_ROLE_ID && !ShiroKit.hasRole(UserService.ROOT_ROLE_NAME)) {
+                continue;
+            }
+            rolse.put(id, record.getStr("name"));
         }
         renderJson(rolse);
     }
