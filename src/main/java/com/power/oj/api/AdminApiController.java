@@ -34,7 +34,7 @@ public class AdminApiController extends OjController {
         String sSortName = getPara("mDataProp_" + iSortCol);
         String sSearch = getPara("sSearch");
 
-        renderJson(userService.getUserRankListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+        renderJson(userService.getUserListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
     }
 
     public void userRoleList() {
