@@ -765,7 +765,7 @@ public final class UserService {
         return dao.getUserRankList(pageNumber, pageSize);
     }
 
-    public Page<UserModel> getUserRankListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
+    public Page<UserModel> getUserListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
         String sSearch) {
         List<Object> param = new ArrayList<Object>();
         String sql = "SELECT *";
