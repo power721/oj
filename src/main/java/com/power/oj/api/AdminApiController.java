@@ -107,4 +107,10 @@ public class AdminApiController extends OjController {
         }
     }
 
+    public void reload() {
+        String type = getPara(0, "all");
+        AdminService.me().reloadConfig(type);
+        renderNull();
+    }
+
 }

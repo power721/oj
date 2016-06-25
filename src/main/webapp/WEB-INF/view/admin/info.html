@@ -14,7 +14,7 @@
     <div class="well">
       <div id="container">
         <span>
-          <button id="update-cache" class="btn btn-success" href="admin/reload">Update Cache</button>
+          <button id="reload" class="btn btn-info">Reload</button>
         </span>
         <table id="oj-info" class="table table-hover table-condensed">
           <thead>
@@ -95,6 +95,12 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+    $('#reload').click(function () {
+      $.get('api/admin/reload', function (data) {
+        window.location.reload();
+      });
+    });
+
     var apiUrl = 'api/admin/updateConfig';
     $.fn.editable.defaults.mode = 'inline';
     $.fn.editable.defaults.url = apiUrl;
