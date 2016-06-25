@@ -124,7 +124,7 @@ public final class OjService {
     }
 
     public List<Record> getRoleList() {
-        return Db.find("SELECT * FROM role ORDER BY id");
+        return Db.find("SELECT id,name FROM role ORDER BY id");
     }
 
     public Page<RoleModel> getRoleList(int pageNumber, int pageSize, String sSortName, String sSortDir,

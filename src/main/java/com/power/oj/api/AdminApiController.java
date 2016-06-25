@@ -1,9 +1,14 @@
 package com.power.oj.api;
 
 import com.jfinal.aop.Before;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Before(AdminInterceptor.class)
 public class AdminApiController extends OjController {
@@ -41,7 +46,22 @@ public class AdminApiController extends OjController {
         String sSortName = getPara("mDataProp_" + iSortCol);
         String sSearch = getPara("sSearch");
 
-        renderJson(ojService.getRoleList(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+        renderJson(userService.getUserRoleListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+    }
+
+    public void roleList() {
+        List<Record> records = ojService.getRoleList();
+        Map<Integer, String> rolse = new HashMap<>();
+        for (Record record : records) {
+            rolse.put(record.getInt("id"), record.getStr("name"));
+        }
+        renderJson(rolse);
+    }
+
+    public void changeUserRole() {
+        int uid = getParaToInt("pk");
+        int rid = getParaToInt("value");
+        userService.changeUserRole(uid, rid);
     }
 
     public void contestList() {
