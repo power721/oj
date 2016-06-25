@@ -51,17 +51,19 @@ public final class AdminService {
 
         systemInfo.put("JREName", sysProperty.getProperty("java.runtime.name"));
         systemInfo.put("JREVersion", sysProperty.getProperty("java.runtime.version"));
-        systemInfo.put("javaHome", sysProperty.getProperty("java.home"));
-        systemInfo.put("javaVendor", sysProperty.getProperty("java.vendor"));
+        systemInfo.put("javaHome", SystemUtil.getJavaHome());
+        systemInfo.put("javaVendor", SystemUtil.getJavaVendor());
         systemInfo.put("javaVersion", SystemUtil.getJavaVersion());
         systemInfo.put("OSName", SystemUtil.getOsName());
         systemInfo.put("OSVersion", SystemUtil.getOsVersion());
         systemInfo.put("OSArch", sysProperty.getProperty("os.arch"));
         systemInfo.put("timezone", sysProperty.getProperty("user.timezone"));
-        systemInfo.put("fileSeparator", sysProperty.getProperty("file.separator"));
+        systemInfo.put("fileEncoding", SystemUtil.getFileEncoding());
         systemInfo.put("tempDir", SystemUtil.getTempDir());
         systemInfo.put("workDir", SystemUtil.getUserDir());
         systemInfo.put("userHome", SystemUtil.getUserHome());
+        systemInfo.put("userName", SystemUtil.getUserName());
+        systemInfo.put("classpath", SystemUtil.getClassPath());
 
         systemInfo.put("mysql", Db.queryStr("select version() as v"));
 
