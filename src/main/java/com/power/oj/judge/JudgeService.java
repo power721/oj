@@ -44,12 +44,16 @@ public final class JudgeService {
         return me;
     }
 
-    public RejudgeTask getRejudgeTask(RejudgeType type, Integer id) {
-        return rejudgeTasks.get(type.getKey(id));
+    public RejudgeTask getRejudgeTask(String key) {
+        return rejudgeTasks.get(key);
     }
 
     public boolean isRejudging(RejudgeType type, Integer id) {
         return rejudgeTasks.containsKey(type.getKey(id));
+    }
+
+    public boolean isRejudging(RejudgeType type, Integer cid, Integer pid) {
+        return rejudgeTasks.containsKey(type.getKey(cid, pid));
     }
 
     public void judge(Solution solution) {
@@ -203,19 +207,39 @@ public final class JudgeService {
         rejudgeExecutor.execute(rejudgeThread);
     }
 
-    public void rejudgeContestProblem(final Integer cid, final Integer pid) {
+    public boolean rejudgeContestProblem(final Integer cid, final Integer pid) {
+        String key = RejudgeType.CONTEST_PROBLEM.getKey(cid, pid);
+        if (rejudgeTasks.containsKey(key)) {
+            log.warn("Do not rejudge contest problem " + cid + "-" + pid + " since rejudge this problem is ongoing.");
+            return false;
+        }
+
+        final long startTime = System.currentTimeMillis();
+        final RejudgeTask task = new RejudgeTask(cid, pid, RejudgeType.CONTEST);
+        rejudgeTasks.put(key, task);
         Thread rejudgeThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                List<ContestSolutionModel> solutions = contestService.getContestProblemSolutions(cid, pid);
+                try {
+                    List<ContestSolutionModel> solutions = contestService.getContestProblemSolutions(cid, pid);
+                    task.setTotal(solutions.size());
 
-                for (ContestSolutionModel solution : solutions) {
-                    rejudgeContestSolution(solution);
+                    for (ContestSolutionModel solution : solutions) {
+                        rejudgeContestSolution(solution);
+                        task.increaseCount();
+                    }
+                } catch (Exception e) {
+                    log.error("rejudge contest problem " + cid + "-" + pid + " failed!", e);
+                } finally {
+                    rejudgeTasks.remove(task.getKey());
                 }
+                log.info("Rejudge contest problem " + cid + "-" + pid + " finished, total judge: "
+                    + task.getTotal() + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
             }
         });
 
         rejudgeExecutor.execute(rejudgeThread);
+        return true;
     }
 
     public int getDataFiles(Integer pid, List<String> inFiles, List<String> outFiles) throws IOException {

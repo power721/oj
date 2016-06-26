@@ -9,4 +9,8 @@ public enum RejudgeType {
     public String getKey(Integer id) {
         return name() + id;
     }
+
+    public String getKey(Integer cid, Integer pid) {
+        return name() + cid + "-" + pid;
+    }
 }

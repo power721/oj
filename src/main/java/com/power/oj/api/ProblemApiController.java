@@ -100,7 +100,7 @@ public class ProblemApiController extends OjController {
     @Clear
     public void rejudgeStatus() {
         Integer pid = getParaToInt(0);
-        RejudgeTask rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.PROBLEM, pid);
+        RejudgeTask rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.PROBLEM.getKey(pid));
         if (rejudgeTask == null) {
             renderJson("{\"count\": 1, \"total\": 0}");
         } else {

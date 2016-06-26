@@ -21,6 +21,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.judge.JudgeService;
+import com.power.oj.judge.RejudgeType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
@@ -887,6 +888,9 @@ public class ContestService {
         }
 
         if (!isFreeze) {
+            if (freezeBoard == null) {
+                freezeBoard = new Record();
+            }
             freezeBoard.setColumns(board.getColumns());
             Db.update("freeze_board", freezeBoard);
         }
@@ -1086,6 +1090,9 @@ public class ContestService {
         CacheKit.put("contest", contestModel.getCid(), contestModel);
     }
 
+    public boolean isRejudging(Integer cid, Integer pid) {
+        return JudgeService.me().isRejudging(RejudgeType.CONTEST_PROBLEM, cid, pid);
+    }
 
     class UserInfo {
         private Integer uid;
