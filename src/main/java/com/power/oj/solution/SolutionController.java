@@ -116,9 +116,15 @@ public class SolutionController extends OjController {
     @RequiresPermissions("code:rejudge")
     public void rejudge() {
         Integer sid = getParaToInt(0);
-        judgeService.rejudgeSolution(sid);
+        FlashMessage msg;
 
-        redirect("/code/" + sid, new FlashMessage("Server got your rejudge request."));
+        if(judgeService.rejudgeSolution(sid)) {
+            msg = new FlashMessage("Server accept your rejudge request.");
+        } else {
+            msg = new FlashMessage("Server reject your request since rejudge this solution or problem is ongoing.", MessageType.ERROR, "Rejudge Error");
+        }
+
+        redirect("/code/" + sid, msg);
     }
 
     public void add() {

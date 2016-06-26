@@ -340,7 +340,7 @@ public class ContestController extends OjController {
         if(judgeService.rejudgeContestProblem(cid, problemModel.getPid(), num)) {
             msg = new FlashMessage("Server accept your request.");
         } else {
-            msg = new FlashMessage("Server reject your request since rejudge this contest problem is ongoing.", MessageType.ERROR, "Rejudge Error");
+            msg = new FlashMessage("Server reject your request since rejudge this contest or problem is ongoing.", MessageType.ERROR, "Rejudge Error");
         }
 
         redirect("/contest/problem/" + cid + "-" + id, msg);

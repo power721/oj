@@ -102,12 +102,32 @@ public final class JudgeService {
         rejudge(solution, false);
     }
 
-    public void rejudgeSolution(Integer sid) {
+    public boolean rejudgeSolution(Integer sid) {
+        String key = RejudgeType.SOLUTION.getKey(sid);
+        if (rejudgeTasks.containsKey(key)) {
+            log.warn("Do not rejudge solution " + sid + " since rejudge this solution is ongoing.");
+            return false;
+        }
+
         SolutionModel solution = solutionService.findSolution(sid);
+        if (rejudgeTasks.containsKey(RejudgeType.PROBLEM.getKey(solution.getPid()))) {
+            log.warn("Do not rejudge solution " + sid + " since rejudge problem is ongoing.");
+            return false;
+        }
 
-        problemService.revertAccepted(solution);
+        final RejudgeTask task = new RejudgeTask(sid, RejudgeType.SOLUTION);
+        rejudgeTasks.put(task.getKey(), task);
+        try {
+            problemService.revertAccepted(solution);
 
-        rejudge(solution);
+            rejudge(solution);
+        } catch (Exception e) {
+            log.error("rejudge solution " + sid + " failed!", e);
+        } finally {
+            rejudgeTasks.remove(task.getKey());
+        }
+
+        return true;
     }
 
     public boolean rejudgeProblem(final Integer pid) {
@@ -226,6 +246,11 @@ public final class JudgeService {
         String key = RejudgeType.CONTEST_PROBLEM.getKey(cid, num);
         if (rejudgeTasks.containsKey(key)) {
             log.warn("Do not rejudge contest problem " + cid + "-" + pid + " since rejudge this problem is ongoing.");
+            return false;
+        }
+
+        if (rejudgeTasks.containsKey(RejudgeType.CONTEST.getKey(cid))) {
+            log.warn("Do not rejudge contest problem " + cid + "-" + pid + " since rejudge this contest is ongoing.");
             return false;
         }
 
