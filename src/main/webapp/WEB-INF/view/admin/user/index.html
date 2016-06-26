@@ -18,9 +18,11 @@
           <thead>
           <tr>
             <th width="5%">Id</th>
-            <th width="15%">User</th>
+            <th width="10%">User</th>
             <th width="15%">Nick Name</th>
-            <th width="15%">Real Name</th>
+            <th width="10%">Real Name</th>
+            <th width="10%">Phone</th>
+            <th width="10%">QQ</th>
             <th width="5%">Solved</th>
             <th width="5%">Submit</th>
             <th width="15%">Register Time</th>
@@ -59,6 +61,18 @@
       },
       {
         "mData": "realName",
+        "mRender": function (data, type, full) {
+          return (data || '');
+        }
+      },
+      {
+        "mData": "phone",
+        "mRender": function (data, type, full) {
+          return (data || '');
+        }
+      },
+      {
+        "mData": "qq",
         "mRender": function (data, type, full) {
           return (data || '');
         }
