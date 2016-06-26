@@ -21,12 +21,13 @@
             <th width="10%">User</th>
             <th width="15%">Nick Name</th>
             <th width="10%">Real Name</th>
+            <th width="10%">Email</th>
             <th width="10%">Phone</th>
             <th width="10%">QQ</th>
             <th width="5%">Solved</th>
             <th width="5%">Submit</th>
-            <th width="15%">Register Time</th>
-            <th width="15%">Action</th>
+            <th width="10%">Register Time</th>
+            <th width="10%">Action</th>
           </tr>
           </thead>
           <tbody>
@@ -56,13 +57,19 @@
       {
         "mData": "nick",
         "mRender": function (data, type, full) {
-          return '<a href="user/profile/' + full.name + '" target="_blank">' + (data || '') + '</a>';
+          return '<a href="user/profile/' + full.name + '" target="_blank" title="' + (data || '') + '">' + (data || '') + '</a>';
         }
       },
       {
         "mData": "realName",
         "mRender": function (data, type, full) {
           return (data || '');
+        }
+      },
+      {
+        "mData": "email",
+        "mRender": function (data, type, full) {
+          return (data || full.regEmail || '');
         }
       },
       {

@@ -774,7 +774,9 @@ public final class UserService {
         StringBuilder sb = new StringBuilder().append("FROM user WHERE 1=1");
 
         if (StringUtil.isNotEmpty(sSearch)) {
-            sb.append(" AND (name LIKE ? OR realName LIKE ?)");
+            sb.append(" AND (name LIKE ? OR realName LIKE ? OR uid LIKE ? OR email LIKE ?)");
+            param.add("%" + sSearch + "%");
+            param.add("%" + sSearch + "%");
             param.add("%" + sSearch + "%");
             param.add("%" + sSearch + "%");
         }
@@ -790,11 +792,12 @@ public final class UserService {
         StringBuilder sb = new StringBuilder().append("FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid LEFT JOIN role r ON r.id=ur.rid WHERE 1=1");
 
         if (StringUtil.isNotEmpty(sSearch)) {
-            sb.append(" AND (u.name LIKE ? OR u.realName LIKE ?)");
+            sb.append(" AND (u.name LIKE ? OR u.realName LIKE ? OR u.uid LIKE ?)");
+            param.add("%" + sSearch + "%");
             param.add("%" + sSearch + "%");
             param.add("%" + sSearch + "%");
         }
-        sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", u.uid");
+        sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(",r.id,u.uid");
 
         return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
     }
