@@ -24,7 +24,7 @@ public class AdminApiController extends OjController {
         String sSortName = getPara("mDataProp_" + iSortCol);
         String sSearch = getPara("sSearch");
 
-        renderJson(problemService.getProblemPageDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+        renderJson(problemService.getProblemPageDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch.trim()));
     }
 
     public void userList() {
@@ -36,7 +36,7 @@ public class AdminApiController extends OjController {
         String sSortName = getPara("mDataProp_" + iSortCol);
         String sSearch = getPara("sSearch");
 
-        renderJson(userService.getUserListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+        renderJson(userService.getUserListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch.trim()));
     }
 
     public void userRoleList() {
@@ -48,7 +48,7 @@ public class AdminApiController extends OjController {
         String sSortName = getPara("mDataProp_" + iSortCol);
         String sSearch = getPara("sSearch");
 
-        renderJson(userService.getUserRoleListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+        renderJson(userService.getUserRoleListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch.trim()));
     }
 
     public void roleList() {
@@ -79,7 +79,7 @@ public class AdminApiController extends OjController {
         String sSortName = getPara("mDataProp_" + iSortCol);
         String sSearch = getPara("sSearch");
 
-        renderJson(contestService.getContestListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch));
+        renderJson(contestService.getContestListDataTables(pageNumber, pageSize, sSortName, sSortDir, sSearch.trim()));
     }
 
     public void updateProblem() {
