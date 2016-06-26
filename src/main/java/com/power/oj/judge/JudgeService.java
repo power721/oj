@@ -222,15 +222,15 @@ public final class JudgeService {
         return true;
     }
 
-    public boolean rejudgeContestProblem(final Integer cid, final Integer pid) {
-        String key = RejudgeType.CONTEST_PROBLEM.getKey(cid, pid);
+    public boolean rejudgeContestProblem(final Integer cid, final Integer pid, final Integer num) {
+        String key = RejudgeType.CONTEST_PROBLEM.getKey(cid, num);
         if (rejudgeTasks.containsKey(key)) {
             log.warn("Do not rejudge contest problem " + cid + "-" + pid + " since rejudge this problem is ongoing.");
             return false;
         }
 
         final long startTime = System.currentTimeMillis();
-        final RejudgeTask task = new RejudgeTask(cid, pid, RejudgeType.CONTEST_PROBLEM);
+        final RejudgeTask task = new RejudgeTask(cid, num, RejudgeType.CONTEST_PROBLEM);
         rejudgeTasks.put(key, task);
         Thread rejudgeThread = new Thread(new Runnable() {
             @Override

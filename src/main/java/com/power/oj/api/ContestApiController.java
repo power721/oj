@@ -189,13 +189,13 @@ public class ContestApiController extends OjController {
     @Clear
     public void rejudgeStatus() {
         Integer cid = getParaToInt(0);
-        Integer pid = getParaToInt(1);
+        Integer id = getParaToInt(1);
         RejudgeTask rejudgeTask;
 
-        if (pid == null) {
+        if (id == null) {
             rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.CONTEST.getKey(cid));
         } else {
-            rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
+            rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.CONTEST_PROBLEM.getKey(cid, id));
         }
 
         if (rejudgeTask == null) {
