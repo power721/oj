@@ -115,6 +115,15 @@
 <script type="text/javascript">
   $().ready(function () {
     $("#editUserForm").validate();
+    $('#inputEmail').tooltip({'trigger':'focus', 'title': 'Your email is required for recovering password.', 'placement': 'right'});
+    $('#inputNick').tooltip({'trigger':'focus', 'title': 'Normal user cannot use html markup.', 'placement': 'right'});
+    $('#inputLanguage').tooltip({'trigger':'focus', 'title': 'Your favorite programming language.', 'placement': 'right'});
+    $('#inputQQ').tooltip({'trigger':'focus', 'title': 'You can leave it empty.', 'placement': 'right'});
+    $('#inputBlog').tooltip({'trigger':'focus', 'title': 'e.g.: http://www.blog.com.', 'placement': 'right'});
+    $('#inputOldPass').tooltip({'trigger':'focus', 'title': 'This is required to update your profile.', 'placement': 'right'});
+    $('#inputRealName').tooltip({'trigger':'focus', 'title': 'Only yourself and admin can access this.', 'placement': 'right'});
+    $('#inputNewPass').tooltip({'trigger':'focus', 'title': 'Input your new password only if you want to change.', 'placement': 'right'});
+    $('#inputConfirmPass').tooltip({'trigger':'focus', 'title': 'Repeat your new password.', 'placement': 'right'});
   });
 </script>
 </@override>
