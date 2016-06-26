@@ -69,7 +69,11 @@
       {
         "mData": "email",
         "mRender": function (data, type, full) {
-          return (data || full.regEmail || '');
+          var email = (data || full.regEmail || '');
+          if (email != '') {
+            email = '<a href="mailto:' + email + '">' + email + '</a>';
+          }
+          return email;
         }
       },
       {
