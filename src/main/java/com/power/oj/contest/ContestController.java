@@ -163,6 +163,7 @@ public class ContestController extends OjController {
         setAttr("contestRank", contestService.getContestRank(pageNumber, pageSize, cid));
         setAttr("contestProblems", contestService.getContestProblems(cid, 0));
         setAttr("cstatus", contestService.getContestStatus(cid));
+        setAttr("isLocked", contestService.checkFreezeBoard4Rank(cid));
 
         setTitle(new StringBuilder(2).append(getText("contest.rank.title")).append(cid).toString());
     }
