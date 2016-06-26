@@ -235,11 +235,13 @@ public class AppConfig extends JFinalConfig {
         me.add(new SessionHandler());
         me.add(new BaseUrlHandler());
         me.add(new UrlFilterHandler());
-        me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {
-            public boolean isPermitted(HttpServletRequest request) {
-                return SecurityUtils.getSubject().isPermitted("system");
-            }
-        }));
+        if (OjConfig.isDevMode()) {
+            me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {
+                public boolean isPermitted(HttpServletRequest request) {
+                    return SecurityUtils.getSubject().isPermitted("system");
+                }
+            }));
+        }
 
         log.debug("configHandler finished.");
     }
