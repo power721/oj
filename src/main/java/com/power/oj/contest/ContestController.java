@@ -82,10 +82,11 @@ public class ContestController extends OjController {
         }
 
         setAttr("problem", problemModel);
+        setAttr("id", num);
         setAttr("spj", problemService.checkSpj(problemModel.getPid()));
         setAttr("userResult", contestService.getUserResult(cid, num));
         setAttr("cstatus", contestService.getContestStatus(cid));
-        setAttr("isRejudging", contestService.isRejudging(cid, problemModel.getPid()));
+        setAttr("isRejudging", contestService.isRejudging(cid, num));
         setAttr("contestProblems", contestService.getContestProblems(cid, null));
 
         setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getTitle())
@@ -336,7 +337,7 @@ public class ContestController extends OjController {
 
         FlashMessage msg;
 
-        if(judgeService.rejudgeContestProblem(cid, problemModel.getPid())) {
+        if(judgeService.rejudgeContestProblem(cid, problemModel.getPid(), num)) {
             msg = new FlashMessage("Server accept your request.");
         } else {
             msg = new FlashMessage("Server reject your request since rejudge this contest problem is ongoing.", MessageType.ERROR, "Rejudge Error");
