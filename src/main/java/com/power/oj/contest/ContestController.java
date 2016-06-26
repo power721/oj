@@ -56,6 +56,7 @@ public class ContestController extends OjController {
             status = getText("contest.status.finished");
 
         setAttr("contest", contestModel);
+        setAttr("isRejudging", contestService.isRejudging(cid));
         setAttr("contestProblems", contestService.getContestProblems(cid, uid));
         setAttr("status", status);
 
@@ -302,9 +303,15 @@ public class ContestController extends OjController {
             return;
         }
 
-        judgeService.rejudgeContest(cid);
+        FlashMessage msg;
 
-        redirect("/contest/show/" + cid, new FlashMessage("Server got your rejudge request."));
+        if(judgeService.rejudgeContest(cid)) {
+            msg = new FlashMessage("Server accept your request.");
+        } else {
+            msg = new FlashMessage("Server reject your request since rejudge this contest is ongoing.", MessageType.ERROR, "Rejudge Error");
+        }
+
+        redirect("/contest/show/" + cid, msg);
     }
 
     @RequiresPermissions("contest:rejudge")

@@ -190,7 +190,14 @@ public class ContestApiController extends OjController {
     public void rejudgeStatus() {
         Integer cid = getParaToInt(0);
         Integer pid = getParaToInt(1);
-        RejudgeTask rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
+        RejudgeTask rejudgeTask;
+
+        if (pid == null) {
+            rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.CONTEST.getKey(cid));
+        } else {
+            rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
+        }
+
         if (rejudgeTask == null) {
             renderJson("{\"count\": 1, \"total\": 0}");
         } else {

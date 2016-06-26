@@ -34,7 +34,7 @@ public final class ProblemService {
     }
 
     public boolean isRejudging(Integer pid) {
-        return JudgeService.me().isRejudging(RejudgeType.PROBLEM, pid);
+        return JudgeService.me().isRejudging(RejudgeType.PROBLEM.getKey(pid));
     }
 
     public ProblemModel findProblem(Integer pid) {
