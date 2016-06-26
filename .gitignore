@@ -12,3 +12,4 @@ build/
 .idea/
 .settings/
 target/
+src/main/webapp/WEB-INF/view/common/version.ftl
