@@ -1,6 +1,7 @@
 package com.power.oj.judge;
 
 public class RejudgeTask {
+    private Integer cid;
     private Integer id;
     private RejudgeType type;
     private int total = 1;
@@ -8,6 +9,12 @@ public class RejudgeTask {
 
     public RejudgeTask(Integer id, RejudgeType type) {
         this.id = id;
+        this.type = type;
+    }
+
+    public RejudgeTask(Integer cid, Integer pid, RejudgeType type) {
+        this.cid = cid;
+        this.id = pid;
         this.type = type;
     }
 
@@ -40,7 +47,10 @@ public class RejudgeTask {
     }
 
     public String getKey() {
-        return type.name() + id;
+        if (cid != null) {
+            return type.getKey(cid, id);
+        }
+        return type.getKey(id);
     }
 
 }

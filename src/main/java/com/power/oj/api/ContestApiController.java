@@ -8,6 +8,9 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.judge.JudgeService;
+import com.power.oj.judge.RejudgeTask;
+import com.power.oj.judge.RejudgeType;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -181,6 +184,18 @@ public class ContestApiController extends OjController {
         Integer sid = getParaToInt("sid", 0);
 
         renderJson(solutionService.getContestSolutionResult(cid, sid));
+    }
+
+    @Clear
+    public void rejudgeStatus() {
+        Integer cid = getParaToInt(0);
+        Integer pid = getParaToInt(1);
+        RejudgeTask rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
+        if (rejudgeTask == null) {
+            renderJson("{\"count\": 1, \"total\": 0}");
+        } else {
+            renderJson(rejudgeTask);
+        }
     }
 
 }

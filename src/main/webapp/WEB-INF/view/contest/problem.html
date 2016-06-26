@@ -1,4 +1,11 @@
 <@override name="contest_content">
+<div id="rejudge" class="hide">
+  <span>Rejudge progress</span>
+  <div class="progress progress-striped">
+    <div id="rejudge-progress" class="bar" style="width: 0%;"></div>
+    <span id="rejudge-status"></span>
+  </div>
+</div>
 
 <div class="row">
   <div class="span6 offset4 text-center">
@@ -206,6 +213,32 @@
     jQuery.ajaxSetup({
       cache: true
     });
+
+    <#if isRejudging?? && isRejudging==true>
+      $('#rejudge').removeClass('hide');
+      var refresh = setInterval(function () {
+        refreshResult();
+      }, 2500);
+
+      function refreshResult() {
+        $('#rejudge').each(function () {
+          var $this = $(this);
+          var id = $this.attr('id');
+          $.getJSON('api/contest/rejudgeStatus/' + ${cid!} + '-' + ${problem.pid}, function (data) {
+            var total = data.total;
+            var count = data.count;
+            if (count < total) {
+              $('#rejudge-progress').css('width', (count / total * 100) + '%');
+              $('#rejudge-status').text(count + '/' + total);
+            } else {
+              clearInterval(refresh);
+              $('#rejudge').addClass('hide');
+              $('div.alert').remove();
+            }
+          });
+        });
+      }
+    </#if>
   });
 </script>
 </@override>

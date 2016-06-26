@@ -84,6 +84,7 @@ public class ContestController extends OjController {
         setAttr("spj", problemService.checkSpj(problemModel.getPid()));
         setAttr("userResult", contestService.getUserResult(cid, num));
         setAttr("cstatus", contestService.getContestStatus(cid));
+        setAttr("isRejudging", contestService.isRejudging(cid, problemModel.getPid()));
         setAttr("contestProblems", contestService.getContestProblems(cid, null));
 
         setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getTitle())
@@ -326,9 +327,15 @@ public class ContestController extends OjController {
             return;
         }
 
-        judgeService.rejudgeContestProblem(cid, problemModel.getPid());
+        FlashMessage msg;
 
-        redirect("/contest/problem/" + cid + "-" + id, new FlashMessage("Server got your rejudge request."));
+        if(judgeService.rejudgeContestProblem(cid, problemModel.getPid())) {
+            msg = new FlashMessage("Server accept your request.");
+        } else {
+            msg = new FlashMessage("Server reject your request since rejudge this contest problem is ongoing.", MessageType.ERROR, "Rejudge Error");
+        }
+
+        redirect("/contest/problem/" + cid + "-" + id, msg);
     }
 
     @RequiresPermissions("code:rejudge")
