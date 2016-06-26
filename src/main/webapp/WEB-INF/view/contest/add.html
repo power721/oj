@@ -54,7 +54,7 @@
   </div>
   <div class="control-group">
     <div class="controls">
-      <label class="checkbox"> <input type="checkbox" name="contest.freeze" value="1">Freeze
+      <label class="checkbox freeze"> <input class="freeze" id="inputFreeze" type="checkbox" name="contest.freeze" value="1">Freeze
       </label>
       <button type="submit" class="btn btn-primary">Submit</button>
       <button type="reset" class="btn btn-info">Reset</button>
@@ -69,6 +69,11 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+    $('#inputTitle').tooltip({'trigger':'focus', 'title': '比赛标题。', 'placement': 'right'});
+    $('#inputDescription').tooltip({'trigger':'focus', 'title': '比赛描述。', 'placement': 'right'});
+    $('#inputReport').tooltip({'trigger':'focus', 'title': '解题报告，比赛结束后自动显示。', 'placement': 'right'});
+    $('#inputType').tooltip({'title': '比赛类型，Password：密码访问，Private：私有比赛，结束后所有人可见，Strict Private,私有比赛，结束后仅参加者可见，Test：测试数据专用。', 'placement': 'right'});
+    $('.freeze').tooltip({'title': '勾选后，比赛最后一个小时到结束后半小时冻结比赛排名。', 'placement': 'right'});
     $("#inputType").change(function () {
       var val = $(this).val();
       if (val == 1) {
