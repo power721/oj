@@ -57,7 +57,11 @@
       {
         "mData": "nick",
         "mRender": function (data, type, full) {
-          return '<a href="user/profile/' + full.name + '" target="_blank" title="' + (data || '') + '">' + (data || '') + '</a>';
+          var nick = (data || '');
+          var encodedStr = nick.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+          });
+          return '<a href="user/profile/' + full.name + '" target="_blank" title="' + encodedStr + '">' + nick + '</a>';
         }
       },
       {
