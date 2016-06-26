@@ -48,12 +48,8 @@ public final class JudgeService {
         return rejudgeTasks.get(key);
     }
 
-    public boolean isRejudging(RejudgeType type, Integer id) {
-        return rejudgeTasks.containsKey(type.getKey(id));
-    }
-
-    public boolean isRejudging(RejudgeType type, Integer cid, Integer pid) {
-        return rejudgeTasks.containsKey(type.getKey(cid, pid));
+    public boolean isRejudging(String key) {
+        return rejudgeTasks.containsKey(key);
     }
 
     public void judge(Solution solution) {
@@ -182,7 +178,16 @@ public final class JudgeService {
         rejudgeContestSolution(contestSolution);
     }
 
-    public void rejudgeContest(final Integer cid) {
+    public boolean rejudgeContest(final Integer cid) {
+        String key = RejudgeType.CONTEST.getKey(cid);
+        if (rejudgeTasks.containsKey(key)) {
+            log.warn("Do not rejudge contest " + cid + " since rejudge this contest is ongoing.");
+            return false;
+        }
+
+        final long startTime = System.currentTimeMillis();
+        final RejudgeTask task = new RejudgeTask(cid, RejudgeType.CONTEST);
+        rejudgeTasks.put(task.getKey(), task);
         Thread rejudgeThread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -193,18 +198,28 @@ public final class JudgeService {
                         e.printStackTrace();
                     log.error(e.getLocalizedMessage());
                 }
-                // contestService.reset(cid);
-                List<ContestSolutionModel> solutionList =
-                    Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
-                synchronized (solutionList) {
-                    Iterator<ContestSolutionModel> it = solutionList.iterator();
-                    while (it.hasNext()) {
-                        rejudgeContestSolution(it.next());
+                try {
+                    // contestService.reset(cid);
+                    List<ContestSolutionModel> solutions = Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
+                    task.setTotal(solutions.size());
+                    synchronized (solutions) {
+                        Iterator<ContestSolutionModel> it = solutions.iterator();
+                        while (it.hasNext()) {
+                            rejudgeContestSolution(it.next());
+                            task.increaseCount();
+                        }
                     }
+                } catch (Exception e) {
+                    log.error("rejudge contest " + cid + " failed!", e);
+                } finally {
+                    rejudgeTasks.remove(task.getKey());
                 }
+                log.info("Rejudge contest contest " + cid + " finished, total judge: "
+                    + task.getTotal() + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
             }
         });
         rejudgeExecutor.execute(rejudgeThread);
+        return true;
     }
 
     public boolean rejudgeContestProblem(final Integer cid, final Integer pid) {
@@ -215,7 +230,7 @@ public final class JudgeService {
         }
 
         final long startTime = System.currentTimeMillis();
-        final RejudgeTask task = new RejudgeTask(cid, pid, RejudgeType.CONTEST);
+        final RejudgeTask task = new RejudgeTask(cid, pid, RejudgeType.CONTEST_PROBLEM);
         rejudgeTasks.put(key, task);
         Thread rejudgeThread = new Thread(new Runnable() {
             @Override

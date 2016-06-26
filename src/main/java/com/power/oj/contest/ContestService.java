@@ -1090,8 +1090,12 @@ public class ContestService {
         CacheKit.put("contest", contestModel.getCid(), contestModel);
     }
 
+    public boolean isRejudging(Integer cid) {
+        return JudgeService.me().isRejudging(RejudgeType.CONTEST.getKey(cid));
+    }
+
     public boolean isRejudging(Integer cid, Integer pid) {
-        return JudgeService.me().isRejudging(RejudgeType.CONTEST_PROBLEM, cid, pid);
+        return JudgeService.me().isRejudging(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
     }
 
     class UserInfo {
