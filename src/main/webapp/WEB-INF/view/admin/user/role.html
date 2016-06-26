@@ -20,7 +20,8 @@
             <th width="5%">Id</th>
             <th width="15%">User</th>
             <th width="30%">Nick Name</th>
-            <th width="30%">Role</th>
+            <th width="15%">Real Name</th>
+            <th width="15%">Role</th>
             <th width="30%">Register Time</th>
           </tr>
           </thead>
@@ -64,6 +65,12 @@
         "mData": "nick",
         "mRender": function (data, type, full) {
           return '<a href="user/profile/' + full.name + '" target="_blank">' + (data || '') + '</a>';
+        }
+      },
+      {
+        "mData": "realName",
+        "mRender": function (data, type, full) {
+          return (data || '');
         }
       },
       {

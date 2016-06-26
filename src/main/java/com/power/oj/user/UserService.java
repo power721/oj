@@ -786,7 +786,7 @@ public final class UserService {
     public Page<UserModel> getUserRoleListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
         String sSearch) {
         List<Object> param = new ArrayList<Object>();
-        String sql = "SELECT u.uid,u.name,u.nick,r.name AS role,u.ctime,r.id";
+        String sql = "SELECT u.uid,u.name,u.realName,u.nick,r.name AS role,u.ctime,r.id";
         StringBuilder sb = new StringBuilder().append("FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid LEFT JOIN role r ON r.id=ur.rid WHERE 1=1");
 
         if (StringUtil.isNotEmpty(sSearch)) {
