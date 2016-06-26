@@ -27,8 +27,6 @@ public class GlobalInterceptor implements Interceptor {
         String methodName = ai.getMethodName();
         controller.setAttr(OjConstants.METHOD_NAME, methodName);
 
-        controller.setAttr("noticeList", NoticeService.me().getNoticeList());
-
         ai.invoke();
 
     }
