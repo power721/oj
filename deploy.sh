@@ -71,7 +71,7 @@ sudo cp ${ARTIFACT} ${TOMCAT}/
 echo "waiting war deploy..."
 sleep 10
 CNT=0
-while [ ! -e ${TOMCAT}/oj/assets/ ]; do
+while [ ! -d "${TOMCAT}/oj/WEB-INF/" ] || [ ${TOMCAT}/oj/WEB-INF/ -ot ${TOMCAT}/oj.war ]; do
     echo "Please start the tomcat service!"
     let CNT+=1
     sleep 5
