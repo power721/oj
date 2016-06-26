@@ -1,4 +1,11 @@
 <@override name="content">
+<div id="rejudge" class="hide">
+  <span>Rejudge progress</span>
+  <div class="progress progress-striped">
+    <div id="rejudge-progress" class="bar" style="width: 0%;"></div>
+    <span id="rejudge-status"></span>
+  </div>
+</div>
 <ul class="pager">
   <li class="previous <#if prevPid==problem.pid>disabled</#if>">
     <a href="problem/show/${prevPid!}" title="Show previous problem."><i class="icon-arrow-left"></i></a>
@@ -215,6 +222,32 @@
         <#if prevPid!=problem.pid>if (event.keyCode == 37 && event.ctrlKey)window.location = prevpage;</#if>
         <#if nextPid!=problem.pid>if (event.keyCode == 39 && event.ctrlKey)window.location = nextpage;</#if>
     });
+
+    <#if isRejudging?? && isRejudging==true>
+      $('#rejudge').removeClass('hide');
+      var refresh = setInterval(function () {
+        refreshResult();
+      }, 2500);
+
+      function refreshResult() {
+        $('#rejudge').each(function () {
+          var $this = $(this);
+          var id = $this.attr('id');
+          $.getJSON('api/problem/rejudgeStatus/' + ${problem.pid}, function (data) {
+            var total = data.total;
+            var count = data.count;
+            if (count < total) {
+              $('#rejudge-progress').css('width', (count / total * 100) + '%');
+              $('#rejudge-status').text(count + '/' + total);
+            } else {
+              clearInterval(refresh);
+              $('#rejudge').addClass('hide');
+              $('div.alert').remove();
+            }
+          });
+        });
+      }
+    </#if>
   });
 </script>
 

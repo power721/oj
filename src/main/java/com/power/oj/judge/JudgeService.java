@@ -19,8 +19,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -33,12 +35,21 @@ public final class JudgeService {
     private static final UserService userService = UserService.me();
     //private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
     private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
+    private static final Map<String, RejudgeTask> rejudgeTasks = new HashMap<>();
 
     private JudgeService() {
     }
 
     public static JudgeService me() {
         return me;
+    }
+
+    public RejudgeTask getRejudgeTask(RejudgeType type, Integer id) {
+        return rejudgeTasks.get(type.getKey(id));
+    }
+
+    public boolean isRejudging(RejudgeType type, Integer id) {
+        return rejudgeTasks.containsKey(type.getKey(id));
     }
 
     public void judge(Solution solution) {
@@ -81,6 +92,7 @@ public final class JudgeService {
                 judgeThread = new PojJudgeAdapter(solution);
             }
             judgeThread.setDeleteTempDir(deleteTempDir);
+            //judgeExecutor.execute(judgeThread);  // this will store session in the thread
             Thread thread = new Thread(judgeThread);
             thread.start();
         }
@@ -98,20 +110,40 @@ public final class JudgeService {
         rejudge(solution);
     }
 
-    public void rejudgeProblem(final Integer pid) {
+    public boolean rejudgeProblem(final Integer pid) {
+        String key = RejudgeType.PROBLEM.getKey(pid);
+        if (rejudgeTasks.containsKey(key)) {
+            log.warn("Do not rejudge problem " + pid + " since rejudge this problem is ongoing.");
+            return false;
+        }
+
+        final long startTime = System.currentTimeMillis();
+        final RejudgeTask task = new RejudgeTask(pid, RejudgeType.PROBLEM);
+        rejudgeTasks.put(task.getKey(), task);
         Thread rejudgeThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                problemService.reset(pid);
-                List<SolutionModel> solutionList = solutionService.getSolutionListForProblem(pid);
+                try {
+                    problemService.reset(pid);
+                    List<SolutionModel> solutionList = solutionService.getSolutionListForProblemRejudge(pid);
+                    task.setTotal(solutionList.size());
 
-                // TODO lock this problem
-                for (SolutionModel solution : solutionList) {
-                    rejudge(solution, true);
+                    // TODO lock this problem
+                    for (SolutionModel solution : solutionList) {
+                        rejudge(solution, true);
+                        task.increaseCount();
+                    }
+                } catch (Exception e) {
+                    log.error("rejudge problem " + pid + " failed!", e);
+                } finally {
+                    rejudgeTasks.remove(task.getKey());
                 }
+                log.info("Rejudge problem " + pid + " finished, total judge: " + task.getTotal() + " total time: " + (
+                    System.currentTimeMillis() - startTime) + " ms");
             }
         });
         rejudgeExecutor.execute(rejudgeThread);
+        return true;
     }
 
     public void rejudgeProblem4Wait(final Integer pid) {

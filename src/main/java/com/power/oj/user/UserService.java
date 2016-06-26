@@ -387,6 +387,9 @@ public final class UserService {
         Integer sid = solutionModel.getSid();
         Integer uid = solutionModel.getUid();
         UserModel userModel = getUser(uid);
+        if (userModel == null) {
+            return false;
+        }
         userModel.setAccepted(userModel.getAccepted() + 1);
         Integer lastAccepted =
             Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1",
@@ -414,6 +417,9 @@ public final class UserService {
         Integer sid = solutionModel.getSid();
         Integer uid = solutionModel.getUid();
         UserModel userModel = getUser(uid);
+        if (userModel == null) {
+            return false;
+        }
         userModel.setAccepted(userModel.getAccepted() - 1);
         Integer lastAccepted =
             Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1",

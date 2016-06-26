@@ -7,6 +7,9 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.judge.JudgeService;
+import com.power.oj.judge.RejudgeTask;
+import com.power.oj.judge.RejudgeType;
 import com.power.oj.user.UserService;
 
 import java.util.List;
@@ -92,6 +95,17 @@ public class ProblemApiController extends OjController {
         Integer sid = getParaToInt("sid", 0);
 
         renderJson(solutionService.getSolutionResult(sid));
+    }
+
+    @Clear
+    public void rejudgeStatus() {
+        Integer pid = getParaToInt(0);
+        RejudgeTask rejudgeTask = JudgeService.me().getRejudgeTask(RejudgeType.PROBLEM, pid);
+        if (rejudgeTask == null) {
+            renderJson("{\"count\": 1, \"total\": 0}");
+        } else {
+            renderJson(rejudgeTask);
+        }
     }
 
 }

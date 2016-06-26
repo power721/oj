@@ -268,6 +268,12 @@ public final class SolutionService {
         return resultList;
     }
 
+    public List<SolutionModel> getSolutionListForProblemRejudge(Integer pid) {
+        List<SolutionModel> solutionList =
+            dao.find("SELECT * FROM solution WHERE pid=? AND status=1 ORDER BY sid", pid);
+        return solutionList;
+    }
+
     public List<SolutionModel> getSolutionListForProblem(Integer pid) {
         List<SolutionModel> solutionList =
             dao.find("SELECT * FROM solution WHERE pid=? AND status=1 ORDER BY sid DESC", pid);
