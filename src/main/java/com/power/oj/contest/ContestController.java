@@ -524,7 +524,7 @@ public class ContestController extends OjController {
         setAttr("contestProblems", contestService.getContestProblems(cid, null));
         setAttr("status", status);
 
-        //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());
+        setTitle("Manage Contest " + cid);
     }
 
     @RequiresPermissions("contest:addUser")
@@ -558,6 +558,44 @@ public class ContestController extends OjController {
 
         redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(),
             new FlashMessage(getText("contest.buildRank.success")));
+    }
+
+    @RequiresPermissions("problem:edit")
+    public void lockBoard() {
+        Integer cid = getParaToInt(0);
+        if (contestService.lockBoard(cid)) {
+            redirect("/contest/admin/" + cid);
+        }
+    }
+
+    @RequiresPermissions("problem:edit")
+    public void unlockBoard() {
+        Integer cid = getParaToInt(0);
+        if (contestService.unlockBoard(cid)) {
+            redirect("/contest/admin/" + cid);
+        } else {
+            redirect("/contest/admin/" + cid, new FlashMessage("Cannot unlock board before contest finished!",
+                MessageType.ERROR, "Unlock Board Error"));
+        }
+    }
+
+    @RequiresPermissions("problem:edit")
+    public void lockReport() {
+        Integer cid = getParaToInt(0);
+        if (contestService.lockReport(cid)) {
+            redirect("/contest/admin/" + cid);
+        }
+    }
+
+    @RequiresPermissions("problem:edit")
+    public void unlockReport() {
+        Integer cid = getParaToInt(0);
+        if (contestService.unlockReport(cid)) {
+            redirect("/contest/admin/" + cid);
+        } else {
+            redirect("/contest/admin/" + cid, new FlashMessage("Cannot unlock report before contest finished!",
+                MessageType.ERROR, "Unlock Report Error"));
+        }
     }
 
 }

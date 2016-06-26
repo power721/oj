@@ -26,6 +26,7 @@ import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
+import com.power.oj.util.Tool;
 import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
 import org.apache.http.conn.HttpHostConnectException;
@@ -290,6 +291,54 @@ public class ContestService {
         return userRank;
     }
 
+    public boolean lockBoard(Integer cid) {
+        ContestModel contestModel = getContest(cid);
+        if (!contestModel.isLockBoard()) {
+            contestModel.setLockBoard(true);
+            contestModel.update();
+            updateCache(contestModel);
+        }
+        return true;
+    }
+
+    public boolean unlockBoard(Integer cid) {
+        ContestModel contestModel = getContest(cid);
+        if (contestModel.isLockBoard()) {
+            if (contestModel.getEndTime() < OjConfig.timeStamp) {
+                contestModel.setLockBoard(false);
+                contestModel.update();
+                updateCache(contestModel);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean lockReport(Integer cid) {
+        ContestModel contestModel = getContest(cid);
+        if (!contestModel.isLockReport()) {
+            contestModel.setLockReport(true);
+            contestModel.update();
+            updateCache(contestModel);
+        }
+        return true;
+    }
+
+    public boolean unlockReport(Integer cid) {
+        ContestModel contestModel = getContest(cid);
+        if (contestModel.isLockReport()) {
+            if (contestModel.getEndTime() < OjConfig.timeStamp) {
+                contestModel.setLockReport(false);
+                contestModel.update();
+                updateCache(contestModel);
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public List<Record> getClarifyList(Integer cid, Integer num) {
         if (num != null && num > -1) {
             return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid "
@@ -525,7 +574,7 @@ public class ContestService {
     private boolean checkFreezeBoard(Integer cid, int submitTime) {
         ContestModel contestModel = getContest(cid);
 
-        if (contestModel.getFreeze()) {
+        if (contestModel.isLockBoard()) {
             int timeDiff = contestModel.getEndTime() - submitTime;
             boolean isFreeze = timeDiff <= 3600;
 
@@ -539,9 +588,10 @@ public class ContestService {
     private boolean checkFreezeBoard4Rank(Integer cid) {
         ContestModel contestModel = getContest(cid);
 
-        if (contestModel.getFreeze()) {
+        if (contestModel.isLockBoard()) {
             int timeDiff = contestModel.getEndTime() - OjConfig.timeStamp;
-            boolean isFreeze = (timeDiff >= -1800 && timeDiff <= 3600);
+//            boolean isFreeze = (timeDiff >= -1800 && timeDiff <= 3600);
+            boolean isFreeze = timeDiff <= 3600;
 
             log.info("contest-" + cid + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
             return isFreeze;
@@ -552,7 +602,7 @@ public class ContestService {
     private boolean checkFreezeBoard4Build(Integer cid) {
         ContestModel contestModel = getContest(cid);
 
-        if (contestModel.getFreeze()) {
+        if (contestModel.isLockBoard()) {
             int timeDiff = contestModel.getEndTime() - OjConfig.timeStamp;
             boolean isFreeze = (timeDiff >= 0 && timeDiff <= 3600);
 
@@ -602,11 +652,12 @@ public class ContestService {
         newContest.setStartTime(contestModel.getStartTime());
         newContest.setEndTime(contestModel.getEndTime());
         newContest.setType(contestModel.getType());
-        newContest.setFreeze(contestModel.getFreeze());
+        newContest.setLockBoard(Tool.getBoolean(contestModel.isLockBoard()));
+        newContest.setLockReport(Tool.getBoolean(contestModel.isLockReport()));
         newContest.setMtime(OjConfig.timeStamp);
-        updateCache(contestModel);
+        updateCache(newContest);
 
-        return contestModel.update();
+        return newContest.update();
     }
 
     public int addProblem(Integer cid, Integer pid, String title) {

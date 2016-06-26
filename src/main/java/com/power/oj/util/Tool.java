@@ -154,4 +154,11 @@ public class Tool {
         return request.getHeader("User-Agent");
     }
 
+    public static boolean getBoolean(Boolean value) {
+        if (value == null) {
+            return false;
+        }
+        return value;
+    }
+
 }

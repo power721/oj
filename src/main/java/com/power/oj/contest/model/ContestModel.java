@@ -17,7 +17,8 @@ public class ContestModel extends Model<ContestModel> {
     public static final String ATIME = "atime";
     public static final String CTIME = "ctime";
     public static final String MTIME = "mtime";
-    public static final String FREEZE = "freeze";
+    public static final String LOCK_BOARD = "lockBoard";
+    public static final String LOCK_REPORT = "lockReport";
     public static final String STATUS = "status";
     public static final int TYPE_PUBLIC = 0;
     public static final int TYPE_PASSWORD = 1;
@@ -163,12 +164,20 @@ public class ContestModel extends Model<ContestModel> {
         return set(MTIME, value);
     }
 
-    public Boolean getFreeze() {
-        return getBoolean(FREEZE);
+    public Boolean isLockBoard() {
+        return getBoolean(LOCK_BOARD);
     }
 
-    public ContestModel setFreeze(Boolean value) {
-        return set(FREEZE, value);
+    public ContestModel setLockBoard(Boolean value) {
+        return set(LOCK_BOARD, value);
+    }
+
+    public Boolean isLockReport() {
+        return getBoolean(LOCK_REPORT);
+    }
+
+    public ContestModel setLockReport(Boolean value) {
+        return set(LOCK_REPORT, value);
     }
 
     public Boolean getStatus() {

@@ -7,11 +7,25 @@
 <div class="row text-center">
   <div class="span6 offset3">
     <#if (contest.type > 1)>
-      <div class="contest-admin">
         <a href="contest/adminUser/${contest.cid!}" class="btn btn-primary">Manage Users</a>
-      </div>
     </#if>
-    <#if status!="Pending"><a href="contest/rejudge/${contest.cid!}" class="btn btn-danger">Rejudge</a></#if>
+    <#if status=="Finished">
+      <#if contest.lockBoard==true>
+        <a href="contest/unlockBoard/${contest.cid!}" id="unlock-board" class="btn btn-warning">Unlock Board</a>
+      <#else>
+        <a href="contest/lockBoard/${contest.cid!}" id="lock-board" class="btn btn-warning">Lock Board</a>
+      </#if>
+      <#if contest.report??>
+        <#if contest.lockReport==true>
+          <a href="contest/unlockReport/${contest.cid!}" id="unlock-report" class="btn btn-warning">Unlock Report</a>
+        <#else>
+          <a href="contest/lockReport/${contest.cid!}" id="lock-report" class="btn btn-warning">Lock Report</a>
+        </#if>
+      </#if>
+    </#if>
+    <#if status!="Pending">
+      <a href="contest/rejudge/${contest.cid!}" class="btn btn-danger">Rejudge</a>
+    </#if>
     <div class="well">
       <span>Start time</span>: <span class="time">${contest.startDateTime!}</span>
       <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
