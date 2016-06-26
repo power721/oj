@@ -84,7 +84,7 @@
               <li class="divider"></li>
               <li class="nav-header">Admin</li>
               <li><a href="user/edit">Edit</a></li>
-                <li><a href=" user/archive">Archive</a></li>
+              <li><a href=" user/archive">Archive</a></li>
               <#if adminUser??>
                 <li><a href="admin">Admin</a></li></#if>
             </ul>
@@ -297,11 +297,19 @@
 
   ga('create', '${gaAccount}', '${domaiNname}');
   ga('send', 'pageview');
-<#if !name??>
-  if ($.cookie && $.cookie("oj_username") != null) {
-    $('#inputAccount').val($.cookie('oj_username'));
-  }
+</script>
 </#if>
+
+<#if !name??>
+<script>
+  $(document).ready(function () {
+    $('#loginModal').on('shown.bs.modal', function () {
+      if ($.cookie && $.cookie("oj_username") != null) {
+        $('input#inputAccount').val($.cookie('oj_username'));
+        $('input#inputPassword').focus();
+      }
+    });
+  });
 </script>
 </#if>
 
