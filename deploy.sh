@@ -16,6 +16,8 @@ read -p "Input the mysql password, press enter to use default value: " PASSWORD
 [ -n "$USERNAME" ] && sed -i "s/dev.user=.*/dev.user=$USERNAME/" ${CONF}
 [ -n "$PASSWORD" ] && sed -i "s/dev.password=.*/dev.password=$PASSWORD/" ${CONF}
 
+git rev-parse --short HEAD >src/main/webapp/WEB-INF/view/common/version.ftl
+
 if [ $# -gt 0 ]; then
     TOMCAT=$1/webapps
     USER=`stat -c '%U' ${TOMCAT}/`
