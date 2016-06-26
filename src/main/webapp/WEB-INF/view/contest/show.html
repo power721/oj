@@ -99,34 +99,41 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    var startTime = ${contest.startTime!0}
-    *
-    1000;
-    var endTime = ${contest.endTime!0}
-    *
-    1000;
-    var during_time = endTime - startTime;
-    var current_time = ${serverTime!}
-    *
-    1000;
-    function updateProgress() {
-      if (current_time >= startTime && current_time <= endTime) {
-        var percent = (current_time - startTime) / during_time * 100;
-        $('#contest-bar').css('width', percent.toFixed(2) + '%');
-      }
-      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
-      current_time += 1000;
+    <#if contest.startTime<=serverTime && serverTime<=contest.endTime>
+      var startTime = ${contest.startTime!0} *
+      1000;
+      var endTime = ${contest.endTime!0} *
+      1000;
+      var during_time = endTime - startTime;
+      var current_time = ${serverTime!0} *
+      1000;
+      var interval = 5000;
 
-      if (current_time >= startTime && current_time <= endTime) {
+      updateProgress();
+      var progress = setInterval(function () {
+        updateProgress();
+      }, interval);
+
+      function updateProgress() {
+        if (current_time >= startTime && current_time <= endTime) {
+          var percent = (current_time - startTime) / during_time * 100;
+          $('#contest-bar').css('width', percent.toFixed(2) + '%');
+        }
+        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+        current_time += interval;
+
+        if (current_time > endTime) {
+          $('#contest-progress').remove();
+          clearInterval(progress);
+          return;
+        }
         if (endTime - current_time < 3600000) {
           $('#contest-progress').addClass('progress-danger progress-striped active');
         } else {
           $('#contest-progress').addClass('progress-success progress-striped active');
         }
       }
-    }
-
-    setInterval(updateProgress, 1000);
+    </#if>
 
     <#if oj_style != "slate">
       $("#problem-list").tablecloth({
