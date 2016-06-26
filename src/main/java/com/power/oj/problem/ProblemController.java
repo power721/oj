@@ -84,9 +84,10 @@ public class ProblemController extends OjController {
 
         try {
             pid = getParaToInt("word", 0);
-        } catch (NumberFormatException e) {
+        } catch (Exception e) {
             pid = 0;
         }
+
         if (pid != 0) {
             problemModel = problemService.findProblem(pid);
             if (problemModel == null)
