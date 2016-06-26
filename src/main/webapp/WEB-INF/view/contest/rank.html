@@ -2,6 +2,11 @@
 <div class="pagination pagination-centered">
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
+  <#if isLocked==true>
+  <div class="pull-left">
+    <span class="label label-important">Board Locked</span>
+  </div>
+  </#if>
   <div class="pull-right">
     <span class="badge badge-info">${contestRank.pageNumber}/${contestRank.totalPage} Pages</span>
     <span class="badge badge-info">${contestRank.totalRow} Users</span>

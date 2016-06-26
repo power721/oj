@@ -585,7 +585,7 @@ public class ContestService {
         return false;
     }
 
-    private boolean checkFreezeBoard4Rank(Integer cid) {
+    public boolean checkFreezeBoard4Rank(Integer cid) {
         ContestModel contestModel = getContest(cid);
 
         if (contestModel.isLockBoard()) {
