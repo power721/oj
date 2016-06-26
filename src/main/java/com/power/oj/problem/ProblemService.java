@@ -7,6 +7,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.judge.JudgeService;
+import com.power.oj.judge.RejudgeType;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 import jodd.io.FileUtil;
@@ -29,6 +31,10 @@ public final class ProblemService {
 
     public static ProblemService me() {
         return me;
+    }
+
+    public boolean isRejudging(Integer pid) {
+        return JudgeService.me().isRejudging(RejudgeType.PROBLEM, pid);
     }
 
     public ProblemModel findProblem(Integer pid) {

@@ -70,13 +70,14 @@ public class PowerJudgeAdapter extends JudgeAdapter {
         String[] resultStr = stringBuilder.toString().split(" ");
         int exitValue = process.waitFor();
         if (exitValue > 0) {
-            log.warn(String.valueOf(exitValue));
+            log.warn("exit code: " + String.valueOf(exitValue));
             updateSystemError(sb.toString());
             return false;
         }
         checkResult(resultStr, sb.toString());
 
-        log.info(Printf.str("%d: Total run time: %d ms", solution.getSid(), solution.getTime()));
+        log.info(Printf.str("Judge sid %d pid: %d: Total run time: %d ms  result: %d",
+            solution.getSid(), solution.getPid(), solution.getTime(), solution.getResult()));
         synchronized (JudgeAdapter.class) {
             updateUser();
             if (!updateContest()) {

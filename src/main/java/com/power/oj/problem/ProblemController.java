@@ -43,6 +43,7 @@ public class ProblemController extends OjController {
         setAttr("nextPid", problemService.getNextPid(pid));
         setAttr("tagList", problemService.getTags(pid));
         setAttr("userResult", problemService.getUserResult(pid));
+        setAttr("isRejudging", problemService.isRejudging(pid));
         setAttr("problem", problemModel);
         setAttr("spj", problemService.checkSpj(pid));
         setCookie("pageNumber", String.valueOf(problemService.getPageNumber(pid, OjConfig.problemPageSize)),
@@ -223,9 +224,14 @@ public class ProblemController extends OjController {
     public void rejudge() {
         Integer pid = getParaToInt(0);
         String redirectURL = new StringBuilder(2).append("/problem/show/").append(pid).toString();
-        FlashMessage msg = new FlashMessage("Server got your request.");
+        FlashMessage msg;
 
-        judgeService.rejudgeProblem(pid);
+        if(judgeService.rejudgeProblem(pid)) {
+            msg = new FlashMessage("Server accept your request.");
+        } else {
+            msg = new FlashMessage("Server reject your request since rejudge this problem is ongoing.", MessageType.ERROR, "Rejudge Error");
+        }
+
         redirect(redirectURL, msg);
     }
 
