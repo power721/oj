@@ -18,9 +18,17 @@
   <li class="<#if methodName=="clarify">active</#if>">
     <a href="contest/clarify/${cid}">Clarify</a>
   </li>
-  <#if (serverTime > contest.endTime) && contest.report??>
+  <#if (serverTime > contest.endTime || adminUser??) && contest.report??>
     <li class="<#if methodName=="report">active</#if>">
       <a href="contest/report/${cid}">Report</a>
+    </li>
+  </#if>
+  <#if adminUser??>
+    <li class="<#if methodName=="admin" || methodName=="adminUser">active</#if>">
+      <a href="contest/admin/${cid}">Manage</a>
+    </li>
+    <li class="<#if methodName=="edit">active</#if>">
+      <a href="contest/edit/${cid}">Edit</a>
     </li>
   </#if>
   <!--
