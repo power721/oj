@@ -120,7 +120,6 @@
           $('#contest-bar').css('width', percent.toFixed(2) + '%');
         }
         $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
-        current_time += interval;
 
         if (current_time > endTime) {
           $('#contest-progress').remove();
@@ -132,7 +131,14 @@
         } else {
           $('#contest-progress').addClass('progress-success progress-striped active');
         }
+        current_time += interval;
       }
+    <#else>
+      var current_time = ${serverTime!0} * 1000;
+      setInterval(function () {
+        current_time += 1000;
+        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+      }, 1000);
     </#if>
 
     <#if oj_style != "slate">

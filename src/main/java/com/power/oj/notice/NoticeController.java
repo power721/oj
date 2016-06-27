@@ -27,8 +27,6 @@ public class NoticeController extends OjController {
         Integer id = getParaToInt(0);
 
         setAttr("notice", noticeService.getNotice(id));
-
-        // TODO add view count
     }
 
     @RequiresPermissions("notice:add")

@@ -58,4 +58,13 @@ public class ResultType {
     public String toJson() {
         return Printf.str("{id:\"%d\", name:\"%s\", longName:\"%s\"}", id, name, longName);
     }
+
+    @Override
+    public String toString() {
+        return "ResultType{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", longName='" + longName + '\'' +
+            '}';
+    }
 }

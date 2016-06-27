@@ -25,6 +25,7 @@ import com.power.oj.admin.ContestAdminController;
 import com.power.oj.admin.ProblemAdminController;
 import com.power.oj.admin.UserAdminController;
 import com.power.oj.api.AdminApiController;
+import com.power.oj.api.CommonApiController;
 import com.power.oj.api.ContestApiController;
 import com.power.oj.api.DiscussionApiController;
 import com.power.oj.api.FriendApiController;
@@ -44,6 +45,7 @@ import com.power.oj.contest.model.FreezeBoardModel;
 import com.power.oj.core.controller.MainController;
 import com.power.oj.core.controller.UeditorController;
 import com.power.oj.core.handler.BaseUrlHandler;
+import com.power.oj.core.handler.ServerTimeHandler;
 import com.power.oj.core.handler.SessionHandler;
 import com.power.oj.core.handler.UrlFilterHandler;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
@@ -137,6 +139,7 @@ public class AppConfig extends JFinalConfig {
         me.add("/admin/contest", ContestAdminController.class);
         me.add("/admin/problem", ProblemAdminController.class);
         me.add("/admin/user", UserAdminController.class);
+        me.add("/api", CommonApiController.class, "/common/");
         me.add("/api/admin", AdminApiController.class, "/admin/");
         me.add("/api/contest", ContestApiController.class, "/contest/");
         me.add("/api/discuss", DiscussionApiController.class, "/discuss/");
@@ -232,6 +235,7 @@ public class AppConfig extends JFinalConfig {
      * 配置处理器
      */
     public void configHandler(Handlers me) {
+        me.add(new ServerTimeHandler());
         me.add(new SessionHandler());
         me.add(new BaseUrlHandler());
         me.add(new UrlFilterHandler());
