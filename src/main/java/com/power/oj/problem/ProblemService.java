@@ -538,6 +538,12 @@ public final class ProblemService {
         return problemModel.update();
     }
 
+    public boolean isUserSolvedProblem(Integer uid, Integer pid) {
+        Long result =
+            Db.queryLong("SELECT 1 FROM solution WHERE result=? AND uid=? AND pid=? LIMIT 1", ResultType.AC, uid, pid);
+        return result != null && result.intValue() > 0;
+    }
+
     private void updateCache(ProblemModel problemModel) {
         CacheKit.put("problem", problemModel.getPid(), problemModel);
     }

@@ -56,6 +56,7 @@ public class SolutionController extends OjController {
     }
 
     @ActionKey("/code")
+    @Before(SolutionInterceptor.class)
     @RequiresUser
     public void show() {
         Integer sid = getParaToInt(0);
@@ -63,13 +64,6 @@ public class SolutionController extends OjController {
         SolutionModel solutionModel = solutionService.findSolution(sid);
         ResultType resultType = OjConfig.resultType.get(solutionModel.getResult());
         Integer uid = solutionModel.getUid();
-        Integer loginUid = userService.getCurrentUid();
-        if (!uid.equals(loginUid) && !isAdmin) {
-            FlashMessage msg =
-                new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
-            redirect("/status", msg);
-            return;
-        }
 
         if (!isAdmin) {
             String error = solutionModel.getError();
