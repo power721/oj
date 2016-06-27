@@ -45,7 +45,7 @@ fi
 
 git rev-parse --short HEAD >src/main/webapp/WEB-INF/view/common/version.ftl
 
-if [ -z "${TOMCAT}" ]; then
+if [ ! -d "${TOMCAT}/webapps" ]; then
   TOMCAT=${CATALINA_HOME}/webapps
   USER=`stat -c '%U' ${TOMCAT}/`
   GROUP=`stat -c '%G' ${TOMCAT}/`

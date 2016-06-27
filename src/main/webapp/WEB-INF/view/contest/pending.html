@@ -22,15 +22,9 @@
 <script src="assets/jcountdown/jquery.jcountdown.min.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    var current_time = ${serverTime!}
-    *
-    1000;
-    function updateTime() {
-      current_time += 1000;
+    clock(function (current_time) {
       $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
-    }
-
-    setInterval(updateTime, 1000);
+    }, 1000);
 
     var startTimeText = new Date(${contest.startTime} * 1e3
     ).

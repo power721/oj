@@ -100,43 +100,28 @@
 <script type="text/javascript">
   $(document).ready(function () {
     <#if contest.startTime<=serverTime && serverTime<=contest.endTime>
-      var startTime = ${contest.startTime!0} *
-      1000;
-      var endTime = ${contest.endTime!0} *
-      1000;
+      var startTime = ${contest.startTime!0} * 1000;
+      var endTime = ${contest.endTime!0} * 1000;
       var during_time = endTime - startTime;
-      var current_time = ${serverTime!0} *
-      1000;
-      var interval = 5000;
-
-      updateProgress();
-      var progress = setInterval(function () {
-        updateProgress();
-      }, interval);
-
-      function updateProgress() {
+      clock(function (current_time) {
+        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
         if (current_time >= startTime && current_time <= endTime) {
           var percent = (current_time - startTime) / during_time * 100;
-          $('#contest-bar').css('width', percent.toFixed(2) + '%');
+          $('#contest-bar').css('width', percent + '%');
         }
-        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
 
         if (current_time > endTime) {
           $('#contest-progress').remove();
-          clearInterval(progress);
-          return;
-        }
-        if (endTime - current_time < 3600000) {
-          $('#contest-progress').addClass('progress-danger progress-striped active');
         } else {
-          $('#contest-progress').addClass('progress-success progress-striped active');
+          if (endTime - current_time < 3600000) {
+            $('#contest-progress').addClass('progress-danger progress-striped active');
+          } else {
+            $('#contest-progress').addClass('progress-success progress-striped active');
+          }
         }
-        current_time += interval;
-      }
+      }, 1000);
     <#else>
-      var current_time = ${serverTime!0} * 1000;
-      setInterval(function () {
-        current_time += 1000;
+      clock(function (current_time) {
         $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
       }, 1000);
     </#if>
