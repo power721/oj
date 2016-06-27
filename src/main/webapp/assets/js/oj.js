@@ -179,6 +179,7 @@ function getLocalTime(nS) {
 }
 
 function clock(fn, interval) {
+    interval = typeof interval !== 'undefined' ? interval : 1000;
     $.get('api/time', function (data) {
         var current_time = parseInt(data);
         fn(current_time);

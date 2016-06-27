@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Before({ContestPasswordInterceptor.class, ContestInterceptor.class})
+@Before({ContestInterceptor.class, SolutionInterceptor.class, ContestPasswordInterceptor.class})
 public class ContestController extends OjController {
 
     @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
@@ -249,13 +249,6 @@ public class ContestController extends OjController {
         ContestSolutionModel solutionModel = solutionService.findContestSolution(sid);
         ResultType resultType = OjConfig.resultType.get(solutionModel.getResult());
         Integer uid = solutionModel.getUid();
-        Integer loginUid = userService.getCurrentUid();
-        if (!uid.equals(loginUid) && !isAdmin) {
-            FlashMessage msg =
-                new FlashMessage(getText("solution.show.error"), MessageType.ERROR, getText("message.error.title"));
-            redirect("/status", msg);
-            return;
-        }
 
         if (!isAdmin) {
             String error = solutionModel.getError();
