@@ -70,10 +70,10 @@
         <td class="result" id="${solution.resultName!}" sid="${solution.sid!}">${solution.resultLongName!}</td>
         <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
         <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
-        <td class="language"><#if user?? &&(adminUser?? || user.uid==solution.uid)><a href="code/${solution.sid!}"
+        <td class="language"><#if solution.accessible==true><a href="code/${solution.sid!}"
                                                                                       target="_blank"
                                                                                       title="show source code"></#if>
-        ${solution.languageName!} <#if user?? &&(adminUser?? || user.uid==solution.uid)></a></#if>
+        ${solution.languageName!} <#if solution.accessible==true></a></#if>
         </td>
         <td class="code_len">${solution.codeLen!} B</td>
         <td class="ctime">${solution.ctime_t!}</td>

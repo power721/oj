@@ -3,6 +3,7 @@ package com.power.oj.solution;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
+import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -42,7 +43,11 @@ public class SolutionController extends OjController {
             query.append("&name=").append(userName);
         }
 
-        setAttr("solutionList", solutionService.getPage(pageNumber, pageSize, result, language, pid, userName));
+        Page<SolutionModel> page = solutionService.getPage(pageNumber, pageSize, result, language, pid, userName);
+        for (SolutionModel solutionModel : page.getList()) {
+            solutionModel.setAccessible(solutionService.canAccessSolution(solutionModel));
+        }
+        setAttr("solutionList", page);
         setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
         setAttr(OjConstants.JUDGE_RESULT, OjConfig.judgeResult);
         setAttr("pageSize", OjConfig.statusPageSize);

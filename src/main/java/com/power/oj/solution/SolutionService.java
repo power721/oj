@@ -335,6 +335,21 @@ public final class SolutionService {
         return solutionModel.getResult().equals(ResultType.AC) && isSolvedProblem(loginUid, solutionModel);
     }
 
+    public boolean canAccessSolution(SolutionModel solutionModel) {
+        boolean isAdmin = UserService.me().isAdmin();
+        if (isAdmin) {
+            return true;
+        }
+
+        Integer uid = solutionModel.getUid();
+        Integer loginUid = UserService.me().getCurrentUid();
+        if (uid.equals(loginUid)) {
+            return true;
+        }
+
+        return solutionModel.getResult().equals(ResultType.AC) && isSolvedProblem(loginUid, solutionModel);
+    }
+
     private boolean isSolvedProblem(Integer uid, SolutionModel solutionModel) {
         Integer pid = solutionModel.getPid();
         return ProblemService.me().isUserSolvedProblem(uid, pid);
