@@ -4,24 +4,51 @@ CONF=src/main/resources/oj.properties
 ASSETS=src/main/webapp/assets
 ARTIFACT=target/oj.war
 
-read -p "Do you want to update from git?[Y/n]" PULL
-[ "$PULL" = 'Y' -o "$PULL" = 'y' ] && git pull
+function parse() {
+  while [ $# -gt 0 ]; do
+    case $1 in
+      "-q")
+      QUICK=true
+      shift
+      ;;
+      *)
+      TOMCAT=$1
+      shift
+      ;;
+    esac
+  done
+}
+
+parse "$@"
+
+if [ "${QUICK}" ]; then
+  echo "use current git reversion"
+else
+  read -p "Do you want to update from git?[Y/n]" PULL
+  [ "$PULL" = 'Y' -o "$PULL" = 'y' ] && git pull
+fi
 
 grep 'devMode' ${CONF}
-read -p "Do you want to continue with this mode?[Y/n]" cont
-[ "$cont" = 'n' -o "$cont" = 'N' ] && exit
+if [ -z "${QUICK}" ]; then
+  read -p "Do you want to continue with this mode?[Y/n]" cont
+  [ "$cont" = 'n' -o "$cont" = 'N' ] && exit
+fi
 
-read -p "Input the mysql username, press enter to use default value: " USERNAME
-read -p "Input the mysql password, press enter to use default value: " PASSWORD
-[ -n "$USERNAME" ] && sed -i "s/dev.user=.*/dev.user=$USERNAME/" ${CONF}
-[ -n "$PASSWORD" ] && sed -i "s/dev.password=.*/dev.password=$PASSWORD/" ${CONF}
+if [ "${QUICK}" ]; then
+  echo "use user/password from configuration file"
+else
+  read -p "Input the mysql username, press enter to use default value: " USERNAME
+  read -p "Input the mysql password, press enter to use default value: " PASSWORD
+  [ -n "$USERNAME" ] && sed -i "s/dev.user=.*/dev.user=$USERNAME/" ${CONF}
+  [ -n "$PASSWORD" ] && sed -i "s/dev.password=.*/dev.password=$PASSWORD/" ${CONF}
+fi
 
 git rev-parse --short HEAD >src/main/webapp/WEB-INF/view/common/version.ftl
 
-if [ $# -gt 0 ]; then
-    TOMCAT=$1/webapps
-    USER=`stat -c '%U' ${TOMCAT}/`
-    GROUP=`stat -c '%G' ${TOMCAT}/`
+if [ -z "${TOMCAT}" ]; then
+  TOMCAT=${CATALINA_HOME}/webapps
+  USER=`stat -c '%U' ${TOMCAT}/`
+  GROUP=`stat -c '%G' ${TOMCAT}/`
 fi
 
 if [ ! -d "${TOMCAT}" ]; then
