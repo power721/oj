@@ -2,6 +2,7 @@ package com.power.oj.api;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -10,6 +11,7 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.judge.RejudgeTask;
 import com.power.oj.judge.RejudgeType;
+import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 
 import java.util.List;
@@ -78,7 +80,11 @@ public class ProblemApiController extends OjController {
         setAttr("user", userService.getCurrentUser());
         setAttr("adminUser", userService.isAdmin());
 
-        setAttr("solutionList", solutionService.getProblemStatusPage(pageNumber, pageSize, language, pid));
+        Page<SolutionModel> page = solutionService.getProblemStatusPage(pageNumber, pageSize, language, pid);
+        for (SolutionModel solutionModel : page.getList()) {
+            solutionModel.setAccessible(solutionService.canAccessSolution(solutionModel));
+        }
+        setAttr("solutionList", page);
         renderJson(new String[] {"user", "adminUser", "pageSize", "language", "program_languages", "solutionList"});
     }
 

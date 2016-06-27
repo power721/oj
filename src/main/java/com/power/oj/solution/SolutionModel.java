@@ -25,6 +25,8 @@ public class SolutionModel extends Model<SolutionModel> implements Solution {
     public static final String CODE_LEN = "codeLen";
     public static final String SYSTEM_ERROR = "systemError";
     public static final String STATUS = "status";
+
+    private boolean isAccessible;
     /**
      *
      */
@@ -179,6 +181,15 @@ public class SolutionModel extends Model<SolutionModel> implements Solution {
 
     public SolutionModel setStatus(Boolean value) {
         return set(STATUS, value);
+    }
+
+    public boolean isAccessible() {
+        return isAccessible;
+    }
+
+    public void setAccessible(boolean accessible) {
+        getAttrs().put("isAccessible", accessible);
+        isAccessible = accessible;
     }
 
 }

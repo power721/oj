@@ -164,8 +164,9 @@
         for (var i in solutionList.list) {
           var solution = data.solutionList.list[i];
           var language = solution.language;
-          if (data.user && data.user.uid && (data.adminUser || data.user.uid == solution.uid))
+          if (solution.isAccessible) {
             language = '<a href="code/' + solution.sid + '" target="_blank" title="show source code">' + solution.language + '</a>';
+          }
 
           html += temp.replace(/\[id\]/g, (parseInt(i) + 1 + (pageNumber - 1) * pageSize))
                   .replace(/\[sid\]/g, solution.sid)
