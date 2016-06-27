@@ -56,24 +56,17 @@
 <script type="text/javascript">
   $(document).ready(function () {
     document.onkeydown = nextpage;
+    clock(function (current_time) {
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+    }, 1000);
+
     var prevpage = "contest/${contestList.pageNumber-1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
     var nextpage = "contest/${contestList.pageNumber+1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>"
-
     function nextpage(event) {
       event = event ? event : (window.event ? window.event : null);
-        <#if (contestList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
-        <#if contestList.pageNumber<contestList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>
+      <#if (contestList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
+      <#if contestList.pageNumber<contestList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>
     }
-
-    var current_time = ${serverTime!}
-    *
-    1000;
-    function updateCurrentTime() {
-      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
-      current_time += 1000;
-    }
-
-    setInterval(updateCurrentTime, 1000);
 
     <#if oj_style != "slate">
       $("#Contest-list").tablecloth({
