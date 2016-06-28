@@ -35,6 +35,19 @@
             </select>
           </div>
         </div>
+        <div class="control-group">
+          <label class="control-label">Share Code?</label>
+          <div class="controls">
+            <label class="radio inline">
+              <input type="radio" name="user.shareCode" id="shareCode1" value="true"<#if user.shareCode==true> checked</#if>>
+              True
+            </label>
+            <label class="radio inline">
+              <input type="radio" name="user.shareCode" id="shareCode2" value="false"<#if user.shareCode==false> checked</#if>>
+              False
+            </label>
+          </div>
+        </div>
       </fieldset>
       <fieldset>
         <legend>Person Information</legend>

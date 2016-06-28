@@ -16,6 +16,7 @@ import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.util.CryptUtils;
 import jodd.util.StringUtil;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.text.SimpleDateFormat;
@@ -290,6 +291,7 @@ public class ContestController extends OjController {
     }
 
     @RequiresPermissions("contest:rejudge")
+    @RequiresAuthentication
     public void rejudge() {
         Integer cid = getParaToInt(0);
         if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
@@ -310,6 +312,7 @@ public class ContestController extends OjController {
     }
 
     @RequiresPermissions("contest:rejudge")
+    @RequiresAuthentication
     public void rejudgeProblem() {
         Integer cid = getParaToInt(0);
         char id = getPara(1, "A").toUpperCase().charAt(0);
@@ -341,6 +344,7 @@ public class ContestController extends OjController {
     }
 
     @RequiresPermissions("code:rejudge")
+    @RequiresAuthentication
     public void rejudgeCode() {
         Integer cid = getParaToInt(0);
         Integer sid = getParaToInt(1);
@@ -419,6 +423,7 @@ public class ContestController extends OjController {
         redirect(SessionService.me().getLastAccessURL(), msg);
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("contest:edit")
     public void edit() {
         boolean ajax = getParaToBoolean("ajax", false);
@@ -429,6 +434,7 @@ public class ContestController extends OjController {
 
     @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
     @Before(POST.class)
+    @RequiresAuthentication
     @RequiresPermissions("contest:edit")
     public void update() {
         String startTime = getPara("startTime");
@@ -441,6 +447,7 @@ public class ContestController extends OjController {
     }
 
     @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @RequiresAuthentication
     @RequiresPermissions("contest:add")
     public void add() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -453,6 +460,7 @@ public class ContestController extends OjController {
 
     @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
     @Before(POST.class)
+    @RequiresAuthentication
     @RequiresPermissions("contest:add")
     public void save() {
         String startTime = getPara("startTime");
@@ -464,6 +472,7 @@ public class ContestController extends OjController {
         redirect(new StringBuilder(2).append("/contest/admin/").append(contestModel.getInt("cid")).toString());
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("problem:edit")
     public void editProblem() {
         Integer cid = getParaToInt(0);
@@ -484,6 +493,7 @@ public class ContestController extends OjController {
 
     @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
     @Before(POST.class)
+    @RequiresAuthentication
     @RequiresPermissions("problem:edit")
     public void updateProblem() {
         Integer cid = getParaToInt("cid");
@@ -498,6 +508,7 @@ public class ContestController extends OjController {
         redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("contest:addProblem")
     public void admin() {
         Integer cid = getParaToInt(0);
@@ -521,6 +532,7 @@ public class ContestController extends OjController {
         setTitle("Manage Contest " + cid);
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("contest:addUser")
     public void adminUser() {
         Integer cid = getParaToInt(0);
@@ -545,6 +557,7 @@ public class ContestController extends OjController {
     }
 
     @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @RequiresAuthentication
     @RequiresPermissions("contest:build")
     public void build() {
         Integer cid = getParaToInt(0);
@@ -554,6 +567,7 @@ public class ContestController extends OjController {
             new FlashMessage(getText("contest.buildRank.success")));
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("problem:edit")
     public void lockBoard() {
         Integer cid = getParaToInt(0);
@@ -562,6 +576,7 @@ public class ContestController extends OjController {
         }
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("problem:edit")
     public void unlockBoard() {
         Integer cid = getParaToInt(0);
@@ -573,6 +588,7 @@ public class ContestController extends OjController {
         }
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("problem:edit")
     public void lockReport() {
         Integer cid = getParaToInt(0);
@@ -581,6 +597,7 @@ public class ContestController extends OjController {
         }
     }
 
+    @RequiresAuthentication
     @RequiresPermissions("problem:edit")
     public void unlockReport() {
         Integer cid = getParaToInt(0);

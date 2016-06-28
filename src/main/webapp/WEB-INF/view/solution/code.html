@@ -22,13 +22,18 @@
 <div class="row">
   <div class="span12">
     <h2>Source Code</h2>
-    <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">Copy to Clipboard</a></span> <span
-          id="message"></span>
+    <#if adminUser?? || user.uid==solution.uid>
+      <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">Copy to Clipboard</a></span> <span
+            id="message"></span>
+    </#if>
     <#if !alpha??>
       <span class="pull-right">
     <#if adminUser??><a class="btn btn-danger" href="solution/rejudge/${solution.sid!}">Rejudge</a></#if>
-        <a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}" data-toggle="modal"
-           data-target="#submitModal">Fork</a>
+        <#if adminUser?? || user.uid==solution.uid>
+          <a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}"
+             data-toggle="modal"
+             data-target="#submitModal">Fork</a>
+        </#if>
     </span>
     </#if>
     <script id="source" class="hidden">${solution.source!}</script>
