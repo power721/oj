@@ -65,7 +65,7 @@
     </div>
     <div class="span5 problems">
       <#if userModel.problems??>
-        <h4>Solved Problems</h4>
+        <h4>Solved Problems<#if userModel.shareCode==true><i class="icon-star"></i></#if></h4>
         <#list userModel.problems as problem>
           <#if problem.result == 0>
             <span><a href="status?pid=${problem.pid}&name=${userModel.name}&result=0"
