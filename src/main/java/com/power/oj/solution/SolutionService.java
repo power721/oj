@@ -332,7 +332,9 @@ public final class SolutionService {
             return true;
         }
 
-        return solutionModel.getResult().equals(ResultType.AC) && isSolvedProblem(loginUid, solutionModel);
+        int result = solutionModel.getResult();
+        return result == ResultType.AC && isUserShareCode(uid) && isUserShareCode(loginUid) && isUserSolvedProblem(
+            loginUid, solutionModel.getPid());
     }
 
     public boolean canAccessSolution(SolutionModel solutionModel) {
@@ -347,11 +349,16 @@ public final class SolutionService {
             return true;
         }
 
-        return solutionModel.getResult().equals(ResultType.AC) && isSolvedProblem(loginUid, solutionModel);
+        int result = solutionModel.getResult();
+        return result == ResultType.AC && isUserShareCode(uid) && isUserShareCode(loginUid) && isUserSolvedProblem(
+            loginUid, solutionModel.getPid());
     }
 
-    private boolean isSolvedProblem(Integer uid, SolutionModel solutionModel) {
-        Integer pid = solutionModel.getPid();
+    private boolean isUserShareCode(Integer uid) {
+        return UserService.me().getUserByUid(uid).getShareCode();
+    }
+
+    private boolean isUserSolvedProblem(Integer uid, Integer pid) {
         return ProblemService.me().isUserSolvedProblem(uid, pid);
     }
 

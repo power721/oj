@@ -235,6 +235,7 @@ public final class UserService {
         newUser.setGender(HtmlEncoder.text(userModel.getGender()));
         newUser.setLanguage(userModel.getLanguage());
         newUser.setQQ(HtmlEncoder.text(userModel.getQQ()));
+        newUser.setShareCode(userModel.getShareCode());
         newUser.setMtime(OjConfig.timeStamp);
         updateCache(newUser);
 
