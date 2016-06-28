@@ -130,9 +130,9 @@ sudo chown -R ${USER}:${GROUP} /var/www/assets
 sudo chown -R ${USER}:${GROUP} /var/www/upload
 sudo chown -R ${USER}:${GROUP} /var/www/download
 
-#sudo chmod -R 664 /var/www/assets
-#sudo chmod -R 664 /var/www/upload
-#sudo chmod -R 664 /var/www/download
+sudo chmod -R 775 /var/www/assets
+sudo chmod -R 775 /var/www/upload
+sudo chmod -R 775 /var/www/download
 echo "/var/www/"
 ls -l --color=auto /var/www/
 
