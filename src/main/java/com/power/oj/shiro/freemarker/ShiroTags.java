@@ -18,6 +18,7 @@ public class ShiroTags extends SimpleHash {
     private static final long serialVersionUID = -724290975679296422L;
 
     public ShiroTags(ObjectWrapper wrapper) {
+        super(wrapper);
         put("authenticated", new AuthenticatedTag());
         put("guest", new GuestTag());
         put("hasAnyRoles", new HasAnyRolesTag());

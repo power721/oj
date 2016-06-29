@@ -1,20 +1,18 @@
 package com.power.oj.util.freemarker;
 
-import freemarker.template.TemplateMethodModel;
+import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModelException;
 
 import java.util.List;
 
-public class Num2AlphaMethod implements TemplateMethodModel {
+public class Num2AlphaMethod implements TemplateMethodModelEx {
 
-    @SuppressWarnings("rawtypes")
     @Override
     public Object exec(List args) throws TemplateModelException {
         Integer number = Integer.parseInt(args.get(0).toString());
 
         if (number >= 0 && number < 26) {
-            char c = (char) (number + 'A');
-            return c;
+            return (char) (number + 'A');
         }
 
         return null;
