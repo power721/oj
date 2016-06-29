@@ -873,6 +873,16 @@ public final class UserService {
         return userModel.get(name);
     }
 
+    public boolean isUserNameExist(String name) {
+        Long result = Db.queryLong("SELECT 1 FROM user WHERE name=?", name);
+        return result != null && result == 1;
+    }
+
+    public boolean isEmailExist(String email) {
+        Long result = Db.queryLong("SELECT 1 FROM user WHERE email=?", email);
+        return result != null && result == 1;
+    }
+
     private void updateCache(UserModel user) {
         CacheKit.put("user", user.getUid(), user);
     }
