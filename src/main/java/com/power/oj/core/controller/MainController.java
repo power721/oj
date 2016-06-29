@@ -1,9 +1,7 @@
 package com.power.oj.core.controller;
 
 import com.jfinal.aop.Clear;
-import com.jfinal.ext.render.CaptchaRender;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 
 /**
@@ -58,8 +56,7 @@ public class MainController extends OjController {
 
     @Clear
     public void captcha() {
-        CaptchaRender img = new CaptchaRender(OjConstants.RANDOM_CODE_KEY);
-        render(img);
+        renderCaptcha();
     }
 
 }

@@ -1,7 +1,6 @@
 package com.power.oj.user.validator;
 
 import com.jfinal.core.Controller;
-import com.jfinal.ext.render.CaptchaRender;
 import com.jfinal.i18n.I18n;
 import com.jfinal.validate.Validator;
 import com.power.oj.core.OjConstants;
@@ -41,8 +40,7 @@ public class SignupValidator extends Validator {
             validateRegex("user.name", regExpression, "nameMsg", passwordMsg);
         }
 
-        String captcha = c.getPara("captcha").toUpperCase();
-        if (!CaptchaRender.validate(c, captcha, OjConstants.RANDOM_CODE_KEY)) {
+        if (!c.validateCaptcha("captcha")) {
             addError("captchaMsg", I18n.use().get("validate.captcha.error"));
         }
     }

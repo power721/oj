@@ -18,7 +18,7 @@ public class SessionHandler extends Handler {
         SessionService.me().setHost(request);
         SessionService.me().setUserAgent(request);
 
-        nextHandler.handle(target, request, response, isHandled);
+        next.handle(target, request, response, isHandled);
     }
 
 }
