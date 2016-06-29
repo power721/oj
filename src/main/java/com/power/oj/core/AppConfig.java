@@ -19,6 +19,7 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.plugin.druid.IDruidStatViewAuth;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
+import com.jfinal.render.CaptchaRender;
 import com.jfinal.render.FreeMarkerRender;
 import com.power.oj.admin.AdminController;
 import com.power.oj.admin.ContestAdminController;
@@ -256,6 +257,7 @@ public class AppConfig extends JFinalConfig {
         OjConfig.initJudgeResult();
         OjConfig.loadConfig();
 
+        CaptchaRender.setCaptchaName("PowerOJCaptcha");
         I18n.setDefaultBaseName("ojText");
         // TODO:
         I18n.setDefaultLocale(Locale.ENGLISH.toString());

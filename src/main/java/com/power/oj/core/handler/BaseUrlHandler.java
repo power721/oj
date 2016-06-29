@@ -25,7 +25,7 @@ public class BaseUrlHandler extends Handler {
         }
 
         request.setAttribute(OjConstants.BASE_URL, request.getContextPath());
-        nextHandler.handle(target, request, response, isHandled);
+        next.handle(target, request, response, isHandled);
     }
 
 }

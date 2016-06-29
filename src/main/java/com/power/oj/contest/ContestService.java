@@ -475,7 +475,7 @@ public class ContestService {
 
                 contests.add(contest);
             }
-            json = JsonKit.toJson(contests, 2);
+            json = JsonKit.toJson(contests);
             CacheKit.put("contest", "recent", json);
         }
 

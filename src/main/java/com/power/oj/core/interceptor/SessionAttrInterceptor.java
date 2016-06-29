@@ -14,9 +14,9 @@ public class SessionAttrInterceptor implements Interceptor {
     public void intercept(Invocation ai) {
         Controller controller = ai.getController();
         HttpSession session = controller.getSession();
-        Enumeration<String> sessionKeys = session.getAttributeNames();
+        Enumeration sessionKeys = session.getAttributeNames();
         while (sessionKeys.hasMoreElements()) {
-            String key = sessionKeys.nextElement();
+            String key = (String) sessionKeys.nextElement();
             Object value = session.getAttribute(key);
             controller.setAttr(key, value);
         }

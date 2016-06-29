@@ -6,8 +6,10 @@ import com.jfinal.render.RenderException;
 import com.power.oj.core.AppConfig;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +47,7 @@ public class FreemarkerKit {
                 // 设置模板路径
                 appConfig
                     .setDirectoryForTemplateLoading(new File(PathKit.getWebRootPath() + AppConfig.getBaseViewPath()));
-                appConfig.setObjectWrapper(new DefaultObjectWrapper());
+                appConfig.setObjectWrapper(new DefaultObjectWrapperBuilder(new Version(2, 3, 21)).build());
             } catch (IOException e) {
                 // TODO log
             }
