@@ -298,4 +298,14 @@ public class UserApiController extends OjController {
         renderJson("result", userService.getUidByName(getPara("name")));
     }
 
+    @Clear
+    public void isUserNameExist() {
+        renderJson("result", userService.isUserNameExist(getPara("name")));
+    }
+
+    @Clear
+    public void isEmailExist() {
+        renderJson("result", userService.isEmailExist(getPara("email")));
+    }
+
 }

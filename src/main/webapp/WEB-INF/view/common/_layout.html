@@ -73,7 +73,7 @@
         </#if>
         </ul>
         <ul class="nav pull-right">
-        <#if user??>
+        <#if user?? && user.uid??>
           <li class="dropdown active">
             <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i
                     class="icon-user"></i>${user.name!"user"}<b class="caret"></b></a>
