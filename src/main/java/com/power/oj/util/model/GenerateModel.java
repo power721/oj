@@ -3,6 +3,7 @@ package com.power.oj.util.model;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.Version;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,8 +15,10 @@ import java.util.Map;
 
 public class GenerateModel {
     public static void main(String[] args) throws SQLException, IOException, TemplateException {
-        Configuration config = new Configuration();
+        Configuration config = new Configuration(new Version(2, 3, 21));
         config.setClassForTemplateLoading(GenerateModel.class, "");
+        config.setLocalizedLookup(false);
+        config.setDirectoryForTemplateLoading(new File("src/main/java/com/power/oj/util/model"));
 
         int count = 0;
         Template temp = config.getTemplate("model.ftl");
@@ -32,8 +35,8 @@ public class GenerateModel {
             myModel.setColumns(DBConn.getColumnsInfoByTableName(table));
             map.put("myModel", myModel);
 
-            File createFolder =
-                new File(System.getProperty("user.dir") + "/src/" + DBConn.p.getProperty("package").replace("", "/"));
+            File createFolder = new File(
+                System.getProperty("user.dir") + "/src/main/java/" + DBConn.p.getProperty("package").replace(".", "/"));
             createFolder.mkdirs();
             temp.process(map, new FileWriter(createFolder + "/" + myModel.getModelName() + ".java"));
 
