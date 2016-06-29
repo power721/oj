@@ -355,7 +355,7 @@ public final class SolutionService {
     }
 
     private boolean isUserShareCode(Integer uid) {
-        return UserService.me().getUserByUid(uid).getShareCode();
+        return uid != null && UserService.me().getUserByUid(uid).getShareCode();
     }
 
     private boolean isUserSolvedProblem(Integer uid, Integer pid) {
