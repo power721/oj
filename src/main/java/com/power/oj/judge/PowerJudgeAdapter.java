@@ -40,6 +40,12 @@ public class PowerJudgeAdapter extends JudgeAdapter {
             problemModel = problemService.findProblem(solution.getPid());
         }
 
+        if (problemModel == null) {
+            setResult(ResultType.SE, 0, 0);
+            updateSystemError("Cannot find problem " + solution.getPid());
+            return false;
+        }
+
         setResult(ResultType.RUN, 0, 0);
 
         int timeLimit = problemModel.getTimeLimit();
@@ -60,7 +66,7 @@ public class PowerJudgeAdapter extends JudgeAdapter {
         StringBuilder sb = new StringBuilder();
         InputStream errorStream = process.getErrorStream();
         while (errorStream.available() > 0) {
-            Character c = new Character((char) errorStream.read());
+            Character c = (char) errorStream.read();
             sb.append(c);
             if (sb.length() > OjConstants.MAX_ERROR_LENGTH) {
                 break;
@@ -76,8 +82,8 @@ public class PowerJudgeAdapter extends JudgeAdapter {
         }
         checkResult(resultStr, sb.toString());
 
-        log.info(Printf.str("Judge sid %d pid: %d: Total run time: %d ms  result: %d",
-            solution.getSid(), solution.getPid(), solution.getTime(), solution.getResult()));
+        log.info(Printf.str("Judge sid %d pid: %d: Total run time: %d ms memory: %d result: %d",
+            solution.getSid(), solution.getPid(), solution.getTime(), solution.getMemory(), solution.getResult()));
         synchronized (JudgeAdapter.class) {
             updateUser();
             if (!updateContest()) {

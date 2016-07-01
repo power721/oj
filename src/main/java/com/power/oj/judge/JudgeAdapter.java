@@ -27,10 +27,9 @@ public abstract class JudgeAdapter implements Runnable {
     protected static final ContestService contestService = ContestService.me();
     protected static final UserService userService = UserService.me();
     protected static final ProblemService problemService = ProblemService.me();
-    private static final Pattern classNamePattern = Pattern.compile("\\s*public\\s*(?:final)?\\s+class\\s+(\\w+)\\s*");
+    private static final Pattern classNamePattern = Pattern.compile("\\s*(?:public)?\\s*(?:final)?\\s+class\\s+(\\w+)\\s*");
     private static final int RESERVED_TEMP_DIRS = 25;
     protected final Logger log = Logger.getLogger(getClass());
-    private final ThreadLocal<Solution> solutionLocal = new ThreadLocal<Solution>();
     protected Solution solution;
     private File workDir;
     private boolean deleteTempDir = false;
@@ -41,7 +40,6 @@ public abstract class JudgeAdapter implements Runnable {
 
     public JudgeAdapter(Solution solution) {
         this();
-        solutionLocal.set(solution);
         this.solution = solution;
     }
 
@@ -144,16 +142,26 @@ public abstract class JudgeAdapter implements Runnable {
     private void generateClassFiles(ProgramLanguageModel programLanguage, String workDirPath, String className)
         throws IOException, URISyntaxException {
 
+        generateUserClass(programLanguage, workDirPath, className);
+
+        generateMainClass(programLanguage, workDirPath, className);
+    }
+
+    private void generateUserClass(ProgramLanguageModel programLanguage, String workDirPath, String className)
+        throws IOException {
         File sourceFile = new File(getFilePath(programLanguage, workDirPath, className));
         FileUtil.touch(sourceFile);
         String content = solution.getSource().replaceAll("\\s*package\\s+.*;", "");
-            FileUtil.writeString(sourceFile, content);
+        FileUtil.writeString(sourceFile, content);
         log.debug("Create source file: " + sourceFile);
+    }
 
-        sourceFile = new File(getFilePath(programLanguage, workDirPath, OjConstants.SOURCE_FILE_NAME));
+    private void generateMainClass(ProgramLanguageModel programLanguage, String workDirPath, String className)
+        throws IOException, URISyntaxException {
+        File sourceFile = new File(getFilePath(programLanguage, workDirPath, OjConstants.SOURCE_FILE_NAME));
         FileUtil.touch(sourceFile);
         File file = new File(getClass().getResource("/Main.ftl").toURI());
-        content = FileUtils.readFileToString(file).replace("${_CLASS_NAME_}", className);
+        String content = FileUtils.readFileToString(file).replace("${_CLASS_NAME_}", className);
         FileUtil.writeString(sourceFile, content);
         log.debug("Create source file: " + sourceFile);
     }
