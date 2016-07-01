@@ -1,1 +1,5 @@
 WebRoot/assets/* linguist-vendored
+src/main/webapp/assets/* linguist-vendored
+src/main/webapp/WEB-INF/view/* linguist-vendored
+oj.js linguist-vendored=false
+oj.css linguist-vendored=false
