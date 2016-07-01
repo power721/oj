@@ -1,5 +1,6 @@
 package com.power.oj.judge;
 
+import com.google.common.io.Files;
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -27,7 +28,8 @@ public abstract class JudgeAdapter implements Runnable {
     protected static final ContestService contestService = ContestService.me();
     protected static final UserService userService = UserService.me();
     protected static final ProblemService problemService = ProblemService.me();
-    private static final Pattern classNamePattern = Pattern.compile("\\s*(?:public)?\\s*(?:final)?\\s+class\\s+(\\w+)\\s*");
+    private static final Pattern classNamePattern =
+        Pattern.compile("\\s*(?:public)?\\s*(?:final)?\\s+class\\s+(\\w+)\\s*");
     private static final int RESERVED_TEMP_DIRS = 25;
     protected final Logger log = Logger.getLogger(getClass());
     protected Solution solution;
@@ -93,6 +95,15 @@ public abstract class JudgeAdapter implements Runnable {
                 } catch (IOException e) {
                     log.warn("Delete previous work directory failed!", e);
                 }
+            }
+        }
+
+        if (solution instanceof ContestSolutionModel) {
+            File dest = new File(workPath + "/java.policy");
+            if (!dest.exists()) {
+                File src = new File(workPath + "/../java.policy");
+                Files.copy(src, dest);
+                log.info("copy file " + src.getAbsolutePath() + " to " + dest.getAbsolutePath());
             }
         }
 

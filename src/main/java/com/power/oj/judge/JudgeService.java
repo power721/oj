@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -59,7 +58,7 @@ public final class JudgeService {
         }
 
         synchronized (JudgeAdapter.class) {
-            JudgeAdapter judgeThread = null;
+            JudgeAdapter judgeThread;
             if (OjConfig.isLinux()) {
                 judgeThread = new PowerJudgeAdapter(solution);
             } else {
@@ -85,7 +84,7 @@ public final class JudgeService {
         }
 
         synchronized (JudgeAdapter.class) {
-            JudgeAdapter judgeThread = null;
+            JudgeAdapter judgeThread;
             if (OjConfig.isLinux()) {
                 judgeThread = new PowerJudgeAdapter(solution);
             } else {
@@ -220,12 +219,12 @@ public final class JudgeService {
                 }
                 try {
                     // contestService.reset(cid);
-                    List<ContestSolutionModel> solutions = Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
+                    List<ContestSolutionModel> solutions =
+                        Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
                     task.setTotal(solutions.size());
                     synchronized (solutions) {
-                        Iterator<ContestSolutionModel> it = solutions.iterator();
-                        while (it.hasNext()) {
-                            rejudgeContestSolution(it.next());
+                        for (ContestSolutionModel solution : solutions) {
+                            rejudgeContestSolution(solution);
                             task.increaseCount();
                         }
                     }
@@ -234,8 +233,9 @@ public final class JudgeService {
                 } finally {
                     rejudgeTasks.remove(task.getKey());
                 }
-                log.info("Rejudge contest contest " + cid + " finished, total judge: "
-                    + task.getTotal() + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
+                log.info(
+                    "Rejudge contest contest " + cid + " finished, total judge: " + task.getTotal() + " total time: "
+                        + (System.currentTimeMillis() - startTime) + " ms");
             }
         });
         rejudgeExecutor.execute(rejudgeThread);
@@ -273,8 +273,8 @@ public final class JudgeService {
                 } finally {
                     rejudgeTasks.remove(task.getKey());
                 }
-                log.info("Rejudge contest problem " + cid + "-" + pid + " finished, total judge: "
-                    + task.getTotal() + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
+                log.info("Rejudge contest problem " + cid + "-" + pid + " finished, total judge: " + task.getTotal()
+                    + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
             }
         });
 
@@ -283,25 +283,27 @@ public final class JudgeService {
     }
 
     public int getDataFiles(Integer pid, List<String> inFiles, List<String> outFiles) throws IOException {
-        File dataDir = new File(
-            new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid).toString());
+        File dataDir = new File(OjConfig.getString("dataPath") + File.separator + pid);
         if (!dataDir.isDirectory()) {
             throw new IOException("Data files does not exist.");
         }
 
         File[] arrayOfFile = dataDir.listFiles();
+        if (arrayOfFile == null) {
+            return 0;
+        }
+
         if (arrayOfFile.length > 3) {
             Arrays.sort(arrayOfFile);
         }
 
-        for (int i = 0; i < arrayOfFile.length; i++) {
-            File inFile = arrayOfFile[i];
+        for (File inFile : arrayOfFile) {
             if (!inFile.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN)) {
                 continue;
             }
-            File outFile = new File(new StringBuilder().append(dataDir.getAbsolutePath()).append(File.separator)
-                .append(inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length()))
-                .append(OjConstants.DATA_EXT_OUT).toString());
+            File outFile = new File(dataDir.getAbsolutePath() + File.separator +
+                inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length()) +
+                OjConstants.DATA_EXT_OUT);
             if (!outFile.isFile()) {
                 log.warn(Printf.str("Output file for input file does not exist: %s", inFile.getAbsolutePath()));
                 continue;
@@ -314,37 +316,29 @@ public final class JudgeService {
     }
 
     public String getWorkPath(Integer cid) {
-        String workPath =
-            new StringBuilder(5).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")))
-                .append(File.separator).append("c").append(cid).append(File.separator).toString();
+        String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) +
+            File.separator + "c" + cid + File.separator;
 
         return workPath;
     }
 
     public String getWorkPath(Solution solution) {
-        String workPath =
-            new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")))
-                .append(File.separator).toString();
+        String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator;
         if (solution instanceof ContestSolutionModel) {
-            workPath =
-                new StringBuilder(4).append(workPath).append("c").append(solution.getCid()).append(File.separator)
-                    .toString();
+            workPath = workPath + "c" + solution.getCid() + File.separator;
         }
 
         return workPath;
     }
 
     public String getWorkDirPath(Solution solution) {
-        String workPath =
-            new StringBuilder(2).append(FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")))
-                .append(File.separator).toString();
+        String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator;
         if (solution instanceof ContestSolutionModel) {
-            workPath =
-                new StringBuilder(6).append(workPath).append("c").append(solution.getCid()).append(File.separator)
-                    .append(solution.getSid()).append(File.separator).toString();
+            workPath = workPath + "c" + solution.getCid() + File.separator +
+                solution.getSid() + File.separator;
         } else {
-            workPath = new StringBuilder(4).append(workPath).append(File.separator).append(solution.getSid())
-                .append(File.separator).toString();
+            workPath = workPath + File.separator + solution.getSid() +
+                File.separator;
         }
 
         return workPath;
