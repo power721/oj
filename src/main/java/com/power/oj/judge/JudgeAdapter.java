@@ -13,9 +13,13 @@ import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
 import jodd.io.FileUtil;
 import jodd.util.StringUtil;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public abstract class JudgeAdapter implements Runnable {
 
@@ -23,6 +27,7 @@ public abstract class JudgeAdapter implements Runnable {
     protected static final ContestService contestService = ContestService.me();
     protected static final UserService userService = UserService.me();
     protected static final ProblemService problemService = ProblemService.me();
+    private static final Pattern classNamePattern = Pattern.compile("\\s*public\\s*(?:final)?\\s+class\\s+(\\w+)\\s*");
     private static final int RESERVED_TEMP_DIRS = 25;
     protected final Logger log = Logger.getLogger(getClass());
     private final ThreadLocal<Solution> solutionLocal = new ThreadLocal<Solution>();
@@ -77,13 +82,12 @@ public abstract class JudgeAdapter implements Runnable {
         }
     }
 
-    protected void prepare() throws IOException {
+    protected void prepare() throws IOException, URISyntaxException {
         ProgramLanguageModel programLanguage = OjConfig.languageType.get(solution.getLanguage());
 
         String workPath = judgeService.getWorkPath(solution);
         if (solution instanceof SolutionModel && !needDeleteTempDir() && OjConfig.getBoolean("deleteTmpFile", false)) {
-            File prevWorkDir = new File(
-                new StringBuilder(2).append(workPath).append(solution.getSid() - RESERVED_TEMP_DIRS).toString());
+            File prevWorkDir = new File(workPath + (solution.getSid() - RESERVED_TEMP_DIRS));
             if (prevWorkDir.isDirectory()) {
                 try {
                     FileUtil.deleteDir(prevWorkDir);
@@ -94,7 +98,7 @@ public abstract class JudgeAdapter implements Runnable {
             }
         }
 
-        workDir = new File(new StringBuilder(2).append(workPath).append(solution.getSid()).toString());
+        workDir = new File(workPath + solution.getSid());
         if (workDir.isDirectory()) {
             try {
                 FileUtil.cleanDir(workDir);
@@ -108,11 +112,49 @@ public abstract class JudgeAdapter implements Runnable {
         }
         String workDirPath = workDir.getAbsolutePath();
 
-        File sourceFile = new File(
-            new StringBuilder(5).append(workDirPath).append(File.separator).append(OjConstants.SOURCE_FILE_NAME)
-                .append('.').append(programLanguage.getExt()).toString());
+        if (solution.getLanguage().equals(OjConfig.languageID.get("Java"))) {
+            String className = getJavaPublicClass(solution.getSource());
+            log.debug("className = " + className);
+            if (className != null && !className.equals(OjConstants.SOURCE_FILE_NAME)) {
+                generateClassFiles(programLanguage, workDirPath, className);
+                return;
+            }
+        }
+
+        File sourceFile = new File(getFilePath(programLanguage, workDirPath, OjConstants.SOURCE_FILE_NAME));
         FileUtil.touch(sourceFile);
         FileUtil.writeString(sourceFile, solution.getSource());
+
+        log.debug("Create source file: " + sourceFile);
+    }
+
+    private String getFilePath(ProgramLanguageModel programLanguage, String workDirPath, String name) {
+        return workDirPath + File.separator + name + '.' + programLanguage.getExt();
+    }
+
+    private String getJavaPublicClass(String content) {
+        String className = null;
+        Matcher matcher = classNamePattern.matcher(content);
+        if (matcher.find()) {
+            className = matcher.group(1);
+        }
+        return className;
+    }
+
+    private void generateClassFiles(ProgramLanguageModel programLanguage, String workDirPath, String className)
+        throws IOException, URISyntaxException {
+
+        File sourceFile = new File(getFilePath(programLanguage, workDirPath, className));
+        FileUtil.touch(sourceFile);
+        String content = solution.getSource().replaceAll("\\s*package\\s+.*;", "");
+            FileUtil.writeString(sourceFile, content);
+        log.debug("Create source file: " + sourceFile);
+
+        sourceFile = new File(getFilePath(programLanguage, workDirPath, OjConstants.SOURCE_FILE_NAME));
+        FileUtil.touch(sourceFile);
+        File file = new File(getClass().getResource("/Main.ftl").toURI());
+        content = FileUtils.readFileToString(file).replace("${_CLASS_NAME_}", className);
+        FileUtil.writeString(sourceFile, content);
         log.debug("Create source file: " + sourceFile);
     }
 
