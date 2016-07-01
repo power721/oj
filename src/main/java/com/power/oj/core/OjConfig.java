@@ -46,6 +46,7 @@ public class OjConfig {
     public static List<ProgramLanguageModel> programLanguages;
     public static Map<Integer, ProgramLanguageModel> languageType;
     public static Map<Integer, String> languageName;
+    public static Map<String, Integer> languageID;
     public static Map<Integer, ResultType> resultType;
     public static List<ResultType> judgeResult;
     public static List<Integer> level;
@@ -101,11 +102,13 @@ public class OjConfig {
     }
 
     public static void loadLanguage() {
-        languageType = new HashMap<Integer, ProgramLanguageModel>();
-        languageName = new HashMap<Integer, String>();
+        languageType = new HashMap<>();
+        languageName = new HashMap<>();
+        languageID = new HashMap<>();
         programLanguages = ProgramLanguageModel.dao.find("SELECT * FROM program_language WHERE status=1");
         for (ProgramLanguageModel language : programLanguages) {
             languageType.put(language.getId(), language);
+            languageID.put(language.getName(), language.getId());
             languageName.put(language.getId(), language.getName());
         }
     }
