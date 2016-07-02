@@ -28,6 +28,12 @@ public class UserAdminController extends OjController {
         setAttr("roleList", roleList);
     }
 
+    public void members() {
+        List<Record> membersList = ojService.getMembers();
+
+        setAttr("members", membersList);
+    }
+
     public void permission() {
         List<Record> roleList = ojService.getRoleList();
         List<Record> permissionList = ojService.getPermissionList();

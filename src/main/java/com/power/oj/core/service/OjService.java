@@ -7,6 +7,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.user.RoleModel;
+import com.power.oj.user.UserService;
 import com.power.oj.util.Tool;
 import com.power.oj.util.freemarker.FreemarkerKit;
 import jodd.mail.EmailMessage;
@@ -125,6 +126,11 @@ public final class OjService {
 
     public List<Record> getRoleList() {
         return Db.find("SELECT id,name FROM role ORDER BY id");
+    }
+
+    public List<Record> getMembers() {
+        return Db.find("SELECT u.uid,u.name,u.nick FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid WHERE ur.rid=? ORDER BY u.uid",
+            UserService.MEMBER_ROLE_ID);
     }
 
     public Page<RoleModel> getRoleList(int pageNumber, int pageSize, String sSortName, String sSortDir,

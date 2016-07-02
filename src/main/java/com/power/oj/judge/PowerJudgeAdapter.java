@@ -82,7 +82,7 @@ public class PowerJudgeAdapter extends JudgeAdapter {
         }
         checkResult(resultStr, sb.toString());
 
-        log.info(Printf.str("Judge sid %d pid: %d: Total run time: %d ms memory: %d result: %d",
+        log.info(Printf.str("Judge sid %d pid: %d: Total run time: %d ms memory: %d KB result: %d",
             solution.getSid(), solution.getPid(), solution.getTime(), solution.getMemory(), solution.getResult()));
         synchronized (JudgeAdapter.class) {
             updateUser();

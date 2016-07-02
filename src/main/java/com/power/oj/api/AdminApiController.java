@@ -64,6 +64,20 @@ public class AdminApiController extends OjController {
         renderJson(rolse);
     }
 
+    public void addMember() {
+        Integer uid = getParaToInt("uid");
+        int result = userService.addMember(uid);
+
+        renderJson("result", result);
+    }
+
+    public void removeMember() {
+        Integer uid = getParaToInt("uid");
+        int result = userService.removeMember(uid);
+
+        renderJson("result", result);
+    }
+
     public void changeUserRole() {
         int uid = getParaToInt("pk");
         int rid = getParaToInt("value");

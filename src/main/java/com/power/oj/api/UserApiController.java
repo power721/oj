@@ -99,7 +99,7 @@ public class UserApiController extends OjController {
         }
 
         if (userModel == null) {
-            renderJson("{result:'User does not exist!'}");
+            renderJson("success", false);
         } else {
             userModel.put("success", true);
             // TODO check user sensitive information
