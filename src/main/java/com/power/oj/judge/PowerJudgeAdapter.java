@@ -82,8 +82,8 @@ public class PowerJudgeAdapter extends JudgeAdapter {
         }
         checkResult(resultStr, sb.toString());
 
-        log.info(Printf.str("Judge sid %d pid: %d: Total run time: %d ms memory: %d KB result: %d",
-            solution.getSid(), solution.getPid(), solution.getTime(), solution.getMemory(), solution.getResult()));
+        log.info(Printf.str("Judge sid %d pid: %d: Total run time: %d ms memory: %d KB result: %d", solution.getSid(),
+            solution.getPid(), solution.getTime(), solution.getMemory(), solution.getResult()));
         synchronized (JudgeAdapter.class) {
             updateUser();
             if (!updateContest()) {
@@ -147,9 +147,7 @@ public class PowerJudgeAdapter extends JudgeAdapter {
     private String readError(String fileName) {
         String workPath = judgeService.getWorkPath(solution);
         StringBuilder sb = new StringBuilder();
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(judgeService.getWorkDirPath(solution) + fileName));
+        try (BufferedReader br = new BufferedReader(new FileReader(judgeService.getWorkDirPath(solution) + fileName))) {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().startsWith(workPath)) {
@@ -173,13 +171,6 @@ public class PowerJudgeAdapter extends JudgeAdapter {
             }
         } catch (Exception e) {
             log.error("readError failed.", e);
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException ignored) {
-                }
-            }
         }
 
         return sb.length() > 0 ? sb.toString() : null;

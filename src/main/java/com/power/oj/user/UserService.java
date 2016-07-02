@@ -569,9 +569,9 @@ public final class UserService {
             }
         }
 
-        log.info("token invlidate: " + name + "  " + token);
+        log.info("token invalidate: " + name + "  " + token);
         if (OjConfig.isDevMode()) {
-            log.info(userModel.toString());
+            log.info(userModel == null ? "" : userModel.toString());
         }
 
         return false;
