@@ -16,20 +16,38 @@ public class SignupValidator extends Validator {
 
     @Override
     protected void validate(Controller c) {
+        validatePassword();
+
+        validateEmail(c);
+
+        validateUserName(c);
+
+        if (!c.validateCaptcha("captcha")) {
+            addError("captchaMsg", I18n.use().get("validate.captcha.error"));
+        }
+    }
+
+    protected void validatePassword() {
         String regExpression = String.format(".{%d,%d}", passwordMinLength, passwordMaxLength);
         String passwordMsg =
             String.format(I18n.use().get("validate.password.length"), passwordMinLength, passwordMaxLength);
 
-        validateEmail("user.email", "emailMsg", I18n.use().get("validate.email.error"));
-        validateRegex("user.password", regExpression, "passwordMsg", passwordMsg);
-        validateEqualField("user.password", "repass", "confirmMsg", I18n.use().get("validate.password.confirm"));
+        validateRegex("User.password", regExpression, "passwordMsg", passwordMsg);
+        validateEqualField("User.password", "repass", "confirmMsg", I18n.use().get("validate.password.confirm"));
+    }
 
-        String email = c.getPara("user.email");
+    protected void validateEmail(Controller c) {
+        validateEmail("User.email", "emailMsg", I18n.use().get("validate.email.error"));
+        String email = c.getPara("User.email");
         if (StringUtil.isNotBlank(email) && UserService.me().containsEmail(email)) {
             addError("emailMsg", I18n.use().get("validate.email.exist"));
         }
+    }
 
-        String username = c.getPara("user.name");
+    protected void validateUserName(Controller c) {
+        String regExpression;
+        String passwordMsg;
+        String username = c.getPara("User.name");
         if (StringUtil.isNotBlank(username) && UserService.me().containsUsername(username)) {
             addError("nameMsg", I18n.use().get("validate.name.exist"));
         } else if (StringUtil.isNotBlank(username) && !checkReservedName(username)) {
@@ -37,23 +55,19 @@ public class SignupValidator extends Validator {
         } else {
             regExpression = String.format("[a-zA-Z0-9_]{%d,%d}", usernameMinLength, usernameMaxLength);
             passwordMsg = String.format(I18n.use().get("validate.name.error"), usernameMinLength, usernameMaxLength);
-            validateRegex("user.name", regExpression, "nameMsg", passwordMsg);
-        }
-
-        if (!c.validateCaptcha("captcha")) {
-            addError("captchaMsg", I18n.use().get("validate.captcha.error"));
+            validateRegex("User.name", regExpression, "nameMsg", passwordMsg);
         }
     }
 
     @Override
     protected void handleError(Controller c) {
-        c.keepModel(UserModel.class, "user");
+        c.keepModel(UserModel.class, "User");
         c.setAttr(OjConstants.PAGE_TITLE, I18n.use().get("user.signup.title"));
 
         c.render("signup.html");
     }
 
-    public boolean checkReservedName(String name) {
+    private boolean checkReservedName(String name) {
         name = name.toLowerCase();
 
         String reservedNames[] = {"admin", "root", "system", "default", "avatar"};

@@ -256,7 +256,7 @@ public class UserController extends OjController {
     @Before({POST.class, SignupValidator.class})
     @RequiresGuest
     public void save() {
-        UserModel userModel = getModel(UserModel.class, "user");
+        UserModel userModel = getModel(UserModel.class, "User");
 
         if (userService.signup(userModel)) {
             setCookie("oj_username", userModel.getName(), OjConstants.COOKIE_AGE);

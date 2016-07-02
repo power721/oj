@@ -340,3 +340,10 @@ INSERT INTO `role_permission` VALUES (6,10,77);
 #2016-6-26
 ALTER TABLE contest ADD `lockReport` tinyint(1) NOT NULL DEFAULT '0',
                     CHANGE `freeze` `lockBoard`  tinyint(1) NOT NULL DEFAULT '0';
+
+#2016-7-1
+ALTER TABLE contest ADD `lockBoardTime` int(9) NOT NULL DEFAULT '60',
+                  ADD `unlockBoardTime` int(9) NOT NULL DEFAULT '30';
+
+#2016-7-2
+ALTER TABLE user CHANGE `shareCode` `shareCode` tinyint(1) NOT NULL DEFAULT '1';

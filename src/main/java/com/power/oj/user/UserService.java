@@ -159,6 +159,40 @@ public final class UserService {
         return false;
     }
 
+    public boolean createUser(UserModel userModel) {
+        String name = HtmlEncoder.text(userModel.getName());
+        String password = BCrypt.hashpw(userModel.getPassword(), BCrypt.gensalt());
+        String email = userModel.getEmail();
+
+        int ctime = OjConfig.timeStamp;
+        UserModel newUser = new UserModel();
+        newUser.setName(name).setPassword(password).setEmail(email).setRegEmail(email);
+        newUser.setEmailVerified(true).setCtime(ctime).setMtime(ctime);
+
+        newUser.setNick(userModel.getNick());
+        newUser.setSchool(HtmlEncoder.text(userModel.getSchool()));
+        newUser.setRealName(HtmlEncoder.text(userModel.getRealName()));
+        newUser.setBlog(HtmlEncoder.text(userModel.getBlog()));
+        newUser.setEmail(HtmlEncoder.text(userModel.getEmail()));
+        newUser.setPhone(HtmlEncoder.text(userModel.getPhone()));
+        newUser.setGender(HtmlEncoder.text(userModel.getGender()));
+        newUser.setLanguage(userModel.getLanguage());
+        newUser.setQQ(HtmlEncoder.text(userModel.getQQ()));
+        newUser.setShareCode(userModel.getShareCode());
+
+        if (newUser.save()) {
+            int uid = newUser.getUid();
+            Db.update("INSERT INTO user_role (rid,uid) SELECT id,? FROM role WHERE name='user'", uid);
+
+            UserExtModel userExt = new UserExtModel();
+            userExt.setUid(uid).save();
+
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * signup with external account
      *

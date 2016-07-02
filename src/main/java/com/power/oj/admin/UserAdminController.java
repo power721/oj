@@ -4,6 +4,8 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.FlashMessage;
+import com.power.oj.user.UserModel;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
@@ -32,6 +34,10 @@ public class UserAdminController extends OjController {
         List<Record> membersList = ojService.getMembers();
 
         setAttr("members", membersList);
+    }
+
+    public void create() {
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
     }
 
     public void permission() {
