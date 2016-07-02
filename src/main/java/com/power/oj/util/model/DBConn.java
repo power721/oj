@@ -30,22 +30,62 @@ public class DBConn {
     }
 
     public static List<String> getTableNamesByDBName() throws SQLException, IOException {
-        Statement stame = (Statement) DBConn.getConnection().createStatement();
-        ResultSet rs = stame.executeQuery("SHOW TABLES;");
-        List<String> list = new ArrayList<String>();
-        while (rs.next()) {
-            list.add(rs.getString(1));
+        Statement statement = null;
+        Connection connection = null;
+        try {
+            connection = DBConn.getConnection();
+            statement = (Statement) connection.createStatement();
+            ResultSet rs = statement.executeQuery("SHOW TABLES;");
+            List<String> list = new ArrayList<>();
+            while (rs.next()) {
+                list.add(rs.getString(1));
+            }
+            return list;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+
+                }
+            }
         }
-        return list;
     }
 
     public static List<String> getColumnsInfoByTableName(String tName) throws SQLException, IOException {
-        List<String> list = new ArrayList<String>();
-        Statement stame = (Statement) DBConn.getConnection().createStatement();
-        ResultSet rs = stame.executeQuery("DESC " + tName + ";");
-        while (rs.next()) {
-            list.add(rs.getString(1) + ";" + rs.getString(2));
+        List<String> list = new ArrayList<>();
+        Statement statement = null;
+        Connection connection = null;
+        try {
+            connection = DBConn.getConnection();
+            statement = (Statement) connection.createStatement();
+            ResultSet rs = statement.executeQuery("DESC " + tName + ";");
+            while (rs.next()) {
+                list.add(rs.getString(1) + ";" + rs.getString(2));
+            }
+            return list;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+
+                }
+            }
         }
-        return list;
     }
 }
