@@ -25,10 +25,10 @@
           <#list members as User>
           <tr class="user" uid="${User.uid!}">
             <td class="pid">
-              <a href="user/profile/${User.name!}" title="${User.realName!}">${User.uid!}</a>
+              <a href="user/profile/${User.name!}" title="${User.realName!}" target="_blank">${User.uid!}</a>
             </td>
-            <td class="name"><a href="user/profile/${User.name!}">${User.name!}</a></td>
-            <td class="nick"><a href="user/profile/${User.nick!}">${User.nick!}</a></td>
+            <td class="name"><a href="user/profile/${User.name!}" target="_blank">${User.name!}</a></td>
+            <td class="nick"><a href="user/profile/${User.nick!}" target="_blank">${User.nick!}</a></td>
             <td class="admin">
               <button class="btn btn-danger remove" uid="${User.uid!}">Remove</button>
             </td>
@@ -129,12 +129,15 @@
                   switch (data.result) {
                     case 0:
                       var html = '<tr class="user" uid="' + uid + '">' +
-                              '<td class="uid"><a href="user/profile/' + name + '">' + uid + '</a></td>' +
-                              '<td class="name"><a href="user/profile/' + name + '">' + name + '</a></td>' +
-                              '<td class="nick"><a href="user/profile/' + name + '">' + nick + '</a></td>' +
+                              '<td class="uid"><a href="user/profile/' + name + '" target="_blank">' + uid + '</a></td>' +
+                              '<td class="name"><a href="user/profile/' + name + '" target="_blank">' + name + '</a></td>' +
+                              '<td class="nick"><a href="user/profile/' + name + '" target="_blank">' + nick + '</a></td>' +
                               '<td class="admin"><button class="btn btn-danger remove" uid="' + uid + '">Remove</button></td>' +
                               '</tr>';
                       that.parent().before(html);
+                      $("input[name='uid']").val('');
+                      $("input[name='name']").val('');
+                      $("input[name='nick']").val('');
                       break;
                     case 1:
                       $.dialog({

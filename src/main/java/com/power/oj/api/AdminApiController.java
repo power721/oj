@@ -1,11 +1,14 @@
 package com.power.oj.api;
 
 import com.jfinal.aop.Before;
+import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.admin.AdminService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.shiro.ShiroKit;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 
 import java.util.HashMap;
@@ -62,6 +65,19 @@ public class AdminApiController extends OjController {
             rolse.put(id, record.getStr("name"));
         }
         renderJson(rolse);
+    }
+
+    @Before({POST.class, CreateUserValidator.class})
+    public void addUser() {
+        UserModel userModel = getModel(UserModel.class, "User");
+
+        if (userService.createUser(userModel)) {
+            setFlashMessage(new FlashMessage(getText("user.save.success")));
+        } else {
+            // TODO
+        }
+
+        redirect("/admin/user");
     }
 
     public void addMember() {

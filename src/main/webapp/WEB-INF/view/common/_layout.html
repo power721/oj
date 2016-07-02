@@ -148,11 +148,11 @@
       </div>
       <div class="control-group
             <#if nameMsg??>error</#if>">
-        <label class="control-label" for="inputAccount">Account</label>
+        <label class="control-label" for="inputName">Account</label>
         <div class="controls">
           <div class="input-prepend">
             <span class="add-on"><i class="icon-user"></i></span>
-            <input type="text" id="inputAccount" name="name" value="${name!}" placeholder="User name" autofocus
+            <input type="text" id="inputName" name="name" value="${name!}" placeholder="User name" autofocus
                    required>
           </div>
         </div>
@@ -305,7 +305,7 @@
   $(document).ready(function () {
     $('#loginModal').on('shown.bs.modal', function () {
       if ($.cookie && $.cookie("oj_username") != null) {
-        $('input#inputAccount').val($.cookie('oj_username'));
+        $('input#inputName').val($.cookie('oj_username'));
         $('input#inputPassword').focus();
       }
     });
