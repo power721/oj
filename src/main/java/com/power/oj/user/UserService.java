@@ -42,7 +42,10 @@ public final class UserService {
     private static final UserService me = new UserService();
     private static final OjService ojService = OjService.me();
     public static final int ROOT_ROLE_ID = 1;
+    public static final int MEMBER_ROLE_ID = 3;
+    public static final int USER_ROLE_ID = 10;
     public static final String ROOT_ROLE_NAME = "root";
+    public static final String MEMBER_ROLE_NAME = "member";
 
     private UserService() {
     }
@@ -821,6 +824,37 @@ public final class UserService {
             return;
         }
         Db.update("UPDATE user_role SET rid=? WHERE uid=?", rid, uid);
+    }
+
+    public int addMember(int uid) {
+        Integer id = Db.queryInt("SELECT rid FROM user_role WHERE uid=?", uid);
+        if (id == null) {
+            return 1;
+        }
+        if (id == UserService.MEMBER_ROLE_ID) {
+            return 2;
+        }
+        if (id != UserService.USER_ROLE_ID) {
+            return 3;
+        }
+        if(Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.MEMBER_ROLE_ID, uid) != 1) {
+            return 4;
+        }
+        return 0;
+    }
+
+    public int removeMember(int uid) {
+        Integer id = Db.queryInt("SELECT rid FROM user_role WHERE uid=?", uid);
+        if (id == null) {
+            return 1;
+        }
+        if (id != UserService.MEMBER_ROLE_ID) {
+            return 2;
+        }
+        if(Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.USER_ROLE_ID, uid) != 1) {
+            return 3;
+        }
+        return 0;
     }
 
     public List<Record> getSubmittedProblems(Integer uid) {
