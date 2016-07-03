@@ -72,13 +72,31 @@
             </div>
           </div>
           <div class="control-group">
+            <label class="control-label" for="inputLockBoard"> Lock Board? </label>
             <div class="controls">
-              <label class="checkbox freeze">
-                <input class="freeze" id="inputLockBoard" type="checkbox" name="contest.lockBoard" value="1">Lock Board
-              </label>
-              <label class="checkbox lockReport">
-                <input class="lockReport" id="inputLockReport" type="checkbox" name="contest.lockReport" value="1">Lock Report
-              </label>
+              <input class="freeze" id="inputLockBoard" type="checkbox" name="contest.lockBoard" value="1">
+            </div>
+          </div>
+          <div class="control-group lockBoard" style="display: none">
+            <label class="control-label" for="inputLockBoardTime"> Lock Board Time </label>
+            <div class="controls">
+              <input class="input-mini" id="inputLockBoardTime" type="number" min="0" name="contest.lockBoardTime" value="60"> minutes
+            </div>
+          </div>
+          <div class="control-group lockBoard" style="display: none">
+            <label class="control-label" for="inputUnlockBoardTime"> Unlock Board Time </label>
+            <div class="controls">
+              <input class="input-mini" id="inputUnlockBoardTime" type="number" min="0" name="contest.unlockBoardTime" value="30"> minutes
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputLockReport"> Lock Report? </label>
+            <div class="controls">
+              <input class="lockReport" id="inputLockReport" type="checkbox" name="contest.lockReport" value="1">
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
               <button type="submit" class="btn btn-primary">Submit</button>
               <button type="reset" class="btn btn-info">Reset</button>
             </div>
@@ -101,17 +119,30 @@
     $('#inputDescription').tooltip({'trigger':'focus', 'title': '比赛描述。', 'placement': 'right'});
     $('#inputReport').tooltip({'trigger':'focus', 'title': '解题报告。', 'placement': 'right'});
     $('#inputType').tooltip({'title': '比赛类型，Password：密码访问，Private：私有比赛，结束后所有人可见，Strict Private,私有比赛，结束后仅参加者可见，Test：测试数据专用。', 'placement': 'right'});
-    $('.freeze').tooltip({'title': '勾选后，比赛结束前一个小时开始冻结比赛排名。', 'placement': 'right'});
+    $('#inputLockBoard').tooltip({'trigger': 'focus', 'title': '比赛结束前封榜？', 'placement': 'right'});
+    $('#inputLockBoardTime').tooltip({
+      'trigger': 'focus', 'title': '比赛结束前x分钟锁定排名。', 'placement': 'right'
+    });
+    $('#inputUnlockBoardTime').tooltip({
+      'trigger': 'focus', 'title': '比赛结束x分钟后解锁排名。', 'placement': 'right'
+    });
     $('.lockReport').tooltip({'title': '勾选后，比赛结束后不显示解题报告。', 'placement': 'right'});
     $("#inputType").change(function () {
       var val = $(this).val();
       if (val == 1) {
         $("div#password").show();
-        $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="password" id="inputPassword" name="contest.pass" placeholder="Password" required>');
+        $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="text" id="inputPassword" name="contest.password" placeholder="Password" required>');
       }
       else {
         $("div#contest-password").html('');
         $("div#password").hide();
+      }
+    });
+    $('#inputLockBoard').change(function () {
+      if (this.checked) {
+        $("div.lockBoard").show();
+      } else {
+        $("div.lockBoard").hide();
       }
     });
   });
