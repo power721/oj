@@ -23,7 +23,7 @@
   <div class="span12">
     <h2>Source Code</h2>
     <#if adminUser?? || user.uid==solution.uid>
-      <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">Copy to Clipboard</a></span> <span
+      <span><a data-clipboard-target="source" id="copy" class="btn btn-primary"><i class="fa fa-files-o" aria-hidden="true"></i> Copy to Clipboard</a></span> <span
             id="message"></span>
     </#if>
     <#if !alpha??>
@@ -32,7 +32,7 @@
         <#if adminUser?? || user.uid==solution.uid>
           <a class="btn btn-primary" href="problem/submit/${solution.pid!}?ajax=1&s=${solution.sid!}"
              data-toggle="modal"
-             data-target="#submitModal">Fork</a>
+             data-target="#submitModal"><i class="fa fa-code-fork" aria-hidden="true"></i> Fork</a>
         </#if>
     </span>
     </#if>
