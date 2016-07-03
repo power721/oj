@@ -80,13 +80,21 @@
           <div class="control-group lockBoard" style="display: none">
             <label class="control-label" for="inputLockBoardTime"> Lock Board Time </label>
             <div class="controls">
-              <input class="input-mini" id="inputLockBoardTime" type="number" min="0" name="contest.lockBoardTime" value="60"> minutes
+              <div class="input-prepend">
+                <span class="add-on"><i class="fa fa-calendar-minus-o" aria-hidden="true"></i></span>
+                <input class="input-mini" id="inputLockBoardTime" type="number" min="0" name="contest.lockBoardTime" value="60">
+                minutes
+              </div>
             </div>
           </div>
           <div class="control-group lockBoard" style="display: none">
             <label class="control-label" for="inputUnlockBoardTime"> Unlock Board Time </label>
             <div class="controls">
-              <input class="input-mini" id="inputUnlockBoardTime" type="number" min="0" name="contest.unlockBoardTime" value="30"> minutes
+              <div class="input-prepend">
+                <span class="add-on"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i></span>
+                <input class="input-mini" id="inputUnlockBoardTime" type="number" min="0" name="contest.unlockBoardTime"
+                       value="30"> minutes
+              </div>
             </div>
           </div>
           <div class="control-group">
