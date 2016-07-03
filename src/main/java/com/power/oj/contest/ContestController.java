@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Before({ContestInterceptor.class, SolutionInterceptor.class, ContestPasswordInterceptor.class})
+@Before({ContestInterceptor.class})
 public class ContestController extends OjController {
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     public void index() {
         int pageNumber = getParaToInt(0, 1);
         int pageSize = getParaToInt(1, OjConfig.contestPageSize);
@@ -136,7 +136,7 @@ public class ContestController extends OjController {
             render("submit.html");
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     @Before(POST.class)
     public void submitSolution() {
         ContestSolutionModel contestSolution = getModel(ContestSolutionModel.class, "solution");
@@ -396,12 +396,12 @@ public class ContestController extends OjController {
 
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     public void recent() {
         setTitle(getText("contest.recent.title"));
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     @Before(POST.class)
     public void password() {
         Integer cid = getParaToInt("cid");
@@ -432,7 +432,7 @@ public class ContestController extends OjController {
         render(ajax ? "ajax/edit.html" : "edit.html");
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     @Before(POST.class)
     @RequiresAuthentication
     @RequiresPermissions("contest:edit")
@@ -446,7 +446,7 @@ public class ContestController extends OjController {
         redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     @RequiresAuthentication
     @RequiresPermissions("contest:add")
     public void add() {
@@ -458,7 +458,7 @@ public class ContestController extends OjController {
         setTitle(getText("contest.add.title"));
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     @Before(POST.class)
     @RequiresAuthentication
     @RequiresPermissions("contest:add")
@@ -491,7 +491,7 @@ public class ContestController extends OjController {
         render(ajax ? "ajax/editProblem.html" : "editProblem.html");
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     @Before(POST.class)
     @RequiresAuthentication
     @RequiresPermissions("problem:edit")
@@ -556,7 +556,7 @@ public class ContestController extends OjController {
         //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());
     }
 
-    @Clear({ContestPasswordInterceptor.class, ContestInterceptor.class})
+    @Clear({ContestInterceptor.class})
     @RequiresAuthentication
     @RequiresPermissions("contest:build")
     public void build() {

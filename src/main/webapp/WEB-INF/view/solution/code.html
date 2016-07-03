@@ -23,8 +23,9 @@
   <div class="span12">
     <h2>Source Code</h2>
     <#if adminUser?? || user.uid==solution.uid>
-      <span><a data-clipboard-target="source" id="copy" class="btn btn-primary"><i class="fa fa-files-o" aria-hidden="true"></i> Copy to Clipboard</a></span> <span
-            id="message"></span>
+      <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">
+        <i class="fa fa-files-o" aria-hidden="true"></i> Copy to Clipboard</a></span>
+      <span id="message"></span>
     </#if>
     <#if !alpha??>
       <span class="pull-right">
