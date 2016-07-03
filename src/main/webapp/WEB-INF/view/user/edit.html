@@ -17,25 +17,35 @@
         <div class="control-group">
           <label class="control-label" for="inputNick">Nick</label>
           <div class="controls">
-            <input type="text" id="inputNick" name="user.nick" value="${user.nick!}" required>
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-user-plus" aria-hidden="true"></i></span>
+              <input type="text" id="inputNick" name="user.nick" value="${user.nick!}" required>
+            </div>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputSchool">School</label>
           <div class="controls">
-            <input type="text" minlength="3" id="inputSchool" name="user.school" value="${user.school!}">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-university" aria-hidden="true"></i></span>
+              <input type="text" minlength="3" id="inputSchool" name="user.school" value="${user.school!}">
+            </div>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputLanguage">Language</label>
           <div class="controls">
-            <select id="inputLanguage" name="user.language">
-              <#if program_languages??>
-                <#list program_languages.keySet() as key>
-                  <option value="${key!}"<#if user.language==key>selected</#if>>${program_languages.get(key)!}</option>
-                </#list>
-              </#if>
-            </select>
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-language" aria-hidden="true"></i></span>
+              <select id="inputLanguage" name="user.language">
+                <#if program_languages??>
+                  <#list program_languages.keySet() as key>
+                    <option value="${key!}"
+                            <#if user.language==key>selected</#if>>${program_languages.get(key)!}</option>
+                  </#list>
+                </#if>
+              </select>
+            </div>
           </div>
         </div>
         <div class="control-group">
@@ -59,36 +69,51 @@
         <div class="control-group">
           <label class="control-label" for="inputRealName">Real Name</label>
           <div class="controls">
-            <input type="text" minlength="2" maxlength="20" id="inputRealName" name="user.realName"
-                   value="${user.realName!}">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-user-secret" aria-hidden="true"></i></span>
+              <input type="text" minlength="2" maxlength="20" id="inputRealName" name="user.realName"
+                     value="${user.realName!}">
+            </div>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputPhone">Phone</label>
           <div class="controls">
-            <input type="tel" minlength="7" maxlength="15" id="inputPhone" name="user.phone" value="${user.phone!}">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-mobile" aria-hidden="true"></i></span>
+              <input type="tel" minlength="7" maxlength="15" id="inputPhone" name="user.phone" value="${user.phone!}">
+            </div>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputQQ">QQ</label>
           <div class="controls">
-            <input type="number" minlength="5" maxlength="12" id="inputQQ" name="user.qq" value="${user.qq!}">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-qq" aria-hidden="true"></i></span>
+              <input type="number" minlength="5" maxlength="12" id="inputQQ" name="user.qq" value="${user.qq!}">
+            </div>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputBlog">Blog</label>
           <div class="controls">
-            <input type="url" id="inputBlog" name="user.blog" value="${user.blog!}">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-link" aria-hidden="true"></i></span>
+              <input type="url" id="inputBlog" name="user.blog" value="${user.blog!}">
+            </div>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputGender">Gender</label>
           <div class="controls">
-            <select id="inputGender" name="user.gender">
-              <option value="secret"<#if user.gender=="secret">selected</#if>>secret</option>
-              <option value="male"<#if user.gender=="male">selected</#if>>male</option>
-              <option value="female"<#if user.gender=="female">selected</#if>>female</option>
-            </select>
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-genderless" aria-hidden="true"></i></span>
+              <select id="inputGender" name="user.gender">
+                <option value="secret"<#if user.gender=="secret">selected</#if>>Secret</option>
+                <option value="male"<#if user.gender=="male">selected</#if>>Male</option>
+                <option value="female"<#if user.gender=="female">selected</#if>>Female</option>
+              </select>
+            </div>
           </div>
         </div>
       </fieldset>
@@ -97,21 +122,30 @@
         <div class="control-group <#if passwordMsg??>error</#if>">
           <label class="control-label" for="inputOldPass">Old Password</label>
           <div class="controls">
-            <input type="password" minlength="6" maxlength="20" id="inputOldPass" name="oldpass"
-                   placeholder="your current password" required>
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
+              <input type="password" minlength="6" maxlength="20" id="inputOldPass" name="oldpass"
+                     placeholder="your current password" required>
+            </div>
             <p class="text-error">${passwordMsg!}</p>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputNewPass">New Password</label>
           <div class="controls">
-            <input type="password" minlength="6" maxlength="20" id="inputNewPass" name="user.password">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-lock" aria-hidden="true"></i></span>
+              <input type="password" minlength="6" maxlength="20" id="inputNewPass" name="user.password">
+            </div>
           </div>
         </div>
         <div class="control-group">
           <label class="control-label" for="inputConfirmPass">Confirm Password</label>
           <div class="controls">
-            <input type="password" minlength="6" maxlength="20" id="inputConfirmPass" name="repass">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-lock" aria-hidden="true"></i></span>
+              <input type="password" minlength="6" maxlength="20" id="inputConfirmPass" name="repass">
+            </div>
             <p class="text-error">${confirmMsg!}</p>
           </div>
         </div>
@@ -119,8 +153,8 @@
           <div class="control-group">
             <div class="controls">
               <input type="hidden" name="user.name" value="${user.name!}">
-              <button type="submit" class="btn btn-primary">Save</button>
-              <a class="btn btn-warning" href="user/profile/${user.name!}">Cancel</a>
+              <button type="submit" class="btn btn-primary"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+              <a class="btn btn-warning" href="user/profile/${user.name!}"><i class="fa fa-undo" aria-hidden="true"></i> Cancel</a>
             </div>
           </div>
     </form>

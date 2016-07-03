@@ -51,7 +51,7 @@
         <tr>
           <form class="form-inline" id="addUser" action="api/contest/addUser" method="post">
             <input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span>
-            <td><input type="number" name="uid" class="input-small" placeholder="User ID" required></td>
+            <td><input type="number" name="uid" class="input-small" placeholder="User ID" min="1000" required></td>
             <td><input type="text" name="name" class="input-large" placeholder="Name" required></td>
             <td>
               <button type="submit" class="btn btn-success">Add</button>
