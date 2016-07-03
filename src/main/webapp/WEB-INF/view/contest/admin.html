@@ -29,8 +29,10 @@
     <div class="well">
       <span>Start Time</span>: <span class="time">${contest.startDateTime!}</span>
       <span>End Time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <#if contest.lockBoard==true>
       <span>Lock Board Time</span>: <span class="time" id="lockBoardTime">${contest.lockBoardDateTime!}</span>
       <span>Unlock Board Time</span>: <span class="time" id="unlockBoardTime">${contest.unlockBoardDateTime!}</span><br>
+      </#if>
       <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span>
       <span>Contest Status</span>: <span class="status ${status!}">${status!}</span>
     </div>
