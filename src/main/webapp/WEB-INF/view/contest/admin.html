@@ -65,7 +65,10 @@
             </td>
             <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
             <td class="admin"><#if serverTime<contest.startTime>
-              <button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button></#if></td>
+              <button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button></#if>
+              <a href="contest/editProblem/${contest.cid!}-${Problem.id!}" class="btn btn-primary">Edit</a>
+              <a href="contest/rejudgeProblem/${contest.cid!}-${Problem.id!}" class="btn btn-danger">Rejudge</a>
+            </td>
           </tr>
           </#list>
         </#if>
@@ -103,6 +106,10 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
+    jQuery.ajaxSetup({
+      cache: true
+    });
+
     clock(function (current_time) {
       $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
     }, 1000);
