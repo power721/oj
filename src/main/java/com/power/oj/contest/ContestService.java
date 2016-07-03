@@ -35,6 +35,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -184,7 +185,6 @@ public class ContestService {
             sb.append(" AND type=?");
             paras.add(type);
         }
-        // TODO only admin and attendee can see test contest
 
         if (status == ContestModel.PENDING) {
             sb.append(" AND startTime>UNIX_TIMESTAMP()");
@@ -198,7 +198,8 @@ public class ContestService {
 
         Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
-        for (ContestModel contest : ContestList.getList()) {
+        for (Iterator<ContestModel> it = ContestList.getList().iterator(); it.hasNext(); ) {
+            ContestModel contest = it.next();
             int ctime = OjConfig.timeStamp;
             int startTime = contest.getStartTime();
             int endTime = contest.getEndTime();
@@ -220,12 +221,25 @@ public class ContestService {
             } else if (contest.isStrictPrivate()) {
                 ctype = "Strict Private";
             } else if (contest.isTest()) {
+                if (!canAccessTestContest(contest.getCid())) {
+                    it.remove();
+                    continue;
+                }
                 ctype = "Test";
             }
             contest.put("ctype", ctype);
         }
 
         return ContestList;
+    }
+
+    private boolean canAccessTestContest(Integer cid) {
+        if (userService.isAdmin()) {
+            return true;
+        }
+
+        Integer uid = userService.getCurrentUid();
+        return uid != null && isUserInContest(uid, cid);
     }
 
     public Page<ContestModel> getContestListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,

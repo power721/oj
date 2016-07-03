@@ -18,15 +18,16 @@
 <div class="row">
   <div class="span12">
     <h2>Source Code</h2>
-    <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">Copy to Clipboard</a></span> <span
-          id="message"></span>
+    <span><a data-clipboard-target="source" id="copy" class="btn btn-primary">
+      <i class="fa fa-files-o" aria-hidden="true"></i> Copy to Clipboard</a></span>
+    <span id="message"></span>
     <span class="pull-right">
     <#if adminUser?? && resultName!="AC">
       <a class="btn btn-danger" href="contest/rejudgeCode/${solution.cid!}-${solution.sid!}">Rejudge</a>
     </#if>
       <#if running>
         <a class="btn btn-primary" href="contest/submit/${solution.cid!}-${alpha!}?ajax=1&s=${solution.sid!}"
-           data-toggle="modal" data-target="#submitModal">Fork</a>
+           data-toggle="modal" data-target="#submitModal"><i class="fa fa-code-fork" aria-hidden="true"></i> Fork</a>
       </#if>
     </span>
     <script id="source" class="hidden">${solution.source!}</script>
