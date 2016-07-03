@@ -55,14 +55,16 @@ public class ContestService {
     }
 
     public ContestModel getContest(Integer cid) {
-        ContestModel contestModel = null;
+        ContestModel contestModel;
+        String sql = "SELECT *," + "FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime, "
+            + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime, "
+            + "FROM_UNIXTIME(endTime - lockBoardTime*60, '%Y-%m-%d %H:%i:%s') AS lockBoardDateTime, "
+            + "FROM_UNIXTIME(endTime + unlockBoardTime*60, '%Y-%m-%d %H:%i:%s') AS unlockBoardDateTime "
+            + "FROM contest WHERE cid=?";
         if (OjConfig.isDevMode()) {
-            contestModel = dao.findFirst("SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
-                + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM contest WHERE cid=?", cid);
+            contestModel = dao.findFirst(sql, cid);
         } else {
-            contestModel = dao.findFirstByCache("contest", cid,
-                "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
-                    + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM contest WHERE cid=?", cid);
+            contestModel = dao.findFirstByCache("contest", cid, sql, cid);
         }
         return contestModel;
     }
@@ -576,7 +578,8 @@ public class ContestService {
 
         if (contestModel.isLockBoard()) {
             int timeDiff = contestModel.getEndTime() - submitTime;
-            boolean isFreeze = timeDiff <= 3600;
+            int lockTime = contestModel.getLockBoardTime() * 60;
+            boolean isFreeze = (timeDiff <= lockTime);
 
             log.info(
                 "contest-" + cid + " submitTime: " + submitTime + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
@@ -590,10 +593,13 @@ public class ContestService {
 
         if (contestModel.isLockBoard()) {
             int timeDiff = contestModel.getEndTime() - OjConfig.timeStamp;
-//            boolean isFreeze = (timeDiff >= -1800 && timeDiff <= 3600);
-            boolean isFreeze = timeDiff <= 3600;
+            int lockTime = contestModel.getLockBoardTime() * 60;
+            int unlockTime = contestModel.getUnlockBoardTime() * 60;
+            boolean isFreeze = (timeDiff >= -unlockTime && timeDiff <= lockTime);
 
-            log.info("contest-" + cid + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
+            log.info(
+                "contest-" + cid + " timeDiff: " + timeDiff + " lockTime: " + lockTime + " unlockTime: " + unlockTime
+                    + " isFreeze: " + isFreeze);
             return isFreeze;
         }
         return false;
@@ -653,6 +659,8 @@ public class ContestService {
         newContest.setEndTime(contestModel.getEndTime());
         newContest.setType(contestModel.getType());
         newContest.setLockBoard(Tool.getBoolean(contestModel.isLockBoard()));
+        newContest.setLockBoardTime(contestModel.getLockBoardTime());
+        newContest.setUnlockBoardTime(contestModel.getUnlockBoardTime());
         newContest.setLockReport(Tool.getBoolean(contestModel.isLockReport()));
         newContest.setMtime(OjConfig.timeStamp);
         updateCache(newContest);

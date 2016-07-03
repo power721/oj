@@ -27,8 +27,10 @@
       <a href="contest/rejudge/${contest.cid!}" class="btn btn-danger">Rejudge</a>
     </#if>
     <div class="well">
-      <span>Start time</span>: <span class="time">${contest.startDateTime!}</span>
-      <span>End time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <span>Start Time</span>: <span class="time">${contest.startDateTime!}</span>
+      <span>End Time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <span>Lock Board Time</span>: <span class="time" id="lockBoardTime">${contest.lockBoardDateTime!}</span>
+      <span>Unlock Board Time</span>: <span class="time" id="unlockBoardTime">${contest.unlockBoardDateTime!}</span><br>
       <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span>
       <span>Contest Status</span>: <span class="status ${status!}">${status!}</span>
     </div>

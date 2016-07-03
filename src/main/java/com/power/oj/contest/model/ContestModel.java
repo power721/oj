@@ -18,6 +18,8 @@ public class ContestModel extends Model<ContestModel> {
     public static final String CTIME = "ctime";
     public static final String MTIME = "mtime";
     public static final String LOCK_BOARD = "lockBoard";
+    public static final String LOCK_BOARD_TIME = "lockBoardTime";
+    public static final String UNLOCK_BOARD_TIME = "unlockBoardTime";
     public static final String LOCK_REPORT = "lockReport";
     public static final String STATUS = "status";
     public static final int TYPE_PUBLIC = 0;
@@ -170,6 +172,26 @@ public class ContestModel extends Model<ContestModel> {
 
     public ContestModel setLockBoard(Boolean value) {
         return set(LOCK_BOARD, value);
+    }
+
+    public Integer getLockBoardTime()
+    {
+        return getInt(LOCK_BOARD_TIME);
+    }
+
+    public ContestModel setLockBoardTime(Integer value)
+    {
+        return set(LOCK_BOARD_TIME, value);
+    }
+
+    public Integer getUnlockBoardTime()
+    {
+        return getInt(UNLOCK_BOARD_TIME);
+    }
+
+    public ContestModel setUnlockBoardTime(Integer value)
+    {
+        return set(UNLOCK_BOARD_TIME, value);
     }
 
     public Boolean isLockReport() {
