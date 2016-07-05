@@ -133,8 +133,8 @@ public abstract class JudgeAdapter implements Runnable {
         File sourceFile = new File(getFilePath(programLanguage, workDirPath, OjConstants.SOURCE_FILE_NAME));
         FileUtil.touch(sourceFile);
         String content = solution.getSource().
-            replaceAll("#include\\s+\"\\.*/.*\".*", "#error \"Your action is logged!\"").
-            replaceAll("#include\\s+<\\.*/.*>.*", "#error \"Your action is logged!\"");
+            replaceAll("#\\s*include\\s+\"\\.*/.*\".*", "#error \"Your action is logged!\"").
+            replaceAll("#\\s*include\\s+<\\.*/.*>.*", "#error \"Your action is logged!\"");
         FileUtil.writeString(sourceFile, content);
 
         log.debug("Create source file: " + sourceFile);
