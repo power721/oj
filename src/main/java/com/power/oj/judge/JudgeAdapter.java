@@ -132,7 +132,10 @@ public abstract class JudgeAdapter implements Runnable {
 
         File sourceFile = new File(getFilePath(programLanguage, workDirPath, OjConstants.SOURCE_FILE_NAME));
         FileUtil.touch(sourceFile);
-        FileUtil.writeString(sourceFile, solution.getSource());
+        String content = solution.getSource().
+            replaceAll("#include\\s+\"\\.*/.*\".*", "#error \"Your action is logged!\"").
+            replaceAll("#include\\s+<\\.*/.*>.*", "#error \"Your action is logged!\"");
+        FileUtil.writeString(sourceFile, content);
 
         log.debug("Create source file: " + sourceFile);
     }
@@ -183,10 +186,7 @@ public abstract class JudgeAdapter implements Runnable {
             solution.setError(error);
         }
 
-        if (solution instanceof ContestSolutionModel) {
-            return ((ContestSolutionModel) solution).update();
-        }
-        return ((SolutionModel) solution).update();
+        return solution.update();
     }
 
     protected boolean updateRuntimeError(String error) {
@@ -195,10 +195,7 @@ public abstract class JudgeAdapter implements Runnable {
             solution.setError(error);
         }
 
-        if (solution instanceof ContestSolutionModel) {
-            return ((ContestSolutionModel) solution).update();
-        }
-        return ((SolutionModel) solution).update();
+        return solution.update();
     }
 
     protected boolean updateSystemError(String error) {
@@ -207,19 +204,13 @@ public abstract class JudgeAdapter implements Runnable {
             solution.setSystemError(error);
         }
 
-        if (solution instanceof ContestSolutionModel) {
-            return ((ContestSolutionModel) solution).update();
-        }
-        return ((SolutionModel) solution).update();
+        return solution.update();
     }
 
     protected boolean updateResult(int result, int time, int memory) {
         solution.setResult(result).setTime(time).setMemory(memory);
 
-        if (solution instanceof ContestSolutionModel) {
-            return ((ContestSolutionModel) solution).update();
-        }
-        return ((SolutionModel) solution).update();
+        return solution.update();
     }
 
     protected boolean updateResult(boolean ac, Integer test) {
@@ -229,10 +220,7 @@ public abstract class JudgeAdapter implements Runnable {
             solution.setTest(test);
         }
 
-        if (solution instanceof ContestSolutionModel) {
-            return ((ContestSolutionModel) solution).update();
-        }
-        return ((SolutionModel) solution).update();
+        return solution.update();
     }
 
     protected boolean setResult(int result, int time, int memory) {
@@ -253,10 +241,7 @@ public abstract class JudgeAdapter implements Runnable {
             return true;
         }
 
-        if (solution instanceof ContestSolutionModel) {
-            return ((ContestSolutionModel) solution).update();
-        }
-        return ((SolutionModel) solution).update();
+        return solution.update();
     }
 
     protected boolean setResult(int result, int time, int memory, int test) {
@@ -265,10 +250,7 @@ public abstract class JudgeAdapter implements Runnable {
         solution.setMemory(memory);
         solution.setTest(test);
 
-        if (solution instanceof ContestSolutionModel) {
-            return ((ContestSolutionModel) solution).update();
-        }
-        return ((SolutionModel) solution).update();
+        return solution.update();
     }
 
     protected boolean updateUser() {
