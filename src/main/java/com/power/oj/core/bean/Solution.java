@@ -71,4 +71,5 @@ public interface Solution {
 
     public Solution setStatus(Boolean value);
 
+    public boolean update();
 }
