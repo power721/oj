@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
 
@@ -59,11 +60,17 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             char[] buff = new char[256];
-            LOGGER.info("wait message!");
-            if (in.read(buff) == -1) {
+            LOGGER.info("waiting message!");
+            int num = in.read(buff);
+            if (num == -1) {
                 LOGGER.error("read socket error");
+                throw new SocketException("read socket error");
             } else {
-                LOGGER.info(new String(buff));
+                String reply = new String(buff, 0, num);
+                LOGGER.info(reply);
+                if (!"Authentication Ok.".equals(reply)) {
+                    throw new JudgeConfigurationException(reply);
+                }
             }
 
             out.write(
@@ -71,25 +78,40 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
                     + " " + memoryLimit);
             out.flush();
 
-            if (in.read(buff) == -1) {
+            LOGGER.info("waiting reply!");
+            num = in.read(buff);
+            if (num == -1) {
                 LOGGER.error("read socket error");
+                throw new SocketException("read socket error");
             } else {
-                LOGGER.info(new String(buff));
+                String reply = new String(buff, 0, num);
+                LOGGER.info(reply);
+                if (!"I got your request.".equals(reply)) {
+                    throw new JudgeConfigurationException(reply);
+                }
             }
             setResult(ResultType.RUN, 0, 0);
             return true;
+        } catch (JudgeConfigurationException e) {
+            LOGGER.error("judge configuration error", e);
+            updateSystemError(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("judge error, try to use PowerJudgeAdapter", e);
             super.runProcess();
         } finally {
-            if (socket != null) {
-                try {
-                    socket.close();
-                } catch (Exception e) {
-
-                }
-            }
+            closeSocket(socket);
         }
         return false;
     }
+
+    private void closeSocket(Socket socket) {
+        if (socket != null) {
+            try {
+                socket.close();
+            } catch (Exception e) {
+
+            }
+        }
+    }
+
 }
