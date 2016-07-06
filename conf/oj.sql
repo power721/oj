@@ -1312,6 +1312,9 @@ INSERT INTO `variable` VALUES (28,'uploadPath','/var/www/upload',NULL,NULL,NULL,
 INSERT INTO `variable` VALUES (29,'downloadPath','/var/www/download/',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (30,'userAvatarPath','/var/www/upload/image/user/',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (31,'problemImagePath','/var/www/upload/image/problem/',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (32,'judgeHost','127.0.0.1',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (33,'judgePort','12345',NULL,'12345',NULL,'int',NULL);
+INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
 /*!40000 ALTER TABLE `variable` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

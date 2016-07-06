@@ -64,6 +64,7 @@ public final class AdminService {
         systemInfo.put("userHome", SystemUtil.getUserHome());
         systemInfo.put("userName", SystemUtil.getUserName());
         systemInfo.put("classpath", SystemUtil.getClassPath());
+        systemInfo.put("judgeVersion", OjConfig.judgeVersion);
 
         systemInfo.put("mysql", Db.queryStr("select version() as v"));
 
@@ -89,6 +90,9 @@ public final class AdminService {
         ojInfo.put("compilerShell", OjConfig.getString("compileShell"));
         ojInfo.put("debugFile", OjConfig.getString("debugFile"));
         ojInfo.put("errorFile", OjConfig.getString("errorFile"));
+        ojInfo.put("judgeHost", OjConfig.getString("judgeHost"));
+        ojInfo.put("judgePort", OjConfig.getInt("judgePort"));
+        ojInfo.put("judgeSecurity", OjConfig.getString("judgeSecurity"));
 
         return ojInfo;
     }

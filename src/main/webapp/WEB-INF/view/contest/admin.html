@@ -7,7 +7,7 @@
 <div class="row text-center">
   <div class="span6 offset3">
     <#if (contest.type > 1)>
-        <a href="contest/adminUser/${contest.cid!}" class="btn btn-primary">Manage Users</a>
+      <a href="contest/adminUser/${contest.cid!}" class="btn btn-primary">Manage Users</a>
     </#if>
     <#if status=="Finished">
       <#if contest.lockBoard==true>
@@ -30,8 +30,9 @@
       <span>Start Time</span>: <span class="time">${contest.startDateTime!}</span>
       <span>End Time</span>: <span class="time">${contest.endDateTime!}</span><br>
       <#if contest.lockBoard==true>
-      <span>Lock Board Time</span>: <span class="time" id="lockBoardTime">${contest.lockBoardDateTime!}</span>
-      <span>Unlock Board Time</span>: <span class="time" id="unlockBoardTime">${contest.unlockBoardDateTime!}</span><br>
+        <span>Lock Board Time</span>: <span class="time" id="lockBoardTime">${contest.lockBoardDateTime!}</span>
+        <span>Unlock Board Time</span>: <span class="time"
+                                              id="unlockBoardTime">${contest.unlockBoardDateTime!}</span><br>
       </#if>
       <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span>
       <span>Contest Status</span>: <span class="status ${status!}">${status!}</span>
@@ -52,6 +53,8 @@
         <th>ID</th>
         <th>Problem</th>
         <th>Title</th>
+        <th>AC</th>
+        <th>Submit</th>
         <th>Action</th>
       </tr>
       </thead>
@@ -64,6 +67,9 @@
               <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
             </td>
             <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
+            <td class="accept"><a
+                    href="contest/status/${contest.cid!}?pid=${Problem.id!}&result=0">${Problem.accepted!}</a></td>
+            <td class="submit"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}">${Problem.submission!}</a>
             <td class="admin"><#if serverTime<contest.startTime>
               <button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button></#if>
               <a href="contest/editProblem/${contest.cid!}-${Problem.id!}" class="btn btn-primary">Edit</a>
@@ -78,6 +84,8 @@
             <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
             <td><input type="number" name="pid" class="input-small" min="1000" placeholder="Problem ID" required></td>
             <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
+            <td></td>
+            <td></td>
             <td>
               <button type="submit" class="btn btn-success">Add</button> <#if serverTime<contest.startTime><a
                     class="btn btn-info hidden" id="reorder">Save</a></#if></td>
@@ -213,12 +221,12 @@
                       break;
                     default:
                       var html = '<tr class="problem" pid="' + pid + '">' +
-                              '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>' +
-                              '<td class="pid">' +
-                              '<a href="problem/show/' + pid + '" target="_blank">' + pid + '</a>' +
-                              '</td>' +
-                              '<td class="title"><a href="contest/problem/' + cid + '-' + String.fromCharCode(65 + data.result) + '">' + title + '</a></td>' +
-                                      '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
+                              '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>'
+                              + '<td class="pid"><a href="problem/show/' + pid + '" target="_blank">' + pid + '</a></td>'
+                              + '<td class="title"><a href="contest/problem/' + cid + '-' + String.fromCharCode(65 + data.result) + '">' + title + '</a></td>'
+                              + '<td class="accept"><a href="contest/status/' + cid + '?pid=' + pid + '&result=0"></a></td>'
+                              + '<td class="submit"><a href="contest/status/' + cid + '?pid=' + pid + '"></a></td>'
+                              + '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
                               '</tr>';
                       that.parent().before(html);
                       updateId();

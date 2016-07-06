@@ -60,7 +60,11 @@ public final class JudgeService {
         synchronized (JudgeAdapter.class) {
             JudgeAdapter judgeThread;
             if (OjConfig.isLinux()) {
-                judgeThread = new PowerJudgeAdapter(solution);
+                if (OjConfig.judgeVersion != null && OjConfig.judgeVersion.startsWith("v2.")) {
+                    judgeThread = new PowerJudgeV2Adapter(solution);
+                } else {
+                    judgeThread = new PojJudgeAdapter(solution);
+                }
             } else {
                 judgeThread = new PojJudgeAdapter(solution);
             }
@@ -86,7 +90,7 @@ public final class JudgeService {
         synchronized (JudgeAdapter.class) {
             JudgeAdapter judgeThread;
             if (OjConfig.isLinux()) {
-                judgeThread = new PowerJudgeAdapter(solution);
+                judgeThread = new PowerJudgeV2Adapter(solution);
             } else {
                 judgeThread = new PojJudgeAdapter(solution);
             }

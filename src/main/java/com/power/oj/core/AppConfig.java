@@ -30,6 +30,7 @@ import com.power.oj.api.CommonApiController;
 import com.power.oj.api.ContestApiController;
 import com.power.oj.api.DiscussionApiController;
 import com.power.oj.api.FriendApiController;
+import com.power.oj.api.JudgeApiController;
 import com.power.oj.api.MailApiController;
 import com.power.oj.api.ProblemApiController;
 import com.power.oj.api.UserApiController;
@@ -149,6 +150,7 @@ public class AppConfig extends JFinalConfig {
         me.add("/api/oauth/sina", SinaLoginApiController.class, "/user/");
         me.add("/api/problem", ProblemApiController.class, "/problem/");
         me.add("/api/user", UserApiController.class, "/user/");
+        me.add("/api/judge", JudgeApiController.class, "/solution/");
         me.add("/contest", ContestController.class);
         me.add("/discuss", DiscussionController.class);
         me.add("/mail", MailController.class);
@@ -265,8 +267,9 @@ public class AppConfig extends JFinalConfig {
             EhcacheService.start();
 
             loadPropertyFile("oj.properties");
-            OjConfig.setBaseURL(getProperty("baseURL", null));
+            OjConfig.setBaseURL(getProperty("baseURL"));
         }
+        OjConfig.judgeVersion = getProperty("judge.version", "v1.0");
 
         log.info(PathKit.getWebRootPath());
         log.debug("afterJFinalStart finished.");
