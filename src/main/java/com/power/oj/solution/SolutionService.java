@@ -6,12 +6,16 @@ import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.bean.Solution;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 import jodd.util.StringUtil;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -356,6 +360,41 @@ public final class SolutionService {
 
     private boolean isUserShareCode(Integer uid) {
         return uid != null && UserService.me().getUserByUid(uid).getShareCode();
+    }
+
+    public boolean setResult(int sid, int cid, int result, int time, int memory, int test, File file) {
+        Solution solution;
+        if (cid > 0) {
+            solution = findContestSolution(sid);
+        } else {
+            solution = findSolution(sid);
+        }
+
+        String error = "";
+        if (file != null) {
+            try {
+                error = FileUtils.readFileToString(file, "UTF-8");
+                file.delete();
+            } catch (IOException e) {
+
+            }
+        }
+
+        if (solution != null) {
+            solution.setResult(result);
+            solution.setTime(time);
+            solution.setMemory(memory);
+            solution.setTest(test);
+            if (result == ResultType.CE || result == ResultType.RE) {
+                solution.setError(error);
+            } else if (result == ResultType.SE || result == ResultType.RF) {
+                solution.setSystemError(error);
+            }
+
+            return solution.update();
+        }
+
+        return false;
     }
 
     private boolean isUserSolvedProblem(Integer uid, Integer pid) {

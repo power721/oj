@@ -67,21 +67,21 @@
             <td><a href="#" id="dataPath">${dataPath!}</a></td>
           </tr>
           <tr>
-            <td>Compiler Binary</td>
-            <td><a href="#" id="compilerShell">${compilerShell!}</a></td>
+            <td>Judge Host</td>
+            <td><a href="#" id="judgeHost">${judgeHost!}</a></td>
           </tr>
           <tr>
-            <td>Run Binary</td>
-            <td><a href="#" id="runShell">${runShell!}</a></td>
+            <td>Judge Port</td>
+            <td><a href="#" id="judgePort">${judgePort!}</a></td>
           </tr>
           <tr>
-            <td>Debug File</td>
-            <td><a href="#" id="debugFile">${debugFile!}</a></td>
+            <td>Judge Security</td>
+            <td><a href="#" id="judgeSecurity">${judgeSecurity!}</a></td>
           </tr>
-          <tr>
-            <td>Error File</td>
-            <td><a href="#" id="errorFile">${errorFile!}</a></td>
-          </tr>
+          <#--<tr>-->
+            <#--<td>Error File</td>-->
+            <#--<td><a href="#" id="errorFile">${errorFile!}</a></td>-->
+          <#--</tr>-->
           </tbody>
         </table>
       </div>
@@ -146,30 +146,30 @@
       params: {type: 'string'},
       title: 'Change judge data path'
     });
-    $('#compilerShell').editable({
+    $('#judgeHost').editable({
       type: 'text',
       pk: 0,
       params: {type: 'string'},
-      title: 'Change POJ judge compiler path'
+      title: 'Change judge server IP'
     });
-    $('#runShell').editable({
+    $('#judgePort').editable({
       type: 'text',
       pk: 0,
       params: {type: 'string'},
-      title: 'Change POJ judge executor path'
+      title: 'Change judge server port'
     });
-    $('#debugFile').editable({
+    $('#judgeSecurity').editable({
       type: 'text',
       pk: 0,
       params: {type: 'string'},
-      title: 'Change POJ judge debug file path'
+      title: 'Change judge server security password'
     });
-    $('#errorFile').editable({
-      type: 'text',
-      pk: 0,
-      params: {type: 'string'},
-      title: 'Change POJ judge error file path'
-    });
+//    $('#errorFile').editable({
+//      type: 'text',
+//      pk: 0,
+//      params: {type: 'string'},
+//      title: 'Change POJ judge error file path'
+//    });
   });
 </script>
 </@override>

@@ -28,6 +28,7 @@ public class OjConfig {
     public static String uploadPath = null;
     public static String downloadPath = null;
     public static String webRootPath = null;
+    public static String judgeVersion = "v1.0";
 
     public static int contestPageSize = 20;
     public static int contestRankPageSize = 50;

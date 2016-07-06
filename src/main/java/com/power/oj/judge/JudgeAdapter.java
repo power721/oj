@@ -19,6 +19,9 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,12 +35,19 @@ public abstract class JudgeAdapter implements Runnable {
         Pattern.compile("\\s*(?:public)?\\s*(?:final)?\\s+class\\s+(\\w+)\\s*");
     private static final int RESERVED_TEMP_DIRS = 25;
     protected final Logger log = Logger.getLogger(getClass());
+    protected Set<PosixFilePermission> filePermissions = new HashSet<>();
     protected Solution solution;
     private File workDir;
     private boolean deleteTempDir = false;
 
     public JudgeAdapter() {
         super();
+        filePermissions.add(PosixFilePermission.OWNER_READ);
+        filePermissions.add(PosixFilePermission.OWNER_WRITE);
+        filePermissions.add(PosixFilePermission.OWNER_EXECUTE);
+        filePermissions.add(PosixFilePermission.GROUP_READ);
+        filePermissions.add(PosixFilePermission.GROUP_WRITE);
+        filePermissions.add(PosixFilePermission.GROUP_EXECUTE);
     }
 
     public JudgeAdapter(Solution solution) {
@@ -119,6 +129,7 @@ public abstract class JudgeAdapter implements Runnable {
             FileUtil.mkdirs(workDir);
             log.debug("Make directory: " + workDir);
         }
+        java.nio.file.Files.setPosixFilePermissions(workDir.toPath(), filePermissions);
         String workDirPath = workDir.getAbsolutePath();
 
         if (solution.getLanguage().equals(OjConfig.languageID.get("Java"))) {

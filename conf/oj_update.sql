@@ -347,3 +347,8 @@ ALTER TABLE contest ADD `lockBoardTime` int(9) NOT NULL DEFAULT '60',
 
 #2016-7-2
 ALTER TABLE user CHANGE `shareCode` `shareCode` tinyint(1) NOT NULL DEFAULT '1';
+
+#2016-7-6
+INSERT INTO `variable` VALUES (32,'judgeHost','127.0.0.1',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (33,'judgePort','12345',NULL,'12345',NULL,'int',NULL);
+INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
