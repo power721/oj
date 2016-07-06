@@ -9,6 +9,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.core.model.ProgramLanguageModel;
+import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 
 public abstract class JudgeAdapter implements Runnable {
 
+    private static final Logger LOGGER = Logger.getLogger(JudgeAdapter.class);
     protected static final JudgeService judgeService = JudgeService.me();
     protected static final ContestService contestService = ContestService.me();
     protected static final UserService userService = UserService.me();
@@ -146,6 +148,9 @@ public abstract class JudgeAdapter implements Runnable {
         String content = solution.getSource().
             replaceAll("#\\s*include\\s+\"\\.*/.*\".*", "#error \"Your action is logged!\"").
             replaceAll("#\\s*include\\s+<\\.*/.*>.*", "#error \"Your action is logged!\"");
+        if (content.length() != solution.getSource().length()) {
+            LOGGER.warn("User " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!");
+        }
         FileUtil.writeString(sourceFile, content);
 
         log.debug("Create source file: " + sourceFile);
