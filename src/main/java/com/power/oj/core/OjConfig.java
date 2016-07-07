@@ -54,6 +54,7 @@ public class OjConfig {
     private static String baseURL = null;
     private static Map<String, VariableModel> variable;
     private static boolean bIsLinux;
+    private static AppConfig appConfig;
 
     private static final Logger LOGGER = Logger.getLogger(OjConfig.class);
 
@@ -70,10 +71,15 @@ public class OjConfig {
         return bIsLinux;
     }
 
+    public static void setAppConfig(AppConfig appConfig) {
+        OjConfig.appConfig = appConfig;
+    }
+
     public static void loadConfig() {
         loadVariable();
         loadLanguage();
         loadLevel();
+        OjConfig.judgeVersion = appConfig.getProperty("judge.version", "v1.0");
     }
 
     public static void loadVariable() {
@@ -135,7 +141,7 @@ public class OjConfig {
         judgeResult.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
         judgeResult.add(new ResultType(ResultType.SE, "SE", "System Error"));
         judgeResult.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
-        judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Runing"));
+        judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Running"));
         judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
 
         resultType = new HashMap<Integer, ResultType>();

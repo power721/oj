@@ -33,6 +33,7 @@ if [ -z "${QUICK}" ]; then
   read -p "Do you want to continue with this mode?[Y/n]" cont
   [ "$cont" = 'n' -o "$cont" = 'N' ] && exit
 fi
+grep 'judge.version' ${CONF}
 
 if [ "${QUICK}" ]; then
   echo "use user/password from configuration file"
