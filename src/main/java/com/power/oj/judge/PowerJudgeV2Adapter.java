@@ -49,7 +49,7 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
         int memoryLimit = problemModel.getMemoryLimit();
 
         String hostName = OjConfig.getString("judgeHost", "127.0.0.1");
-        int portNumber = OjConfig.getInt("judgePort", 12345);
+        int portNumber = OjConfig.getInt("judgePort", 55555);
 
         Socket socket = null;
         try {
