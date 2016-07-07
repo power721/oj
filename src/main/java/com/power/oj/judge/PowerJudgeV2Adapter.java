@@ -60,14 +60,14 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
 
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             char[] buff = new char[256];
-            LOGGER.info("waiting message!");
+            LOGGER.debug("waiting message!");
             int num = in.read(buff);
             if (num == -1) {
                 LOGGER.error("read socket error");
                 throw new SocketException("read socket error");
             } else {
                 String reply = new String(buff, 0, num);
-                LOGGER.info(reply);
+                LOGGER.debug(reply);
                 if (!"Authentication Ok.".equals(reply)) {
                     throw new JudgeConfigurationException(reply);
                 }
@@ -78,14 +78,14 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
                     + " " + memoryLimit);
             out.flush();
 
-            LOGGER.info("waiting reply!");
+            LOGGER.debug("waiting reply!");
             num = in.read(buff);
             if (num == -1) {
                 LOGGER.error("read socket error");
                 throw new SocketException("read socket error");
             } else {
                 String reply = new String(buff, 0, num);
-                LOGGER.info(reply);
+                LOGGER.debug(reply);
                 if (!"I got your request.".equals(reply)) {
                     throw new JudgeConfigurationException(reply);
                 }

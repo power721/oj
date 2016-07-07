@@ -256,6 +256,7 @@ public class AppConfig extends JFinalConfig {
      */
     @Override
     public void afterJFinalStart() {
+        OjConfig.setAppConfig(this);
         OjConfig.initJudgeResult();
         OjConfig.loadConfig();
 
@@ -266,10 +267,8 @@ public class AppConfig extends JFinalConfig {
         if (!OjConfig.isDevMode()) {
             EhcacheService.start();
 
-            loadPropertyFile("oj.properties");
             OjConfig.setBaseURL(getProperty("baseURL"));
         }
-        OjConfig.judgeVersion = getProperty("judge.version", "v1.0");
 
         log.info(PathKit.getWebRootPath());
         log.debug("afterJFinalStart finished.");
