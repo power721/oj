@@ -12,6 +12,7 @@ import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 import jodd.io.FileUtil;
 import jodd.util.StringUtil;
@@ -199,7 +200,7 @@ public abstract class JudgeAdapter implements Runnable {
     protected boolean updateCompileError(String error) {
         solution.setResult(ResultType.CE);
         if (StringUtil.isNotBlank(error)) {
-            solution.setError(error);
+            SolutionService.checkCompileError(solution, error);
         }
 
         return solution.update();

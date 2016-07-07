@@ -1,5 +1,6 @@
 package com.power.oj.solution;
 
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
@@ -7,6 +8,7 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
+import com.power.oj.core.service.SessionService;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class SolutionService {
+
+    private static final Logger LOGGER = Logger.getLogger(SolutionService.class);
     private static final SolutionModel dao = SolutionModel.dao;
     private static final SolutionService me = new SolutionService();
 
@@ -385,7 +389,9 @@ public final class SolutionService {
             solution.setTime(time);
             solution.setMemory(memory);
             solution.setTest(test);
-            if (result == ResultType.CE || result == ResultType.RE) {
+            if (result == ResultType.CE) {
+                checkCompileError(solution, error);
+            } else if (result == ResultType.RE) {
                 solution.setError(error);
             } else if (result == ResultType.SE || result == ResultType.RF) {
                 solution.setSystemError(error);
@@ -395,6 +401,16 @@ public final class SolutionService {
         }
 
         return false;
+    }
+
+    public static void checkCompileError(Solution solution, String error) {
+        if (error.contains(OjConfig.getString("dataPath")) || error.contains(OjConfig.getString("workPath"))) {
+            String message = "User " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!";
+            LOGGER.warn(message);
+            solution.setSystemError(message + "\n" + error);
+        } else {
+            solution.setError(error);
+        }
     }
 
     private boolean isUserSolvedProblem(Integer uid, Integer pid) {
