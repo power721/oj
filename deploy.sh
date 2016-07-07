@@ -144,5 +144,6 @@ sudo ln -sf /var/www/upload ${TOMCAT}/oj/
 sudo ln -sf /var/www/download ${TOMCAT}/oj/
 echo "$TOMCAT/oj/"
 ls -l --color=auto ${TOMCAT}/oj/
+sudo find ${TOMCAT}/oj/WEB-INF/ -type f -exec chmod 600 {} \;
 
 echo "OJ deploy completed."
