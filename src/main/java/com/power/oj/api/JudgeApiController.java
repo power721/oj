@@ -36,7 +36,7 @@ public class JudgeApiController extends OjController {
 
         LOGGER.info("sid=" + sid + " cid=" + cid + " result=" + result + " time=" + time+ " memory=" + memory + " test=" + test);
         if(SolutionService.me().setResult(sid, cid, result, time, memory, test, file)) {
-            LOGGER.debug("set result successfully");
+            LOGGER.debug("set result successfully.");
         } else {
             LOGGER.error("set result failed!");
         }
