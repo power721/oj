@@ -105,7 +105,7 @@ public class AppConfig extends JFinalConfig {
      * 使用内置的Jetty容器， 基于Tomcat开发，需要将jetty.jar删除
      */
     public static void main(String[] args) {
-        JFinal.start("WebRoot", 8000, "/", 5);
+        JFinal.start("src/main/webapp", 8000, "/", 5);
     }
 
     /**

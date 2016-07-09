@@ -20,8 +20,13 @@
         </layout>
     </appender>
 
-    <root>
+    <logger name="com.power.oj" additivity="false">
         <level value="DEBUG"/>
+        <appender-ref ref="file"/>
+    </logger>
+
+    <root>
+        <level value="INFO"/>
         <!--<appender-ref ref="console"/>-->
         <appender-ref ref="file"/>
     </root>
