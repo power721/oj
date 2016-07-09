@@ -244,7 +244,6 @@ public class AppConfig extends JFinalConfig {
      */
     @Override
     public void afterJFinalStart() {
-        OjConfig.setAppConfig(this);
         OjConfig.initJudgeResult();
         OjConfig.loadConfig();
 

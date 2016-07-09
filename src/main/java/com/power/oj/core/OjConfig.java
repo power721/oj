@@ -1,6 +1,7 @@
 package com.power.oj.core;
 
 import com.jfinal.core.JFinal;
+import com.jfinal.kit.PropKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
@@ -42,7 +43,6 @@ public class OjConfig {
     public static int newsPageSize = 4;
     public static int timeStamp;
     public static long startInterceptorTime;
-    public static long startGlobalHandlerTime;
     public static boolean variableChanged = false;
     public static List<ProgramLanguageModel> programLanguages;
     public static Map<Integer, ProgramLanguageModel> languageType;
@@ -54,7 +54,6 @@ public class OjConfig {
     private static String baseURL = null;
     private static Map<String, VariableModel> variable;
     private static boolean bIsLinux;
-    private static AppConfig appConfig;
 
     private static final Logger LOGGER = Logger.getLogger(OjConfig.class);
 
@@ -71,19 +70,15 @@ public class OjConfig {
         return bIsLinux;
     }
 
-    public static void setAppConfig(AppConfig appConfig) {
-        OjConfig.appConfig = appConfig;
-    }
-
     public static void loadConfig() {
         loadVariable();
         loadLanguage();
         loadLevel();
-        OjConfig.judgeVersion = appConfig.getProperty("judge.version", "v1.0");
+        OjConfig.judgeVersion = PropKit.use("oj.properties").get("judge.version", "v1.0");
     }
 
     public static void loadVariable() {
-        variable = new HashMap<String, VariableModel>();
+        variable = new HashMap<>();
         for (VariableModel variableModel : VariableModel.dao.find("SELECT * FROM variable")) {
             variable.put(variableModel.getName(), variableModel);
         }
@@ -121,7 +116,7 @@ public class OjConfig {
     }
 
     public static void loadLevel() {
-        level = new ArrayList<Integer>();
+        level = new ArrayList<>();
         List<Record> levels = Db.find("SELECT * FROM level ORDER BY level");
         for (Record record : levels) {
             level.add(record.getInt("exp"));
@@ -129,7 +124,7 @@ public class OjConfig {
     }
 
     public static void initJudgeResult() {
-        judgeResult = new ArrayList<ResultType>();
+        judgeResult = new ArrayList<>();
         judgeResult.add(new ResultType(ResultType.AC, "AC", "Accepted"));
         judgeResult.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
         judgeResult.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
@@ -144,9 +139,8 @@ public class OjConfig {
         judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Running"));
         judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
 
-        resultType = new HashMap<Integer, ResultType>();
-        for (Iterator<ResultType> it = judgeResult.iterator(); it.hasNext(); ) {
-            ResultType result = it.next();
+        resultType = new HashMap<>();
+        for (ResultType result : judgeResult) {
             resultType.put(result.getId(), result);
         }
     }
