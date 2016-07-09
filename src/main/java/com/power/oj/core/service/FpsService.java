@@ -1,6 +1,5 @@
 package com.power.oj.core.service;
 
-import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
@@ -116,7 +115,7 @@ public class FpsService {
                 saveSourceCodeToFile("spj", lang, value);
             }
             if (name.equalsIgnoreCase("img")) {
-                problem.getImageList().add(saveIamge(e, num++));
+                problem.getImageList().add(saveImage(e, num++));
             }
         }
         problem.getModel().setDescription(setImages(problem.getModel().getDescription()));
@@ -315,7 +314,7 @@ public class FpsService {
         }
         String src;
         String base64;
-        String rootPath = PathKit.getWebRootPath() + File.separator;
+        String rootPath = OjConfig.webRootPath;
         Pattern p = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]?([^'\"]+)['\"]?[^>]*>", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(text);
 
@@ -380,7 +379,7 @@ public class FpsService {
         return html;
     }
 
-    private FpsImage saveIamge(Element e, int num) {
+    private FpsImage saveImage(Element e, int num) {
         FpsImage fpsImage = new FpsImage();
         Integer pid = problem.getModel().getPid();
 
@@ -389,7 +388,7 @@ public class FpsService {
         StringBuilder sb = new StringBuilder(6).append(OjConfig.problemImagePath).append(File.separator);
         sb.append(pid).append("_").append(num).append(".png");
         File imageFile = new File(sb.toString());
-        String src = imageFile.getAbsolutePath().replace(PathKit.getWebRootPath(), "").substring(1);
+        String src = imageFile.getAbsolutePath().replace(OjConfig.webRootPath, "").substring(1);
         fpsImage.setOriginalSrc(originalSrc);
         fpsImage.setSrc(src);
 

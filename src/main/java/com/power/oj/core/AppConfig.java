@@ -113,6 +113,7 @@ public class AppConfig extends JFinalConfig {
      */
     public void configConstant(Constants me) {
         loadPropertyFile("oj.properties");
+        me.setBaseUploadPath("/var/www/upload");
 
         FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
         FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
