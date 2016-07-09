@@ -13,6 +13,7 @@ import com.jfinal.ext.plugin.shiro.ShiroInterceptor;
 import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.i18n.I18n;
 import com.jfinal.kit.PathKit;
+import com.jfinal.kit.PropKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
@@ -21,21 +22,6 @@ import com.jfinal.plugin.druid.IDruidStatViewAuth;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.CaptchaRender;
 import com.jfinal.render.FreeMarkerRender;
-import com.power.oj.admin.AdminController;
-import com.power.oj.admin.ContestAdminController;
-import com.power.oj.admin.ProblemAdminController;
-import com.power.oj.admin.UserAdminController;
-import com.power.oj.api.AdminApiController;
-import com.power.oj.api.CommonApiController;
-import com.power.oj.api.ContestApiController;
-import com.power.oj.api.DiscussionApiController;
-import com.power.oj.api.FriendApiController;
-import com.power.oj.api.JudgeApiController;
-import com.power.oj.api.MailApiController;
-import com.power.oj.api.ProblemApiController;
-import com.power.oj.api.UserApiController;
-import com.power.oj.api.oauth.QQLoginApiController;
-import com.power.oj.api.oauth.SinaLoginApiController;
 import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.contest.ContestController;
 import com.power.oj.contest.model.BoardModel;
@@ -112,7 +98,7 @@ public class AppConfig extends JFinalConfig {
      * 配置常量
      */
     public void configConstant(Constants me) {
-        loadPropertyFile("oj.properties");
+        PropKit.use("oj.properties", "UTF-8");
         me.setBaseUploadPath("/var/www/upload");
 
         FreeMarkerRender.getConfiguration().setSharedVariable("block", new BlockDirective());
@@ -120,7 +106,7 @@ public class AppConfig extends JFinalConfig {
         FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
         FreeMarkerRender.getConfiguration().setSharedVariable("num2alpha", new Num2AlphaMethod());
 
-        me.setDevMode(getPropertyToBoolean("devMode", false));
+        me.setDevMode(PropKit.getBoolean("devMode", false));
         me.setBaseViewPath(BASE_VIEW_PATH);
         me.setError401View(BASE_VIEW_PATH + "/error/401.html");
         me.setError403View(BASE_VIEW_PATH + "/error/403.html");
@@ -159,11 +145,11 @@ public class AppConfig extends JFinalConfig {
     public void configPlugin(Plugins me) {
         DruidPlugin druidPlugin;
         if (isAceMode()) {
-            druidPlugin = new DruidPlugin(getProperty("ace.jdbcUrl"), getProperty("ace.user"),
-                getProperty("ace.password").trim());
+            druidPlugin = new DruidPlugin(PropKit.get("ace.jdbcUrl"), PropKit.get("ace.user"),
+                PropKit.get("ace.password").trim());
         } else {
-            druidPlugin = new DruidPlugin(getProperty("dev.jdbcUrl"), getProperty("dev.user"),
-                getProperty("dev.password").trim());
+            druidPlugin = new DruidPlugin(PropKit.get("dev.jdbcUrl"), PropKit.get("dev.user"),
+                PropKit.get("dev.password").trim());
         }
         druidPlugin.addFilter(new StatFilter());
         WallFilter wall = new WallFilter();
@@ -173,7 +159,7 @@ public class AppConfig extends JFinalConfig {
 
         // 配置ActiveRecord插件
         ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
-        arp.setShowSql(getPropertyToBoolean("devMode", false));
+        arp.setShowSql(PropKit.getBoolean("devMode", false));
         arp.addMapping("board", BoardModel.class);
         arp.addMapping("comment", CommentModel.class);
         arp.addMapping("contest", "cid", ContestModel.class);
@@ -254,7 +240,7 @@ public class AppConfig extends JFinalConfig {
         if (!OjConfig.isDevMode()) {
             EhcacheService.start();
 
-            OjConfig.setBaseURL(getProperty("baseURL"));
+            OjConfig.setBaseURL(PropKit.get("baseURL"));
         }
 
         log.info(PathKit.getWebRootPath());
