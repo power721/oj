@@ -74,7 +74,7 @@ public class OjConfig {
         loadVariable();
         loadLanguage();
         loadLevel();
-        OjConfig.judgeVersion = PropKit.use("oj.properties").get("judge.version", "v1.0");
+        OjConfig.judgeVersion = PropKit.get("judge.version", "v1.0");
     }
 
     public static void loadVariable() {
