@@ -28,7 +28,7 @@ else
   [ "$PULL" = 'Y' -o "$PULL" = 'y' ] && git pull
 fi
 
-grep 'devMode' ${CONF}
+grep '^\s*devMode=' ${CONF}
 if [ -z "${QUICK}" ]; then
   read -p "Do you want to continue with this mode?[Y/n]" cont
   [ "$cont" = 'n' -o "$cont" = 'N' ] && exit
@@ -111,16 +111,14 @@ while [ ! -d "${TOMCAT}/oj/WEB-INF/" ] || [ ${TOMCAT}/oj/WEB-INF/ -ot ${TOMCAT}/
     fi
 done
 
-echo "remove $TOMCAT/oj/assets/"
-if [ ! -L ${TOMCAT}/oj/assets ]; then
-    echo "delete director ${TOMCAT}/oj/assets"
-    sudo rm -rf ${TOMCAT}/oj/assets
+if grep -q '^\s*devMode=true' ${CONF}; then
+  echo "use log4j-dev.xml"
+  sudo cp src/main/resources/log4j-dev.xml $(find ${TOMCAT}/oj/ -type f -name log4j.xml)
 fi
 
-#sudo cp -r ${TOMCAT}/oj/upload/ /var/www/ 2>&1 >/dev/null
-sudo rm -rf ${TOMCAT}/oj/upload/
-#sudo cp -r ${TOMCAT}/oj/download/ /var/www/ 2>&1 >/dev/null
-sudo rm -rf ${TOMCAT}/oj/download/
+sudo rm -rf ${TOMCAT}/oj/assets
+sudo rm -rf ${TOMCAT}/oj/upload
+sudo rm -rf ${TOMCAT}/oj/download
 
 if [ -d /var/log/nginx/ ]; then
     USER=`stat -c '%U' /var/log/nginx/`
@@ -137,11 +135,6 @@ sudo chmod -R 775 /var/www/download
 echo "/var/www/"
 ls -l --color=auto /var/www/
 
-#echo "make soft link"
-### Issue: when delete oj.war from webapps, the directory /var/www/upload will be deleted by Tomcat  ###
-#sudo ln -sf /var/www/assets ${TOMCAT}/oj/
-#sudo ln -sf /var/www/upload ${TOMCAT}/oj/
-#sudo ln -sf /var/www/download ${TOMCAT}/oj/
 echo "$TOMCAT/oj/"
 ls -l --color=auto ${TOMCAT}/oj/
 sudo find ${TOMCAT}/oj/WEB-INF/ -type f -exec chmod 600 {} \;
