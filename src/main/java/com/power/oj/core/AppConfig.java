@@ -136,28 +136,15 @@ public class AppConfig extends JFinalConfig {
     public void configRoute(Routes me) {
         this.routes = me;
 
+        me.add(new AdminRoutes());
+        me.add(new ApiRoutes());
         me.add("/", MainController.class, "/common/");
-        me.add("/admin", AdminController.class);
-        me.add("/admin/contest", ContestAdminController.class);
-        me.add("/admin/problem", ProblemAdminController.class);
-        me.add("/admin/user", UserAdminController.class);
-        me.add("/api", CommonApiController.class, "/common/");
-        me.add("/api/admin", AdminApiController.class, "/admin/");
-        me.add("/api/contest", ContestApiController.class, "/contest/");
-        me.add("/api/discuss", DiscussionApiController.class, "/discuss/");
-        me.add("/api/friend", FriendApiController.class, "/user/");
-        me.add("/api/mail", MailApiController.class, "/mail/");
-        me.add("/api/oauth/qq", QQLoginApiController.class, "/user/");
-        me.add("/api/oauth/sina", SinaLoginApiController.class, "/user/");
-        me.add("/api/problem", ProblemApiController.class, "/problem/");
-        me.add("/api/user", UserApiController.class, "/user/");
-        me.add("/api/judge", JudgeApiController.class, "/solution/");
         me.add("/contest", ContestController.class);
         me.add("/discuss", DiscussionController.class);
-        me.add("/mail", MailController.class);
-        me.add("/notice", NoticeController.class);
         me.add("/honor", HonorController.class);
+        me.add("/mail", MailController.class);
         me.add("/news", NewsController.class);
+        me.add("/notice", NoticeController.class);
         me.add("/problem", ProblemController.class);
         me.add("/solution", SolutionController.class);
         me.add("/ueditor", UeditorController.class, "/common/");
