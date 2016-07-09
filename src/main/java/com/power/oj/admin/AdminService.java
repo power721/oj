@@ -283,6 +283,7 @@ public final class AdminService {
 
         try {
             document = XmlUtil.readDocument(file);
+            file.delete();
         } catch (DocumentException e) {
             if (OjConfig.isDevMode()) {
                 log.warn("read xml failed!", e);

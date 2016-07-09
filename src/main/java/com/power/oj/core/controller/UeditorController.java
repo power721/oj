@@ -1,6 +1,5 @@
 package com.power.oj.core.controller;
 
-import com.jfinal.kit.PathKit;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
@@ -36,7 +35,7 @@ public class UeditorController extends OjController {
     public void uploadImage() {
         UploadFile file = getFile("upfile", "", 10 * 1024 * 1024, "UTF-8");
 
-        String rootPath = PathKit.getWebRootPath() + File.separator;
+        String rootPath = OjConfig.webRootPath;
         String originalName = file.getOriginalFileName();
         String title = getPara("pictitle");
         String state = "SUCCESS";
@@ -53,7 +52,7 @@ public class UeditorController extends OjController {
     public void uploadProblemImage() {
         UploadFile file = getFile("upfile", "", 10 * 1024 * 1024, "UTF-8");
 
-        String rootPath = PathKit.getWebRootPath() + File.separator;
+        String rootPath = OjConfig.webRootPath;
         String originalName = file.getOriginalFileName();
         String title = getPara("pictitle");
         String state = "SUCCESS";
@@ -179,7 +178,7 @@ public class UeditorController extends OjController {
     @RequiresPermissions("image:admin")
     public void imageManager() {
         String imgStr = "";
-        String rootPath = PathKit.getWebRootPath() + File.separator;
+        String rootPath = OjConfig.webRootPath + File.separator;
         String imagesDir = OjConfig.problemImagePath;
         List<File> files = FileKit.getImageFiles(imagesDir, new ArrayList<File>());
 

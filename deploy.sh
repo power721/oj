@@ -92,8 +92,8 @@ mvn clean package || exit 1
 sudo mkdir -p ~/oj_backup/upload/image/
 echo "backup /var/www/upload/image/ to ~/oj_backup/upload/image/"
 sudo rsync -r /var/www/upload/image/ ~/oj_backup/upload/image/
-sudo rm -rf ${TOMCAT}/oj/upload
-sudo rm -rf ${TOMCAT}/oj/download
+#sudo rm -rf ${TOMCAT}/oj/upload
+#sudo rm -rf ${TOMCAT}/oj/download
 
 echo "copy ${ARTIFACT} to $TOMCAT/"
 sudo cp ${ARTIFACT} ${TOMCAT}/
@@ -118,9 +118,9 @@ if [ ! -L ${TOMCAT}/oj/assets ]; then
 fi
 
 #sudo cp -r ${TOMCAT}/oj/upload/ /var/www/ 2>&1 >/dev/null
-#sudo rm -rf ${TOMCAT}/oj/upload/
+sudo rm -rf ${TOMCAT}/oj/upload/
 #sudo cp -r ${TOMCAT}/oj/download/ /var/www/ 2>&1 >/dev/null
-#sudo rm -rf ${TOMCAT}/oj/download/
+sudo rm -rf ${TOMCAT}/oj/download/
 
 if [ -d /var/log/nginx/ ]; then
     USER=`stat -c '%U' /var/log/nginx/`
@@ -137,11 +137,11 @@ sudo chmod -R 775 /var/www/download
 echo "/var/www/"
 ls -l --color=auto /var/www/
 
-echo "make soft link"
+#echo "make soft link"
 ### Issue: when delete oj.war from webapps, the directory /var/www/upload will be deleted by Tomcat  ###
-sudo ln -sf /var/www/assets ${TOMCAT}/oj/
-sudo ln -sf /var/www/upload ${TOMCAT}/oj/
-sudo ln -sf /var/www/download ${TOMCAT}/oj/
+#sudo ln -sf /var/www/assets ${TOMCAT}/oj/
+#sudo ln -sf /var/www/upload ${TOMCAT}/oj/
+#sudo ln -sf /var/www/download ${TOMCAT}/oj/
 echo "$TOMCAT/oj/"
 ls -l --color=auto ${TOMCAT}/oj/
 sudo find ${TOMCAT}/oj/WEB-INF/ -type f -exec chmod 600 {} \;
