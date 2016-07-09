@@ -16,7 +16,7 @@
         <param name="file" value="${catalina.home}/logs/oj.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
-                   value="[%-d{yyyy-MM-dd HH\:mm\:ss}]-[%t]-[%l] %C{1}#%M()#%L%n[%p]\: %m%n"/>
+                   value="[%-d{yyyy-MM-dd HH\:mm\:ss}]-[%t]-[%l]%n[%p]\: %m%n"/>
         </layout>
     </appender>
 
