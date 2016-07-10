@@ -38,6 +38,17 @@ public final class SolutionService {
         return me;
     }
 
+    public static void checkCompileError(Solution solution, String error) {
+        if (error.contains(OjConfig.getString("dataPath")) || error.contains(OjConfig.getString("workPath"))) {
+            String message =
+                "User " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!";
+            LOGGER.warn(message);
+            solution.setSystemError(message + "\n" + error);
+        } else {
+            solution.setError(error);
+        }
+    }
+
     public Page<SolutionModel> getPage(int pageNumber, int pageSize, int result, int language, int pid,
         String userName) {
         String sql =
@@ -366,7 +377,12 @@ public final class SolutionService {
         return uid != null && UserService.me().getUserByUid(uid).getShareCode();
     }
 
-    public boolean setResult(int sid, int cid, int result, int time, int memory, int test, File file) {
+    public boolean setResult(int sid, int cid, int result, int time, int memory, int test, String token, File file) {
+        if (!judgeService.verifyToken(sid, token)) {
+            LOGGER.error("verify token for " + (cid > 0 ? cid + "-" : "") + sid + " failed.(" + token + ")");
+            return false;
+        }
+
         Solution solution;
         if (cid > 0) {
             solution = findContestSolution(sid);
@@ -419,16 +435,6 @@ public final class SolutionService {
         }
 
         return false;
-    }
-
-    public static void checkCompileError(Solution solution, String error) {
-        if (error.contains(OjConfig.getString("dataPath")) || error.contains(OjConfig.getString("workPath"))) {
-            String message = "User " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!";
-            LOGGER.warn(message);
-            solution.setSystemError(message + "\n" + error);
-        } else {
-            solution.setError(error);
-        }
     }
 
     private boolean isUserSolvedProblem(Integer uid, Integer pid) {

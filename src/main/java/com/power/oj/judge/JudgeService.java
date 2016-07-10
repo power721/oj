@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -34,7 +36,9 @@ public final class JudgeService {
     private static final UserService userService = UserService.me();
     //private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
     private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
-    private static final Map<String, RejudgeTask> rejudgeTasks = new HashMap<>();
+    private static final ConcurrentHashMap<String, RejudgeTask> rejudgeTasks = new ConcurrentHashMap<>();
+    // TODO: store token in redis with expire time
+    private static final ConcurrentHashMap<Integer, String> tokens = new ConcurrentHashMap<>();
 
     private JudgeService() {
     }
@@ -49,6 +53,20 @@ public final class JudgeService {
 
     public boolean isRejudging(String key) {
         return rejudgeTasks.containsKey(key);
+    }
+
+    public String generateToken(Integer sid) {
+        String token = UUID.randomUUID().toString() + "-" + sid;
+        tokens.put(sid, token);
+        return token;
+    }
+
+    public boolean verifyToken(Integer sid, String token) {
+        if (token != null && token.equals(tokens.get(sid))) {
+            tokens.remove(sid);
+            return true;
+        }
+        return false;
     }
 
     public void judge(Solution solution) {
