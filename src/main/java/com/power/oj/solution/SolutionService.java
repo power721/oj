@@ -9,15 +9,13 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.judge.JudgeResult;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 import jodd.util.StringUtil;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -377,7 +375,16 @@ public final class SolutionService {
         return uid != null && UserService.me().getUserByUid(uid).getShareCode();
     }
 
-    public boolean setResult(int sid, int cid, int result, int time, int memory, int test, String token, File file) {
+    public boolean setResult(JudgeResult judgeResult) {
+        int result = judgeResult.getResult();
+        int sid = judgeResult.getSid();
+        int cid = judgeResult.getCid();
+        int time = judgeResult.getTime();
+        int memory = judgeResult.getMemory();
+        int test = judgeResult.getTest();
+        String token = judgeResult.getToken();
+        String error = judgeResult.getError();
+
         if (!judgeService.verifyToken(sid, token)) {
             LOGGER.error("verify token for " + (cid > 0 ? cid + "-" : "") + sid + " failed.(" + token + ")");
             return false;
@@ -388,16 +395,6 @@ public final class SolutionService {
             solution = findContestSolution(sid);
         } else {
             solution = findSolution(sid);
-        }
-
-        String error = "";
-        if (file != null) {
-            try {
-                error = FileUtils.readFileToString(file, "UTF-8");
-                file.delete();
-            } catch (IOException e) {
-
-            }
         }
 
         if (solution != null) {
