@@ -39,7 +39,7 @@ public final class SolutionService {
     public static void checkCompileError(Solution solution, String error) {
         if (error.contains(OjConfig.getString("dataPath")) || error.contains(OjConfig.getString("workPath"))) {
             String message =
-                "User " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!";
+                "User id " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!";
             LOGGER.warn(message);
             solution.setSystemError(message + "\n" + error);
         } else {
