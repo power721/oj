@@ -21,6 +21,7 @@ public class JudgeApiController extends OjController {
         if (uploadFile != null) {
             file = uploadFile.getFile();
         }
+        String token = getPara("token");
         int result = getParaToInt("result");
         int sid = getParaToInt("sid");
         int cid = getParaToInt("cid");
@@ -35,7 +36,7 @@ public class JudgeApiController extends OjController {
         }
 
         LOGGER.info("sid=" + sid + " cid=" + cid + " result=" + result + " time=" + time+ " memory=" + memory + " test=" + test);
-        if(SolutionService.me().setResult(sid, cid, result, time, memory, test, file)) {
+        if(SolutionService.me().setResult(sid, cid, result, time, memory, test, token, file)) {
             LOGGER.debug("set result successfully.");
         } else {
             LOGGER.error("set result failed!");
