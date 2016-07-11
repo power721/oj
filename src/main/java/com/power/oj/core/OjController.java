@@ -115,9 +115,9 @@ public class OjController extends Controller {
         setAttr(OjConstants.PAGE_TITLE, title);
     }
 
-    protected String getText(String key) {
+    protected String getText(String key, Object... args) {
         Res resEn = I18n.use("en_US");
-        return resEn.get(key);
+        return String.format(resEn.get(key), args);
     }
 
 }

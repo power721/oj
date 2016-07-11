@@ -67,6 +67,46 @@ public class UserController extends OjController {
         setTitle(getText("user.profile.title"));
     }
 
+    @Before(POST.class)
+    public void compare() {
+        String name1 = getPara("name1");
+        String name2 = getPara("name2");
+
+        Integer uid1 = userService.getUidByName(name1);
+        if (uid1 == null) {
+            FlashMessage msg =
+                new FlashMessage(getText("user.error.none", name1), MessageType.WARN, getText("message.warn.title"));
+            redirect("/rank", msg);
+            return;
+        }
+
+        Integer uid2 = null;
+        if (name2 != null) {
+            uid2 = userService.getUidByName(name2);
+            if (uid2 == null) {
+                FlashMessage msg =
+                    new FlashMessage(getText("user.error.none", name2), MessageType.WARN, getText("message.warn.title"));
+                redirect("/rank", msg);
+                return;
+            }
+        }
+
+        if (uid2 == null) {
+            uid2 = userService.getCurrentUid();
+            name2 = userService.getCurrentUserName();
+        }
+
+        if (uid2 == null) {
+            FlashMessage msg = new FlashMessage("Please login first!", MessageType.WARN, getText("message.warn.title"));
+            redirect("/rank", msg);
+            return;
+        }
+
+        setAttr("name1", name1);
+        setAttr("name2", name2);
+        setAttr("result", userService.compareUsers(uid1, uid2));
+    }
+
     @RequiresUser
     public void loginlog() {
         int pageNumber = getParaToInt(0, 1);

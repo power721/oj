@@ -13,7 +13,6 @@ import com.power.oj.core.bean.Solution;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
-import com.power.oj.solution.SolutionModel;
 import com.power.oj.util.FileKit;
 import com.power.oj.util.Tool;
 import jodd.io.FileUtil;
@@ -33,20 +32,22 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public final class UserService {
-    private static final Logger log = Logger.getLogger(UserService.class);
-    private static final UserModel dao = UserModel.dao;
-    private static final UserService me = new UserService();
-    private static final OjService ojService = OjService.me();
     public static final int ROOT_ROLE_ID = 1;
     public static final int MEMBER_ROLE_ID = 3;
     public static final int USER_ROLE_ID = 10;
     public static final String ROOT_ROLE_NAME = "root";
     public static final String MEMBER_ROLE_NAME = "member";
+    private static final Logger log = Logger.getLogger(UserService.class);
+    private static final UserModel dao = UserModel.dao;
+    private static final UserService me = new UserService();
+    private static final OjService ojService = OjService.me();
 
     private UserService() {
     }
@@ -742,7 +743,19 @@ public final class UserService {
      * @return current user or null.
      */
     public UserModel getCurrentUser() {
-        return getUser(getCurrentUid());
+        Integer uid = getCurrentUid();
+        if (uid == null) {
+            return null;
+        }
+        return getUser(uid);
+    }
+
+    public String getCurrentUserName() {
+        UserModel user = getCurrentUser();
+        if (user == null) {
+            return null;
+        }
+        return user.getName();
     }
 
     /**
@@ -834,7 +847,8 @@ public final class UserService {
         String sSearch) {
         List<Object> param = new ArrayList<Object>();
         String sql = "SELECT u.uid,u.name,u.realName,u.nick,r.name AS role,u.ctime,r.id";
-        StringBuilder sb = new StringBuilder().append("FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid LEFT JOIN role r ON r.id=ur.rid WHERE 1=1");
+        StringBuilder sb = new StringBuilder()
+            .append("FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid LEFT JOIN role r ON r.id=ur.rid WHERE 1=1");
 
         if (StringUtil.isNotEmpty(sSearch)) {
             sb.append(" AND (u.name LIKE ? OR u.realName LIKE ? OR u.uid LIKE ?)");
@@ -872,7 +886,7 @@ public final class UserService {
         if (id != UserService.USER_ROLE_ID) {
             return 3;
         }
-        if(Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.MEMBER_ROLE_ID, uid) != 1) {
+        if (Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.MEMBER_ROLE_ID, uid) != 1) {
             return 4;
         }
         return 0;
@@ -886,20 +900,20 @@ public final class UserService {
         if (id != UserService.MEMBER_ROLE_ID) {
             return 2;
         }
-        if(Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.USER_ROLE_ID, uid) != 1) {
+        if (Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.USER_ROLE_ID, uid) != 1) {
             return 3;
         }
         return 0;
     }
 
     public List<Record> getSubmittedProblems(Integer uid) {
-        return Db.find(
-            "SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid WHERE s.uid=? AND s.status=1 GROUP BY s.pid",
-            uid);
+        return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid"
+            + " WHERE s.uid=? AND s.status=1 GROUP BY s.pid", uid);
     }
 
     public List<Record> getSolvedProblems(Integer uid) {
-        return Db.find("SELECT * FROM solution WHERE uid=? AND result=? AND status=1 GROUP BY pid", uid, ResultType.AC);
+        return Db
+            .find("SELECT * FROM solution WHERE uid=? AND result=? AND status=1 GROUP BY pid", uid, ResultType.AC);
     }
 
     public boolean checkPassword(Integer uid, String password) {
@@ -950,6 +964,57 @@ public final class UserService {
     public boolean isEmailExist(String email) {
         Long result = Db.queryLong("SELECT 1 FROM user WHERE email=?", email);
         return result != null && result == 1;
+    }
+
+    public CompareResult compareUsers(Integer uid1, Integer uid2) {
+        List<Record> problems1 = getSubmittedProblems(uid1);
+        List<Record> problems2 = getSubmittedProblems(uid2);
+        Set<Integer> solvedPID1 = new HashSet<>();
+        Set<Integer> failedPID1 = new HashSet<>();
+        Set<Integer> solvedPID2 = new HashSet<>();
+        Set<Integer> failedPID2 = new HashSet<>();
+
+        classify(problems1, solvedPID1, failedPID1);
+
+        classify(problems2, solvedPID2, failedPID2);
+
+        CompareResult result = new CompareResult();
+        Set<Integer> bothSolved = new HashSet<>(solvedPID1);
+        bothSolved.retainAll(solvedPID2);
+        result.setBothSolved(bothSolved);
+
+        Set<Integer> firstSolved = new HashSet<>(solvedPID1);
+        firstSolved.removeAll(solvedPID2);
+        result.setFirstSolved(firstSolved);
+
+        Set<Integer> secondSolved = new HashSet<>(solvedPID2);
+        secondSolved.removeAll(solvedPID1);
+        result.setSecondSolved(secondSolved);
+
+        Set<Integer> bothFailed = new HashSet<>(failedPID1);
+        bothFailed.retainAll(failedPID2);
+        result.setBothFailed(bothFailed);
+
+        Set<Integer> firstFailed = new HashSet<>(failedPID1);
+        firstFailed.removeAll(failedPID2);
+        result.setFirstFailed(firstFailed);
+
+        Set<Integer> secondFailed = new HashSet<>(failedPID2);
+        secondFailed.removeAll(failedPID1);
+        result.setSecondFailed(secondFailed);
+
+        return result;
+    }
+
+    private void classify(List<Record> problems1, Set<Integer> solvedPID1, Set<Integer> failedPID1) {
+        for (Record record : problems1) {
+            Integer pid = record.getInt("pid");
+            if (record.getInt("result") == ResultType.AC) {
+                solvedPID1.add(pid);
+            } else {
+                failedPID1.add(pid);
+            }
+        }
     }
 
     private void updateCache(UserModel user) {

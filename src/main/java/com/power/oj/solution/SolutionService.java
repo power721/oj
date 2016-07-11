@@ -51,7 +51,7 @@ public final class SolutionService {
         String userName) {
         String sql =
             "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name";
-        StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid WHERE cid=0 ");
+        StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid WHERE s.status=1 ");
 
         List<Object> paras = new ArrayList<Object>();
         if (result > -1) {
@@ -68,7 +68,7 @@ public final class SolutionService {
             paras.add(language);
         }
         if (pid > 0) {
-            sb.append(" AND pid=? AND cid=0");
+            sb.append(" AND pid=?");
             paras.add(pid);
         }
         if (StringUtil.isNotBlank(userName)) {
