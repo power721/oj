@@ -52,12 +52,12 @@
           <label class="control-label">Share Code?</label>
           <div class="controls">
             <label class="radio inline">
-              <input type="radio" name="user.shareCode" id="shareCode1" value="true"<#if user.shareCode==true>
+              <input type="radio" name="user.shareCode" class="shareCode" id="shareCode1" value="true"<#if user.shareCode==true>
                      checked</#if>>
               True
             </label>
             <label class="radio inline">
-              <input type="radio" name="user.shareCode" id="shareCode2" value="false"<#if user.shareCode==false>
+              <input type="radio" name="user.shareCode" class="shareCode" id="shareCode2" value="false"<#if user.shareCode==false>
                      checked</#if>>
               False
             </label>
@@ -176,6 +176,10 @@
     $('#inputLanguage').tooltip({
       'trigger': 'focus',
       'title': 'Your favorite programming language.',
+      'placement': 'right'
+    });
+    $('#shareCode1').tooltip({
+      'title': 'You can access others\' AC code if you solved the same problem.',
       'placement': 'right'
     });
     $('#inputQQ').tooltip({'trigger': 'focus', 'title': 'You can leave it empty.', 'placement': 'right'});
