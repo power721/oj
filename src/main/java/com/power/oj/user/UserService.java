@@ -9,6 +9,7 @@ import com.power.oj.api.oauth.WebLoginModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.bean.Solution;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.shiro.ShiroKit;
@@ -420,7 +421,7 @@ public final class UserService {
      * @param solutionModel
      * @return
      */
-    public boolean incAccepted(SolutionModel solutionModel) {
+    public boolean incAccepted(Solution solutionModel) {
         Integer pid = solutionModel.getPid();
         Integer sid = solutionModel.getSid();
         Integer uid = solutionModel.getUid();
@@ -446,7 +447,7 @@ public final class UserService {
      * @param solutionModel
      * @return
      */
-    public boolean revertAccepted(SolutionModel solutionModel) {
+    public boolean revertAccepted(Solution solutionModel) {
         if (solutionModel.getResult() != ResultType.AC) {
             return false;
         }

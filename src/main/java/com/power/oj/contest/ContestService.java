@@ -19,6 +19,7 @@ import com.power.oj.contest.model.FreezeBoardModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.bean.Solution;
 import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.judge.RejudgeType;
@@ -818,7 +819,7 @@ public class ContestService {
         return false;
     }
 
-    public boolean updateBoard(ContestSolutionModel solutionModel) {
+    public boolean updateBoard(Solution solutionModel) {
         Integer cid = solutionModel.getCid();
         Integer uid = solutionModel.getUid();
         Integer num = solutionModel.getNum();
@@ -876,7 +877,7 @@ public class ContestService {
         return Db.update("board", board);
     }
 
-    public boolean updateBoard4Rejudge(ContestSolutionModel solutionModel) {
+    public boolean updateBoard4Rejudge(Solution solutionModel) {
         int result = solutionModel.getInt("originalResult");
         boolean ac = true;
         if (result == ResultType.AC) {

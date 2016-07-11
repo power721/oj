@@ -410,6 +410,18 @@ public final class SolutionService {
                 solution.setSystemError(error);
             }
 
+            if (result == ResultType.AC) {
+                if (cid == 0) {
+                    userService.incAccepted(solution);
+                    problemService.incAccepted(solution);
+                } else {
+                    if (solution.get("originalResult") != null) {
+                        ContestService.me().updateBoard4Rejudge(solution);
+                    } else {
+                        ContestService.me().updateBoard(solution);
+                    }
+                }
+            }
             return solution.update();
         }
 

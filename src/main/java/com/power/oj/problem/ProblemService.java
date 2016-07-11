@@ -7,6 +7,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.core.bean.Solution;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.judge.RejudgeType;
 import com.power.oj.solution.SolutionModel;
@@ -455,7 +456,7 @@ public final class ProblemService {
 
     }
 
-    public boolean incAccepted(SolutionModel solutionModel) {
+    public boolean incAccepted(Solution solutionModel) {
         Integer pid = solutionModel.getPid();
         Integer sid = solutionModel.getSid();
         Integer uid = solutionModel.getUid();
@@ -473,7 +474,7 @@ public final class ProblemService {
         return problemModel.update();
     }
 
-    public boolean revertAccepted(SolutionModel solutionModel) {
+    public boolean revertAccepted(Solution solutionModel) {
         if (solutionModel.getResult() != ResultType.AC) {
             return false;
         }
