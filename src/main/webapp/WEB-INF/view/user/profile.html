@@ -63,6 +63,19 @@
         </dd>
       </dl>
     </div>
+  </div>
+  <div class="row">
+    <div>
+      <#if user?? && user.uid!=userModel.uid>
+        <form action="user/compare" method="post">
+          <input type="hidden" name="name1" value="${userModel.name}" required>
+          <input type="hidden" name="name2" value="${user.name}" required>
+          <input type="submit" class="btn btn-success" value="Compare">
+        </form>
+      </#if>
+    </div>
+  </div>
+  <div class="row">
     <div class="span5 problems">
       <#if userModel.problems??>
         <h4>Solved Problems<#if userModel.shareCode==true><i class="icon-star"></i></#if></h4>

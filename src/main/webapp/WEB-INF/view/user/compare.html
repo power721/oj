@@ -1,0 +1,73 @@
+<@override name="content">
+<div class="page-header">
+  <h3>
+    Compare User
+  </h3>
+  <form action="user/compare" method="post">
+    <input type="text" name="name1" value="${name1}" required>
+    &nbsp;&nbsp;  VS  &nbsp;&nbsp;
+    <input type="text" name="name2" value="${name2}" required>
+    <input type="submit" class="btn btn-success" value="GO">
+  </form>
+</div>
+
+<div class="<#if oj_fluid_width??>container-fluid<#else>container</#if> warp">
+  <div class="row">
+    <div class="span5 problems">
+      <#if result.bothSolved??>
+        <h4>Both Solved Problems</h4>
+        <#list result.bothSolved as pid>
+          <span><a href="status?pid=${pid}&name=${name1}&result=0">${pid}</a></span>
+        </#list>
+      </#if>
+    </div>
+    <div class="span5 problems">
+      <#if result.bothFailed??>
+        <h4>Both Failed Problems</h4>
+        <#list result.bothFailed as pid>
+          <span><a href="status?pid=${pid}&name=${name2}&result=999">${pid}</a></span>
+        </#list>
+      </#if>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="span5 problems">
+      <#if result.firstSolved??>
+        <h4>Only <a href="status?name=${name1}&result=0">${name1}</a> Solved Problems</h4>
+        <#list result.firstSolved as pid>
+          <span><a href="status?pid=${pid}&name=${name1}&result=0">${pid}</a></span>
+        </#list>
+      </#if>
+    </div>
+    <div class="span5 problems">
+      <#if result.secondSolved??>
+        <h4>Only <a href="status?name=${name2}&result=0">${name2}</a> Solved Problems</h4>
+        <#list result.secondSolved as pid>
+          <span><a href="status?pid=${pid}&name=${name2}&result=0">${pid}</a></span>
+        </#list>
+      </#if>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="span5 problems">
+      <#if result.firstFailed??>
+        <h4>Only <a href="status?name=${name1}&result=999">${name1}</a> Failed Problems</h4>
+        <#list result.firstFailed as pid>
+          <span><a href="status?pid=${pid}&name=${name1}&result=999">${pid}</a></span>
+        </#list>
+      </#if>
+    </div>
+    <div class="span5 problems">
+      <#if result.secondFailed??>
+        <h4>Only <a href="status?name=${name2}&result=999">${name2}</a> Failed Problems</h4>
+        <#list result.secondFailed as pid>
+          <span><a href="status?pid=${pid}&name=${name2}&result=999">${pid}</a></span>
+        </#list>
+      </#if>
+    </div>
+  </div>
+</div>
+</@override>
+<@extends name="../common/_layout.html" />
