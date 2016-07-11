@@ -94,16 +94,12 @@ public final class JudgeService {
 
     public void rejudge(Solution solution, boolean deleteTempDir) {
         if (solution instanceof SolutionModel) {
-            userService.revertAccepted((SolutionModel) solution);
+            userService.revertAccepted(solution);
         }
 
         solution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
         solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
-        if (solution instanceof SolutionModel) {
-            ((SolutionModel) solution).update();
-        } else {
-            ((ContestSolutionModel) solution).update();
-        }
+        solution.update();
 
         synchronized (JudgeAdapter.class) {
             JudgeAdapter judgeThread;

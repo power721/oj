@@ -279,7 +279,7 @@ public abstract class JudgeAdapter implements Runnable {
         if (cid != null && cid > 0) {
             return false;
         }
-        return userService.incAccepted((SolutionModel) solution);
+        return userService.incAccepted(solution);
     }
 
     protected boolean updateProblem() {
@@ -287,15 +287,15 @@ public abstract class JudgeAdapter implements Runnable {
             return false;
         }
 
-        return problemService.incAccepted((SolutionModel) solution);
+        return problemService.incAccepted(solution);
     }
 
     protected boolean updateContest() {
         if (solution instanceof ContestSolutionModel) {
-            if (((ContestSolutionModel) solution).get("originalResult") != null) {
-                contestService.updateBoard4Rejudge((ContestSolutionModel) solution);
+            if (solution.get("originalResult") != null) {
+                contestService.updateBoard4Rejudge(solution);
             } else {
-                contestService.updateBoard((ContestSolutionModel) solution);
+                contestService.updateBoard(solution);
             }
             return true;
         }

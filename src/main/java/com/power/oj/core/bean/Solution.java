@@ -72,4 +72,9 @@ public interface Solution {
     public Solution setStatus(Boolean value);
 
     public boolean update();
+
+    public <T> T get(String attr);
+
+    public Integer getInt(String attr);
+
 }
