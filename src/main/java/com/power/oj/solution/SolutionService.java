@@ -72,8 +72,15 @@ public final class SolutionService {
             paras.add(pid);
         }
         if (StringUtil.isNotBlank(userName)) {
-            sb.append(" AND name=?");
-            paras.add(userName);
+            String[] names = userName.split(",", 5);
+            if (names.length > 0) {
+                sb.append(" AND (");
+                for (String name : names) {
+                    sb.append("name=? OR ");
+                    paras.add(name);
+                }
+                sb.append("1!=1)");
+            }
         }
 
         if (!userService.isAdmin()) {
