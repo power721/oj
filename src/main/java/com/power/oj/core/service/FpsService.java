@@ -38,8 +38,8 @@ public class FpsService {
     public FpsProblem itemToProblem(Element item) {
         problem.setModel(ProblemModel.dao.findById(problem.getModel().getPid()));
         int num = 0;
-        int timeLimit = 1000;
-        int memoryLimit = 65536;
+        int timeLimit;
+        int memoryLimit;
         String unit;
 
         File dataDir = new File(OjConfig.getString("dataPath") + File.separator + problem.getModel().getPid());
@@ -124,7 +124,7 @@ public class FpsService {
         problem.getModel().setHint(setImages(problem.getModel().getHint()));
         problem.getModel().update();
 
-        svaeData();
+        saveData();
 
         return problem;
     }
@@ -151,7 +151,7 @@ public class FpsService {
         String inputValue = problem.getModel().getInput();
         if (inputValue != null && inputValue.length() > 0) {
             Element input = item.addElement("input");
-            if (needReplace && inputValue != null) {
+            if (needReplace) {
                 inputValue = inputValue.replace("\n", "<br>");
             }
             input.addCDATA(inputValue);
@@ -160,7 +160,7 @@ public class FpsService {
         String outputValue = problem.getModel().getOutput();
         if (outputValue != null && outputValue.length() > 0) {
             Element output = item.addElement("output");
-            if (needReplace && outputValue != null) {
+            if (needReplace) {
                 outputValue = outputValue.replace("\n", "<br>");
             }
             output.addCDATA(outputValue);
@@ -184,7 +184,7 @@ public class FpsService {
         String hintValue = problem.getModel().getHint();
         if (hintValue != null && hintValue.length() > 0) {
             Element hint = item.addElement("hint");
-            if (needReplace && hintValue != null) {
+            if (needReplace) {
                 hintValue = hintValue.replace("\n", "<br>");
             }
             hint.addCDATA(hintValue);
@@ -197,8 +197,8 @@ public class FpsService {
         }
 
         try {
-            addSolution(item);
             addSpj(item);
+            addSolution(item);
         } catch (IOException e) {
             if (OjConfig.isDevMode()) {
                 log.warn("add solution or spj code failed!", e);
@@ -226,8 +226,11 @@ public class FpsService {
         }
 
         File[] arrayOfFile = dataDir.listFiles();
-        for (int i = 0; i < arrayOfFile.length; i++) {
-            File inFile = arrayOfFile[i];
+        if (arrayOfFile == null) {
+            return item;
+        }
+
+        for (File inFile : arrayOfFile) {
             if (!isInDataFile(inFile)) {
                 continue;
             }
@@ -253,13 +256,15 @@ public class FpsService {
         }
 
         String[] exts = {"c", "cc", "pas", "java", "py"};
-        for (int i = 0; i < arrayOfFile.length; i++) {
-            String ext = FileNameUtil.getExtension(arrayOfFile[i].getName());
-            if (StringUtil.equalsOne(ext, exts) != -1) {
-                Element solution = item.addElement("solution");
-                solution.addCDATA(FileUtils.readFileToString(arrayOfFile[i]));
-                solution.addAttribute("language", ext2lang(ext));
-                return item;
+        for (File file : arrayOfFile) {
+            if (!file.getName().startsWith("spj.")) {
+                String ext = FileNameUtil.getExtension(file.getName());
+                if (StringUtil.equalsOne(ext, exts) != -1) {
+                    Element solution = item.addElement("solution");
+                    solution.addCDATA(FileUtils.readFileToString(file));
+                    solution.addAttribute("language", ext2lang(ext));
+                    return item;
+                }
             }
         }
 
@@ -284,14 +289,18 @@ public class FpsService {
 
         if (spjFile.isFile()) {
             File[] arrayOfFile = problem.getDataDir().listFiles();
+            if (arrayOfFile == null) {
+                return item;
+            }
+
             String[] spjFileNames = {"spj.c", "spj.cc", "spj.java"};
-            for (int i = 0; i < arrayOfFile.length; i++) {
-                String name = arrayOfFile[i].getName();
+            for (File file : arrayOfFile) {
+                String name = file.getName();
                 String ext = FileNameUtil.getExtension(name);
                 if (StringUtil.equalsOne(name, spjFileNames) != -1) {
-                    Element solution = item.addElement("solution");
-                    solution.addCDATA(FileUtils.readFileToString(arrayOfFile[i]));
-                    solution.addAttribute("language", ext2lang(ext));
+                    Element spj = item.addElement("spj");
+                    spj.addCDATA(FileUtils.readFileToString(file));
+                    spj.addAttribute("language", ext2lang(ext));
                     break;
                 }
             }
@@ -321,7 +330,7 @@ public class FpsService {
         while (m.find()) {
             src = m.group(1);
             if (src.startsWith("http")) {
-                URL url = null;
+                URL url;
                 try {
                     url = new URL(src);
                 } catch (MalformedURLException e) {
@@ -371,8 +380,7 @@ public class FpsService {
         if (html == null) {
             return null;
         }
-        for (Iterator<FpsImage> i = problem.getImageList().iterator(); i.hasNext(); ) {
-            FpsImage img = (FpsImage) i.next();
+        for (FpsImage img : problem.getImageList()) {
             html = html.replace(img.getOriginalSrc(), img.getSrc());
         }
 
@@ -385,9 +393,8 @@ public class FpsService {
 
         String originalSrc = e.elementText("src");
         String base64 = e.elementText("base64");
-        StringBuilder sb = new StringBuilder(6).append(OjConfig.problemImagePath).append(File.separator);
-        sb.append(pid).append("_").append(num).append(".png");
-        File imageFile = new File(sb.toString());
+        String fileName = OjConfig.problemImagePath + File.separator + pid + "_" + num + ".png";
+        File imageFile = new File(fileName);
         String src = imageFile.getAbsolutePath().replace(OjConfig.webRootPath, "").substring(1);
         fpsImage.setOriginalSrc(originalSrc);
         fpsImage.setSrc(src);
@@ -417,7 +424,7 @@ public class FpsService {
             ext = "py";
         }
 
-        File sourceFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + name + "" + ext);
+        File sourceFile = new File(problem.getDataDir().getAbsolutePath() + File.separator + name + "." + ext);
 
         try {
             FileUtil.touch(sourceFile);
@@ -430,7 +437,7 @@ public class FpsService {
         }
     }
 
-    private void svaeData() {
+    private void saveData() {
         if (problem.getDataIn().size() < 1) {
             saveSampleData();
             return;
@@ -445,8 +452,8 @@ public class FpsService {
             File dataInFile = new File(sb.toString() + OjConstants.DATA_EXT_IN);
             File dataOutFile = new File(sb.toString() + OjConstants.DATA_EXT_OUT);
 
-            String inData = (String) in.next();
-            String outData = (String) it.next();
+            String inData = in.next();
+            String outData = it.next();
 
             try {
                 FileUtil.touch(dataOutFile);
