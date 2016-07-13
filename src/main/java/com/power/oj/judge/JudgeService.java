@@ -17,11 +17,12 @@ import jodd.io.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.attribute.PosixFilePermission;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -39,6 +40,16 @@ public final class JudgeService {
     private static final ConcurrentHashMap<String, RejudgeTask> rejudgeTasks = new ConcurrentHashMap<>();
     // TODO: store token in redis with expire time
     private static final ConcurrentHashMap<Integer, String> tokens = new ConcurrentHashMap<>();
+    public static final Set<PosixFilePermission> FILE_PERMISSIONS = new HashSet<>();
+
+    static {
+        FILE_PERMISSIONS.add(PosixFilePermission.OWNER_READ);
+        FILE_PERMISSIONS.add(PosixFilePermission.OWNER_WRITE);
+        FILE_PERMISSIONS.add(PosixFilePermission.OWNER_EXECUTE);
+        FILE_PERMISSIONS.add(PosixFilePermission.GROUP_READ);
+        FILE_PERMISSIONS.add(PosixFilePermission.GROUP_WRITE);
+        FILE_PERMISSIONS.add(PosixFilePermission.GROUP_EXECUTE);
+    }
 
     private JudgeService() {
     }

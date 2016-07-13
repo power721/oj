@@ -6,6 +6,7 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.FpsImage;
 import com.power.oj.core.bean.FpsProblem;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
 import jodd.io.FileNameUtil;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,6 +48,7 @@ public class FpsService {
         problem.setDataDir(dataDir);
         try {
             FileUtil.mkdirs(dataDir);
+            Files.setPosixFilePermissions(dataDir.toPath(), JudgeService.FILE_PERMISSIONS);
         } catch (IOException e) {
             if (OjConfig.isDevMode()) {
                 log.warn("mkdir: " + dataDir + " failed!", e);
