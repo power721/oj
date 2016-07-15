@@ -23,8 +23,9 @@ public class NewsService {
     }
 
     public NewsModel getNews(Integer id) {
-        NewsModel newsModel = dao
-            .findFirst("SELECT * ,FROM_UNIXTIME(time, '%Y-%m-%d %H:%i:%s') AS publishTime FROM news WHERE id = ?", id);
+        NewsModel newsModel =
+            dao.findFirst("SELECT * ,FROM_UNIXTIME(time, '%Y-%m-%d %H:%i:%s') AS publishTime FROM news WHERE id = ?",
+                id);
         newsModel.setView(newsModel.getView() + 1);
 
         if (OjConfig.isDevMode()) {

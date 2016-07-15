@@ -227,10 +227,12 @@ public class ProblemController extends OjController {
         String redirectURL = new StringBuilder(2).append("/problem/show/").append(pid).toString();
         FlashMessage msg;
 
-        if(judgeService.rejudgeProblem(pid)) {
+        if (judgeService.rejudgeProblem(pid)) {
             msg = new FlashMessage("Server accept your request.");
         } else {
-            msg = new FlashMessage("Server reject your request since rejudge this problem is ongoing.", MessageType.ERROR, "Rejudge Error");
+            msg =
+                new FlashMessage("Server reject your request since rejudge this problem is ongoing.", MessageType.ERROR,
+                    "Rejudge Error");
         }
 
         redirect(redirectURL, msg);

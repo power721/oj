@@ -682,8 +682,8 @@ public final class UserService {
 
             String ext = OjConfig.languageType.get(code.get("language")).getExt();
             StringBuilder sb = new StringBuilder(10);
-            sb.append(problemDir).append(File.separator).append(code.get("sid")).append("_");
-            sb.append(code.get("time")).append("MS_").append(code.get("memory")).append("KB").append("").append(ext);
+            sb.append(problemDir).append(File.separator).append(code.getStr("sid")).append("_");
+            sb.append(code.getStr("time")).append("MS_").append(code.getStr("memory")).append("KB").append("").append(ext);
 
             File file = new File(sb.toString());
             if (file.createNewFile() == false) {
@@ -912,8 +912,7 @@ public final class UserService {
     }
 
     public List<Record> getSolvedProblems(Integer uid) {
-        return Db
-            .find("SELECT * FROM solution WHERE uid=? AND result=? AND status=1 GROUP BY pid", uid, ResultType.AC);
+        return Db.find("SELECT * FROM solution WHERE uid=? AND result=? AND status=1 GROUP BY pid", uid, ResultType.AC);
     }
 
     public boolean checkPassword(Integer uid, String password) {

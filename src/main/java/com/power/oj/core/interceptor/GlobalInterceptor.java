@@ -5,7 +5,6 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.core.Controller;
 import com.power.oj.core.OjConstants;
-import com.power.oj.notice.NoticeService;
 
 /**
  * Global interceptor<br>

@@ -140,14 +140,7 @@ public class JudgeResult {
 
     @Override
     public String toString() {
-        return "JudgeResult{" +
-            "result=" + result +
-            ", sid=" + sid +
-            ", cid=" + cid +
-            ", time=" + time +
-            ", memory=" + memory +
-            ", test=" + test +
-            ", token='" + token + '\'' +
-            '}';
+        return "JudgeResult{" + "result=" + result + ", sid=" + sid + ", cid=" + cid + ", time=" + time + ", memory="
+            + memory + ", test=" + test + ", token='" + token + '\'' + '}';
     }
 }

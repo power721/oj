@@ -1,0 +1,115 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">评测文件</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <#if dir??>
+    <li>
+      <a href="admin/file/browse">文件管理</a>
+      <span class="divider">/</span>
+    </li>
+  </#if>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h4>Judge Files: ${dir!}</h4>
+        <div>
+          <#if files??>
+            <table id="data-files" class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>File</th>
+                <th>Size</th>
+                <th>Modified</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+                <#list files as file>
+                <tr>
+                  <td>${file_index+1}</td>
+                  <td class="file">
+                    <#if file.directory==true><a href="admin/file/browse/${file.name}">${file.name}</a>
+                    <#else>
+                      <a href="admin/file/view/${dir!}?name=${file.name!}">${file.name}</a>
+                    </#if>
+                  </td>
+                  <td class="size" size="${file.size}"></td>
+                  <td class="timestamp" data="${file.modifyTime}"></td>
+                  <td class="action" name="${file.name}">
+                    <#if file.directory==true>
+                      <a class="btn btn-primary view" href="admin/file/browse/${file.name!}">View</a>
+                    <#else>
+                      <a class="btn btn-primary view" href="admin/file/view/${dir!}?name=${file.name!}">View</a>
+                    </#if>
+                    <i class="btn btn-info download">Download</i>
+                  </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+          </#if>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</@override>
+
+<@override name="styles">
+<link rel="stylesheet" href="assets/bootstrap-modal/bootstrap-modal.css" type="text/css">
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css" type="text/css">
+<link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css" type="text/css">
+</@override>
+
+<@override name="scripts">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modal.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modalmanager.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('.download').click(function () {
+      window.location.href = 'admin/file/download/' + ${dir!} +'?name=' + $(this).parent().attr('name');
+    });
+
+    $("#data-files").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: false,
+      striped: true,
+      clean: true
+    });
+
+    $('.size').each(function () {
+      $(this).html(num2size($(this).attr('size')));
+    });
+  });
+</script>
+
+<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
+<script type="text/javascript">
+  function num2size(size) {
+    if (size >= 1048576) {
+      return (size / 1048576.0).toFixed(2) + ' MB';
+    } else if (size >= 1024) {
+      return (size / 1024.0).toFixed(2) + ' KB';
+    } else {
+      return size + ' B';
+    }
+  }
+</script>
+</@override>
+<@extends name="../_layout.html"></@extends>

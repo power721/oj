@@ -61,10 +61,6 @@ public class ResultType {
 
     @Override
     public String toString() {
-        return "ResultType{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", longName='" + longName + '\'' +
-            '}';
+        return "ResultType{" + "id=" + id + ", name='" + name + '\'' + ", longName='" + longName + '\'' + '}';
     }
 }

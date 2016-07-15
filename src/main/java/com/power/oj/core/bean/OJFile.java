@@ -7,14 +7,8 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * file info for problem data files.
- * current implementation is for all files.
- *
- * @author power
- */
 public class OJFile {
-    private static String[] exts = {"in", "out", "txt", "c", "cc", "cpp", "pas", "java", "py"};
+    public static String[] exts = {"in", "out", "txt", "c", "cc", "cpp", "pas", "java", "py"};
     protected String name;
     protected String user;
     protected String group;
@@ -43,6 +37,10 @@ public class OJFile {
         if (StringUtil.equalsOne(ext, exts) == -1) {
             return null;
         }
+        return FileUtils.readFileToString(file);
+    }
+
+    public String getContent() throws IOException {
         return FileUtils.readFileToString(file);
     }
 
@@ -100,6 +98,14 @@ public class OJFile {
 
     public File getFile() {
         return file;
+    }
+
+    public boolean isFile() {
+        return file.isFile();
+    }
+
+    public boolean isDirectory() {
+        return file.isDirectory();
     }
 
 }

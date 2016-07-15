@@ -117,10 +117,11 @@ public class SolutionController extends OjController {
         Integer sid = getParaToInt(0);
         FlashMessage msg;
 
-        if(judgeService.rejudgeSolution(sid)) {
+        if (judgeService.rejudgeSolution(sid)) {
             msg = new FlashMessage("Server accept your rejudge request.");
         } else {
-            msg = new FlashMessage("Server reject your request since rejudge this solution or problem is ongoing.", MessageType.ERROR, "Rejudge Error");
+            msg = new FlashMessage("Server reject your request since rejudge this solution or problem is ongoing.",
+                MessageType.ERROR, "Rejudge Error");
         }
 
         redirect("/code/" + sid, msg);

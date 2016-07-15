@@ -9,21 +9,27 @@ import com.power.oj.core.AppConfig;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.DataFile;
 import com.power.oj.core.bean.FpsProblem;
+import com.power.oj.core.bean.OJFile;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.core.service.FpsService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.XmlUtil;
+import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
 import jodd.util.BCrypt;
+import jodd.util.StringUtil;
 import jodd.util.SystemUtil;
+import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -160,8 +166,52 @@ public final class AdminService {
         return Db.paginate(pageNumber, pageSize, "SELECT *", "FROM loginlog ORDER BY ctime DESC");
     }
 
+    public List<OJFile> getJudgeFiles(String dirName) {
+        File workDir = new File(OjConfig.getString("workPath"), dirName);
+        return getOJFiles(workDir);
+    }
+
+    public List<OJFile> getOJFiles(String dirName) {
+        return getOJFiles(new File(dirName));
+    }
+
+    public List<OJFile> getOJFiles(File dir) {
+        List<OJFile> ojFiles = new ArrayList<>();
+        if (dir.isDirectory()) {
+            File[] files = dir.listFiles(file -> {
+                if (file.isDirectory()) {
+                    return true;
+                }
+                String ext = FileNameUtil.getExtension(file.getName());
+                return !ext.isEmpty() && StringUtil.equalsOne(ext, OJFile.exts) != -1;
+            });
+
+            if (files != null) {
+                Arrays.sort(files);
+                for (File file : files) {
+                    ojFiles.add(new OJFile(file));
+                }
+            }
+        }
+
+        return ojFiles;
+    }
+
+    public String getFileContent(String dirName, String fileName) {
+        File dir = new File(OjConfig.getString("workPath"), dirName);
+        File file = new File(dir, fileName);
+        String content;
+        try {
+            content = FileUtils.readFileToString(file);
+        } catch (IOException e) {
+            content = e.getMessage();
+            log.error("cannot read file!", e);
+        }
+        return content;
+    }
+
     public List<DataFile> getDataFiles(Integer pid) {
-        List<DataFile> dataFiles = new ArrayList<DataFile>();
+        List<DataFile> dataFiles = new ArrayList<>();
         File dataDir = new File(
             new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid).toString());
 

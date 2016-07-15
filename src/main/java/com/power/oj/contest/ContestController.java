@@ -186,8 +186,8 @@ public class ContestController extends OjController {
         }
         String userName = getPara("name");
         ContestModel contestModel = contestService.getContest(cid);
-        if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD &&
-            contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
+        if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD
+            && contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
             userName = userService.getCurrentUser().getName();
         }
         StringBuilder query = new StringBuilder().append("?cid=").append(cid);
@@ -302,10 +302,12 @@ public class ContestController extends OjController {
 
         FlashMessage msg;
 
-        if(judgeService.rejudgeContest(cid)) {
+        if (judgeService.rejudgeContest(cid)) {
             msg = new FlashMessage("Server accept your request.");
         } else {
-            msg = new FlashMessage("Server reject your request since rejudge this contest is ongoing.", MessageType.ERROR, "Rejudge Error");
+            msg =
+                new FlashMessage("Server reject your request since rejudge this contest is ongoing.", MessageType.ERROR,
+                    "Rejudge Error");
         }
 
         redirect("/contest/show/" + cid, msg);
@@ -334,10 +336,11 @@ public class ContestController extends OjController {
 
         FlashMessage msg;
 
-        if(judgeService.rejudgeContestProblem(cid, problemModel.getPid(), num)) {
+        if (judgeService.rejudgeContestProblem(cid, problemModel.getPid(), num)) {
             msg = new FlashMessage("Server accept your request.");
         } else {
-            msg = new FlashMessage("Server reject your request since rejudge this contest or problem is ongoing.", MessageType.ERROR, "Rejudge Error");
+            msg = new FlashMessage("Server reject your request since rejudge this contest or problem is ongoing.",
+                MessageType.ERROR, "Rejudge Error");
         }
 
         redirect("/contest/problem/" + cid + "-" + id, msg);
@@ -583,8 +586,9 @@ public class ContestController extends OjController {
         if (contestService.unlockBoard(cid)) {
             redirect("/contest/admin/" + cid);
         } else {
-            redirect("/contest/admin/" + cid, new FlashMessage("Cannot unlock board before contest finished!",
-                MessageType.ERROR, "Unlock Board Error"));
+            redirect("/contest/admin/" + cid,
+                new FlashMessage("Cannot unlock board before contest finished!", MessageType.ERROR,
+                    "Unlock Board Error"));
         }
     }
 
@@ -604,8 +608,9 @@ public class ContestController extends OjController {
         if (contestService.unlockReport(cid)) {
             redirect("/contest/admin/" + cid);
         } else {
-            redirect("/contest/admin/" + cid, new FlashMessage("Cannot unlock report before contest finished!",
-                MessageType.ERROR, "Unlock Report Error"));
+            redirect("/contest/admin/" + cid,
+                new FlashMessage("Cannot unlock report before contest finished!", MessageType.ERROR,
+                    "Unlock Report Error"));
         }
     }
 
