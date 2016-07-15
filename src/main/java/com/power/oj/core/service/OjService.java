@@ -129,7 +129,8 @@ public final class OjService {
     }
 
     public List<Record> getMembers() {
-        return Db.find("SELECT u.uid,u.name,u.nick FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid WHERE ur.rid=? ORDER BY u.uid",
+        return Db.find(
+            "SELECT u.uid,u.name,u.nick FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid WHERE ur.rid=? ORDER BY u.uid",
             UserService.MEMBER_ROLE_ID);
     }
 

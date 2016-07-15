@@ -330,9 +330,8 @@ public final class JudgeService {
             if (!inFile.getName().toLowerCase().endsWith(OjConstants.DATA_EXT_IN)) {
                 continue;
             }
-            File outFile = new File(dataDir.getAbsolutePath() + File.separator +
-                inFile.getName().substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length()) +
-                OjConstants.DATA_EXT_OUT);
+            File outFile = new File(dataDir.getAbsolutePath() + File.separator + inFile.getName()
+                .substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length()) + OjConstants.DATA_EXT_OUT);
             if (!outFile.isFile()) {
                 log.warn(Printf.str("Output file for input file does not exist: %s", inFile.getAbsolutePath()));
                 continue;
@@ -345,8 +344,9 @@ public final class JudgeService {
     }
 
     public String getWorkPath(Integer cid) {
-        String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) +
-            File.separator + "c" + cid + File.separator;
+        String workPath =
+            FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator + "c" + cid
+                + File.separator;
 
         return workPath;
     }
@@ -363,11 +363,9 @@ public final class JudgeService {
     public String getWorkDirPath(Solution solution) {
         String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator;
         if (solution instanceof ContestSolutionModel) {
-            workPath = workPath + "c" + solution.getCid() + File.separator +
-                solution.getSid() + File.separator;
+            workPath = workPath + "c" + solution.getCid() + File.separator + solution.getSid() + File.separator;
         } else {
-            workPath = workPath + File.separator + solution.getSid() +
-                File.separator;
+            workPath = workPath + File.separator + solution.getSid() + File.separator;
         }
 
         return workPath;

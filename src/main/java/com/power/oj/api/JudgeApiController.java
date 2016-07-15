@@ -36,7 +36,7 @@ public class JudgeApiController extends OjController {
         }
 
         LOGGER.info(judgeResult.toString());
-        if(SolutionService.me().setResult(judgeResult)) {
+        if (SolutionService.me().setResult(judgeResult)) {
             LOGGER.debug("set result successfully.");
         } else {
             LOGGER.error("set result failed!");

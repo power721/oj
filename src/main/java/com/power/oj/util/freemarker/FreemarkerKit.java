@@ -5,7 +5,6 @@ import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.RenderException;
 import com.power.oj.core.AppConfig;
 import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.DefaultObjectWrapperBuilder;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

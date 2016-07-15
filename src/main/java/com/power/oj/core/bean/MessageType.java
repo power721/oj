@@ -1,10 +1,7 @@
 package com.power.oj.core.bean;
 
 public enum MessageType {
-    ERROR("error"),
-    WARN("warning"),
-    INFO("info"),
-    SUCCESS("success");
+    ERROR("error"), WARN("warning"), INFO("info"), SUCCESS("success");
 
     private final String name;
 

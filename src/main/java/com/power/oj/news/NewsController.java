@@ -35,7 +35,7 @@ public class NewsController extends OjController {
     }
 
     public void show() {
-		/*int pageSize = 20;
+        /*int pageSize = 20;
 		int pageNumber = getParaToInt(0, 1);
 		setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
 		*/

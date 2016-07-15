@@ -174,23 +174,19 @@ public class ContestModel extends Model<ContestModel> {
         return set(LOCK_BOARD, value);
     }
 
-    public Integer getLockBoardTime()
-    {
+    public Integer getLockBoardTime() {
         return getInt(LOCK_BOARD_TIME);
     }
 
-    public ContestModel setLockBoardTime(Integer value)
-    {
+    public ContestModel setLockBoardTime(Integer value) {
         return set(LOCK_BOARD_TIME, value);
     }
 
-    public Integer getUnlockBoardTime()
-    {
+    public Integer getUnlockBoardTime() {
         return getInt(UNLOCK_BOARD_TIME);
     }
 
-    public ContestModel setUnlockBoardTime(Integer value)
-    {
+    public ContestModel setUnlockBoardTime(Integer value) {
         return set(UNLOCK_BOARD_TIME, value);
     }
 

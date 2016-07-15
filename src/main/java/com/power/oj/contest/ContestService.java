@@ -937,8 +937,8 @@ public class ContestService {
 
                 long penalty = board.getInt(c + "_SolvedTime")
                     + board.getLong(c + "_WrongNum") * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
-                board.set("penalty", board.getInt("penalty") - penalty + acTime +
-                    wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
+                board.set("penalty", board.getInt("penalty") - penalty + acTime
+                    + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
             } else {
                 board.set(c + "_WrongNum", board.getInt(c + "_WrongNum") + 1);
                 board.set("penalty", board.getInt("penalty") + OjConstants.PENALTY_FOR_WRONG_SUBMISSION);

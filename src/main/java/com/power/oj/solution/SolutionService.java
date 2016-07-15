@@ -248,8 +248,8 @@ public final class SolutionService {
         int cid, int num) {
         String sql = null;
         ContestModel contestModel = ContestService.me().getContest(cid);
-        if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD &&
-            contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
+        if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD
+            && contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
             sql = "SELECT sid,s.uid,u.name,pid,result,s.language,s.ctime,l.name AS language";
         } else {
             sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";

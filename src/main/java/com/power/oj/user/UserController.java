@@ -84,8 +84,8 @@ public class UserController extends OjController {
         if (name2 != null) {
             uid2 = userService.getUidByName(name2);
             if (uid2 == null) {
-                FlashMessage msg =
-                    new FlashMessage(getText("user.error.none", name2), MessageType.WARN, getText("message.warn.title"));
+                FlashMessage msg = new FlashMessage(getText("user.error.none", name2), MessageType.WARN,
+                    getText("message.warn.title"));
                 redirect("/rank", msg);
                 return;
             }
