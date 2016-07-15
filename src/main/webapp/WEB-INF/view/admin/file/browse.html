@@ -38,7 +38,7 @@
                   <td class="file">
                     <#if file.directory==true><a href="admin/file/browse/${file.name}">${file.name}</a>
                     <#else>
-                      <a href="admin/file/view/${dir!}?name=${file.name!}">${file.name}</a>
+                      <a href="admin/file/view/?dir=${dir!}&name=${file.name!}">${file.name}</a>
                     </#if>
                   </td>
                   <td class="size" size="${file.size}"></td>
@@ -47,9 +47,9 @@
                     <#if file.directory==true>
                       <a class="btn btn-primary view" href="admin/file/browse/${file.name!}">View</a>
                     <#else>
-                      <a class="btn btn-primary view" href="admin/file/view/${dir!}?name=${file.name!}">View</a>
+                      <a class="btn btn-primary view" href="admin/file/view/?dir=${dir!}&name=${file.name!}">View</a>
                     </#if>
-                    <i class="btn btn-info download">Download</i>
+                    <a class="btn btn-info download" href="admin/file/download/?dir=${dir!}&name=${file.name!}">Download</a>
                   </td>
                 </tr>
                 </#list>

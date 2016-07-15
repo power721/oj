@@ -20,7 +20,7 @@ public class FileAdminController extends AdminController {
     }
 
     public void view() {
-        String dir = getPara(0);
+        String dir = getPara("dir");
         String name = getPara("name");
         if (dir == null) {
             dir = "";
@@ -40,7 +40,13 @@ public class FileAdminController extends AdminController {
     }
 
     public void download() {
+        String dir = getPara("dir");
+        String name = getPara("name");
+        if (dir == null) {
+            dir = "";
+        }
 
+        renderFile(adminService.downloadFile(dir, name));
     }
 
 }
