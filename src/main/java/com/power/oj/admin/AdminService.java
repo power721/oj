@@ -202,7 +202,7 @@ public final class AdminService {
         File file = new File(dir, fileName);
         String content;
         try {
-            content = FileUtils.readFileToString(file);
+            content = FileUtils.readFileToString(file, "UTF-8");
         } catch (IOException e) {
             content = e.getMessage();
             log.error("cannot read file!", e);
@@ -388,6 +388,9 @@ public final class AdminService {
                     } else {
                         problemModel = ProblemModel.dao.findFirst("SELECT * FROM problem WHERE pid=?", pid);
                     }
+                    if (problemModel == null) {
+                        continue;
+                    }
                     Element item = rootElement.addElement("item");
 
                     item.addAttribute("pid", String.valueOf(problemModel.getPid()));
@@ -427,6 +430,9 @@ public final class AdminService {
                             find("SELECT * FROM problem WHERE pid>=? AND pid<=?", start, end);
                     }
                     for (ProblemModel problemModel : problemList) {
+                        if (problemModel == null) {
+                            continue;
+                        }
                         Element item = rootElement.addElement("item");
                         item.addAttribute("pid", String.valueOf(problemModel.getPid()));
                         FpsProblem problem = new FpsProblem(problemModel);
