@@ -170,6 +170,10 @@ public final class AdminService {
         }
 
         File[] arrayOfFile = dataDir.listFiles();
+        if (arrayOfFile == null) {
+            return dataFiles;
+        }
+
         if (arrayOfFile.length > 1) {
             Arrays.sort(arrayOfFile);
         }
