@@ -210,6 +210,19 @@ public final class AdminService {
         return content;
     }
 
+    public File downloadFile(String dirName, String fileName) {
+        File dir = new File(OjConfig.getString("workPath"), dirName);
+        File file = new File(dir, fileName);
+        if (file.isDirectory()) {
+            // TODO: compress directory
+            return null;
+        }
+        if (file.exists()) {
+            return file;
+        }
+        return null;
+    }
+
     public List<DataFile> getDataFiles(Integer pid) {
         List<DataFile> dataFiles = new ArrayList<>();
         File dataDir = new File(
