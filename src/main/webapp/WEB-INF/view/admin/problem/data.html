@@ -55,6 +55,10 @@
               <tr>
                 <th>No.</th>
                 <th>File</th>
+                <th>Type</th>
+                <th>Permissions</th>
+                <th>User</th>
+                <th>Group</th>
                 <th>Size</th>
                 <th>Modified</th>
                 <th>Action</th>
@@ -66,6 +70,10 @@
                   <td>${file_index+1}</td>
                   <td class="file"><a href="admin/problem/viewData/${pid}?name=${file.name}"
                                       target="_blank">${file.name}</a></td>
+                  <td class="type">${file.type}</td>
+                  <td class="permissions">${file.perm}</td>
+                  <td class="user">${file.user}</td>
+                  <td class="group">${file.group}</td>
                   <td class="size" size="${file.size}"></td>
                   <td class="timestamp" data="${file.modifyTime}"></td>
                   <td class="action" name="${file.name}">
