@@ -9,7 +9,7 @@ public class DataFile extends OJFile {
     private int pid;
 
     public DataFile(Integer pid, String name) {
-        super(OjConfig.getString("dataPath") + File.separator + pid + File.separator + name);
+        super(OjConfig.getString("dataPath") + File.separator + pid, name);
         this.pid = pid;
     }
 

@@ -12,6 +12,14 @@
       <a href="admin/file/browse">文件管理</a>
       <span class="divider">/</span>
     </li>
+    <#assign index = dir?index_of("/")>
+    <#if index != -1>
+    <#assign sub = dir[0..<index]>
+      <li>
+        <a href="admin/file/browse/?dir=${sub}">${sub}</a>
+        <span class="divider">/</span>
+      </li>
+    </#if>
   </#if>
 </ul>
 <div class="container-fluid">
@@ -40,7 +48,7 @@
                 <tr>
                   <td>${file_index+1}</td>
                   <td class="file">
-                    <#if file.directory==true><a href="admin/file/browse/${file.name}">${file.name}</a>
+                    <#if file.directory==true><a href="admin/file/browse/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name}">${file.name}</a>
                     <#else>
                       <a href="admin/file/view/?dir=${dir!}&name=${file.name!}">${file.name}</a>
                     </#if>
@@ -53,7 +61,7 @@
                   <td class="timestamp" data="${file.modifyTime}"></td>
                   <td class="action" name="${file.name}">
                     <#if file.directory==true>
-                      <a class="btn btn-primary view" href="admin/file/browse/${file.name!}">View</a>
+                      <a class="btn btn-primary view" href="admin/file/browse/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name!}">View</a>
                     <#else>
                       <a class="btn btn-primary view" href="admin/file/view/?dir=${dir!}&name=${file.name!}">View</a>
                     </#if>

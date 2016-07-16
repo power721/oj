@@ -12,17 +12,31 @@
     <span class="divider">/</span>
   </li>
   <#if dir??>
-    <li>
-      <a href="admin/file/browse/${dir}">${dir}</a>
-      <span class="divider">/</span>
-    </li>
+    <#assign index = dir?index_of("/")>
+    <#if index != -1>
+      <#assign sub = dir[0..<index]>
+      <#assign end = dir[index+1..]>
+      <li>
+        <a href="admin/file/browse/?dir=${sub}">${sub}</a>
+        <span class="divider">/</span>
+      </li>
+      <li>
+        <a href="admin/file/browse/?dir=${dir}">${end}</a>
+        <span class="divider">/</span>
+      </li>
+    <#else>
+      <li>
+        <a href="admin/file/browse/?dir=${dir}">${dir}</a>
+        <span class="divider">/</span>
+      </li>
+    </#if>
   </#if>
 </ul>
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="well">
       <div id="container">
-        <h4>Judge Files: ${dir!}/${name!}</h4>
+        <h4>Judge Files: <#if dir?? && dir?has_content>${dir!}/</#if>${name!}</h4>
         <div>
           <textarea rows="40" cols="160">${content}</textarea>
         </div>

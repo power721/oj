@@ -217,7 +217,7 @@ public class ContestController extends OjController {
         setAttr("name", userName);
         setAttr("query", query.toString());
 
-        setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"), cid)).toString());
+        setTitle(getText("contest.status.title", cid));
     }
 
     public void problemStatus() {

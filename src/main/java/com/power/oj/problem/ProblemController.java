@@ -70,12 +70,12 @@ public class ProblemController extends OjController {
         setAttr("prevPid", problemService.getPrevPid(pid));
         setAttr("nextPid", problemService.getNextPid(pid));
 
-        setTitle(new StringBuilder(2).append(String.format(getText("problem.status.title"), pid)).toString());
+        setTitle(getText("problem.status.title", pid));
     }
 
     public void random() {
         Integer pid = problemService.getRandomPid();
-        redirect(new StringBuilder(2).append("/problem/show/").append(pid).toString());
+        redirect("/problem/show/" + pid);
     }
 
     public void search() {
@@ -97,7 +97,7 @@ public class ProblemController extends OjController {
         }
 
         if (pid != 0) {
-            redirect(new StringBuilder(2).append("/problem/show/").append(pid).toString());
+            redirect("/problem/show/" + pid);
             return;
         }
 

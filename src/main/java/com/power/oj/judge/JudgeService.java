@@ -17,6 +17,7 @@ import jodd.io.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.Arrays;
 import java.util.Collections;
@@ -355,6 +356,16 @@ public final class JudgeService {
         String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator;
         if (solution instanceof ContestSolutionModel) {
             workPath = workPath + "c" + solution.getCid() + File.separator;
+            File contestDir = new File(workPath);
+            if (!contestDir.isDirectory()) {
+                if(contestDir.mkdirs()) {
+                    try {
+                        Files.setPosixFilePermissions(contestDir.toPath(), FILE_PERMISSIONS);
+                    } catch (IOException e) {
+                        log.error("set file permissions failed!", e);
+                    }
+                }
+            }
         }
 
         return workPath;
