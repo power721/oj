@@ -343,7 +343,7 @@ ALTER TABLE contest ADD `lockReport` tinyint(1) NOT NULL DEFAULT '0',
 
 #2016-7-1
 ALTER TABLE contest ADD `lockBoardTime` int(9) NOT NULL DEFAULT '60',
-                  ADD `unlockBoardTime` int(9) NOT NULL DEFAULT '30';
+                    ADD `unlockBoardTime` int(9) NOT NULL DEFAULT '30';
 
 #2016-7-2
 ALTER TABLE user CHANGE `shareCode` `shareCode` tinyint(1) NOT NULL DEFAULT '1';
