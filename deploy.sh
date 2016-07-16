@@ -124,6 +124,9 @@ if [ -d /var/log/nginx/ ]; then
     USER=`stat -c '%U' /var/log/nginx/`
     GROUP=`stat -c '%G' /var/log/nginx/`
 fi
+[ ! -d /var/www/assets ] && mkdir -p /var/www/assets
+[ ! -d /var/www/upload ] && mkdir -p /var/www/upload
+[ ! -d /var/www/download ] && mkdir -p /var/www/download
 echo "change owner to $USER:$GROUP"
 sudo chown -R ${USER}:${GROUP} /var/www/assets
 sudo chown -R ${USER}:${GROUP} /var/www/upload

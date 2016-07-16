@@ -904,7 +904,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-16 22:16:09
+-- Dump completed on 2016-07-16 22:43:34
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -917,11 +917,66 @@ ALTER TABLE problem AUTO_INCREMENT=1000;
 ALTER TABLE solution AUTO_INCREMENT=1000;
 
 ALTER TABLE user AUTO_INCREMENT=1000;
+-- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: oj
+-- ------------------------------------------------------
+-- Server version	5.5.49-0ubuntu0.14.04.1
 
-INSERT INTO `user` VALUES ('1000', '0', 'root', '$2a$10$lyKeLNMNYC6eXhmTb6CMb.NvtMS1SfQTIZRCddnoes6sGfk4gwsQS', null, null, 'admin@local.host', 'admin@local.host', '0', '0', null, '0', '0', '0', '0', '0', '0', '0', '127.0.0.1', null, null, null, 'secret', null, '118', '0', '', null, '1', null);
-INSERT INTO `user_ext` VALUES ('1000', '0', null, null, null, null, '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping data for table `user`
+--
+-- WHERE:  uid=1000
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1000,0,'root','$2a$10$32c4WA.dm2czb7LFy4TQFumIiYbwm75c7s645cIEUpt1W8ZVEF/lG','root','root','','power721@163.com',0,1,'SWUST',20,56,99,0,0,1410622292,1418132128,'171.217.47.184','',NULL,'','secret','',72670,1,0,0,NULL,NULL,0,0,1,NULL,NULL);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `user_ext`
+--
+-- WHERE:  uid=1000
+
+LOCK TABLES `user_ext` WRITE;
+/*!40000 ALTER TABLE `user_ext` DISABLE KEYS */;
+INSERT INTO `user_ext` VALUES (1000,0,NULL,NULL,NULL,NULL,0,0,1,2,2,1410324944,2,1,0,0,0,0);
+/*!40000 ALTER TABLE `user_ext` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `user_role`
+--
+-- WHERE:  uid=1000
+
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
 INSERT INTO `user_role` VALUES (1,1000,1,1);
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2016-07-16 22:43:34
 -- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
@@ -1336,4 +1391,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-16 22:16:09
+-- Dump completed on 2016-07-16 22:43:34
