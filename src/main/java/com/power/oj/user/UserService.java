@@ -680,13 +680,13 @@ public final class UserService {
             String problemDir = userDir + File.separator + code.get("pid");
             FileUtil.mkdirs(problemDir);
 
-            String ext = OjConfig.languageType.get(code.get("language")).getExt();
+            String ext = OjConfig.languageType.get(code.getInt("language")).getExt();
             StringBuilder sb = new StringBuilder(10);
-            sb.append(problemDir).append(File.separator).append(code.getStr("sid")).append("_");
-            sb.append(code.getStr("time")).append("MS_").append(code.getStr("memory")).append("KB").append("").append(ext);
+            sb.append(problemDir).append(File.separator).append(code.getInt("sid")).append("_");
+            sb.append(code.getInt("time")).append("MS_").append(code.getInt("memory")).append("KB").append("").append(ext);
 
             File file = new File(sb.toString());
-            if (file.createNewFile() == false) {
+            if (!file.createNewFile()) {
                 log.info("Create file failed: " + sb.toString());
                 continue;
             }
@@ -695,9 +695,8 @@ public final class UserService {
         }
 
         ZipUtil.zip(userDirFile);
-        File zipFile = new File(userDirFile.getAbsolutePath() + ".zip");
 
-        return zipFile;
+        return new File(userDirFile.getAbsolutePath() + ".zip");
     }
 
     /**

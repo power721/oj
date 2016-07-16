@@ -18,6 +18,7 @@ import com.power.oj.user.UserService;
 import com.power.oj.util.XmlUtil;
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
+import jodd.io.ZipUtil;
 import jodd.util.BCrypt;
 import jodd.util.StringUtil;
 import jodd.util.SystemUtil;
@@ -38,6 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.ZipOutputStream;
 
 public final class AdminService {
     private static final int MAX_EDIT_DATA_SIZE = 2 * 1024 * 1024;
@@ -214,7 +216,25 @@ public final class AdminService {
         File dir = new File(OjConfig.getString("workPath"), dirName);
         File file = new File(dir, fileName);
         if (file.isDirectory()) {
-            // TODO: compress directory
+            ZipOutputStream zos = null;
+            try {
+                // TODO: how to clean the temp files?
+                File zip = new File(OjConfig.downloadPath, file.getName() + ".zip");
+                zos = ZipUtil.createZip(zip);
+                ZipUtil.addToZip(zos, file, null, null, true);
+                log.info("create " + zip + " successfully.");
+                return zip;
+            } catch (IOException e) {
+                log.error("create zip file failed!", e);
+            } finally {
+                if (zos != null) {
+                    try {
+                        zos.close();
+                    } catch (IOException e) {
+
+                    }
+                }
+            }
             return null;
         }
         if (file.exists()) {
