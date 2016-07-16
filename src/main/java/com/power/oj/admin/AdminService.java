@@ -29,6 +29,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -179,12 +180,15 @@ public final class AdminService {
     public List<OJFile> getOJFiles(File dir) {
         List<OJFile> ojFiles = new ArrayList<>();
         if (dir.isDirectory()) {
-            File[] files = dir.listFiles(file -> {
-                if (file.isDirectory()) {
-                    return true;
+            File[] files = dir.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    if (file.isDirectory()) {
+                        return true;
+                    }
+                    String ext = FileNameUtil.getExtension(file.getName());
+                    return !ext.isEmpty() && StringUtil.equalsOne(ext, OJFile.exts) != -1;
                 }
-                String ext = FileNameUtil.getExtension(file.getName());
-                return !ext.isEmpty() && StringUtil.equalsOne(ext, OJFile.exts) != -1;
             });
 
             if (files != null) {
@@ -202,7 +206,12 @@ public final class AdminService {
         List<OJFile> logs = new ArrayList<>();
         File workDir = new File(OjConfig.getString("workPath"));
         logs.add(new OJFile(OjConfig.getString("workPath"), "oj-judge.log"));
-        File[] dirs = workDir.listFiles(file -> file.isDirectory() && file.getName().startsWith("c"));
+        File[] dirs = workDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isDirectory() && file.getName().startsWith("c");
+            }
+        });
         if (dirs != null) {
             for (File dir : dirs) {
                 OJFile file = new OJFile(dir.getPath(), "oj-judge.log");
