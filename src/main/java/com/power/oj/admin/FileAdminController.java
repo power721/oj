@@ -34,7 +34,7 @@ public class FileAdminController extends AdminController {
     }
 
     public void logs() {
-
+        setAttr("logs", adminService.getLogs());
     }
 
     public void log() {
@@ -44,11 +44,12 @@ public class FileAdminController extends AdminController {
     public void download() {
         String dir = getPara("dir");
         String name = getPara("name");
+        boolean isLog = getParaToBoolean("log", false);
         if (dir == null) {
             dir = "";
         }
 
-        File file = adminService.downloadFile(dir, name);
+        File file = adminService.downloadFile(dir, name, isLog);
         if (file == null) {
             renderError(404);
         } else {
