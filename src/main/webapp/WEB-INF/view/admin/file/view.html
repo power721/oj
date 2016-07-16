@@ -36,7 +36,11 @@
   <div class="row-fluid">
     <div class="well">
       <div id="container">
-        <h4>Judge Files: <#if dir?? && dir?has_content>${dir!}/</#if>${name!}</h4>
+        <h4>View File:
+          <a href="admin/file/download/?dir=${dir!}&name=${name!}">
+            <#if dir?? && dir?has_content>${dir!}/</#if>${name!}
+          </a>
+        </h4>
         <div>
           <textarea rows="40" cols="160">${content}</textarea>
         </div>

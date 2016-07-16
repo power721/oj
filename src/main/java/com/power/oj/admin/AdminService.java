@@ -29,11 +29,10 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -201,11 +200,48 @@ public final class AdminService {
 
     public List<OJFile> getLogs() {
         List<OJFile> logs = new ArrayList<>();
+        File workDir = new File(OjConfig.getString("workPath"));
         logs.add(new OJFile(OjConfig.getString("workPath"), "oj-judge.log"));
+        File[] dirs = workDir.listFiles(file -> file.isDirectory() && file.getName().startsWith("c"));
+        if (dirs != null) {
+            for (File dir : dirs) {
+                OJFile file = new OJFile(dir.getPath(), "oj-judge.log");
+                file.setDir(dir.getName());
+                logs.add(file);
+            }
+        }
         logs.add(new OJFile(System.getProperty("catalina.home") + File.separator + "logs", "oj.log"));
         logs.add(new OJFile("/var/log/judged.log"));
 
         return logs;
+    }
+
+    public String viewLog(String dirName, String fileName, int page, int size) {
+        File file = getLogFile(dirName, fileName);
+        String content = null;
+        if (file != null) {
+            StringBuilder sb = new StringBuilder();
+            try {
+                List<String> lines = FileUtils.readLines(file, "UTF-8");
+                Collections.reverse(lines);
+                int start = page * size;
+                if (start > lines.size()) {
+                    start = lines.size() - size;
+                }
+                int end = start + size;
+                if (end > lines.size()) {
+                    end = lines.size();
+                }
+                for (int i = start; i < end; ++i) {
+                    sb.append(lines.get(i)).append('\n');
+                }
+                content = sb.toString();
+            } catch (IOException e) {
+                content = e.getMessage();
+                log.error("cannot read log!", e);
+            }
+        }
+        return content;
     }
 
     public String getFileContent(String dirName, String fileName) {
@@ -219,6 +255,10 @@ public final class AdminService {
             log.error("cannot read file!", e);
         }
         return content;
+    }
+
+    private File getLogFile(String dirName, String fileName) {
+        return downloadFile(dirName, fileName, true);
     }
 
     public File downloadFile(String dirName, String fileName, boolean isLog) {
@@ -272,8 +312,7 @@ public final class AdminService {
 
     public List<DataFile> getDataFiles(Integer pid) {
         List<DataFile> dataFiles = new ArrayList<>();
-        File dataDir = new File(
-            new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid).toString());
+        File dataDir = new File(OjConfig.getString("dataPath") + File.separator + pid);
 
         if (!dataDir.isDirectory()) {
             return dataFiles;
@@ -288,8 +327,8 @@ public final class AdminService {
             Arrays.sort(arrayOfFile);
         }
 
-        for (int i = 0; i < arrayOfFile.length; i++) {
-            DataFile dataFile = new DataFile(pid, arrayOfFile[i]);
+        for (File anArrayOfFile : arrayOfFile) {
+            DataFile dataFile = new DataFile(pid, anArrayOfFile);
             dataFiles.add(dataFile);
         }
 

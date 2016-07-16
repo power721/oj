@@ -1,0 +1,53 @@
+<@override name="content">
+<div class="header" xmlns="http://www.w3.org/1999/html">
+  <h1 class="page-title">日志文件</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="admin/file/logs">文件管理</a>
+    <span class="divider">/</span>
+  </li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h4>View Log:
+          <a href="admin/file/download/?dir=${dir!}&name=${name!}&log=true">
+            <#if dir?? && dir?has_content>${dir!}/</#if>${name!}
+          </a>
+        </h4>
+        <div>
+          <textarea id="content" rows="40" cols="200" wrap="soft"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+<@override name="styles">
+<style>
+  textarea {
+    width: auto;
+  }
+</style>
+</@override>
+<@override name="scripts">
+<script type="text/javascript">
+  $(document).ready(function () {
+    function getLog(page, size) {
+      var url = 'api/admin/log';
+      $.getJSON(url, {'dir': '${dir!}', 'name': '${name!}', 'page': page, 'size': size}, function (data) {
+        $('#content').val(data.content);
+      });
+    }
+
+    getLog(0, 40);
+  });
+</script>
+</@override>
+<@extends name="../_layout.html"></@extends>

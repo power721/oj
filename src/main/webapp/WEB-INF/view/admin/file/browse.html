@@ -14,7 +14,7 @@
     </li>
     <#assign index = dir?index_of("/")>
     <#if index != -1>
-    <#assign sub = dir[0..<index]>
+      <#assign sub = dir[0..<index]>
       <li>
         <a href="admin/file/browse/?dir=${sub}">${sub}</a>
         <span class="divider">/</span>
@@ -48,7 +48,8 @@
                 <tr>
                   <td>${file_index+1}</td>
                   <td class="file">
-                    <#if file.directory==true><a href="admin/file/browse/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name}">${file.name}</a>
+                    <#if file.directory==true><a
+                            href="admin/file/browse/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name}">${file.name}</a>
                     <#else>
                       <a href="admin/file/view/?dir=${dir!}&name=${file.name!}">${file.name}</a>
                     </#if>
@@ -61,11 +62,13 @@
                   <td class="timestamp" data="${file.modifyTime}"></td>
                   <td class="action" name="${file.name}">
                     <#if file.directory==true>
-                      <a class="btn btn-primary view" href="admin/file/browse/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name!}">View</a>
+                      <a class="btn btn-primary view"
+                         href="admin/file/browse/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name!}">View</a>
                     <#else>
                       <a class="btn btn-primary view" href="admin/file/view/?dir=${dir!}&name=${file.name!}">View</a>
                     </#if>
-                    <a class="btn btn-info download" href="admin/file/download/?dir=${dir!}&name=${file.name!}">Download</a>
+                    <a class="btn btn-info download"
+                       href="admin/file/download/?dir=${dir!}&name=${file.name!}">Download</a>
                   </td>
                 </tr>
                 </#list>
@@ -94,10 +97,6 @@
 <script src="assets/bootstrap-modal/bootstrap-modalmanager.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    $('.download').click(function () {
-      window.location.href = 'admin/file/download/' + ${dir!} +'?name=' + $(this).parent().attr('name');
-    });
-
     $("#data-files").tablecloth({
       theme: "stats",
       condensed: true,

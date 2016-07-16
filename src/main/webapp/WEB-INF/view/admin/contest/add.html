@@ -82,7 +82,8 @@
             <div class="controls">
               <div class="input-prepend">
                 <span class="add-on"><i class="fa fa-calendar-minus-o" aria-hidden="true"></i></span>
-                <input class="input-mini" id="inputLockBoardTime" type="number" min="0" name="contest.lockBoardTime" value="60">
+                <input class="input-mini" id="inputLockBoardTime" type="number" min="0" name="contest.lockBoardTime"
+                       value="60">
                 minutes
               </div>
             </div>
@@ -123,10 +124,13 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    $('#inputTitle').tooltip({'trigger':'focus', 'title': '比赛标题。', 'placement': 'right'});
-    $('#inputDescription').tooltip({'trigger':'focus', 'title': '比赛描述。', 'placement': 'right'});
-    $('#inputReport').tooltip({'trigger':'focus', 'title': '解题报告。', 'placement': 'right'});
-    $('#inputType').tooltip({'title': '比赛类型，Password：密码访问，Private：私有比赛，结束后所有人可见，Strict Private,私有比赛，结束后仅参加者可见，Test：测试数据专用。', 'placement': 'right'});
+    $('#inputTitle').tooltip({'trigger': 'focus', 'title': '比赛标题。', 'placement': 'right'});
+    $('#inputDescription').tooltip({'trigger': 'focus', 'title': '比赛描述。', 'placement': 'right'});
+    $('#inputReport').tooltip({'trigger': 'focus', 'title': '解题报告。', 'placement': 'right'});
+    $('#inputType').tooltip({
+      'title': '比赛类型，Password：密码访问，Private：私有比赛，结束后所有人可见，Strict Private,私有比赛，结束后仅参加者可见，Test：测试数据专用。',
+      'placement': 'right'
+    });
     $('#inputLockBoard').tooltip({'trigger': 'focus', 'title': '比赛结束前封榜？', 'placement': 'right'});
     $('#inputLockBoardTime').tooltip({
       'trigger': 'focus', 'title': '比赛结束前x分钟锁定排名。', 'placement': 'right'
