@@ -3,6 +3,8 @@ package com.power.oj.admin;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
+import java.io.File;
+
 @RequiresPermissions("admin")
 @RequiresAuthentication
 public class FileAdminController extends AdminController {
@@ -46,7 +48,12 @@ public class FileAdminController extends AdminController {
             dir = "";
         }
 
-        renderFile(adminService.downloadFile(dir, name));
+        File file = adminService.downloadFile(dir, name);
+        if (file == null) {
+            renderError(404);
+        } else {
+            renderFile(file);
+        }
     }
 
 }
