@@ -26,6 +26,10 @@
               <tr>
                 <th>No.</th>
                 <th>File</th>
+                <th>Type</th>
+                <th>Permissions</th>
+                <th>User</th>
+                <th>Group</th>
                 <th>Size</th>
                 <th>Modified</th>
                 <th>Action</th>
@@ -41,6 +45,10 @@
                       <a href="admin/file/view/?dir=${dir!}&name=${file.name!}">${file.name}</a>
                     </#if>
                   </td>
+                  <td class="type">${file.type}</td>
+                  <td class="permissions">${file.perm}</td>
+                  <td class="user">${file.user}</td>
+                  <td class="group">${file.group}</td>
                   <td class="size" size="${file.size}"></td>
                   <td class="timestamp" data="${file.modifyTime}"></td>
                   <td class="action" name="${file.name}">
@@ -86,7 +94,7 @@
     $("#data-files").tablecloth({
       theme: "stats",
       condensed: true,
-      sortable: false,
+      sortable: true,
       striped: true,
       clean: true
     });
