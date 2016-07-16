@@ -199,6 +199,15 @@ public final class AdminService {
         return ojFiles;
     }
 
+    public List<OJFile> getLogs() {
+        List<OJFile> logs = new ArrayList<>();
+        logs.add(new OJFile(OjConfig.getString("workPath"), "oj-judge.log"));
+        logs.add(new OJFile(System.getProperty("catalina.home") + File.separator + "logs", "oj.log"));
+        logs.add(new OJFile("/var/log/judged.log"));
+
+        return logs;
+    }
+
     public String getFileContent(String dirName, String fileName) {
         File dir = new File(OjConfig.getString("workPath"), dirName);
         File file = new File(dir, fileName);
@@ -212,7 +221,11 @@ public final class AdminService {
         return content;
     }
 
-    public File downloadFile(String dirName, String fileName) {
+    public File downloadFile(String dirName, String fileName, boolean isLog) {
+        if (isLog) {
+            return downloadLog(dirName, fileName);
+        }
+
         File dir = new File(OjConfig.getString("workPath"), dirName);
         File file = new File(dir, fileName);
         if (file.isDirectory()) {
@@ -221,7 +234,7 @@ public final class AdminService {
                 // TODO: how to clean the temp files?
                 File zip = new File(OjConfig.downloadPath, file.getName() + ".zip");
                 zos = ZipUtil.createZip(zip);
-                ZipUtil.addToZip(zos, file, null, null, true);
+                ZipUtil.addToZip(zos, file, null, "PowerOJ judge files", true);
                 log.info("create " + zip + " successfully.");
                 return zip;
             } catch (IOException e) {
@@ -241,6 +254,20 @@ public final class AdminService {
             return file;
         }
         return null;
+    }
+
+    private File downloadLog(String dirName, String fileName) {
+        File file = null;
+        if ("oj.log".equals(fileName)) {
+            file = new File(System.getProperty("catalina.home") + File.separator + "logs", "oj.log");
+        } else if ("judged.log".equals(fileName)) {
+            file = new File("/var/log/judged.log");
+        } else if ("oj-judge.log".equals(fileName)) {
+            File dir = new File(OjConfig.getString("workPath"), dirName);
+            file = new File(dir, fileName);
+        }
+
+        return file;
     }
 
     public List<DataFile> getDataFiles(Integer pid) {
