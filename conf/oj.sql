@@ -904,7 +904,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-16 22:43:34
+-- Dump completed on 2016-07-16 22:59:35
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -941,7 +941,7 @@ ALTER TABLE user AUTO_INCREMENT=1000;
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1000,0,'root','$2a$10$32c4WA.dm2czb7LFy4TQFumIiYbwm75c7s645cIEUpt1W8ZVEF/lG','root','root','','power721@163.com',0,1,'SWUST',20,56,99,0,0,1410622292,1418132128,'171.217.47.184','',NULL,'','secret','',72670,1,0,0,NULL,NULL,0,0,1,NULL,NULL);
+INSERT INTO `user` VALUES (1000,0,'root','$2a$10$FYhE.LjD7nmGPJRUaIoeVOupJITPSRCjqJkfLZq/ooOEVEoL0Wjea','root','root','','admin@power.oj',0,1,'',0,0,0,0,0,0,0,'127.0.0.1','','','','secret','',0,1,0,1,NULL,NULL,0,0,1,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -976,7 +976,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-16 22:43:34
+-- Dump completed on 2016-07-16 22:59:35
 -- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
@@ -1391,4 +1391,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-16 22:43:34
+-- Dump completed on 2016-07-16 22:59:35
