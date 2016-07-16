@@ -143,4 +143,15 @@ public class AdminApiController extends OjController {
         renderNull();
     }
 
+    public void log() {
+        String dir = getPara("dir");
+        String name = getPara("name");
+        if (dir == null) {
+            dir = "";
+        }
+        int page = getParaToInt("page", 0);
+        int size = getParaToInt("size", 40);
+
+        renderJson("content", AdminService.me().viewLog(dir, name, page, size));
+    }
 }

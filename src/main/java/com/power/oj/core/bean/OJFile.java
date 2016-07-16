@@ -22,6 +22,7 @@ public class OJFile {
     private String group;
     private String perm;
     private String type;
+    private String dir;
     private File file;
 
     public OJFile(String dir, String name) {
@@ -138,6 +139,18 @@ public class OJFile {
 
     public String getType() {
         return type;
+    }
+
+    public String getPath() {
+        return file.getAbsolutePath();
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
+
+    public String getDir() {
+        return dir;
     }
 
     public boolean isFile() {

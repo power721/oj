@@ -30,7 +30,7 @@ public class FileAdminController extends AdminController {
 
         setAttr("dir", dir);
         setAttr("name", name);
-        setAttr("content" ,adminService.getFileContent(dir, name));
+        setAttr("content", adminService.getFileContent(dir, name));
     }
 
     public void logs() {
@@ -38,7 +38,14 @@ public class FileAdminController extends AdminController {
     }
 
     public void log() {
+        String dir = getPara("dir");
+        String name = getPara("name");
+        if (dir == null) {
+            dir = "";
+        }
 
+        setAttr("dir", dir);
+        setAttr("name", name);
     }
 
     public void download() {
