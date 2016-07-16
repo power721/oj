@@ -12,7 +12,7 @@ public class FileAdminController extends AdminController {
     private static final AdminService adminService = AdminService.me();
 
     public void browse() {
-        String dir = getPara(0);
+        String dir = getPara("dir");
         if (dir == null) {
             dir = "";
         }

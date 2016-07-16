@@ -57,7 +57,7 @@ public class UserController extends OjController {
         if (userModel == null) {
             // TODO use exception
             FlashMessage msg =
-                new FlashMessage(getText("user.error.none"), MessageType.WARN, getText("message.warn.title"));
+                new FlashMessage(getText("user.error.none", name), MessageType.WARN, getText("message.warn.title"));
             redirect("/", msg);
             return;
         }

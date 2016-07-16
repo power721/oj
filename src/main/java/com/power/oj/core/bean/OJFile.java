@@ -24,6 +24,13 @@ public class OJFile {
     private String type;
     private File file;
 
+    public OJFile(String dir, String name) {
+        file = new File(dir, name);
+        this.name = file.getName();
+
+        init();
+    }
+
     public OJFile(String path) {
         file = new File(path);
         this.name = file.getName();

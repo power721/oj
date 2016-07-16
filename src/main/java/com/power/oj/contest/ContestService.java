@@ -835,12 +835,12 @@ public class ContestService {
             board.set("uid", uid);
             Db.save("board", board);
             board = Db.findById("board", board.get("id"));
+        }
 
-            if (!isFreeze) {
-                freezeBoard = new Record();
-                freezeBoard.setColumns(board.getColumns());
-                Db.save("freeze_board", freezeBoard);
-            }
+        if (!isFreeze && freezeBoard == null) {
+            freezeBoard = new Record();
+            freezeBoard.setColumns(board.getColumns());
+            Db.save("freeze_board", freezeBoard);
         }
         Integer wrongSubmissions = board.getInt(c + "_WrongNum");
         Integer acTime = board.getInt(c + "_SolvedTime");
