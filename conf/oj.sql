@@ -16,6 +16,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Current Database: `oj`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `oj` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `oj`;
+
+--
 -- Table structure for table `board`
 --
 
@@ -132,17 +140,18 @@ CREATE TABLE `contest` (
   `title` varchar(255) DEFAULT NULL,
   `startTime` int(11) DEFAULT '0',
   `endTime` int(11) DEFAULT '0',
-  `lockBoardTime` int(9) NOT NULL DEFAULT '60',
-  `unlockBoardTime` int(9) NOT NULL DEFAULT '30',
   `description` text,
   `report` text,
   `type` tinyint(4) NOT NULL DEFAULT '0',
   `password` varchar(255) DEFAULT NULL,
-  `freeze` tinyint(1) NOT NULL DEFAULT '0',
+  `lockBoard` tinyint(1) NOT NULL DEFAULT '0',
   `atime` int(11) DEFAULT NULL,
   `ctime` int(11) DEFAULT NULL,
   `mtime` int(11) DEFAULT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
+  `lockReport` tinyint(1) NOT NULL DEFAULT '0',
+  `lockBoardTime` int(9) NOT NULL DEFAULT '60',
+  `unlockBoardTime` int(9) NOT NULL DEFAULT '30',
   PRIMARY KEY (`cid`),
   KEY `search` (`title`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -895,7 +904,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-25 19:11:44
+-- Dump completed on 2016-07-16 22:16:09
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -1313,7 +1322,7 @@ INSERT INTO `variable` VALUES (29,'downloadPath','/var/www/download/',NULL,NULL,
 INSERT INTO `variable` VALUES (30,'userAvatarPath','/var/www/upload/image/user/',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (31,'problemImagePath','/var/www/upload/image/problem/',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (32,'judgeHost','127.0.0.1',NULL,NULL,NULL,'string',NULL);
-INSERT INTO `variable` VALUES (33,'judgePort','12345',NULL,'12345',NULL,'int',NULL);
+INSERT INTO `variable` VALUES (33,'judgePort','55555',NULL,55555,NULL,'int',NULL);
 INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
 /*!40000 ALTER TABLE `variable` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -1327,4 +1336,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-06-25 19:11:44
+-- Dump completed on 2016-07-16 22:16:09
