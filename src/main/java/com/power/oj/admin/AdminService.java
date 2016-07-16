@@ -223,17 +223,12 @@ public final class AdminService {
             StringBuilder sb = new StringBuilder();
             try {
                 List<String> lines = FileUtils.readLines(file, "UTF-8");
+                int len = lines.size();
                 Collections.reverse(lines);
                 int start = page * size;
-                if (start > lines.size()) {
-                    start = lines.size() - size;
-                }
                 int end = start + size;
-                if (end > lines.size()) {
-                    end = lines.size();
-                }
                 for (int i = start; i < end; ++i) {
-                    sb.append(lines.get(i)).append('\n');
+                    sb.append(len - i).append(':').append(lines.get(i)).append('\n');
                 }
                 content = sb.toString();
             } catch (IOException e) {

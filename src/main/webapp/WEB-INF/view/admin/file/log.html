@@ -39,14 +39,26 @@
 <@override name="scripts">
 <script type="text/javascript">
   $(document).ready(function () {
+    var page = 0;
+    var size = 40;
     function getLog(page, size) {
       var url = 'api/admin/log';
       $.getJSON(url, {'dir': '${dir!}', 'name': '${name!}', 'page': page, 'size': size}, function (data) {
-        $('#content').val(data.content);
+        var content = $('#content').val() + data.content;
+        if (isEmpty(data.content)) {
+          page = -1;
+        }
+        $('#content').val(content);
       });
     }
 
-    getLog(0, 40);
+    getLog(page, size);
+    $('#content').scroll(function() {
+      if(this.scrollHeight <= $('#content').scrollTop() + $('#content').height() + 10) {
+        page = page + 1;
+        getLog(page, size);
+      }
+    });
   });
 </script>
 </@override>

@@ -190,6 +190,10 @@ function clock(fn, interval) {
     });
 }
 
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
 try {
     console.log("Welcome to PowerOJ, have fun!");
 } catch (f) {
