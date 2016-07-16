@@ -89,9 +89,9 @@ sudo rsync -r ${ASSETS}/ /var/www/assets/
 
 mvn clean package || exit 1
 
-sudo mkdir -p ~/oj_backup/upload/image/
-echo "backup /var/www/upload/image/ to ~/oj_backup/upload/image/"
-sudo rsync -r /var/www/upload/image/ ~/oj_backup/upload/image/
+sudo mkdir -p ~/oj_backup/upload/
+echo "backup /var/www/upload/ to ~/oj_backup/upload/"
+sudo rsync -r /var/www/upload/ ~/oj_backup/upload/
 #sudo rm -rf ${TOMCAT}/oj/upload
 #sudo rm -rf ${TOMCAT}/oj/download
 

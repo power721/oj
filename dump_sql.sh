@@ -10,7 +10,7 @@ done
 read -s -p "mysql password: " PASSWORD
 echo
 
-mysqldump -u root --password=${PASSWORD} --no-data --single-transaction oj > conf/oj.sql
+mysqldump -u root --password=${PASSWORD} -B --no-data --single-transaction oj > conf/oj.sql
 
 sed -i 's/ AUTO_INCREMENT=[0-9]*\b//' conf/oj.sql
 for TABLE in "${AI_TABLES[@]}"; do
