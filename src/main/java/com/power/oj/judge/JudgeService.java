@@ -87,21 +87,7 @@ public final class JudgeService {
             userService.incSubmission(solution.getUid());
         }
 
-        synchronized (JudgeAdapter.class) {
-            JudgeAdapter judgeThread;
-            if (OjConfig.isLinux()) {
-                if (OjConfig.judgeVersion != null && OjConfig.judgeVersion.startsWith("v2.")) {
-                    judgeThread = new PowerJudgeV2Adapter(solution);
-                } else {
-                    judgeThread = new PojJudgeAdapter(solution);
-                }
-            } else {
-                judgeThread = new PojJudgeAdapter(solution);
-            }
-            //judgeExecutor.execute(judgeThread);  // this will store session in the thread
-            Thread thread = new Thread(judgeThread);
-            thread.start();
-        }
+        startJudgeThread(solution);
     }
 
     public void rejudge(Solution solution, boolean deleteTempDir) {
@@ -113,14 +99,22 @@ public final class JudgeService {
         solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
         solution.update();
 
+        startJudgeThread(solution);
+    }
+
+    private void startJudgeThread(Solution solution) {
         synchronized (JudgeAdapter.class) {
             JudgeAdapter judgeThread;
             if (OjConfig.isLinux()) {
-                judgeThread = new PowerJudgeV2Adapter(solution);
+                if (OjConfig.judgeVersion != null && OjConfig.judgeVersion.startsWith("v2.")) {
+                    judgeThread = new PowerJudgeV2Adapter(solution);
+                } else {
+                    judgeThread = new PowerJudgeAdapter(solution);
+                }
             } else {
                 judgeThread = new PojJudgeAdapter(solution);
             }
-            judgeThread.setDeleteTempDir(deleteTempDir);
+            // judgeThread.setDeleteTempDir(deleteTempDir);
             //judgeExecutor.execute(judgeThread);  // this will store session in the thread
             Thread thread = new Thread(judgeThread);
             thread.start();

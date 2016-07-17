@@ -6,6 +6,7 @@ public class RejudgeTask {
     private RejudgeType type;
     private int total = 1;
     private int count = 0;
+    private boolean deleteTempDir;
 
     public RejudgeTask(Integer id, RejudgeType type) {
         this.id = id;
@@ -40,6 +41,14 @@ public class RejudgeTask {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public boolean isDeleteTempDir() {
+        return deleteTempDir;
+    }
+
+    public void setDeleteTempDir(boolean deleteTempDir) {
+        this.deleteTempDir = deleteTempDir;
     }
 
     public void increaseCount() {
