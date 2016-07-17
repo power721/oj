@@ -229,7 +229,7 @@ public class ContestController extends OjController {
         if (problemModel == null) {
             FlashMessage msg =
                 new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-            redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
+            redirect("/contest/show/" + cid, msg);
             return;
         }
 
@@ -240,7 +240,7 @@ public class ContestController extends OjController {
         setAttr("problem", problemModel);
         setAttr("id", id);
 
-        setTitle(new StringBuilder(2).append(String.format(getText("contest.status.title"), cid, id)).toString());
+        setTitle(getText("contest.status.title", cid, id));
     }
 
     public void code() {
