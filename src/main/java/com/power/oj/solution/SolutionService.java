@@ -429,6 +429,7 @@ public final class SolutionService {
                     }
                 }
             }
+            judgeService.cleanRejudge(solution);
             return solution.update();
         }
 

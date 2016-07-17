@@ -1,6 +1,5 @@
 package com.power.oj.judge;
 
-import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
@@ -98,7 +97,7 @@ public class PojJudgeAdapter extends JudgeAdapter {
         log.info("runProcess: " + OjConfig.getString("runShell"));
 
         ProblemModel problemModel;
-        if (solution instanceof ContestSolutionModel) {
+        if (solution.isContest()) {
             problemModel = problemService.findProblemForContest(solution.getPid());
         } else {
             problemModel = problemService.findProblem(solution.getPid());

@@ -192,4 +192,8 @@ public class SolutionModel extends Model<SolutionModel> implements Solution {
         isAccessible = accessible;
     }
 
+    @Override
+    public boolean isContest() {
+        return false;
+    }
 }
