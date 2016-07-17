@@ -178,4 +178,8 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
         return set(STATUS, value);
     }
 
+    @Override
+    public boolean isContest() {
+        return true;
+    }
 }

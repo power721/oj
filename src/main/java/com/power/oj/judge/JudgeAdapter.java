@@ -3,7 +3,6 @@ package com.power.oj.judge;
 import com.google.common.io.Files;
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
-import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
@@ -36,7 +35,6 @@ public abstract class JudgeAdapter implements Runnable {
     private static final int RESERVED_TEMP_DIRS = 25;
     protected final Logger log = Logger.getLogger(getClass());
     protected Solution solution;
-    private File workDir;
     private boolean deleteTempDir = false;
 
     public JudgeAdapter() {
@@ -73,15 +71,6 @@ public abstract class JudgeAdapter implements Runnable {
 
                 log.error("Exception in judge.", e);
             }
-
-            if (needDeleteTempDir()) {
-                try {
-                    FileUtil.deleteDir(workDir);
-                    log.debug("Delete directory: " + workDir);
-                } catch (IOException e) {
-                    log.info("Cannot delete directory: " + workDir + " reason:" + e.getMessage());
-                }
-            }
         }
     }
 
@@ -101,7 +90,7 @@ public abstract class JudgeAdapter implements Runnable {
             }
         }
 
-        workDir = new File(workPath + solution.getSid());
+        File workDir = new File(workPath + solution.getSid());
         if (workDir.isDirectory()) {
             try {
                 FileUtil.cleanDir(workDir);
@@ -115,7 +104,7 @@ public abstract class JudgeAdapter implements Runnable {
         }
         java.nio.file.Files.setPosixFilePermissions(workDir.toPath(), JudgeService.FILE_PERMISSIONS);
 
-        if (solution instanceof ContestSolutionModel) {
+        if (solution.isContest()) {
             File dest = new File(workPath + "/java.policy");
             if (!dest.exists()) {
                 File src = new File(workPath + "/../java.policy");
@@ -283,7 +272,7 @@ public abstract class JudgeAdapter implements Runnable {
     }
 
     protected boolean updateContest() {
-        if (solution instanceof ContestSolutionModel) {
+        if (solution.isContest()) {
             if (solution.get("originalResult") != null) {
                 contestService.updateBoard4Rejudge(solution);
             } else {

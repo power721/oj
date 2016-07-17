@@ -1,7 +1,6 @@
 package com.power.oj.judge;
 
 import com.jfinal.log.Logger;
-import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
@@ -32,7 +31,7 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
         ProblemModel problemModel;
         int cid = 0;
 
-        if (solution instanceof ContestSolutionModel) {
+        if (solution.isContest()) {
             problemModel = problemService.findProblemForContest(solution.getPid());
             cid = solution.getCid();
         } else {

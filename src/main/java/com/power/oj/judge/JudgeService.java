@@ -14,6 +14,7 @@ import com.power.oj.user.UserService;
 import jodd.format.Printf;
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -87,7 +88,7 @@ public final class JudgeService {
             userService.incSubmission(solution.getUid());
         }
 
-        startJudgeThread(solution);
+        startJudgeThread(solution, false);
     }
 
     public void rejudge(Solution solution, boolean deleteTempDir) {
@@ -99,10 +100,10 @@ public final class JudgeService {
         solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
         solution.update();
 
-        startJudgeThread(solution);
+        startJudgeThread(solution, deleteTempDir);
     }
 
-    private void startJudgeThread(Solution solution) {
+    private void startJudgeThread(Solution solution, boolean deleteTempDir) {
         synchronized (JudgeAdapter.class) {
             JudgeAdapter judgeThread;
             if (OjConfig.isLinux()) {
@@ -114,10 +115,41 @@ public final class JudgeService {
             } else {
                 judgeThread = new PojJudgeAdapter(solution);
             }
-            // judgeThread.setDeleteTempDir(deleteTempDir);
+            RejudgeTask task;
+            if (solution.isContest()) {
+                task = new RejudgeTask(solution.getCid(), solution.getSid(), RejudgeType.SOLUTION);
+            } else {
+                task = new RejudgeTask(solution.getSid(), RejudgeType.SOLUTION);
+            }
+            task.setDeleteTempDir(deleteTempDir);
+            rejudgeTasks.put(task.getKey(), task);
+            judgeThread.setDeleteTempDir(deleteTempDir);
             //judgeExecutor.execute(judgeThread);  // this will store session in the thread
             Thread thread = new Thread(judgeThread);
             thread.start();
+        }
+    }
+
+    public void cleanRejudge(Solution solution) {
+        RejudgeTask task;
+        String key;
+        File dir = new File(getWorkPath(solution) + solution.getSid());
+        if (solution.isContest()) {
+            key = RejudgeType.SOLUTION.getKey(solution.getCid(), solution.getSid());
+        } else {
+            key = RejudgeType.SOLUTION.getKey(solution.getSid());
+        }
+
+        task = rejudgeTasks.get(key);
+        if (task != null) {
+            rejudgeTasks.remove(key);
+            if (task.isDeleteTempDir()) {
+                try {
+                    FileUtils.deleteDirectory(dir);
+                } catch (IOException e) {
+                    log.error("delete work directory failed!", e);
+                }
+            }
         }
     }
 
@@ -348,11 +380,11 @@ public final class JudgeService {
 
     public String getWorkPath(Solution solution) {
         String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator;
-        if (solution instanceof ContestSolutionModel) {
+        if (solution.isContest()) {
             workPath = workPath + "c" + solution.getCid() + File.separator;
             File contestDir = new File(workPath);
             if (!contestDir.isDirectory()) {
-                if(contestDir.mkdirs()) {
+                if (contestDir.mkdirs()) {
                     try {
                         Files.setPosixFilePermissions(contestDir.toPath(), FILE_PERMISSIONS);
                     } catch (IOException e) {
@@ -367,7 +399,7 @@ public final class JudgeService {
 
     public String getWorkDirPath(Solution solution) {
         String workPath = FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator;
-        if (solution instanceof ContestSolutionModel) {
+        if (solution.isContest()) {
             workPath = workPath + "c" + solution.getCid() + File.separator + solution.getSid() + File.separator;
         } else {
             workPath = workPath + File.separator + solution.getSid() + File.separator;
