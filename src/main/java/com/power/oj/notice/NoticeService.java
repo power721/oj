@@ -67,6 +67,7 @@ public final class NoticeService {
         NoticeModel newNotice = dao.findById(id);
 
         newNotice.setId(id);
+        newNotice.setView(noticeModel.getView());
         newNotice.setEditorUid(userService.getCurrentUid());
         newNotice.setCid(noticeModel.getCid());
         newNotice.setTitle(noticeModel.getTitle());

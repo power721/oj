@@ -8,7 +8,15 @@
 </div>
 
 <div class="row">
+  <#if contestProblems?size < 10>
+  <div class="span4 offset5 text-center">
+  <#elseif contestProblems?size < 16>
   <div class="span6 offset4 text-center">
+  <#elseif contestProblems?size < 22>
+  <div class="span8 offset2 text-center">
+  <#else>
+  <div class="span10 offset1 text-center">
+  </#if>
     <ul class="nav nav-pills">
       <#list contestProblems as Problem>
         <li class="<#if problem.id==Problem.id>active</#if>">
