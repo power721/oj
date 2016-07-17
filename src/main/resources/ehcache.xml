@@ -62,8 +62,8 @@
            maxEntriesLocalHeap="1000"
            overflowToDisk="false"
            eternal="false"
-           timeToLiveSeconds="60"
-           timeToIdleSeconds="60"
+           timeToLiveSeconds="3600"
+           timeToIdleSeconds="3600"
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900"/>
 

@@ -36,6 +36,8 @@ public class EhcacheService extends TimerTask {
     @Override
     public void run() {
         flush("problem");
+        flush("notice");
+        flush("news");
     }
 
     @Override

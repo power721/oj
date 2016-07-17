@@ -96,7 +96,9 @@ public class ContestController extends OjController {
 
     public void allProblems() {
         Integer cid = getParaToInt(0);
+        setAttr("cid", cid);
         setAttr("contestProblems", contestService.getContestProblems(cid));
+        setTitle("Contest " + cid);
     }
 
     public void submit() {
