@@ -683,7 +683,8 @@ public final class UserService {
             String ext = OjConfig.languageType.get(code.getInt("language")).getExt();
             StringBuilder sb = new StringBuilder(10);
             sb.append(problemDir).append(File.separator).append(code.getInt("sid")).append("_");
-            sb.append(code.getInt("time")).append("MS_").append(code.getInt("memory")).append("KB").append("").append(ext);
+            sb.append(code.getInt("time")).append("MS_").append(code.getInt("memory")).append("KB")
+                .append(".").append(ext);
 
             File file = new File(sb.toString());
             if (!file.createNewFile()) {
@@ -695,6 +696,7 @@ public final class UserService {
         }
 
         ZipUtil.zip(userDirFile);
+        userDirFile.delete();
 
         return new File(userDirFile.getAbsolutePath() + ".zip");
     }
