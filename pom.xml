@@ -21,7 +21,7 @@
         <httpcomponents.version>4.2.5</httpcomponents.version>
         <jodd.version>3.5.1</jodd.version>
         <powermock.version>1.6.4</powermock.version>
-        <ehcache.version>2.5.0</ehcache.version>
+        <ehcache.version>2.6.11</ehcache.version>
     </properties>
 
     <dependencies>
