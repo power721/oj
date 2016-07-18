@@ -193,6 +193,7 @@ CREATE TABLE `contest_problem` (
   `pid` int(9) NOT NULL DEFAULT '0',
   `title` char(255) NOT NULL,
   `num` int(5) NOT NULL DEFAULT '0',
+  `view` int(5) NOT NULL DEFAULT '0',
   `accepted` int(5) NOT NULL DEFAULT '0',
   `submission` int(5) NOT NULL DEFAULT '0',
   `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',

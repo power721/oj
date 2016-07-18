@@ -74,7 +74,7 @@ public class ContestController extends OjController {
         char id = problemId.toUpperCase().charAt(0);
         Integer num = id - 'A';
 
-        ProblemModel problemModel = contestService.getProblem(cid, num);
+        ProblemModel problemModel = contestService.getProblem4Show(cid, num);
         if (problemModel == null) {
             FlashMessage msg =
                 new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));

@@ -110,9 +110,16 @@ public class ContestService {
         return contestProblems;
     }
 
+    public ProblemModel getProblem4Show(Integer cid, Integer num) {
+        ProblemModel problem = getProblem(cid, num);
+        Db.update("UPDATE contest_problem SET view=view+1 WHERE cid=? AND num=?", cid, num);
+
+        return problem;
+    }
+
     public ProblemModel getProblem(Integer cid, Integer num) {
         Record record =
-            Db.findFirst("SELECT pid,title,accepted,submission FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid,
+            Db.findFirst("SELECT pid,title,accepted,submission,view FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid,
                 num);
         if (record == null)
             return null;
@@ -135,6 +142,7 @@ public class ContestService {
         problem.setSubmission(record.getInt("submission"));
         problem.setSubmitUser((int) submitUser);
         problem.setSolved((int) solved);
+        problem.setView(record.getInt("view"));
         problem.put("id", (char) (num + 'A'));
         problem.put("num", num);
 
