@@ -455,7 +455,6 @@ public final class ProblemService {
         updateCache(problemModel);
 
         return problemModel.update();
-
     }
 
     public boolean incAccepted(Solution solutionModel) {
