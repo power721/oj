@@ -238,7 +238,7 @@ public class AppConfig extends JFinalConfig {
         // TODO:
         I18n.setDefaultLocale(Locale.ENGLISH.toString());
         if (!OjConfig.isDevMode()) {
-            EhcacheService.start();
+//            EhcacheService.start();
 
             OjConfig.setBaseURL(PropKit.get("baseURL"));
         }
@@ -250,7 +250,7 @@ public class AppConfig extends JFinalConfig {
     @Override
     public void beforeJFinalStop() {
         //SessionService.me().deleteAllSession();
-        EhcacheService.destroy();
+//        EhcacheService.destroy();
         log.debug("beforeJFinalStop");
     }
 
