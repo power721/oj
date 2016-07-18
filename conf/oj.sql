@@ -144,6 +144,7 @@ CREATE TABLE `contest` (
   `report` text,
   `type` tinyint(4) NOT NULL DEFAULT '0',
   `password` varchar(255) DEFAULT NULL,
+  `languages` varchar(255) DEFAULT NULL,
   `lockBoard` tinyint(1) NOT NULL DEFAULT '0',
   `atime` int(11) DEFAULT NULL,
   `ctime` int(11) DEFAULT NULL,

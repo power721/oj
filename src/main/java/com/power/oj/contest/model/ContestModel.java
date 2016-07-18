@@ -14,6 +14,7 @@ public class ContestModel extends Model<ContestModel> {
     public static final String REPORT = "report";
     public static final String TYPE = "type";
     public static final String PASSWORD = "password";
+    public static final String LANGUAGES = "languages";
     public static final String ATIME = "atime";
     public static final String CTIME = "ctime";
     public static final String MTIME = "mtime";
@@ -140,6 +141,14 @@ public class ContestModel extends Model<ContestModel> {
 
     public ContestModel setPassword(String value) {
         return set(PASSWORD, value);
+    }
+
+    public String getLanguages() {
+        return getStr(LANGUAGES);
+    }
+
+    public ContestModel setLanguages(String value) {
+        return set(LANGUAGES, value);
     }
 
     public Integer getAtime() {

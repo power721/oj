@@ -53,6 +53,18 @@
     </div>
   </div>
   <div class="control-group">
+    <label class="control-label" for="inputLanguages"> Enabled Languages </label>
+    <div class="controls">
+      <#if program_languages??>
+        <#list program_languages.keySet() as key>
+          <label class="checkbox inline">
+            <input type="checkbox" name="languages" id="inputLanguages${key!}" value="${key!}"> ${program_languages.get(key)!}
+          </label>
+        </#list>
+      </#if>
+    </div>
+  </div>
+  <div class="control-group">
     <label class="control-label" for="inputLockBoard"> Lock Board? </label>
     <div class="controls">
       <input class="freeze" id="inputLockBoard" type="checkbox" name="contest.lockBoard" value="1">

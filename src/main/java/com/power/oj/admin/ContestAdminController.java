@@ -55,6 +55,7 @@ public class ContestAdminController extends OjController {
         ContestModel contestModle = contestService.getContest(cid);
 
         setAttr("cid", cid);
+        setAttr("contest_languages", contestService.getLanguages(cid));
         setAttr("contest", contestModle);
 
         setTitle(getText("contest.edit.title"));
