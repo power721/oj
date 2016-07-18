@@ -30,6 +30,7 @@ import com.power.oj.util.HttpUtil;
 import com.power.oj.util.Tool;
 import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.HttpHostConnectException;
 
 import java.text.ParseException;
@@ -69,6 +70,19 @@ public class ContestService {
             contestModel = dao.findFirstByCache("contest", cid, sql, cid);
         }
         return contestModel;
+    }
+
+    public Map<Integer, String> getLanguages(Integer cid) {
+        ContestModel contestModel = getContest(cid);
+        Map<Integer, String> languages = OjConfig.languageName;
+        if (contestModel.getLanguages() != null) {
+            languages = new HashMap<>();
+            for (String language : StringUtils.split(contestModel.getLanguages(), ",")) {
+                Integer id = Integer.valueOf(language);
+                languages.put(id, OjConfig.languageName.get(id));
+            }
+        }
+        return languages;
     }
 
     public String getContestTitle(Integer cid) {
@@ -142,7 +156,7 @@ public class ContestService {
         problem.setSubmission(record.getInt("submission"));
         problem.setSubmitUser((int) submitUser);
         problem.setSolved((int) solved);
-        problem.setView(record.getInt("view"));
+        problem.setView(record.getInt("view") + 1);
         problem.put("id", (char) (num + 'A'));
         problem.put("num", num);
 
@@ -681,6 +695,7 @@ public class ContestService {
         newContest.setStartTime(contestModel.getStartTime());
         newContest.setEndTime(contestModel.getEndTime());
         newContest.setType(contestModel.getType());
+        newContest.setLanguages(contestModel.getLanguages());
         newContest.setLockBoard(Tool.getBoolean(contestModel.isLockBoard()));
         newContest.setLockBoardTime(contestModel.getLockBoardTime());
         newContest.setUnlockBoardTime(contestModel.getUnlockBoardTime());

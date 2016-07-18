@@ -15,7 +15,9 @@ import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.util.CryptUtils;
+import jodd.util.ArraysUtil;
 import jodd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
@@ -61,7 +63,7 @@ public class ContestController extends OjController {
         setAttr("contestProblems", contestService.getContestProblems(cid, uid));
         setAttr("status", status);
 
-        setTitle(new StringBuilder(2).append(getText("contest.show.title")).append(cid).toString());
+        setTitle(getText("contest.show.title") + cid);
     }
 
     public void problem() {
@@ -78,7 +80,7 @@ public class ContestController extends OjController {
         if (problemModel == null) {
             FlashMessage msg =
                 new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-            redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
+            redirect("/contest/show/" + cid, msg);
             return;
         }
 
@@ -90,8 +92,7 @@ public class ContestController extends OjController {
         setAttr("isRejudging", contestService.isRejudging(cid, num));
         setAttr("contestProblems", contestService.getContestProblems(cid, null));
 
-        setTitle(new StringBuilder(5).append(cid).append("-").append(id).append(": ").append(problemModel.getTitle())
-            .toString());
+        setTitle(cid + "-" + id + ": " + problemModel.getTitle());
     }
 
     public void allProblems() {
@@ -111,7 +112,7 @@ public class ContestController extends OjController {
         if (contestService.isContestFinished(cid)) {
             FlashMessage msg =
                 new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
-            redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
+            redirect("/contest/show/" + cid, msg);
             return;
         }
 
@@ -119,7 +120,7 @@ public class ContestController extends OjController {
         if (problemModel == null) {
             FlashMessage msg =
                 new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-            redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
+            redirect("/contest/show/" + cid, msg);
             return;
         }
 
@@ -128,10 +129,9 @@ public class ContestController extends OjController {
         }
 
         setAttr("problem", problemModel);
-        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+        setAttr(OjConstants.PROGRAM_LANGUAGES, contestService.getLanguages(cid));
 
-        setTitle(new StringBuilder(6).append(getText("contest.problem.title")).append(cid).append("-").append(id)
-            .append(": ").append(problemModel.getTitle()).toString());
+        setTitle(getText("contest.problem.title") + cid + "-" + id + ": " + problemModel.getTitle());
         if (ajax)
             render("ajax/submit.html");
         else
@@ -143,7 +143,18 @@ public class ContestController extends OjController {
     public void submitSolution() {
         ContestSolutionModel contestSolution = getModel(ContestSolutionModel.class, "solution");
         Integer cid = contestSolution.getCid();
-        String url = new StringBuilder(2).append("/contest/status/").append(cid).toString();
+        String url = "/contest/status/" + cid;
+        ContestModel contestModle = contestService.getContest(cid);
+        if (contestModle.getLanguages() != null) {
+            String[] languages = StringUtils.split(contestModle.getLanguages(), ",");
+            if(!ArraysUtil.contains(languages, String.valueOf(contestSolution.getLanguage()))) {
+                setFlashMessage(
+                    new FlashMessage("invalid language", MessageType.ERROR, getText("message.error.title")));
+                redirect(url);
+                return;
+            }
+        }
+
         int result = contestService.submitSolution(contestSolution);
 
         if (result == -1) {
@@ -168,7 +179,7 @@ public class ContestController extends OjController {
         setAttr("cstatus", contestService.getContestStatus(cid));
         setAttr("isLocked", contestService.checkFreezeBoard4Rank(cid));
 
-        setTitle(new StringBuilder(2).append(getText("contest.rank.title")).append(cid).toString());
+        setTitle(getText("contest.rank.title") + cid);
     }
 
     public void status() {
@@ -211,7 +222,7 @@ public class ContestController extends OjController {
         setAttr("contestProblems", contestService.getContestProblems(cid, 0));
         setAttr("solutionList",
             solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
-        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+        setAttr(OjConstants.PROGRAM_LANGUAGES, contestService.getLanguages(cid));
         setAttr(OjConstants.JUDGE_RESULT, OjConfig.judgeResult);
         setAttr("result", result);
         setAttr("language", language);
@@ -235,7 +246,7 @@ public class ContestController extends OjController {
             return;
         }
 
-        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+        setAttr(OjConstants.PROGRAM_LANGUAGES, contestService.getLanguages(cid));
         setAttr("language", getParaToInt("language"));
         setAttr("pageSize", OjConfig.statusPageSize);
         setAttr("resultList", solutionService.getProblemStatusForContest(cid, num));
@@ -332,7 +343,7 @@ public class ContestController extends OjController {
         if (problemModel == null) {
             FlashMessage msg =
                 new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-            redirect(new StringBuilder(2).append("/contest/show/").append(cid).toString(), msg);
+            redirect("/contest/show/" + cid, msg);
             return;
         }
 
@@ -373,7 +384,7 @@ public class ContestController extends OjController {
         setAttr("languageList", OjConfig.programLanguages); // need ext
         setAttr("statistics", contestService.getContestStatistics(cid));
 
-        setTitle(new StringBuilder(3).append(getText("contest.statistics.title")).append(cid).toString());
+        setTitle(getText("contest.statistics.title") + cid);
     }
 
     public void clarify() {
@@ -413,7 +424,7 @@ public class ContestController extends OjController {
         String password = getPara("password");
 
         if (contestService.checkContestPassword(cid, password)) {
-            String tokenName = new StringBuilder("cid-").append(cid).toString();
+            String tokenName = "cid-" + cid;
             String tokenToken = CryptUtils.encrypt(password, tokenName);
             setSessionAttr(tokenName, tokenToken);
             redirect(SessionService.me().getLastAccessURL());
@@ -433,6 +444,9 @@ public class ContestController extends OjController {
     public void edit() {
         boolean ajax = getParaToBoolean("ajax", false);
 
+        Integer cid = getParaToInt(0);
+        setAttr("contest_languages", contestService.getLanguages(cid));
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
         setTitle(getText("contest.edit.title"));
         render(ajax ? "ajax/edit.html" : "edit.html");
     }
@@ -446,9 +460,10 @@ public class ContestController extends OjController {
         String endTime = getPara("endTime");
         ContestModel contestModel = getModel(ContestModel.class, "contest");
 
+        contestModel.setLanguages(StringUtils.join(getParaMap().get("languages"), ","));
         contestService.updateContest(contestModel, startTime, endTime);
 
-        redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getInt("cid")).toString());
+        redirect("/contest/show/" + contestModel.getInt("cid"));
     }
 
     @Clear({ContestInterceptor.class})
@@ -459,6 +474,7 @@ public class ContestController extends OjController {
         long ctime = OjConfig.startInterceptorTime + 3600000;
         setAttr("startDateTime", sdf.format(new Date(ctime)));
         setAttr("endDateTime", sdf.format(new Date(ctime + 18000000)));
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
 
         setTitle(getText("contest.add.title"));
     }
@@ -472,9 +488,10 @@ public class ContestController extends OjController {
         String endTime = getPara("endTime");
         ContestModel contestModel = getModel(ContestModel.class, "contest");
 
+        contestModel.setLanguages(StringUtils.join(getParaMap().get("languages"), ","));
         contestService.addContest(contestModel, startTime, endTime);
 
-        redirect(new StringBuilder(2).append("/contest/admin/").append(contestModel.getInt("cid")).toString());
+        redirect("/contest/admin/" + contestModel.getInt("cid"));
     }
 
     @RequiresAuthentication
@@ -490,8 +507,7 @@ public class ContestController extends OjController {
         setAttr("id", id);
         setAttr("num", num);
         setAttr("problem", contestService.getProblem(cid, num));
-        setTitle(
-            new StringBuilder(4).append(getText("problem.edit.title")).append(cid).append("-").append(num).toString());
+        setTitle(getText("problem.edit.title") + cid + "-" + num);
 
         render(ajax ? "ajax/editProblem.html" : "editProblem.html");
     }
@@ -507,9 +523,7 @@ public class ContestController extends OjController {
         ProblemModel problemModel = getModel(ProblemModel.class, "problem");
         contestService.updateProblem(problemModel, cid, num, title);
 
-        String redirectURL =
-            new StringBuilder(4).append("/contest/problem/").append(cid).append("-").append((char) (num + 'A'))
-                .toString();
+        String redirectURL = "/contest/problem/" + cid + "-" + (char) (num + 'A');
         redirect(redirectURL, new FlashMessage(getText("problem.update.success")));
     }
 
@@ -568,8 +582,7 @@ public class ContestController extends OjController {
         Integer cid = getParaToInt(0);
         contestService.build(cid);
 
-        redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(),
-            new FlashMessage(getText("contest.buildRank.success")));
+        redirect("/contest/rank/" + cid, new FlashMessage(getText("contest.buildRank.success")));
     }
 
     @RequiresAuthentication

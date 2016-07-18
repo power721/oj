@@ -354,4 +354,5 @@ INSERT INTO `variable` VALUES (33,'judgePort','12345',NULL,'12345',NULL,'int',NU
 INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
 
 #2016-7-18
-ALTER TABLE  contest_problem ADD `view` int(5) NOT NULL DEFAULT '0' AFTER `num`;
+ALTER TABLE contest_problem ADD `view` int(5) NOT NULL DEFAULT '0' AFTER `num`;
+ALTER TABLE contest ADD `languages` varchar(255) DEFAULT NULL AFTER `password`;
