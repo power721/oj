@@ -158,12 +158,29 @@ public final class ProblemService {
 
     public List<Record> getTags(Integer pid) {
         List<Record> tagList =
-            Db.find("SELECT t.tag,u.name FROM tag t LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
+            Db.find("SELECT t.id,t.tag AS name,u.name AS user FROM tag t LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
 
         if (tagList.isEmpty()) {
             return null;
         }
         return tagList;
+    }
+
+    public Record addTag(Integer pid, String tag) {
+        Integer uid = userService.getCurrentUid();
+        Record old = Db.findFirst("SELECT id FROM tag WHERE pid=? AND tag=? LIMIT 1", pid, tag);
+        if (old != null) {
+            return old;
+        }
+        Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", OjConfig.timeStamp);
+        if(Db.save("tag", Tag)) {
+            return Db.findFirst("SELECT t.id,t.tag AS name,u.name AS user FROM tag t LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND tag=?", pid, tag);
+        }
+        return null;
+    }
+
+    public boolean removeTag(Integer pid, Integer tid) {
+        return Db.deleteById("tag", tid);
     }
 
     public List<Record> getUserInfo(Integer pid, Integer uid) {
@@ -366,12 +383,6 @@ public final class ProblemService {
         }
 
         return false;
-    }
-
-    public boolean addTag(Integer pid, String tag) {
-        Integer uid = userService.getCurrentUid();
-        Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", OjConfig.timeStamp);
-        return Db.save("tag", Tag);
     }
 
     public boolean addProblem(ProblemModel problemModel) throws IOException {

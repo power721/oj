@@ -184,24 +184,29 @@
             title="Search other problems">${problem.source!}</a></pre>
   </div>
 </section>
-</#if> <#if tagList??>
-<section id="s-tag">
-  <div class="page-header">
-    <h4>Tag</h4>
-  </div>
-  <div class="content" id="tag">
-    <pre><#list tagList as Tag><a href="problem/search?word=${Tag.tag!}&scope=tag"
-                                  title="${Tag.name!}" data-toggle="tooltip">${Tag.tag!}</a> </#list></pre>
-  </div>
-</section>
-</#if> <#if adminUser??>
-<form class="form-inline" action="problem/tag" method="post">
-  <input type="hidden" name="op" value="add">
-  <input type="hidden" name="pid" value="${problem.pid!}">
-  <input type="text" class="input-small" name="tag" placeholder="Add a tag">
-  <button type="submit" class="btn btn-warning">Add</button>
-</form>
 </#if>
+  <#if tagList??>
+  <section id="s-tag">
+    <div class="page-header">
+      <h4>Tag</h4>
+    </div>
+    <div class="content" id="tags">
+      <#list tagList as Tag>
+        <span data-tid="${Tag.id!}" class="tag">
+      <a href="problem/search?word=${Tag.name!}&scope=tag" title="${Tag.user!}" data-toggle="tooltip">
+      ${Tag.name!}
+      </a>
+          <#if adminUser??>
+            <div data-tid="${Tag.id!}" title="delete the tag" class="delete-tag">&times;</div>
+          </#if>
+    </span>
+      </#list>
+    </div>
+  </section>
+  </#if>
+  <#if adminUser??>
+  <input type="text" id="addTag" class="input-small" name="tag" placeholder="Add a tag">
+  </#if>
 
 <div class="text-center">
   <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
@@ -214,6 +219,42 @@
 <@override name="scripts">
 <script type="text/javascript">
   $(document).ready(function () {
+    <#if adminUser??>
+      $('#addTag').keypress(function (e) {
+        if (e.which == 13) {
+          var pid = ${problem.pid!0};
+          var that = $(this);
+          var tag = $(this).val();
+          $.post('/api/problem/addTag', {'pid': pid, 'tag': tag}, function (data) {
+            if (data) {
+              that.val("");
+              if (data.name) {
+                var html = '<span data-tid="' + data.id + '" class="tag"><a href="problem/search?word='
+                        + data.name + '&scope=tag" title="' + data.user + '" data-toggle="tooltip">'
+                        + data.name + ' </a><div data-tid="'
+                        + data.id + '" title="delete the tag" class="delete-tag">&times;</div></span>';
+                $('#tags').append(html);
+              } else if (data.id) {
+                var id = data.id;
+                $('span[data-tid='+id+']').fadeOut(200).fadeIn();
+              }
+            }
+          });
+        }
+      });
+
+      $('#tags').delegate('.delete-tag', 'click', function () {
+        var that = $(this).parent();
+        var tid = $(this).data('tid');
+        var pid = ${problem.pid!0};
+        $.post('/api/problem/removeTag', {'pid': pid, 'tid': tid}, function (data) {
+          if (data) {
+            that.remove();
+          }
+        });
+      });
+    </#if>
+
     jQuery.ajaxSetup({
       cache: true
     });
