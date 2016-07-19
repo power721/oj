@@ -1,5 +1,5 @@
 <@override name="contest_content">
-<form class="form-horizontal" action="contest/update" method="post">
+<form class="form-horizontal" id="editContest" action="contest/update" method="post">
   <input type="hidden" name="contest.cid" value="${contest.cid!}" readonly required>
   <div class="control-group contest <#if titleMsg??>error</#if>">
     <label class="control-label" for="inputTitle">Title</label>
@@ -103,18 +103,23 @@
   </div>
   <div class="control-group">
     <div class="controls">
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="submit" id="submitContest" class="btn btn-primary">Submit</button>
       <button type="reset" class="btn btn-info">Reset</button>
     </div>
   </div>
 </form>
 </@override>
 
+<@override name="styles">
+<link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
+</@override>
+
 <@override name="scripts">
 <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
 <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"
         charset="UTF-8"></script>
-
+<script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
     $('#inputTitle').tooltip({'trigger': 'focus', 'title': '比赛标题。', 'placement': 'right'});
@@ -151,6 +156,16 @@
         $("div.lockBoard").hide();
       }
     });
+  });
+
+  $('#editContest').submit(function (e) {
+    if ($('[name=languages]:checked').size() == 0) {
+      e.preventDefault();
+      $.dialog({
+        content: 'You must select at least one language.',
+        time: 2
+      });
+    }
   });
 
   $('#startTime').datetimepicker({

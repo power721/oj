@@ -85,6 +85,19 @@ public class ContestService {
         return languages;
     }
 
+    public List<ProgramLanguageModel> getLanguageList(Integer cid) {
+        ContestModel contestModel = getContest(cid);
+        List<ProgramLanguageModel> languages = OjConfig.programLanguages;
+        if (contestModel.getLanguages() != null) {
+            languages = new ArrayList<>();
+            for (String language : StringUtils.split(contestModel.getLanguages(), ",")) {
+                Integer id = Integer.valueOf(language);
+                languages.add(OjConfig.languageType.get(id));
+            }
+        }
+        return languages;
+    }
+
     public String getContestTitle(Integer cid) {
         ContestModel contestModel = getContest(cid);
 
