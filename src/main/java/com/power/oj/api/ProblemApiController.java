@@ -2,6 +2,7 @@ package com.power.oj.api;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
+import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
@@ -13,6 +14,8 @@ import com.power.oj.judge.RejudgeTask;
 import com.power.oj.judge.RejudgeType;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
+import jodd.util.HtmlEncoder;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.util.List;
 
@@ -111,6 +114,39 @@ public class ProblemApiController extends OjController {
             renderJson("{\"count\": 1, \"total\": 0}");
         } else {
             renderJson(rejudgeTask);
+        }
+    }
+
+    @Clear
+    public void tags() {
+        Integer pid = getParaToInt("pid");
+        renderJson("tags", problemService.getTags(pid));
+    }
+
+    @Before(POST.class)
+    @RequiresPermissions("problem:addTag")
+    public void removeTag() {
+        Integer pid = getParaToInt("pid");
+        Integer tid = getParaToInt("tid");
+
+        if (problemService.removeTag(pid, tid)) {
+            renderJson("success", "true");
+        } else {
+            renderNull();
+        }
+    }
+
+    @Before(POST.class)
+    @RequiresPermissions("problem:addTag")
+    public void addTag() {
+        Integer pid = getParaToInt("pid");
+        String tag = HtmlEncoder.text(getPara("tag").trim());
+
+        Record Tag = problemService.addTag(pid, tag);
+        if (Tag != null) {
+            renderJson(Tag);
+        } else {
+            renderNull();
         }
     }
 
