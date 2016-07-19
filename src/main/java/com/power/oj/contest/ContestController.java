@@ -201,7 +201,7 @@ public class ContestController extends OjController {
         ContestModel contestModel = contestService.getContest(cid);
         if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD
             && contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
-            userName = userService.getCurrentUser().getName();
+            userName = userService.getCurrentUserName();
         }
         StringBuilder query = new StringBuilder().append("?cid=").append(cid);
 
@@ -381,7 +381,7 @@ public class ContestController extends OjController {
         resultName.add("Others");
 
         setAttr("resultName", resultName);
-        setAttr("languageList", OjConfig.programLanguages); // need ext
+        setAttr("languageList", contestService.getLanguageList(cid)); // need ext
         setAttr("statistics", contestService.getContestStatistics(cid));
 
         setTitle(getText("contest.statistics.title") + cid);
