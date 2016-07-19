@@ -77,7 +77,8 @@
               <#if program_languages??>
                 <#list program_languages.keySet() as key>
                   <label class="checkbox inline">
-                    <input type="checkbox" name="languages" id="inputLanguages${key!}" value="${key!}"> ${program_languages.get(key)!}
+                    <input type="checkbox" name="languages" id="inputLanguages${key!}" value="${key!}"
+                           <#if contest_languages.containsKey(key)>checked</#if>> ${program_languages.get(key)!}
                   </label>
                 </#list>
               </#if>

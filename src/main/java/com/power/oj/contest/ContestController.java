@@ -474,6 +474,7 @@ public class ContestController extends OjController {
         long ctime = OjConfig.startInterceptorTime + 3600000;
         setAttr("startDateTime", sdf.format(new Date(ctime)));
         setAttr("endDateTime", sdf.format(new Date(ctime + 18000000)));
+        setAttr("contest_languages", OjConfig.languageName);
         setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
 
         setTitle(getText("contest.add.title"));

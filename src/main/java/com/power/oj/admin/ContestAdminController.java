@@ -4,6 +4,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -33,6 +34,8 @@ public class ContestAdminController extends OjController {
         long ctime = OjConfig.startInterceptorTime + 3600000;
         setAttr("startDateTime", sdf.format(new Date(ctime)));
         setAttr("endDateTime", sdf.format(new Date(ctime + 18000000)));
+        setAttr("contest_languages", OjConfig.languageName);
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
 
         setTitle(getText("contest.add.title"));
     }
