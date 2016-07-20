@@ -286,6 +286,18 @@ public class UserApiController extends OjController {
     }
 
     @Clear
+    public void getUserBasic() {
+        Integer uid = getParaToInt("uid");
+        String name = getPara("name");
+
+        if (uid != null) {
+            renderJson(userService.getUserBasic(uid));
+        } else {
+            renderJson(userService.getUserBasic(name));
+        }
+    }
+
+    @Clear
     public void getField() {
         Integer uid = getParaToInt("uid");
         String name = getPara("name");

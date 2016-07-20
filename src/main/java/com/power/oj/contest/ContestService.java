@@ -337,8 +337,18 @@ public class ContestService {
             tableName = "board";
         }
         String sql =
-            "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid WHERE b.cid=? ORDER BY solved DESC,penalty";
-        Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realName", sql, cid);
+            "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid LEFT JOIN contest_user cu ON b.uid=cu.uid"
+                + " WHERE b.cid=? ORDER BY solved DESC,penalty";
+        Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realName,cu.special", sql, cid);
+        int rank = (pageNumber - 1) * pageSize;
+        for (Record record : userRank.getList()) {
+            if (record.getBoolean("special") != null && record.getBoolean("special")) {
+                record.set("rank", "*");
+            } else {
+                rank++;
+                record.set("rank", rank);
+            }
+        }
 
         return userRank;
     }
@@ -812,6 +822,17 @@ public class ContestService {
 
     public int removeUser(Integer cid, Integer uid) {
         return Db.update("DELETE FROM contest_user WHERE cid=? AND uid=?", cid, uid);
+    }
+
+    public Record setSpecial(Integer cid, Integer uid, Boolean special) {
+        Record record = Db.findFirst("SELECT * FROM contest_user WHERE cid=? AND uid=?", cid, uid);
+        if (record == null) {
+            return null;
+        }
+
+        record.set("special", special);
+        Db.update("contest_user", record);
+        return record;
     }
 
     public boolean isContestPending(Integer cid) {

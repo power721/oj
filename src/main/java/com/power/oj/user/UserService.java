@@ -725,7 +725,7 @@ public final class UserService {
      * @return
      */
     public UserModel getUser(Integer uid) {
-        UserModel userModel = null;
+        UserModel userModel;
         if (OjConfig.isDevMode()) {
             userModel = getUserByUid(uid);
         } else {
@@ -733,6 +733,28 @@ public final class UserService {
         }
         if (userModel != null) {
             userModel.remove("token").remove("password").remove("data");
+        }
+
+        return userModel;
+    }
+
+    public UserModel getUserBasic(Integer uid) {
+        UserModel userModel;
+        if (OjConfig.isDevMode()) {
+            userModel = getUserByUid(uid);
+        } else {
+            userModel = dao.findFirstByCache("user", uid, "SELECT uid,name,nick FROM user WHERE uid=?", uid);
+        }
+
+        return userModel;
+    }
+
+    public UserModel getUserBasic(String name) {
+        UserModel userModel;
+        if (OjConfig.isDevMode()) {
+            userModel = getUserByName(name);
+        } else {
+            userModel = dao.findFirstByCache("user", "SELECT uid,name,nick FROM user WHERE name=?", name);
         }
 
         return userModel;

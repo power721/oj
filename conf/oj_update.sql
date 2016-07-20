@@ -357,3 +357,6 @@ INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NUL
 #2016-7-18
 ALTER TABLE contest_problem ADD `view` int(5) NOT NULL DEFAULT '0' AFTER `num`;
 ALTER TABLE contest ADD `languages` varchar(255) DEFAULT NULL AFTER `password`;
+
+#2016-7-20
+ALTER TABLE contest_user ADD `special` tinyint(1) NOT NULL DEFAULT '0' AFTER `cid`;

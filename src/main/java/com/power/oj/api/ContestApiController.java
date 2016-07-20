@@ -89,6 +89,15 @@ public class ContestApiController extends OjController {
     }
 
     @RequiresPermissions("contest:addUser")
+    public void setSpecial() {
+        Integer cid = getParaToInt("cid");
+        Integer uid = getParaToInt("uid");
+        Boolean special = getParaToBoolean("special");
+
+        renderJson(contestService.setSpecial(cid, uid, special));
+    }
+
+    @RequiresPermissions("contest:addUser")
     public void removeUser() {
         Integer cid = getParaToInt("cid");
         Integer uid = getParaToInt("uid");
