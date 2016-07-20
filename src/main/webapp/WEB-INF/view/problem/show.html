@@ -208,16 +208,18 @@
       <h4>Tag</h4>
     </div>
     <div class="content" id="tags">
+      <#if tagList??>
       <#list tagList as Tag>
         <span data-tid="${Tag.id!}" class="tag">
-      <a href="problem/search?word=${Tag.name!}&scope=tag" title="${Tag.user!}" data-toggle="tooltip">
-      ${Tag.name!}
-      </a>
+        <a href="problem/search?word=${Tag.name!}&scope=tag" title="${Tag.user!}" data-toggle="tooltip">
+        ${Tag.name!}
+        </a>
           <#if adminUser?? || (user?? && user.uid==Tag.uid)>
             <div data-tid="${Tag.id!}" title="delete the tag" class="delete-tag">&times;</div>
           </#if>
-    </span>
+      </span>
       </#list>
+      </#if>
     </div>
     <@shiro.hasPermission name="problem:addTag">
       <input type="text" id="addTag" class="input-small" name="tag" placeholder="Add a tag">
@@ -244,6 +246,10 @@
           var pid = ${problem.pid!0};
           var that = $(this);
           var tag = $(this).val();
+          if (!tag) {
+            return;
+          }
+
           $.post('/api/problem/addTag', {'pid': pid, 'tag': tag}, function (data) {
             if (data) {
               that.val("");
