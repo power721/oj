@@ -1,5 +1,5 @@
 <@override name="content">
-<div id="rejudge" class="hide">
+<div id="rejudge" class="hide row">
   <span>Rejudge Progress:</span>
   <div class="progress progress-danger progress-striped active">
     <div id="rejudge-progress" class="bar" style="width: 0%;"></div>
@@ -18,7 +18,7 @@
   </li>
 </ul>
 
-<div class="text-center">
+<div class="row text-center">
   <h2>
     <#if userResult??>
       <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>"/>
@@ -100,92 +100,109 @@
   </div>
   </#if>
 
-<section id="s-description">
-  <div class="page-header">
-    <h4>Description</h4>
-  </div>
-  <div class="content" id="description">
-    <pre>${problem.description!}</pre>
-  </div>
-</section>
-
-<section id="s-input">
-  <div class="page-header">
-    <h4>Input</h4>
-  </div>
-  <div class="content" id="input">
-    <pre>${problem.input!}</pre>
-  </div>
-</section>
-
-<section id="s-output">
-  <div class="page-header">
-    <h4>Output</h4>
-  </div>
-  <div class="content" id="output">
-    <pre>${problem.output!}</pre>
-  </div>
-</section>
-
-<section id="s-sampleInput">
-  <div class="tabbable content" id="sampleInput">
-    <!-- Only required for left/right tabs -->
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
-      <li><a href="#tab2" data-toggle="tab">Raw</a></li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" id="tab1">
-        <pre>${problem.sampleInput!}</pre>
-      </div>
-      <div class="tab-pane" id="tab2">
-        <textarea id="sampleInput" class="auto-width" rows="${problem.sample_input_rows!12}"
-                  cols="185">${problem.sampleInput!}</textarea>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="s-sampleOutput">
-  <div class="tabbable content" id="sampleOutput">
-    <!-- Only required for left/right tabs -->
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
-      <li><a href="#tab4" data-toggle="tab">Raw</a></li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" id="tab3">
-        <pre>${problem.sampleOutput!}</pre>
-      </div>
-      <div class="tab-pane" id="tab4">
-        <textarea id="sampleOutput" class="auto-width" rows="${problem.sample_output_rows!12}"
-                  cols="185">${problem.sampleOutput!}</textarea>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <#if problem.hint?? && problem.hint!="">
-  <section id="s-hint">
+<div class="row">
+  <section id="s-description">
     <div class="page-header">
-      <h4>Hint</h4>
+      <h4>Description</h4>
     </div>
-    <div class="content" id="hint">
-      <pre>${problem.hint!}</pre>
+    <div class="content" id="description">
+      <pre>${problem.description!}</pre>
     </div>
   </section>
-  </#if> <#if problem.source?? && problem.source!="">
-<section id="s-source">
-  <div class="page-header">
-    <h4>Source</h4>
+</div>
+
+<div class="row">
+  <section id="s-input">
+    <div class="page-header">
+      <h4>Input</h4>
+    </div>
+    <div class="content" id="input">
+      <pre>${problem.input!}</pre>
+    </div>
+  </section>
+</div>
+
+<div class="row">
+  <section id="s-output">
+    <div class="page-header">
+      <h4>Output</h4>
+    </div>
+    <div class="content" id="output">
+      <pre>${problem.output!}</pre>
+    </div>
+  </section>
+</div>
+
+<div class="row">
+  <section id="s-sampleInput">
+    <div class="tabbable content" id="sampleInput">
+      <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
+        <li><a href="#tab2" data-toggle="tab">Raw</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+          <pre>${problem.sampleInput!}</pre>
+        </div>
+        <div class="tab-pane" id="tab2">
+        <textarea id="sampleInput" class="auto-width" rows="${problem.sample_input_rows!12}"
+                  cols="185">${problem.sampleInput!}</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="row">
+  <section id="s-sampleOutput">
+    <div class="tabbable content" id="sampleOutput">
+      <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
+        <li><a href="#tab4" data-toggle="tab">Raw</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab3">
+          <pre>${problem.sampleOutput!}</pre>
+        </div>
+        <div class="tab-pane" id="tab4">
+        <textarea id="sampleOutput" class="auto-width" rows="${problem.sample_output_rows!12}"
+                  cols="185">${problem.sampleOutput!}</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+  <#if problem.hint?? && problem.hint!="">
+  <div class="row">
+    <section id="s-hint">
+      <div class="page-header">
+        <h4>Hint</h4>
+      </div>
+      <div class="content" id="hint">
+        <pre>${problem.hint!}</pre>
+      </div>
+    </section>
   </div>
-  <div class="content" id="source">
+  </#if>
+
+  <#if problem.source?? && problem.source!="">
+  <div class="row">
+    <section id="s-source">
+      <div class="page-header">
+        <h4>Source</h4>
+      </div>
+      <div class="content" id="source">
     <pre><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip"
             title="Search other problems">${problem.source!}</a></pre>
+      </div>
+    </section>
   </div>
-</section>
-</#if>
-  <#if tagList??>
+  </#if>
+
+<div class="row">
   <section id="s-tag">
     <div class="page-header">
       <h4>Tag</h4>
@@ -196,30 +213,32 @@
       <a href="problem/search?word=${Tag.name!}&scope=tag" title="${Tag.user!}" data-toggle="tooltip">
       ${Tag.name!}
       </a>
-          <#if adminUser??>
+          <#if adminUser?? || (user?? && user.uid==Tag.uid)>
             <div data-tid="${Tag.id!}" title="delete the tag" class="delete-tag">&times;</div>
           </#if>
     </span>
       </#list>
     </div>
+    <@shiro.hasPermission name="problem:addTag">
+      <input type="text" id="addTag" class="input-small" name="tag" placeholder="Add a tag">
+    </@shiro.hasPermission>
   </section>
-  </#if>
-  <#if adminUser??>
-  <input type="text" id="addTag" class="input-small" name="tag" placeholder="Add a tag">
-  </#if>
+</div>
 
-<div class="text-center">
-  <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
-     data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
-  <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
-  <a href="discuss?pid=${problem.pid!}" class="btn btn-info">Discuss</a>
+<div class="row">
+  <div class="text-center">
+    <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
+       data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
+    <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
+    <a href="discuss?pid=${problem.pid!}" class="btn btn-info">Discuss</a>
+  </div>
 </div>
 </@override>
 
 <@override name="scripts">
 <script type="text/javascript">
   $(document).ready(function () {
-    <#if adminUser??>
+    <@shiro.hasPermission name="problem:addTag">
       $('#addTag').keypress(function (e) {
         if (e.which == 13) {
           var pid = ${problem.pid!0};
@@ -236,7 +255,7 @@
                 $('#tags').append(html);
               } else if (data.id) {
                 var id = data.id;
-                $('span[data-tid='+id+']').fadeOut(200).fadeIn();
+                $('span[data-tid=' + id + ']').fadeOut(200).fadeIn();
               }
             }
           });
@@ -253,7 +272,7 @@
           }
         });
       });
-    </#if>
+    </@shiro.hasPermission>
 
     jQuery.ajaxSetup({
       cache: true
@@ -288,22 +307,6 @@
     </#if>
   });
 </script>
-
-  <#if userResult??>
-  <script type="text/javascript">
-    /*$(document).ready(function() {
-      $.getJSON('api/problem/userInfo?pid=' + ${problem.pid}, function(data) {
-            if (data.userInfo)
-              {
-                for (result in data.userInfo)
-                {
-                  
-                }
-              }
-            });
-      });*/
-  </script>
-  </#if>
 
   <#if enableDict??>
   <script src="http://dict.cn/hc/" type="text/javascript"></script>
