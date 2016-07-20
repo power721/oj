@@ -15,6 +15,7 @@ import com.power.oj.user.UserService;
 import jodd.io.FileUtil;
 import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -168,6 +169,10 @@ public final class ProblemService {
     }
 
     public Record addTag(Integer pid, String tag) {
+        if (StringUtils.isBlank(tag)) {
+            return null;
+        }
+
         Integer uid = userService.getCurrentUid();
         Record old = Db.findFirst("SELECT id FROM tag WHERE pid=? AND tag=? LIMIT 1", pid, tag);
         if (old != null) {
