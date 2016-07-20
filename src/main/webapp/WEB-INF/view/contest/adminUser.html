@@ -30,6 +30,8 @@
       <tr>
         <th>UID</th>
         <th>Name</th>
+        <th>Nick</th>
+        <th>Special Team</th>
         <th>Action</th>
       </tr>
       </thead>
@@ -41,6 +43,12 @@
               <a href="user/profile/${User.name!}" title="${User.realName!}">${User.uid!}</a>
             </td>
             <td class="name"><a href="user/profile/${User.name!}">${User.name!}</a></td>
+            <td class="nick"><a href="user/profile/${User.name!}">${User.nick!}</a></td>
+            <td>
+              <i data-uid="${User.uid!}" data-special="${User.special?c}" class="special btn <#if User.special>btn-success<#else>btn-info</#if>">
+                <#if User.special>Yes<#else>No</#if>
+              </i>
+            </td>
             <td class="admin">
               <button class="btn btn-danger remove" uid="${User.uid!}">Remove</button>
             </td>
@@ -51,7 +59,7 @@
         <tr>
           <form class="form-inline" id="addUser" action="api/contest/addUser" method="post">
             <input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span>
-            <td><input type="number" name="uid" class="input-small" placeholder="User ID" min="1000" required></td>
+            <td id="user" data-nick=""><input type="number" name="uid" class="input-small" placeholder="User ID" min="1000" required></td>
             <td><input type="text" name="name" class="input-large" placeholder="Name" required></td>
             <td>
               <button type="submit" class="btn btn-success">Add</button>
@@ -86,9 +94,10 @@
     function getUserName() {
       var uid = this.value;
       if (uid >= 1000) {
-        $.get("api/user/getField", {name: "name", uid: this.value},
+        $.get("api/user/getUserBasic", {uid: this.value},
                 function (data) {
-                  $("input[name='name']").val(data.result);
+                  $("input[name='name']").val(data.name);
+                  $('td#user').data('nick', data.nick);
                 });
       }
       esle
@@ -97,14 +106,30 @@
       }
     }
 
+    $('#user-list').delegate('.special', 'click', function () {
+      var cid = ${contest.cid!0};
+      var uid = $(this).data("uid");
+      var special = $(this).data("special");
+      var that = $(this);
+      $.post('/api/contest/setSpecial', {'cid': cid, 'uid': uid, 'special': !special}, function (data) {
+        if (data && data.special != special) {
+          that.data("special", data.special);
+          that.removeClass("btn-success btn-info");
+          that.addClass(data.special ? "btn-success" : "btn-info");
+          that.html(data.special ? "Yes" : "No");
+        }
+      })
+    });
+
     $("input[name='uid']").change(getUserName).keyup(getUserName);
     $("input[name='name']").keyup(function () {
       var name = this.value;
       if (name.length >= 4) // for old user name, e.g: 'test'
       {
-        $.get("api/user/getUid", {name: this.value},
+        $.get("api/user/getUserBasic", {name: this.value},
                 function (data) {
-                  $("input[name='uid']").val(data.result);
+                  $("input[name='uid']").val(data.uid);
+                  $('td#user').data('nick', data.nick);
                 });
       }
       else {
@@ -128,6 +153,7 @@
         var cid = $('input[name=cid]').val();
         var uid = $('input[name=uid]').val();
         var name = $('input[name=name]').val();
+        var nick = $('td#user').data('nick');
         $.post($(this).attr("action"), $('#addUser').serialize(),
                 function (data) {
                   switch (data.result) {
@@ -135,7 +161,10 @@
                       var html = '<tr class="user" uid="' + uid + '">' +
                               '<td class="uid"><a href="user/profile/' + name + '">' + uid + '</a></td>' +
                               '<td class="name"><a href="user/profile/' + name + '">' + name + '</a></td>' +
-                                      '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" uid="' + uid + '">Remove</button></#if></td>' +
+                              '<td class="nick"><a href="user/profile/' + name + '">' + nick + '</a></td>' +
+                              '<td><i data-uid="' + uid + '" data-special="false" class="special btn btn-info">No</i></td>' +
+                              '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" uid="'
+                                + uid + '">Remove</button></#if></td>' +
                               '</tr>';
                       that.parent().before(html);
                       break;
