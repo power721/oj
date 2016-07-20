@@ -58,6 +58,7 @@ import com.power.oj.notice.NoticeModel;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.service.EhcacheService;
+import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.social.FriendGroupModel;
 import com.power.oj.social.FriendModel;
 import com.power.oj.solution.SolutionController;
@@ -105,6 +106,7 @@ public class AppConfig extends JFinalConfig {
         FreeMarkerRender.getConfiguration().setSharedVariable("override", new OverrideDirective());
         FreeMarkerRender.getConfiguration().setSharedVariable("extends", new ExtendsDirective());
         FreeMarkerRender.getConfiguration().setSharedVariable("num2alpha", new Num2AlphaMethod());
+        FreeMarkerRender.getConfiguration().setSharedVariable("shiro", new ShiroTags(null));
 
         me.setDevMode(PropKit.getBoolean("devMode", false));
         me.setBaseViewPath(BASE_VIEW_PATH);

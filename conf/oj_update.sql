@@ -335,7 +335,8 @@ INSERT INTO `role_permission` VALUES (2,2,2);
 INSERT INTO `role_permission` VALUES (3,2,31);
 INSERT INTO `role_permission` VALUES (4,3,77);
 INSERT INTO `role_permission` VALUES (5,3,174);
-INSERT INTO `role_permission` VALUES (6,10,77);
+INSERT INTO `role_permission` VALUES (6,3,84);
+INSERT INTO `role_permission` VALUES (7,10,77);
 
 #2016-6-26
 ALTER TABLE contest ADD `lockReport` tinyint(1) NOT NULL DEFAULT '0',

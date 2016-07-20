@@ -158,7 +158,8 @@ public final class ProblemService {
 
     public List<Record> getTags(Integer pid) {
         List<Record> tagList =
-            Db.find("SELECT t.id,t.tag AS name,u.name AS user FROM tag t LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
+            Db.find("SELECT t.id,t.tag AS name,u.name AS user,u.uid FROM tag t "
+                + "LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
 
         if (tagList.isEmpty()) {
             return null;
@@ -172,15 +173,23 @@ public final class ProblemService {
         if (old != null) {
             return old;
         }
+
         Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", OjConfig.timeStamp);
         if(Db.save("tag", Tag)) {
-            return Db.findFirst("SELECT t.id,t.tag AS name,u.name AS user FROM tag t LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND tag=?", pid, tag);
+            Tag.set("name", Tag.getStr("tag"));
+            Tag.set("user", userService.getCurrentUserName());
+            return Tag;
         }
         return null;
     }
 
     public boolean removeTag(Integer pid, Integer tid) {
-        return Db.deleteById("tag", tid);
+        if (userService.isAdmin()) {
+            return Db.deleteById("tag", tid);
+        } else {
+            Integer uid = userService.getCurrentUid();
+            return Db.update("DELETE FROM tag WHERE id=? AND pid=? AND uid=?", tid, pid, uid) == 1;
+        }
     }
 
     public List<Record> getUserInfo(Integer pid, Integer uid) {
