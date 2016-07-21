@@ -1,0 +1,38 @@
+<input type="hidden" name="resource.id" value="${resource.id!}">
+<div class="control-group">
+  <label class="control-label" for="inputName">Name</label>
+  <div class="controls">
+    <input type="text" id="inputName" name="resource.name" value="${resource.name!}" placeholder="Resource name" autofocus required>
+    <span class="help-block">You should not use the file name.</span>
+  </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="inputName">File Path</label>
+  <div class="controls">
+    <input type="text" class="input-large" id="inputPath" name="resource.path" value="${resource.path!}" placeholder="File path" required>
+    <span class="help-block">You should not upload confidential file to ${downloadPath!}.</span>
+  </div>
+</div>
+<div class="control-group">
+  <label class="control-label" for="inputDescription">Description</label>
+  <div class="controls">
+    <textarea type="text" id="inputDescription" name="resource.description" rows="5" cols="30">${resource.description!}</textarea>
+  </div>
+</div>
+<div class="control-group">
+  <label id="accessType" class="control-label accessType">Access Type</label>
+  <div class="controls">
+    <label class="radio inline">
+      <input type="radio" class="accessType" name="resource.access" value="public" <#if resource.access=='public'>checked</#if>>
+      Public
+    </label>
+    <label class="radio inline">
+      <input type="radio" class="accessType" name="resource.access" value="private" <#if resource.access=='private'>checked</#if>>
+      Private
+    </label>
+    <label class="radio inline">
+      <input type="radio" class="accessType" name="resource.access" value="security" <#if resource.access=='security'>checked</#if>>
+      Security
+    </label>
+  </div>
+</div>

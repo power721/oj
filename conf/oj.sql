@@ -596,6 +596,26 @@ CREATE TABLE `program_language` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `resource`
+--
+
+DROP TABLE IF EXISTS `resource`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `resource` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text,
+  `path` text NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `download` int(9) DEFAULT '0',
+  `access` enum('public','private','security') NOT NULL DEFAULT 'public',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `role`
 --
 
@@ -907,7 +927,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-20 20:12:52
+-- Dump completed on 2016-07-21 20:48:53
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -979,7 +999,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-20 20:12:52
+-- Dump completed on 2016-07-21 20:48:53
 -- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
@@ -1395,4 +1415,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-20 20:12:52
+-- Dump completed on 2016-07-21 20:48:53
