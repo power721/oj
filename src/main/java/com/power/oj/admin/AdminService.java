@@ -276,7 +276,7 @@ public final class AdminService {
             ZipOutputStream zos = null;
             try {
                 // TODO: how to clean the temp files?
-                File zip = new File(OjConfig.downloadPath, file.getName() + ".zip");
+                File zip = new File(SystemUtil.getTempDir(), file.getName() + ".zip");
                 zos = ZipUtil.createZip(zip);
                 ZipUtil.addToZip(zos, file, null, "PowerOJ judge files", true);
                 log.info("create " + zip + " successfully.");
