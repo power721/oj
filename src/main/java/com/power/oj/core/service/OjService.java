@@ -6,7 +6,10 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
+import com.power.oj.core.model.ResourceModel;
+import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.RoleModel;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.Tool;
 import com.power.oj.util.freemarker.FreemarkerKit;
@@ -14,6 +17,7 @@ import jodd.mail.EmailMessage;
 import jodd.util.MimeTypes;
 import jodd.util.StringUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -165,4 +169,68 @@ public final class OjService {
     public List<Record> tagList() {
         return Db.find("SELECT tag FROM tag WHERE status=1 GROUP by tag ORDER BY COUNT(tag) DESC");
     }
+
+    public List<ResourceModel> resourceList() {
+        String sql;
+        if (UserService.me().isAdmin()) {
+            sql = "SELECT * FROM resource";
+        } else if (ShiroKit.hasRole(UserService.MEMBER_ROLE_NAME)) {
+            sql = "SELECT * FROM resource WHERE access='public' OR access='private'";
+        } else {
+            sql = "SELECT * FROM resource WHERE access='public'";
+        }
+
+        return ResourceModel.dao.find(sql);
+    }
+
+    public ResourceModel getResource(Integer id) {
+        return ResourceModel.dao.findFirst("SELECT * FROM resource WHERE id=?", id);
+    }
+
+    public boolean addResource(ResourceModel resourceModel) {
+        resourceModel.setCtime(OjConfig.timeStamp).setUid(UserService.me().getCurrentUid());
+        return resourceModel.save();
+    }
+
+    public boolean updateResource(ResourceModel resourceModel) {
+        ResourceModel newResource = ResourceModel.dao.findById(resourceModel.getId());
+        newResource.setAccess(resourceModel.getAccess());
+        newResource.setDescription(resourceModel.getDescription());
+        newResource.setName(resourceModel.getName());
+        newResource.setPath(resourceModel.getPath());
+        return newResource.update();
+    }
+
+    public File getResourceFile(String name, Integer id) {
+        String sql;
+        if (UserService.me().isAdmin()) {
+            sql = "SELECT * FROM resource WHERE name=? AND id=?";
+        } else if (ShiroKit.hasRole(UserService.MEMBER_ROLE_NAME)) {
+            sql = "SELECT * FROM resource WHERE (access='public' OR access='private') AND name=? AND id=?";
+        } else {
+            sql = "SELECT * FROM resource WHERE access='public' AND name=? AND id=?";
+        }
+
+        ResourceModel resourceModel = ResourceModel.dao.findFirst(sql, name, id);
+        if (resourceModel == null) {
+            return null;
+        }
+
+        String path = resourceModel.getPath();
+        File file;
+        if (path.charAt(0) == '/') {
+            file = new File(path);
+        } else {
+            file = new File(OjConfig.downloadPath, path);
+        }
+
+        if (file.exists()) {
+            resourceModel.setDownload(resourceModel.getDownload() + 1);
+            resourceModel.update();
+            return file;
+        } else {
+            return null;
+        }
+    }
+
 }

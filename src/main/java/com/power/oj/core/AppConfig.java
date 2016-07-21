@@ -41,6 +41,7 @@ import com.power.oj.core.interceptor.OjVariableInterceptor;
 import com.power.oj.core.interceptor.SessionAttrInterceptor;
 import com.power.oj.core.interceptor.TimingInterceptor;
 import com.power.oj.core.model.ProgramLanguageModel;
+import com.power.oj.core.model.ResourceModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.discussion.CommentModel;
@@ -178,6 +179,7 @@ public class AppConfig extends JFinalConfig {
         arp.addMapping("news", NewsModel.class);
         arp.addMapping("problem", "pid", ProblemModel.class);
         arp.addMapping("program_language", ProgramLanguageModel.class);
+        arp.addMapping("resource", ResourceModel.class);
         arp.addMapping("role", RoleModel.class);
         arp.addMapping("session", "sessionId", SessionModel.class);
         arp.addMapping("solution", "sid", SolutionModel.class);

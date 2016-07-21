@@ -360,3 +360,16 @@ ALTER TABLE contest ADD `languages` varchar(255) DEFAULT NULL AFTER `password`;
 
 #2016-7-20
 ALTER TABLE contest_user ADD `special` tinyint(1) NOT NULL DEFAULT '0' AFTER `cid`;
+
+#2016-7-21
+CREATE TABLE `resource` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` text,
+  `path` text NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `download` int(9) DEFAULT 0,
+  `access` ENUM('public', 'private', 'security') NOT NULL DEFAULT 'public',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
