@@ -58,25 +58,6 @@
           <a href="discuss/?pid=${problem.pid!}" class="btn btn-info" target="_blank">Discuss</a>
         </div>
 
-        <!--<div class="modal hide fade problemModal" id="editModal">
-              <form class="" action="problem/update" id="editPorblemForm" method="post">
-                <div class="modal-header">
-                  <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-                  <h3 id="editModalLabel">
-                    Edit Problem ${problem.pid!}:
-                    <a href="problem/edit/${problem.pid!}" title="Edit in another page" data-toggle="tooltip" data-placement="bottom">${problem.title!}</a>
-                  </h3>
-                </div>
-                <div class="modal-body">
-                  <a href="problem/edit/${problem.pid!}" class="btn btn-primary">Edit</a>
-                </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary">Save</button>
-                  <button type="reset" class="btn btn-info">Reset</button>
-                  <button class="btn" data-dismiss="modal">Cancel</button>
-                </div>
-              </form>
-            </div>-->
         <div class="modal hide fade problemModal" id="submitModal">
           <form class="" id="submitForm" action="solution/save" method="post">
             <div class="modal-header">
@@ -168,29 +149,6 @@
             </div>
           </section>
         </#if>
-        <#if tagList??>
-          <section id="problem-tag">
-            <div class="page-header">
-              <h4>Tag</h4>
-            </div>
-            <div class="bootstrap-tagsinput pre" id="tag">
-              <#list tagList as Tag>
-                <span class="tag label label-info">
-                  ${Tag.tag!}
-                    <span data-role="remove"></span>
-                </span>
-              </#list>
-            </div>
-          </section>
-        </#if>
-
-        <form class="form-inline" action="problem/tag" method="post">
-          <input type="hidden" name="op" value="add">
-          <input type="hidden" name="pid" value="${problem.pid!}">
-          <input type="text" class="input-small" name="tag" placeholder="Add a tag">
-          <button type="submit" class="btn btn-warning">Add</button>
-        </form>
-
       </div>
     </div>
   </div>
