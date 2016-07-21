@@ -20,6 +20,8 @@ import jodd.io.ZipUtil;
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
+import jodd.util.SystemUtil;
+import org.apache.commons.io.FileUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
@@ -672,17 +674,16 @@ public final class UserService {
         UserModel userModel = getCurrentUser();
         Integer uid = userModel.getUid();
         List<Record> codes = getSolvedProblems(uid);
-        String userDir = OjConfig.downloadPath + File.separator + userModel.getName();
-        File userDirFile = new File(userDir);
-        FileUtil.mkdirs(userDirFile);
+        File userDir = new File(SystemUtil.getTempDir(), userModel.getName());
+        FileUtil.mkdirs(userDir);
 
         for (Record code : codes) {
-            String problemDir = userDir + File.separator + code.get("pid");
+            File problemDir = new File(userDir, code.get("pid").toString());
             FileUtil.mkdirs(problemDir);
 
             String ext = OjConfig.languageType.get(code.getInt("language")).getExt();
             StringBuilder sb = new StringBuilder(10);
-            sb.append(problemDir).append(File.separator).append(code.getInt("sid")).append("_");
+            sb.append(problemDir.getAbsolutePath()).append(File.separator).append(code.getInt("sid")).append("_");
             sb.append(code.getInt("time")).append("MS_").append(code.getInt("memory")).append("KB")
                 .append(".").append(ext);
 
@@ -695,10 +696,10 @@ public final class UserService {
             FileUtil.writeString(file, code.getStr("source"));
         }
 
-        ZipUtil.zip(userDirFile);
-        userDirFile.delete();
+        ZipUtil.zip(userDir);
+        FileUtils.deleteDirectory(userDir);
 
-        return new File(userDirFile.getAbsolutePath() + ".zip");
+        return new File(userDir.getAbsolutePath() + ".zip");
     }
 
     /**

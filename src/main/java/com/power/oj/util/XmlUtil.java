@@ -2,6 +2,7 @@ package com.power.oj.util;
 
 import com.jfinal.log.Logger;
 import com.power.oj.core.OjConfig;
+import jodd.util.SystemUtil;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -40,11 +41,11 @@ public abstract class XmlUtil {
     }
 
     public static File exportXmlFile(Document document, final String fileName) {
-        final String filePath = OjConfig.downloadPath + File.separator + fileName;
+        File file = new File(SystemUtil.getTempDir(), fileName);
         try {
             OutputFormat format = OutputFormat.createPrettyPrint();
             format.setEncoding("UTF-8");
-            OutputStream out = new FileOutputStream(filePath);
+            OutputStream out = new FileOutputStream(file);
             Writer fileWriter = new OutputStreamWriter(out, "UTF-8");
             XMLWriter xmlWriter = new XMLWriter(fileWriter, format);
 
@@ -57,6 +58,6 @@ public abstract class XmlUtil {
             }
             log.error(e.getLocalizedMessage());
         }
-        return new File(filePath);
+        return file;
     }
 }
