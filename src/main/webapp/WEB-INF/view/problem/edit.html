@@ -6,6 +6,7 @@
     <div class="controls">
       <span class="input-mini uneditable-input"><a href="problem/show/${problem.pid!}">${problem.pid!}</a></span>
       <!--<input class="input-mini uneditable-input" type="number" id="inputPid" name="problem.pid" value="${problem.pid!}" disabled>-->
+      <a class="btn btn-success" href="admin/problem/data/${problem.pid!}" target="_blank">Manage Data</a>
     </div>
   </div>
   <div class="control-group problem <#if titleMsg??>error</#if>">
