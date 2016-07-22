@@ -744,7 +744,7 @@ public final class UserService {
         if (OjConfig.isDevMode()) {
             userModel = getUserByUid(uid);
         } else {
-            userModel = dao.findFirstByCache("user", uid, "SELECT uid,name,nick FROM user WHERE uid=?", uid);
+            userModel = dao.findFirst("SELECT uid,name,nick FROM user WHERE uid=?", uid);
         }
 
         return userModel;
@@ -755,7 +755,7 @@ public final class UserService {
         if (OjConfig.isDevMode()) {
             userModel = getUserByName(name);
         } else {
-            userModel = dao.findFirstByCache("user", "SELECT uid,name,nick FROM user WHERE name=?", name);
+            userModel = dao.findFirst("SELECT uid,name,nick FROM user WHERE name=?", name);
         }
 
         return userModel;

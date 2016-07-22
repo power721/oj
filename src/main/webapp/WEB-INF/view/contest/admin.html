@@ -70,15 +70,21 @@
             <td class="accept"><a
                     href="contest/status/${contest.cid!}?pid=${Problem.id!}&result=0">${Problem.accepted!}</a></td>
             <td class="submit"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}">${Problem.submission!}</a>
-            <td class="admin"><#if serverTime<contest.startTime>
-              <button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button></#if>
+            <td class="admin">
+            <#if serverTime<contest.startTime>
+              <button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button>
+            </#if>
               <a href="contest/editProblem/${contest.cid!}-${Problem.id!}" class="btn btn-primary">Edit</a>
+            <#if serverTime &gt; contest.startTime>
               <a href="contest/rejudgeProblem/${contest.cid!}-${Problem.id!}" class="btn btn-danger">Rejudge</a>
+            </#if>
             </td>
           </tr>
           </#list>
         </#if>
-        <#if serverTime<contest.endTime>
+      </tbody>
+      <#if serverTime<contest.endTime>
+        <tfoot>
         <tr>
           <form class="form-inline" id="addProblem" action="api/contest/addProblem" method="post">
             <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
@@ -91,8 +97,8 @@
                     class="btn btn-info hidden" id="reorder">Save</a></#if></td>
           </form>
         </tr>
-        </#if>
-      </tbody>
+        </tfoot>
+      </#if>
     </table>
   </div>
 </div>
@@ -226,9 +232,14 @@
                               + '<td class="title"><a href="contest/problem/' + cid + '-' + String.fromCharCode(65 + data.result) + '">' + title + '</a></td>'
                               + '<td class="accept"><a href="contest/status/' + cid + '?pid=' + pid + '&result=0"></a></td>'
                               + '<td class="submit"><a href="contest/status/' + cid + '?pid=' + pid + '"></a></td>'
-                              + '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" pid="' + pid + '">Remove</button></#if></td>' +
+                              + '<td class="admin">' +
+                                <#if serverTime<contest.startTime>
+                                '<button class="btn btn-danger remove" pid="' + pid + '">Remove</button>\n' +
+                                '<a href="contest/editProblem/'+ cid+ '-'+ pid+ '" class="btn btn-primary">Edit</a>' +
+                                </#if>
+                              '</td>' +
                               '</tr>';
-                      that.parent().before(html);
+                      $('#problem-list tbody').append(html);
                       updateId();
                       break;
                   }
