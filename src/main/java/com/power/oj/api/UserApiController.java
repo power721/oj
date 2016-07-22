@@ -290,10 +290,17 @@ public class UserApiController extends OjController {
         Integer uid = getParaToInt("uid");
         String name = getPara("name");
 
+        UserModel userModel;
         if (uid != null) {
-            renderJson(userService.getUserBasic(uid));
+            userModel = userService.getUserBasic(uid);
         } else {
-            renderJson(userService.getUserBasic(name));
+            userModel = userService.getUserBasic(name);
+        }
+
+        if (userModel != null) {
+            renderJson(userModel);
+        } else {
+            renderNull();
         }
     }
 

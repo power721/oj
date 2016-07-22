@@ -29,8 +29,8 @@
       <thead>
       <tr>
         <th>UID</th>
-        <th>Name</th>
-        <th>Nick</th>
+        <th>User</th>
+        <th>Team Name</th>
         <th>Special Team</th>
         <th>Action</th>
       </tr>
@@ -45,12 +45,15 @@
             <td class="name"><a href="user/profile/${User.name!}">${User.name!}</a></td>
             <td class="nick"><a href="user/profile/${User.name!}">${User.nick!}</a></td>
             <td>
-              <i data-uid="${User.uid!}" data-special="${User.special?c}" class="special btn <#if User.special>btn-success<#else>btn-info</#if>">
+              <i data-uid="${User.uid!}" data-special="${User.special?c}"
+                 class="special btn <#if User.special>btn-success<#else>btn-info</#if>">
                 <#if User.special>Yes<#else>No</#if>
               </i>
             </td>
             <td class="admin">
-              <button class="btn btn-danger remove" uid="${User.uid!}">Remove</button>
+              <#if serverTime<contest.endTime>
+                <button class="btn btn-danger remove" uid="${User.uid!}">Remove</button>
+              </#if>
             </td>
           </tr>
           </#list>
@@ -59,8 +62,11 @@
         <tr>
           <form class="form-inline" id="addUser" action="api/contest/addUser" method="post">
             <input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span>
-            <td id="user" data-nick=""><input type="number" name="uid" class="input-small" placeholder="User ID" min="1000" required></td>
-            <td><input type="text" name="name" class="input-large" placeholder="Name" required></td>
+            <td id="user" data-nick=""><input type="number" name="uid" class="input-small" placeholder="User ID"
+                                              min="1000" required></td>
+            <td><input type="text" name="name" class="input-large" placeholder="User Name" required></td>
+            <td id="nick"></td>
+            <td></td>
             <td>
               <button type="submit" class="btn btn-success">Add</button>
             </td>
@@ -96,8 +102,15 @@
       if (uid >= 1000) {
         $.get("api/user/getUserBasic", {uid: this.value},
                 function (data) {
-                  $("input[name='name']").val(data.name);
-                  $('td#user').data('nick', data.nick);
+                  if (data) {
+                    $("input[name='name']").val(data.name);
+                    $('td#user').data('nick', data.nick);
+                    $('td#nick').html(data.nick);
+                  } else {
+                    $("input[name='uid']").val('');
+                    $('td#user').data('nick', '');
+                    $('td#nick').html('');
+                  }
                 });
       }
       esle
@@ -124,12 +137,19 @@
     $("input[name='uid']").change(getUserName).keyup(getUserName);
     $("input[name='name']").keyup(function () {
       var name = this.value;
-      if (name.length >= 4) // for old user name, e.g: 'test'
+      if (name.length >= 2) // for old user name, e.g: 'test'
       {
         $.get("api/user/getUserBasic", {name: this.value},
                 function (data) {
-                  $("input[name='uid']").val(data.uid);
-                  $('td#user').data('nick', data.nick);
+                  if (data) {
+                    $("input[name='uid']").val(data.uid);
+                    $('td#user').data('nick', data.nick);
+                    $('td#nick').html(data.nick);
+                  } else {
+                    $("input[name='uid']").val('');
+                    $('td#user').data('nick', '');
+                    $('td#nick').html('');
+                  }
                 });
       }
       else {
@@ -163,7 +183,7 @@
                               '<td class="name"><a href="user/profile/' + name + '">' + name + '</a></td>' +
                               '<td class="nick"><a href="user/profile/' + name + '">' + nick + '</a></td>' +
                               '<td><i data-uid="' + uid + '" data-special="false" class="special btn btn-info">No</i></td>' +
-                              '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" uid="'
+                                      '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" uid="'
                                 + uid + '">Remove</button></#if></td>' +
                               '</tr>';
                       that.parent().before(html);
@@ -206,22 +226,30 @@
           okVal: 'Remove',
           ok: function () {
             $.post('api/contest/removeUser', {cid:${contest.cid!}, uid: that.attr('uid')}, function (data) {
-              if (data.result > 0) {
-                that.parent().parent().remove();
-                $.dialog({
-                  content: 'User removed.',
-                  time: 1
-                });
+              switch (data.result) {
+                case 0:
+                  $.dialog({
+                    content: "DB error!",
+                    time: 1.5
+                  });
+                  break;
+                case 1:
+                  that.parent().parent().remove();
+                  $.dialog({
+                    content: 'User removed.',
+                    time: 1
+                  });
+                  break;
+                case 2:
+                  $.dialog({
+                    content: "User already has submission!",
+                    time: 1.5
+                  });
+                  break;
               }
-              else {
-                $.dialog({
-                  content: data.result,
-                  time: 1.5
-                });
-              }
+              this.close();
+              return false;
             });
-            this.close();
-            return false;
           }
         });
       });

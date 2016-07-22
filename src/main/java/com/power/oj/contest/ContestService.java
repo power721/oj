@@ -344,6 +344,8 @@ public class ContestService {
         for (Record record : userRank.getList()) {
             if (record.getBoolean("special") != null && record.getBoolean("special")) {
                 record.set("rank", "*");
+                String nick = record.getStr("nick");
+                record.set("nick", "*" + nick + "*");
             } else {
                 rank++;
                 record.set("rank", rank);
@@ -821,6 +823,10 @@ public class ContestService {
     }
 
     public int removeUser(Integer cid, Integer uid) {
+        Record record = Db.findFirst("SELECT 1 FROM contest_solution WHERE cid=? AND uid=? LIMIT 1", cid, uid);
+        if (record != null) {
+            return 2;
+        }
         return Db.update("DELETE FROM contest_user WHERE cid=? AND uid=?", cid, uid);
     }
 

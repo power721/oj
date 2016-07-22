@@ -77,6 +77,7 @@ public class MainController extends OjController {
     @RequiresPermissions("admin")
     public void editResource() {
         Integer id = getParaToInt(0);
+        setAttr("downloadPath", OjConfig.downloadPath);
         setAttr("resource", ojService.getResource(id));
     }
 
