@@ -421,12 +421,14 @@ public final class SolutionService {
                 if (cid == 0) {
                     userService.incAccepted(solution);
                     problemService.incAccepted(solution);
+                }
+            }
+
+            if (cid > 0) {
+                if (solution.get("originalResult") != null) {
+                    ContestService.me().updateBoard4Rejudge(solution);
                 } else {
-                    if (solution.get("originalResult") != null) {
-                        ContestService.me().updateBoard4Rejudge(solution);
-                    } else {
-                        ContestService.me().updateBoard(solution);
-                    }
+                    ContestService.me().updateBoard(solution);
                 }
             }
             judgeService.cleanRejudge(solution);

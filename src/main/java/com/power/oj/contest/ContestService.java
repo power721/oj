@@ -337,9 +337,11 @@ public class ContestService {
             tableName = "board";
         }
         String sql =
-            "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid LEFT JOIN contest_user cu ON b.uid=cu.uid"
+            "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid "
+                + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
                 + " WHERE b.cid=? ORDER BY solved DESC,penalty";
-        Page<Record> userRank = Db.paginate(pageNumber, pageSize, "SELECT b.*,u.name,u.nick,u.realName,cu.special", sql, cid);
+        String select = "SELECT b.*,u.name,u.nick,u.realName,cu.special";
+        Page<Record> userRank = Db.paginate(pageNumber, pageSize, select, sql, cid);
         int rank = (pageNumber - 1) * pageSize;
         for (Record record : userRank.getList()) {
             if (record.getBoolean("special") != null && record.getBoolean("special")) {
