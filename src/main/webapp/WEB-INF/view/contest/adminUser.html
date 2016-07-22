@@ -58,7 +58,9 @@
           </tr>
           </#list>
         </#if>
-        <#if serverTime<contest.endTime>
+      </tbody>
+      <#if serverTime<contest.endTime>
+      <tfoot>
         <tr>
           <form class="form-inline" id="addUser" action="api/contest/addUser" method="post">
             <input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span>
@@ -72,8 +74,8 @@
             </td>
           </form>
         </tr>
-        </#if>
-      </tbody>
+      </tfoot>
+      </#if>
     </table>
   </div>
 </div>
@@ -113,7 +115,7 @@
                   }
                 });
       }
-      esle
+      else
       {
         $("input[name='name']").val('');
       }
@@ -186,7 +188,7 @@
                                       '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" uid="'
                                 + uid + '">Remove</button></#if></td>' +
                               '</tr>';
-                      that.parent().before(html);
+                      $('#user-list tbody').append(html);
                       break;
                     case 1:
                       $.dialog({
