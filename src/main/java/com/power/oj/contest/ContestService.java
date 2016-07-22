@@ -146,8 +146,8 @@ public class ContestService {
 
     public ProblemModel getProblem(Integer cid, Integer num) {
         Record record =
-            Db.findFirst("SELECT pid,title,accepted,submission,view FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid,
-                num);
+            Db.findFirst("SELECT pid,title,accepted,submission,view FROM contest_problem WHERE cid=? AND num=? LIMIT 1",
+                cid, num);
         if (record == null)
             return null;
 
@@ -336,10 +336,9 @@ public class ContestService {
         } else {
             tableName = "board";
         }
-        String sql =
-            "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid "
-                + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
-                + " WHERE b.cid=? ORDER BY solved DESC,penalty";
+        String sql = "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid "
+            + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
+            + " WHERE b.cid=? ORDER BY solved DESC,penalty";
         String select = "SELECT b.*,u.name,u.nick,u.realName,cu.special";
         Page<Record> userRank = Db.paginate(pageNumber, pageSize, select, sql, cid);
         int rank = (pageNumber - 1) * pageSize;
@@ -638,15 +637,18 @@ public class ContestService {
     }
 
     private boolean checkFreezeBoard(Integer cid, int submitTime) {
-        ContestModel contestModel = getContest(cid);
+        return checkFreezeBoard(getContest(cid), submitTime);
+    }
 
+    private boolean checkFreezeBoard(ContestModel contestModel, int submitTime) {
         if (contestModel.isLockBoard()) {
             int timeDiff = contestModel.getEndTime() - submitTime;
             int lockTime = contestModel.getLockBoardTime() * 60;
             boolean isFreeze = (timeDiff <= lockTime);
 
             log.info(
-                "contest-" + cid + " submitTime: " + submitTime + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
+                "contest-" + contestModel.getCid() + " submitTime: " + submitTime
+                    + " timeDiff: " + timeDiff + " isFreeze: " + isFreeze);
             return isFreeze;
         }
         return false;
@@ -973,8 +975,6 @@ public class ContestService {
         Integer submitTime = solutionModel.getCtime();
         char c = (char) (num + 'A');
         Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
-        Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=?", cid, uid);
-        boolean isFreeze = checkFreezeBoard(cid, submitTime);
         ContestProblemModel contestProblem =
             ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
         ContestModel contestModle = getContest(cid);
@@ -1026,7 +1026,8 @@ public class ContestService {
             }
         }
 
-        if (!isFreeze) {
+        if (contestModle.isLockBoard() && !checkFreezeBoard(contestModle, submitTime)) {
+            Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=?", cid, uid);
             if (freezeBoard == null) {
                 freezeBoard = new Record();
             }
