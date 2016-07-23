@@ -99,10 +99,12 @@
         </#list>
       </#if>
       <#if userModel.contests??>
+        <hr>
         <h4>Attended Contests</h4>
         <#list userModel.contests as contest>
           <span>
-              <a href="contest/status/${contest.cid}?name=${userModel.name}" title="${contest.title}">${contest.cid}</a>
+              <a href="contest/status/${contest.cid}?name=${userModel.name}"
+                 title="Contest ${contest.cid} : ${contest.title}">${contest.cid}</a>
           </span>
         </#list>
       </#if>
