@@ -55,7 +55,7 @@ public final class SolutionService {
 
         List<Object> paras = new ArrayList<Object>();
         if (result > -1) {
-            if (result == 999) {
+            if (result == ResultType.NOT_AC) {
                 sb.append(" AND result!=?");
                 paras.add(ResultType.AC);
             } else {
@@ -146,7 +146,7 @@ public final class SolutionService {
         paras.add(cid);
 
         if (result > -1) {
-            if (result == 999) {
+            if (result == ResultType.NOT_AC) {
                 sb.append(" AND result!=?");
                 paras.add(ResultType.AC);
             } else {

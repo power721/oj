@@ -887,51 +887,36 @@ public class ContestService {
         Integer uid = solutionModel.getUid();
         Integer num = solutionModel.getNum();
         Integer submitTime = solutionModel.getCtime();
-        char c = (char) (num + 'A');
-        Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
-        Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
-        boolean isFreeze = checkFreezeBoard(cid, submitTime);
-
+        BoardModel board = BoardModel.dao.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
         if (board == null) {
-            board = createBoardRecord(cid, uid);
+            board = createBoardModel(cid, uid);
         }
 
         ContestModel contestModel = getContest(cid);
-        if (contestModel.isLockBoard() && !isFreeze && freezeBoard == null) {
-            freezeBoard = new Record();
-            freezeBoard.setColumns(board.getColumns());
-            Db.save("freeze_board", freezeBoard);
-        }
-        Integer wrongSubmissions = board.getInt(c + "_WrongNum");
-        Integer acTime = board.getInt(c + "_SolvedTime");
+        Integer wrongSubmissions = board.getWrongNum(num);
+        Integer acTime = board.getSolvedTime(num);
 
         if (solutionModel.getResult() == ResultType.AC) {
             ContestProblemModel contestProblem =
                 ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
             Integer contestStartTime = contestModel.getStartTime();
+            int solvedTime = submitTime - contestStartTime;
 
-            if (contestProblem.getFirstBloodUid() == 0) {
-                contestProblem.setFirstBloodUid(solutionModel.getUid());
-                contestProblem.setFirstBloodTime(submitTime - contestStartTime);
-            }
-            contestProblem.setAccepted(contestProblem.getAccepted() + 1);
-            contestProblem.update();
+            updateContestProblem(contestProblem, uid, solvedTime);
 
             if (acTime == null || acTime == 0) {
-                acTime = submitTime - contestStartTime;
-                board.set(c + "_SolvedTime", acTime);
-                updateUserSolved(board, acTime, wrongSubmissions);
+                board.setSolvedTime(num, solvedTime);
+                updateUserSolved(board, solvedTime, wrongSubmissions);
             }
         } else if ((acTime == null || acTime == 0) && isNormalResult(solutionModel)) {
-            board.set(c + "_WrongNum", wrongSubmissions + 1);
+            board.setWrongNum(num, wrongSubmissions + 1);
         }
 
-        if (contestModel.isLockBoard() && !isFreeze) {
-            freezeBoard.setColumns(board.getColumns());
-            Db.update("freeze_board", freezeBoard);
+        if (contestModel.isLockBoard() && !checkFreezeBoard(cid, submitTime)) {
+            syncFreezeBoard(cid, uid, board);
         }
 
-        return Db.update("board", board);
+        return board.update();
     }
 
     public boolean updateBoard4Rejudge(Solution solutionModel, int originalResult) {
@@ -960,25 +945,24 @@ public class ContestService {
             return true; // already AC in previous submissions
         }
 
-        Record board = Db.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
+        BoardModel board = BoardModel.dao.findFirst("SELECT * FROM board WHERE cid=? AND uid=?", cid, uid);
         if (board == null) {
-            board = createBoardRecord(cid, uid);
+            board = createBoardModel(cid, uid);
         }
 
         ContestModel contestModel = getContest(cid);
         int contestStartTime = contestModel.getStartTime();
         int submitTime = solutionModel.getCtime();
         int acTime = submitTime - contestStartTime;
-        long wrongSubmissions = 0L;
-        char c = (char) (num + 'A');
+        int wrongSubmissions = 0;
 
-        long originalWrongNum = board.getLong(c + "_WrongNum");
-        int originalSolvedTime = board.getInt(c + "_SolvedTime");
+        int originalWrongNum = board.getWrongNum(num);
+        int originalSolvedTime = board.getSolvedTime(num);
         if (isAccepted) {
             // Not-AC --> AC
-            wrongSubmissions = getWrongSubmissions(cid, sid, uid, num);
-            board.set(c + "_WrongNum", wrongSubmissions);
-            board.set(c + "_SolvedTime", acTime);
+            wrongSubmissions = getWrongSubmissions(cid, sid, uid, num).intValue();
+            board.setWrongNum(num, wrongSubmissions);
+            board.setSolvedTime(num, acTime);
         }
 
         ContestProblemModel contestProblem =
@@ -989,12 +973,12 @@ public class ContestService {
                 updateContestProblem(contestProblem, uid, acTime);
 
                 // set new penalty
-                long originalPenalty = originalSolvedTime + originalWrongNum * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
-                long penalty = acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
-                board.set("penalty", board.getInt("penalty") - originalPenalty + penalty);
+                int originalPenalty = originalSolvedTime + originalWrongNum * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
+                int newPenalty = acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION;
+                board.setPenalty(board.getPenalty() - originalPenalty + newPenalty);
             } else {
-                board.set(c + "_WrongNum", board.getInt(c + "_WrongNum") + 1);
-                board.set("penalty", board.getInt("penalty") + OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
+                board.setWrongNum(num, wrongSubmissions + 1);
+                board.setPenalty(board.getPenalty() + OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
             }
         } else {
             if (isAccepted) {
@@ -1003,36 +987,25 @@ public class ContestService {
 
                 updateUserSolved(board, acTime, wrongSubmissions);
             } else {
-                board.set(c + "_WrongNum", board.getInt(c + "_WrongNum") + 1);
+                board.setWrongNum(num, wrongSubmissions + 1);
             }
         }
 
         if (contestModel.isLockBoard() && !checkFreezeBoard(contestModel, submitTime)) {
-            Record freezeBoard = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=?", cid, uid);
-            if (freezeBoard == null) {
-                freezeBoard = new Record();
-                freezeBoard.setColumns(board.getColumns());
-                Db.save("freeze_board", freezeBoard);
-            } else {
-                freezeBoard.setColumns(board.getColumns());
-                Db.update("freeze_board", freezeBoard);
-            }
+            syncFreezeBoard(cid, uid, board);
         }
 
-        return Db.update("board", board);
+        return board.update();
     }
 
-    private long getWrongSubmissions(Integer cid, Integer sid, Integer uid, Integer num) {
-        return Db.queryLong(
-            "SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=? AND uid=? AND"
-                + " sid<? AND result!=? AND result<? AND status=1",
-            cid, num, uid, sid, ResultType.AC, ResultType.SE);
+    private Long getWrongSubmissions(Integer cid, Integer sid, Integer uid, Integer num) {
+        return Db.queryLong("SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=? AND uid=? AND"
+            + " sid<? AND result!=? AND result<? AND status=1", cid, num, uid, sid, ResultType.AC, ResultType.SE);
     }
 
-    private void updateUserSolved(Record board, int acTime, long wrongSubmissions) {
-        board.set("solved", board.getInt("solved") + 1);
-        board.set("penalty",
-            board.getInt("penalty") + acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
+    private void updateUserSolved(BoardModel board, int acTime, int wrongSubmissions) {
+        board.setSolved(board.getSolved() + 1);
+        board.setPenalty(board.getPenalty() + acTime + wrongSubmissions * OjConstants.PENALTY_FOR_WRONG_SUBMISSION);
     }
 
     private void updateContestProblem(ContestProblemModel contestProblem, Integer uid, int acTime) {
@@ -1062,14 +1035,26 @@ public class ContestService {
         return solutionModel.getResult() < ResultType.SE;
     }
 
-    private Record createBoardRecord(Integer cid, Integer uid) {
-        Record board;
-        board = new Record();
+    private BoardModel createBoardModel(Integer cid, Integer uid) {
+        BoardModel board;
+        board = new BoardModel();
         board.set("cid", cid);
         board.set("uid", uid);
-        Db.save("board", board);
-        board = Db.findById("board", board.get("id"));
+        board.save();
         return board;
+    }
+
+    private void syncFreezeBoard(Integer cid, Integer uid, BoardModel board) {
+        FreezeBoardModel freezeBoard =
+            FreezeBoardModel.dao.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
+        if (freezeBoard == null) {
+            freezeBoard = new FreezeBoardModel();
+            freezeBoard.put(board);
+            freezeBoard.save();
+        } else {
+            freezeBoard.put(board);
+            freezeBoard.update();
+        }
     }
 
     public boolean build(Integer cid) {
@@ -1101,13 +1086,16 @@ public class ContestService {
             userInfo = userRank.get(uid);
             int elapseTime = ctime - contestStartTime;
             penalty = elapseTime;
+
             if (result == ResultType.AC && firstBloodUid[num] == 0) {
                 firstBloodUid[num] = uid;
                 firstBloodTime[num] = elapseTime;
             }
+
             if (result == ResultType.AC) {
                 ++accepted[num];
             }
+
             if (userInfo == null) {
                 userInfo = new UserInfo(uid);
                 if (result == ResultType.AC) {

@@ -242,18 +242,18 @@ public final class JudgeService {
         rejudgeExecutor.execute(rejudgeThread);
     }
 
-    public void rejudgeContestSolution(ContestSolutionModel contestSolution) {
+    public void rejudgeContestSolution(Solution contestSolution) {
         int result = contestSolution.getResult();
 
         originalResult.put(contestSolution.getSid(), result);
 
-        contestSolution.put("originalResult", result);
+        contestSolution.put("originalResult", result);  // for PowerJudgeAdapter
 
         rejudge(contestSolution);
     }
 
     public void rejudgeContestSolution(Integer sid) {
-        ContestSolutionModel contestSolution = solutionService.findContestSolution(sid);
+        Solution contestSolution = solutionService.findContestSolution(sid);
 
         rejudgeContestSolution(contestSolution);
     }
