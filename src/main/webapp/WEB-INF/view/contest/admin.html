@@ -9,6 +9,7 @@
     <#if (contest.type > 1)>
       <a href="contest/adminUser/${contest.cid!}" class="btn btn-primary">Manage Attendees</a>
     </#if>
+    <a href="contest/copy/${contest.cid!}" class="btn btn-success">Copy</a>
     <#if status=="Finished">
       <#if contest.lockBoard==true>
         <a href="contest/unlockBoard/${contest.cid!}" id="unlock-board" class="btn btn-warning">Unlock Board</a>

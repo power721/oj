@@ -2,6 +2,7 @@ package com.power.oj.contest;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
+import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -478,6 +479,22 @@ public class ContestController extends OjController {
         setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
 
         setTitle(getText("contest.add.title"));
+    }
+
+    @Clear({ContestInterceptor.class})
+    @RequiresAuthentication
+    @RequiresPermissions("contest:add")
+    public void copy() {
+        Integer cid = getParaToInt(0);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        long ctime = OjConfig.startInterceptorTime + 3600000;
+        setAttr("startDateTime", sdf.format(new Date(ctime)));
+        setAttr("endDateTime", sdf.format(new Date(ctime + 18000000)));
+        setAttr("contest_languages", contestService.getLanguages(cid));
+        setAttr("contest", contestService.getContest(cid));
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+
+        setTitle(getText("contest.copy.title", cid));
     }
 
     @Clear({ContestInterceptor.class})

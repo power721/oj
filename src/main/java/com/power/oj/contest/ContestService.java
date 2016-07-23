@@ -192,8 +192,7 @@ public class ContestService {
 
     public List<Record> getContestUsers(Integer cid) {
         return Db
-            .find("SELECT c.*,u.name,u.realName FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?",
-                cid);
+            .find("SELECT c.*,u.name,u.realName FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
     }
 
     public boolean isUserInContest(Integer uid, Integer cid) {
@@ -683,6 +682,10 @@ public class ContestService {
 
     public boolean addContest(ContestModel contestModel, String startTime, String endTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Integer cid = contestModel.getCid();
+        if (cid != null) {
+            contestModel.setCid(null);
+        }
 
         contestModel.setUid(userService.getCurrentUid());
         contestModel.setCtime(OjConfig.timeStamp);
@@ -694,7 +697,27 @@ public class ContestService {
             log.error("add contest failed!", e);
         }
 
-        return contestModel.save();
+        boolean result = contestModel.save();
+        if (cid != null) {
+            copyContest(cid, contestModel);
+        }
+        return result;
+    }
+
+    private void copyContest(Integer cid, ContestModel contestModel) {
+        List<Record> problems = Db.find("SELECT pid,num,title FROM contest_problem WHERE cid=?", cid);
+        for (Record problem : problems) {
+            problem.set("cid", contestModel.getCid());
+            Db.save("contest_problem", problem);
+        }
+
+        List<Record> users = Db.find("SELECT * FROM contest_user WHERE cid=?", cid);
+        for (Record user : users) {
+            user.set("id", null);
+            user.set("cid", contestModel.getCid());
+            user.set("ctime", OjConfig.timeStamp);
+            Db.save("contest_user", user);
+        }
     }
 
     public boolean updateContest(ContestModel contestModel, String startTime, String endTime) {
