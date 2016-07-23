@@ -6,6 +6,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.api.oauth.WebLoginModel;
+import com.power.oj.contest.ContestService;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
@@ -641,6 +642,7 @@ public final class UserService {
             userModel.put("loginTime_t", sdf.format(new Date(userModel.getLoginTime() * 1000L)));
             userModel.put("rank", getUserRank(userModel.getUid()));
             userModel.put("problems", getSubmittedProblems(userModel.getUid()));
+            userModel.put("contests", ContestService.me().getAttendedContests(userModel.getUid()));
         }
 
         return userModel;
