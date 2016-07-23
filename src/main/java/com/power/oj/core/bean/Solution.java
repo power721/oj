@@ -77,5 +77,7 @@ public interface Solution {
 
     public Integer getInt(String attr);
 
+    public Solution put(String key, Object value);
+
     public boolean isContest();
 }

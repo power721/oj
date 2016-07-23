@@ -137,6 +137,7 @@ public class OjConfig {
         judgeResult.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
         judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Running"));
         judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
+        judgeResult.add(new ResultType(ResultType.REJUDGE, "REJUDGE", "Rejudging"));
 
         resultType = new HashMap<>();
         for (ResultType result : judgeResult) {

@@ -313,7 +313,7 @@ public final class SolutionService {
 
     public List<ContestSolutionModel> getSolutionListForContest(Integer cid) {
         List<ContestSolutionModel> solutionList =
-            ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
+            ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid ASC", cid);
         return solutionList;
     }
 
@@ -425,8 +425,9 @@ public final class SolutionService {
             }
 
             if (cid > 0) {
-                if (solution.get("originalResult") != null) {
-                    ContestService.me().updateBoard4Rejudge(solution);
+                Integer originalResult = judgeService.removeOriginalResult(sid);
+                if (originalResult != null) {
+                    ContestService.me().updateBoard4Rejudge(solution, originalResult);
                 } else {
                     ContestService.me().updateBoard(solution);
                 }

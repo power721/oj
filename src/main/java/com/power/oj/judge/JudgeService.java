@@ -42,6 +42,7 @@ public final class JudgeService {
     private static final ConcurrentHashMap<String, RejudgeTask> rejudgeTasks = new ConcurrentHashMap<>();
     // TODO: store token in redis with expire time
     private static final ConcurrentHashMap<Integer, String> tokens = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Integer, Integer> originalResult = new ConcurrentHashMap<>();
     public static final Set<PosixFilePermission> FILE_PERMISSIONS = new HashSet<>();
 
     static {
@@ -82,6 +83,10 @@ public final class JudgeService {
         return false;
     }
 
+    public Integer removeOriginalResult(Integer sid) {
+        return originalResult.remove(sid);
+    }
+
     public void judge(Solution solution) {
         if (solution instanceof SolutionModel) {
             problemService.incSubmission(solution.getPid());
@@ -96,7 +101,7 @@ public final class JudgeService {
             userService.revertAccepted(solution);
         }
 
-        solution.setResult(ResultType.WAIT).setTest(0).setMtime(OjConfig.timeStamp);
+        solution.setResult(ResultType.REJUDGE).setTest(0).setMtime(OjConfig.timeStamp);
         solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
         solution.update();
 
@@ -240,7 +245,7 @@ public final class JudgeService {
     public void rejudgeContestSolution(ContestSolutionModel contestSolution) {
         int result = contestSolution.getResult();
 
-        contestSolution.update();
+        originalResult.put(contestSolution.getSid(), result);
 
         contestSolution.put("originalResult", result);
 
@@ -274,7 +279,6 @@ public final class JudgeService {
                     log.error(e.getLocalizedMessage());
                 }
                 try {
-                    // contestService.reset(cid);
                     List<ContestSolutionModel> solutions =
                         Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
                     task.setTotal(solutions.size());
