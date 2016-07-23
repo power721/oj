@@ -127,7 +127,7 @@
 
     $('.result i').each(function () {
       var resultName = $(this).parent().attr('id');
-      if (resultName == 'WAIT' || resultName == 'RUN') {
+      if (resultName == 'WAIT' || resultName == 'RUN' || resultName == 'REJUDGE') {
         $(this).append(' <img src="assets/images/' + (resultName == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>');
       }
       $(this).addClass(getBtnClass(resultName));
@@ -143,7 +143,7 @@
         btnClass = 'btn-danger';
       else if (resultName == 'VE' || resultName == 'SE')
         btnClass = 'btn-inverse';
-      else if (resultName == 'WAIT' || resultName == 'RUN')
+      else if (resultName == 'WAIT' || resultName == 'RUN' || resultName == 'REJUDGE')
         btnClass = '';
       return btnClass;
     }
@@ -193,12 +193,12 @@
     }, 20010);
 
     function refreshResult() {
-      $('#WAIT, #RUN').each(function () {
+      $('#WAIT, #RUN, #REJUDGE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
         $.getJSON('api/contest/getResult', {'cid':${cid!}, 'sid': $this.children('i').attr('sid')}, function (data) {
           var img = '';
-          if (data.result.name == 'WAIT' || data.result.name == 'RUN') {
+          if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';
           }
           if (data.result.name != id) {
