@@ -25,6 +25,7 @@ import com.power.oj.judge.JudgeService;
 import com.power.oj.judge.RejudgeType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
 import com.power.oj.util.Tool;
@@ -191,7 +192,7 @@ public class ContestService {
 
     public List<Record> getContestUsers(Integer cid) {
         return Db
-            .find("SELECT c.*,u.name,u.realName,u.nick FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?",
+            .find("SELECT c.*,u.name,u.realName FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?",
                 cid);
     }
 
@@ -336,7 +337,7 @@ public class ContestService {
         String sql = "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid "
             + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
             + " WHERE b.cid=? ORDER BY solved DESC,penalty";
-        String select = "SELECT b.*,u.name,u.nick,u.realName,cu.special";
+        String select = "SELECT b.*,u.name,u.realName,cu.special,cu.nick";
         Page<Record> userRank = Db.paginate(pageNumber, pageSize, select, sql, cid);
         int rank = (pageNumber - 1) * pageSize;
         for (Record record : userRank.getList()) {
@@ -803,7 +804,8 @@ public class ContestService {
             return 4;
         }
 
-        if (Db.queryInt("SELECT uid FROM user WHERE uid=? AND status=1", uid) == null) {
+        UserModel user = UserModel.dao.findById(uid);
+        if (user == null) {
             return 3;
         }
 
@@ -814,12 +816,22 @@ public class ContestService {
         Record record = new Record();
         record.set("cid", cid);
         record.set("uid", uid);
+        record.set("nick", user.getNick());
         record.set("ctime", OjConfig.timeStamp);
 
         if (Db.save("contest_user", record)) {
             return 0;
         }
         return 1;
+    }
+
+    public boolean updateUser(Integer cid, Integer uid, String nick) {
+        Record record = Db.findFirst("SELECT * FROM contest_user WHERE cid=? AND uid=?", cid, uid);
+        if (record == null) {
+            return false;
+        }
+        record.set("nick", nick);
+        return Db.update("contest_user", record);
     }
 
     public int removeUser(Integer cid, Integer uid) {

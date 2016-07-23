@@ -2,6 +2,7 @@ package com.power.oj.api;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
+import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -41,6 +42,7 @@ public class ContestApiController extends OjController {
     }
 
     @RequiresPermissions("contest:addProblem")
+    @Before(POST.class)
     public void addProblem() {
         Integer cid = getParaToInt("cid");
         Integer pid = getParaToInt("pid");
@@ -51,6 +53,7 @@ public class ContestApiController extends OjController {
     }
 
     @RequiresPermissions("contest:removeProblem")
+    @Before(POST.class)
     public void removeProblem() {
         Integer cid = getParaToInt("cid");
         Integer pid = getParaToInt("pid");
@@ -67,6 +70,7 @@ public class ContestApiController extends OjController {
     }
 
     @RequiresPermissions("contest:addProblem")
+    @Before(POST.class)
     public void reorderProblem() {
         Integer cid = getParaToInt("cid");
         String pid = getPara("pid");
@@ -79,6 +83,7 @@ public class ContestApiController extends OjController {
     }
 
     @RequiresPermissions("contest:addUser")
+    @Before(POST.class)
     public void addUser() {
         Integer cid = getParaToInt("cid");
         Integer uid = getParaToInt("uid");
@@ -89,6 +94,18 @@ public class ContestApiController extends OjController {
     }
 
     @RequiresPermissions("contest:addUser")
+    @Before(POST.class)
+    public void updateUser() {
+        Integer cid = getParaToInt("cid");
+        Integer uid = getParaToInt("uid");
+        String nick = getPara("nick");
+        boolean result = contestService.updateUser(cid, uid, nick);
+
+        renderJson("result", result);
+    }
+
+    @RequiresPermissions("contest:addUser")
+    @Before(POST.class)
     public void setSpecial() {
         Integer cid = getParaToInt("cid");
         Integer uid = getParaToInt("uid");
@@ -98,6 +115,7 @@ public class ContestApiController extends OjController {
     }
 
     @RequiresPermissions("contest:addUser")
+    @Before(POST.class)
     public void removeUser() {
         Integer cid = getParaToInt("cid");
         Integer uid = getParaToInt("uid");
@@ -107,6 +125,7 @@ public class ContestApiController extends OjController {
         renderJson("result", result);
     }
 
+    @Before(POST.class)
     public void postQuestion() {
         Integer cid = getParaToInt("cid");
         Integer num = getParaToInt("num");
@@ -115,6 +134,7 @@ public class ContestApiController extends OjController {
         renderJson("success", contestService.addClarify(cid, num, question));
     }
 
+    @Before(POST.class)
     public void updateClarify() {
         //Integer cid = getParaToInt("cid");
         Integer id = getParaToInt("id");

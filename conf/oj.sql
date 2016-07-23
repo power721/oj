@@ -244,6 +244,7 @@ CREATE TABLE `contest_user` (
   `uid` int(9) NOT NULL,
   `cid` int(9) NOT NULL,
   `special` tinyint(1) NOT NULL DEFAULT '0',
+  `nick` varchar(55) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -927,7 +928,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-21 20:48:53
+-- Dump completed on 2016-07-23 17:41:22
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -999,7 +1000,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-21 20:48:53
+-- Dump completed on 2016-07-23 17:41:22
 -- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
@@ -1415,4 +1416,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-21 20:48:53
+-- Dump completed on 2016-07-23 17:41:22
