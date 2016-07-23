@@ -28,11 +28,11 @@
     <table id="user-list" class="table table-hover table-condensed">
       <thead>
       <tr>
-        <th>UID</th>
-        <th>User</th>
-        <th>Team Name</th>
-        <th>Special Team</th>
-        <th>Action</th>
+        <th width="5%">UID</th>
+        <th width="25%">User</th>
+        <th width="25%">Team Name</th>
+        <th width="20%">Special Team</th>
+        <th width="25%">Action</th>
       </tr>
       </thead>
       <tbody>
@@ -43,7 +43,9 @@
               <a href="user/profile/${User.name!}" title="${User.realName!}">${User.uid!}</a>
             </td>
             <td class="name"><a href="user/profile/${User.name!}">${User.name!}</a></td>
-            <td class="nick"><a href="user/profile/${User.name!}">${User.nick!}</a></td>
+            <td class="nick">
+              <input type="text" class="input-large" value="${User.nick!}" placeholder="Team Name" required>
+            </td>
             <td>
               <i data-uid="${User.uid!}" data-special="${User.special?c}"
                  class="special btn <#if User.special>btn-success<#else>btn-info</#if>">
@@ -51,8 +53,9 @@
               </i>
             </td>
             <td class="admin">
+              <i class="btn btn-success update" uid="${User.uid!}">Update</i>
               <#if serverTime<contest.endTime>
-                <button class="btn btn-danger remove" uid="${User.uid!}">Remove</button>
+                <i class="btn btn-danger remove" uid="${User.uid!}">Remove</i>
               </#if>
             </td>
           </tr>
@@ -60,7 +63,7 @@
         </#if>
       </tbody>
       <#if serverTime<contest.endTime>
-      <tfoot>
+        <tfoot>
         <tr>
           <form class="form-inline" id="addUser" action="api/contest/addUser" method="post">
             <input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span>
@@ -74,7 +77,7 @@
             </td>
           </form>
         </tr>
-      </tfoot>
+        </tfoot>
       </#if>
     </table>
   </div>
@@ -115,8 +118,7 @@
                   }
                 });
       }
-      else
-      {
+      else {
         $("input[name='name']").val('');
       }
     }
@@ -139,8 +141,7 @@
     $("input[name='uid']").change(getUserName).keyup(getUserName);
     $("input[name='name']").keyup(function () {
       var name = this.value;
-      if (name.length >= 2) // for old user name, e.g: 'test'
-      {
+      if (name.length >= 2) {  // for old user name, e.g: 'test'
         $.get("api/user/getUserBasic", {name: this.value},
                 function (data) {
                   if (data) {
@@ -183,11 +184,15 @@
                       var html = '<tr class="user" uid="' + uid + '">' +
                               '<td class="uid"><a href="user/profile/' + name + '">' + uid + '</a></td>' +
                               '<td class="name"><a href="user/profile/' + name + '">' + name + '</a></td>' +
-                              '<td class="nick"><a href="user/profile/' + name + '">' + nick + '</a></td>' +
+                              '<td class="nick"><input type="text" name="team" class="input-large" value="'
+                              + (nick ? nick : '') + '" placeholder="Team Name" required></td>' +
                               '<td><i data-uid="' + uid + '" data-special="false" class="special btn btn-info">No</i></td>' +
-                                      '<td class="admin"><#if serverTime<contest.startTime><button class="btn btn-danger remove" uid="'
-                                + uid + '">Remove</button></#if></td>' +
-                              '</tr>';
+                              '<td class="admin">' +
+                              '<i class="btn btn-success update" uid="' + uid + '">Update</i>' +
+                                <#if serverTime<contest.startTime>
+                                '<button class="btn btn-danger remove" uid="' + uid + '">Remove</button>' +
+                                </#if>
+                              '</td></tr>';
                       $('#user-list tbody').append(html);
                       break;
                     case 1:
@@ -217,6 +222,23 @@
                   }
                 });
         return false;
+      });
+      $('table').on('click', '.update', function () {
+        var that = $(this);
+        var nick = that.parent().parent().children('.nick').children().val();
+        $.post('api/contest/updateUser', {'cid':${contest.cid!}, 'uid': that.attr('uid'), 'nick': nick}, function (data) {
+          if (data.result) {
+            $.dialog({
+              content: 'User updated.',
+              time: 1
+            });
+          } else {
+            $.dialog({
+              content: "DB error!",
+              time: 1.5
+            });
+          }
+        });
       });
       $('table').on('click', '.remove', function () {
         var that = $(this);
@@ -249,9 +271,9 @@
                   });
                   break;
               }
-              this.close();
-              return false;
             });
+            this.close();
+            return false;
           }
         });
       });

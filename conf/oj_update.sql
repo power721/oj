@@ -373,3 +373,7 @@ CREATE TABLE `resource` (
   `access` ENUM('public', 'private', 'security') NOT NULL DEFAULT 'public',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#2016-7-23
+ALTER TABLE `contest_user` ADD nick VARCHAR(55) AFTER `special`;
+UPDATE contest_user,user SET contest_user.nick=user.nick WHERE contest_user.uid=user.uid;
