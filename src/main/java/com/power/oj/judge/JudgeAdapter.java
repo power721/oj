@@ -274,7 +274,7 @@ public abstract class JudgeAdapter implements Runnable {
     protected boolean updateContest() {
         if (solution.isContest()) {
             if (solution.get("originalResult") != null) {
-                contestService.updateBoard4Rejudge(solution);
+                contestService.updateBoard4Rejudge(solution, solution.getInt("originalResult"));
             } else {
                 contestService.updateBoard(solution);
             }

@@ -16,6 +16,7 @@ public class ResultType {
     public static final int VE = 10;
     public static final int WAIT = 11;
     public static final int RUN = 12;
+    public static final int REJUDGE = 13;
 
     private int id;
     private String name;
