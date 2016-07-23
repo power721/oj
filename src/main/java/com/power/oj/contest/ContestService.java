@@ -202,7 +202,9 @@ public class ContestService {
             + " LEFT JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
         for (Iterator<Record> it = contests.iterator(); it.hasNext();) {
             Record record = it.next();
-            if (record.getInt("type") == ContestModel.TYPE_TEST && !canAccessTestContest(record.getInt("cid"))) {
+            if (record.getInt("cid") == null) {
+                it.remove();
+            } else if (record.getInt("type") == ContestModel.TYPE_TEST && !canAccessTestContest(record.getInt("cid"))) {
                 it.remove();
             }
         }
