@@ -104,31 +104,27 @@ public class BoardModel extends Model<BoardModel> {
         return set(PENALTY, value);
     }
 
-    public Integer getA_SolvedTime() {
-        return getInt(A_SOLVED_TIME);
-    }
-
     public Integer getSolvedTime(int num) {
         char c = (char) (num + 'A');
-        String field = new StringBuilder().append(c).append("_SolvedTime").toString();
+        String field = String.valueOf(c) + "_SolvedTime";
         return getInt(field);
     }
 
     public BoardModel setSolvedTime(int num, Integer value) {
         char c = (char) (num + 'A');
-        String field = new StringBuilder().append(c).append("_SolvedTime").toString();
+        String field = String.valueOf(c) + "_SolvedTime";
         return set(field, value);
     }
 
     public Integer getWrongNum(int num) {
         char c = (char) (num + 'A');
-        String field = new StringBuilder().append(c).append("_WrongNum").toString();
+        String field = String.valueOf(c) + "_WrongNum";
         return getInt(field);
     }
 
     public BoardModel setWrongNum(int num, Integer value) {
         char c = (char) (num + 'A');
-        String field = new StringBuilder().append(c).append("_WrongNum").toString();
+        String field = String.valueOf(c) + "_WrongNum";
         return set(field, value);
     }
   
