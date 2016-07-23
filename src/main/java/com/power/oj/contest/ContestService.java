@@ -135,9 +135,11 @@ public class ContestService {
         return contestProblems;
     }
 
-    public ProblemModel getProblem4Show(Integer cid, Integer num) {
+    public ProblemModel getProblem4Show(Integer cid, Integer num, Integer status) {
         ProblemModel problem = getProblem(cid, num);
-        Db.update("UPDATE contest_problem SET view=view+1 WHERE cid=? AND num=?", cid, num);
+        if (ContestModel.PENDING != status) {
+            Db.update("UPDATE contest_problem SET view=view+1 WHERE cid=? AND num=?", cid, num);
+        }
 
         return problem;
     }
@@ -167,7 +169,7 @@ public class ContestService {
         problem.setSubmission(record.getInt("submission"));
         problem.setSubmitUser((int) submitUser);
         problem.setSolved((int) solved);
-        problem.setView(record.getInt("view") + 1);
+        problem.setView(record.getInt("view"));
         problem.put("id", (char) (num + 'A'));
         problem.put("num", num);
 

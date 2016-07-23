@@ -77,7 +77,9 @@ public class ContestController extends OjController {
         char id = problemId.toUpperCase().charAt(0);
         Integer num = id - 'A';
 
-        ProblemModel problemModel = contestService.getProblem4Show(cid, num);
+        int status = contestService.getContestStatus(cid);
+        setAttr("cstatus", status);
+        ProblemModel problemModel = contestService.getProblem4Show(cid, num, status);
         if (problemModel == null) {
             FlashMessage msg =
                 new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
@@ -89,7 +91,6 @@ public class ContestController extends OjController {
         setAttr("id", num);
         setAttr("spj", problemService.checkSpj(problemModel.getPid()));
         setAttr("userResult", contestService.getUserResult(cid, num));
-        setAttr("cstatus", contestService.getContestStatus(cid));
         setAttr("isRejudging", contestService.isRejudging(cid, num));
         setAttr("contestProblems", contestService.getContestProblems(cid, null));
 
