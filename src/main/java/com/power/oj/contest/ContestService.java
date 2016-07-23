@@ -197,6 +197,18 @@ public class ContestService {
             .find("SELECT c.*,u.name,u.realName FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
     }
 
+    public List<Record> getAttendedContests(Integer uid) {
+        List<Record> contests = Db.find("SELECT DISTINCT(c.cid),c.title,c.type FROM contest_solution s"
+            + " LEFT JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
+        for (Iterator<Record> it = contests.iterator(); it.hasNext();) {
+            Record record = it.next();
+            if (record.getInt("type") == ContestModel.TYPE_TEST && !canAccessTestContest(record.getInt("cid"))) {
+                it.remove();
+            }
+        }
+        return contests;
+    }
+
     public boolean isUserInContest(Integer uid, Integer cid) {
         return Db.queryInt("SELECT uid FROM contest_user WHERE uid=? AND cid=? LIMIT 1", uid, cid) != null;
     }
@@ -1078,7 +1090,7 @@ public class ContestService {
         board.set("cid", cid);
         board.set("uid", uid);
         board.save();
-        return board;
+        return BoardModel.dao.findById(board.getId());
     }
 
     private void syncFreezeBoard(Integer cid, Integer uid, BoardModel board) {
