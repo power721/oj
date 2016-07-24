@@ -199,12 +199,10 @@ public class ContestService {
 
     public List<Record> getAttendedContests(Integer uid) {
         List<Record> contests = Db.find("SELECT DISTINCT(c.cid),c.title,c.type FROM contest_solution s"
-            + " LEFT JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
+            + " INNER JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
         for (Iterator<Record> it = contests.iterator(); it.hasNext(); ) {
             Record record = it.next();
-            if (record.getInt("cid") == null) {
-                it.remove();
-            } else if (record.getInt("type") == ContestModel.TYPE_TEST && !canAccessTestContest(record.getInt("cid"))) {
+            if (record.getInt("type") == ContestModel.TYPE_TEST && !canAccessTestContest(record.getInt("cid"))) {
                 it.remove();
             }
         }
