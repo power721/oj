@@ -874,7 +874,7 @@ public final class UserService {
         List<Object> param = new ArrayList<Object>();
         String sql = "SELECT u.uid,u.name,u.realName,u.nick,r.name AS role,u.ctime,r.id";
         StringBuilder sb = new StringBuilder()
-            .append("FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid LEFT JOIN role r ON r.id=ur.rid WHERE 1=1");
+            .append("FROM user_role ur INNER JOIN user u ON u.uid=ur.uid INNER JOIN role r ON r.id=ur.rid WHERE 1=1");
 
         if (StringUtil.isNotEmpty(sSearch)) {
             sb.append(" AND (u.name LIKE ? OR u.realName LIKE ? OR u.uid LIKE ?)");
@@ -933,7 +933,7 @@ public final class UserService {
     }
 
     public List<Record> getSubmittedProblems(Integer uid) {
-        return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s LEFT JOIN problem p ON p.pid=s.pid"
+        return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s INNER JOIN problem p ON p.pid=s.pid"
             + " WHERE s.uid=? AND s.status=1 GROUP BY s.pid", uid);
     }
 

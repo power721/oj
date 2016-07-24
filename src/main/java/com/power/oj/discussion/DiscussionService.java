@@ -23,7 +23,7 @@ public final class DiscussionService {
     public Page<TopicModel> getTopicPage(int pageNumber, int pageSize, Integer pid) {
         List<Object> paras = new ArrayList<Object>();
         StringBuilder sb = new StringBuilder();
-        sb.append("FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE 1=1");
+        sb.append("FROM `topic` t INNER JOIN `user` u ON u.uid=t.uid WHERE 1=1");
         if (pid != null && pid > 0) {
             sb.append(" AND pid=?");
             paras.add(pid);
@@ -50,7 +50,7 @@ public final class DiscussionService {
 
         topicList.add(topic);
         List<TopicModel> children = dao.find(
-            "SELECT t.*,u.name FROM `topic` t LEFT JOIN `user` u ON u.uid=t.uid WHERE t.parentId=? ORDER BY t.orderNum DESC,t.id",
+            "SELECT t.*,u.name FROM `topic` t INNER JOIN `user` u ON u.uid=t.uid WHERE t.parentId=? ORDER BY t.orderNum DESC,t.id",
             topic.getId());
         for (TopicModel child : children) {
             topicList.addAll(getTopicTree(child));
@@ -65,8 +65,8 @@ public final class DiscussionService {
 
     public TopicModel findTopic4Show(Integer id) {
         TopicModel topic = dao.findFirst(
-            "SELECT t.*,p.title AS problem,u.name FROM `topic` t " + "LEFT JOIN problem p ON p.pid=t.pid "
-                + "LEFT JOIN user u ON u.uid=t.uid WHERE t.id=?", id);
+            "SELECT t.*,p.title AS problem,u.name FROM `topic` t LEFT JOIN problem p ON p.pid=t.pid "
+                + "INNER JOIN user u ON u.uid=t.uid WHERE t.id=?", id);
         //topic.setView(topic.getView() + 1).update();
         return topic;
     }

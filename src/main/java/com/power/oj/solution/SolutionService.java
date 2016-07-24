@@ -51,7 +51,7 @@ public final class SolutionService {
         String userName) {
         String sql =
             "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name";
-        StringBuilder sb = new StringBuilder("FROM solution s LEFT JOIN user u ON u.uid=s.uid WHERE s.status=1 ");
+        StringBuilder sb = new StringBuilder("FROM solution s INNER JOIN user u ON u.uid=s.uid WHERE s.status=1 ");
 
         List<Object> paras = new ArrayList<Object>();
         if (result > -1) {
@@ -123,7 +123,7 @@ public final class SolutionService {
 
     public ContestSolutionModel findContestSolution4Json(Integer sid) {
         return ContestSolutionModel.dao.findFirst(
-            "SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE sid=? AND s.status=1 LIMIT 1",
+            "SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s INNER JOIN user u ON u.uid=s.uid WHERE sid=? AND s.status=1 LIMIT 1",
             sid);
     }
 
@@ -141,7 +141,7 @@ public final class SolutionService {
         int num, String userName) {
         String sql =
             "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick";
-        StringBuilder sb = new StringBuilder("FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid WHERE cid=?");
+        StringBuilder sb = new StringBuilder("FROM contest_solution s INNER JOIN user u ON u.uid=s.uid WHERE cid=?");
         List<Object> paras = new ArrayList<Object>();
         paras.add(cid);
 
@@ -225,7 +225,7 @@ public final class SolutionService {
         // TODO check user permission for view source code
         String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
         StringBuilder sb = new StringBuilder(
-            "FROM solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=?");
+            "FROM solution s INNER JOIN user u ON u.uid=s.uid INNER JOIN program_language l ON l.id=s.language WHERE result=?");
 
         List<Object> paras = new ArrayList<Object>();
         paras.add(ResultType.AC);
@@ -255,7 +255,7 @@ public final class SolutionService {
             sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
         }
         StringBuilder sb = new StringBuilder(
-            "FROM contest_solution s LEFT JOIN user u ON u.uid=s.uid LEFT JOIN program_language l ON l.id=s.language WHERE result=?");
+            "FROM contest_solution s INNER JOIN user u ON u.uid=s.uid INNER JOIN program_language l ON l.id=s.language WHERE result=?");
 
         List<Object> paras = new ArrayList<Object>();
         paras.add(ResultType.AC);
