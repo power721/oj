@@ -9,7 +9,11 @@
     </form>
   </div>
   <#include "../common/_paginate.html" />
-  <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="rank/" />
+  <#if userList.pageSize!=pageSize>
+    <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="rank/" urlParas="?pageSize=${userList.pageSize}" />
+  <#else>
+    <@paginate currentPage=userList.pageNumber totalPage=userList.totalPage actionUrl="rank/" />
+  </#if>
   <div class="pull-right">
     <span class="badge badge-info">${userList.pageNumber}/${userList.totalPage} Pages</span> <span
           class="badge badge-info">${userList.totalRow} Users</span>
@@ -52,8 +56,8 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
-    var nextpage = "rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>-${userList.pageSize}</#if>"
+    var prevpage = "rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>?pageSize=${userList.pageSize}</#if>"
+    var nextpage = "rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>?pageSize=${userList.pageSize}</#if>"
     $(document).keydown(function (event) {
         <#if (userList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
         <#if userList.pageNumber<userList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>

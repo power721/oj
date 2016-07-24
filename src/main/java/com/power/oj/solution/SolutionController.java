@@ -55,7 +55,7 @@ public class SolutionController extends OjController {
         setAttr("language", language);
         setAttr("pid", getPara("pid"));
         setAttr("name", getPara("name"));
-        setAttr("query", query.length() > 0 ? query.substring(1).toString() : null);
+        setAttr("query", query.length() > 0 ? query.substring(1) : null);
 
         setTitle(getText("solution.index.title"));
     }

@@ -140,6 +140,13 @@
       'font-styles': false
     });
 
+    var prevpage = "discuss/${pageNumber-1}<#if 20!=pageSize>?s=${pageSize}</#if>"
+    var nextpage = "discuss/${pageNumber+1}<#if 20!=pageSize>?s=${pageSize}</#if>"
+    $(document).keydown(function (event) {
+        <#if (pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
+        <#if pageNumber<topicList?size>if (event.keyCode == 39)location = nextpage;</#if>
+    });
+
     function getProblemTitle() {
       var pid = this.value;
       if (pid >= 1000) {

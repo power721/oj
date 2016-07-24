@@ -35,7 +35,8 @@ public class DiscussionController extends OjController {
         }
 
         setAttr("pid", pid);
-        setAttr("pageSize", OjConfig.noticePageSize);
+        setAttr("pageNumber", pageNumber);
+        setAttr("pageSize", pageSize);
         setAttr("topicList", topicList);
         setAttr("threadList", threadList);
         setAttr("deepTree", deepTree);

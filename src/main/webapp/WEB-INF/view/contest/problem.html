@@ -222,6 +222,13 @@
       cache: true
     });
 
+    var prevpage = "contest/problem/${cid!}-${prevPid!}";
+    var nextpage = "contest/problem/${cid!}-${nextPid!}";
+    $(document).keydown(function (event) {
+        <#if prevPid!=problem.id>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if nextPid!=problem.id>if (event.keyCode == 39)window.location = nextpage;</#if>
+    });
+
     <#if isRejudging?? && isRejudging==true>
       $('#rejudge').removeClass('hide');
       var refresh = setInterval(function () {
