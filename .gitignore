@@ -13,3 +13,4 @@ build/
 .settings/
 target/
 src/main/webapp/WEB-INF/view/common/version.ftl
+src/main/webapp/WEB-INF/view/common/compilers.ftl
