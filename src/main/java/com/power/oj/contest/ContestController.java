@@ -2,7 +2,6 @@ package com.power.oj.contest;
 
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
-import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -374,7 +373,7 @@ public class ContestController extends OjController {
 
     public void statistics() {
         Integer cid = getParaToInt(0);
-        List<String> resultName = new ArrayList<String>();
+        List<String> resultName = new ArrayList<>();
 
         for (ResultType resultType : OjConfig.judgeResult) {
             if (resultType.getId() > ResultType.RF)

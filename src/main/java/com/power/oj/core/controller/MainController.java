@@ -34,6 +34,12 @@ public class MainController extends OjController {
         } catch (NumberFormatException e) {
             redirect301("/");
         }
+
+        if (getRequest().getRequestURL().toString().contains("swust")) {
+            render("swust.html");
+        } else {
+            render("index.html");
+        }
     }
 
     public void about() {

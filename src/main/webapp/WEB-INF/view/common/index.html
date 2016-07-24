@@ -1,65 +1,45 @@
 <@override name="content">
-<div class="cxboard">
-  <a href="notice"><h3 class="title">Notice公告</h3></a>
-  <ul class="entry">
-    <#if noticeList?? & (noticeList.list.size()>0) >
-      <#list noticeList.list as notice>
-        <li>
-          <a href="notice/show/${notice.id!}">${notice.title!}</a>
-        </li>
-        <#if (notice_index > 3)><#break></#if>
-      </#list>
-    </#if>
-  </ul>
-
-  <a href="contest"><h3 class="title">Contest比賽預告</h3></a>
-  <ul class="entry">
-    <#if contestList?? & (contestList.list.size()>0) >
-      <#list contestList.list as Contest>
-        <li>
-          <a href="contest/show/${Contest.cid!}">${Contest.title!}-- ${Contest.startDateTime!}</a>
-        </li>
-        <#if (Contest_index > 3)><#break></#if>
-      </#list>
-    </#if>
-  </ul>
-
+<div class="hero-unit">
+  <h1>
+    Welcome to PowerOJ 2.3!
+  </h1>
+  <p>
+    IE 9+, Opera 11+, Safari 9+, Firefox 45+ and Chrome 48+ are <span class="badge badge-important"><b>REQUIRED</b></span>
+    according to <a href="https://github.com/twitter/bootstrap/wiki/browser-Compatibility" target='_blank'>bootstrap compatibility page</a>.<br>
+    If you have none of them, click <a href='http://browsehappy.com/' target='_blank'>here</a> to get one.<br>
+    Enjoy and have fun!
+  </p>
 </div>
 
-  <#if newsList?? & (newsList.list.size() > 0) >
-  <div class="flexslider">
-    <ul class="slides">
-      <#list newsList.list as news>
-        <li>
-          <div class="titlepimg">${news.title!}</div>
-          <img src="${news.image}"/>
-        </li> </#list>
-    </ul>
-  </div>
-  </#if>
-
-  <#if newsList?? & (newsList.list.size() > 0) >
-    <#list newsList.list as news>
-    <div class="news">
-      <a href="news/show/${news.id}"><h3 class="title">${news.title!}</h3></a>
-      <p style="text-align: right;position:relative;top:-10px">
-        On <span class="timestamp" data="${news.time!}"></span> By <span
-              class="author">${news.author!}</span>
-      </p>
-      <p class="entry"><#if (news.content?length &gt; 34) >${news.content?substring(0,34)}
-        ...<#else>${news.content}</#if></p>
-    </div>
-    </#list>
-
-  <div class="pagination pagination-centered" style="position:relative;top:50px;float:left;left:32%">
-    <#include "../common/_paginate.html" />
-	<@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
-  </div>
-  </#if>
-
-
-
+<div>
+  <p>
+    PowerOJ is a online judge for <abbr title="ACM International Collegiate Programming Contest">ACM-ICPC</abbr> or <abbr title="Olympiad in Informatics">OI</abbr>.
+    Online Judge is a web service which can compile user's source code and run in limition. <br>
+    Judge use predefined data files as stdin and get user's stdout as files, compare with the standard output data to judge the user's solution.
+  </p>
+  <p>
+    First of all, read carefully <a href="faq" target="_blank">Frequently asked Questions</a>.<br>
+    Then, choose <a href="problem">problem</a>, solve it and submit it.
+  </p>
+  <p>
+    If you want to publish your problems or setup your own online contest, just <a href="mailto:power721@163.com">write us</a><br>
+  </p>
+</div>
+<abbr title="Online Judge">OJ</abbr>使用的相关帮助请参见
+<a href="faq">F.A.Q.</a>
+<br>
+你可以在<a href="problem"><b>题库</b></a>找到练习题目并
+提交代码通过本系统测试你的解答。
+<br>
+如果有什么疑问或建议请联系<a href="mailto:power721@163.com">管理员</a>。
+<br>
+题目数量：${problemsNumber!0}
+<br>
+<br>
+<b>如果遇到问题请联系<a href="mailto:power721@163.com">管理员</a>。
+</b>
+<br>
 </@override>
 <@override name="scripts">
 </@override>
-<@extends name="../common/_layout.html" />
+<@extends name="_layout.html" />

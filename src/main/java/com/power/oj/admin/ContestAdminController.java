@@ -49,7 +49,7 @@ public class ContestAdminController extends OjController {
 
         contestService.addContest(contestModel, startTime, endTime);
 
-        redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getCid()).toString());
+        redirect("/contest/show/" + contestModel.getCid());
     }
 
     @RequiresPermissions("contest:edit")
@@ -73,7 +73,7 @@ public class ContestAdminController extends OjController {
 
         contestService.updateContest(contestModel, startTime, endTime);
 
-        redirect(new StringBuilder(2).append("/contest/show/").append(contestModel.getCid()).toString());
+        redirect("/contest/show/" + contestModel.getCid());
     }
 
     @RequiresPermissions("contest:build")
@@ -81,7 +81,7 @@ public class ContestAdminController extends OjController {
         Integer cid = getParaToInt(0);
         contestService.build(cid);
 
-        redirect(new StringBuilder(2).append("/contest/rank/").append(cid).toString(),
+        redirect("/contest/rank/" + cid,
             new FlashMessage(getText("contest.buildRank.success")));
     }
 
