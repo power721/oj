@@ -200,7 +200,7 @@ public class ContestService {
     public List<Record> getAttendedContests(Integer uid) {
         List<Record> contests = Db.find("SELECT DISTINCT(c.cid),c.title,c.type FROM contest_solution s"
             + " LEFT JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
-        for (Iterator<Record> it = contests.iterator(); it.hasNext();) {
+        for (Iterator<Record> it = contests.iterator(); it.hasNext(); ) {
             Record record = it.next();
             if (record.getInt("cid") == null) {
                 it.remove();
@@ -698,11 +698,6 @@ public class ContestService {
 
     public boolean addContest(ContestModel contestModel, String startTime, String endTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Integer cid = contestModel.getCid();
-        if (cid != null) {
-            contestModel.setCid(null);
-        }
-
         contestModel.setUid(userService.getCurrentUid());
         contestModel.setCtime(OjConfig.timeStamp);
         try {
@@ -713,27 +708,34 @@ public class ContestService {
             log.error("add contest failed!", e);
         }
 
-        boolean result = contestModel.save();
-        if (cid != null) {
-            copyContest(cid, contestModel);
-        }
-        return result;
+        return contestModel.save();
     }
 
-    private void copyContest(Integer cid, ContestModel contestModel) {
-        List<Record> problems = Db.find("SELECT pid,num,title FROM contest_problem WHERE cid=?", cid);
-        for (Record problem : problems) {
-            problem.set("cid", contestModel.getCid());
-            Db.save("contest_problem", problem);
+    public boolean copyContest(ContestModel contestModel, String startTime, String endTime) {
+        Integer cid = contestModel.getCid();
+        contestModel.setCid(null);
+        if(!addContest(contestModel, startTime, endTime)) {
+            return false;
         }
 
-        List<Record> users = Db.find("SELECT * FROM contest_user WHERE cid=?", cid);
-        for (Record user : users) {
-            user.set("id", null);
-            user.set("cid", contestModel.getCid());
-            user.set("ctime", OjConfig.timeStamp);
-            Db.save("contest_user", user);
+        if (contestModel.get("includeProblems") != null) {
+            List<Record> problems = Db.find("SELECT pid,num,title FROM contest_problem WHERE cid=?", cid);
+            for (Record problem : problems) {
+                problem.set("cid", contestModel.getCid());
+                Db.save("contest_problem", problem);
+            }
         }
+
+        if (contestModel.get("includeUsers") != null) {
+            List<Record> users = Db.find("SELECT * FROM contest_user WHERE cid=?", cid);
+            for (Record user : users) {
+                user.set("id", null);
+                user.set("cid", contestModel.getCid());
+                user.set("ctime", OjConfig.timeStamp);
+                Db.save("contest_user", user);
+            }
+        }
+        return true;
     }
 
     public boolean updateContest(ContestModel contestModel, String startTime, String endTime) {
