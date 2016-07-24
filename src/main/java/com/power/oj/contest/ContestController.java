@@ -572,7 +572,7 @@ public class ContestController extends OjController {
 
     @RequiresAuthentication
     @RequiresPermissions("contest:addUser")
-    public void adminUser() {
+    public void attendees() {
         Integer cid = getParaToInt(0);
 
         ContestModel contestModel = contestService.getContest(cid);
@@ -591,7 +591,7 @@ public class ContestController extends OjController {
         setAttr("contestUsers", contestService.getContestUsers(cid));
         setAttr("status", status);
 
-        //setTitle(new StringBuilder(2).append(getText("contest.admin.title")).append(cid).toString());
+        setTitle(getText("contest.attendees.title", cid));
     }
 
     @Clear({ContestInterceptor.class})
