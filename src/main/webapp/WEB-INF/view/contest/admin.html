@@ -7,7 +7,7 @@
 <div class="row text-center">
   <div class="span6 offset3">
     <#if (contest.type > 1)>
-      <a href="contest/adminUser/${contest.cid!}" class="btn btn-primary">Manage Attendees</a>
+      <a href="contest/attendees/${contest.cid!}" class="btn btn-primary">Manage Attendees</a>
     </#if>
     <a href="contest/copy/${contest.cid!}" class="btn btn-success">Copy</a>
     <#if status=="Finished">
