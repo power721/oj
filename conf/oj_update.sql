@@ -377,3 +377,10 @@ CREATE TABLE `resource` (
 #2016-7-23
 ALTER TABLE `contest_user` ADD nick VARCHAR(55) AFTER `special`;
 UPDATE contest_user,user SET contest_user.nick=user.nick WHERE contest_user.uid=user.uid;
+
+#2016-7-24
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_cid_pid_pk UNIQUE (cid, pid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE board ADD CONSTRAINT board_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE freeze_board ADD CONSTRAINT freeze_board_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE user_role ADD CONSTRAINT user_role_uid_rid_pk UNIQUE (uid, rid);

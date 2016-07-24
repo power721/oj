@@ -1,5 +1,8 @@
 <@override name="content">
 <h1 class="text-center 500">500 Internal Server Error</h1>
+<#if adminUser??>
+${exception!}
+</#if>
 </@override>
 <@override name="scripts">
 </@override>
