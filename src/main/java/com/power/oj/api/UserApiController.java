@@ -167,6 +167,7 @@ public class UserApiController extends OjController {
         Integer uid = userModel.getUid();
         String origPwd = getPara("origPwd");
         String newEmail = getPara("newEmail");
+        // TODO: validate Email
 
         if (userService.checkPassword(uid, origPwd)) {
             if (userService.containsEmailExceptThis(uid, newEmail)) {

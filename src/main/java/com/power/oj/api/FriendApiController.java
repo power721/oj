@@ -3,6 +3,7 @@ package com.power.oj.api;
 import com.jfinal.aop.Before;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
+import jodd.util.HtmlEncoder;
 
 @Before(CheckGuestInterceptor.class)
 public class FriendApiController extends OjController {
@@ -34,7 +35,7 @@ public class FriendApiController extends OjController {
 
     public void addGroup() {
         Integer uid = userService.getCurrentUid();
-        String groupName = getPara("name");
+        String groupName = HtmlEncoder.text(getPara("name"));
 
         if (socialService.addGroup(uid, groupName)) {
             renderJson("{\"success\":true, \"status\":200,\"result\":\"\"}");
@@ -46,7 +47,7 @@ public class FriendApiController extends OjController {
     public void updateGroup() {
         Integer uid = userService.getCurrentUid();
         Integer gid = getParaToInt("gid", 1);
-        String groupName = getPara("name");
+        String groupName = HtmlEncoder.text(getPara("name"));
         int result = socialService.updateGroup(uid, gid, groupName);
 
         if (result > 0) {
@@ -71,8 +72,8 @@ public class FriendApiController extends OjController {
 
     public void changeFollowingByGroup() {
         Integer uid = userService.getCurrentUid();
-        String[] friendUid = getPara("followingUid").split(",");
-        String[] groupId = getPara("groupId").split(",");
+        String[] friendUid = HtmlEncoder.text(getPara("followingUid")).split(",");
+        String[] groupId = HtmlEncoder.text(getPara("groupId")).split(",");
         Integer tgid = getParaToInt("targetGid", 1);
 
         if (socialService.changeFollowingByGroup(uid, friendUid, groupId, tgid)) {

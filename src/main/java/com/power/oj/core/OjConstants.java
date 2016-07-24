@@ -25,6 +25,7 @@ public interface OjConstants {
     int USERNAME_MAX_LENGTH = 15;
     int PASSWORD_MIN_LENGTH = 6;
     int PASSWORD_MAX_LENGTH = 20;
+    int TAG_MAX_LENGTH = 45;
 
     /*
      * These contants are used in view(attr name) and session.

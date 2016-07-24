@@ -94,7 +94,7 @@ public class ProblemApiController extends OjController {
     @Clear
     public void getField() {
         Integer pid = getParaToInt("pid");
-        String name = getPara("name");
+        String name = HtmlEncoder.text(getPara("name"));
 
         renderJson("result", problemService.getProblemField(pid, name));
     }
@@ -141,6 +141,10 @@ public class ProblemApiController extends OjController {
     public void addTag() {
         Integer pid = getParaToInt("pid");
         String tag = HtmlEncoder.text(getPara("tag").trim());
+        if (tag.length() > OjConstants.TAG_MAX_LENGTH) {
+            renderNull();
+            return;
+        }
 
         Record Tag = problemService.addTag(pid, tag);
         if (Tag != null) {

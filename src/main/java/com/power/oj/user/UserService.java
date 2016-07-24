@@ -256,6 +256,9 @@ public final class UserService {
      */
     public boolean updateUser(UserModel userModel) {
         UserModel newUser = getCurrentUser();
+        if (newUser == null) {
+            return false;
+        }
         String password = userModel.getPassword();
 
         if (StringUtil.isNotBlank(password)) {
@@ -263,7 +266,6 @@ public final class UserService {
             newUser.setPassword(password);
         }
 
-        newUser.setUid(getCurrentUid());
         if (ShiroKit.hasPermission("user:sp:nick")) {
             newUser.setNick(userModel.getNick());
         } else {

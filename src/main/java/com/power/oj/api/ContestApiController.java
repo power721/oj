@@ -129,11 +129,12 @@ public class ContestApiController extends OjController {
     public void postQuestion() {
         Integer cid = getParaToInt("cid");
         Integer num = getParaToInt("num");
-        String question = getPara("question");
+        String question = HtmlEncoder.text(getPara("question"));
 
         renderJson("success", contestService.addClarify(cid, num, question));
     }
 
+    @RequiresPermissions("contest:edit")
     @Before(POST.class)
     public void updateClarify() {
         //Integer cid = getParaToInt("cid");
