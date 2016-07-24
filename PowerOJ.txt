@@ -153,3 +153,18 @@ diff文件
 12 Configuration Error
 13 System Error
 255 Unknown
+
+
+ALTER TABLE contest_clarify ADD CONSTRAINT contest_clarify_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_cid_pid_pk UNIQUE (cid, pid);
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_problem_pid_fk FOREIGN KEY (pid) REFERENCES problem (pid);
+ALTER TABLE contest_solution ADD CONSTRAINT contest_solution_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_solution ADD CONSTRAINT contest_solution_user_uid_fk FOREIGN KEY (uid) REFERENCES user (uid);
+ALTER TABLE contest_solution ADD CONSTRAINT contest_solution_problem_pid_fk FOREIGN KEY (pid) REFERENCES problem (pid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_user_uid_fk FOREIGN KEY (uid) REFERENCES user (uid);
+ALTER TABLE board ADD CONSTRAINT board_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE board ADD CONSTRAINT board_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE board ADD CONSTRAINT board_user_uid_fk FOREIGN KEY (uid) REFERENCES user (uid);

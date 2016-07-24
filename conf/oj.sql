@@ -88,7 +88,8 @@ CREATE TABLE `board` (
   `Y_WrongNum` tinyint(5) DEFAULT '0',
   `Z_SolvedTime` int(11) DEFAULT '0',
   `Z_WrongNum` tinyint(5) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `board_cid_uid_pk` (`cid`,`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -199,7 +200,8 @@ CREATE TABLE `contest_problem` (
   `submission` int(5) NOT NULL DEFAULT '0',
   `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
   `firstBloodTime` int(9) NOT NULL DEFAULT '-1' COMMENT 'first time(minutes) solved this problem',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `contest_problem_cid_pid_pk` (`cid`,`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -246,7 +248,8 @@ CREATE TABLE `contest_user` (
   `special` tinyint(1) NOT NULL DEFAULT '0',
   `nick` varchar(55) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `contest_user_cid_uid_pk` (`cid`,`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -315,7 +318,8 @@ CREATE TABLE `freeze_board` (
   `Y_WrongNum` tinyint(5) DEFAULT '0',
   `Z_SolvedTime` int(11) DEFAULT '0',
   `Z_WrongNum` tinyint(5) DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `freeze_board_cid_uid_pk` (`cid`,`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -875,6 +879,7 @@ CREATE TABLE `user_role` (
   `rid` int(9) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `user_role_uid_rid_pk` (`uid`,`rid`),
   KEY `rid` (`rid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -928,7 +933,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-23 17:41:22
+-- Dump completed on 2016-07-24 10:16:44
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -1000,7 +1005,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-23 17:41:22
+-- Dump completed on 2016-07-24 10:16:44
 -- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
@@ -1416,4 +1421,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-07-23 17:41:22
+-- Dump completed on 2016-07-24 10:16:44
