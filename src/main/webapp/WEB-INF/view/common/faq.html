@@ -48,10 +48,7 @@
             <br>
             <br> 我们的服务器运行在Linux平台下，提供的编译器的版本分别是：<br>
             <ul>
-              <li>GCC/G++ Version 4.8.4</li>
-              <li>Free Pascal Compiler version 2.6.2-8</li>
-              <li>Java SDK Version 1.7.0_101</li>
-              <li>Python 2.7.6</li>
+              <#include "compilers.ftl">
             </ul>
           </div>
 
@@ -62,7 +59,7 @@
           <div class="faq_content_A">
             <span class="A">A</span>：不同的编译器之间有一些语法的差异，请使用相应的编译器进行提交。<br>
             另外，我们的OJ对编译器所使用的资源有所限制，限制是：
-            CPU时间<strong> 5 s</strong>，内存<strong> 256 MB</strong>，输出<strong> 64 MB</strong>。<br>
+            CPU时间<strong> 5 s</strong>，内存<strong> 1024 MB</strong>，输出<strong> 64 MB</strong>。<br>
             如果你使用的编译器在编译你的程序时超过这个资源限制，将被判为CE。<br>
             <p class="text-warning">当你使用G++、GCC时<code>main()</code>函数返回值必须是<code>int</code>，否则你可能会得到CE。</p>
           </div>
@@ -181,6 +178,8 @@
               <dd>使用了受限制的系统调用，比如system()函数是禁止使用的。</dd>
               <dt id="WAIT">Waiting</dt>
               <dd>OJ正在评测其它用户的提交，请你稍等片刻。</dd>
+              <dt id="REJUDGR">Rejuding</dt>
+              <dd>你的程序正在准备重新评测，请稍候。</dd>
               <dt id="RUN">Running</dt>
               <dd>你的程序正在评测当中，请稍候。</dd>
               <dt id="SE">System Error</dt>
@@ -207,7 +206,7 @@
               <dt>ALT+S</dt>
               <dd>提交代码</dd>
             </dl>
-            <span class="A">Note</span>： 大部分列表(题目列表、用户列表、比赛列表等)及题目页面，可以使用快捷键&larr;和&rarr;。
+            <p class="text-info">大部分列表(题目列表、用户列表、比赛列表等)及题目页面，可以使用快捷键&larr;和&rarr;。</p>
           </div>
 
           <a id="sample"></a>
