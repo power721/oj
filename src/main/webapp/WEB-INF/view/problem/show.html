@@ -284,11 +284,11 @@
     jQuery.ajaxSetup({
       cache: true
     });
-    var prevpage = "${baseUrl}/problem/show/${prevPid!}";
-    var nextpage = "${baseUrl}/problem/show/${nextPid!}";
+    var prevpage = "problem/show/${prevPid!}";
+    var nextpage = "problem/show/${nextPid!}";
     $(document).keydown(function (event) {
-        <#if prevPid!=problem.pid>if (event.keyCode == 37 && event.ctrlKey)window.location = prevpage;</#if>
-        <#if nextPid!=problem.pid>if (event.keyCode == 39 && event.ctrlKey)window.location = nextpage;</#if>
+        <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
     });
 
     <#if isRejudging?? && isRejudging==true>

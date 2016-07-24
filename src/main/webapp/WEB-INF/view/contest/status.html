@@ -115,15 +115,13 @@
 <script type="text/javascript" src="assets/prettify/prettify.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    document.onkeydown = nextpage;
-    var prevpage = "contest/status/${cid!}?p=${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
-    var nextpage = "contest/status/${cid!}?p=${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
+    var prevpage = "contest/status/${cid!}-${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+    var nextpage = "contest/status/${cid!}-${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
 
-    function nextpage(event) {
-      event = event ? event : (window.event ? window.event : null);
+    $(document).keydown(function (event) {
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
         <#if solutionList.pageNumber<solutionList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>
-    }
+    });
 
     $('.result i').each(function () {
       var resultName = $(this).parent().attr('id');

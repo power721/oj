@@ -42,7 +42,7 @@ public class UserController extends OjController {
     @ActionKey("/rank")
     public void rank() {
         int pageNumber = getParaToInt(0, 1);
-        int pageSize = getParaToInt(1, OjConfig.userPageSize);
+        int pageSize = getParaToInt("pageSize", OjConfig.userPageSize);
 
         setAttr("pageSize", OjConfig.userPageSize);
         setAttr(OjConstants.USER_LIST, userService.getUserRankList(pageNumber, pageSize));

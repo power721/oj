@@ -3,6 +3,7 @@ package com.power.oj.contest;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.POST;
+import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -87,12 +88,24 @@ public class ContestController extends OjController {
             return;
         }
 
-        setAttr("problem", problemModel);
+        List<Record> contestProblems = contestService.getContestProblems(cid, null);
+        Integer prevPid = num;
+        if (num > 0) {
+            prevPid = num - 1;
+        }
+        Integer nextPid = num;
+        if (num < contestProblems.size()) {
+            nextPid = num + 1;
+        }
+
         setAttr("id", num);
+        setAttr("prevPid", (char) (prevPid + 'A'));
+        setAttr("nextPid", (char) (nextPid + 'A'));
         setAttr("spj", problemService.checkSpj(problemModel.getPid()));
         setAttr("userResult", contestService.getUserResult(cid, num));
         setAttr("isRejudging", contestService.isRejudging(cid, num));
-        setAttr("contestProblems", contestService.getContestProblems(cid, null));
+        setAttr("contestProblems", contestProblems);
+        setAttr("problem", problemModel);
 
         setTitle(cid + "-" + id + ": " + problemModel.getTitle());
     }
