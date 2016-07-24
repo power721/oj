@@ -6,6 +6,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.mail.MailModel;
+import jodd.util.HtmlEncoder;
 
 @Before(CheckGuestInterceptor.class)
 public class MailApiController extends OjController {
@@ -29,7 +30,7 @@ public class MailApiController extends OjController {
     public void getMails() {
         int pageNumber = getParaToInt("page", 1);
         int pageSize = getParaToInt("size", OjConfig.mailPageSize);
-        String p2p = getPara("p2p");
+        String p2p = HtmlEncoder.text(getPara("p2p"));
         Integer uid = userService.getCurrentUid();
         Integer peer = Integer.parseInt(p2p.split("-")[1]);
 
@@ -41,7 +42,7 @@ public class MailApiController extends OjController {
 
     @Clear
     public void isHaveUnreaded() {
-        String p2p = getPara("p2p");
+        String p2p = HtmlEncoder.text(getPara("p2p"));
         Integer uid = userService.getCurrentUid();
         Integer peer = Integer.parseInt(p2p.split("-")[1]);
         boolean result = mailService.hasNewMails(uid, peer);
@@ -50,8 +51,8 @@ public class MailApiController extends OjController {
     }
 
     public void newMail() {
-        String username = getPara("username");
-        String content = getPara("content");
+        String username = HtmlEncoder.text(getPara("username"));
+        String content = HtmlEncoder.text(getPara("content"));
         Integer from = userService.getCurrentUid();
         Integer to = getParaToInt("userId");
 
@@ -82,7 +83,7 @@ public class MailApiController extends OjController {
     }
 
     public void deleteGroup() {
-        String p2p = getPara("p2p");
+        String p2p = HtmlEncoder.text(getPara("p2p"));
         Integer uid = userService.getCurrentUid();
         Integer peer = Integer.parseInt(p2p.split("-")[1]);
 
@@ -104,7 +105,7 @@ public class MailApiController extends OjController {
     }
 
     public void newDrift() {
-        String content = getPara("content");
+        String content = HtmlEncoder.text(getPara("content"));
         Integer from = userService.getCurrentUid();
         int result = mailService.sendDrift(from, content);
 

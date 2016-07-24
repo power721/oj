@@ -33,6 +33,7 @@ import com.power.oj.contest.model.FreezeBoardModel;
 import com.power.oj.core.controller.MainController;
 import com.power.oj.core.controller.UeditorController;
 import com.power.oj.core.handler.BaseUrlHandler;
+import com.power.oj.core.handler.ExceptionHandler;
 import com.power.oj.core.handler.SessionHandler;
 import com.power.oj.core.handler.UrlFilterHandler;
 import com.power.oj.core.interceptor.AccessLogInterceptor;
@@ -215,6 +216,7 @@ public class AppConfig extends JFinalConfig {
      * 配置处理器
      */
     public void configHandler(Handlers me) {
+        me.add(new ExceptionHandler());
         me.add(new SessionHandler());
         me.add(new BaseUrlHandler());
         me.add(new UrlFilterHandler());

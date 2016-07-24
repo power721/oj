@@ -101,8 +101,8 @@ public final class DiscussionService {
     public boolean updateDiscussion(TopicModel topicModel) {
         TopicModel newTopic = dao.findById(topicModel.getId());
 
-        newTopic.setTitle(topicModel.getTitle());
-        newTopic.setContent(HtmlEncoder.text(topicModel.getContent()));
+        newTopic.setTitle(HtmlEncoder.text(topicModel.getTitle()));
+        newTopic.setContent(topicModel.getContent());
         newTopic.setMtime(OjConfig.timeStamp);
 
         return newTopic.update();
