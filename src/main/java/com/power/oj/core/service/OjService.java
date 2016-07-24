@@ -134,7 +134,7 @@ public final class OjService {
 
     public List<Record> getMembers() {
         return Db.find(
-            "SELECT u.uid,u.name,u.nick FROM user_role ur LEFT JOIN user u ON u.uid=ur.uid WHERE ur.rid=? ORDER BY u.uid",
+            "SELECT u.uid,u.name,u.nick FROM user_role ur INNER JOIN user u ON u.uid=ur.uid WHERE ur.rid=? ORDER BY u.uid",
             UserService.MEMBER_ROLE_ID);
     }
 
@@ -156,7 +156,7 @@ public final class OjService {
 
     public List<Record> getRolePermission(int rid) {
         String sql =
-            "SELECT p.name AS permission FROM permission p LEFT JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
+            "SELECT p.name AS permission FROM permission p INNER JOIN role_permission rp ON rp.pid = p.id WHERE rp.rid = ?";
         List<Record> permissionList = Db.find(sql, rid);
 
         return permissionList;

@@ -160,7 +160,7 @@ public final class ProblemService {
     public List<Record> getTags(Integer pid) {
         List<Record> tagList =
             Db.find("SELECT t.id,t.tag AS name,u.name AS user,u.uid FROM tag t "
-                + "LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
+                + "INNER JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
 
         if (tagList.isEmpty()) {
             return null;

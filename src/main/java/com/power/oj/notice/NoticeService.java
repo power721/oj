@@ -23,7 +23,7 @@ public final class NoticeService {
         NoticeModel noticeModel = dao.findFirstByCache("notice", id,
             "SELECT n.*,u.name,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,"
                 + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime FROM notice n "
-                + "LEFT JOIN user u ON u.uid=n.uid WHERE id=? AND n.status=1", id);
+                + "INNER JOIN user u ON u.uid=n.uid WHERE id=? AND n.status=1", id);
         noticeModel.setView(noticeModel.getView() + 1);
 
         if (OjConfig.isDevMode()) {
@@ -43,7 +43,7 @@ public final class NoticeService {
     public Page<NoticeModel> getNoticePage(int pageNumber, int pageSize) {
         String sql = "SELECT n.*,u.name";
         String from =
-            "FROM notice n LEFT JOIN user u ON u.uid=n.uid WHERE startTime<=UNIX_TIMESTAMP() AND n.status=1 ORDER BY id DESC";
+            "FROM notice n INNER JOIN user u ON u.uid=n.uid WHERE startTime<=UNIX_TIMESTAMP() AND n.status=1 ORDER BY id DESC";
 
         return dao.paginate(pageNumber, pageSize, sql, from);
     }

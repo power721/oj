@@ -126,7 +126,7 @@ public class ContestService {
 
     public List<Record> getContestProblems(Integer cid) {
         List<Record> contestProblems = Db.find(
-            "SELECT p.*,cp.title,cp.num FROM contest_problem cp LEFT JOIN problem p ON p.pid=cp.pid WHERE cid=? ORDER BY num",
+            "SELECT p.*,cp.title,cp.num FROM contest_problem cp INNER JOIN problem p ON p.pid=cp.pid WHERE cid=? ORDER BY num",
             cid);
         for (Record problem : contestProblems) {
             problem.set("id", (char) (problem.getInt("num") + 'A'));
@@ -194,7 +194,7 @@ public class ContestService {
 
     public List<Record> getContestUsers(Integer cid) {
         return Db
-            .find("SELECT c.*,u.name,u.realName FROM contest_user c LEFT JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
+            .find("SELECT c.*,u.name,u.realName FROM contest_user c INNER JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
     }
 
     public List<Record> getAttendedContests(Integer uid) {
@@ -347,7 +347,7 @@ public class ContestService {
         } else {
             tableName = "board";
         }
-        String sql = "FROM " + tableName + " b LEFT JOIN user u ON u.uid=b.uid "
+        String sql = "FROM " + tableName + " b INNER JOIN user u ON u.uid=b.uid "
             + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
             + " WHERE b.cid=? ORDER BY solved DESC,penalty";
         String select = "SELECT b.*,u.name,u.realName,cu.special,cu.nick";
@@ -417,18 +417,18 @@ public class ContestService {
 
     public List<Record> getClarifyList(Integer cid, Integer num) {
         if (num != null && num > -1) {
-            return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid "
+            return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid "
                     + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.num=? ORDER BY c.id DESC",
                 cid, num);
         } else {
-            return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid "
+            return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid "
                 + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? ORDER BY c.id DESC", cid);
         }
     }
 
     public List<Record> getPrivateClarifyList(Integer cid, Integer num, Integer uid) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid ");
+        sb.append("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid ");
         sb.append(
             "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.uid=? AND c.public=0 ");
         if (num != null && num > -1) {
@@ -443,7 +443,7 @@ public class ContestService {
 
     public List<Record> getPublicClarifyList(Integer cid, Integer num) {
         StringBuilder sb = new StringBuilder();
-        sb.append("SELECT c.*,u.name,p.title FROM contest_clarify c LEFT JOIN user u ON u.uid=c.uid ");
+        sb.append("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid ");
         sb.append("LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.public=1 ");
         if (num != null && num > -1) {
             sb.append(" AND c.num=? ");
