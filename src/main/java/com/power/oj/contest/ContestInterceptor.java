@@ -27,25 +27,25 @@ public class ContestInterceptor implements Interceptor {
         else if (controller.getParaToInt(0) != null)
             cid = controller.getParaToInt(0);
 
-        ContestModel contestModle = contestService.getContest(cid);
-        if (contestModle == null) {
+        ContestModel contestModel = contestService.getContest(cid);
+        if (contestModel == null) {
             LOGGER.debug("cannot find contest model for cid " + cid);
             controller.renderError(404);
             return;
         }
 
         controller.setAttr("cid", cid);
-        controller.setAttr("title", contestModle.getTitle());
-        controller.setAttr("contest", contestModle);
+        controller.setAttr("title", contestModel.getTitle());
+        controller.setAttr("contest", contestModel);
 
         if (!ShiroKit.hasPermission("contest:view")) {
-            if (!checkAccess(contestModle)) {
+            if (!checkAccess(contestModel)) {
                 LOGGER.debug("cannot access contest " + cid);
                 controller.renderError(403);
                 return;
             }
 
-            if (!checkPassword(controller, contestModle)) {
+            if (!checkPassword(controller, contestModel)) {
                 controller.render("password.html");
                 return;
             }
@@ -57,7 +57,7 @@ public class ContestInterceptor implements Interceptor {
                 }
             }
 
-            if (contestModle.isPending()) {
+            if (contestModel.isPending()) {
                 controller.render("pending.html");
                 return;
             }
