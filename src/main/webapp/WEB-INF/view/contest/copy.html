@@ -102,6 +102,18 @@
     </div>
   </div>
   <div class="control-group">
+    <label class="control-label" for="inputIncludeProblems"> Copy Problems? </label>
+    <div class="controls">
+      <input class="includeProblems" id="inputIncludeProblems" type="checkbox" name="includeProblems" value="1" checked>
+    </div>
+  </div>
+  <div id="copyUsers" class="control-group">
+    <label class="control-label" for="inputIncludeUsers"> Copy Users? </label>
+    <div class="controls">
+      <input class="includeUsers" id="inputIncludeUsers" type="checkbox" name="includeUsers" value="1" checked>
+    </div>
+  </div>
+  <div class="control-group">
     <div class="controls">
       <button type="submit" id="submitContest" class="btn btn-primary">Submit</button>
       <button type="reset" class="btn btn-info">Reset</button>
@@ -139,13 +151,21 @@
     $('.lockReport').tooltip({'title': '勾选后，比赛结束后不显示解题报告。', 'placement': 'right'});
     $("#inputType").change(function () {
       var val = $(this).val();
-      if (val == 1) {
-        $("div#password").show();
-        $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="text" id="inputPassword" name="contest.password" placeholder="${contest.password!}">');
-      }
-      else {
+      if (val == 0) {
         $("div#contest-password").html('');
         $("div#password").hide();
+        $('#inputIncludeUsers').prop("checked", false);
+        $("div#copyUsers").hide();
+      } else if (val == 1) {
+        $("div#password").show();
+        $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="text" id="inputPassword" name="contest.password" placeholder="${contest.password!}">');
+        $('#inputIncludeUsers').prop("checked", false);
+        $("div#copyUsers").hide();
+      } else {
+        $("div#contest-password").html('');
+        $("div#password").hide();
+        $("div#copyUsers").show();
+        $('#inputIncludeUsers').prop("checked", true);
       }
     });
     $("#inputType").trigger('change');

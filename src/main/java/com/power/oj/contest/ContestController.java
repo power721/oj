@@ -9,6 +9,7 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.ErrorFlashMessage;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
@@ -505,10 +506,18 @@ public class ContestController extends OjController {
     public void save() {
         String startTime = getPara("startTime");
         String endTime = getPara("endTime");
+        Boolean includeProblems = getParaToBoolean("includeProblems");
+        Boolean includeUsers = getParaToBoolean("includeUsers");
         ContestModel contestModel = getModel(ContestModel.class, "contest");
 
         contestModel.setLanguages(StringUtils.join(getParaMap().get("languages"), ","));
-        contestService.addContest(contestModel, startTime, endTime);
+        if (contestModel.getCid() != null) {
+            contestModel.put("includeProblems", includeProblems);
+            contestModel.put("includeUsers", includeUsers);
+            contestService.copyContest(contestModel, startTime, endTime);
+        } else {
+            contestService.addContest(contestModel, startTime, endTime);
+        }
 
         redirect("/contest/admin/" + contestModel.getInt("cid"));
     }
@@ -576,6 +585,10 @@ public class ContestController extends OjController {
         Integer cid = getParaToInt(0);
 
         ContestModel contestModel = contestService.getContest(cid);
+        if (contestModel.getType() < ContestModel.TYPE_PRIVATE) {
+            redirect("/contest/show/" + cid, new ErrorFlashMessage("This is not a private contest!"));
+            return;
+        }
 
         long serverTime = OjConfig.timeStamp;
         int startTime = contestModel.getInt("startTime");
