@@ -24,8 +24,14 @@
   <thead>
   <tr>
     <th>Rank</th>
+    <#if adminUser??>
+      <th>UID</th>
+    </#if>
     <th>User</th>
     <th>Nick Name</th>
+    <#if adminUser??>
+      <th>Real Name</th>
+    </#if>
     <th>Solved</th>
     <th>Submit</th>
     <th>Ratio</th>
@@ -35,10 +41,16 @@
     <#if userList??> <#list userList.list as User>
     <tr>
       <td>${User.rank!}</td>
+      <#if adminUser??>
+      <td>${User.uid!}</td>
+      </#if>
       <td class="user"><a href="user/profile/${User.name!}" class="user"
                           <#if adminUser?? && User.realName??>data-toggle="tooltip"
                           title="${(User.realName)!}"</#if>>${User.name!}</a></td>
       <td>${User.nick!}</td>
+      <#if adminUser??>
+        <td>${User.realName!}</td>
+      </#if>
       <td><a href="status?name=${User.name!}&result=0">${User.solved!}</a></td>
       <td><a href="status?name=${User.name!}">${User.submission!}</a></td>
       <td><#if (User.submission>0)>${(User.solved/User.submission*100)?int}<#else>0</#if>%</td>

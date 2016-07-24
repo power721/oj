@@ -35,7 +35,7 @@ public class MainController extends OjController {
             redirect301("/");
         }
 
-        if (getRequest().getRequestURL().toString().contains("swust")) {
+        if (getPara("swust") != null || getRequest().getRequestURL().toString().contains("swust")) {
             render("swust.html");
         } else {
             render("index.html");
