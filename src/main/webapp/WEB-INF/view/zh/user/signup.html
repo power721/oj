@@ -71,7 +71,7 @@
                    required>
             <span id="captcha"><a id="captcha" onclick="getCaptcha();" href="javascript:;"
                                   title="click to change another one"><img id="captcha"
-                                                                           src="${baseUrl!}/captcha"/></a></span>
+                                                                           src="captcha"/></a></span>
           </div>
           <p class="text-error">${captchaMsg!}</p>
         </div>
@@ -87,10 +87,6 @@
 
 <script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
 <script type="text/javascript">
-  function getCaptcha() {
-    $("img#captcha").attr("src", "${baseUrl!}/captcha?r=" + Math.random());
-    $(":input[name='captcha']").val("");
-  }
   $().ready(function () {
     $("#signupForm").validate();
   });

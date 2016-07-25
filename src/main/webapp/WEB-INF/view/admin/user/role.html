@@ -43,7 +43,7 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    $.fn.editable.defaults.url = '${baseUrl!}/api/admin/changeUserRole';
+    $.fn.editable.defaults.url = 'api/admin/changeUserRole';
 
     $('table').on('click', '.role', function () {
       $(this).editable();
@@ -52,7 +52,7 @@
   });
 
   var oTable = $('#user-list').jfinalDataTable({
-    "sAjaxSource": "${baseUrl!}/api/admin/userRoleList",
+    "sAjaxSource": "api/admin/userRoleList",
     "aoColumns": [
       {"mData": "uid"},
       {
@@ -81,7 +81,7 @@
         "mData": "role",
         "mRender": function (data, type, full) {
           return '<button class="role btn btn-link" data-type="select" data-name="role" data-pk="' + full.uid + '" data-value="' + full.id
-                  + '" data-source="${baseUrl!}/api/admin/roleList" data-original-title="Select Role">' + data + '</button>';
+                  + '" data-source="api/admin/roleList" data-original-title="Select Role">' + data + '</button>';
         }
       },
       {

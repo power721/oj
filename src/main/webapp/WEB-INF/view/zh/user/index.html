@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
   <meta name="author" content="power721">
-  <base href="${baseUrl!}/"/>
+  <base href=""/>
   <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
 
   <!-- styles -->
@@ -21,7 +21,7 @@
   <link href="${css}" type="text/css" rel="stylesheet">
 </#list> </#if>
 
-  <script type="text/javascript">  var BaseURL = "${baseUrl!}/";</script>
+  <script type="text/javascript">  var BaseURL = "";</script>
 
 <#if gaAccount??>
   <script type="text/javascript">
@@ -434,10 +434,10 @@
 <script src="assets/acfun/jquery.hashchange.min.js"></script>
 <script src="assets/acfun/core.js"></script>
 <script>
-  system.path = "${baseUrl!}/assets";
+  system.path = "assets";
   system.date = Math.round(new Date().getTime() / 1000);
   system.location = 'location-member';
-  window.UEDITOR_HOME_URL = "${baseUrl!}/assets/ueditor/";
+  window.UEDITOR_HOME_URL = "assets/ueditor/";
 </script>
 <script src="assets/acfun/swfobject.js"></script>
 <script type="text/javascript" src="assets/acfun/editor_config.js"></script>

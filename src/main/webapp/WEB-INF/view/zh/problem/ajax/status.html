@@ -90,7 +90,7 @@
     });
 
     $('div.ajax-loader a').click(function () {
-      var url = '${baseUrl!}/' + $(this).attr("url");
+      var url = '' + $(this).attr("url");
       if (url.indexOf('?') > 0)
         url = url + '&ajax=1';
       else
