@@ -194,6 +194,11 @@ function isEmpty(str) {
     return (!str || 0 === str.length);
 }
 
+function getCaptcha() {
+    $("img#captcha").attr("src", "captcha?r=" + Math.random());
+    $(":input[name='captcha']").val("");
+}
+
 try {
     console.log("Welcome to PowerOJ, have fun!");
 } catch (f) {

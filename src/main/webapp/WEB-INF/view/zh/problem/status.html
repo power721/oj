@@ -21,7 +21,7 @@
         plotShadow: false
       },
       title: {
-        text: '<a href="${baseUrl!}/problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
+        text: '<a href="problem/show/${pid!}" title="view the problem">Problem ${pid!} Statistics</a>'
       },
       subtitle: {
         text: 'Power OJ'
@@ -204,7 +204,7 @@
       if ($(this).parent().hasClass('disabled'))
         return;
 
-      var url = '${baseUrl!}/' + $(this).attr("url");
+      var url = '' + $(this).attr("url");
       if (url.indexOf('?') > 0)
         url = url + '&ajax=1';
       else

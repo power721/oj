@@ -94,7 +94,7 @@
   $(document).ready(function () {
 
     $('a#copy-description').zclip({
-      path: '${baseUrl!}/assets/js/ZeroClipboard.swf',
+      path: 'assets/js/ZeroClipboard.swf',
       copy: $('textarea#source').text(),
       afterCopy: function () {
         $(this).attr("class", "btn btn-success");

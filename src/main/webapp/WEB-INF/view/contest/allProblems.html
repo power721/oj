@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
   <meta name="author" content="power721">
+  <base href="${baseUrl!}/"/>
   <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!}</title>
   <style>
     html {
@@ -57,11 +58,11 @@
 <body>
 
 <div class="">
-  <a href="${baseUrl!}/contest/show/${cid!}">Contest ${cid!}</a>
+  <a href="/contest/show/${cid!}">Contest ${cid!}</a>
 <#if contestProblems??>
   <#list contestProblems as problem>
     <div class="center">
-      <h1>${problem.id!}: <a href="${baseUrl!}/contest/problem/${cid!}-${problem.id!}">${problem.title!}</a></h1>
+      <h1>${problem.id!}: <a href="/contest/problem/${cid!}-${problem.id!}">${problem.title!}</a></h1>
       Time Limit: <span class="blue">${problem.timeLimit!} MS</span>
       Memory Limit: <span class="blue">${problem.memoryLimit!} KB</span>
     </div>
