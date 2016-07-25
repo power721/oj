@@ -28,6 +28,9 @@
     <thead>
     <tr>
       <th>No.</th>
+      <#if adminUser??>
+        <th>UID</th>
+      </#if>
       <th>User</th>
       <th>Nick Name</th>
       <th>School</th>
@@ -40,6 +43,9 @@
         <#list userList.list as User>
         <tr>
           <td>${(userList.pageNumber-1) * userList.pageSize + User_index + 1}</td>
+          <#if adminUser??>
+            <td>${User.uid!}</td>
+          </#if>
           <td class="user"><a href="user/profile/${User.name!}">${User.name!}</a></td>
           <td>${User.nick!}</td>
           <td>${User.school!}</td>
