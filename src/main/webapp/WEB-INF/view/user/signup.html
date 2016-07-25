@@ -69,10 +69,12 @@
             <span class="add-on"><i class="icon-check"></i></span>
             <input type="text" minlength="4" maxlength="4" id="inputCaptcha" class="input-small" name="captcha"
                    required>
-              <span id="captcha"><a id="captcha" onclick="getCaptcha();" href="javascript:;"
-                                    title="click to change another one"><img id="captcha"
-                                                                             src="${baseUrl!}/captcha"/></a></span>
           </div>
+          <span id="captcha">
+            <a id="captcha" onclick="getCaptcha();" href="javascript:;" title="click to change another one">
+              <img id="captcha" src="captcha"/>
+            </a>
+          </span>
           <p class="text-error">${captchaMsg!}</p>
         </div>
       </div>

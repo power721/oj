@@ -59,7 +59,7 @@
           <li class="<#if actionKey?? && actionKey=="rank">active</#if>">
             <a href="rank"><i class="icon-signal"></i>Ranklist</a>
           </li>
-          <li class="<#if controllerKey?? && controllerKey?? && controllerKey=="discuss">active</#if>">
+          <li class="<#if controllerKey?? && controllerKey=="discuss">active</#if>">
             <a href="discuss"><i class="icon-comment"></i>Discuss</a>
           </li>
           <li class="<#if actionKey?? && actionKey=="faq">active</#if>">
@@ -68,7 +68,7 @@
           <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
             <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
           </li>
-          <li class="<#if controllerKey?? && controllerKey=="download">active</#if>">
+          <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
             <a href="downloads"><i class="icon-download-alt"></i>Download</a>
           </li>
         <#if adminUser??>
