@@ -1,0 +1,217 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">资源文件</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <#if dir??>
+    <li>
+      <a href="admin/file/resources">文件管理</a>
+      <span class="divider">/</span>
+    </li>
+    <#assign index = dir?index_of("/")>
+    <#if index != -1>
+      <#assign sub = dir[0..<index]>
+      <li>
+        <a href="admin/file/resources/?dir=${sub}">${sub}</a>
+        <span class="divider">/</span>
+      </li>
+    </#if>
+  </#if>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h4>Resources Files: ${dir!}</h4>
+        <div>
+          <p class="text-info">Select files to upload.</p>
+          <p class="text-error">中文文件名会出现乱码。</p>
+          <div id="filelist">
+          </div>
+
+          <div id="data-container">
+            <a id="pickfiles" href="javascript:;"><i class="fa fa-file-text-o btn btn-primary"
+                                                     aria-hidden="true">Browse</i></a>
+            <a id="uploadfiles" href="javascript:;"><i class="fa fa-file-text-o btn btn-primary disabled"
+                                                       aria-hidden="true" id="upload">Upload</i></a>
+          </div>
+          <div id="console"></div>
+          <br>
+        </div>
+        <div>
+          <#if resources??>
+            <table id="data-files" class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>File</th>
+                <th>Type</th>
+                <th>Permissions</th>
+                <th>User</th>
+                <th>Group</th>
+                <th>Size</th>
+                <th>Modified</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+                <#list resources as file>
+                <tr>
+                  <td>${file_index+1}</td>
+                  <td class="file">
+                    <#if file.directory==true><a
+                            href="admin/file/resources/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name}">${file.name}</a>
+                    <#elseif file.editable>
+                      <a href="admin/file/view/?dir=${dir!}&name=${file.name!}&type=resource">${file.name}</a>
+                    <#else>
+                      ${file.name}
+                    </#if>
+                  </td>
+                  <td class="type">${file.type}</td>
+                  <td class="permissions">${file.perm}</td>
+                  <td class="user">${file.user}</td>
+                  <td class="group">${file.group}</td>
+                  <td class="size" size="${file.size}"></td>
+                  <td class="timestamp" data="${file.modifyTime}"></td>
+                  <td class="action" name="${file.name}">
+                    <#if file.directory==true>
+                      <a class="btn btn-primary view"
+                         href="admin/file/resources/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name!}">View</a>
+                    <#elseif file.editable>
+                      <a class="btn btn-primary view" href="admin/file/view/?dir=${dir!}&name=${file.name!}&type=resource">View</a>
+                    </#if>
+                    <a class="btn btn-info download"
+                       href="admin/file/download/?dir=${dir!}&name=${file.name!}&type=resource">Download</a>
+                  </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+          </#if>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+
+<@override name="styles">
+<link rel="stylesheet" href="assets/bootstrap-modal/bootstrap-modal.css" type="text/css">
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
+<link rel="stylesheet" href="assets/tipsy/css/tipsy.css" type="text/css">
+<link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css" type="text/css">
+</@override>
+
+<@override name="styles">
+textarea {
+width: 535px;
+}
+
+.control-group {
+margin: 5px;
+}
+</@override>
+
+<@override name="scripts">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modal.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modalmanager.js"></script>
+
+<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#data-files").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
+    });
+
+    $('.size').each(function () {
+      $(this).html(num2size($(this).attr('size')));
+    });
+
+    var uploader = new plupload.Uploader({
+      runtimes: 'html5,flash,silverlight,html4',
+      browse_button: 'pickfiles', // you can pass in id...
+      container: document.getElementById('data-container'), // cannot change to $('#container')
+      url: baseUrl + 'admin/file/upload',
+      flash_swf_url: baseUrl + 'assets/plupload/js/Moxie.swf',
+      silverlight_xap_url: baseUrl + 'assets/plupload/js/Moxie.xap',
+
+      filters: {
+        max_file_size : '20mb',
+        mime_types: [
+          {title: "Data files", extensions: "in,out,txt,log,xml"},
+          {title: "Source files", extensions: "c,cc,cpp,pas,java,py"},
+          {title: "Compression files", extensions: "zip,rar,tgz,gz,7z"},
+          {title: "Image files", extensions: "jpg,jpeg,png,gif,tif,bmp,svg"},
+          {title: "Document files", extensions: "pdf,ppt,pptx,doc,docx,chm,wpd,xls,xlsx"},
+        ]
+      },
+
+      init: {
+        PostInit: function () {
+          $('#filelist').html('');
+
+          $('#uploadfiles').click(function () {
+            uploader.start();
+            return false;
+          });
+        },
+
+        FilesAdded: function (up, files) {
+          $('#upload').removeClass('disabled');
+          plupload.each(files, function (file) {
+            var html = $('#filelist').html();
+            html += '<div class="file">' + file.name + ' (' + plupload.formatSize(file.size) + ')' +
+                    '<div style="width:50%;" class="progress progress-striped active">' +
+                    '<div class="bar" id="' + file.id + '"></div></div></div>';
+            $('#filelist').html(html);
+          });
+        },
+
+        UploadProgress: function (up, file) {
+          $('#' + file.id).css('width', file.percent + '%');
+          if (file.percent >= 100) {
+            $('#' + file.id).parent().removeClass('active').addClass('progress-success');
+          }
+        },
+
+        UploadComplete: function () {
+          var html = $('#filelist').html();
+          if (html == '') {
+            return false;
+          }
+          $.dialog().content('All files uploaded.').lock().time(1);
+          setTimeout(function () {
+                    window.location.reload();
+                  },
+                  1500);
+        },
+
+        Error: function (up, err) {
+          var html = $('#console').html();
+          html += '<p class="text-error">Error #' + err.code + ': ' + err.message + '</p>';
+          $('#console').html(html);
+        }
+      }
+    });
+
+    uploader.init();
+
+  });
+</script>
+
+</@override>
+<@extends name="../_layout.html"></@extends>

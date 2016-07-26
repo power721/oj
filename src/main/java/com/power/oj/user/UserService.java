@@ -1,5 +1,6 @@
 package com.power.oj.user;
 
+import com.google.common.io.Files;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
@@ -397,7 +398,7 @@ public final class UserService {
         File destFile = new File(destFileName);
 
         log.info(srcFile.getAbsolutePath() + " --> " + destFile.getAbsolutePath());
-        FileUtil.moveFile(srcFile, destFile);
+        FileKit.moveFile(srcFile, destFile);
         if (!destFile.exists()) {
             throw new IOException("save avatar to " + destFile.getAbsolutePath() + " failed!");
         }

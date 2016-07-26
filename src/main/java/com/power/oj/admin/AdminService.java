@@ -1,5 +1,6 @@
 package com.power.oj.admin;
 
+import com.google.common.io.Files;
 import com.jfinal.kit.PathKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
@@ -15,6 +16,7 @@ import com.power.oj.core.service.FpsService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
+import com.power.oj.util.FileKit;
 import com.power.oj.util.XmlUtil;
 import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
@@ -202,6 +204,21 @@ public final class AdminService {
         return ojFiles;
     }
 
+    public List<OJFile> getResources(String dir) {
+        List<OJFile> resources = new ArrayList<>();
+        File resourceDir = new File(OjConfig.downloadPath, dir);
+        File[] files = resourceDir.listFiles();
+
+        if (files != null) {
+            Arrays.sort(files);
+            for (File file : files) {
+                resources.add(new OJFile(file));
+            }
+        }
+
+        return resources;
+    }
+
     public List<OJFile> getLogs() {
         List<OJFile> logs = new ArrayList<>();
         File workDir = new File(OjConfig.getString("workPath"));
@@ -248,8 +265,13 @@ public final class AdminService {
         return content;
     }
 
-    public String getFileContent(String dirName, String fileName) {
-        File dir = new File(OjConfig.getString("workPath"), dirName);
+    public String getFileContent(String dirName, String fileName, String type) {
+        File dir;
+        if ("resource".equals(type)) {
+            dir = new File(OjConfig.downloadPath, dirName);
+        } else {
+            dir = new File(OjConfig.getString("workPath"), dirName);
+        }
         File file = new File(dir, fileName);
         String content;
         try {
@@ -262,15 +284,20 @@ public final class AdminService {
     }
 
     private File getLogFile(String dirName, String fileName) {
-        return downloadFile(dirName, fileName, true);
+        return downloadFile(dirName, fileName, "log");
     }
 
-    public File downloadFile(String dirName, String fileName, boolean isLog) {
-        if (isLog) {
+    public File downloadFile(String dirName, String fileName, String type) {
+        if ("log".equals(type)) {
             return downloadLog(dirName, fileName);
         }
 
-        File dir = new File(OjConfig.getString("workPath"), dirName);
+        File dir;
+        if ("resource".equals(type)) {
+            dir = new File(OjConfig.downloadPath, dirName);
+        } else {
+            dir = new File(OjConfig.getString("workPath"), dirName);
+        }
         File file = new File(dir, fileName);
         if (file.isDirectory()) {
             ZipOutputStream zos = null;
@@ -280,6 +307,7 @@ public final class AdminService {
                 zos = ZipUtil.createZip(zip);
                 ZipUtil.addToZip(zos, file, null, "PowerOJ judge files", true);
                 log.info("create " + zip + " successfully.");
+                zip.deleteOnExit();
                 return zip;
             } catch (IOException e) {
                 log.error("create zip file failed!", e);
@@ -294,6 +322,7 @@ public final class AdminService {
             }
             return null;
         }
+
         if (file.exists()) {
             return file;
         }
@@ -312,6 +341,15 @@ public final class AdminService {
         }
 
         return file;
+    }
+
+    public String uploadFile(String filename, File srcFile) throws IOException {
+        File destFile = new File(OjConfig.downloadPath, filename);
+
+        FileKit.moveFile(srcFile, destFile);
+        log.debug(destFile.getAbsolutePath());
+
+        return destFile.getName();
     }
 
     public List<DataFile> getDataFiles(Integer pid) {
@@ -342,7 +380,7 @@ public final class AdminService {
     public String uploadData(Integer pid, String filename, File srcFile) throws IOException {
         File destFile = new DataFile(pid, filename).getFile();
 
-        FileUtil.moveFile(srcFile, destFile);
+        FileKit.moveFile(srcFile, destFile);
         log.debug(destFile.getAbsolutePath());
 
         return destFile.getName();
@@ -424,7 +462,7 @@ public final class AdminService {
         File destFile = new File(OjConfig.uploadPath + File.separator + filename);
 
         try {
-            FileUtil.moveFile(srcFile, destFile);
+            FileKit.moveFile(srcFile, destFile);
         } catch (IOException e) {
             log.error("delete data failed!", e);
 
