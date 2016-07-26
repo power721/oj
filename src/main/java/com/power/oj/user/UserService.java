@@ -1,6 +1,5 @@
 package com.power.oj.user;
 
-import com.google.common.io.Files;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;

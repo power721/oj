@@ -3,6 +3,7 @@ package com.power.oj.admin;
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.upload.UploadFile;
+import com.power.oj.core.OjConfig;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
@@ -35,6 +36,7 @@ public class FileAdminController extends AdminController {
 
         setAttr("dir", dir);
         setAttr("name", name);
+        setAttr("type", type);
         setAttr("content", adminService.getFileContent(dir, name, type));
     }
 
@@ -60,6 +62,7 @@ public class FileAdminController extends AdminController {
         }
 
         setAttr("dir", dir);
+        setAttr("path", OjConfig.downloadPath);
         setAttr("resources", adminService.getResources(dir));
     }
 
