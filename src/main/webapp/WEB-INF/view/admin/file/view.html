@@ -1,32 +1,38 @@
 <@override name="content">
 <div class="header">
-  <h1 class="page-title">评测文件</h1>
+  <h1 class="page-title"><#if type?? && type == "resource">资源文件<#else>评测文件</#if></h1>
 </div>
 <ul class="breadcrumb">
   <li>
     <a href="admin">首页</a>
     <span class="divider">/</span>
   </li>
+<#if type?? && type == "resource">
+    <#assign parent = "resources">
+<#else>
+    <#assign parent = "browse">
+</#if>
+
   <li>
-    <a href="admin/file/browse">文件管理</a>
+    <a href="admin/file/${parent!}">文件管理</a>
     <span class="divider">/</span>
   </li>
-  <#if dir??>
+  <#if dir?? && dir!="">
     <#assign index = dir?index_of("/")>
     <#if index != -1>
       <#assign sub = dir[0..<index]>
       <#assign end = dir[index+1..]>
       <li>
-        <a href="admin/file/browse/?dir=${sub}">${sub}</a>
+        <a href="admin/file/${parent!}/?dir=${sub}">${sub}</a>
         <span class="divider">/</span>
       </li>
       <li>
-        <a href="admin/file/browse/?dir=${dir}">${end}</a>
+        <a href="admin/file/${parent!}/?dir=${dir}">${end}</a>
         <span class="divider">/</span>
       </li>
     <#else>
       <li>
-        <a href="admin/file/browse/?dir=${dir}">${dir}</a>
+        <a href="admin/file/${parent!}/?dir=${dir}">${dir}</a>
         <span class="divider">/</span>
       </li>
     </#if>
@@ -37,7 +43,7 @@
     <div class="well">
       <div id="container">
         <h4>View File:
-          <a href="admin/file/download/?dir=${dir!}&name=${name!}">
+          <a href="admin/file/download/?dir=${dir!}&name=${name!}&type=${type!}">
             <#if dir?? && dir?has_content>${dir!}/</#if>${name!}
           </a>
         </h4>

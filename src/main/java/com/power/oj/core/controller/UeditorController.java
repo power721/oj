@@ -1,11 +1,9 @@
 package com.power.oj.core.controller;
 
-import com.google.common.io.Files;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.util.FileKit;
-import jodd.io.FileUtil;
 import jodd.util.StringUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
