@@ -1,5 +1,6 @@
 package com.power.oj.util;
 
+import com.google.common.io.Files;
 import com.jfinal.kit.PathKit;
 import com.power.oj.core.OjConfig;
 import jodd.io.FileUtil;
@@ -179,4 +180,12 @@ public class FileKit {
         return false;
     }
 
+    public static void moveFile(File src, File dest) throws IOException {
+//        String srcName = URLEncoder.encode(src.getName(),"UTF-8");
+//        String destName = URLEncoder.encode(dest.getName(),"UTF-8");
+//
+//        File from = new File(src.getParentFile(), srcName);
+//        File to = new File(dest.getParentFile(), destName);
+        Files.move(src, dest);
+    }
 }

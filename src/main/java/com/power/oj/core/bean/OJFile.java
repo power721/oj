@@ -161,4 +161,9 @@ public class OJFile {
         return file.isDirectory();
     }
 
+    public boolean isEditable() {
+        String ext = FileNameUtil.getExtension(name);
+        return StringUtil.equalsOne(ext, exts) != -1;
+    }
+
 }

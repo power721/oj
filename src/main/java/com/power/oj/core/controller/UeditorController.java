@@ -1,5 +1,6 @@
 package com.power.oj.core.controller;
 
+import com.google.common.io.Files;
 import com.jfinal.upload.UploadFile;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
@@ -67,7 +68,7 @@ public class UeditorController extends OjController {
         File imageFile = new File(fileName);
         log.info(fileName);
         try {
-            FileUtil.moveFile(file.getFile(), imageFile);
+            FileKit.moveFile(file.getFile(), imageFile);
             url = imageFile.getAbsolutePath().replace(rootPath, "").replace("\\", "/");
         } catch (IOException e) {
             if (OjConfig.isDevMode())
