@@ -2,16 +2,18 @@
 <div>
   <#if clarifyList?? && (clarifyList?size > 0)>
     <#list clarifyList as clarify>
-      <span class="name"><a href="user/profile/${clarify.name!}">${clarify.name!}</a></span> /
+      <span class="name"><a href="user/profile/${clarify.name!}" target="_blank">${clarify.name!}</a></span> /
       Post at <span class="timestamp" data="${clarify.ctime}"></span>
       <#if clarify.num??>/ Problem <a
               href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}
         : ${clarify.title!}</a></#if>
       <pre class="question">${clarify.question!}</pre>
-      <form class="clarform" action="api/contest/updateClarify" method="post">
-        <span class="name">Administrator</span><#if clarify.atime??> reply at
+      <form class="clarform form-horizontal" action="api/contest/updateClarify" method="post">
+        <span class="name">Administrator</span> reply<#if clarify.atime??> at
         <span class="timestamp" data="${clarify.atime!0}"></span></#if>
-        <textarea name="reply" class="input-block-level<#if !clarify.atime??> empty</#if>">${clarify.reply!}</textarea>
+        <div class="control-group">
+        <textarea name="reply" class="input-block-level<#if !clarify.atime??> error</#if>">${clarify.reply!}</textarea>
+        </div>
         <label class="radio inline"><input name="ispublic" type="radio" value="1" <#if clarify.public>checked</#if>>
           Public </label>
         <label class="radio inline"><input name="ispublic" type="radio" value="0" <#if !clarify.public>checked</#if>>
@@ -66,10 +68,12 @@
 <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
 <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
 <style>
-  textarea.empty {
-    outline: none !important;
-    border:1px solid red;
-    box-shadow: 0 0 10px #719ECE;
+  textarea.error {
+    color: #b94a48;
+    border-color: #e9322d;
+    -webkit-box-shadow: 0 0 6px #f8b9b7;
+    -moz-box-shadow: 0 0 6px #f8b9b7;
+    box-shadow: 0 0 6px #f8b9b7;
   }
 </style>
 </@override>
@@ -103,7 +107,7 @@
       $.post($(this).attr("action"), that.serialize(),
               function (data) {
                 if (data.success) {
-                  that.children('.empty').removeClass('empty');
+                  that.children('.error').removeClass('error');
                   dialog.content('Success.').lock().time(1.5);
                 } else {
                   $.dialog({

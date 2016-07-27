@@ -38,7 +38,7 @@
         <td><#if cstatus==2 && User.rank?is_number && User.rank<4><i class="oj-medal_${User.rank}"></i></#if>${User.rank}
         </td>
         <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realName??>data-toggle="tooltip"
-               title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+               title="${(User.realName)!}"</#if> target="_blank">${User.name!}</a></td>
         <td class="user">${User.nick!}</td>
         <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
         <td data="${User.penalty!}" class="penalty"><span>${(User.penalty/60)?int!}</span></td>

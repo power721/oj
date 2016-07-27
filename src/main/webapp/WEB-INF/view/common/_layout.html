@@ -74,9 +74,15 @@
         </ul>
         <ul class="nav pull-right">
         <#if user?? && user.uid??>
+          <#--<li>-->
+            <#--<img class="pull-left avatar img-polaroid media-object" alt="user avatar"-->
+                 <#--onerror="this.onerror=null;this.src='assets/images/user/default.png'"-->
+                 <#--src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>"/>-->
+          <#--</li>-->
           <li class="dropdown active">
-            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown"><i
-                    class="icon-user"></i>${user.name!"user"}<b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown">
+              <i class="icon-user"></i>${user.name!"user"}<b class="caret"></b>
+            </a>
             <ul class="dropdown-menu">
               <li><a href="user/profile">Profile</a></li>
               <li><a href="user/#area=mail">Mail</a></li>

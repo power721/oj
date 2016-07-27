@@ -458,3 +458,39 @@ table.table-stats {
   color: #b94a48;
   display: inline-block;
 }
+
+.nav .avatar {
+  height: 40px;
+  width: 40px;
+  /*border-radius: 15px;*/
+  box-shadow: none;
+  background-clip: border-box;
+  background-origin: padding-box;
+  background: transparent none repeat scroll 0% 0%;
+  background-size: auto auto;
+  border-image-outset: 0 0 0 0;
+  border-image-repeat: stretch stretch;
+  border-image-slice: 100% 100% 100% 100%;
+  border-image-source: none;
+  border-image-width: 1 1 1 1;
+  border: 2px solid rgb(255, 165, 199);
+  box-sizing: border-box;
+  color: rgb(51, 102, 153);
+  cursor: pointer;
+  display: block;
+  line-height: 16px;
+  margin: 0px 0px 0px;
+  outline: rgb(51, 102, 153) none 0px;
+  overflow: hidden;
+  padding: 0px;
+  text-align: center;
+  transition-delay: 0s;
+  transition-duration: 0.2s;
+  vertical-align: baseline;
+  white-space: normal;
+  word-break: break-all;
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+}
