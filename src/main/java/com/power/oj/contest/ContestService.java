@@ -456,9 +456,13 @@ public class ContestService {
     }
 
     public int getUnreadClarifications(Integer cid, Long timestamp) {
+        Integer uid = userService.getCurrentUid();
+        if (userService.isAdmin()) {
+            return Db.queryLong("SELECT COUNT(*) FROM contest_clarify WHERE cid=? AND mtime IS NULL", cid).intValue();
+        }
+
         int count = Db.queryLong("SELECT COUNT(*) FROM contest_clarify "
             + "WHERE cid=? AND mtime>? AND public=1", cid, timestamp).intValue();
-        Integer uid = userService.getCurrentUid();
         if (uid != null) {
             count += Db.queryLong("SELECT COUNT(*) FROM contest_clarify "
                 + "WHERE cid=? AND uid=? AND mtime>? AND public=0", cid, uid, timestamp).intValue();
@@ -497,15 +501,15 @@ public class ContestService {
     }
 
     public boolean updateClarify(Integer id, String reply, boolean isPublic) {
-        Record clarify = Db.findById("contest_clarify", id);
+        ContestClarifyModel clarify = ContestClarifyModel.dao.findById(id);
 
-        clarify.set("reply", reply);
-        clarify.set("public", isPublic);
-        clarify.set("admin", userService.getCurrentUid());
-        clarify.set("mtime", OjConfig.timeStamp);
-        clarify.set("atime", OjConfig.timeStamp);
+        clarify.setReply(reply);
+        clarify.setPublic(isPublic);
+        clarify.setAdmin(userService.getCurrentUid());
+        clarify.setMtime(OjConfig.timeStamp);
+        clarify.setAtime(OjConfig.timeStamp);
 
-        return Db.update("contest_clarify", clarify);
+        return clarify.update();
     }
 
     public String getRecentContest() {
