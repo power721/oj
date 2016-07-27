@@ -96,7 +96,7 @@ public class ContestController extends OjController {
             prevPid = num - 1;
         }
         Integer nextPid = num;
-        if (num < contestProblems.size()) {
+        if (num + 1 < contestProblems.size()) {
             nextPid = num + 1;
         }
 
