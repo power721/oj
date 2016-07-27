@@ -456,11 +456,11 @@ public class ContestService {
     }
 
     public int getUnreadClarifications(Integer cid, Long timestamp) {
-        Integer uid = userService.getCurrentUid();
         if (userService.isAdmin()) {
             return Db.queryLong("SELECT COUNT(*) FROM contest_clarify WHERE cid=? AND mtime IS NULL", cid).intValue();
         }
 
+        Integer uid = userService.getCurrentUid();
         int count = Db.queryLong("SELECT COUNT(*) FROM contest_clarify "
             + "WHERE cid=? AND mtime>? AND public=1", cid, timestamp).intValue();
         if (uid != null) {
@@ -493,6 +493,7 @@ public class ContestService {
         clarify.setUid(userService.getCurrentUid());
         clarify.setAdmin(userService.getCurrentUid());
         clarify.setQuestion(question);
+        clarify.setAtime(OjConfig.timeStamp);
         clarify.setCtime(OjConfig.timeStamp);
         clarify.setMtime(OjConfig.timeStamp);
         clarify.setPublic(true);

@@ -353,12 +353,12 @@ public class ContestController extends OjController {
             setAttr("pid", num);
         }
 
-        setCookie("clarify-" + cid, String.valueOf(OjConfig.timeStamp), OjConstants.COOKIE_AGE);
         setAttr("contestProblems", contestService.getContestProblems(cid, 0));
         if (userService.isAdmin()) {
             setAttr("clarifyList", contestService.getClarifyList(cid, num));
             render("adminClarify.html");
         } else {
+            setCookie("clarify-" + cid, String.valueOf(OjConfig.timeStamp), OjConstants.COOKIE_AGE);
             setAttr("privateClarifyList", contestService.getPrivateClarifyList(cid, num, uid));
             setAttr("publicClarifyList", contestService.getPublicClarifyList(cid, num));
             render("clarify.html");
@@ -399,6 +399,7 @@ public class ContestController extends OjController {
 
     @RequiresAuthentication
     @RequiresPermissions("contest:edit")
+    @Before(ClarificationsInterceptor.class)
     public void edit() {
         boolean ajax = getParaToBoolean("ajax", false);
 
@@ -517,6 +518,7 @@ public class ContestController extends OjController {
 
     @RequiresAuthentication
     @RequiresPermissions("contest:addProblem")
+    @Before(ClarificationsInterceptor.class)
     public void admin() {
         Integer cid = getParaToInt(0);
 
@@ -541,6 +543,7 @@ public class ContestController extends OjController {
 
     @RequiresAuthentication
     @RequiresPermissions("contest:addUser")
+    @Before(ClarificationsInterceptor.class)
     public void attendees() {
         Integer cid = getParaToInt(0);
 
