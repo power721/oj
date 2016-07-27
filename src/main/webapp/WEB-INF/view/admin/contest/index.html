@@ -37,7 +37,7 @@
 </div>
 
 <div class="modal hide fade contestModal" id="editModal">
-  <form class="" action="contest/update" id="editContestForm" method="post">
+  <form class="" action="contest/update?ajax=1" id="editContestForm" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
       <h3 id="editModalLabel">
@@ -62,63 +62,71 @@
 <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
 <script type="text/javascript">
-  var oTable = $('#contest-list').jfinalDataTable({
-    "sAjaxSource": "api/admin/contestList",
-    "aaSorting": [
-      [0, "desc"]
-    ],
-    "aoColumns": [
-      {
-        "mData": "cid",
-        "mRender": function (data, type, full) {
-          return '<a href="contest/show/' + full.cid + '" target="_blank">' + data + '</a>';
+  $(document).ready(function () {
+    var oTable = $('#contest-list').jfinalDataTable({
+      "sAjaxSource": "api/admin/contestList",
+      "aaSorting": [
+        [0, "desc"]
+      ],
+      "aoColumns": [
+        {
+          "mData": "cid",
+          "mRender": function (data, type, full) {
+            return '<a href="contest/show/' + full.cid + '" target="_blank">' + data + '</a>';
+          }
+        },
+        {
+          "mData": "title",
+          "mRender": function (data, type, full) {
+            return '<a href="contest/admin/' + full.cid + '" target="_blank">' + data + '</a>';
+          }
+        },
+        {
+          "mData": "startTime",
+          "mRender": function (data, type, full) {
+            return parseTimestamp(data);
+          }
+        },
+        {
+          "mData": "endTime",
+          "mRender": function (data, type, full) {
+            return parseTimestamp(data);
+          }
+        },
+        {"mData": "ctype", "bSortable": false},
+        {"mData": "cstatus", "bSortable": false},
+        {
+          "mData": null,
+          "bSortable": false,
+          "mRender": function (data, type, full) {
+            var action = '<button data-cid="' + full.cid
+                    + '" class="btn btn-success contest-edit">Edit</button>'
+                    + '<button data-cid="' + full.cid
+                    + '" class="btn btn-warning contest-toggle">'
+                    + (full.status ? 'Delete' : 'Resume')
+                    + '</button>';
+            return action;
+          }
         }
-      },
-      {
-        "mData": "title",
-        "mRender": function (data, type, full) {
-          return '<a href="contest/admin/' + full.cid + '" target="_blank">' + data + '</a>';
-        }
-      },
-      {
-        "mData": "startTime",
-        "mRender": function (data, type, full) {
-          return parseTimestamp(data);
-        }
-      },
-      {
-        "mData": "endTime",
-        "mRender": function (data, type, full) {
-          return parseTimestamp(data);
-        }
-      },
-      {"mData": "ctype", "bSortable": false},
-      {"mData": "cstatus", "bSortable": false},
-      {
-        "mData": null,
-        "bSortable": false,
-        "mRender": function (data, type, full) {
-          var action = '<button cid="' + full.cid
-                  + '" class="btn btn-success contest-edit">Edit</button> '
-                  + '<button cid="' + full.cid
-                  + '" class="btn btn-warning contest-toggle">'
-                  + (full.status ? 'Delete' : 'Resume')
-                  + '</button> ';
-          return action;
-        }
-      }
-    ]
-  });
+      ]
+    });
 
-  $('table').on('click', '.contest-edit', function () {
-    var cid = $(this).attr('cid');
-    $('span#cid').html(cid);
-    //$('span#contest').html('<a href="contest/edit/' + cid + '">' + title + '</a>');
-    $('#editModal').modal("show");
-    $.get("contest/edit/" + cid + "?ajax=1", {},
-            function (data) {
-              $('#editModal #content').html(data);
-            });
+    $('#editContestForm').submit(function () {
+      $.post($(this).attr("action"), $('#editContestForm').serialize());
+      $('#editModal').modal('hide');
+      return false;
+    });
+
+    $('table').on('click', '.contest-edit', function () {
+      var cid = $(this).data('cid');
+      $('span#cid').html(cid);
+      //$('span#contest').html('<a href="contest/edit/' + cid + '">' + title + '</a>');
+      $('#editModal').modal("show");
+      $.get("contest/edit/" + cid + "?ajax=1", {},
+              function (data) {
+                $('#editModal #content').html(data);
+              });
+    });
   });
 </script>
 </@override>
