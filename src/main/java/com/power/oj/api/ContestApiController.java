@@ -136,6 +136,16 @@ public class ContestApiController extends OjController {
 
     @RequiresPermissions("contest:edit")
     @Before(POST.class)
+    public void postClarification() {
+        Integer cid = getParaToInt("cid");
+        Integer num = getParaToInt("num");
+        String clarification = HtmlEncoder.text(getPara("clarification"));
+
+        renderJson("success", contestService.addClarification(cid, num, clarification));
+    }
+
+    @RequiresPermissions("contest:edit")
+    @Before(POST.class)
     public void updateClarify() {
         //Integer cid = getParaToInt("cid");
         Integer id = getParaToInt("id");

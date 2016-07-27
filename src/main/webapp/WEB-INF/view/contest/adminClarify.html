@@ -27,18 +27,18 @@
   <#if serverTime<contest.endTime>
   <div class="text-center">
     <button class="btn btn-primary" id="newQuestion" data-toggle="modal"
-            data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post New Question
+            data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post Clarification
     </button>
   </div>
   </#if>
 
 <div class="modal hide fade contestModal" id="postModal">
-  <form class="form-horizontal" id="postForm" action="api/contest/postQuestion" method="post">
+  <form class="form-horizontal" id="postForm" action="api/contest/postClarification" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="postModalLabel">
-        <a href="contest/post/${cid!}" title="Post in another page" data-toggle="tooltip" data-placement="bottom">Post
-          New Question</a>
+        <a href="contest/post/${cid!}" title="Post in another page" data-toggle="tooltip" data-placement="bottom">
+          Post Clarification</a>
       </h3>
     </div>
     <div class="modal-body">
@@ -52,7 +52,7 @@
           </#list>
         </select>
       </#if>
-      <textarea name="question" rows="10"></textarea>
+      <textarea name="clarification" rows="10"></textarea>
     </div>
     <div class="modal-footer">
       <button type="submit" class="btn btn-primary">Submit</button>
