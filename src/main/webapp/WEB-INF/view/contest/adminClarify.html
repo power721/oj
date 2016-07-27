@@ -9,9 +9,9 @@
         : ${clarify.title!}</a></#if>
       <pre class="question">${clarify.question!}</pre>
       <form class="clarform" action="api/contest/updateClarify" method="post">
-        <span class="name">Administrator</span> reply at
-        <span class="timestamp" data="${clarify.atime!0}"></span>
-        <textarea name="reply" class="input-block-level">${clarify.reply!}</textarea>
+        <span class="name">Administrator</span><#if clarify.atime??> reply at
+        <span class="timestamp" data="${clarify.atime!0}"></span></#if>
+        <textarea name="reply" class="input-block-level<#if !clarify.atime??> empty</#if>">${clarify.reply!}</textarea>
         <label class="radio inline"><input name="ispublic" type="radio" value="1" <#if clarify.public>checked</#if>>
           Public </label>
         <label class="radio inline"><input name="ispublic" type="radio" value="0" <#if !clarify.public>checked</#if>>
@@ -65,6 +65,13 @@
 <@override name="styles">
 <link rel="stylesheet" type="text/css" href="assets/tipsy/css/tipsy.css">
 <link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css">
+<style>
+  textarea.empty {
+    outline: none !important;
+    border:1px solid red;
+    box-shadow: 0 0 10px #719ECE;
+  }
+</style>
 </@override>
 
 <@override name="scripts">
@@ -96,8 +103,8 @@
       $.post($(this).attr("action"), that.serialize(),
               function (data) {
                 if (data.success) {
+                  that.children('.empty').removeClass('empty');
                   dialog.content('Success.').lock().time(1.5);
-
                 } else {
                   $.dialog({
                     content: data.result || 'Update clarify failed!',
