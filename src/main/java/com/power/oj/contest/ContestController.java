@@ -358,9 +358,15 @@ public class ContestController extends OjController {
             setAttr("clarifyList", contestService.getClarifyList(cid, num));
             render("adminClarify.html");
         } else {
-            setCookie("clarify-" + cid, String.valueOf(OjConfig.timeStamp), OjConstants.COOKIE_AGE);
-            setAttr("privateClarifyList", contestService.getPrivateClarifyList(cid, num, uid));
-            setAttr("publicClarifyList", contestService.getPublicClarifyList(cid, num));
+            List<Record> privateClarifyList = contestService.getPrivateClarifyList(cid, num, uid);
+            List<Record> publicClarifyList = contestService.getPublicClarifyList(cid, num);
+
+            if (privateClarifyList.size() + publicClarifyList.size() > 0) {
+                setCookie("clarify-" + cid, String.valueOf(OjConfig.timeStamp), OjConstants.COOKIE_AGE);
+            }
+
+            setAttr("privateClarifyList", privateClarifyList);
+            setAttr("publicClarifyList", publicClarifyList);
             render("clarify.html");
         }
     }
