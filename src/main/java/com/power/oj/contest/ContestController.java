@@ -44,6 +44,7 @@ public class ContestController extends OjController {
         setTitle(getText("contest.index.title"));
     }
 
+    @Before(ClarificationsInterceptor.class)
     public void show() {
         Integer cid = getParaToInt(0);
         Integer uid = userService.getCurrentUid();
@@ -68,6 +69,7 @@ public class ContestController extends OjController {
         setTitle(getText("contest.show.title") + cid);
     }
 
+    @Before(ClarificationsInterceptor.class)
     public void problem() {
         Integer cid = getParaToInt(0);
         String problemId = getPara(1);
@@ -183,6 +185,7 @@ public class ContestController extends OjController {
         redirect(url);
     }
 
+    @Before(ClarificationsInterceptor.class)
     public void rank() {
         Integer cid = getParaToInt(0);
         int pageNumber = getParaToInt(1, 1);
@@ -197,6 +200,7 @@ public class ContestController extends OjController {
         setTitle(getText("contest.rank.title") + cid);
     }
 
+    @Before(ClarificationsInterceptor.class)
     public void status() {
         Integer cid = getParaToInt(0);
         int pageNumber = getParaToInt(1, 1);
@@ -248,6 +252,7 @@ public class ContestController extends OjController {
         setTitle(getText("contest.status.title", cid));
     }
 
+    @Before(ClarificationsInterceptor.class)
     public void problemStatus() {
         Integer cid = getParaToInt(0);
         char id = getPara(1, "A").toUpperCase().charAt(0);
@@ -271,6 +276,7 @@ public class ContestController extends OjController {
         setTitle(getText("contest.status.title", cid, id));
     }
 
+    @Before(ClarificationsInterceptor.class)
     public void code() {
         Integer cid = getParaToInt(0);
         Integer sid = getParaToInt(1);
@@ -318,72 +324,7 @@ public class ContestController extends OjController {
         setTitle(getText("solution.show.title"));
     }
 
-    @RequiresPermissions("contest:rejudge")
-    @RequiresAuthentication
-    public void rejudge() {
-        Integer cid = getParaToInt(0);
-        if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
-            redirect("/contest/show/" + cid,
-                new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
-            return;
-        }
-
-        FlashMessage msg;
-
-        if (judgeService.rejudgeContest(cid)) {
-            msg = new FlashMessage("Server accept your request.");
-        } else {
-            msg =
-                new FlashMessage("Server reject your request since rejudge this contest is ongoing.", MessageType.ERROR,
-                    "Rejudge Error");
-        }
-
-        redirect("/contest/show/" + cid, msg);
-    }
-
-    @RequiresPermissions("contest:rejudge")
-    @RequiresAuthentication
-    public void rejudgeProblem() {
-        Integer cid = getParaToInt(0);
-        char id = getPara(1, "A").toUpperCase().charAt(0);
-        if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
-            redirect("/contest/problem/" + cid + "-" + id,
-                new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
-            return;
-        }
-
-        Integer num = id - 'A';
-        ProblemModel problemModel = contestService.getProblem(cid, num);
-
-        if (problemModel == null) {
-            FlashMessage msg =
-                new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-            redirect("/contest/show/" + cid, msg);
-            return;
-        }
-
-        FlashMessage msg;
-
-        if (judgeService.rejudgeContestProblem(cid, problemModel.getPid(), num)) {
-            msg = new FlashMessage("Server accept your request.");
-        } else {
-            msg = new FlashMessage("Server reject your request since rejudge this contest or problem is ongoing.",
-                MessageType.ERROR, "Rejudge Error");
-        }
-
-        redirect("/contest/problem/" + cid + "-" + id, msg);
-    }
-
-    @RequiresPermissions("code:rejudge")
-    @RequiresAuthentication
-    public void rejudgeCode() {
-        Integer cid = getParaToInt(0);
-        Integer sid = getParaToInt(1);
-        judgeService.rejudgeContestSolution(sid);
-
-        redirect("/contest/code/" + cid + "-" + sid, new FlashMessage("Server got your rejudge request."));
-    }
-
+    @Before(ClarificationsInterceptor.class)
     public void statistics() {
         Integer cid = getParaToInt(0);
         List<String> resultName = new ArrayList<>();
@@ -412,6 +353,7 @@ public class ContestController extends OjController {
             setAttr("pid", num);
         }
 
+        setCookie("clarify-" + cid, String.valueOf(OjConfig.timeStamp), OjConstants.COOKIE_AGE);
         setAttr("contestProblems", contestService.getContestProblems(cid, 0));
         if (userService.isAdmin()) {
             setAttr("clarifyList", contestService.getClarifyList(cid, num));
@@ -423,6 +365,7 @@ public class ContestController extends OjController {
         }
     }
 
+    @Before(ClarificationsInterceptor.class)
     public void report() {
 
     }
@@ -622,6 +565,72 @@ public class ContestController extends OjController {
         setAttr("status", status);
 
         setTitle(getText("contest.attendees.title", cid));
+    }
+
+    @RequiresPermissions("contest:rejudge")
+    @RequiresAuthentication
+    public void rejudge() {
+        Integer cid = getParaToInt(0);
+        if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
+            redirect("/contest/show/" + cid,
+                new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
+            return;
+        }
+
+        FlashMessage msg;
+
+        if (judgeService.rejudgeContest(cid)) {
+            msg = new FlashMessage("Server accept your request.");
+        } else {
+            msg =
+                new FlashMessage("Server reject your request since rejudge this contest is ongoing.", MessageType.ERROR,
+                    "Rejudge Error");
+        }
+
+        redirect("/contest/show/" + cid, msg);
+    }
+
+    @RequiresPermissions("contest:rejudge")
+    @RequiresAuthentication
+    public void rejudgeProblem() {
+        Integer cid = getParaToInt(0);
+        char id = getPara(1, "A").toUpperCase().charAt(0);
+        if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
+            redirect("/contest/problem/" + cid + "-" + id,
+                new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
+            return;
+        }
+
+        Integer num = id - 'A';
+        ProblemModel problemModel = contestService.getProblem(cid, num);
+
+        if (problemModel == null) {
+            FlashMessage msg =
+                new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+            redirect("/contest/show/" + cid, msg);
+            return;
+        }
+
+        FlashMessage msg;
+
+        if (judgeService.rejudgeContestProblem(cid, problemModel.getPid(), num)) {
+            msg = new FlashMessage("Server accept your request.");
+        } else {
+            msg = new FlashMessage("Server reject your request since rejudge this contest or problem is ongoing.",
+                MessageType.ERROR, "Rejudge Error");
+        }
+
+        redirect("/contest/problem/" + cid + "-" + id, msg);
+    }
+
+    @RequiresPermissions("code:rejudge")
+    @RequiresAuthentication
+    public void rejudgeCode() {
+        Integer cid = getParaToInt(0);
+        Integer sid = getParaToInt(1);
+        judgeService.rejudgeContestSolution(sid);
+
+        redirect("/contest/code/" + cid + "-" + sid, new FlashMessage("Server got your rejudge request."));
     }
 
     @Clear({ContestInterceptor.class})

@@ -26,9 +26,11 @@
               href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}
         : ${clarify.title!}</a></#if>
       <pre class="question">${clarify.question!}</pre>
+      <#if clarify.reply??>
       <span class="name">Administrator</span>
       <#if clarify.atime??>reply at <span class="timestamp" data="${clarify.atime!0}"></span></#if>
       <pre class="reply">${clarify.reply!}</pre>
+      </#if>
       <hr>
     </#list>
   </#if>

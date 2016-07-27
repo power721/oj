@@ -455,6 +455,17 @@ public class ContestService {
         return Db.find(sb.toString(), cid);
     }
 
+    public int getUnreadClarifications(Integer cid, Long timestamp) {
+        int count = Db.queryLong("SELECT COUNT(*) FROM contest_clarify "
+            + "WHERE cid=? AND mtime>? AND public=1", cid, timestamp).intValue();
+        Integer uid = userService.getCurrentUid();
+        if (uid != null) {
+            count += Db.queryLong("SELECT COUNT(*) FROM contest_clarify "
+                + "WHERE cid=? AND uid=? AND mtime>? AND public=0", cid, uid, timestamp).intValue();
+        }
+        return count;
+    }
+
     public boolean addClarify(Integer cid, Integer num, String question) {
         ContestClarifyModel clarify = new ContestClarifyModel();
 
@@ -470,16 +481,28 @@ public class ContestService {
         return clarify.save();
     }
 
+    public boolean addClarification(Integer cid, Integer num, String question) {
+        ContestClarifyModel clarify = new ContestClarifyModel();
+
+        clarify.setCid(cid);
+        clarify.setNum(num);
+        clarify.setUid(userService.getCurrentUid());
+        clarify.setAdmin(userService.getCurrentUid());
+        clarify.setQuestion(question);
+        clarify.setCtime(OjConfig.timeStamp);
+        clarify.setMtime(OjConfig.timeStamp);
+        clarify.setPublic(true);
+
+        return clarify.save();
+    }
+
     public boolean updateClarify(Integer id, String reply, boolean isPublic) {
         Record clarify = Db.findById("contest_clarify", id);
 
-        if (StringUtil.isNotBlank(clarify.getStr("reply"))) {
-            clarify.set("mtime", OjConfig.timeStamp);
-        } else {
-            clarify.set("admin", userService.getCurrentUid());
-        }
         clarify.set("reply", reply);
         clarify.set("public", isPublic);
+        clarify.set("admin", userService.getCurrentUid());
+        clarify.set("mtime", OjConfig.timeStamp);
         clarify.set("atime", OjConfig.timeStamp);
 
         return Db.update("contest_clarify", clarify);
