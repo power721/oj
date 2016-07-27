@@ -71,11 +71,6 @@
           <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
             <a href="downloads"><i class="icon-download-alt"></i>Download</a>
           </li>
-        <#if adminUser??>
-          <li class="<#if controllerKey?? && controllerKey=="news">active</#if>">
-            <a href="news"><i class="icon-bell"></i>News</a>
-          </li>
-        </#if>
         </ul>
         <ul class="nav pull-right">
         <#if user?? && user.uid??>
@@ -91,7 +86,9 @@
               <li><a href="user/edit">Edit</a></li>
               <li><a href=" user/archive">Archive</a></li>
               <#if adminUser??>
-                <li><a href="admin">Admin</a></li></#if>
+                <li><a href="news">News</a></li>
+                <li><a href="admin">Admin</a></li>
+              </#if>
             </ul>
           </li>
           <li><a href="logout"><i class="icon-off"></i>Logout</a></li>

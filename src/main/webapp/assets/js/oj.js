@@ -209,6 +209,23 @@ function num2size(size) {
     }
 }
 
+function formatDate(now) {
+    var year = now.getUTCFullYear();
+    var month = now.getUTCMonth() + 1;
+    month = (month < 10 ? '0' : '') + month;
+    var date = now.getUTCDate();
+    date = (date < 10 ? '0' : '') + date;
+    var hour = now.getUTCHours();
+    hour = (hour < 10 ? '0' : '') + hour;
+    var minute = now.getUTCMinutes();
+    minute = (minute < 10 ? '0' : '') + minute;
+    return year + "-" + month + "-" + date + " " + hour + ":" + minute;
+}
+
+function getLocalTime(time) {
+    return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+}
+
 try {
     console.log("Welcome to PowerOJ, have fun!");
 } catch (f) {

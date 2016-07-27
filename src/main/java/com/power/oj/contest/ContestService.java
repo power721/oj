@@ -227,7 +227,7 @@ public class ContestService {
         List<Object> paras = new ArrayList<Object>();
         String sql =
             "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime";
-        StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
+        StringBuilder sb = new StringBuilder("FROM contest WHERE status=1");
         if (type > -1) {
             sb.append(" AND type=?");
             paras.add(type);
@@ -303,7 +303,7 @@ public class ContestService {
             sb.append(" AND endTime<UNIX_TIMESTAMP()");
         } else {
             sb.append(" AND title LIKE ?");
-            paras.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+            paras.add("%" + sSearch + "%");
         }
 
         sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", cid DESC");
@@ -765,6 +765,7 @@ public class ContestService {
         newContest.setLockBoardTime(contestModel.getLockBoardTime());
         newContest.setUnlockBoardTime(contestModel.getUnlockBoardTime());
         newContest.setLockReport(Tool.getBoolean(contestModel.isLockReport()));
+        newContest.setStatus(Tool.getBoolean(contestModel.getStatus()));
         newContest.setMtime(OjConfig.timeStamp);
         updateCache(newContest);
 

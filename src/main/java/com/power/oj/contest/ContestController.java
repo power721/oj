@@ -471,6 +471,7 @@ public class ContestController extends OjController {
     @RequiresAuthentication
     @RequiresPermissions("contest:edit")
     public void update() {
+        boolean ajax = getParaToBoolean("ajax", false);
         String startTime = getPara("startTime");
         String endTime = getPara("endTime");
         ContestModel contestModel = getModel(ContestModel.class, "contest");
@@ -478,7 +479,11 @@ public class ContestController extends OjController {
         contestModel.setLanguages(StringUtils.join(getParaMap().get("languages"), ","));
         contestService.updateContest(contestModel, startTime, endTime);
 
-        redirect("/contest/show/" + contestModel.getInt("cid"));
+        if (ajax) {
+            renderNull();
+        } else {
+            redirect("/contest/show/" + contestModel.getInt("cid"));
+        }
     }
 
     @Clear({ContestInterceptor.class})
