@@ -35,7 +35,11 @@
     <#if contestRank??>
       <#list contestRank.list as User>
       <tr>
-        <td><#if cstatus==2 && User.rank?is_number && User.rank<4><i class="oj-medal_${User.rank}"></i></#if>${User.rank}
+        <td>
+        <#if cstatus==2 && User.rank?is_number && User.rank<4>
+          <#--<img class="medal" src="assets/images/medal_<#if User.rank==1>gold<#elseif User.rank==2>silver<#else>bronze</#if>.png">-->
+        </#if>
+        ${User.rank}
         </td>
         <td><a href="user/profile/${User.name!}"<#if adminUser?? && User.realName??>data-toggle="tooltip"
                title="${(User.realName)!}"</#if> target="_blank">${User.name!}</a></td>
@@ -64,6 +68,15 @@
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
 </div>
+</@override>
+
+<@override name="styles">
+<style>
+  img.medal {
+    height: 24px;
+    width: 24px;
+  }
+</style>
 </@override>
 
 <@override name="scripts">
