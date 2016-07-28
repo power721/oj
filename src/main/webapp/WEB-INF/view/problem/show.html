@@ -21,7 +21,7 @@
 <div class="row text-center">
   <h2>
     <#if userResult??>
-      <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>"/>
+      <i class="oj-icon oj-icon-<#if userResult==0>accept<#else>delete</#if>"></i>
     </#if>
     <span class="black pts">${problem.pid!0}:</span>
     <#if problem.status==false>
