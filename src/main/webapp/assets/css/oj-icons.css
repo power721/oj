@@ -1,182 +1,635 @@
-
-/* icons */
-[class^="oj-"],
-[class*=" oj-"] {
-  display: inline-block;
-  width: 17px;
-  height: 16px;
-  *margin-right: .3em;
-  line-height: 14px;
-  vertical-align: text-top;
-  background-image: url("../images/oj-icons.png");
-  background-position: 14px 14px;
-  background-repeat: no-repeat;
-}
-[class^="oj-"]:last-child,
-[class*=" oj-"]:last-child {
-  *margin-left: 0;
+.oj-icon {
+    display: inline-block;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background: url(images/oj-icons.png) no-repeat 14px 14px;
 }
 
-.oj-accept{ background-position: 0 0; width: 16px; height: 16px; } 
-.oj-add{ background-position: -21px 0; width: 16px; height: 16px; } 
-.oj-arrow_down{ background-position: -42px 0; width: 16px; height: 16px; } 
-.oj-arrow_left{ background-position: -63px 0; width: 16px; height: 16px; } 
-.oj-arrow_refresh{ background-position: -84px 0; width: 16px; height: 16px; } 
-.oj-arrow_refresh_small{ background-position: -105px 0; width: 16px; height: 16px; } 
-.oj-arrow_right{ background-position: -126px 0; width: 16px; height: 16px; } 
-.oj-arrow_up{ background-position: -147px 0; width: 16px; height: 16px; } 
-.oj-attach{ background-position: -168px 0; width: 16px; height: 16px; } 
-.oj-award_star_bronze_2{ background-position: -189px 0; width: 16px; height: 16px; } 
-.oj-award_star_gold_1{ background-position: -210px 0; width: 16px; height: 16px; } 
-.oj-award_star_silver_3{ background-position: -231px 0; width: 16px; height: 16px; } 
-.oj-cancel{ background-position: -252px 0; width: 16px; height: 16px; } 
-.oj-chart_bar{ background-position: -273px 0; width: 16px; height: 16px; } 
-.oj-clock{ background-position: -294px 0; width: 16px; height: 16px; } 
-.oj-cog{ background-position: -315px 0; width: 16px; height: 16px; } 
-.oj-coins{ background-position: -336px 0; width: 16px; height: 16px; } 
-.oj-comment{ background-position: -357px 0; width: 16px; height: 16px; } 
-.oj-comment_add{ background-position: -378px 0; width: 16px; height: 16px; } 
-.oj-comment_delete{ background-position: -399px 0; width: 16px; height: 16px; } 
-.oj-comment_edit{ background-position: -420px 0; width: 16px; height: 16px; } 
-.oj-comments{ background-position: -441px 0; width: 16px; height: 16px; } 
-.oj-comments_add{ background-position: -462px 0; width: 16px; height: 16px; } 
-.oj-comments_delete{ background-position: -483px 0; width: 16px; height: 16px; } 
-.oj-date{ background-position: -504px 0; width: 16px; height: 16px; } 
-.oj-date_add{ background-position: -525px 0; width: 16px; height: 16px; } 
-.oj-date_delete{ background-position: -546px 0; width: 16px; height: 16px; } 
-.oj-date_edit{ background-position: -567px 0; width: 16px; height: 16px; } 
-.oj-date_error{ background-position: -588px 0; width: 16px; height: 16px; } 
-.oj-delete{ background-position: -609px 0; width: 16px; height: 16px; } 
-.oj-disk{ background-position: -630px 0; width: 16px; height: 16px; } 
-.oj-door_in{ background-position: -651px 0; width: 16px; height: 16px; } 
-.oj-door_out{ background-position: -672px 0; width: 16px; height: 16px; } 
-.oj-email{ background-position: -693px 0; width: 16px; height: 16px; } 
-.oj-email_add{ background-position: -714px 0; width: 16px; height: 16px; } 
-.oj-email_attach{ background-position: -735px 0; width: 16px; height: 16px; } 
-.oj-email_delete{ background-position: -756px 0; width: 16px; height: 16px; } 
-.oj-email_edit{ background-position: -777px 0; width: 16px; height: 16px; } 
-.oj-email_error{ background-position: -798px 0; width: 16px; height: 16px; } 
-.oj-email_go{ background-position: -819px 0; width: 16px; height: 16px; } 
-.oj-email_link{ background-position: -840px 0; width: 16px; height: 16px; } 
-.oj-email_open{ background-position: -861px 0; width: 16px; height: 16px; } 
-.oj-email_open_image{ background-position: -882px 0; width: 16px; height: 16px; } 
-.oj-error{ background-position: -903px 0; width: 16px; height: 16px; } 
-.oj-exclamation{ background-position: -924px 0; width: 16px; height: 16px; } 
-.oj-feed{ background-position: -945px 0; width: 16px; height: 16px; } 
-.oj-female{ background-position: -966px 0; width: 16px; height: 16px; } 
-.oj-find{ background-position: -987px 0; width: 16px; height: 16px; } 
-.oj-folder{ background-position: -1008px 0; width: 16px; height: 16px; } 
-.oj-folder_add{ background-position: -1029px 0; width: 16px; height: 16px; } 
-.oj-folder_delete{ background-position: -1050px 0; width: 16px; height: 16px; } 
-.oj-folder_error{ background-position: -1071px 0; width: 16px; height: 16px; } 
-.oj-folder_explore{ background-position: -1092px 0; width: 16px; height: 16px; } 
-.oj-folder_find{ background-position: -1113px 0; width: 16px; height: 16px; } 
-.oj-folder_image{ background-position: -1134px 0; width: 16px; height: 16px; } 
-.oj-folder_page{ background-position: -1155px 0; width: 16px; height: 16px; } 
-.oj-folder_user{ background-position: -1176px 0; width: 16px; height: 16px; } 
-.oj-font{ background-position: -1197px 0; width: 16px; height: 16px; } 
-.oj-group{ background-position: -1218px 0; width: 16px; height: 16px; } 
-.oj-group_add{ background-position: -1239px 0; width: 16px; height: 16px; } 
-.oj-group_delete{ background-position: -1260px 0; width: 16px; height: 16px; } 
-.oj-group_edit{ background-position: -1281px 0; width: 16px; height: 16px; } 
-.oj-group_error{ background-position: -1302px 0; width: 16px; height: 16px; } 
-.oj-help{ background-position: -1323px 0; width: 16px; height: 16px; } 
-.oj-hourglass{ background-position: -1344px 0; width: 16px; height: 16px; } 
-.oj-house{ background-position: -1365px 0; width: 16px; height: 16px; } 
-.oj-image{ background-position: -1386px 0; width: 16px; height: 16px; } 
-.oj-information{ background-position: -1407px 0; width: 16px; height: 16px; } 
-.oj-key{ background-position: -1428px 0; width: 16px; height: 16px; } 
-.oj-keyboard{ background-position: -1449px 0; width: 16px; height: 16px; } 
-.oj-lightbulb{ background-position: -1470px 0; width: 16px; height: 16px; } 
-.oj-lightbulb_off{ background-position: -1491px 0; width: 16px; height: 16px; } 
-.oj-link{ background-position: -1512px 0; width: 16px; height: 16px; } 
-.oj-lock{ background-position: -1533px 0; width: 16px; height: 16px; } 
-.oj-magnifier{ background-position: -1554px 0; width: 16px; height: 16px; } 
-.oj-medal_bronze_3{ background-position: -1575px 0; width: 16px; height: 16px; } 
-.oj-medal_gold_1{ background-position: -1596px 0; width: 16px; height: 16px; } 
-.oj-medal_silver_2{ background-position: -1617px 0; width: 16px; height: 16px; } 
-.oj-medal_1{ background-position: -1596px 0; width: 16px; height: 16px; } 
-.oj-medal_2{ background-position: -1617px 0; width: 16px; height: 16px; } 
-.oj-medal_3{ background-position: -1575px 0; width: 16px; height: 16px; } 
-.oj-new{ background-position: -1638px 0; width: 16px; height: 16px; } 
-.oj-note{ background-position: -1659px 0; width: 16px; height: 16px; } 
-.oj-note_add{ background-position: -1680px 0; width: 16px; height: 16px; } 
-.oj-note_delete{ background-position: -1701px 0; width: 16px; height: 16px; } 
-.oj-note_edit{ background-position: -1722px 0; width: 16px; height: 16px; } 
-.oj-note_error{ background-position: -1743px 0; width: 16px; height: 16px; } 
-.oj-page_excel{ background-position: -1764px 0; width: 16px; height: 16px; } 
-.oj-page_paste{ background-position: -1785px 0; width: 16px; height: 16px; } 
-.oj-page_white_c{ background-position: -1806px 0; width: 16px; height: 16px; } 
-.oj-page_white_code{ background-position: -1827px 0; width: 16px; height: 16px; } 
-.oj-page_white_code_red{ background-position: -1848px 0; width: 16px; height: 16px; } 
-.oj-page_white_cplusplus{ background-position: -1869px 0; width: 16px; height: 16px; } 
-.oj-page_white_csharp{ background-position: -1890px 0; width: 16px; height: 16px; } 
-.oj-page_white_excel{ background-position: -1911px 0; width: 16px; height: 16px; } 
-.oj-page_white_h{ background-position: -1932px 0; width: 16px; height: 16px; } 
-.oj-page_white_php{ background-position: -1953px 0; width: 16px; height: 16px; } 
-.oj-page_white_ruby{ background-position: -1974px 0; width: 16px; height: 16px; } 
-.oj-page_white_text{ background-position: 0 -21px; width: 16px; height: 16px; } 
-.oj-page_white_word{ background-position: -21px -21px; width: 16px; height: 16px; } 
-.oj-pencil{ background-position: -42px -21px; width: 16px; height: 16px; } 
-.oj-phone{ background-position: -63px -21px; width: 16px; height: 16px; } 
-.oj-picture{ background-position: -84px -21px; width: 16px; height: 16px; } 
-.oj-pill{ background-position: -105px -21px; width: 16px; height: 16px; } 
-.oj-plugin{ background-position: -126px -21px; width: 16px; height: 16px; } 
-.oj-plugin_add{ background-position: -147px -21px; width: 16px; height: 16px; } 
-.oj-plugin_delete{ background-position: -168px -21px; width: 16px; height: 16px; } 
-.oj-plugin_disabled{ background-position: -189px -21px; width: 16px; height: 16px; } 
-.oj-plugin_edit{ background-position: -210px -21px; width: 16px; height: 16px; } 
-.oj-plugin_error{ background-position: -231px -21px; width: 16px; height: 16px; } 
-.oj-printer{ background-position: -252px -21px; width: 16px; height: 16px; } 
-.oj-rainbow{ background-position: -273px -21px; width: 16px; height: 16px; } 
-.oj-report{ background-position: -294px -21px; width: 16px; height: 16px; } 
-.oj-report_add{ background-position: -315px -21px; width: 16px; height: 16px; } 
-.oj-resultset_first{ background-position: -336px -21px; width: 16px; height: 16px; } 
-.oj-resultset_last{ background-position: -357px -21px; width: 16px; height: 16px; } 
-.oj-resultset_next{ background-position: -378px -21px; width: 16px; height: 16px; } 
-.oj-resultset_previous{ background-position: -399px -21px; width: 16px; height: 16px; } 
-.oj-rosette{ background-position: -420px -21px; width: 16px; height: 16px; } 
-.oj-rss{ background-position: -441px -21px; width: 16px; height: 16px; } 
-.oj-script{ background-position: -462px -21px; width: 16px; height: 16px; } 
-.oj-script_code{ background-position: -483px -21px; width: 16px; height: 16px; } 
-.oj-shading{ background-position: -504px -21px; width: 16px; height: 16px; } 
-.oj-shield{ background-position: -525px -21px; width: 16px; height: 16px; } 
-.oj-sitemap{ background-position: -546px -21px; width: 16px; height: 16px; } 
-.oj-sitemap_color{ background-position: -567px -21px; width: 16px; height: 16px; } 
-.oj-sound{ background-position: -588px -21px; width: 16px; height: 16px; } 
-.oj-star{ background-position: -609px -21px; width: 16px; height: 16px; } 
-.oj-status_away{ background-position: -630px -21px; width: 16px; height: 16px; } 
-.oj-status_busy{ background-position: -651px -21px; width: 16px; height: 16px; } 
-.oj-status_offline{ background-position: -672px -21px; width: 16px; height: 16px; } 
-.oj-status_online{ background-position: -693px -21px; width: 16px; height: 16px; } 
-.oj-stop{ background-position: -714px -21px; width: 16px; height: 16px; } 
-.oj-style{ background-position: -735px -21px; width: 16px; height: 16px; } 
-.oj-sum{ background-position: -756px -21px; width: 16px; height: 16px; } 
-.oj-table{ background-position: -777px -21px; width: 16px; height: 16px; } 
-.oj-tag{ background-position: -798px -21px; width: 16px; height: 16px; } 
-.oj-tag_blue{ background-position: -819px -21px; width: 16px; height: 16px; } 
-.oj-tag_blue_add{ background-position: -840px -21px; width: 16px; height: 16px; } 
-.oj-tag_blue_delete{ background-position: -861px -21px; width: 16px; height: 16px; } 
-.oj-tag_blue_edit{ background-position: -882px -21px; width: 16px; height: 16px; } 
-.oj-thumb_down{ background-position: -903px -21px; width: 16px; height: 16px; } 
-.oj-thumb_up{ background-position: -924px -21px; width: 16px; height: 16px; } 
-.oj-tick{ background-position: -945px -21px; width: 16px; height: 16px; } 
-.oj-time{ background-position: -966px -21px; width: 16px; height: 16px; } 
-.oj-user{ background-position: -987px -21px; width: 16px; height: 16px; } 
-.oj-user_add{ background-position: -1008px -21px; width: 16px; height: 16px; } 
-.oj-user_delete{ background-position: -1029px -21px; width: 16px; height: 16px; } 
-.oj-user_edit{ background-position: -1050px -21px; width: 16px; height: 16px; } 
-.oj-user_female{ background-position: -1071px -21px; width: 16px; height: 16px; } 
-.oj-user_gray{ background-position: -1092px -21px; width: 16px; height: 16px; } 
-.oj-user_green{ background-position: -1113px -21px; width: 16px; height: 16px; } 
-.oj-user_orange{ background-position: -1134px -21px; width: 16px; height: 16px; } 
-.oj-user_red{ background-position: -1155px -21px; width: 16px; height: 16px; } 
-.oj-user_suit{ background-position: -1176px -21px; width: 16px; height: 16px; } 
-.oj-vcard{ background-position: -1197px -21px; width: 16px; height: 16px; } 
-.oj-weather_sun{ background-position: -1218px -21px; width: 16px; height: 16px; } 
-.oj-wrench{ background-position: -1239px -21px; width: 16px; height: 16px; } 
-.oj-wrench_orange{ background-position: -1260px -21px; width: 16px; height: 16px; } 
-.oj-zoom{ background-position: -1281px -21px; width: 16px; height: 16px; } 
-.oj-zoom_in{ background-position: -1302px -21px; width: 16px; height: 16px; } 
-.oj-zoom_out{ background-position: -1323px -21px; width: 16px; height: 16px; } 
+.oj-icon:last-child {
+    *margin-left: 0;
+}
 
+.oj-icon-accept {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -5px;
+}
+
+.oj-icon-add {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -5px;
+}
+
+.oj-icon-application-view-columns {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -5px;
+}
+
+.oj-icon-application-view-detail {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -5px;
+}
+
+.oj-icon-application-view-gallery {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -5px;
+}
+
+.oj-icon-application-view-icons {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -5px;
+}
+
+.oj-icon-application-view-list {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -5px;
+}
+
+.oj-icon-application-view-tile {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -5px;
+}
+
+.oj-icon-attach {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -5px;
+}
+
+.oj-icon-calendar {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -5px;
+}
+
+.oj-icon-cancel {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -31px;
+}
+
+.oj-icon-chart-bar {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -31px;
+}
+
+.oj-icon-chart-organisation {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -31px;
+}
+
+.oj-icon-clock {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -31px;
+}
+
+.oj-icon-cog {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -31px;
+}
+
+.oj-icon-comment {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -31px;
+}
+
+.oj-icon-comment-add {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -31px;
+}
+
+.oj-icon-comment-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -31px;
+}
+
+.oj-icon-comment-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -31px;
+}
+
+.oj-icon-comments {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -31px;
+}
+
+.oj-icon-comments-add {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -57px;
+}
+
+.oj-icon-comments-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -57px;
+}
+
+.oj-icon-compress {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -57px;
+}
+
+.oj-icon-cut {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -57px;
+}
+
+.oj-icon-cut-red {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -57px;
+}
+
+.oj-icon-date {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -57px;
+}
+
+.oj-icon-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -57px;
+}
+
+.oj-icon-email {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -57px;
+}
+
+.oj-icon-email-add {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -57px;
+}
+
+.oj-icon-email-attach {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -57px;
+}
+
+.oj-icon-email-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -83px;
+}
+
+.oj-icon-email-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -83px;
+}
+
+.oj-icon-email-error {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -83px;
+}
+
+.oj-icon-email-go {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -83px;
+}
+
+.oj-icon-email-link {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -83px;
+}
+
+.oj-icon-email-open {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -83px;
+}
+
+.oj-icon-email-open-image {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -83px;
+}
+
+.oj-icon-error {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -83px;
+}
+
+.oj-icon-folder {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -83px;
+}
+
+.oj-icon-folder-page {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -83px;
+}
+
+.oj-icon-group {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -109px;
+}
+
+.oj-icon-group-add {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -109px;
+}
+
+.oj-icon-group-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -109px;
+}
+
+.oj-icon-group-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -109px;
+}
+
+.oj-icon-group-error {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -109px;
+}
+
+.oj-icon-group-gear {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -109px;
+}
+
+.oj-icon-group-go {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -109px;
+}
+
+.oj-icon-group-key {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -109px;
+}
+
+.oj-icon-group-link {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -109px;
+}
+
+.oj-icon-heart {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -109px;
+}
+
+.oj-icon-heart-add {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -135px;
+}
+
+.oj-icon-heart-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -135px;
+}
+
+.oj-icon-help {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -135px;
+}
+
+.oj-icon-hourglass {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -135px;
+}
+
+.oj-icon-information {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -135px;
+}
+
+.oj-icon-key {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -135px;
+}
+
+.oj-icon-lock {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -135px;
+}
+
+.oj-icon-lock-open {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -135px;
+}
+
+.oj-icon-page {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -135px;
+}
+
+.oj-icon-page-code {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -135px;
+}
+
+.oj-icon-page-white-c {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -161px;
+}
+
+.oj-icon-page-white-code {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -161px;
+}
+
+.oj-icon-page-white-code-red {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -161px;
+}
+
+.oj-icon-page-white-cplusplus {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -161px;
+}
+
+.oj-icon-page-white-text {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -161px;
+}
+
+.oj-icon-rosette {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -161px;
+}
+
+.oj-icon-sitemap {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -161px;
+}
+
+.oj-icon-sitemap-color {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -161px;
+}
+
+.oj-icon-star {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -161px;
+}
+
+.oj-icon-status-away {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -161px;
+}
+
+.oj-icon-status-busy {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -187px;
+}
+
+.oj-icon-status-offline {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -187px;
+}
+
+.oj-icon-status-online {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -187px;
+}
+
+.oj-icon-stop {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -187px;
+}
+
+.oj-icon-table {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -187px;
+}
+
+.oj-icon-tag {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -187px;
+}
+
+.oj-icon-tag-blue {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -187px;
+}
+
+.oj-icon-tag-blue-add {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -187px;
+}
+
+.oj-icon-tag-blue-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -187px;
+}
+
+.oj-icon-tag-blue-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -187px;
+}
+
+.oj-icon-tag-green {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -213px;
+}
+
+.oj-icon-tag-orange {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -213px;
+}
+
+.oj-icon-tag-pink {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -213px;
+}
+
+.oj-icon-tag-purple {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -213px;
+}
+
+.oj-icon-tag-red {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -213px;
+}
+
+.oj-icon-tag-yellow {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -213px;
+}
+
+.oj-icon-thumb-down {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -213px;
+}
+
+.oj-icon-thumb-up {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -213px;
+}
+
+.oj-icon-time {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -213px;
+}
+
+.oj-icon-user {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -213px;
+}
+
+.oj-icon-user-add {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -239px;
+}
+
+.oj-icon-user-comment {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -239px;
+}
+
+.oj-icon-user-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -239px;
+}
+
+.oj-icon-user-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -239px;
+}
+
+.oj-icon-user-female {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -239px;
+}
+
+.oj-icon-user-go {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -239px;
+}
+
+.oj-icon-user-gray {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -239px;
+}
+
+.oj-icon-user-green {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -239px;
+}
+
+.oj-icon-user-orange {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -239px;
+}
+
+.oj-icon-user-red {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -239px;
+}
+
+.oj-icon-user-suit {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -5px;
+}
+
+.oj-icon-vcard {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -31px;
+}
+
+.oj-icon-vcard-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -57px;
+}
+
+.oj-icon-wrench {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -83px;
+}
