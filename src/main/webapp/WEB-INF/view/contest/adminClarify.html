@@ -26,13 +26,11 @@
     </#list>
   </#if>
 </div>
-  <#if serverTime<contest.endTime>
   <div class="text-center">
-    <button class="btn btn-primary" id="newQuestion" data-toggle="modal"
-            data-target="<#if user??>#postModal<#else>#loginModal</#if>">Post Clarification
+    <button class="btn btn-primary" id="newQuestion" data-toggle="modal" data-target="#postModal">
+      Post Clarification
     </button>
   </div>
-  </#if>
 
 <div class="modal hide fade contestModal" id="postModal">
   <form class="form-horizontal" id="postForm" action="api/contest/postClarification" method="post">
