@@ -38,11 +38,11 @@
       <a href="problem/rejudge/${problem.pid!}" class="btn btn-danger">Rejudge</a>
     </div>
   </#if>
-  Time Limit:<span class="blue">${problem.timeLimit!}MS</span>
-  Memory Limit:<span class="blue">${problem.memoryLimit!}KB</span><br>
-  Total Submit:<a href="status?pid=${problem.pid!}">${problem.submission!}</a>
-  Accepted:<a href="status?pid=${problem.pid!}&result=0">${problem.accepted!}</a>
-  Page View:<span class="blue">${problem.view!}</span><br>
+  Time Limit: <span class="badge badge-info">${problem.timeLimit!} MS</span>
+  Memory Limit: <span class="badge badge-info">${problem.memoryLimit!} KB</span><br>
+  Total Submit: <a href="status?pid=${problem.pid!}">${problem.submission!}</a>
+  Accepted: <a href="status?pid=${problem.pid!}&result=0">${problem.accepted!}</a>
+  Page View: <span class="blue">${problem.view!}</span><br>
   <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
      data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
   <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
@@ -104,7 +104,7 @@
 <div class="row">
   <section id="s-description">
     <div class="page-header">
-      <h4>Description</h4>
+      <h4>Description <i class="icon-chevron-up"></i></h4>
     </div>
     <div class="content" id="description">
       <pre>${problem.description!}</pre>
@@ -115,7 +115,7 @@
 <div class="row">
   <section id="s-input">
     <div class="page-header">
-      <h4>Input</h4>
+      <h4>Input <i class="icon-chevron-up"></i></h4>
     </div>
     <div class="content" id="input">
       <pre>${problem.input!}</pre>
@@ -126,7 +126,7 @@
 <div class="row">
   <section id="s-output">
     <div class="page-header">
-      <h4>Output</h4>
+      <h4>Output <i class="icon-chevron-up"></i></h4>
     </div>
     <div class="content" id="output">
       <pre>${problem.output!}</pre>
@@ -180,7 +180,7 @@
   <div class="row">
     <section id="s-hint">
       <div class="page-header">
-        <h4>Hint</h4>
+        <h4>Hint <i class="icon-chevron-up"></i></h4>
       </div>
       <div class="content" id="hint">
         <pre>${problem.hint!}</pre>
@@ -193,7 +193,7 @@
   <div class="row">
     <section id="s-source">
       <div class="page-header">
-        <h4>Source</h4>
+        <h4>Source <i class="icon-chevron-up"></i></h4>
       </div>
       <div class="content" id="source">
     <pre><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip"
@@ -206,9 +206,9 @@
 <div class="row">
   <section id="s-tag">
     <div class="page-header">
-      <h4>Tag</h4>
+      <h4>Tag <i class="icon-chevron-down"></i></h4>
     </div>
-    <div class="content" id="tags">
+    <div class="content" id="tags" style="display: none;">
       <#if tagList??>
       <#list tagList as Tag>
         <span data-tid="${Tag.id!}" class="tag">
@@ -312,6 +312,10 @@
         });
       }
     </#if>
+    $('.page-header').click(function () {
+      $(this).siblings('.content').fadeToggle();
+      $(this).children().children().toggleClass('icon-chevron-up icon-chevron-down');
+    });
   });
 </script>
 

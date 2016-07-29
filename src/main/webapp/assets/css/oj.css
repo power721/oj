@@ -23,12 +23,40 @@ a.cureent {
   color: blue;
 }
 
-.gray {
-  color: gray;
+.grey {
+  color: grey;
 }
 
 .orange {
   color: orange;
+}
+
+.yellow {
+  color: yellow;
+}
+
+.olive {
+  color: olive;
+}
+
+.teal {
+  color: teal;
+}
+
+.violet {
+  color: violet;
+}
+
+.purple {
+  color: purple;
+}
+
+.pink {
+  color: pink;
+}
+
+.brown {
+  color: brown;
 }
 
 .navy {
@@ -85,8 +113,7 @@ a.cureent {
   margin-top: 1px;
   line-height: 16px;
   vertical-align: text-top;
-  background-image: url("../images/comments-open.gif");
-  background-repeat: no-repeat;
+  background: url("../images/comments-open.gif") no-repeat;
 }
 
 .topic-closed {
@@ -96,8 +123,7 @@ a.cureent {
   margin-top: 1px;
   line-height: 16px;
   vertical-align: text-top;
-  background-image: url("../images/comments-closed.gif");
-  background-repeat: no-repeat;
+  background: url("../images/comments-closed.gif") no-repeat;
 }
 
 .discussModal {
@@ -298,7 +324,7 @@ table.table-stats {
   text-align: left;
   position: relative;
   color: #666;
-  font-family: "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体";
+  font-family: "Microsoft YaHei", "微软雅黑", tahoma, arial, simsun, "宋体", serif;
   font-size: 14px;
   height: 36px;
   line-height: 34px;
@@ -347,9 +373,6 @@ table.table-stats {
 .tab.more {
   cursor: pointer;
   background-color: transparent;
-  height: 32px;
-  line-height: 32px;
-  margin: 0;
   float: right;
   color: #08c;
   border-radius: 2px;
@@ -359,7 +382,7 @@ table.table-stats {
   line-height: 24px;
   font-size: 14px;
   padding: 0 4px;
-  margin-right: 4px;
+  margin: 0 4px 0 0;
   position: relative;
   top: 4px;
 }
@@ -396,7 +419,7 @@ table.table-stats {
   position: absolute;
   top: 0px;
   left: 0px;
-  font-family: Microsoft YaHei;
+  font-family: Microsoft YaHei, serif;
   color: #fff;
   font-weight: bold;
   text-decoration: none;

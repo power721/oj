@@ -109,7 +109,7 @@
 
 <section id="s-description">
   <div class="page-header">
-    <h4>Description</h4>
+    <h4>Description <i class="icon-chevron-up"></i></h4>
   </div>
   <div class="content" id="description">
     <pre>${problem.description!}</pre>
@@ -118,7 +118,7 @@
 
 <section id="s-input">
   <div class="page-header">
-    <h4>Input</h4>
+    <h4>Input <i class="icon-chevron-up"></i></h4>
   </div>
   <div class="content" id="input">
     <pre>${problem.input!}</pre>
@@ -127,7 +127,7 @@
 
 <section id="s-output">
   <div class="page-header">
-    <h4>Output</h4>
+    <h4>Output <i class="icon-chevron-up"></i></h4>
   </div>
   <div class="content" id="output">
     <pre>${problem.output!}</pre>
@@ -173,7 +173,7 @@
   <#if problem.hint?? && problem.hint!="">
   <section id="s-hint">
     <div class="page-header">
-      <h4>Hint</h4>
+      <h4>Hint <i class="icon-chevron-up"></i></h4>
     </div>
     <div class="content" id="hint">
       <pre>${problem.hint!}</pre>
@@ -184,7 +184,7 @@
   <#if adminUser??>
   <section id="s-source">
     <div class="page-header">
-      <h4>Source</h4>
+      <h4>Source <i class="icon-chevron-up"></i></h4>
     </div>
     <div class="content" id="source">
       <pre><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip"
@@ -195,7 +195,7 @@
     <#if tagList??>
     <section id="s-tag">
       <div class="page-header">
-        <h4>Tag</h4>
+        <h4>Tag <i class="icon-chevron-up"></i></h4>
       </div>
       <div class="content" id="tag">
         <pre><#list tagList as Tag><a href="problem/search?word=${Tag.tag!}&scope=tag" title="${Tag.name!}"
@@ -250,6 +250,10 @@
         });
       }
     </#if>
+    $('.page-header').click(function () {
+      $(this).siblings('.content').fadeToggle();
+      $(this).children().children().toggleClass('icon-chevron-up icon-chevron-down');
+    });
   });
 </script>
 </@override>
