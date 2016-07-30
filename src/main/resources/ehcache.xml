@@ -58,15 +58,6 @@
            diskPersistent="true"
            diskExpiryThreadIntervalSeconds="900"/>
 
-    <cache name="notice"
-           maxEntriesLocalHeap="1000"
-           overflowToDisk="false"
-           eternal="false"
-           timeToLiveSeconds="3600"
-           timeToIdleSeconds="3600"
-           diskPersistent="true"
-           diskExpiryThreadIntervalSeconds="900"/>
-
     <cache name="news"
            maxEntriesLocalHeap="100"
            overflowToDisk="false"

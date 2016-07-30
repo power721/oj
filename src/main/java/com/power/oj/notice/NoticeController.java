@@ -26,7 +26,12 @@ public class NoticeController extends OjController {
     public void show() {
         Integer id = getParaToInt(0);
 
-        setAttr("notice", noticeService.getNotice(id));
+        NoticeModel noticeModel = noticeService.getNotice(id);
+        if (noticeModel == null) {
+            renderError(404);
+        } else {
+            setAttr("notice", noticeModel);
+        }
     }
 
     @RequiresPermissions("notice:add")
