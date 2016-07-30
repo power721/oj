@@ -222,10 +222,6 @@ function formatDate(now) {
     return year + "-" + month + "-" + date + " " + hour + ":" + minute;
 }
 
-function getLocalTime(time) {
-    return new Date(time).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
-}
-
 try {
     console.log("Welcome to PowerOJ, have fun!");
 } catch (f) {
