@@ -22,7 +22,7 @@ public class FileKit {
     private static String[] allowFiles =
         {".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp"};
 
-    private static String[] imageFileType = {".gif", ".png", ".jpg", ".jpeg", ".bmp"};
+    private static String[] imageFileType = {".gif", ".png", ".jpg", ".jpeg", ".bmp", ".tif", ".svg", ".gif"};
 
     /**
      * Get the files in a directory recursively.

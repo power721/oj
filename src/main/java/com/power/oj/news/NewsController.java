@@ -36,7 +36,7 @@ public class NewsController extends OjController {
 
     public void show() {
         /*int pageSize = 20;
-		int pageNumber = getParaToInt(0, 1);
+        int pageNumber = getParaToInt(0, 1);
 		setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
 		*/
         int id = getParaToInt(0);
@@ -94,19 +94,9 @@ public class NewsController extends OjController {
     public void update() {
         String author = getPara("author");
         String imagePath = getPara("imagePath");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         NewsModel newsModel = getModel(NewsModel.class, "news");
-        try {
-            Date newDate = new Date();
-            String publishTime = sdf.format(newDate);
-            newsModel.setAuthor(author);
-            newsModel.setImage(imagePath);
-            newsModel.setTime((int) (sdf.parse(publishTime).getTime() / 1000));
-        } catch (ParseException e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
-            log.error(e.getLocalizedMessage());
-        }
+        newsModel.setAuthor(author);
+        newsModel.setImage(imagePath);
 
         if (newsService.updateNews(newsModel)) {
             setFlashMessage(new FlashMessage("Update news successful!"));

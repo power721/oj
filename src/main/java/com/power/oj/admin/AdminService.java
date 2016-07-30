@@ -32,6 +32,7 @@ import org.dom4j.Element;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -218,6 +219,21 @@ public final class AdminService {
         return resources;
     }
 
+    public List<OJFile> getImages(String dir) {
+        List<OJFile> images = new ArrayList<>();
+        File resourceDir = new File(OjConfig.uploadPath, dir);
+        File[] files = resourceDir.listFiles();
+
+        if (files != null) {
+            Arrays.sort(files);
+            for (File file : files) {
+                images.add(new OJFile(file));
+            }
+        }
+
+        return images;
+    }
+
     public List<OJFile> getLogs() {
         List<OJFile> logs = new ArrayList<>();
         File workDir = new File(OjConfig.getString("workPath"));
@@ -266,11 +282,7 @@ public final class AdminService {
 
     public String getFileContent(String dirName, String fileName, String type) {
         File dir;
-        if ("resource".equals(type)) {
-            dir = new File(OjConfig.downloadPath, dirName);
-        } else {
-            dir = new File(OjConfig.getString("workPath"), dirName);
-        }
+        dir = getDirByType(dirName, type);
         File file = new File(dir, fileName);
         String content;
         try {
@@ -280,6 +292,10 @@ public final class AdminService {
             log.error("cannot read file!", e);
         }
         return content;
+    }
+
+    public String getImagePath(String dirName, String fileName) {
+        return OjConfig.uploadPath.replace(OjConfig.webRootPath, "") + "/" + dirName + "/" + fileName;
     }
 
     private File getLogFile(String dirName, String fileName) {
@@ -292,11 +308,7 @@ public final class AdminService {
         }
 
         File dir;
-        if ("resource".equals(type)) {
-            dir = new File(OjConfig.downloadPath, dirName);
-        } else {
-            dir = new File(OjConfig.getString("workPath"), dirName);
-        }
+        dir = getDirByType(dirName, type);
         File file = new File(dir, fileName);
         if (file.isDirectory()) {
             ZipOutputStream zos = null;
@@ -328,6 +340,18 @@ public final class AdminService {
         return null;
     }
 
+    private File getDirByType(String dirName, String type) {
+        File dir;
+        if ("resource".equals(type)) {
+            dir = new File(OjConfig.downloadPath, dirName);
+        } else if ("image".equals(type)) {
+            dir = new File(OjConfig.uploadPath, dirName);
+        } else {
+            dir = new File(OjConfig.getString("workPath"), dirName);
+        }
+        return dir;
+    }
+
     private File downloadLog(String dirName, String fileName) {
         File file = null;
         if ("oj.log".equals(fileName)) {
@@ -349,6 +373,28 @@ public final class AdminService {
         log.debug(destFile.getAbsolutePath());
 
         return destFile.getName();
+    }
+
+    public String uploadImage(String dirName, String filename, File srcFile) throws IOException {
+        File dir = new File(OjConfig.uploadPath, dirName);
+        File destFile = new File(dir, filename);
+
+        FileKit.moveFile(srcFile, destFile);
+        log.debug(destFile.getAbsolutePath());
+
+        return destFile.getName();
+    }
+
+    public boolean deleteFile(String dirName, String fileName, String type) {
+        File dir = getDirByType(dirName, type);
+        File destFile = new File(dir, fileName);
+        try {
+            Files.delete(destFile.toPath());
+            return true;
+        } catch (IOException e) {
+            log.error("Delete file failed!", e);
+        }
+        return false;
     }
 
     public List<DataFile> getDataFiles(Integer pid) {

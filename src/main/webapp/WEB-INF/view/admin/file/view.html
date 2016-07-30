@@ -1,16 +1,18 @@
 <@override name="content">
 <div class="header">
-  <h1 class="page-title"><#if type?? && type == "resource">资源文件<#else>评测文件</#if></h1>
+  <h1 class="page-title"><#if type?? && type=="resource">资源<#elseif type?? && type=="image">图片<#else>评测</#if>文件</h1>
 </div>
 <ul class="breadcrumb">
   <li>
     <a href="admin">首页</a>
     <span class="divider">/</span>
   </li>
-<#if type?? && type == "resource">
+<#if type?? && type=="resource">
     <#assign parent = "resources">
+<#elseif type?? && type=="image">
+  <#assign parent = "images">
 <#else>
-    <#assign parent = "browse">
+    <#assign parent = "judge">
 </#if>
 
   <li>
@@ -48,7 +50,11 @@
           </a>
         </h4>
         <div>
-          <textarea rows="40" cols="160">${content}</textarea>
+          <#if path??>
+            <img src="${path!}">
+          <#else>
+            <textarea rows="40" cols="160">${content}</textarea>
+          </#if>
         </div>
       </div>
     </div>
