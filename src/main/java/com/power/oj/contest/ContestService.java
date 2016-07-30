@@ -4,6 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+//import com.itextpdf.text.Document;
+//import com.itextpdf.text.DocumentException;
+//import com.itextpdf.text.Element;
+//import com.itextpdf.text.Paragraph;
+//import com.itextpdf.text.pdf.PdfWriter;
+//import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
@@ -29,11 +37,25 @@ import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.HttpUtil;
 import com.power.oj.util.Tool;
+import freemarker.cache.WebappTemplateLoader;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.Version;
 import jodd.util.HtmlDecoder;
 import jodd.util.StringUtil;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.HttpHostConnectException;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -134,6 +156,65 @@ public class ContestService {
 
         return contestProblems;
     }
+
+//    public File renderProblems2pdf(Integer cid) {
+//        List<Record> contestProblems = getContestProblems(cid);
+//        ContestModel contest = getContest(cid);
+//        Document document = new Document();
+//        InputStream is = null;
+//        File pdf = new File(OjConfig.downloadPath, "contest-" + cid + ".pdf");
+//        try(FileOutputStream fos = new FileOutputStream(pdf)) {
+//            document.open();
+//            addMetaData(document, contest);
+//
+//            PdfWriter writer = PdfWriter.getInstance(document, fos);
+//            String html = getFreemarkerOutput(cid, contestProblems);
+//            log.info(html);
+//            is = new ByteArrayInputStream(html.getBytes());
+//            XMLWorkerHelper.getInstance().parseXHtml(writer, document, is);
+//            document.close();
+//            return pdf;
+//        } catch (DocumentException | IOException e) {
+//            log.error("create pdf for contest " + cid + " failed!", e);
+//        } catch (TemplateException e) {
+//            log.error("process template for contest " + cid + " failed!", e);
+//        } finally {
+//            IOUtils.closeQuietly(is);
+//        }
+//        return null;
+//    }
+//
+//    private void addMetaData(Document document, ContestModel contest) {
+//        document.addTitle(contest.getTitle());
+//        document.addCreator("Power OJ");
+//        document.addCreationDate();
+//        document.addAuthor(userService.getUser(contest.getUid()).getName());
+//    }
+//
+//    private String getFreemarkerOutput(Integer cid, List<Record> contestProblems) throws IOException, TemplateException {
+//        Configuration config = new Configuration(new Version(2, 3, 21));
+//        config.setTemplateLoader(new WebappTemplateLoader(JFinal.me().getServletContext()));
+//        config.setLocalizedLookup(false);
+//        StringWriter stringWriter = new StringWriter();
+//        Template temp = config.getTemplate("WEB-INF/view/contest/allProblems.html");
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("cid", cid);
+//        params.put("siteTitle", "Power OJ");
+//        params.put("contestProblems", contestProblems);
+//        temp.process(params, stringWriter);
+//        return stringWriter.toString();
+//    }
+//
+//    public Element getProblemElement(Record problem) {
+//        Paragraph paragraph = new Paragraph();
+//        paragraph.setSpacingAfter(15);
+//        paragraph.setSpacingBefore(15);
+//        paragraph.setAlignment(Element.ALIGN_LEFT);
+//        paragraph.setIndentationLeft(15);
+//        paragraph.setIndentationRight(15);
+//        paragraph.add(problem.getStr("title"));
+//        return paragraph;
+//    }
 
     public ProblemModel getProblem4Show(Integer cid, Integer num, Integer status) {
         ProblemModel problem = getProblem(cid, num);
