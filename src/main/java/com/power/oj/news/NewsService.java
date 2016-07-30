@@ -28,11 +28,7 @@ public class NewsService {
                 id);
         newsModel.setView(newsModel.getView() + 1);
 
-        if (OjConfig.isDevMode()) {
-            newsModel.update();
-        } else {
-            updateCache(newsModel);
-        }
+        newsModel.update();
 
         return newsModel;
     }
