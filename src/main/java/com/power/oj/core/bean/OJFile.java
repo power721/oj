@@ -1,6 +1,7 @@
 package com.power.oj.core.bean;
 
 import com.jfinal.log.Logger;
+import com.power.oj.util.FileKit;
 import jodd.io.FileNameUtil;
 import jodd.util.StringUtil;
 import org.apache.commons.io.FileUtils;
@@ -166,4 +167,8 @@ public class OJFile {
         return StringUtil.equalsOne(ext, exts) != -1;
     }
 
+    public boolean isImage() {
+        String ext = FileNameUtil.getExtension(name);
+        return StringUtil.equalsOne("." + ext, FileKit.getImageFileType()) != -1;
+    }
 }
