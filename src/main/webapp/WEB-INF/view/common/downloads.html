@@ -103,7 +103,8 @@
 </@override>
 <@override name="scripts">
 <script type="text/javascript">
-$().ready(function () {
+<#if adminUser??>
+  $(document).ready(function () {
   $('#inputName').tooltip({'trigger': 'focus', 'title': '资源名字不要和文件名相同.', 'placement': 'right'});
   $('#inputPath').tooltip({'trigger': 'focus', 'title': '不以/开头是相对路径${downloadPath!}，建议用绝对路径.', 'placement': 'top'});
   $('.accessType').tooltip({'title': 'public所有人可见，private队员可见，security仅管理员可见.', 'placement': 'top'});
@@ -111,6 +112,7 @@ $().ready(function () {
     $(this).removeData('modal');
   })
 });
+</#if>
 </script>
 </@override>
 <@extends name="../common/_layout.html" />
