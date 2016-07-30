@@ -127,7 +127,10 @@ public class Tool {
             return SecurityUtils.getSubject().getSession().getHost();
         }
 
-        String ip = request.getHeader("x-forwarded-for");
+        String ip = request.getHeader("X-Real-IP");
+        if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("x-forwarded-for");
+        }
         if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
@@ -136,9 +139,6 @@ public class Tool {
         }
         if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Real-IP");
         }
         if (StringUtil.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
