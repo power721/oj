@@ -31,7 +31,7 @@
 <div class="text-center">
   <h2>
     <#if userResult??>
-      <image src="assets/images/<#if userResult==0>accepted.gif<#else>wrong.gif</#if>"/>
+      <i class="oj-icon oj-icon-<#if userResult==0>accept<#else>delete</#if>"></i>
     </#if>
     <span class="black">${problem.id!}:</span>
     <#if adminUser??>
@@ -215,6 +215,15 @@
 </div>
 
 </@override>
+
+<@override name="styles">
+  <style>
+    h2 .oj-icon {
+      vertical-align: baseline;
+    }
+  </style>
+</@override>
+
 <@override name="scripts">
 <script type="text/javascript">
   $(document).ready(function () {
