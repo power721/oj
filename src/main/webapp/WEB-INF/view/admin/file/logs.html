@@ -34,7 +34,7 @@
                 <tr>
                   <td>${file_index+1}</td>
                   <td class="file">
-                    <a href="admin/file/log/?dir=${file.dir!}&name=${file.name!}" title="${file.path}">
+                    <a href="admin/file/log/?dir=${file.dir!?url}&name=${file.name!?url}" title="${file.path}">
                       <#if file.dir?? && file.dir?has_content>${file.dir!}/</#if>${file.name}
                     </a>
                   </td>
@@ -45,9 +45,9 @@
                   <td class="size" size="${file.size}"></td>
                   <td class="timestamp" data="${file.modifyTime}"></td>
                   <td class="action" name="${file.name}" dir="${file.dir!}">
-                    <a class="btn btn-primary view" href="admin/file/log/?dir=${file.dir!}&name=${file.name!}">View</a>
+                    <a class="btn btn-primary view" href="admin/file/log/?dir=${file.dir!?url}&name=${file.name!?url}">View</a>
                     <a class="btn btn-info download"
-                       href="admin/file/download/?dir=${file.dir!}&name=${file.name!}&type=log">
+                       href="admin/file/download/?dir=${file.dir!?url}&name=${file.name!?url}&type=log">
                       Download
                     </a>
                   </td>

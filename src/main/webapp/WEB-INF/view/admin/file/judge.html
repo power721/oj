@@ -49,9 +49,9 @@
                   <td>${file_index+1}</td>
                   <td class="file">
                     <#if file.directory==true><a
-                            href="admin/file/judge/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name}">${file.name}</a>
+                            href="admin/file/judge/?dir=<#if dir?? && dir?has_content>${dir!?url}/</#if>${file.name!?url}">${file.name}</a>
                     <#else>
-                      <a href="admin/file/view/?dir=${dir!}&name=${file.name!}">${file.name}</a>
+                      <a href="admin/file/view/?dir=${dir!?url}&name=${file.name!?url}">${file.name}</a>
                     </#if>
                   </td>
                   <td class="type">${file.type}</td>
@@ -63,12 +63,12 @@
                   <td class="action" name="${file.name}">
                     <#if file.directory==true>
                       <a class="btn btn-primary view"
-                         href="admin/file/judge/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name!}">View</a>
+                         href="admin/file/judge/?dir=<#if dir?? && dir?has_content>${dir!?url}/</#if>${file.name!?url}">View</a>
                     <#else>
-                      <a class="btn btn-primary view" href="admin/file/view/?dir=${dir!}&name=${file.name!}">View</a>
+                      <a class="btn btn-primary view" href="admin/file/view/?dir=${dir!?url}&name=${file.name!?url}">View</a>
                     </#if>
                     <a class="btn btn-info download"
-                       href="admin/file/download/?dir=${dir!}&name=${file.name!}">Download</a>
+                       href="admin/file/download/?dir=${dir!?url}&name=${file.name!?url}">Download</a>
                   </td>
                 </tr>
                 </#list>
