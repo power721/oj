@@ -17,7 +17,7 @@
     <div class="well">
       <div id="container">
         <h4>View Log:
-          <a href="admin/file/download/?dir=${dir!}&name=${name!}&type=log">
+          <a href="admin/file/download/?dir=${dir!?url}&name=${name!?url}&type=log">
             <#if dir?? && dir?has_content>${dir!}/</#if>${name!}
           </a>
         </h4>

@@ -19,11 +19,11 @@
         <#list resources as resource>
         <tr>
           <td>${resource_index + 1}</td>
-          <td><a href="resource/?name=${resource.name!}&id=${resource.id!}">${resource.name!}</a></td>
+          <td><a href="resource/?name=${resource.name!?url}&id=${resource.id!}">${resource.name!}</a></td>
           <td>${resource.description!}</td>
           <td>${resource.access!}</td>
           <td>${resource.download!}</td>
-          <td><a href="resource/?name=${resource.name!}&id=${resource.id!}"><i class="icon-download-alt"></i></a></td>
+          <td><a href="resource/?name=${resource.name!?url}&id=${resource.id!}"><i class="icon-download-alt"></i></a></td>
           <#if adminUser??>
             <td><a href="editResource/${resource.id!}" class="btn btn-info" data-toggle="modal" data-target="#editModal">Edit</a></td>
           </#if>

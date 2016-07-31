@@ -65,9 +65,9 @@
                   <td>${file_index+1}</td>
                   <td class="file">
                     <#if file.directory==true><a
-                            href="admin/file/images/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name}">${file.name}</a>
+                            href="admin/file/images/?dir=<#if dir?? && dir?has_content>${dir!?url}/</#if>${file.name!?url}">${file.name}</a>
                     <#elseif file.image>
-                      <a title="${baseDir!}/${dir!}/${file.name!}" href="${baseDir!}/${dir!}/${file.name!}" target="_blank">${file.name}</a>
+                      <a title="${baseDir!}/${dir!}/${file.name!}" href="${baseDir!}/${dir!?url}/${file.name!?url}" target="_blank">${file.name}</a>
                     <#else>
                       ${file.name}
                     </#if>
@@ -81,13 +81,13 @@
                   <td class="action" name="${file.name}">
                     <#if file.directory==true>
                       <a class="btn btn-primary"
-                         href="admin/file/images/?dir=<#if dir?? && dir?has_content>${dir!}/</#if>${file.name!}">View</a>
+                         href="admin/file/images/?dir=<#if dir?? && dir?has_content>${dir!?url}/</#if>${file.name!?url}">View</a>
                     <#elseif file.image>
-                      <a class="btn btn-primary" href="admin/file/view/?dir=${dir!}&name=${file.name!}&type=image">View</a>
+                      <a class="btn btn-primary" href="admin/file/view/?dir=${dir!?url}&name=${file.name!?url}&type=image">View</a>
                       <i class="btn btn-danger delete" data-dir="${dir!}" data-name="${file.name!}" data-trigger="confirm">Delete</i>
                     </#if>
                     <a class="btn btn-info download"
-                       href="admin/file/download/?dir=${dir!}&name=${file.name!}&type=image">Download</a>
+                       href="admin/file/download/?dir=${dir!?url}&name=${file.name!?url}&type=image">Download</a>
                   </td>
                 </tr>
                 </#list>
