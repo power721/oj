@@ -154,7 +154,10 @@ public class AppConfig extends JFinalConfig {
             druidPlugin = new DruidPlugin(PropKit.get("dev.jdbcUrl"), PropKit.get("dev.user"),
                 PropKit.get("dev.password").trim());
         }
-        druidPlugin.addFilter(new StatFilter());
+
+        if (OjConfig.isDevMode()) {
+            druidPlugin.addFilter(new StatFilter());
+        }
         WallFilter wall = new WallFilter();
         wall.setDbType("mysql");
         druidPlugin.addFilter(wall);
