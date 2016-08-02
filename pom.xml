@@ -150,6 +150,11 @@
             <artifactId>dom4j</artifactId>
             <version>1.6</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>org.apache.pdfbox</groupId>-->
             <!--<artifactId>pdfbox</artifactId>-->
@@ -176,8 +181,8 @@
                 <version>3.3</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>

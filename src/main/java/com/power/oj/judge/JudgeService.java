@@ -1,5 +1,7 @@
 package com.power.oj.judge;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -26,11 +28,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public final class JudgeService {
+
+    public static final Set<PosixFilePermission> FILE_PERMISSIONS = new HashSet<>();
+
     private static final Logger log = Logger.getLogger(JudgeService.class);
     private static final JudgeService me = new JudgeService();
     private static final ContestService contestService = ContestService.me();
@@ -39,11 +44,15 @@ public final class JudgeService {
     private static final UserService userService = UserService.me();
     //private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
     private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
-    private static final ConcurrentHashMap<String, RejudgeTask> rejudgeTasks = new ConcurrentHashMap<>();
+    // TODO: store task in redis with expire time
+    private static final Cache<String, RejudgeTask> rejudgeTasks =
+        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
     // TODO: store token in redis with expire time
-    private static final ConcurrentHashMap<Integer, String> tokens = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<Integer, Integer> originalResult = new ConcurrentHashMap<>();
-    public static final Set<PosixFilePermission> FILE_PERMISSIONS = new HashSet<>();
+    private static final Cache<Integer, String> tokens =
+        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+    // TODO: store originalResult in redis with expire time
+    private static final Cache<Integer, Integer> originalResult =
+        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
 
     static {
         FILE_PERMISSIONS.add(PosixFilePermission.OWNER_READ);
@@ -62,11 +71,11 @@ public final class JudgeService {
     }
 
     public RejudgeTask getRejudgeTask(String key) {
-        return rejudgeTasks.get(key);
+        return rejudgeTasks.getIfPresent(key);
     }
 
     public boolean isRejudging(String key) {
-        return rejudgeTasks.containsKey(key);
+        return rejudgeTasks.getIfPresent(key) != null;
     }
 
     public String generateToken(Integer sid) {
@@ -76,15 +85,17 @@ public final class JudgeService {
     }
 
     public boolean verifyToken(Integer sid, String token) {
-        if (token != null && token.equals(tokens.get(sid))) {
-            tokens.remove(sid);
+        if (token != null && token.equals(tokens.getIfPresent(sid))) {
+            tokens.invalidate(sid);
             return true;
         }
         return false;
     }
 
     public Integer removeOriginalResult(Integer sid) {
-        return originalResult.remove(sid);
+        Integer value = originalResult.getIfPresent(sid);
+        originalResult.invalidate(sid);
+        return value;
     }
 
     public void judge(Solution solution) {
@@ -145,9 +156,9 @@ public final class JudgeService {
             key = RejudgeType.SOLUTION.getKey(solution.getSid());
         }
 
-        task = rejudgeTasks.get(key);
+        task = rejudgeTasks.getIfPresent(key);
         if (task != null) {
-            rejudgeTasks.remove(key);
+            rejudgeTasks.invalidate(key);
             if (task.isDeleteTempDir()) {
                 try {
                     FileUtils.deleteDirectory(dir);
@@ -157,7 +168,7 @@ public final class JudgeService {
             }
         }
 
-        tokens.remove(solution.getSid());
+        tokens.invalidate(solution.getSid());
     }
 
     public void rejudge(Solution solution) {
@@ -166,13 +177,13 @@ public final class JudgeService {
 
     public boolean rejudgeSolution(Integer sid) {
         String key = RejudgeType.SOLUTION.getKey(sid);
-        if (rejudgeTasks.containsKey(key)) {
+        if (containsKey(rejudgeTasks, key)) {
             log.warn("Do not rejudge solution " + sid + " since rejudge this solution is ongoing.");
             return false;
         }
 
         SolutionModel solution = solutionService.findSolution(sid);
-        if (rejudgeTasks.containsKey(RejudgeType.PROBLEM.getKey(solution.getPid()))) {
+        if (containsKey(rejudgeTasks, RejudgeType.PROBLEM.getKey(solution.getPid()))) {
             log.warn("Do not rejudge solution " + sid + " since rejudge problem is ongoing.");
             return false;
         }
@@ -186,7 +197,7 @@ public final class JudgeService {
         } catch (Exception e) {
             log.error("rejudge solution " + sid + " failed!", e);
         } finally {
-            rejudgeTasks.remove(task.getKey());
+            rejudgeTasks.invalidate(task.getKey());
         }
 
         return true;
@@ -194,7 +205,7 @@ public final class JudgeService {
 
     public boolean rejudgeProblem(final Integer pid) {
         String key = RejudgeType.PROBLEM.getKey(pid);
-        if (rejudgeTasks.containsKey(key)) {
+        if (containsKey(rejudgeTasks, key)) {
             log.warn("Do not rejudge problem " + pid + " since rejudge this problem is ongoing.");
             return false;
         }
@@ -202,43 +213,37 @@ public final class JudgeService {
         final long startTime = System.currentTimeMillis();
         final RejudgeTask task = new RejudgeTask(pid, RejudgeType.PROBLEM);
         rejudgeTasks.put(task.getKey(), task);
-        Thread rejudgeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    problemService.reset(pid);
-                    List<SolutionModel> solutionList = solutionService.getSolutionListForProblemRejudge(pid);
-                    task.setTotal(solutionList.size());
+        Thread rejudgeThread = new Thread(() -> {
+            try {
+                problemService.reset(pid);
+                List<SolutionModel> solutionList = solutionService.getSolutionListForProblemRejudge(pid);
+                task.setTotal(solutionList.size());
 
-                    // TODO lock this problem
-                    for (SolutionModel solution : solutionList) {
-                        rejudge(solution, true);
-                        task.increaseCount();
-                    }
-                } catch (Exception e) {
-                    log.error("rejudge problem " + pid + " failed!", e);
-                } finally {
-                    rejudgeTasks.remove(task.getKey());
+                // TODO lock this problem
+                for (SolutionModel solution : solutionList) {
+                    rejudge(solution, true);
+                    task.increaseCount();
                 }
-                log.info("Rejudge problem " + pid + " finished, total judge: " + task.getTotal() + " total time: " + (
-                    System.currentTimeMillis() - startTime) + " ms");
+            } catch (Exception e) {
+                log.error("rejudge problem " + pid + " failed!", e);
+            } finally {
+                rejudgeTasks.invalidate(task.getKey());
             }
+            log.info("Rejudge problem " + pid + " finished, total judge: " + task.getTotal() + " total time: " + (
+                System.currentTimeMillis() - startTime) + " ms");
         });
         rejudgeExecutor.execute(rejudgeThread);
         return true;
     }
 
     public void rejudgeProblem4Wait(final Integer pid) {
-        Thread rejudgeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<SolutionModel> solutionList = solutionService.getWaitSolutionListForProblem(pid);
+        Thread rejudgeThread = new Thread(() -> {
+            List<SolutionModel> solutionList = solutionService.getWaitSolutionListForProblem(pid);
 
-                // TODO lock this problem
-                for (SolutionModel solution : solutionList) {
-                    problemService.revertAccepted(solution);
-                    rejudge(solution);
-                }
+            // TODO lock this problem
+            for (SolutionModel solution : solutionList) {
+                problemService.revertAccepted(solution);
+                rejudge(solution);
             }
         });
         rejudgeExecutor.execute(rejudgeThread);
@@ -262,7 +267,7 @@ public final class JudgeService {
 
     public boolean rejudgeContest(final Integer cid) {
         String key = RejudgeType.CONTEST.getKey(cid);
-        if (rejudgeTasks.containsKey(key)) {
+        if (containsKey(rejudgeTasks, key)) {
             log.warn("Do not rejudge contest " + cid + " since rejudge this contest is ongoing.");
             return false;
         }
@@ -270,35 +275,32 @@ public final class JudgeService {
         final long startTime = System.currentTimeMillis();
         final RejudgeTask task = new RejudgeTask(cid, RejudgeType.CONTEST);
         rejudgeTasks.put(task.getKey(), task);
-        Thread rejudgeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    FileUtil.deleteDir(getWorkPath(cid));
-                } catch (IOException e) {
-                    if (OjConfig.isDevMode())
-                        e.printStackTrace();
-                    log.error(e.getLocalizedMessage());
-                }
-                try {
-                    List<ContestSolutionModel> solutions =
-                        Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
-                    task.setTotal(solutions.size());
-                    synchronized (solutions) {
-                        for (ContestSolutionModel solution : solutions) {
-                            rejudgeContestSolution(solution);
-                            task.increaseCount();
-                        }
-                    }
-                } catch (Exception e) {
-                    log.error("rejudge contest " + cid + " failed!", e);
-                } finally {
-                    rejudgeTasks.remove(task.getKey());
-                }
-                log.info(
-                    "Rejudge contest contest " + cid + " finished, total judge: " + task.getTotal() + " total time: "
-                        + (System.currentTimeMillis() - startTime) + " ms");
+        Thread rejudgeThread = new Thread(() -> {
+            try {
+                FileUtil.deleteDir(getWorkPath(cid));
+            } catch (IOException e) {
+                if (OjConfig.isDevMode())
+                    e.printStackTrace();
+                log.error(e.getLocalizedMessage());
             }
+            try {
+                List<ContestSolutionModel> solutions =
+                    Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
+                task.setTotal(solutions.size());
+                synchronized (solutions) {
+                    for (ContestSolutionModel solution : solutions) {
+                        rejudgeContestSolution(solution);
+                        task.increaseCount();
+                    }
+                }
+            } catch (Exception e) {
+                log.error("rejudge contest " + cid + " failed!", e);
+            } finally {
+                rejudgeTasks.invalidate(task.getKey());
+            }
+            log.info(
+                "Rejudge contest contest " + cid + " finished, total judge: " + task.getTotal() + " total time: " + (
+                    System.currentTimeMillis() - startTime) + " ms");
         });
         rejudgeExecutor.execute(rejudgeThread);
         return true;
@@ -306,12 +308,12 @@ public final class JudgeService {
 
     public boolean rejudgeContestProblem(final Integer cid, final Integer pid, final Integer num) {
         String key = RejudgeType.CONTEST_PROBLEM.getKey(cid, num);
-        if (rejudgeTasks.containsKey(key)) {
+        if (containsKey(rejudgeTasks, key)) {
             log.warn("Do not rejudge contest problem " + cid + "-" + pid + " since rejudge this problem is ongoing.");
             return false;
         }
 
-        if (rejudgeTasks.containsKey(RejudgeType.CONTEST.getKey(cid))) {
+        if (containsKey(rejudgeTasks, RejudgeType.CONTEST.getKey(cid))) {
             log.warn("Do not rejudge contest problem " + cid + "-" + pid + " since rejudge this contest is ongoing.");
             return false;
         }
@@ -319,25 +321,22 @@ public final class JudgeService {
         final long startTime = System.currentTimeMillis();
         final RejudgeTask task = new RejudgeTask(cid, num, RejudgeType.CONTEST_PROBLEM);
         rejudgeTasks.put(key, task);
-        Thread rejudgeThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    List<ContestSolutionModel> solutions = contestService.getContestProblemSolutions(cid, pid);
-                    task.setTotal(solutions.size());
+        Thread rejudgeThread = new Thread(() -> {
+            try {
+                List<ContestSolutionModel> solutions = contestService.getContestProblemSolutions(cid, pid);
+                task.setTotal(solutions.size());
 
-                    for (ContestSolutionModel solution : solutions) {
-                        rejudgeContestSolution(solution);
-                        task.increaseCount();
-                    }
-                } catch (Exception e) {
-                    log.error("rejudge contest problem " + cid + "-" + pid + " failed!", e);
-                } finally {
-                    rejudgeTasks.remove(task.getKey());
+                for (ContestSolutionModel solution : solutions) {
+                    rejudgeContestSolution(solution);
+                    task.increaseCount();
                 }
-                log.info("Rejudge contest problem " + cid + "-" + pid + " finished, total judge: " + task.getTotal()
-                    + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
+            } catch (Exception e) {
+                log.error("rejudge contest problem " + cid + "-" + pid + " failed!", e);
+            } finally {
+                rejudgeTasks.invalidate(task.getKey());
             }
+            log.info("Rejudge contest problem " + cid + "-" + pid + " finished, total judge: " + task.getTotal()
+                + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
         });
 
         rejudgeExecutor.execute(rejudgeThread);
@@ -377,11 +376,8 @@ public final class JudgeService {
     }
 
     public String getWorkPath(Integer cid) {
-        String workPath =
-            FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator + "c" + cid
-                + File.separator;
-
-        return workPath;
+        return FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator + "c" + cid
+            + File.separator;
     }
 
     public String getWorkPath(Solution solution) {
@@ -414,4 +410,7 @@ public final class JudgeService {
         return workPath;
     }
 
+    private boolean containsKey(Cache<?, ?> cache, Object key) {
+        return cache.getIfPresent(key) != null;
+    }
 }
