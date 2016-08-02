@@ -68,6 +68,13 @@ if [ ! -d "${TOMCAT}" ]; then
     USER=tomcat8
     GROUP=tomcat8
     TOMCAT=/usr/share/tomcat8/webapps
+
+    if [ ! -d "${TOMCAT}" ]; then
+        USER=tomcat8
+        GROUP=tomcat8
+        TOMCAT=/var/lib/tomcat8/webapps
+    fi
+
     if [ ! -d "${TOMCAT}" ]; then
         read -p "Please input the tomcat home path: " TOMCAT
         TOMCAT=${TOMCAT}/webapps
