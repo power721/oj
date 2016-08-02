@@ -202,6 +202,7 @@ public abstract class JudgeAdapter implements Runnable {
             solution.setSystemError(error);
         }
 
+        judgeService.cleanRejudge(solution);
         return solution.update();
     }
 

@@ -13,7 +13,7 @@
         <param name="append" value="true"/>
         <param name="maxFileSize" value="10MB"/>
         <param name="maxBackupIndex" value="10"/>
-        <param name="file" value="${catalina.home}/logs/oj.log"/>
+        <param name="file" value="${catalina.base}/logs/oj.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
                    value="[%-d{yyyy-MM-dd HH\:mm\:ss}]-[%t]-[%l]%n[%p]\: %m%n"/>

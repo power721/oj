@@ -156,6 +156,8 @@ public final class JudgeService {
                 }
             }
         }
+
+        tokens.remove(solution.getSid());
     }
 
     public void rejudge(Solution solution) {
