@@ -917,6 +917,7 @@ public final class UserService {
         if (Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.MEMBER_ROLE_ID, uid) != 1) {
             return 4;
         }
+        Db.update("UPDATE user SET shareCode=1 WHERE uid=?", uid);
         return 0;
     }
 
