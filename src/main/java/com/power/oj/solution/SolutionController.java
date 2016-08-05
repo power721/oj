@@ -79,7 +79,7 @@ public class SolutionController extends OjController {
             }
         }
 
-        String problemTitle = "";
+        String problemTitle;
         Integer cid = solutionModel.getCid();
         if (cid != null && cid > 0) {
             int num = solutionModel.getNum();
@@ -137,10 +137,11 @@ public class SolutionController extends OjController {
         SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
         solutionModel.set("uid", userService.getCurrentUid());
         Integer cid = solutionModel.getInt("cid");
-        String url = "/status";
+        String name = userService.getCurrentUserName();
+        String url = "/status?name=" + name;
 
         if (cid != null && cid > 0) {
-            url = new StringBuilder(2).append("/contest/status/").append(cid).toString();
+            url = "/contest/status/" + cid + "?name=" + name;
         }
 
         if (solutionService.submitSolution(solutionModel) != 0) {
