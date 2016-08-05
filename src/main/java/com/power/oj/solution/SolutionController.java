@@ -137,11 +137,14 @@ public class SolutionController extends OjController {
         SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
         solutionModel.set("uid", userService.getCurrentUid());
         Integer cid = solutionModel.getInt("cid");
+        Integer pid = solutionModel.getInt("pid");
         String name = userService.getCurrentUserName();
-        String url = "/status?name=" + name;
+        String url;
 
         if (cid != null && cid > 0) {
             url = "/contest/status/" + cid + "?name=" + name;
+        } else {
+            url = "/status?name=" + name + "&pid=" + pid;
         }
 
         if (solutionService.submitSolution(solutionModel) != 0) {
