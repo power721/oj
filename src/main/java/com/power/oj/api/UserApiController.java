@@ -83,9 +83,31 @@ public class UserApiController extends OjController {
 
     public void profile() {
         UserModel userModel = userService.getCurrentUser();
-        userModel.put("success", true);
-        userModel.remove("token").remove("password").remove("data");
-        renderJson(userModel);
+        if (userModel == null) {
+            renderJson("success", false);
+        } else {
+            userModel.put("success", true);
+            userModel.remove("token").remove("password").remove("data");
+            renderJson(userModel);
+        }
+    }
+
+    public void full() {
+        UserModel userModel = null;
+
+        if (isParaExists("uid")) {
+            userModel = userService.getUserByUid(getParaToInt("uid"));
+        } else if (isParaExists("name")) {
+            userModel = userService.getUserByName(getPara("name"));
+        }
+
+        if (userModel == null) {
+            renderJson("success", false);
+        } else {
+            userModel.put("success", true);
+            userModel.remove("token").remove("password").remove("data");
+            renderJson(userModel);
+        }
     }
 
     @Clear
@@ -103,7 +125,10 @@ public class UserApiController extends OjController {
         } else {
             userModel.put("success", true);
             // TODO check user sensitive information
-            userModel.remove("token").remove("password").remove("realName").remove("phone").remove("data");
+            userModel.remove("token").remove("password").remove("data");
+            if (!userService.isAdmin()) {
+                userModel.remove("realName").remove("phone");
+            }
             renderJson(userModel);
         }
     }

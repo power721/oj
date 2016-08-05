@@ -29,7 +29,7 @@ public class UserAdminController extends OjController {
     }
 
     public void members() {
-        List<Record> membersList = ojService.getMembers();
+        List<Record> membersList = adminService.getMembers();
 
         setAttr("members", membersList);
     }

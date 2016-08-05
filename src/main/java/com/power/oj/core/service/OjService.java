@@ -132,12 +132,6 @@ public final class OjService {
         return Db.find("SELECT id,name FROM role ORDER BY id");
     }
 
-    public List<Record> getMembers() {
-        return Db.find(
-            "SELECT u.uid,u.name,u.nick FROM user_role ur INNER JOIN user u ON u.uid=ur.uid WHERE ur.rid=? ORDER BY u.uid",
-            UserService.MEMBER_ROLE_ID);
-    }
-
     public Page<RoleModel> getRoleList(int pageNumber, int pageSize, String sSortName, String sSortDir,
         String sSearch) {
         List<Object> param = new ArrayList<Object>();

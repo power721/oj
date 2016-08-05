@@ -17,6 +17,7 @@
         <th>UID</th>
         <th>Name</th>
         <th>Nick</th>
+        <th>Real Name</th>
         <th>Action</th>
       </tr>
       </thead>
@@ -29,6 +30,7 @@
             </td>
             <td class="name"><a href="user/profile/${User.name!}" target="_blank">${User.name!}</a></td>
             <td class="nick"><a href="user/profile/${User.nick!}" target="_blank">${User.nick!}</a></td>
+            <td class="realName">${User.realName!}</td>
             <td class="admin">
               <button class="btn btn-danger remove" uid="${User.uid!}">Remove</button>
             </td>
@@ -40,6 +42,7 @@
           <td><input type="number" name="uid" class="input-small" placeholder="User ID" min="1000" required></td>
           <td><input type="text" name="name" class="input-large" placeholder="Name" required></td>
           <td><input type="text" name="nick" class="input-large uneditable-input" placeholder="Nick" disabled></td>
+          <td><input type="text" name="realName" class="input-large uneditable-input" placeholder="Real Name" disabled></td>
           <td>
             <button type="submit" class="btn btn-success">Add</button>
           </td>
@@ -68,20 +71,23 @@
     function getUserInfo() {
       var uid = this.value;
       if (uid >= 1000) {
-        $.get("api/user/info", {uid: this.value},
+        $.get("api/user/full", {uid: this.value},
                 function (data) {
                   if (data.success) {
                     $("input[name='name']").val(data.name);
                     $("input[name='nick']").val(data.nick);
+                    $("input[name='realName']").val(data.realName);
                   } else {
                     $("input[name='name']").val('');
                     $("input[name='nick']").val('');
+                    $("input[name='realName']").val('');
                   }
                 });
       }
       else {
         $("input[name='name']").val('');
         $("input[name='nick']").val('');
+        $("input[name='realName']").val('');
       }
     }
 
@@ -91,20 +97,23 @@
       var name = this.value;
       if (name.length >= 4) // for old user name, e.g: 'test'
       {
-        $.get("api/user/info", {name: this.value},
+        $.get("api/user/full", {name: this.value},
                 function (data) {
                   if (data.success) {
                     $("input[name='uid']").val(data.uid);
                     $("input[name='nick']").val(data.nick);
+                    $("input[name='realName']").val(data.realName);
                   } else {
                     $("input[name='uid']").val('');
                     $("input[name='nick']").val('');
+                    $("input[name='realName']").val('');
                   }
                 });
       }
       else {
         $("input[name='uid']").val('');
         $("input[name='nick']").val('');
+        $("input[name='realName']").val('');
       }
     }
 
@@ -127,6 +136,7 @@
         var uid = $('input[name=uid]').val();
         var name = $('input[name=name]').val();
         var nick = $('input[name=nick]').val();
+        var realName = $('input[name=realName]').val();
         $.post($(this).attr("action"), $('#addMember').serialize(),
                 function (data) {
                   switch (data.result) {
@@ -135,6 +145,7 @@
                               '<td class="uid"><a href="user/profile/' + name + '" target="_blank">' + uid + '</a></td>' +
                               '<td class="name"><a href="user/profile/' + name + '" target="_blank">' + name + '</a></td>' +
                               '<td class="nick"><a href="user/profile/' + name + '" target="_blank">' + nick + '</a></td>' +
+                              '<td class="realName">' + realName + '</td>' +
                               '<td class="admin"><button class="btn btn-danger remove" uid="' + uid + '">Remove</button></td>' +
                               '</tr>';
                       that.parent().before(html);

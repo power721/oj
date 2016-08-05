@@ -166,6 +166,12 @@ public final class AdminService {
         return user.update();
     }
 
+    public List<Record> getMembers() {
+        return Db.find(
+            "SELECT u.uid,u.name,u.nick,u.realName FROM user_role ur INNER JOIN user u ON u.uid=ur.uid WHERE ur.rid=? ORDER BY u.uid",
+            UserService.MEMBER_ROLE_ID);
+    }
+
     public Page<Record> getLoginlog(int pageNumber, int pageSize) {
         return Db.paginate(pageNumber, pageSize, "SELECT *", "FROM loginlog ORDER BY ctime DESC");
     }
