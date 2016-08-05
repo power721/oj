@@ -130,7 +130,6 @@ public class ContestController extends OjController {
 //        }
 //    }
 
-    @RequiresAuthentication
     public void submit() {
         Integer cid = getParaToInt(0);
         String problemId = getPara(1, "A");
@@ -172,7 +171,8 @@ public class ContestController extends OjController {
     public void submitSolution() {
         ContestSolutionModel contestSolution = getModel(ContestSolutionModel.class, "solution");
         Integer cid = contestSolution.getCid();
-        String url = "/contest/status/" + cid;
+        String name = userService.getCurrentUserName();
+        String url = "/contest/status/" + cid + "?name=" + name;
         ContestModel contestModle = contestService.getContest(cid);
         if (contestModle.getLanguages() != null) {
             String[] languages = StringUtils.split(contestModle.getLanguages(), ",");

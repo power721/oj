@@ -118,7 +118,7 @@
     }, 25050);
 
     function refreshResult() {
-      $('#WAIT, #RUN').each(function () {
+      $('#WAIT, #RUN, #REJUDGE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
         $.getJSON('api/contest/getResult', {'cid': ${cid!}, 'sid': ${solution.sid!}}, function (data) {
