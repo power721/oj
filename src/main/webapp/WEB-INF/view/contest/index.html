@@ -13,6 +13,12 @@
   <#include "../common/_paginate.html" />
   <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="contest/" />
   <div class="pull-right">
+    <div class="btn-group" data-toggle="buttons-radio">
+      <a href="/contest" type="button" class="btn btn-small<#if status==-1> active</#if>">All</a>
+      <a href="/contest?status=0" type="button" class="btn btn-small<#if status==0> active</#if>">Pending</a>
+      <a href="/contest?status=1" type="button" class="btn btn-small<#if status==1> active</#if>">Running</a>
+      <a href="/contest?status=2" type="button" class="btn btn-small<#if status==2> active</#if>">Finished</a>
+    </div>
     <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span>
     <span class="badge badge-info">${contestList.totalRow} Contests</span>
   </div>

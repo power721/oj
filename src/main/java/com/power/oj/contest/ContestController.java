@@ -41,6 +41,7 @@ public class ContestController extends OjController {
 
         setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status));
         setAttr("pageSize", OjConfig.contestPageSize);
+        setAttr("status", status);
 
         setTitle(getText("contest.index.title"));
     }
