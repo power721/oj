@@ -3,6 +3,7 @@ package com.power.oj.core.controller;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.POST;
+import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ErrorFlashMessage;
@@ -19,27 +20,28 @@ import java.io.File;
 public class MainController extends OjController {
 
     public void index() {
-        setAttr("problemsNumber", problemService.getProblemsNumber());
-        setTitle(getText("page.index.title"));
-        try {
-            int pageNumber = getParaToInt(0, 1);
-            int pageSize = getParaToInt(1, OjConfig.noticePageSize);
-            Integer type = getParaToInt("type", -1);
-            Integer status = getParaToInt("status", 0);
+        if (isSwust()) {
+            int pageNumber = 1;
+            int pageSize = OjConfig.noticePageSize;
             setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
             pageSize = OjConfig.contestPageSize;
-            setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status));
+            setAttr("pendingContests", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.PENDING));
+            setAttr("contestList", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.RUNNING));
             pageSize = OjConfig.newsPageSize;
             setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
-        } catch (NumberFormatException e) {
-            redirect301("/");
-        }
+            setAttr("isSwust", true);
+            setTitle(getText("page.index.title"));
 
-        if (getPara("swust") != null || getRequest().getRequestURL().toString().contains("swust")) {
             render("swust.html");
         } else {
+            setAttr("problemsNumber", problemService.getProblemsNumber());
+
             render("index.html");
         }
+    }
+
+    private boolean isSwust() {
+        return getPara("swust") != null || getRequest().getRequestURL().toString().contains("swust");
     }
 
     public void about() {
@@ -91,7 +93,7 @@ public class MainController extends OjController {
     @RequiresPermissions("admin")
     public void addResource() {
         ResourceModel model = getModel(ResourceModel.class, "resource");
-        if(ojService.addResource(model)) {
+        if (ojService.addResource(model)) {
             redirect("/downloads");
         } else {
             redirect("/downloads", new ErrorFlashMessage("Add resource failed!"));
@@ -102,7 +104,7 @@ public class MainController extends OjController {
     @RequiresPermissions("admin")
     public void updateResource() {
         ResourceModel model = getModel(ResourceModel.class, "resource");
-        if(ojService.updateResource(model)) {
+        if (ojService.updateResource(model)) {
             redirect("/downloads");
         } else {
             redirect("/downloads", new ErrorFlashMessage("Update resource failed!"));
