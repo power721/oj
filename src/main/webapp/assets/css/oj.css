@@ -520,4 +520,5 @@ table.table-stats {
 
 ul.marquee li {
   display: inline-block;
+  padding-right: 5000px;
 }
