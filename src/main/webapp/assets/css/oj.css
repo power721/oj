@@ -517,3 +517,7 @@ table.table-stats {
   -moz-border-right-colors: none;
   -moz-border-top-colors: none;
 }
+
+ul.marquee li {
+  display: inline-block;
+}

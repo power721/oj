@@ -72,6 +72,18 @@
 
 
 </@override>
+<@override name="styles">
+<link rel="stylesheet" type="text/css" href="assets/css/flexslider.css" media="screen"/>
+</@override>
 <@override name="scripts">
+<script type="text/javascript" src="assets/js/jquery.flexslider.js"></script>
+
+<script type="text/javascript">
+  $(window).load(function () {
+    $('.flexslider').flexslider({
+      animation: "slide"
+    });
+  });
+</script>
 </@override>
 <@extends name="../common/_layout.html" />
