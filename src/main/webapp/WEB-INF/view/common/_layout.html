@@ -114,7 +114,7 @@
 
 <#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
 <div class="marquee">
-  <marquee class="hidden-phone" direction="left" behavior="alternate" scrollamount="2" style="margin-top: 45px;">
+  <marquee class="hidden-phone" direction="left" behavior="scroll" scrollamount="2" style="margin-top: 45px;">
     <ul class='marquee'>
     <#list notices as notice>
       <li><a href="notice/show/${notice.id!}">${notice.title!}</a></li>
