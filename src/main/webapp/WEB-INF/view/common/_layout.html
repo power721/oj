@@ -115,7 +115,11 @@
 
 <div class="marquee">
   <marquee class="hidden-phone" direction="left" behavior="alternate" scrollamount="2" style="margin-top: 45px;">
-
+  <#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
+    <#list notices as notice>
+      <p><a href="notice/show/${notice.id!}">${notice.title!}</a></p>
+    </#list>
+  </#if>
   </marquee>
 </div>
 
