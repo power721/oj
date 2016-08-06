@@ -16,7 +16,6 @@
   <link href="assets/css/news.css" type="text/css" rel="stylesheet">
   <link href="assets/css/board.css" type="text/css" rel="stylesheet">
   <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="assets/css/flexslider.css" media="screen"/>
   <link href="assets/font-awesome-4.6.3/css/font-awesome.min.css" type="text/css" rel="stylesheet">
   <!--[if lt IE 8]>
   <link href="assets/font-awesome-4.6.3/css/font-awesome-ie7.min.css" type="text/css" rel="stylesheet">
@@ -113,15 +112,17 @@
   </div>
 </div>
 
+<#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
 <div class="marquee">
   <marquee class="hidden-phone" direction="left" behavior="alternate" scrollamount="2" style="margin-top: 45px;">
-  <#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
+    <ul class='marquee'>
     <#list notices as notice>
-      <p><a href="notice/show/${notice.id!}">${notice.title!}</a></p>
+      <li><a href="notice/show/${notice.id!}">${notice.title!}</a></li>
     </#list>
-  </#if>
+    </ul>
   </marquee>
 </div>
+</#if>
 
 <!-- ======================= main content ======================= -->
 <div class="main <#if oj_fluid_width??>container-fluid<#else>container</#if>">
@@ -274,18 +275,9 @@
 <script type="text/javascript" src="assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="assets/js/jquery.cookie.js"></script>
 <script type="text/javascript" src="assets/js/jquery.form.js"></script>
-<script type="text/javascript" src="assets/js/jquery.flexslider.js"></script>
 <script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
 <script type="text/javascript" src="assets/js/oj.js"></script>
-<script type="text/javascript">
 
-  $(window).load(function () {
-    $('.flexslider').flexslider({
-      animation: "slide"
-
-    });
-  });
-</script>
 <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 <!--[if lt IE 9]>
 <script type="text/javascript" src="assets/js/placeholders.min.js"></script>
@@ -293,6 +285,14 @@
 <![endif]-->
 
 <@block name="scripts"></@block>
+
+<#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('ul.marquee li').css('padding-right', $(window).width());
+  });
+</script>
+</#if>
 
 <#if gaAccount?? && domaiNname??>
 <script>
