@@ -112,17 +112,18 @@
   </div>
 </div>
 
-<#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
 <div class="marquee">
   <marquee class="hidden-phone" direction="left" behavior="scroll" scrollamount="2" style="margin-top: 45px;">
-    <ul class='marquee'>
+    <#-- this is required -->
+<#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
+  <ul class='marquee'>
     <#list notices as notice>
       <li><a href="notice/show/${notice.id!}">${notice.title!}</a></li>
     </#list>
     </ul>
+</#if>
   </marquee>
 </div>
-</#if>
 
 <!-- ======================= main content ======================= -->
 <div class="main <#if oj_fluid_width??>container-fluid<#else>container</#if>">
