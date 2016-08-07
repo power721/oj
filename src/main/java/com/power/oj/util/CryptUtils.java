@@ -1,6 +1,6 @@
 package com.power.oj.util;
 
-import com.power.oj.core.OjConfig;
+import com.jfinal.log.Logger;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -15,6 +15,7 @@ import java.security.SecureRandom;
  */
 public class CryptUtils {
 
+    private static final Logger LOGGER = Logger.getLogger(CryptUtils.class);
     private final static String DES = "DES";
 
     /**
@@ -23,9 +24,8 @@ public class CryptUtils {
      * @param src 数据源
      * @param key 密钥，长度必须是8的倍数
      * @return 返回加密后的数据
-     * @throws Exception
      */
-    public static byte[] encrypt(byte[] src, byte[] key) throws RuntimeException {
+    public static byte[] encrypt(byte[] src, byte[] key) {
         // DES算法要求有一个可信任的随机数源
         try {
             SecureRandom sr = new SecureRandom();
@@ -43,8 +43,7 @@ public class CryptUtils {
             // 正式执行加密操作
             return cipher.doFinal(src);
         } catch (Exception e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
+            LOGGER.error("encrypt failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -55,9 +54,8 @@ public class CryptUtils {
      * @param src 数据源
      * @param key 密钥，长度必须是8的倍数
      * @return 返回解密后的原始数据
-     * @throws Exception
      */
-    public static byte[] decrypt(byte[] src, byte[] key) throws RuntimeException {
+    public static byte[] decrypt(byte[] src, byte[] key) {
         try {
             // DES算法要求有一个可信任的随机数源
             SecureRandom sr = new SecureRandom();
@@ -75,8 +73,7 @@ public class CryptUtils {
             // 正式执行解密操作
             return cipher.doFinal(src);
         } catch (Exception e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
+            LOGGER.error("decrypt failed", e);
             throw new RuntimeException(e);
         }
     }
@@ -87,9 +84,8 @@ public class CryptUtils {
      * @param data
      * @param key  密钥
      * @return
-     * @throws Exception
      */
-    public final static String decrypt(String data, String key) throws Exception {
+    public static String decrypt(String data, String key) {
         return new String(decrypt(hex2byte(data.getBytes()), key.getBytes()));
     }
 
@@ -99,26 +95,18 @@ public class CryptUtils {
      * @param data
      * @param key  密钥
      * @return
-     * @throws Exception
      */
-    public final static String encrypt(String data, String key) {
+    public static String encrypt(String data, String key) {
         if (data != null)
             try {
                 return byte2hex(encrypt(data.getBytes(), key.getBytes()));
             } catch (Exception e) {
-                if (OjConfig.isDevMode())
-                    e.printStackTrace();
+                LOGGER.error("encrypt failed", e);
                 throw new RuntimeException(e);
             }
         return null;
     }
 
-    /**
-     * 二行制转字符串
-     *
-     * @param b
-     * @return
-     */
     private static String byte2hex(byte[] b) {
         StringBuilder hs = new StringBuilder();
         String stmp;

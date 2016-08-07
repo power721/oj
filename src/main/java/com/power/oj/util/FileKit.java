@@ -2,13 +2,12 @@ package com.power.oj.util;
 
 import com.google.common.io.Files;
 import com.jfinal.kit.PathKit;
-import com.power.oj.core.OjConfig;
+import com.jfinal.log.Logger;
 import jodd.io.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +18,7 @@ import java.util.Random;
  */
 public class FileKit {
 
+    private static final Logger LOGGER = Logger.getLogger(FileKit.class);
     private static String[] allowFiles =
         {".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp"};
 
@@ -35,12 +35,14 @@ public class FileKit {
         File realFile = new File(realPath);
         if (realFile.isDirectory()) {
             File[] subfiles = realFile.listFiles();
-            for (File file : subfiles) {
-                if (file.isDirectory()) {
-                    getFiles(file.getAbsolutePath(), files);
-                } else {
-                    if (!getFileType(file.getName()).equals("")) {
-                        files.add(file);
+            if (subfiles != null) {
+                for (File file : subfiles) {
+                    if (file.isDirectory()) {
+                        getFiles(file.getAbsolutePath(), files);
+                    } else {
+                        if (!getFileType(file.getName()).equals("")) {
+                            files.add(file);
+                        }
                     }
                 }
             }
@@ -77,12 +79,14 @@ public class FileKit {
         File realFile = new File(realpath);
         if (realFile.isDirectory()) {
             File[] subfiles = realFile.listFiles();
-            for (File file : subfiles) {
-                if (file.isDirectory()) {
-                    getImageFiles(file.getAbsolutePath(), files);
-                } else {
-                    if (!getImageType(file.getName()).equals("")) {
-                        files.add(file);
+            if (subfiles != null) {
+                for (File file : subfiles) {
+                    if (file.isDirectory()) {
+                        getImageFiles(file.getAbsolutePath(), files);
+                    } else {
+                        if (!getImageType(file.getName()).equals("")) {
+                            files.add(file);
+                        }
                     }
                 }
             }
@@ -97,9 +101,7 @@ public class FileKit {
      * @return the image file suffix with '.'
      */
     public static String getImageType(String fileName) {
-        Iterator<String> type = Arrays.asList(imageFileType).iterator();
-        while (type.hasNext()) {
-            String t = type.next();
+        for (String t : Arrays.asList(imageFileType)) {
             if (fileName.endsWith(t)) {
                 return t;
             }
@@ -149,7 +151,7 @@ public class FileKit {
             path = path + "/";
 
         if (!path.startsWith("/"))
-            path = new StringBuilder(3).append(PathKit.getWebRootPath()).append("/").append(path).toString();
+            path = PathKit.getWebRootPath() + "/" + path;
 
         File file = new File(path);
         path = file.getAbsolutePath();
@@ -158,8 +160,7 @@ public class FileKit {
             try {
                 FileUtil.mkdirs(file);
             } catch (IOException e) {
-                if (OjConfig.isDevMode())
-                    e.printStackTrace();
+                LOGGER.error("mkdirs failed", e);
             }
         }
         return path;

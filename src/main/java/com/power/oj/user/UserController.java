@@ -175,7 +175,7 @@ public class UserController extends OjController {
             redirect(sessionService.getLastAccessURL());
             return;
         }
-        // TODO: recodr login fail times
+        // TODO: record login fail times
 
         FlashMessage msg =
             new FlashMessage(getText("user.signin.error"), MessageType.ERROR, getText("message.error.title"));

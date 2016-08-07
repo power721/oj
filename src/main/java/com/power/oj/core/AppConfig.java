@@ -18,7 +18,6 @@ import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
-import com.jfinal.plugin.druid.IDruidStatViewAuth;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.CaptchaRender;
 import com.jfinal.render.FreeMarkerRender;
@@ -58,7 +57,6 @@ import com.power.oj.notice.NoticeController;
 import com.power.oj.notice.NoticeModel;
 import com.power.oj.problem.ProblemController;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.service.EhcacheService;
 import com.power.oj.shiro.freemarker.ShiroTags;
 import com.power.oj.social.FriendGroupModel;
 import com.power.oj.social.FriendModel;
@@ -76,7 +74,6 @@ import com.power.oj.util.freemarker.OverrideDirective;
 import jodd.util.SystemUtil;
 import org.apache.shiro.SecurityUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Locale;
 
 public class AppConfig extends JFinalConfig {
@@ -222,11 +219,7 @@ public class AppConfig extends JFinalConfig {
         me.add(new BaseUrlHandler());
         me.add(new UrlFilterHandler());
         if (OjConfig.isDevMode()) {
-            me.add(new DruidStatViewHandler("/admin/druid", new IDruidStatViewAuth() {
-                public boolean isPermitted(HttpServletRequest request) {
-                    return SecurityUtils.getSubject().isPermitted("system");
-                }
-            }));
+            me.add(new DruidStatViewHandler("/admin/druid", request -> SecurityUtils.getSubject().isPermitted("system")));
         }
 
         log.debug("configHandler finished.");
