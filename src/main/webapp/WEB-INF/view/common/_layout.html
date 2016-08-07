@@ -114,7 +114,7 @@
 
 <div class="marquee">
   <marquee class="hidden-phone" direction="left" behavior="scroll" scrollamount="2" style="margin-top: 45px;">
-    <#-- this is required -->
+    <#-- this is required: style="margin-top: 45px;" -->
 <#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
   <ul class='marquee'>
     <#list notices as notice>

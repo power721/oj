@@ -206,7 +206,7 @@
 <div class="row">
   <section id="s-tag">
     <div class="page-header">
-      <h4>Tag <i class="icon-chevron-down"></i></h4>
+      <h4>Tags<#if (tagList?? && tagList?size>0)>(${tagList?size})</#if> <i class="icon-chevron-down"></i></h4>
     </div>
     <div class="content" id="tags" style="display: none;">
       <#if tagList??>
