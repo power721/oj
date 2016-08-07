@@ -255,7 +255,7 @@ public final class AdminService {
                 logs.add(file);
             }
         }
-        logs.add(new OJFile(System.getProperty("catalina.home") + File.separator + "logs", "oj.log"));
+        logs.add(new OJFile(System.getProperty("catalina.base") + File.separator + "logs", "oj.log"));
         logs.add(new OJFile("/var/log/judged.log"));
 
         return logs;
@@ -359,7 +359,7 @@ public final class AdminService {
     private File downloadLog(String dirName, String fileName) {
         File file = null;
         if ("oj.log".equals(fileName)) {
-            file = new File(System.getProperty("catalina.home") + File.separator + "logs", "oj.log");
+            file = new File(System.getProperty("catalina.base") + File.separator + "logs", "oj.log");
         } else if ("judged.log".equals(fileName)) {
             file = new File("/var/log/judged.log");
         } else if ("oj-judge.log".equals(fileName)) {
