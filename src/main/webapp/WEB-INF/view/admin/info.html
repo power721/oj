@@ -78,6 +78,30 @@
             <td>Judge Security</td>
             <td><a href="#" id="judgeSecurity">${judgeSecurity!}</a></td>
           </tr>
+          <#if adminEmail??>
+          <tr>
+            <td>Admin Email</td>
+            <td><a href="#" id="adminEmail">${adminEmail!}</a></td>
+          </tr>
+          </#if>
+          <#if emailServer??>
+          <tr>
+            <td>Email Server</td>
+            <td><a href="#" id="emailServer">${emailServer!}</a></td>
+          </tr>
+          </#if>
+          <#if emailUser??>
+          <tr>
+            <td>Email User</td>
+            <td><a href="#" id="emailUser">${emailUser!}</a></td>
+          </tr>
+          </#if>
+          <#if emailPass??>
+          <tr>
+            <td>Email Password</td>
+            <td><a href="#" id="emailPass">${emailPass!}</a></td>
+          </tr>
+          </#if>
           <#--<tr>-->
           <#--<td>Error File</td>-->
           <#--<td><a href="#" id="errorFile">${errorFile!}</a></td>-->
@@ -163,6 +187,30 @@
       pk: 0,
       params: {type: 'string'},
       title: 'Change judge server security password'
+    });
+    $('#adminEmail').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email'
+    });
+    $('#emailServer').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email Server'
+    });
+    $('#emailUser').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email User'
+    });
+    $('#emailPass').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email Password'
     });
 //    $('#errorFile').editable({
 //      type: 'text',
