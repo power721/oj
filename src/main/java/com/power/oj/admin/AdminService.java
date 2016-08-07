@@ -31,7 +31,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ public final class AdminService {
     }
 
     public Map<String, Object> getSystemInfo() {
-        Map<String, Object> systemInfo = new HashMap<String, Object>();
+        Map<String, Object> systemInfo = new HashMap<>();
         Properties sysProperty = System.getProperties();
 
         systemInfo.put("JREName", sysProperty.getProperty("java.runtime.name"));
@@ -83,7 +82,7 @@ public final class AdminService {
     }
 
     public Map<String, Object> getOjInfo() {
-        Map<String, Object> ojInfo = new HashMap<String, Object>();
+        Map<String, Object> ojInfo = new HashMap<>();
         String rootPath = PathKit.getWebRootPath();
 
         ojInfo.put("webRootPath", rootPath);
@@ -195,15 +194,12 @@ public final class AdminService {
     public List<OJFile> getOJFiles(File dir) {
         List<OJFile> ojFiles = new ArrayList<>();
         if (dir.isDirectory()) {
-            File[] files = dir.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    if (file.isDirectory()) {
-                        return true;
-                    }
-                    String ext = FileNameUtil.getExtension(file.getName());
-                    return !ext.isEmpty() && StringUtil.equalsOne(ext, OJFile.exts) != -1;
+            File[] files = dir.listFiles(file -> {
+                if (file.isDirectory()) {
+                    return true;
                 }
+                String ext = FileNameUtil.getExtension(file.getName());
+                return !ext.isEmpty() && StringUtil.equalsOne(ext, OJFile.exts) != -1;
             });
 
             if (files != null) {
@@ -251,12 +247,7 @@ public final class AdminService {
         List<OJFile> logs = new ArrayList<>();
         File workDir = new File(OjConfig.getString("workPath"));
         logs.add(new OJFile(OjConfig.getString("workPath"), "oj-judge.log"));
-        File[] dirs = workDir.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.isDirectory() && file.getName().startsWith("c");
-            }
-        });
+        File[] dirs = workDir.listFiles(file -> file.isDirectory() && file.getName().startsWith("c"));
         if (dirs != null) {
             for (File dir : dirs) {
                 OJFile file = new OJFile(dir.getPath(), "oj-judge.log");
@@ -531,8 +522,8 @@ public final class AdminService {
     }
 
     public List<FpsProblem> importProblems(File file, Integer outputLimit, Boolean status) {
-        Document document = null;
-        List<FpsProblem> problemList = new ArrayList<FpsProblem>();
+        Document document;
+        List<FpsProblem> problemList = new ArrayList<>();
 
         try {
             document = XmlUtil.readDocument(file);
@@ -580,7 +571,7 @@ public final class AdminService {
             if (pids.length == 1) {
                 try {
                     Integer pid = Integer.parseInt(pids[0]);
-                    ProblemModel problemModel = null;
+                    ProblemModel problemModel;
                     if (status) {
                         problemModel = ProblemModel.dao.
                             findFirst("SELECT * FROM problem WHERE pid=? AND status=1", pid);
@@ -605,8 +596,8 @@ public final class AdminService {
                     return null;
                 }
             } else if (pids.length == 2) {
-                Integer start = 1;
-                Integer end = 0;
+                Integer start;
+                Integer end;
                 try {
                     start = Integer.parseInt(pids[0]);
                     end = Integer.parseInt(pids[1]);
@@ -620,7 +611,7 @@ public final class AdminService {
                 }
 
                 if (start <= end) {
-                    List<ProblemModel> problemList = null;
+                    List<ProblemModel> problemList;
                     if (status) {
                         problemList = ProblemModel.dao.
                             find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=1", start, end);
