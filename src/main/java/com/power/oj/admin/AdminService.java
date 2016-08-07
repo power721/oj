@@ -198,7 +198,7 @@ public final class AdminService {
                 if (file.isDirectory()) {
                     return true;
                 }
-                String ext = FileNameUtil.getExtension(file.getName());
+                String ext = FileNameUtil.getExtension(file.getName()).toLowerCase();
                 return !ext.isEmpty() && StringUtil.equalsOne(ext, OJFile.exts) != -1;
             });
 
@@ -272,7 +272,7 @@ public final class AdminService {
                 Collections.reverse(lines);
                 int start = page * size;
                 int end = start + size;
-                for (int i = start; i < end; ++i) {
+                for (int i = start; i < end && i < lines.size(); ++i) {
                     sb.append(len - i).append(':').append(lines.get(i)).append('\n');
                 }
                 content = sb.toString();

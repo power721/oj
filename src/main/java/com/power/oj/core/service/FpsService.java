@@ -261,7 +261,7 @@ public class FpsService {
         String[] exts = {"c", "cc", "pas", "java", "py"};
         for (File file : arrayOfFile) {
             if (!file.getName().startsWith("spj.")) {
-                String ext = FileNameUtil.getExtension(file.getName());
+                String ext = FileNameUtil.getExtension(file.getName()).toLowerCase();
                 if (StringUtil.equalsOne(ext, exts) != -1) {
                     Element solution = item.addElement("solution");
                     solution.addCDATA(FileUtils.readFileToString(file));
@@ -299,7 +299,7 @@ public class FpsService {
             String[] spjFileNames = {"spj.c", "spj.cc", "spj.java"};
             for (File file : arrayOfFile) {
                 String name = file.getName();
-                String ext = FileNameUtil.getExtension(name);
+                String ext = FileNameUtil.getExtension(name).toLowerCase();
                 if (StringUtil.equalsOne(name, spjFileNames) != -1) {
                     Element spj = item.addElement("spj");
                     spj.addCDATA(FileUtils.readFileToString(file));

@@ -75,7 +75,7 @@ public class OJFile {
     }
 
     public String readString() throws IOException {
-        String ext = FileNameUtil.getExtension(name);
+        String ext = FileNameUtil.getExtension(name).toLowerCase();
         if (StringUtil.equalsOne(ext, exts) == -1) {
             return null;
         }
