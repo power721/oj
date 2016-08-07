@@ -51,9 +51,8 @@ public class Tool {
      * @param to      the email address of receiver.
      * @param subject the title of email.
      * @param content string of email body.
-     * @throws Exception
      */
-    public static void sendEmail(String from, String to, String subject, String content) throws Exception {
+    public static void sendEmail(String from, String to, String subject, String content) {
         EmailMessage textMessage = new EmailMessage(content, MimeTypes.MIME_TEXT_PLAIN);
         sendEmail(from, to, subject, textMessage);
     }
@@ -65,7 +64,6 @@ public class Tool {
      * @param to      the email address of receiver.
      * @param subject the title of email.
      * @param content EmailMessage of email body.
-     * @throws Exception
      */
     public static void sendEmail(String from, String to, String subject, EmailMessage content) {
         // TODO: create new thread to send mail

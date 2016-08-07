@@ -1,10 +1,8 @@
 package com.power.oj.util;
 
 import com.jfinal.log.Logger;
-import com.power.oj.core.OjConfig;
 import jodd.util.StringUtil;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -35,7 +33,7 @@ public class HttpUtil {
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     public static String doGet(String url) throws HttpHostConnectException {
-        return doGet(url, new HashMap<String, String>());
+        return doGet(url, new HashMap<>());
     }
 
     public static String doGet(String url, Map<String, String> params) throws HttpHostConnectException {
@@ -54,13 +52,7 @@ public class HttpUtil {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             html = httpclient.execute(httpGet, responseHandler);
 
-        } catch (ClientProtocolException e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
-            log.warn(e.getLocalizedMessage());
         } catch (IOException e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
             log.warn(e.getLocalizedMessage());
         } finally {
             httpclient.getConnectionManager().shutdown();
@@ -79,7 +71,7 @@ public class HttpUtil {
         try {
             HttpPost httpPost = new HttpPost(url);
             log.info("executing request " + httpPost.getURI());
-            List<NameValuePair> paramsList = new ArrayList<NameValuePair>();
+            List<NameValuePair> paramsList = new ArrayList<>();
             for (Entry<String, String> entry : params.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
@@ -95,13 +87,7 @@ public class HttpUtil {
             ResponseHandler<String> responseHandler = new BasicResponseHandler();
             html = httpclient.execute(httpPost, responseHandler);
 
-        } catch (ClientProtocolException e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
-            log.warn(e.getLocalizedMessage());
         } catch (IOException e) {
-            if (OjConfig.isDevMode())
-                e.printStackTrace();
             log.warn(e.getLocalizedMessage());
         } finally {
             httpclient.getConnectionManager().shutdown();
@@ -136,7 +122,7 @@ public class HttpUtil {
     }
 
     public static Map<String, String> splitQuery(String query, String charset) {
-        Map<String, String> ret = new HashMap<String, String>();
+        Map<String, String> ret = new HashMap<>();
         if (StringUtil.isNotBlank(query)) {
             String[] splits = query.split("\\&");
             for (String split : splits) {

@@ -163,12 +163,12 @@ public class OJFile {
     }
 
     public boolean isEditable() {
-        String ext = FileNameUtil.getExtension(name);
+        String ext = FileNameUtil.getExtension(name).toLowerCase();
         return StringUtil.equalsOne(ext, exts) != -1;
     }
 
     public boolean isImage() {
-        String ext = FileNameUtil.getExtension(name);
+        String ext = FileNameUtil.getExtension(name).toLowerCase();
         return StringUtil.equalsOne("." + ext, FileKit.getImageFileType()) != -1;
     }
 }

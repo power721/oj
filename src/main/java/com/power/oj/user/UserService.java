@@ -204,9 +204,8 @@ public final class UserService {
      * @param email
      * @param webLogin
      * @return user model
-     * @throws Exception
      */
-    public UserModel signup(String email, WebLoginModel webLogin) throws Exception {
+    public UserModel signup(String email, WebLoginModel webLogin) {
         String name = HtmlEncoder.text(email);
         String pass = Tool.randomPassword(9);
         String password = BCrypt.hashpw(pass, BCrypt.gensalt());
@@ -316,9 +315,8 @@ public final class UserService {
      * @param userModel
      * @param email
      * @return
-     * @throws Exception
      */
-    public boolean updateEmail(UserModel userModel, String email) throws Exception {
+    public boolean updateEmail(UserModel userModel, String email) {
         String name = userModel.getName();
         String token = UUID.randomUUID().toString();
 
