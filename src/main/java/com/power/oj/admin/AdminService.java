@@ -13,6 +13,7 @@ import com.power.oj.core.bean.OJFile;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.core.service.FpsService;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.FileKit;
@@ -104,6 +105,12 @@ public final class AdminService {
         ojInfo.put("judgePort", OjConfig.getInt("judgePort"));
         ojInfo.put("judgeSecurity", OjConfig.getString("judgeSecurity"));
 
+        if (ShiroKit.hasRole("root")) {
+            ojInfo.put("adminEmail", OjConfig.getString("adminEmail"));
+            ojInfo.put("emailServer", OjConfig.getString("emailServer"));
+            ojInfo.put("emailUser", OjConfig.getString("emailUser"));
+            ojInfo.put("emailPass", OjConfig.getString("emailPass"));
+        }
         return ojInfo;
     }
 
