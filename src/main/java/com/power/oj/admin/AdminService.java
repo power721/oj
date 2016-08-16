@@ -245,18 +245,20 @@ public final class AdminService {
 
     public List<OJFile> getLogs() {
         List<OJFile> logs = new ArrayList<>();
-        File workDir = new File(OjConfig.getString("workPath"));
+        logs.add(new OJFile(System.getProperty("catalina.base") + File.separator + "logs", "oj.log"));
+        logs.add(new OJFile("/var/log/judged.log"));
         logs.add(new OJFile(OjConfig.getString("workPath"), "oj-judge.log"));
+
+        File workDir = new File(OjConfig.getString("workPath"));
         File[] dirs = workDir.listFiles(file -> file.isDirectory() && file.getName().startsWith("c"));
         if (dirs != null) {
+            Arrays.sort(dirs);
             for (File dir : dirs) {
                 OJFile file = new OJFile(dir.getPath(), "oj-judge.log");
                 file.setDir(dir.getName());
                 logs.add(file);
             }
         }
-        logs.add(new OJFile(System.getProperty("catalina.base") + File.separator + "logs", "oj.log"));
-        logs.add(new OJFile("/var/log/judged.log"));
 
         return logs;
     }
