@@ -41,7 +41,7 @@ public final class ProblemService {
     }
 
     public ProblemModel findProblem(Integer pid) {
-        ProblemModel problemModel = null;
+        ProblemModel problemModel;
 
         if (OjConfig.isDevMode()) {
             problemModel = dao.findById(pid);
@@ -88,7 +88,7 @@ public final class ProblemService {
     }
 
     public ProblemModel findProblemForContest(Integer pid) {
-        ProblemModel problemModel = null;
+        ProblemModel problemModel;
 
         if (OjConfig.isDevMode()) {
             problemModel = dao.findById(pid);
@@ -120,7 +120,7 @@ public final class ProblemService {
     }
 
     public int getNextPid(Integer pid) {
-        int nextPid = 0;
+        int nextPid;
         StringBuilder sb = new StringBuilder().append("SELECT pid FROM problem WHERE pid>?");
         if (!userService.isAdmin()) {
             sb.append(" AND status=1");
@@ -136,7 +136,7 @@ public final class ProblemService {
     }
 
     public int getPrevPid(Integer pid) {
-        int prevPid = 0;
+        int prevPid;
         StringBuilder sb = new StringBuilder().append("SELECT pid FROM problem WHERE pid<?");
         if (!userService.isAdmin()) {
             sb.append(" AND status=1");
@@ -158,9 +158,8 @@ public final class ProblemService {
     }
 
     public List<Record> getTags(Integer pid) {
-        List<Record> tagList =
-            Db.find("SELECT t.id,t.tag AS name,u.name AS user,u.uid FROM tag t "
-                + "LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
+        List<Record> tagList = Db.find("SELECT t.id,t.tag AS name,u.name AS user,u.uid FROM tag t "
+            + "LEFT JOIN user u on u.uid=t.uid WHERE t.pid=? AND t.status=1", pid);
 
         if (tagList.isEmpty()) {
             return null;
@@ -180,7 +179,7 @@ public final class ProblemService {
         }
 
         Record Tag = new Record().set("pid", pid).set("uid", uid).set("tag", tag).set("ctime", OjConfig.timeStamp);
-        if(Db.save("tag", Tag)) {
+        if (Db.save("tag", Tag)) {
             Tag.set("name", Tag.getStr("tag"));
             Tag.set("user", userService.getCurrentUserName());
             return Tag;
@@ -198,21 +197,19 @@ public final class ProblemService {
     }
 
     public List<Record> getUserInfo(Integer pid, Integer uid) {
-        List<Record> userInfo = Db.find(
+        return Db.find(
             "SELECT uid,sid,pid,cid,result,ctime,num,time,memory,codeLen,language FROM solution WHERE uid=? AND pid=? AND status=1 GROUP BY result",
             uid, pid);
-        return userInfo;
     }
 
     public Record getUserResult(Integer pid, Integer uid) {
-        Record record =
-            Db.findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND status=1 LIMIT 1", uid,
+        return Db
+            .findFirst("SELECT MIN(result) AS result FROM solution WHERE uid=? AND pid=? AND status=1 LIMIT 1", uid,
                 pid);
-        return record;
     }
 
     public List<Record> getUserProblemResult(Integer uid) {
-        List<Record> records = null;
+        List<Record> records;
         if (OjConfig.isDevMode()) {
             records =
                 Db.find("SELECT pid,MIN(result) AS result FROM solution WHERE uid=? AND status=1 GROUP BY pid", uid);
@@ -256,30 +253,26 @@ public final class ProblemService {
             sb.append(" WHERE status=1");
         sb.append(" ORDER BY pid");
 
-        Page<ProblemModel> problemList = dao.paginate(pageNumber, pageSize, sql, sb.toString());
-
-        return problemList;
+        return dao.paginate(pageNumber, pageSize, sql, sb.toString());
     }
 
     public Page<ProblemModel> getProblemPageDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
         String sSearch) {
-        List<Object> param = new ArrayList<Object>();
+        List<Object> param = new ArrayList<>();
         String sql = "SELECT pid,title,source,accepted,submission,ctime,status";
         StringBuilder sb = new StringBuilder().append("FROM problem WHERE 1=1");
         if (StringUtil.isNotEmpty(sSearch)) {
             sb.append(" AND (pid LIKE ? OR title LIKE ?)");
-            param.add(new StringBuilder(3).append(sSearch).append("%").toString());
-            param.add(new StringBuilder(3).append("%").append(sSearch).append("%").toString());
+            param.add(sSearch + "%");
+            param.add("%" + sSearch + "%");
         }
         sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", pid");
 
-        Page<ProblemModel> problemList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
-
-        return problemList;
+        return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
     }
 
     public int getPageNumber(Integer pid, int pageSize) {
-        long pageNumber = 0;
+        long pageNumber;
         StringBuilder sb = new StringBuilder().append("SELECT COUNT(*) AS idx FROM problem WHERE pid<?");
         if (!userService.isAdmin())
             sb.append(" AND status=1");
@@ -323,7 +316,7 @@ public final class ProblemService {
 
     public Page<ProblemModel> searchProblem(int pageNumber, int pageSize, String scope, String word) {
         Page<ProblemModel> problemList = null;
-        List<Object> paras = new ArrayList<Object>();
+        List<Object> paras = new ArrayList<>();
         String sql = "SELECT pid,title,accepted,submission,source,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t";
 
         if (StringUtil.isNotBlank(word)) {
@@ -355,46 +348,39 @@ public final class ProblemService {
     }
 
     public boolean checkSpj(Integer pid) {
-        File dataDir = new File(
-            new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator).append(pid).toString());
+        File dataDir = new File(OjConfig.getString("dataPath") + File.separator + pid);
         if (!dataDir.isDirectory()) {
             return false;
         }
 
-        StringBuilder sb = new StringBuilder(4).append(dataDir.getAbsolutePath()).append(File.separator).append("spj");
-        File spjFile = new File(sb.toString());
+        File spjFile = new File(dataDir.getAbsolutePath() + File.separator + "spj");
         if (spjFile.isFile()) {
-            return true;
-        }
-        spjFile = new File(sb.append(".c").toString());
-        if (spjFile.isFile()) {
-            String cmd = new StringBuilder(4).append("gcc -o ").append(sb.toString()).append(" ")
-                .append(sb.append(".c").toString()).toString();
-            try {
-                Runtime.getRuntime().exec(cmd);
-            } catch (IOException e) {
-                if (OjConfig.isDevMode())
-                    e.printStackTrace();
-                log.error(e.getLocalizedMessage());
-                return false;
-            }
             return true;
         }
 
-        spjFile = new File(sb.append(".cc").toString());
-        if (spjFile.isFile()) {
-            String cmd = new StringBuilder(4).append("g++ -o ").append(sb.toString()).append(" ")
-                .append(sb.append(".cc").toString()).toString();
-            try {
-                Runtime.getRuntime().exec(cmd);
-            } catch (IOException e) {
-                if (OjConfig.isDevMode())
-                    e.printStackTrace();
-                log.error(e.getLocalizedMessage());
-                return false;
-            }
-            return true;
-        }
+        //        spjFile = new File(sb.append(".c").toString());
+        //        if (spjFile.isFile()) {
+        //            String cmd = "gcc -o " + sb.toString() + " " + sb.append(".c").toString();
+        //            try {
+        //                Runtime.getRuntime().exec(cmd);
+        //            } catch (IOException e) {
+        //                log.error(e.getLocalizedMessage(), e);
+        //                return false;
+        //            }
+        //            return true;
+        //        }
+        //
+        //        spjFile = new File(sb.append(".cc").toString());
+        //        if (spjFile.isFile()) {
+        //            String cmd = "g++ -o " + sb.toString() + " " + sb.append(".cc").toString();
+        //            try {
+        //                Runtime.getRuntime().exec(cmd);
+        //            } catch (IOException e) {
+        //                log.error(e.getLocalizedMessage(), e);
+        //                return false;
+        //            }
+        //            return true;
+        //        }
 
         return false;
     }
@@ -409,8 +395,7 @@ public final class ProblemService {
         problemModel.set("uid", userService.getCurrentUid());
         problemModel.save();
 
-        File dataDir = new File(new StringBuilder(3).append(OjConfig.getString("dataPath")).append(File.separator)
-            .append(problemModel.getInt("pid")).toString());
+        File dataDir = new File(OjConfig.getString("dataPath") + File.separator + problemModel.getInt("pid"));
         if (dataDir.isDirectory()) {
             log.warn("Data directory already exists: " + dataDir.getPath());
             return false;
@@ -452,6 +437,10 @@ public final class ProblemService {
 
     public boolean updateProblem(ProblemModel newProblemModel) {
         ProblemModel problemModel = findProblem(newProblemModel.getPid());
+        if (problemModel == null) {
+            throw new ProblemException("Problem is not exist!");
+        }
+
         problemModel.merge(newProblemModel);
         problemModel.setMtime(OjConfig.timeStamp);
         if (newProblemModel.getStatus() == null) {
@@ -474,6 +463,9 @@ public final class ProblemService {
 
     public boolean incSubmission(Integer pid) {
         ProblemModel problemModel = findProblem(pid);
+        if (problemModel == null) {
+            return false;
+        }
 
         problemModel.setSubmission(problemModel.getSubmission() + 1);
         problemModel.setStime(OjConfig.timeStamp);
@@ -487,6 +479,9 @@ public final class ProblemService {
         Integer sid = solutionModel.getSid();
         Integer uid = solutionModel.getUid();
         ProblemModel problemModel = findProblem(pid);
+        if (problemModel == null) {
+            throw new ProblemException("Problem is not exist!");
+        }
 
         problemModel.setAccepted(problemModel.getAccepted() + 1);
         Integer lastAccepted =
@@ -509,6 +504,9 @@ public final class ProblemService {
         Integer sid = solutionModel.getSid();
         Integer uid = solutionModel.getUid();
         ProblemModel problemModel = findProblem(pid);
+        if (problemModel == null) {
+            throw new ProblemException("Problem is not exist!");
+        }
 
         problemModel.setAccepted(problemModel.getAccepted() - 1);
         Integer lastAccepted =
