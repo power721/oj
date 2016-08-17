@@ -87,8 +87,8 @@
 <@override name="scripts">
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "status/${solutionList.pageNumber-1}?${query!}";
-    var nextpage = "status/${solutionList.pageNumber+1}?${query!}";
+    var prevpage = "/status/${solutionList.pageNumber-1}?${query!}";
+    var nextpage = "/status/${solutionList.pageNumber+1}?${query!}";
     $(document).keydown(function (event) {
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if solutionList.pageNumber<solutionList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>
@@ -105,7 +105,7 @@
       $('#WAIT, #RUN, #REJUDGE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
-        $.getJSON('api/problem/getResult', {'sid': $this.attr('sid')}, function (data) {
+        $.getJSON('/api/problem/getResult', {'sid': $this.attr('sid')}, function (data) {
           if (data.result.name != id) {
             $this.attr('id', data.result.name);
             $this.html(data.result.longName);

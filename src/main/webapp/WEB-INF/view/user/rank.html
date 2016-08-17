@@ -68,8 +68,8 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>?pageSize=${userList.pageSize}</#if>"
-    var nextpage = "rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>?pageSize=${userList.pageSize}</#if>"
+    var prevpage = "/rank/${userList.pageNumber-1}<#if userList.pageSize!=pageSize>?pageSize=${userList.pageSize}</#if>"
+    var nextpage = "/rank/${userList.pageNumber+1}<#if userList.pageSize!=pageSize>?pageSize=${userList.pageSize}</#if>"
     $(document).keydown(function (event) {
         <#if (userList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
         <#if userList.pageNumber<userList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>

@@ -48,7 +48,7 @@
 
 <script type="text/javascript">
   var oTable = $('#problem-list').jfinalDataTable({
-    "sAjaxSource": "api/admin/problemList",
+    "sAjaxSource": "/api/admin/problemList",
     "aoColumns": [
       {
         "mData": "pid",
@@ -114,7 +114,7 @@
       cancel: true,
       okVal: action,
       ok: function () {
-        $.post('api/admin/updateProblem', {pk: that.attr('pid'), name: 'status', value: status}, function (data) {
+        $.post('/api/admin/updateProblem', {pk: that.attr('pid'), name: 'status', value: status}, function (data) {
           status = !status;
           that.data('next-status', status);
           that.removeClass().addClass('btn btn-' + (status ? 'primary' : 'warning') + ' problem-toggle');

@@ -62,7 +62,7 @@
       <#if serverTime<contest.endTime>
         <tfoot>
         <tr>
-          <form class="form-inline" id="addUser" action="api/contest/addUser" method="post">
+          <form class="form-inline" id="addUser" action="/api/contest/addUser" method="post">
             <input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span>
             <td id="user" data-nick=""><input type="number" name="uid" class="input-small" placeholder="User ID"
                                               min="1000" required></td>
@@ -102,7 +102,7 @@
     function getUserName() {
       var uid = this.value;
       if (uid >= 1000) {
-        $.get("api/user/getUserBasic", {uid: this.value},
+        $.get("/api/user/getUserBasic", {uid: this.value},
                 function (data) {
                   if (data) {
                     $("input[name='name']").val(data.name);
@@ -139,7 +139,7 @@
     $("input[name='name']").keyup(function () {
       var name = this.value;
       if (name.length >= 2) {  // for old user name, e.g: 'test'
-        $.get("api/user/getUserBasic", {name: this.value},
+        $.get("/api/user/getUserBasic", {name: this.value},
                 function (data) {
                   if (data) {
                     $("input[name='uid']").val(data.uid);
@@ -223,7 +223,7 @@
       $('table').on('click', '.update', function () {
         var that = $(this);
         var nick = that.parent().parent().children('.nick').children().val();
-        $.post('api/contest/updateUser', {'cid':${contest.cid!}, 'uid': that.attr('uid'), 'nick': nick}, function (data) {
+        $.post('/api/contest/updateUser', {'cid':${contest.cid!}, 'uid': that.attr('uid'), 'nick': nick}, function (data) {
           if (data.result) {
             $.dialog({
               content: 'User updated.',
@@ -246,7 +246,7 @@
           cancel: true,
           okVal: 'Remove',
           ok: function () {
-            $.post('api/contest/removeUser', {cid:${contest.cid!}, uid: that.attr('uid')}, function (data) {
+            $.post('/api/contest/removeUser', {cid:${contest.cid!}, uid: that.attr('uid')}, function (data) {
               switch (data.result) {
                 case 0:
                   $.dialog({

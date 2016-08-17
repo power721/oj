@@ -66,8 +66,8 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
-    var nextpage = "problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+    var prevpage = "/problem/${problemList.pageNumber-1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
+    var nextpage = "/problem/${problemList.pageNumber+1}<#if problemList.pageSize!=pageSize>-${problemList.pageSize}</#if>"
     $(document).keydown(function (event) {
         <#if (problemList.pageNumber>1)>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if problemList.pageNumber<problemList.totalPage>if (event.keyCode == 39)window.location = nextpage;</#if>
@@ -84,7 +84,7 @@
     </#if>
 
     <#if user??>
-      $.getJSON('api/problem/userResult', function (data) {
+      $.getJSON('/api/problem/userResult', function (data) {
         if (data.userResult) {
           for (var i = 0; i < data.userResult.length; ++i) {
             var problem = data.userResult[i];

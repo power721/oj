@@ -8,7 +8,7 @@
               href="contest/problem/${clarify.cid!}-${num2alpha(clarify.num)}">${num2alpha(clarify.num)}
         : ${clarify.title!}</a></#if>
       <pre class="question">${clarify.question!}</pre>
-      <form class="clarform form-horizontal" action="api/contest/updateClarify" method="post">
+      <form class="clarform form-horizontal" action="/api/contest/updateClarify" method="post">
         <span class="name">Administrator</span> reply<#if clarify.atime??> at
         <span class="timestamp" data="${clarify.atime!0}"></span></#if>
         <div class="control-group">
@@ -33,7 +33,7 @@
   </div>
 
 <div class="modal hide fade contestModal" id="postModal">
-  <form class="form-horizontal" id="postForm" action="api/contest/postClarification" method="post">
+  <form class="form-horizontal" id="postForm" action="/api/contest/postClarification" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="postModalLabel">

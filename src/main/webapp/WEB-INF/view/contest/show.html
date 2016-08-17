@@ -148,7 +148,7 @@
       }, 2500);
 
       function refreshResult() {
-        $.getJSON('api/contest/rejudgeStatus/' + ${contest.cid}, function (data) {
+        $.getJSON('/api/contest/rejudgeStatus/' + ${contest.cid}, function (data) {
           var total = data.total;
           var count = data.count;
           if (count < total) {

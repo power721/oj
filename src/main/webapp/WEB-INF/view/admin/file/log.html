@@ -42,7 +42,7 @@
     var page = 0;
     var size = 40;
     function getLog(page, size) {
-      var url = 'api/admin/log';
+      var url = '/api/admin/log';
       $.getJSON(url, {'dir': '${dir!}', 'name': '${name!}', 'page': page, 'size': size}, function (data) {
         var content = $('#content').val() + data.content;
         if (isEmpty(data.content)) {

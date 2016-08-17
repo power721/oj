@@ -120,12 +120,12 @@
 <script type="text/javascript">
   $(document).ready(function () {
     $('#reload').click(function () {
-      $.get('api/admin/reload', function (data) {
+      $.get('/api/admin/reload', function (data) {
         window.location.reload();
       });
     });
 
-    var apiUrl = 'api/admin/updateConfig';
+    var apiUrl = '/api/admin/updateConfig';
     $.fn.editable.defaults.mode = 'inline';
     $.fn.editable.defaults.url = apiUrl;
     $('#siteTitle').editable({

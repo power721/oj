@@ -168,7 +168,7 @@
 <script type="text/javascript">
   $(document).ready(function () {
     var pid = ${problem.pid!};
-    var apiUrl = 'api/admin/updateProblem';
+    var apiUrl = '/api/admin/updateProblem';
     $.fn.editable.defaults.mode = 'inline';
     $.fn.editable.defaults.url = apiUrl;
     $('#title').editable({
@@ -240,8 +240,8 @@
       title: 'Change problem source'
     });
 
-    var prevpage = "admin/problem/show/${prevPid!}";
-    var nextpage = "admin/problem/show/${nextPid!}";
+    var prevpage = "/admin/problem/show/${prevPid!}";
+    var nextpage = "/admin/problem/show/${nextPid!}";
     $(document).keydown(function (event) {
         <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>

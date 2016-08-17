@@ -147,7 +147,7 @@
 
 <#if !user??>
 <div class="modal hide fade userModal" id="loginModal">
-  <form id="loginForm" class="form-horizontal" action="api/user/signin" method="post">
+  <form id="loginForm" class="form-horizontal" action="/api/user/signin" method="post">
     <div class="modal-header">
       <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
       <h3 id="loginModalLabel">
@@ -195,7 +195,7 @@
     </div>
     <div class="modal-footer">
       <#if enable_qq_login?? && enable_qq_login==true>
-        <a class="left" href="api/oauth/qq">
+        <a class="left" href="/api/oauth/qq">
           <img src="assets/images/QQ_Connect_logo_7.png" alt="QQ Login"/>
         </a>
       </#if>

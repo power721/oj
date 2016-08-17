@@ -34,7 +34,7 @@
         //batch: true,
         transport: {
           read: {
-            url: "api/contest/recent",
+            url: "/api/contest/recent",
             dataType: "json"
           },
           /*update: {
@@ -110,7 +110,7 @@
       if ($(this).hasClass('disabled')) {
         return;
       }
-      $.get('api/contest/evictRecent', function (data) {
+      $.get('/api/contest/evictRecent', function (data) {
         $('#evict').removeClass('btn-info').addClass('btn-success disabled');
         $.pnotify({
           title: 'Evict Success',

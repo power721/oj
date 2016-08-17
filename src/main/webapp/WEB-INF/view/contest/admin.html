@@ -83,7 +83,7 @@
       <#if serverTime<contest.endTime>
         <tfoot>
         <tr>
-          <form class="form-inline" id="addProblem" action="api/contest/addProblem" method="post">
+          <form class="form-inline" id="addProblem" action="/api/contest/addProblem" method="post">
             <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
             <td><input type="number" name="pid" class="input-small" min="1000" placeholder="Problem ID" required></td>
             <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
@@ -128,7 +128,7 @@
     function getProblemTitle() {
       var pid = this.value;
       if (pid >= 1000) {
-        $.get("api/problem/getField", {name: "title", pid: this.value},
+        $.get("/api/problem/getField", {name: "title", pid: this.value},
                 function (data) {
                   if (data.result) {
                     $("input[name='title']").val(data.result);
@@ -249,7 +249,7 @@
           data.pid += $(e).attr('pid') + ',';
         });
         data.pid = data.pid.substring(0, data.pid.length - 1);
-        $.post('api/contest/reorderProblem', data, function (data) {
+        $.post('/api/contest/reorderProblem', data, function (data) {
           if (data.success) {
             $.dialog({
               content: 'Reorder problem success.',
@@ -273,7 +273,7 @@
           cancel: true,
           okVal: 'Remove',
           ok: function () {
-            $.post('api/contest/removeProblem', {cid:${contest.cid!}, pid: that.attr('pid')}, function (data) {
+            $.post('/api/contest/removeProblem', {cid:${contest.cid!}, pid: that.attr('pid')}, function (data) {
               if (data.success) {
                 that.parent().parent().remove();
                 updateId();

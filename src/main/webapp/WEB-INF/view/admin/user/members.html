@@ -38,7 +38,7 @@
           </#list>
         </#if>
       <tr>
-        <form class="form-inline" id="addMember" action="api/admin/addMember" method="post">
+        <form class="form-inline" id="addMember" action="/api/admin/addMember" method="post">
           <td><input type="number" name="uid" class="input-small" placeholder="User ID" min="1000" required></td>
           <td><input type="text" name="name" class="input-large" placeholder="Name" required></td>
           <td><input type="text" name="nick" class="input-large uneditable-input" placeholder="Nick" disabled></td>
@@ -71,7 +71,7 @@
     function getUserInfo() {
       var uid = this.value;
       if (uid >= 1000) {
-        $.get("api/user/full", {uid: this.value},
+        $.get("/api/user/full", {uid: this.value},
                 function (data) {
                   if (data.success) {
                     $("input[name='name']").val(data.name);
@@ -97,7 +97,7 @@
       var name = this.value;
       if (name.length >= 4) // for old user name, e.g: 'test'
       {
-        $.get("api/user/full", {name: this.value},
+        $.get("/api/user/full", {name: this.value},
                 function (data) {
                   if (data.success) {
                     $("input[name='uid']").val(data.uid);
@@ -190,7 +190,7 @@
           cancel: true,
           okVal: 'Remove',
           ok: function () {
-            $.post('api/admin/removeMember', {uid: that.attr('uid')}, function (data) {
+            $.post('/api/admin/removeMember', {uid: that.attr('uid')}, function (data) {
               switch (data.result) {
                 case 0:
                   that.parent().parent().remove();

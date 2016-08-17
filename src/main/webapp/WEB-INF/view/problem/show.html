@@ -292,8 +292,8 @@
     jQuery.ajaxSetup({
       cache: true
     });
-    var prevpage = "problem/show/${prevPid!}";
-    var nextpage = "problem/show/${nextPid!}";
+    var prevpage = "/problem/show/${prevPid!}";
+    var nextpage = "/problem/show/${nextPid!}";
     $(document).keydown(function (event) {
         <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
@@ -306,7 +306,7 @@
       }, 2500);
 
       function refreshResult() {
-        $.getJSON('api/problem/rejudgeStatus/' + ${problem.pid}, function (data) {
+        $.getJSON('/api/problem/rejudgeStatus/' + ${problem.pid}, function (data) {
           var total = data.total;
           var count = data.count;
           if (count < total) {

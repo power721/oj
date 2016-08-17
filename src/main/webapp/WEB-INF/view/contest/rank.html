@@ -87,8 +87,8 @@
 <script type="text/javascript">
   $(document).ready(function () {
     document.onkeydown = nextpage;
-    var prevpage = "contest/rank/${cid!}-${contestRank.pageNumber-1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
-    var nextpage = "contest/rank/${cid!}-${contestRank.pageNumber+1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
+    var prevpage = "/contest/rank/${cid!}-${contestRank.pageNumber-1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
+    var nextpage = "/contest/rank/${cid!}-${contestRank.pageNumber+1}<#if contestRank.pageSize!=pageSize>?s=${contestRank.pageSize}</#if>"
 
     function nextpage(event) {
       event = event ? event : (window.event ? window.event : null);
