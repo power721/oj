@@ -231,11 +231,11 @@
       var lang = $(this).attr('data-id') || $('.ajax-loader.active').attr('data-id') || '';
       var page = $(this).attr('data-page') || 1;
 
-      var url = 'api/problem/status/${problem.pid!}?language=' + lang + '&p=' + page;
+      var url = '/api/problem/status/${problem.pid!}?language=' + lang + '&p=' + page;
       problemStatus(url);
     });
 
-    var url = 'api/problem/status/${problem.pid!}';
+    var url = '/api/problem/status/${problem.pid!}';
     problemStatus(url);
 
     <#if oj_style != "slate">

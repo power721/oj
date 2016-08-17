@@ -140,8 +140,8 @@
       'font-styles': false
     });
 
-    var prevpage = "discuss/${pageNumber-1}<#if 20!=pageSize>?s=${pageSize}</#if>"
-    var nextpage = "discuss/${pageNumber+1}<#if 20!=pageSize>?s=${pageSize}</#if>"
+    var prevpage = "/discuss/${pageNumber-1}<#if 20!=pageSize>?s=${pageSize}</#if>"
+    var nextpage = "/discuss/${pageNumber+1}<#if 20!=pageSize>?s=${pageSize}</#if>"
     $(document).keydown(function (event) {
         <#if (pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
         <#if pageNumber<topicList?size>if (event.keyCode == 39)location = nextpage;</#if>
@@ -150,7 +150,7 @@
     function getProblemTitle() {
       var pid = this.value;
       if (pid >= 1000) {
-        $.get("api/problem/getField", {name: "title", pid: this.value},
+        $.get("/api/problem/getField", {name: "title", pid: this.value},
                 function (data) {
                   if (data.result) {
                     $("#problemTitle").html('<a href="problem/show/' + pid + '" target="_blank">' + data.result + '</a>');
@@ -203,7 +203,7 @@
       var target = $('#topicModal');
 
       target.modal("show");
-      $.get("api/discuss", {id: id},
+      $.get("/api/discuss", {id: id},
               function (data) {
                 if (data.topic.success) {
                   var html = parseTimestamp(data.topic.ctime)

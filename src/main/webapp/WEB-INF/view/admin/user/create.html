@@ -11,7 +11,7 @@
 </ul>
 <div class="row">
   <div class="span4 offset3">
-    <form class="form-horizontal" id="createUserForm" action="api/admin/addUser" method="post">
+    <form class="form-horizontal" id="createUserForm" action="/api/admin/addUser" method="post">
       <fieldset>
         <legend>Basic Information</legend>
         <div class="control-group <#if nameMsg??>error</#if>">
@@ -215,7 +215,7 @@
     $('#inputAccount').focusout(function () {
       var name = $('#inputAccount').val();
       if (name) {
-        $.get('api/user/isUserNameExist', {'name': name}, function (data) {
+        $.get('/api/user/isUserNameExist', {'name': name}, function (data) {
           if (data.result) {
             $('#name-error').text('This user name already registered!');
             $('#name-error').parent().parent().addClass('error');
@@ -229,7 +229,7 @@
     $('#inputEmail').focusout(function () {
       var email = $('#inputEmail').val();
       if (email) {
-        $.get('api/user/isEmailExist', {'email': email}, function (data) {
+        $.get('/api/user/isEmailExist', {'email': email}, function (data) {
           if (data.result) {
             $('#email-error').text('This Email already registered!');
           } else {

@@ -223,11 +223,11 @@
       var lang = $(this).attr('data-id') || $('.ajax-loader.active').attr('data-id') || '';
       var page = $(this).attr('data-page') || 1;
 
-      var url = 'api/contest/problemStatus/${cid!}-${id}?language=' + lang + '&p=' + page;
+      var url = '/api/contest/problemStatus/${cid!}-${id}?language=' + lang + '&p=' + page;
       problemStatus(url);
     });
 
-    var url = 'api/contest/problemStatus/${cid!}-${id}';
+    var url = '/api/contest/problemStatus/${cid!}-${id}';
     problemStatus(url);
 
     <#if oj_style != "slate">

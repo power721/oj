@@ -231,8 +231,8 @@
       cache: true
     });
 
-    var prevpage = "contest/problem/${cid!}-${prevPid!}";
-    var nextpage = "contest/problem/${cid!}-${nextPid!}";
+    var prevpage = "/contest/problem/${cid!}-${prevPid!}";
+    var nextpage = "/contest/problem/${cid!}-${nextPid!}";
     $(document).keydown(function (event) {
         <#if prevPid!=problem.id>if (event.keyCode == 37)window.location = prevpage;</#if>
         <#if nextPid!=problem.id>if (event.keyCode == 39)window.location = nextpage;</#if>
@@ -245,7 +245,7 @@
       }, 2500);
 
       function refreshResult() {
-        $.getJSON('api/contest/rejudgeStatus/' + ${cid!} + '-' + ${id}, function (data) {
+        $.getJSON('/api/contest/rejudgeStatus/' + ${cid!} + '-' + ${id}, function (data) {
           var total = data.total;
           var count = data.count;
           if (count < total) {

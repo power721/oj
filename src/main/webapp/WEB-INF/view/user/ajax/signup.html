@@ -65,7 +65,7 @@
     $('#inputAccount').focusout(function () {
       var name = $('#inputAccount').val();
       if (name) {
-        $.get('api/user/isUserNameExist', { 'name': name }, function (data) {
+        $.get('/api/user/isUserNameExist', { 'name': name }, function (data) {
           if (data.result) {
             $('#name-error').text('This user name already registered!');
             $('#name-error').parent().parent().addClass('error');
@@ -80,7 +80,7 @@
     $('#inputEmail').focusout(function () {
       var email = $('#inputEmail').val();
       if (email) {
-        $.get('api/user/isEmailExist', { 'email': email }, function (data) {
+        $.get('/api/user/isEmailExist', { 'email': email }, function (data) {
           if (data.result) {
             $('#email-error').text('This Email already registered!');
             $('#email-error').parent().parent().addClass('error');

@@ -75,7 +75,7 @@
     });
 
     $('#expires').click(function () {
-      $.post('api/admin/expiresSession', function (data) {
+      $.post('/api/admin/expiresSession', function (data) {
         $.pnotify({
           title: 'Expires Session',
           text: data.expiresSession + ' sessions deleted!',

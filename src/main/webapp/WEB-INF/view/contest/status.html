@@ -115,8 +115,8 @@
 <script type="text/javascript" src="assets/prettify/prettify.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "contest/status/${cid!}-${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
-    var nextpage = "contest/status/${cid!}-${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+    var prevpage = "/contest/status/${cid!}-${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+    var nextpage = "/contest/status/${cid!}-${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
 
     $(document).keydown(function (event) {
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
@@ -158,7 +158,7 @@
         $('#codeModal').modal("show");
         var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, cid);
         $('#codeModal #sid').html(tmp);
-        $.get("api/contest/code", {cid: cid, sid: sid},
+        $.get("/api/contest/code", {cid: cid, sid: sid},
                 function (data) {
                   if (data.success) {
                     var code = "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
@@ -194,7 +194,7 @@
       $('#WAIT, #RUN, #REJUDGE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
-        $.getJSON('api/contest/getResult', {'cid':${cid!}, 'sid': $this.children('i').attr('sid')}, function (data) {
+        $.getJSON('/api/contest/getResult', {'cid':${cid!}, 'sid': $this.children('i').attr('sid')}, function (data) {
           var img = '';
           if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';

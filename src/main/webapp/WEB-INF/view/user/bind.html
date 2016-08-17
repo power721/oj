@@ -9,7 +9,7 @@
             您好：${nickname!}，来自${type!}的朋友！
           </p>
           <div class="block-body">
-            <form id="bind" action="api/user/bind" method="post">
+            <form id="bind" action="/api/user/bind" method="post">
               <label>
                 <#if nouser??>请绑定您的邮箱帐号：<#else>请使用邮箱激活帐号：</#if>
               </label>
