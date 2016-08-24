@@ -34,7 +34,7 @@ public class UserController extends OjController {
         UserModel userModel = userService.getCurrentUserExt();
         userService.isCheckin(userModel);
 
-        setAttr(OjConstants.USER, userModel);  // replace current user model
+        setAttr(OjConstants.USER, userModel); // replace current user model
 
         setTitle(getText("user.index.title"));
     }

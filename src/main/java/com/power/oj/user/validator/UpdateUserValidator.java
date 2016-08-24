@@ -16,11 +16,10 @@ public class UpdateUserValidator extends Validator {
         validateEmail("user.email", "emailMsg", I18n.use().get("validate.email.error"));
 
         Integer uid = UserService.me().getCurrentUid();
-    /*
-     * String email = c.getPara("user.email"); if (StringUtil.isNotBlank(email)
-     * && UserModel.dao.containEmailExceptThis(uid, email)) {
-     * addError("emailMsg", "This Email already registered!"); }
-     */
+        /*
+         * String email = c.getPara("user.email"); if (StringUtil.isNotBlank(email) &&
+         * UserModel.dao.containEmailExceptThis(uid, email)) { addError("emailMsg", "This Email already registered!"); }
+         */
 
         String password = c.getPara("user.password");
         if (StringUtil.isNotBlank(password)) {

@@ -126,9 +126,9 @@ public abstract class JudgeAdapter implements Runnable {
 
         File sourceFile = new File(getFilePath(programLanguage, workDirPath, OjConstants.SOURCE_FILE_NAME));
         FileUtil.touch(sourceFile);
-        String content = solution.getSource().
-            replaceAll("#\\s*include\\s*\"\\.*/.*\".*", "#error \"Your action is logged!\"").
-            replaceAll("#\\s*include\\s*<\\.*/.*>.*", "#error \"Your action is logged!\"");
+        String content =
+            solution.getSource().replaceAll("#\\s*include\\s*\"\\.*/.*\".*", "#error \"Your action is logged!\"")
+                .replaceAll("#\\s*include\\s*<\\.*/.*>.*", "#error \"Your action is logged!\"");
         if (content.length() != solution.getSource().length()) {
             LOGGER.warn(
                 "User id " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!");

@@ -51,7 +51,7 @@ public class PowerJudgeAdapter extends JudgeAdapter {
         int memoryLimit = problemModel.getMemoryLimit();
         String cmd = buildCommand(timeLimit, memoryLimit);
 
-        log.debug("Ready to execute Judge process: " + cmd);  // DEBUG
+        log.debug("Ready to execute Judge process: " + cmd); // DEBUG
         Process process = Runtime.getRuntime().exec(cmd);
         InputStream inputStream = process.getInputStream();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -158,10 +158,9 @@ public class PowerJudgeAdapter extends JudgeAdapter {
                 {
                     break;
                 }
-        /*else if (line.trim().startsWith("File \"<string>\"")) // Python RE print input data
-        {
-          break;
-        }*/
+                /*
+                 * else if (line.trim().startsWith("File \"<string>\"")) // Python RE print input data { break; }
+                 */
 
                 sb.append(line).append('\n');
                 if (sb.length() > OjConstants.MAX_ERROR_LENGTH) {

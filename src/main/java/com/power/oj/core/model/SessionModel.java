@@ -102,11 +102,8 @@ public class SessionModel extends Model<SessionModel> {
     }
 
     /*
-      public Integer getCtime()
-      {
-        return getInt(CTIME);
-      }
-      */
+     * public Integer getCtime() { return getInt(CTIME); }
+     */
     public SessionModel setCtime(Integer value) {
         return set(CTIME, value);
     }

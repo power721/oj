@@ -87,7 +87,7 @@ public class ContestApiController extends OjController {
     public void addUser() {
         Integer cid = getParaToInt("cid");
         Integer uid = getParaToInt("uid");
-        //String name = getPara("name");
+        // String name = getPara("name");
         int result = contestService.addUser(cid, uid);
 
         renderJson("result", result);
@@ -147,7 +147,7 @@ public class ContestApiController extends OjController {
     @RequiresPermissions("contest:edit")
     @Before(POST.class)
     public void updateClarify() {
-        //Integer cid = getParaToInt("cid");
+        // Integer cid = getParaToInt("cid");
         Integer id = getParaToInt("id");
         boolean isPublic = getParaToBoolean("ispublic");
         String reply = getPara("reply");

@@ -289,7 +289,7 @@ public final class UserService {
      * Update user login time and loginlog.
      *
      * @param name    user name.
-     * @param success true if user login sucessfully.
+     * @param success true if user login successfully.
      * @return true if success
      */
     public boolean updateLogin(String name, boolean success) {
@@ -387,7 +387,7 @@ public final class UserService {
      */
     public String saveAvatar(File srcFile) throws IOException {
         UserModel userModel = getCurrentUser();
-        //        String rootPath = PathKit.getWebRootPath() + File.separator;
+        // String rootPath = PathKit.getWebRootPath() + File.separator;
         String srcFileName = srcFile.getAbsolutePath();
         String ext = FileKit.getFileType(srcFileName);
         String destFileName = OjConfig.userAvatarPath + File.separator + userModel.getUid() + ext;
@@ -407,7 +407,7 @@ public final class UserService {
         return destFileName;
     } /* for user center end */
 
-	/* for solution */
+    /* for solution */
 
     /**
      * @param uid
@@ -445,7 +445,7 @@ public final class UserService {
         return userModel.update();
     }
 
-	/* for rejudge */
+    /* for rejudge */
 
     /**
      * @param solutionModel
@@ -686,8 +686,8 @@ public final class UserService {
             String ext = OjConfig.languageType.get(code.getInt("language")).getExt();
             StringBuilder sb = new StringBuilder(10);
             sb.append(problemDir.getAbsolutePath()).append(File.separator).append(code.getInt("sid")).append("_");
-            sb.append(code.getInt("time")).append("MS_").append(code.getInt("memory")).append("KB")
-                .append(".").append(ext);
+            sb.append(code.getInt("time")).append("MS_").append(code.getInt("memory")).append("KB").append(".")
+                .append(ext);
 
             File file = new File(sb.toString());
             if (!file.createNewFile()) {
@@ -934,8 +934,9 @@ public final class UserService {
     }
 
     public List<Record> getSubmittedProblems(Integer uid) {
-        return Db.find("SELECT p.title, p.pid, MIN(result) AS result FROM solution s INNER JOIN problem p ON p.pid=s.pid"
-            + " WHERE s.uid=? AND s.status=1 GROUP BY s.pid", uid);
+        return Db.find(
+            "SELECT p.title, p.pid, MIN(result) AS result FROM solution s INNER JOIN problem p ON p.pid=s.pid"
+                + " WHERE s.uid=? AND s.status=1 GROUP BY s.pid", uid);
     }
 
     public List<Record> getSolvedProblems(Integer uid) {

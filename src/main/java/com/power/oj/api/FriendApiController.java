@@ -19,7 +19,7 @@ public class FriendApiController extends OjController {
         Integer uid = userService.getCurrentUid();
         int pageNumber = getParaToInt("page", 1);
         int pageSize = getParaToInt("size", OjConfig.friendPageSize);
-        //boolean isGroup = getParaToBoolean("isGroup", false);
+        // boolean isGroup = getParaToBoolean("isGroup", false);
         Integer gid = getParaToInt("gid", -1);
 
         renderJson(socialService.getFollowingList(pageNumber, pageSize, uid, gid));
@@ -97,7 +97,7 @@ public class FriendApiController extends OjController {
 
     public void unfollow() {
         Integer uid = userService.getCurrentUid();
-        //Integer gid = getParaToInt("gid");
+        // Integer gid = getParaToInt("gid");
         Integer fid = getParaToInt("uid");
 
         if (socialService.deleteFriend(uid, fid)) {

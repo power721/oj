@@ -9,7 +9,6 @@ import com.power.oj.core.OjConstants;
 import com.power.oj.core.model.ResourceModel;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.RoleModel;
-import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.power.oj.util.Tool;
 import com.power.oj.util.freemarker.FreemarkerKit;

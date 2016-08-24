@@ -127,521 +127,212 @@ public class BoardModel extends Model<BoardModel> {
         String field = String.valueOf(c) + "_WrongNum";
         return set(field, value);
     }
-  
-  /*
-  public BoardModel setA_SolvedTime(Integer value)
-  {
-    return set(A_SOLVED_TIME, value);
-  }
-  
-  public Integer getA_WrongNum()
-  {
-    return getInt(A_WRONG_NUM);
-  }
-  
-  public BoardModel setA_WrongNum(Integer value)
-  {
-    return set(A_WRONG_NUM, value);
-  }
-  
-  public Integer getB_SolvedTime()
-  {
-    return getInt(B_SOLVED_TIME);
-  }
-  
-  public BoardModel setB_SolvedTime(Integer value)
-  {
-    return set(B_SOLVED_TIME, value);
-  }
-  
-  public Integer getB_WrongNum()
-  {
-    return getInt(B_WRONG_NUM);
-  }
-  
-  public BoardModel setB_WrongNum(Integer value)
-  {
-    return set(B_WRONG_NUM, value);
-  }
-  
-  public Integer getC_SolvedTime()
-  {
-    return getInt(C_SOLVED_TIME);
-  }
-  
-  public BoardModel setC_SolvedTime(Integer value)
-  {
-    return set(C_SOLVED_TIME, value);
-  }
-  
-  public Integer getC_WrongNum()
-  {
-    return getInt(C_WRONG_NUM);
-  }
-  
-  public BoardModel setC_WrongNum(Integer value)
-  {
-    return set(C_WRONG_NUM, value);
-  }
-  
-  public Integer getD_SolvedTime()
-  {
-    return getInt(D_SOLVED_TIME);
-  }
-  
-  public BoardModel setD_SolvedTime(Integer value)
-  {
-    return set(D_SOLVED_TIME, value);
-  }
-  
-  public Integer getD_WrongNum()
-  {
-    return getInt(D_WRONG_NUM);
-  }
-  
-  public BoardModel setD_WrongNum(Integer value)
-  {
-    return set(D_WRONG_NUM, value);
-  }
-  
-  public Integer getE_SolvedTime()
-  {
-    return getInt(E_SOLVED_TIME);
-  }
-  
-  public BoardModel setE_SolvedTime(Integer value)
-  {
-    return set(E_SOLVED_TIME, value);
-  }
-  
-  public Integer getE_WrongNum()
-  {
-    return getInt(E_WRONG_NUM);
-  }
-  
-  public BoardModel setE_WrongNum(Integer value)
-  {
-    return set(E_WRONG_NUM, value);
-  }
-  
-  public Integer getF_SolvedTime()
-  {
-    return getInt(F_SOLVED_TIME);
-  }
-  
-  public BoardModel setF_SolvedTime(Integer value)
-  {
-    return set(F_SOLVED_TIME, value);
-  }
-  
-  public Integer getF_WrongNum()
-  {
-    return getInt(F_WRONG_NUM);
-  }
-  
-  public BoardModel setF_WrongNum(Integer value)
-  {
-    return set(F_WRONG_NUM, value);
-  }
-  
-  public Integer getG_SolvedTime()
-  {
-    return getInt(G_SOLVED_TIME);
-  }
-  
-  public BoardModel setG_SolvedTime(Integer value)
-  {
-    return set(G_SOLVED_TIME, value);
-  }
-  
-  public Integer getG_WrongNum()
-  {
-    return getInt(G_WRONG_NUM);
-  }
-  
-  public BoardModel setG_WrongNum(Integer value)
-  {
-    return set(G_WRONG_NUM, value);
-  }
-  
-  public Integer getH_SolvedTime()
-  {
-    return getInt(H_SOLVED_TIME);
-  }
-  
-  public BoardModel setH_SolvedTime(Integer value)
-  {
-    return set(H_SOLVED_TIME, value);
-  }
-  
-  public Integer getH_WrongNum()
-  {
-    return getInt(H_WRONG_NUM);
-  }
-  
-  public BoardModel setH_WrongNum(Integer value)
-  {
-    return set(H_WRONG_NUM, value);
-  }
-  
-  public Integer getI_SolvedTime()
-  {
-    return getInt(I_SOLVED_TIME);
-  }
-  
-  public BoardModel setI_SolvedTime(Integer value)
-  {
-    return set(I_SOLVED_TIME, value);
-  }
-  
-  public Integer getI_WrongNum()
-  {
-    return getInt(I_WRONG_NUM);
-  }
-  
-  public BoardModel setI_WrongNum(Integer value)
-  {
-    return set(I_WRONG_NUM, value);
-  }
-  
-  public Integer getJ_SolvedTime()
-  {
-    return getInt(J_SOLVED_TIME);
-  }
-  
-  public BoardModel setJ_SolvedTime(Integer value)
-  {
-    return set(J_SOLVED_TIME, value);
-  }
-  
-  public Integer getJ_WrongNum()
-  {
-    return getInt(J_WRONG_NUM);
-  }
-  
-  public BoardModel setJ_WrongNum(Integer value)
-  {
-    return set(J_WRONG_NUM, value);
-  }
-  
-  public Integer getK_SolvedTime()
-  {
-    return getInt(K_SOLVED_TIME);
-  }
-  
-  public BoardModel setK_SolvedTime(Integer value)
-  {
-    return set(K_SOLVED_TIME, value);
-  }
-  
-  public Integer getK_WrongNum()
-  {
-    return getInt(K_WRONG_NUM);
-  }
-  
-  public BoardModel setK_WrongNum(Integer value)
-  {
-    return set(K_WRONG_NUM, value);
-  }
-  
-  public Integer getL_SolvedTime()
-  {
-    return getInt(L_SOLVED_TIME);
-  }
-  
-  public BoardModel setL_SolvedTime(Integer value)
-  {
-    return set(L_SOLVED_TIME, value);
-  }
-  
-  public Integer getL_WrongNum()
-  {
-    return getInt(L_WRONG_NUM);
-  }
-  
-  public BoardModel setL_WrongNum(Integer value)
-  {
-    return set(L_WRONG_NUM, value);
-  }
-  
-  public Integer getM_SolvedTime()
-  {
-    return getInt(M_SOLVED_TIME);
-  }
-  
-  public BoardModel setM_SolvedTime(Integer value)
-  {
-    return set(M_SOLVED_TIME, value);
-  }
-  
-  public Integer getM_WrongNum()
-  {
-    return getInt(M_WRONG_NUM);
-  }
-  
-  public BoardModel setM_WrongNum(Integer value)
-  {
-    return set(M_WRONG_NUM, value);
-  }
-  
-  public Integer getN_SolvedTime()
-  {
-    return getInt(N_SOLVED_TIME);
-  }
-  
-  public BoardModel setN_SolvedTime(Integer value)
-  {
-    return set(N_SOLVED_TIME, value);
-  }
-  
-  public Integer getN_WrongNum()
-  {
-    return getInt(N_WRONG_NUM);
-  }
-  
-  public BoardModel setN_WrongNum(Integer value)
-  {
-    return set(N_WRONG_NUM, value);
-  }
-  
-  public Integer getO_SolvedTime()
-  {
-    return getInt(O_SOLVED_TIME);
-  }
-  
-  public BoardModel setO_SolvedTime(Integer value)
-  {
-    return set(O_SOLVED_TIME, value);
-  }
-  
-  public Integer getO_WrongNum()
-  {
-    return getInt(O_WRONG_NUM);
-  }
-  
-  public BoardModel setO_WrongNum(Integer value)
-  {
-    return set(O_WRONG_NUM, value);
-  }
-  
-  public Integer getP_SolvedTime()
-  {
-    return getInt(P_SOLVED_TIME);
-  }
-  
-  public BoardModel setP_SolvedTime(Integer value)
-  {
-    return set(P_SOLVED_TIME, value);
-  }
-  
-  public Integer getP_WrongNum()
-  {
-    return getInt(P_WRONG_NUM);
-  }
-  
-  public BoardModel setP_WrongNum(Integer value)
-  {
-    return set(P_WRONG_NUM, value);
-  }
-  
-  public Integer getQ_SolvedTime()
-  {
-    return getInt(Q_SOLVED_TIME);
-  }
-  
-  public BoardModel setQ_SolvedTime(Integer value)
-  {
-    return set(Q_SOLVED_TIME, value);
-  }
-  
-  public Integer getQ_WrongNum()
-  {
-    return getInt(Q_WRONG_NUM);
-  }
-  
-  public BoardModel setQ_WrongNum(Integer value)
-  {
-    return set(Q_WRONG_NUM, value);
-  }
-  
-  public Integer getR_SolvedTime()
-  {
-    return getInt(R_SOLVED_TIME);
-  }
-  
-  public BoardModel setR_SolvedTime(Integer value)
-  {
-    return set(R_SOLVED_TIME, value);
-  }
-  
-  public Integer getR_WrongNum()
-  {
-    return getInt(R_WRONG_NUM);
-  }
-  
-  public BoardModel setR_WrongNum(Integer value)
-  {
-    return set(R_WRONG_NUM, value);
-  }
-  
-  public Integer getS_SolvedTime()
-  {
-    return getInt(S_SOLVED_TIME);
-  }
-  
-  public BoardModel setS_SolvedTime(Integer value)
-  {
-    return set(S_SOLVED_TIME, value);
-  }
-  
-  public Integer getS_WrongNum()
-  {
-    return getInt(S_WRONG_NUM);
-  }
-  
-  public BoardModel setS_WrongNum(Integer value)
-  {
-    return set(S_WRONG_NUM, value);
-  }
-  
-  public Integer getT_SolvedTime()
-  {
-    return getInt(T_SOLVED_TIME);
-  }
-  
-  public BoardModel setT_SolvedTime(Integer value)
-  {
-    return set(T_SOLVED_TIME, value);
-  }
-  
-  public Integer getT_WrongNum()
-  {
-    return getInt(T_WRONG_NUM);
-  }
-  
-  public BoardModel setT_WrongNum(Integer value)
-  {
-    return set(T_WRONG_NUM, value);
-  }
-  
-  public Integer getU_SolvedTime()
-  {
-    return getInt(U_SOLVED_TIME);
-  }
-  
-  public BoardModel setU_SolvedTime(Integer value)
-  {
-    return set(U_SOLVED_TIME, value);
-  }
-  
-  public Integer getU_WrongNum()
-  {
-    return getInt(U_WRONG_NUM);
-  }
-  
-  public BoardModel setU_WrongNum(Integer value)
-  {
-    return set(U_WRONG_NUM, value);
-  }
-  
-  public Integer getV_SolvedTime()
-  {
-    return getInt(V_SOLVED_TIME);
-  }
-  
-  public BoardModel setV_SolvedTime(Integer value)
-  {
-    return set(V_SOLVED_TIME, value);
-  }
-  
-  public Integer getV_WrongNum()
-  {
-    return getInt(V_WRONG_NUM);
-  }
-  
-  public BoardModel setV_WrongNum(Integer value)
-  {
-    return set(V_WRONG_NUM, value);
-  }
-  
-  public Integer getW_SolvedTime()
-  {
-    return getInt(W_SOLVED_TIME);
-  }
-  
-  public BoardModel setW_SolvedTime(Integer value)
-  {
-    return set(W_SOLVED_TIME, value);
-  }
-  
-  public Integer getW_WrongNum()
-  {
-    return getInt(W_WRONG_NUM);
-  }
-  
-  public BoardModel setW_WrongNum(Integer value)
-  {
-    return set(W_WRONG_NUM, value);
-  }
-  
-  public Integer getX_SolvedTime()
-  {
-    return getInt(X_SOLVED_TIME);
-  }
-  
-  public BoardModel setX_SolvedTime(Integer value)
-  {
-    return set(X_SOLVED_TIME, value);
-  }
-  
-  public Integer getX_WrongNum()
-  {
-    return getInt(X_WRONG_NUM);
-  }
-  
-  public BoardModel setX_WrongNum(Integer value)
-  {
-    return set(X_WRONG_NUM, value);
-  }
-  
-  public Integer getY_SolvedTime()
-  {
-    return getInt(Y_SOLVED_TIME);
-  }
-  
-  public BoardModel setY_SolvedTime(Integer value)
-  {
-    return set(Y_SOLVED_TIME, value);
-  }
-  
-  public Integer getY_WrongNum()
-  {
-    return getInt(Y_WRONG_NUM);
-  }
-  
-  public BoardModel setY_WrongNum(Integer value)
-  {
-    return set(Y_WRONG_NUM, value);
-  }
-  
-  public Integer getZ_SolvedTime()
-  {
-    return getInt(Z_SOLVED_TIME);
-  }
-  
-  public BoardModel setZ_SolvedTime(Integer value)
-  {
-    return set(Z_SOLVED_TIME, value);
-  }
-  
-  public Integer getZ_WrongNum()
-  {
-    return getInt(Z_WRONG_NUM);
-  }
-  
-  public BoardModel setZ_WrongNum(Integer value)
-  {
-    return set(Z_WRONG_NUM, value);
-  }
-  */
+
+    /*
+     * public BoardModel setA_SolvedTime(Integer value) { return set(A_SOLVED_TIME, value); }
+     * 
+     * public Integer getA_WrongNum() { return getInt(A_WRONG_NUM); }
+     * 
+     * public BoardModel setA_WrongNum(Integer value) { return set(A_WRONG_NUM, value); }
+     * 
+     * public Integer getB_SolvedTime() { return getInt(B_SOLVED_TIME); }
+     * 
+     * public BoardModel setB_SolvedTime(Integer value) { return set(B_SOLVED_TIME, value); }
+     * 
+     * public Integer getB_WrongNum() { return getInt(B_WRONG_NUM); }
+     * 
+     * public BoardModel setB_WrongNum(Integer value) { return set(B_WRONG_NUM, value); }
+     * 
+     * public Integer getC_SolvedTime() { return getInt(C_SOLVED_TIME); }
+     * 
+     * public BoardModel setC_SolvedTime(Integer value) { return set(C_SOLVED_TIME, value); }
+     * 
+     * public Integer getC_WrongNum() { return getInt(C_WRONG_NUM); }
+     * 
+     * public BoardModel setC_WrongNum(Integer value) { return set(C_WRONG_NUM, value); }
+     * 
+     * public Integer getD_SolvedTime() { return getInt(D_SOLVED_TIME); }
+     * 
+     * public BoardModel setD_SolvedTime(Integer value) { return set(D_SOLVED_TIME, value); }
+     * 
+     * public Integer getD_WrongNum() { return getInt(D_WRONG_NUM); }
+     * 
+     * public BoardModel setD_WrongNum(Integer value) { return set(D_WRONG_NUM, value); }
+     * 
+     * public Integer getE_SolvedTime() { return getInt(E_SOLVED_TIME); }
+     * 
+     * public BoardModel setE_SolvedTime(Integer value) { return set(E_SOLVED_TIME, value); }
+     * 
+     * public Integer getE_WrongNum() { return getInt(E_WRONG_NUM); }
+     * 
+     * public BoardModel setE_WrongNum(Integer value) { return set(E_WRONG_NUM, value); }
+     * 
+     * public Integer getF_SolvedTime() { return getInt(F_SOLVED_TIME); }
+     * 
+     * public BoardModel setF_SolvedTime(Integer value) { return set(F_SOLVED_TIME, value); }
+     * 
+     * public Integer getF_WrongNum() { return getInt(F_WRONG_NUM); }
+     * 
+     * public BoardModel setF_WrongNum(Integer value) { return set(F_WRONG_NUM, value); }
+     * 
+     * public Integer getG_SolvedTime() { return getInt(G_SOLVED_TIME); }
+     * 
+     * public BoardModel setG_SolvedTime(Integer value) { return set(G_SOLVED_TIME, value); }
+     * 
+     * public Integer getG_WrongNum() { return getInt(G_WRONG_NUM); }
+     * 
+     * public BoardModel setG_WrongNum(Integer value) { return set(G_WRONG_NUM, value); }
+     * 
+     * public Integer getH_SolvedTime() { return getInt(H_SOLVED_TIME); }
+     * 
+     * public BoardModel setH_SolvedTime(Integer value) { return set(H_SOLVED_TIME, value); }
+     * 
+     * public Integer getH_WrongNum() { return getInt(H_WRONG_NUM); }
+     * 
+     * public BoardModel setH_WrongNum(Integer value) { return set(H_WRONG_NUM, value); }
+     * 
+     * public Integer getI_SolvedTime() { return getInt(I_SOLVED_TIME); }
+     * 
+     * public BoardModel setI_SolvedTime(Integer value) { return set(I_SOLVED_TIME, value); }
+     * 
+     * public Integer getI_WrongNum() { return getInt(I_WRONG_NUM); }
+     * 
+     * public BoardModel setI_WrongNum(Integer value) { return set(I_WRONG_NUM, value); }
+     * 
+     * public Integer getJ_SolvedTime() { return getInt(J_SOLVED_TIME); }
+     * 
+     * public BoardModel setJ_SolvedTime(Integer value) { return set(J_SOLVED_TIME, value); }
+     * 
+     * public Integer getJ_WrongNum() { return getInt(J_WRONG_NUM); }
+     * 
+     * public BoardModel setJ_WrongNum(Integer value) { return set(J_WRONG_NUM, value); }
+     * 
+     * public Integer getK_SolvedTime() { return getInt(K_SOLVED_TIME); }
+     * 
+     * public BoardModel setK_SolvedTime(Integer value) { return set(K_SOLVED_TIME, value); }
+     * 
+     * public Integer getK_WrongNum() { return getInt(K_WRONG_NUM); }
+     * 
+     * public BoardModel setK_WrongNum(Integer value) { return set(K_WRONG_NUM, value); }
+     * 
+     * public Integer getL_SolvedTime() { return getInt(L_SOLVED_TIME); }
+     * 
+     * public BoardModel setL_SolvedTime(Integer value) { return set(L_SOLVED_TIME, value); }
+     * 
+     * public Integer getL_WrongNum() { return getInt(L_WRONG_NUM); }
+     * 
+     * public BoardModel setL_WrongNum(Integer value) { return set(L_WRONG_NUM, value); }
+     * 
+     * public Integer getM_SolvedTime() { return getInt(M_SOLVED_TIME); }
+     * 
+     * public BoardModel setM_SolvedTime(Integer value) { return set(M_SOLVED_TIME, value); }
+     * 
+     * public Integer getM_WrongNum() { return getInt(M_WRONG_NUM); }
+     * 
+     * public BoardModel setM_WrongNum(Integer value) { return set(M_WRONG_NUM, value); }
+     * 
+     * public Integer getN_SolvedTime() { return getInt(N_SOLVED_TIME); }
+     * 
+     * public BoardModel setN_SolvedTime(Integer value) { return set(N_SOLVED_TIME, value); }
+     * 
+     * public Integer getN_WrongNum() { return getInt(N_WRONG_NUM); }
+     * 
+     * public BoardModel setN_WrongNum(Integer value) { return set(N_WRONG_NUM, value); }
+     * 
+     * public Integer getO_SolvedTime() { return getInt(O_SOLVED_TIME); }
+     * 
+     * public BoardModel setO_SolvedTime(Integer value) { return set(O_SOLVED_TIME, value); }
+     * 
+     * public Integer getO_WrongNum() { return getInt(O_WRONG_NUM); }
+     * 
+     * public BoardModel setO_WrongNum(Integer value) { return set(O_WRONG_NUM, value); }
+     * 
+     * public Integer getP_SolvedTime() { return getInt(P_SOLVED_TIME); }
+     * 
+     * public BoardModel setP_SolvedTime(Integer value) { return set(P_SOLVED_TIME, value); }
+     * 
+     * public Integer getP_WrongNum() { return getInt(P_WRONG_NUM); }
+     * 
+     * public BoardModel setP_WrongNum(Integer value) { return set(P_WRONG_NUM, value); }
+     * 
+     * public Integer getQ_SolvedTime() { return getInt(Q_SOLVED_TIME); }
+     * 
+     * public BoardModel setQ_SolvedTime(Integer value) { return set(Q_SOLVED_TIME, value); }
+     * 
+     * public Integer getQ_WrongNum() { return getInt(Q_WRONG_NUM); }
+     * 
+     * public BoardModel setQ_WrongNum(Integer value) { return set(Q_WRONG_NUM, value); }
+     * 
+     * public Integer getR_SolvedTime() { return getInt(R_SOLVED_TIME); }
+     * 
+     * public BoardModel setR_SolvedTime(Integer value) { return set(R_SOLVED_TIME, value); }
+     * 
+     * public Integer getR_WrongNum() { return getInt(R_WRONG_NUM); }
+     * 
+     * public BoardModel setR_WrongNum(Integer value) { return set(R_WRONG_NUM, value); }
+     * 
+     * public Integer getS_SolvedTime() { return getInt(S_SOLVED_TIME); }
+     * 
+     * public BoardModel setS_SolvedTime(Integer value) { return set(S_SOLVED_TIME, value); }
+     * 
+     * public Integer getS_WrongNum() { return getInt(S_WRONG_NUM); }
+     * 
+     * public BoardModel setS_WrongNum(Integer value) { return set(S_WRONG_NUM, value); }
+     * 
+     * public Integer getT_SolvedTime() { return getInt(T_SOLVED_TIME); }
+     * 
+     * public BoardModel setT_SolvedTime(Integer value) { return set(T_SOLVED_TIME, value); }
+     * 
+     * public Integer getT_WrongNum() { return getInt(T_WRONG_NUM); }
+     * 
+     * public BoardModel setT_WrongNum(Integer value) { return set(T_WRONG_NUM, value); }
+     * 
+     * public Integer getU_SolvedTime() { return getInt(U_SOLVED_TIME); }
+     * 
+     * public BoardModel setU_SolvedTime(Integer value) { return set(U_SOLVED_TIME, value); }
+     * 
+     * public Integer getU_WrongNum() { return getInt(U_WRONG_NUM); }
+     * 
+     * public BoardModel setU_WrongNum(Integer value) { return set(U_WRONG_NUM, value); }
+     * 
+     * public Integer getV_SolvedTime() { return getInt(V_SOLVED_TIME); }
+     * 
+     * public BoardModel setV_SolvedTime(Integer value) { return set(V_SOLVED_TIME, value); }
+     * 
+     * public Integer getV_WrongNum() { return getInt(V_WRONG_NUM); }
+     * 
+     * public BoardModel setV_WrongNum(Integer value) { return set(V_WRONG_NUM, value); }
+     * 
+     * public Integer getW_SolvedTime() { return getInt(W_SOLVED_TIME); }
+     * 
+     * public BoardModel setW_SolvedTime(Integer value) { return set(W_SOLVED_TIME, value); }
+     * 
+     * public Integer getW_WrongNum() { return getInt(W_WRONG_NUM); }
+     * 
+     * public BoardModel setW_WrongNum(Integer value) { return set(W_WRONG_NUM, value); }
+     * 
+     * public Integer getX_SolvedTime() { return getInt(X_SOLVED_TIME); }
+     * 
+     * public BoardModel setX_SolvedTime(Integer value) { return set(X_SOLVED_TIME, value); }
+     * 
+     * public Integer getX_WrongNum() { return getInt(X_WRONG_NUM); }
+     * 
+     * public BoardModel setX_WrongNum(Integer value) { return set(X_WRONG_NUM, value); }
+     * 
+     * public Integer getY_SolvedTime() { return getInt(Y_SOLVED_TIME); }
+     * 
+     * public BoardModel setY_SolvedTime(Integer value) { return set(Y_SOLVED_TIME, value); }
+     * 
+     * public Integer getY_WrongNum() { return getInt(Y_WRONG_NUM); }
+     * 
+     * public BoardModel setY_WrongNum(Integer value) { return set(Y_WRONG_NUM, value); }
+     * 
+     * public Integer getZ_SolvedTime() { return getInt(Z_SOLVED_TIME); }
+     * 
+     * public BoardModel setZ_SolvedTime(Integer value) { return set(Z_SOLVED_TIME, value); }
+     * 
+     * public Integer getZ_WrongNum() { return getInt(Z_WRONG_NUM); }
+     * 
+     * public BoardModel setZ_WrongNum(Integer value) { return set(Z_WRONG_NUM, value); }
+     */
 }

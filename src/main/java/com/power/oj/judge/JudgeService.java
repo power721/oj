@@ -42,7 +42,7 @@ public final class JudgeService {
     private static final ProblemService problemService = ProblemService.me();
     private static final SolutionService solutionService = SolutionService.me();
     private static final UserService userService = UserService.me();
-    //private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
+    // private static final ExecutorService judgeExecutor = Executors.newSingleThreadExecutor();
     private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
     // TODO: store task in redis with expire time
     private static final Cache<String, RejudgeTask> rejudgeTasks =
@@ -140,7 +140,7 @@ public final class JudgeService {
             task.setDeleteTempDir(deleteTempDir);
             rejudgeTasks.put(task.getKey(), task);
             judgeThread.setDeleteTempDir(deleteTempDir);
-            //judgeExecutor.execute(judgeThread);  // this will store session in the thread
+            // judgeExecutor.execute(judgeThread); // this will store session in the thread
             Thread thread = new Thread(judgeThread);
             thread.start();
         }
@@ -254,7 +254,7 @@ public final class JudgeService {
 
         originalResult.put(contestSolution.getSid(), result);
 
-        contestSolution.put("originalResult", result);  // for PowerJudgeAdapter
+        contestSolution.put("originalResult", result); // for PowerJudgeAdapter
 
         rejudge(contestSolution);
     }

@@ -2,7 +2,6 @@ package com.power.oj.news;
 
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.ehcache.CacheKit;
-import com.power.oj.core.OjConfig;
 
 public class NewsService {
     private static final NewsModel dao = NewsModel.dao;

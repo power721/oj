@@ -67,7 +67,7 @@ public final class DiscussionService {
         TopicModel topic = dao.findFirst(
             "SELECT t.*,p.title AS problem,u.name FROM `topic` t LEFT JOIN problem p ON p.pid=t.pid "
                 + "INNER JOIN user u ON u.uid=t.uid WHERE t.id=?", id);
-        //topic.setView(topic.getView() + 1).update();
+        // topic.setView(topic.getView() + 1).update();
         return topic;
     }
 
