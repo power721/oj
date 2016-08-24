@@ -45,8 +45,7 @@ public final class NoticeService {
 
     public Page<NoticeModel> getNoticePage(int pageNumber, int pageSize) {
         String sql = "SELECT n.*,u.name";
-        String from =
-            "FROM notice n INNER JOIN user u ON u.uid=n.uid";
+        String from = "FROM notice n INNER JOIN user u ON u.uid=n.uid";
         if (!userService.isAdmin()) {
             from += " WHERE startTime<=UNIX_TIMESTAMP() AND n.status=1";
         }

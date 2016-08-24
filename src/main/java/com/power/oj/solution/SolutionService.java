@@ -96,10 +96,10 @@ public final class SolutionService {
             solution.put("resultName", resultType.getName());
             solution.put("resultLongName", resultType.getLongName());
 
-      /*if (solution.getNum() != null && solution.getNum() > -1)
-      {
-        solution.put("alpha", (char) (solution.getNum() + 'A'));
-      }*/
+            /*
+             * if (solution.getNum() != null && solution.getNum() > -1) { solution.put("alpha", (char)
+             * (solution.getNum() + 'A')); }
+             */
         }
 
         return solutionList;
@@ -129,10 +129,9 @@ public final class SolutionService {
 
     public ContestSolutionModel getContestSolutionResult(Integer cid, Integer sid) {
         // TODO check permission
-        ContestSolutionModel solutionModel = ContestSolutionModel.dao.
-            findFirst(
-                "SELECT cid,sid,time,memory,result FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1",
-                cid, sid);
+        ContestSolutionModel solutionModel = ContestSolutionModel.dao.findFirst(
+            "SELECT cid,sid,time,memory,result FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1", cid,
+            sid);
         solutionModel.set("result", OjConfig.resultType.get(solutionModel.getResult()));
         return solutionModel;
     }
@@ -312,8 +311,8 @@ public final class SolutionService {
     }
 
     public List<ContestSolutionModel> getSolutionListForContest(Integer cid) {
-        List<ContestSolutionModel> solutionList =
-            ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid ASC", cid);
+        List<ContestSolutionModel> solutionList = ContestSolutionModel.dao
+            .find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid ASC", cid);
         return solutionList;
     }
 

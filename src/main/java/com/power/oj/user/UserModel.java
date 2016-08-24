@@ -105,11 +105,9 @@ public class UserModel extends Model<UserModel> {
     }
 
     /*
-      public List<Record> getUnsolvedProblems(Integer uid)
-      {
-          return Db.find("SELECT pid FROM solution WHERE uid=? AND result!=0 AND status=1 GROUP BY pid", uid);
-      }
-    */
+     * public List<Record> getUnsolvedProblems(Integer uid) { return Db.find(
+     * "SELECT pid FROM solution WHERE uid=? AND result!=0 AND status=1 GROUP BY pid", uid); }
+     */
     public boolean containsEmailExceptThis(Integer uid, String email) {
         return findFirst("SELECT email FROM user WHERE email=? AND uid!=? LIMIT 1", email, uid) != null;
     }

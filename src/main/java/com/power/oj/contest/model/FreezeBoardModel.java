@@ -127,526 +127,214 @@ public class FreezeBoardModel extends Model<FreezeBoardModel> {
         String field = String.valueOf(c) + "_WrongNum";
         return set(field, value);
     }
-  
-  /*
-  public Integer getA_SolvedTime()
-  {
-    return getInt(A_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setA_SolvedTime(Integer value)
-  {
-    return set(A_SOLVED_TIME, value);
-  }
-  
-  public Integer getA_WrongNum()
-  {
-    return getInt(A_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setA_WrongNum(Integer value)
-  {
-    return set(A_WRONG_NUM, value);
-  }
-  
-  public Integer getB_SolvedTime()
-  {
-    return getInt(B_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setB_SolvedTime(Integer value)
-  {
-    return set(B_SOLVED_TIME, value);
-  }
-  
-  public Integer getB_WrongNum()
-  {
-    return getInt(B_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setB_WrongNum(Integer value)
-  {
-    return set(B_WRONG_NUM, value);
-  }
-  
-  public Integer getC_SolvedTime()
-  {
-    return getInt(C_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setC_SolvedTime(Integer value)
-  {
-    return set(C_SOLVED_TIME, value);
-  }
-  
-  public Integer getC_WrongNum()
-  {
-    return getInt(C_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setC_WrongNum(Integer value)
-  {
-    return set(C_WRONG_NUM, value);
-  }
-  
-  public Integer getD_SolvedTime()
-  {
-    return getInt(D_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setD_SolvedTime(Integer value)
-  {
-    return set(D_SOLVED_TIME, value);
-  }
-  
-  public Integer getD_WrongNum()
-  {
-    return getInt(D_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setD_WrongNum(Integer value)
-  {
-    return set(D_WRONG_NUM, value);
-  }
-  
-  public Integer getE_SolvedTime()
-  {
-    return getInt(E_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setE_SolvedTime(Integer value)
-  {
-    return set(E_SOLVED_TIME, value);
-  }
-  
-  public Integer getE_WrongNum()
-  {
-    return getInt(E_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setE_WrongNum(Integer value)
-  {
-    return set(E_WRONG_NUM, value);
-  }
-  
-  public Integer getF_SolvedTime()
-  {
-    return getInt(F_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setF_SolvedTime(Integer value)
-  {
-    return set(F_SOLVED_TIME, value);
-  }
-  
-  public Integer getF_WrongNum()
-  {
-    return getInt(F_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setF_WrongNum(Integer value)
-  {
-    return set(F_WRONG_NUM, value);
-  }
-  
-  public Integer getG_SolvedTime()
-  {
-    return getInt(G_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setG_SolvedTime(Integer value)
-  {
-    return set(G_SOLVED_TIME, value);
-  }
-  
-  public Integer getG_WrongNum()
-  {
-    return getInt(G_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setG_WrongNum(Integer value)
-  {
-    return set(G_WRONG_NUM, value);
-  }
-  
-  public Integer getH_SolvedTime()
-  {
-    return getInt(H_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setH_SolvedTime(Integer value)
-  {
-    return set(H_SOLVED_TIME, value);
-  }
-  
-  public Integer getH_WrongNum()
-  {
-    return getInt(H_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setH_WrongNum(Integer value)
-  {
-    return set(H_WRONG_NUM, value);
-  }
-  
-  public Integer getI_SolvedTime()
-  {
-    return getInt(I_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setI_SolvedTime(Integer value)
-  {
-    return set(I_SOLVED_TIME, value);
-  }
-  
-  public Integer getI_WrongNum()
-  {
-    return getInt(I_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setI_WrongNum(Integer value)
-  {
-    return set(I_WRONG_NUM, value);
-  }
-  
-  public Integer getJ_SolvedTime()
-  {
-    return getInt(J_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setJ_SolvedTime(Integer value)
-  {
-    return set(J_SOLVED_TIME, value);
-  }
-  
-  public Integer getJ_WrongNum()
-  {
-    return getInt(J_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setJ_WrongNum(Integer value)
-  {
-    return set(J_WRONG_NUM, value);
-  }
-  
-  public Integer getK_SolvedTime()
-  {
-    return getInt(K_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setK_SolvedTime(Integer value)
-  {
-    return set(K_SOLVED_TIME, value);
-  }
-  
-  public Integer getK_WrongNum()
-  {
-    return getInt(K_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setK_WrongNum(Integer value)
-  {
-    return set(K_WRONG_NUM, value);
-  }
-  
-  public Integer getL_SolvedTime()
-  {
-    return getInt(L_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setL_SolvedTime(Integer value)
-  {
-    return set(L_SOLVED_TIME, value);
-  }
-  
-  public Integer getL_WrongNum()
-  {
-    return getInt(L_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setL_WrongNum(Integer value)
-  {
-    return set(L_WRONG_NUM, value);
-  }
-  
-  public Integer getM_SolvedTime()
-  {
-    return getInt(M_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setM_SolvedTime(Integer value)
-  {
-    return set(M_SOLVED_TIME, value);
-  }
-  
-  public Integer getM_WrongNum()
-  {
-    return getInt(M_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setM_WrongNum(Integer value)
-  {
-    return set(M_WRONG_NUM, value);
-  }
-  
-  public Integer getN_SolvedTime()
-  {
-    return getInt(N_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setN_SolvedTime(Integer value)
-  {
-    return set(N_SOLVED_TIME, value);
-  }
-  
-  public Integer getN_WrongNum()
-  {
-    return getInt(N_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setN_WrongNum(Integer value)
-  {
-    return set(N_WRONG_NUM, value);
-  }
-  
-  public Integer getO_SolvedTime()
-  {
-    return getInt(O_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setO_SolvedTime(Integer value)
-  {
-    return set(O_SOLVED_TIME, value);
-  }
-  
-  public Integer getO_WrongNum()
-  {
-    return getInt(O_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setO_WrongNum(Integer value)
-  {
-    return set(O_WRONG_NUM, value);
-  }
-  
-  public Integer getP_SolvedTime()
-  {
-    return getInt(P_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setP_SolvedTime(Integer value)
-  {
-    return set(P_SOLVED_TIME, value);
-  }
-  
-  public Integer getP_WrongNum()
-  {
-    return getInt(P_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setP_WrongNum(Integer value)
-  {
-    return set(P_WRONG_NUM, value);
-  }
-  
-  public Integer getQ_SolvedTime()
-  {
-    return getInt(Q_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setQ_SolvedTime(Integer value)
-  {
-    return set(Q_SOLVED_TIME, value);
-  }
-  
-  public Integer getQ_WrongNum()
-  {
-    return getInt(Q_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setQ_WrongNum(Integer value)
-  {
-    return set(Q_WRONG_NUM, value);
-  }
-  
-  public Integer getR_SolvedTime()
-  {
-    return getInt(R_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setR_SolvedTime(Integer value)
-  {
-    return set(R_SOLVED_TIME, value);
-  }
-  
-  public Integer getR_WrongNum()
-  {
-    return getInt(R_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setR_WrongNum(Integer value)
-  {
-    return set(R_WRONG_NUM, value);
-  }
-  
-  public Integer getS_SolvedTime()
-  {
-    return getInt(S_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setS_SolvedTime(Integer value)
-  {
-    return set(S_SOLVED_TIME, value);
-  }
-  
-  public Integer getS_WrongNum()
-  {
-    return getInt(S_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setS_WrongNum(Integer value)
-  {
-    return set(S_WRONG_NUM, value);
-  }
-  
-  public Integer getT_SolvedTime()
-  {
-    return getInt(T_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setT_SolvedTime(Integer value)
-  {
-    return set(T_SOLVED_TIME, value);
-  }
-  
-  public Integer getT_WrongNum()
-  {
-    return getInt(T_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setT_WrongNum(Integer value)
-  {
-    return set(T_WRONG_NUM, value);
-  }
-  
-  public Integer getU_SolvedTime()
-  {
-    return getInt(U_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setU_SolvedTime(Integer value)
-  {
-    return set(U_SOLVED_TIME, value);
-  }
-  
-  public Integer getU_WrongNum()
-  {
-    return getInt(U_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setU_WrongNum(Integer value)
-  {
-    return set(U_WRONG_NUM, value);
-  }
-  
-  public Integer getV_SolvedTime()
-  {
-    return getInt(V_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setV_SolvedTime(Integer value)
-  {
-    return set(V_SOLVED_TIME, value);
-  }
-  
-  public Integer getV_WrongNum()
-  {
-    return getInt(V_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setV_WrongNum(Integer value)
-  {
-    return set(V_WRONG_NUM, value);
-  }
-  
-  public Integer getW_SolvedTime()
-  {
-    return getInt(W_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setW_SolvedTime(Integer value)
-  {
-    return set(W_SOLVED_TIME, value);
-  }
-  
-  public Integer getW_WrongNum()
-  {
-    return getInt(W_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setW_WrongNum(Integer value)
-  {
-    return set(W_WRONG_NUM, value);
-  }
-  
-  public Integer getX_SolvedTime()
-  {
-    return getInt(X_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setX_SolvedTime(Integer value)
-  {
-    return set(X_SOLVED_TIME, value);
-  }
-  
-  public Integer getX_WrongNum()
-  {
-    return getInt(X_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setX_WrongNum(Integer value)
-  {
-    return set(X_WRONG_NUM, value);
-  }
-  
-  public Integer getY_SolvedTime()
-  {
-    return getInt(Y_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setY_SolvedTime(Integer value)
-  {
-    return set(Y_SOLVED_TIME, value);
-  }
-  
-  public Integer getY_WrongNum()
-  {
-    return getInt(Y_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setY_WrongNum(Integer value)
-  {
-    return set(Y_WRONG_NUM, value);
-  }
-  
-  public Integer getZ_SolvedTime()
-  {
-    return getInt(Z_SOLVED_TIME);
-  }
-  
-  public FreezeBoardModel setZ_SolvedTime(Integer value)
-  {
-    return set(Z_SOLVED_TIME, value);
-  }
-  
-  public Integer getZ_WrongNum()
-  {
-    return getInt(Z_WRONG_NUM);
-  }
-  
-  public FreezeBoardModel setZ_WrongNum(Integer value)
-  {
-    return set(Z_WRONG_NUM, value);
-  }
-  */
+
+    /*
+     * public Integer getA_SolvedTime() { return getInt(A_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setA_SolvedTime(Integer value) { return set(A_SOLVED_TIME, value); }
+     * 
+     * public Integer getA_WrongNum() { return getInt(A_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setA_WrongNum(Integer value) { return set(A_WRONG_NUM, value); }
+     * 
+     * public Integer getB_SolvedTime() { return getInt(B_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setB_SolvedTime(Integer value) { return set(B_SOLVED_TIME, value); }
+     * 
+     * public Integer getB_WrongNum() { return getInt(B_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setB_WrongNum(Integer value) { return set(B_WRONG_NUM, value); }
+     * 
+     * public Integer getC_SolvedTime() { return getInt(C_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setC_SolvedTime(Integer value) { return set(C_SOLVED_TIME, value); }
+     * 
+     * public Integer getC_WrongNum() { return getInt(C_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setC_WrongNum(Integer value) { return set(C_WRONG_NUM, value); }
+     * 
+     * public Integer getD_SolvedTime() { return getInt(D_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setD_SolvedTime(Integer value) { return set(D_SOLVED_TIME, value); }
+     * 
+     * public Integer getD_WrongNum() { return getInt(D_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setD_WrongNum(Integer value) { return set(D_WRONG_NUM, value); }
+     * 
+     * public Integer getE_SolvedTime() { return getInt(E_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setE_SolvedTime(Integer value) { return set(E_SOLVED_TIME, value); }
+     * 
+     * public Integer getE_WrongNum() { return getInt(E_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setE_WrongNum(Integer value) { return set(E_WRONG_NUM, value); }
+     * 
+     * public Integer getF_SolvedTime() { return getInt(F_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setF_SolvedTime(Integer value) { return set(F_SOLVED_TIME, value); }
+     * 
+     * public Integer getF_WrongNum() { return getInt(F_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setF_WrongNum(Integer value) { return set(F_WRONG_NUM, value); }
+     * 
+     * public Integer getG_SolvedTime() { return getInt(G_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setG_SolvedTime(Integer value) { return set(G_SOLVED_TIME, value); }
+     * 
+     * public Integer getG_WrongNum() { return getInt(G_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setG_WrongNum(Integer value) { return set(G_WRONG_NUM, value); }
+     * 
+     * public Integer getH_SolvedTime() { return getInt(H_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setH_SolvedTime(Integer value) { return set(H_SOLVED_TIME, value); }
+     * 
+     * public Integer getH_WrongNum() { return getInt(H_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setH_WrongNum(Integer value) { return set(H_WRONG_NUM, value); }
+     * 
+     * public Integer getI_SolvedTime() { return getInt(I_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setI_SolvedTime(Integer value) { return set(I_SOLVED_TIME, value); }
+     * 
+     * public Integer getI_WrongNum() { return getInt(I_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setI_WrongNum(Integer value) { return set(I_WRONG_NUM, value); }
+     * 
+     * public Integer getJ_SolvedTime() { return getInt(J_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setJ_SolvedTime(Integer value) { return set(J_SOLVED_TIME, value); }
+     * 
+     * public Integer getJ_WrongNum() { return getInt(J_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setJ_WrongNum(Integer value) { return set(J_WRONG_NUM, value); }
+     * 
+     * public Integer getK_SolvedTime() { return getInt(K_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setK_SolvedTime(Integer value) { return set(K_SOLVED_TIME, value); }
+     * 
+     * public Integer getK_WrongNum() { return getInt(K_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setK_WrongNum(Integer value) { return set(K_WRONG_NUM, value); }
+     * 
+     * public Integer getL_SolvedTime() { return getInt(L_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setL_SolvedTime(Integer value) { return set(L_SOLVED_TIME, value); }
+     * 
+     * public Integer getL_WrongNum() { return getInt(L_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setL_WrongNum(Integer value) { return set(L_WRONG_NUM, value); }
+     * 
+     * public Integer getM_SolvedTime() { return getInt(M_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setM_SolvedTime(Integer value) { return set(M_SOLVED_TIME, value); }
+     * 
+     * public Integer getM_WrongNum() { return getInt(M_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setM_WrongNum(Integer value) { return set(M_WRONG_NUM, value); }
+     * 
+     * public Integer getN_SolvedTime() { return getInt(N_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setN_SolvedTime(Integer value) { return set(N_SOLVED_TIME, value); }
+     * 
+     * public Integer getN_WrongNum() { return getInt(N_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setN_WrongNum(Integer value) { return set(N_WRONG_NUM, value); }
+     * 
+     * public Integer getO_SolvedTime() { return getInt(O_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setO_SolvedTime(Integer value) { return set(O_SOLVED_TIME, value); }
+     * 
+     * public Integer getO_WrongNum() { return getInt(O_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setO_WrongNum(Integer value) { return set(O_WRONG_NUM, value); }
+     * 
+     * public Integer getP_SolvedTime() { return getInt(P_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setP_SolvedTime(Integer value) { return set(P_SOLVED_TIME, value); }
+     * 
+     * public Integer getP_WrongNum() { return getInt(P_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setP_WrongNum(Integer value) { return set(P_WRONG_NUM, value); }
+     * 
+     * public Integer getQ_SolvedTime() { return getInt(Q_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setQ_SolvedTime(Integer value) { return set(Q_SOLVED_TIME, value); }
+     * 
+     * public Integer getQ_WrongNum() { return getInt(Q_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setQ_WrongNum(Integer value) { return set(Q_WRONG_NUM, value); }
+     * 
+     * public Integer getR_SolvedTime() { return getInt(R_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setR_SolvedTime(Integer value) { return set(R_SOLVED_TIME, value); }
+     * 
+     * public Integer getR_WrongNum() { return getInt(R_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setR_WrongNum(Integer value) { return set(R_WRONG_NUM, value); }
+     * 
+     * public Integer getS_SolvedTime() { return getInt(S_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setS_SolvedTime(Integer value) { return set(S_SOLVED_TIME, value); }
+     * 
+     * public Integer getS_WrongNum() { return getInt(S_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setS_WrongNum(Integer value) { return set(S_WRONG_NUM, value); }
+     * 
+     * public Integer getT_SolvedTime() { return getInt(T_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setT_SolvedTime(Integer value) { return set(T_SOLVED_TIME, value); }
+     * 
+     * public Integer getT_WrongNum() { return getInt(T_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setT_WrongNum(Integer value) { return set(T_WRONG_NUM, value); }
+     * 
+     * public Integer getU_SolvedTime() { return getInt(U_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setU_SolvedTime(Integer value) { return set(U_SOLVED_TIME, value); }
+     * 
+     * public Integer getU_WrongNum() { return getInt(U_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setU_WrongNum(Integer value) { return set(U_WRONG_NUM, value); }
+     * 
+     * public Integer getV_SolvedTime() { return getInt(V_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setV_SolvedTime(Integer value) { return set(V_SOLVED_TIME, value); }
+     * 
+     * public Integer getV_WrongNum() { return getInt(V_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setV_WrongNum(Integer value) { return set(V_WRONG_NUM, value); }
+     * 
+     * public Integer getW_SolvedTime() { return getInt(W_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setW_SolvedTime(Integer value) { return set(W_SOLVED_TIME, value); }
+     * 
+     * public Integer getW_WrongNum() { return getInt(W_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setW_WrongNum(Integer value) { return set(W_WRONG_NUM, value); }
+     * 
+     * public Integer getX_SolvedTime() { return getInt(X_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setX_SolvedTime(Integer value) { return set(X_SOLVED_TIME, value); }
+     * 
+     * public Integer getX_WrongNum() { return getInt(X_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setX_WrongNum(Integer value) { return set(X_WRONG_NUM, value); }
+     * 
+     * public Integer getY_SolvedTime() { return getInt(Y_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setY_SolvedTime(Integer value) { return set(Y_SOLVED_TIME, value); }
+     * 
+     * public Integer getY_WrongNum() { return getInt(Y_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setY_WrongNum(Integer value) { return set(Y_WRONG_NUM, value); }
+     * 
+     * public Integer getZ_SolvedTime() { return getInt(Z_SOLVED_TIME); }
+     * 
+     * public FreezeBoardModel setZ_SolvedTime(Integer value) { return set(Z_SOLVED_TIME, value); }
+     * 
+     * public Integer getZ_WrongNum() { return getInt(Z_WRONG_NUM); }
+     * 
+     * public FreezeBoardModel setZ_WrongNum(Integer value) { return set(Z_WRONG_NUM, value); }
+     */
 }

@@ -66,11 +66,9 @@ public class ProblemApiController extends OjController {
 
     @Clear
     public void status() {
-    /*if (!isParaExists(0))
-    {
-      forwardAction("/contest/problem_status");
-      return;
-    }*/
+        /*
+         * if (!isParaExists(0)) { forwardAction("/contest/problem_status"); return; }
+         */
 
         Integer pid = getParaToInt(0);
         int pageNumber = getParaToInt("p", 1);

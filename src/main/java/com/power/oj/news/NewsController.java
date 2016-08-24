@@ -15,30 +15,25 @@ import java.util.Date;
 public class NewsController extends OjController {
 
     public void index() {
-        /*int pageNumber = 1;
-        int pageSize = OjConfig.noticePageSize;
-		setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
-		setAttr("problemsNumber", problemService.getProblemsNumber());
-		setTitle(getText("page.index.title"));
-		Integer type = getParaToInt("type", -1);
-		Integer status = getParaToInt("status", -1);
-		pageSize = OjConfig.contestPageSize;
-		setAttr("contestList", contestService.getContestList(pageNumber,
-				pageSize, type, status));
-		pageSize = OjConfig.newsPageSize;
-		pageNumber = getParaToInt(0, 1);
-		setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
-		*/
+        /*
+         * int pageNumber = 1; int pageSize = OjConfig.noticePageSize; setAttr("noticeList",
+         * noticeService.getNoticePage(pageNumber, pageSize)); setAttr("problemsNumber",
+         * problemService.getProblemsNumber()); setTitle(getText("page.index.title")); Integer type =
+         * getParaToInt("type", -1); Integer status = getParaToInt("status", -1); pageSize = OjConfig.contestPageSize;
+         * setAttr("contestList", contestService.getContestList(pageNumber, pageSize, type, status)); pageSize =
+         * OjConfig.newsPageSize; pageNumber = getParaToInt(0, 1); setAttr("newsList",
+         * newsService.getNewsListPage(pageNumber, pageSize));
+         */
         int pageSize = 20;
         int pageNumber = getParaToInt(0, 1);
         setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
     }
 
     public void show() {
-        /*int pageSize = 20;
-        int pageNumber = getParaToInt(0, 1);
-		setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
-		*/
+        /*
+         * int pageSize = 20; int pageNumber = getParaToInt(0, 1); setAttr("newsList",
+         * newsService.getNewsListPage(pageNumber, pageSize));
+         */
         int id = getParaToInt(0);
         setAttr("news", newsService.getNews(id));
     }

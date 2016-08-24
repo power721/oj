@@ -81,8 +81,7 @@ public class ContestAdminController extends OjController {
         Integer cid = getParaToInt(0);
         contestService.build(cid);
 
-        redirect("/contest/rank/" + cid,
-            new FlashMessage(getText("contest.buildRank.success")));
+        redirect("/contest/rank/" + cid, new FlashMessage(getText("contest.buildRank.success")));
     }
 
 }

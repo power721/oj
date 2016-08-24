@@ -13,10 +13,7 @@ public class TokenUtil {
     /**
      * 参考自 qq sdk
      *
-     * @param @param  string
-     * @param @return 设定文件
-     * @return String 返回类型
-     * @throws
+     * @param @param string @param @return 设定文件 @return String 返回类型 @throws
      */
     public static String getAccessToken(String string) {
         String accessToken = "";
@@ -42,10 +39,7 @@ public class TokenUtil {
     /**
      * 匹配openid
      *
-     * @param @param  string
-     * @param @return 设定文件
-     * @return String 返回类型
-     * @throws
+     * @param @param string @param @return 设定文件 @return String 返回类型 @throws
      */
     public static String getOpenId(String string) {
         String openid = null;
@@ -62,8 +56,7 @@ public class TokenUtil {
      * @param @param  string
      * @param @return 设定文件
      * @return String 返回类型
-     * @throws
-     * @Title: getUid
+     * @throws @Title: getUid
      */
     public static String getUid(String string) {
         JSONObject json = JSONObject.parseObject(string);

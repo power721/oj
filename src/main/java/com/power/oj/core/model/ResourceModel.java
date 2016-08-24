@@ -19,8 +19,8 @@ public class ResourceModel extends Model<ResourceModel> {
     public static final String ACCESS = "access";
 
     /*
-    * auto generated getter and setter
-    */
+     * auto generated getter and setter
+     */
     public Integer getId() {
         return getInt(ID);
     }

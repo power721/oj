@@ -182,11 +182,11 @@ public class FileKit {
     }
 
     public static void moveFile(File src, File dest) throws IOException {
-//        String srcName = URLEncoder.encode(src.getName(),"UTF-8");
-//        String destName = URLEncoder.encode(dest.getName(),"UTF-8");
-//
-//        File from = new File(src.getParentFile(), srcName);
-//        File to = new File(dest.getParentFile(), destName);
+        // String srcName = URLEncoder.encode(src.getName(),"UTF-8");
+        // String destName = URLEncoder.encode(dest.getName(),"UTF-8");
+        //
+        // File from = new File(src.getParentFile(), srcName);
+        // File to = new File(dest.getParentFile(), destName);
         Files.move(src, dest);
     }
 }

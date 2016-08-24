@@ -575,8 +575,8 @@ public final class AdminService {
                     Integer pid = Integer.parseInt(pids[0]);
                     ProblemModel problemModel;
                     if (status) {
-                        problemModel = ProblemModel.dao.
-                            findFirst("SELECT * FROM problem WHERE pid=? AND status=1", pid);
+                        problemModel =
+                            ProblemModel.dao.findFirst("SELECT * FROM problem WHERE pid=? AND status=1", pid);
                     } else {
                         problemModel = ProblemModel.dao.findFirst("SELECT * FROM problem WHERE pid=?", pid);
                     }
@@ -615,11 +615,11 @@ public final class AdminService {
                 if (start <= end) {
                     List<ProblemModel> problemList;
                     if (status) {
-                        problemList = ProblemModel.dao.
-                            find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=1", start, end);
+                        problemList = ProblemModel.dao
+                            .find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=1", start, end);
                     } else {
-                        problemList = ProblemModel.dao.
-                            find("SELECT * FROM problem WHERE pid>=? AND pid<=?", start, end);
+                        problemList =
+                            ProblemModel.dao.find("SELECT * FROM problem WHERE pid>=? AND pid<=?", start, end);
                     }
                     for (ProblemModel problemModel : problemList) {
                         if (problemModel == null) {
@@ -648,8 +648,8 @@ public final class AdminService {
         Element rootElement = XmlUtil.createXmlRootElement(document);
         FpsService fpsService = new FpsService();
 
-        List<ProblemModel> problemList = ProblemModel.dao.
-            find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=?", start, end, status ? 1 : 0);
+        List<ProblemModel> problemList = ProblemModel.dao
+            .find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=?", start, end, status ? 1 : 0);
         for (ProblemModel problemModel : problemList) {
             Element item = rootElement.addElement("item");
             item.addAttribute("pid", String.valueOf(problemModel.getPid()));

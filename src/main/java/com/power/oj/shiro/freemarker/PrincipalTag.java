@@ -14,18 +14,15 @@ import java.util.Map;
 
 /**
  * <p>
- * Tag used to print out the String value of a user's default principal, or a
- * specific principal as specified by the tag's attributes.
+ * Tag used to print out the String value of a user's default principal, or a specific principal as specified by the
+ * tag's attributes.
  * </p>
  * <p/>
  * <p>
- * If no attributes are specified, the tag prints out the <tt>toString()</tt>
- * value of the user's default principal. If the <tt>type</tt> attribute is
- * specified, the tag looks for a principal with the given type. If the
- * <tt>property</tt> attribute is specified, the tag prints the string value of
- * the specified property of the principal. If no principal is found or the user
- * is not authenticated, the tag displays nothing unless a <tt>defaultValue</tt>
- * is specified.
+ * If no attributes are specified, the tag prints out the <tt>toString()</tt> value of the user's default principal. If
+ * the <tt>type</tt> attribute is specified, the tag looks for a principal with the given type. If the <tt>property</tt>
+ * attribute is specified, the tag prints the string value of the specified property of the principal. If no principal
+ * is found or the user is not authenticated, the tag displays nothing unless a <tt>defaultValue</tt> is specified.
  * </p>
  * <p/>
  * <p>
@@ -39,16 +36,14 @@ public class PrincipalTag extends SecureTag {
     static final Logger log = Logger.getLogger("PrincipalTag");
 
     /**
-     * The type of principal to be retrieved, or null if the default principal
-     * should be used.
+     * The type of principal to be retrieved, or null if the default principal should be used.
      */
     String getType(Map params) {
         return getParam(params, "type");
     }
 
     /**
-     * The property name to retrieve of the principal, or null if the
-     * <tt>toString()</tt> value should be used.
+     * The property name to retrieve of the principal, or null if the <tt>toString()</tt> value should be used.
      */
     String getProperty(Map params) {
         return getParam(params, "property");

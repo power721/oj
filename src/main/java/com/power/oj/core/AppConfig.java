@@ -86,8 +86,8 @@ public class AppConfig extends JFinalConfig {
     }
 
     /**
-     * 建议使用 JFinal 手册推荐的方式启动项目 运行此 main 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此
-     * 使用内置的Jetty容器， 基于Tomcat开发，需要将jetty.jar删除
+     * 建议使用 JFinal 手册推荐的方式启动项目 运行此 main 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此 使用内置的Jetty容器，
+     * 基于Tomcat开发，需要将jetty.jar删除
      */
     public static void main(String[] args) {
         JFinal.start("src/main/webapp", 8000, "/", 5);
@@ -219,7 +219,8 @@ public class AppConfig extends JFinalConfig {
         me.add(new BaseUrlHandler());
         me.add(new UrlFilterHandler());
         if (OjConfig.isDevMode()) {
-            me.add(new DruidStatViewHandler("/admin/druid", request -> SecurityUtils.getSubject().isPermitted("system")));
+            me.add(
+                new DruidStatViewHandler("/admin/druid", request -> SecurityUtils.getSubject().isPermitted("system")));
         }
 
         log.debug("configHandler finished.");
@@ -238,7 +239,7 @@ public class AppConfig extends JFinalConfig {
         // TODO:
         I18n.setDefaultLocale(Locale.ENGLISH.toString());
         if (!OjConfig.isDevMode()) {
-//            EhcacheService.start();
+            // EhcacheService.start();
 
             OjConfig.setBaseURL(PropKit.get("baseURL"));
         }
@@ -249,8 +250,8 @@ public class AppConfig extends JFinalConfig {
 
     @Override
     public void beforeJFinalStop() {
-        //SessionService.me().deleteAllSession();
-//        EhcacheService.destroy();
+        // SessionService.me().deleteAllSession();
+        // EhcacheService.destroy();
         log.debug("beforeJFinalStop");
     }
 

@@ -358,29 +358,29 @@ public final class ProblemService {
             return true;
         }
 
-        //        spjFile = new File(sb.append(".c").toString());
-        //        if (spjFile.isFile()) {
-        //            String cmd = "gcc -o " + sb.toString() + " " + sb.append(".c").toString();
-        //            try {
-        //                Runtime.getRuntime().exec(cmd);
-        //            } catch (IOException e) {
-        //                log.error(e.getLocalizedMessage(), e);
-        //                return false;
-        //            }
-        //            return true;
-        //        }
+        // spjFile = new File(sb.append(".c").toString());
+        // if (spjFile.isFile()) {
+        // String cmd = "gcc -o " + sb.toString() + " " + sb.append(".c").toString();
+        // try {
+        // Runtime.getRuntime().exec(cmd);
+        // } catch (IOException e) {
+        // log.error(e.getLocalizedMessage(), e);
+        // return false;
+        // }
+        // return true;
+        // }
         //
-        //        spjFile = new File(sb.append(".cc").toString());
-        //        if (spjFile.isFile()) {
-        //            String cmd = "g++ -o " + sb.toString() + " " + sb.append(".cc").toString();
-        //            try {
-        //                Runtime.getRuntime().exec(cmd);
-        //            } catch (IOException e) {
-        //                log.error(e.getLocalizedMessage(), e);
-        //                return false;
-        //            }
-        //            return true;
-        //        }
+        // spjFile = new File(sb.append(".cc").toString());
+        // if (spjFile.isFile()) {
+        // String cmd = "g++ -o " + sb.toString() + " " + sb.append(".cc").toString();
+        // try {
+        // Runtime.getRuntime().exec(cmd);
+        // } catch (IOException e) {
+        // log.error(e.getLocalizedMessage(), e);
+        // return false;
+        // }
+        // return true;
+        // }
 
         return false;
     }

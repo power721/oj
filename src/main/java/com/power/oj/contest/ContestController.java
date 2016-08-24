@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -121,15 +120,15 @@ public class ContestController extends OjController {
         setTitle("Contest " + cid);
     }
 
-//    public void pdf() {
-//        Integer cid = getParaToInt(0);
-//        File pdf = contestService.renderProblems2pdf(cid);
-//        if (pdf != null) {
-//            renderFile(pdf);
-//        } else {
-//            renderNull();
-//        }
-//    }
+    // public void pdf() {
+    // Integer cid = getParaToInt(0);
+    // File pdf = contestService.renderProblems2pdf(cid);
+    // if (pdf != null) {
+    // renderFile(pdf);
+    // } else {
+    // renderNull();
+    // }
+    // }
 
     public void submit() {
         Integer cid = getParaToInt(0);
@@ -177,7 +176,7 @@ public class ContestController extends OjController {
         ContestModel contestModle = contestService.getContest(cid);
         if (contestModle.getLanguages() != null) {
             String[] languages = StringUtils.split(contestModle.getLanguages(), ",");
-            if(!ArraysUtil.contains(languages, String.valueOf(contestSolution.getLanguage()))) {
+            if (!ArraysUtil.contains(languages, String.valueOf(contestSolution.getLanguage()))) {
                 setFlashMessage(
                     new FlashMessage("invalid language", MessageType.ERROR, getText("message.error.title")));
                 redirect(url);
@@ -250,7 +249,7 @@ public class ContestController extends OjController {
             query.append("&name=").append(userName);
         }
 
-        //setAttr("contest", contestService.getContestById(cid));
+        // setAttr("contest", contestService.getContestById(cid));
         setAttr("contestProblems", contestService.getContestProblems(cid, 0));
         setAttr("solutionList",
             solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));

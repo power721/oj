@@ -42,9 +42,9 @@ public class PojJudgeAdapter extends JudgeAdapter {
                 programLanguage.getExt());
         log.info("compileCmd: " + compileCmdName);
 
-    /*
-     * execute compiler command
-     */
+        /*
+         * execute compiler command
+         */
         Process compileProcess = Runtime.getRuntime().exec(comShellName);
         OutputStream comShellOutputStream = compileProcess.getOutputStream();
         comShellOutputStream.write(compileCmdName.getBytes());
@@ -89,9 +89,9 @@ public class PojJudgeAdapter extends JudgeAdapter {
         ProgramLanguageModel programLanguage = OjConfig.languageType.get(solution.getLanguage());
         String workDirPath = judgeService.getWorkDirPath(solution);
 
-    /*
-     * execute run command
-     */
+        /*
+         * execute run command
+         */
         Process runProcess = Runtime.getRuntime().exec(OjConfig.getString("runShell"));
         OutputStream runProcessOutputStream = runProcess.getOutputStream();
         log.info("runProcess: " + OjConfig.getString("runShell"));
