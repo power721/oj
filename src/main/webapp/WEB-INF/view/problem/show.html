@@ -106,9 +106,7 @@
     <div class="page-header">
       <h4>Description <i class="icon-chevron-up"></i></h4>
     </div>
-    <div class="content" id="description">
-      <pre>${problem.description!}</pre>
-    </div>
+    <div class="content pre" id="description">${problem.description!}</div>
   </section>
 </div>
 
@@ -117,9 +115,7 @@
     <div class="page-header">
       <h4>Input <i class="icon-chevron-up"></i></h4>
     </div>
-    <div class="content" id="input">
-      <pre>${problem.input!}</pre>
-    </div>
+    <div class="content pre" id="input">${problem.input!}</div>
   </section>
 </div>
 
@@ -128,9 +124,7 @@
     <div class="page-header">
       <h4>Output <i class="icon-chevron-up"></i></h4>
     </div>
-    <div class="content" id="output">
-      <pre>${problem.output!}</pre>
-    </div>
+    <div class="content pre" id="output">${problem.output!}</div>
   </section>
 </div>
 
@@ -144,7 +138,7 @@
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="tab1">
-          <pre>${problem.sampleInput!}</pre>
+          <div class="pre">${problem.sampleInput!}</div>
         </div>
         <div class="tab-pane" id="tab2">
         <textarea id="sampleInput" class="auto-width" rows="${problem.sample_input_rows!12}"
@@ -165,7 +159,7 @@
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="tab3">
-          <pre>${problem.sampleOutput!}</pre>
+          <div class="pre">${problem.sampleOutput!}</div>
         </div>
         <div class="tab-pane" id="tab4">
         <textarea id="sampleOutput" class="auto-width" rows="${problem.sample_output_rows!12}"
@@ -182,9 +176,7 @@
       <div class="page-header">
         <h4>Hint <i class="icon-chevron-up"></i></h4>
       </div>
-      <div class="content" id="hint">
-        <pre>${problem.hint!}</pre>
-      </div>
+      <div class="content pre" id="hint">${problem.hint!}</div>
     </section>
   </div>
   </#if>
@@ -195,10 +187,8 @@
       <div class="page-header">
         <h4>Source <i class="icon-chevron-up"></i></h4>
       </div>
-      <div class="content" id="source">
-    <pre><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip"
-            title="Search other problems">${problem.source!}</a></pre>
-      </div>
+      <div class="content pre" id="source"><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip"
+            title="Search other problems">${problem.source!}</a></div>
     </section>
   </div>
   </#if>
@@ -247,6 +237,10 @@
 </@override>
 
 <@override name="scripts">
+<script type="text/javascript" async src="/assets/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
 <script type="text/javascript">
   $(document).ready(function () {
     <@shiro.hasPermission name="problem:addTag">
