@@ -104,15 +104,6 @@ public abstract class JudgeAdapter implements Runnable {
         }
         java.nio.file.Files.setPosixFilePermissions(workDir.toPath(), JudgeService.FILE_PERMISSIONS);
 
-        if (solution.isContest()) {
-            File dest = new File(workPath + "/java.policy");
-            if (!dest.exists()) {
-                File src = new File(workPath + "/../java.policy");
-                Files.copy(src, dest);
-                log.info("copy file " + src.getAbsolutePath() + " to " + dest.getAbsolutePath());
-            }
-        }
-
         String workDirPath = workDir.getAbsolutePath();
 
         if (solution.getLanguage().equals(OjConfig.languageID.get("Java"))) {
