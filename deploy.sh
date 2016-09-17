@@ -62,12 +62,6 @@ if [ ! -d "${TOMCAT}" ]; then
     USER=tomcat7
     GROUP=tomcat7
     TOMCAT=/usr/share/tomcat7/webapps
-
-    if [ ! -d "${TOMCAT}" ]; then
-        USER=tomcat7
-        GROUP=tomcat7
-        TOMCAT=/var/lib/tomcat7/webapps
-    fi
 fi
 
 if [ ! -d "${TOMCAT}" ]; then
@@ -99,7 +93,6 @@ echo "Use tomcat webapps: $TOMCAT"
 [ -L ${TOMCAT}/oj/assets ] && sudo unlink ${TOMCAT}/oj/assets
 [ -L ${TOMCAT}/oj/upload ] && sudo unlink ${TOMCAT}/oj/upload
 [ -L ${TOMCAT}/oj/download ] && sudo unlink ${TOMCAT}/oj/download
-sudo mkdir -p /var/www
 sudo rsync -r ${ASSETS}/ /var/www/assets/
 
 #export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
@@ -110,10 +103,8 @@ sudo rsync -r ${ASSETS}/ /var/www/assets/
 mvn clean package || exit 1
 
 sudo mkdir -p ~/oj_backup/upload/
-if [ -d /var/www/upload/ ]; then
-    echo "backup /var/www/upload/ to ~/oj_backup/upload/"
-    sudo rsync -r /var/www/upload/ ~/oj_backup/upload/
-fi
+echo "backup /var/www/upload/ to ~/oj_backup/upload/"
+sudo rsync -r /var/www/upload/ ~/oj_backup/upload/
 #sudo rm -rf ${TOMCAT}/oj/upload
 #sudo rm -rf ${TOMCAT}/oj/download
 
@@ -138,13 +129,17 @@ if grep -q '^\s*devMode=true' ${CONF}; then
   sudo cp src/main/resources/log4j-dev.xml $(find ${TOMCAT}/oj/ -type f -name log4j.xml)
 fi
 
+sudo rm -rf ${TOMCAT}/oj/assets
+sudo rm -rf ${TOMCAT}/oj/upload
+sudo rm -rf ${TOMCAT}/oj/download
+
 if [ -d /var/log/nginx/ ]; then
-    USER=`stat -c '%U' /var/log/nginx/access.log`
-    GROUP=`stat -c '%G' /var/log/nginx/access.log`
+    USER=`stat -c '%U' /var/log/nginx/`
+    GROUP=`stat -c '%G' /var/log/nginx/`
 fi
-[ ! -d /var/www/assets ] && sudo mkdir -p /var/www/assets
-[ ! -d /var/www/upload ] && sudo mkdir -p /var/www/upload
-[ ! -d /var/www/download ] && sudo mkdir -p /var/www/download
+[ ! -d /var/www/assets ] && mkdir -p /var/www/assets
+[ ! -d /var/www/upload ] && mkdir -p /var/www/upload
+[ ! -d /var/www/download ] && mkdir -p /var/www/download
 echo "change owner to $USER:$GROUP"
 sudo chown -R ${USER}:${GROUP} /var/www/assets
 sudo chown -R ${USER}:${GROUP} /var/www/upload
@@ -155,10 +150,6 @@ sudo chmod -R 775 /var/www/upload
 sudo chmod -R 775 /var/www/download
 echo "/var/www/"
 ls -l --color=auto /var/www/
-
-sudo rm -rf ${TOMCAT}/oj/assets
-sudo rm -rf ${TOMCAT}/oj/upload
-sudo rm -rf ${TOMCAT}/oj/download
 
 echo "$TOMCAT/oj/"
 ls -l --color=auto ${TOMCAT}/oj/
