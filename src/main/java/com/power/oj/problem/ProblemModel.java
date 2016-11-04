@@ -42,12 +42,14 @@ public class ProblemModel extends Model<ProblemModel> {
     }
 
     public ProblemModel(ProblemModel original) {
-        merge(original);
+        for (Map.Entry<String, Object> entry : original.getAttrs().entrySet()) {
+            put(entry.getKey(), entry.getValue());
+        }
     }
 
     public ProblemModel merge(ProblemModel newProblemModel) {
         for (Map.Entry<String, Object> entry : newProblemModel.getAttrs().entrySet()) {
-            put(entry.getKey(), entry.getValue());
+            set(entry.getKey(), entry.getValue());
         }
         return this;
     }
