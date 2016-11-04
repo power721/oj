@@ -129,10 +129,6 @@ if grep -q '^\s*devMode=true' ${CONF}; then
   sudo cp src/main/resources/log4j-dev.xml $(find ${TOMCAT}/oj/ -type f -name log4j.xml)
 fi
 
-sudo rm -rf ${TOMCAT}/oj/assets
-sudo rm -rf ${TOMCAT}/oj/upload
-sudo rm -rf ${TOMCAT}/oj/download
-
 if [ -d /var/log/nginx/ ]; then
     USER=`stat -c '%U' /var/log/nginx/`
     GROUP=`stat -c '%G' /var/log/nginx/`
@@ -150,6 +146,10 @@ sudo chmod -R 775 /var/www/upload
 sudo chmod -R 775 /var/www/download
 echo "/var/www/"
 ls -l --color=auto /var/www/
+
+sudo rm -rf ${TOMCAT}/oj/upload
+sudo rm -rf ${TOMCAT}/oj/download
+sudo rm -rf ${TOMCAT}/oj/assets
 
 echo "$TOMCAT/oj/"
 ls -l --color=auto ${TOMCAT}/oj/

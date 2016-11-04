@@ -4,6 +4,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.render.FileRender;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
@@ -23,6 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -210,6 +213,21 @@ public class ContestController extends OjController {
         setAttr("isLocked", contestService.checkFreezeBoard4Rank(cid));
 
         setTitle(getText("contest.rank.title") + cid);
+    }
+
+    public void info() {
+        Integer cid = getParaToInt(0);
+        int grand = getParaToInt("grand", 1);
+        int first = getParaToInt("first", 2);
+        int second = getParaToInt("second", 5);
+        int third = getParaToInt("third", 10);
+
+        try {
+            File file = contestService.getContextXML(cid, grand, first, second, third);
+            renderFile(file);
+        } catch (IOException e) {
+            renderError(500);
+        }
     }
 
     @Before(ClarificationsInterceptor.class)

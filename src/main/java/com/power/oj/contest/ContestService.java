@@ -34,14 +34,23 @@ import jodd.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.conn.HttpHostConnectException;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 // import com.itextpdf.text.Document;
 // import com.itextpdf.text.DocumentException;
@@ -215,7 +224,7 @@ public class ContestService {
     public ProblemModel getProblem(Integer cid, Integer num) {
         Record record =
             Db.findFirst("SELECT pid,title,accepted,submission,view FROM contest_problem WHERE cid=? AND num=? LIMIT 1",
-                cid, num);
+                         cid, num);
         if (record == null)
             return null;
 
@@ -232,7 +241,7 @@ public class ContestService {
             Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND status=1", cid, num);
         long solved =
             Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND result=? AND status=1", cid,
-                num, ResultType.AC);
+                         num, ResultType.AC);
         problem.setAccepted(record.getInt("accepted"));
         problem.setSubmission(record.getInt("submission"));
         problem.setSubmitUser((int) submitUser);
@@ -261,13 +270,13 @@ public class ContestService {
     }
 
     public List<Record> getContestUsers(Integer cid) {
-        return Db
-            .find("SELECT c.*,u.name,u.realName FROM contest_user c INNER JOIN user u ON u.uid=c.uid WHERE cid=?", cid);
+        return Db.find("SELECT c.*,u.name,u.realName FROM contest_user c INNER JOIN user u ON u.uid=c.uid WHERE cid=?",
+                       cid);
     }
 
     public List<Record> getAttendedContests(Integer uid) {
         List<Record> contests = Db.find("SELECT DISTINCT(c.cid),c.title,c.type FROM contest_solution s"
-            + " INNER JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
+                                            + " INNER JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
         for (Iterator<Record> it = contests.iterator(); it.hasNext(); ) {
             Record record = it.next();
             if (record.getInt("type") == ContestModel.TYPE_TEST && !canAccessTestContest(record.getInt("cid"))) {
@@ -292,7 +301,7 @@ public class ContestService {
     }
 
     public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status) {
-        List<Object> paras = new ArrayList<Object>();
+        List<Object> paras = new ArrayList<>();
         String sql =
             "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime";
         StringBuilder sb = new StringBuilder("FROM contest WHERE status=1");
@@ -313,7 +322,9 @@ public class ContestService {
 
         Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
-        for (Iterator<ContestModel> it = ContestList.getList().iterator(); it.hasNext(); ) {
+        for (Iterator<ContestModel> it = ContestList
+            .getList()
+            .iterator(); it.hasNext(); ) {
             ContestModel contest = it.next();
             int ctime = OjConfig.timeStamp;
             int startTime = contest.getStartTime();
@@ -359,7 +370,7 @@ public class ContestService {
 
     public Page<ContestModel> getContestListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
         String sSearch) {
-        List<Object> paras = new ArrayList<Object>();
+        List<Object> paras = new ArrayList<>();
         String sql = "SELECT *";
         StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
 
@@ -374,7 +385,12 @@ public class ContestService {
             paras.add("%" + sSearch + "%");
         }
 
-        sb.append(" ORDER BY ").append(sSortName).append(" ").append(sSortDir).append(", cid DESC");
+        sb
+            .append(" ORDER BY ")
+            .append(sSortName)
+            .append(" ")
+            .append(sSortDir)
+            .append(", cid DESC");
 
         Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
@@ -486,11 +502,12 @@ public class ContestService {
     public List<Record> getClarifyList(Integer cid, Integer num) {
         if (num != null && num > -1) {
             return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid "
-                    + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.num=? ORDER BY c.id DESC",
-                cid, num);
+                               + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.num=? ORDER BY c.id DESC",
+                           cid, num);
         } else {
             return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid "
-                + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? ORDER BY c.id DESC", cid);
+                               + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? ORDER BY c.id DESC",
+                           cid);
         }
     }
 
@@ -525,16 +542,20 @@ public class ContestService {
 
     public int getUnreadClarifications(Integer cid, Long timestamp) {
         if (userService.isAdmin()) {
-            return Db.queryLong("SELECT COUNT(*) FROM contest_clarify WHERE cid=? AND mtime IS NULL", cid).intValue();
+            return Db
+                .queryLong("SELECT COUNT(*) FROM contest_clarify WHERE cid=? AND mtime IS NULL", cid)
+                .intValue();
         }
 
         Integer uid = userService.getCurrentUid();
-        int count = Db.queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND mtime>? AND public=1", cid,
-            timestamp).intValue();
+        int count = Db
+            .queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND mtime>? AND public=1", cid, timestamp)
+            .intValue();
         if (uid != null) {
-            count +=
-                Db.queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND uid=? AND mtime>? AND public=0",
-                    cid, uid, timestamp).intValue();
+            count += Db
+                .queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND uid=? AND mtime>? AND public=0",
+                           cid, uid, timestamp)
+                .intValue();
         }
         return count;
     }
@@ -589,7 +610,7 @@ public class ContestService {
             json = CacheKit.get("contest", "recent");
         }
         if (json == null) {
-            List<ContestkendoSchedulerTask> contests = new ArrayList<ContestkendoSchedulerTask>();
+            List<ContestkendoSchedulerTask> contests = new ArrayList<>();
             String html = null;
             try {
                 html = HttpUtil.doGet("http://contests.acmicpc.info/contests.json");
@@ -609,7 +630,7 @@ public class ContestService {
             }
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            long timeStamp = 0;
+            long timeStamp;
 
             JSONArray jsonArray;
             try {
@@ -628,7 +649,9 @@ public class ContestService {
                 JSONObject data = jsonArray.getJSONObject(i);
                 ContestkendoSchedulerTask contest = new ContestkendoSchedulerTask();
                 try {
-                    timeStamp = sdf.parse(data.getString("start_time")).getTime();
+                    timeStamp = sdf
+                        .parse(data.getString("start_time"))
+                        .getTime();
                 } catch (ParseException e) {
                     timeStamp = 0;
                     log.warn(e.getLocalizedMessage());
@@ -682,17 +705,26 @@ public class ContestService {
     public List<Record> getContestStatistics(Integer cid) {
         StringBuilder sb = new StringBuilder("SELECT ");
         for (ProgramLanguageModel language : OjConfig.programLanguages) {
-            sb.append("COUNT(IF(language=").append(language.getId()).append(",1,NULL)) AS ").append(language.getExt())
+            sb
+                .append("COUNT(IF(language=")
+                .append(language.getId())
+                .append(",1,NULL)) AS ")
+                .append(language.getExt())
                 .append(",");
         }
         for (ResultType resultType : OjConfig.judgeResult) {
             if (resultType.getId() > ResultType.RF)
                 break;
-            sb.append("COUNT(IF(result=").append(resultType.getId()).append(",1,NULL)) AS ")
-                .append(resultType.getName()).append(",");
+            sb
+                .append("COUNT(IF(result=")
+                .append(resultType.getId())
+                .append(",1,NULL)) AS ")
+                .append(resultType.getName())
+                .append(",");
         }
         sb.append(
-            "pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? AND status=1 GROUP BY num ORDER BY num");
+            "pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? AND status=1 GROUP BY num,pid ORDER BY num");
+        log.info(sb.toString());
         List<Record> statistics = Db.find(sb.toString(), ResultType.RF, cid);
         for (Record record : statistics) {
             record.set("id", (char) (record.getInt("num") + 'A'));
@@ -707,7 +739,9 @@ public class ContestService {
             "SELECT pid,uid,language,source FROM contest_solution WHERE sid=? AND cid=? AND status=1");
 
         if (!userService.isAdmin())
-            sb.append(" AND uid=").append(uid);
+            sb
+                .append(" AND uid=")
+                .append(uid);
         sb.append(" LIMIT 1");
 
         return ContestSolutionModel.dao.findFirst(sb.toString(), sid, cid);
@@ -755,7 +789,7 @@ public class ContestService {
             boolean isFreeze = (timeDiff <= lockTime);
 
             log.info("contest-" + contestModel.getCid() + " submitTime: " + submitTime + " timeDiff: " + timeDiff
-                + " isFreeze: " + isFreeze);
+                         + " isFreeze: " + isFreeze);
             return isFreeze;
         }
         return false;
@@ -796,9 +830,15 @@ public class ContestService {
         contestModel.setUid(userService.getCurrentUid());
         contestModel.setCtime(OjConfig.timeStamp);
         try {
-            contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
-            contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
-            log.info(contestModel.getEndTime().toString());
+            contestModel.setStartTime((int) (sdf
+                .parse(startTime)
+                .getTime() / 1000));
+            contestModel.setEndTime((int) (sdf
+                .parse(endTime)
+                .getTime() / 1000));
+            log.info(contestModel
+                         .getEndTime()
+                         .toString());
         } catch (ParseException e) {
             log.error("add contest failed!", e);
         }
@@ -838,8 +878,12 @@ public class ContestService {
         ContestModel newContest = getContest(contestModel.getCid());
 
         try {
-            contestModel.setStartTime((int) (sdf.parse(startTime).getTime() / 1000));
-            contestModel.setEndTime((int) (sdf.parse(endTime).getTime() / 1000));
+            contestModel.setStartTime((int) (sdf
+                .parse(startTime)
+                .getTime() / 1000));
+            contestModel.setEndTime((int) (sdf
+                .parse(endTime)
+                .getTime() / 1000));
         } catch (ParseException e) {
             log.warn("update contest failed!", e);
         }
@@ -869,6 +913,211 @@ public class ContestService {
         return newContest.update();
     }
 
+    public File getContextXML(Integer cid, int grand, int first, int second, int third) throws IOException {
+        File file = new File(OjConfig.downloadPath, "context-" + cid + ".xml");
+
+        try (PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))) {
+            writer.write("<contest>\n");
+
+            long startTime = writeContestInfo(writer, cid);
+            ContestInfo info = new ContestInfo(cid, grand, first, second, third, startTime);
+
+            writeProgramLanguages(writer);
+
+            writeContestProblems(writer, cid);
+
+            Map<Integer, Team> teamMp = writeContestTeams(writer, cid);
+
+            List<Run> runs = getRuns(cid, teamMp);
+            for (Run r : runs) {
+                writeSingleRun(writer, startTime, teamMp, r);
+            }
+
+            writeAdditional(writer, info);
+
+            List<Team> teams = new ArrayList<>(teamMp.values());
+            Collections.sort(teams);
+            writeAwards(writer, teams, info);
+
+            writer.write("</contest>\n");
+        }
+
+        return file;
+    }
+
+    private long writeContestInfo(PrintWriter writer, Integer cid) {
+        writer.write("\t<info>\n");
+        writer.write(("\t\t<contest-id>" + cid + "</contest-id>\n"));
+        ContestModel contest = getContest(cid);
+        writer.write((String.format("\t\t<title>%s</title>\n", contest.getTitle())));
+        int startTime = contest.getStartTime();
+        int end_time = contest.getEndTime();
+        int lockTime = contest.getLockBoardTime();
+        writer.write((String.format("\t\t<starttime>%d</starttime>\n", startTime)));
+        writer.write(String.format("\t\t<length>%02d:%02d:%02d</length>\n", (end_time - startTime) / 3600,
+                                   (end_time - startTime) / 60 % 60, (end_time - startTime) % 60));
+        writer.write(
+            String.format("\t\t<scoreboard-freeze-length>%02d:%02d:00</scoreboard-freeze-length>\n", lockTime / 60,
+                          lockTime % 60));
+        writer.write("\t\t<penalty>20</penalty>\n");
+        writer.write("\t\t<started>true</started>\n");
+        writer.write((String.format("\t\t<short-title>%s</short-title>\n", contest.getTitle())));
+        writer.write("\t</info>\n");
+        return startTime;
+    }
+
+    private void writeProgramLanguages(PrintWriter writer) {
+        List<Record> languages = Db.find("select id,name from program_language ORDER BY id");
+        for (Record language : languages) {
+            writer.write("\t<language>\n");
+            writer.write((String.format("\t\t<id>%d</id>\n", language.getInt("id"))));
+            writer.write((String.format("\t\t<name>%s</name>\n", language.getStr("name"))));
+            writer.write("\t</language>\n");
+        }
+    }
+
+    private void writeContestProblems(PrintWriter writer, Integer cid) {
+        List<Record> problems = Db.find("select pid,title,num from contest_problem where cid = ?", cid);
+        for (Record problem : problems) {
+            writer.write("\t<problem>\n");
+            writer.write(String.format("\t\t<id>%s</id>\n", problem.getInt("pid")));
+            writer.write(String.format("\t\t<letter>%c</letter>\n", 'A' + problem.getInt("num")));
+            writer.write(String.format("\t\t<name>%s</name>\n", problem.getStr("title")));
+            writer.write("\t</problem>\n");
+        }
+    }
+
+    private Map<Integer, Team> writeContestTeams(PrintWriter writer, Integer cid) {
+        Record result;
+        List<Record> teams = Db.find("select uid from contest_user where cid = ? and special = 0;", cid);
+        Map<Integer, Team> teamMap = new HashMap<>();
+        for (Record user : teams) {
+            int uid = user.getInt("uid");
+            teamMap.put(uid, new Team(uid));
+            result = Db.findFirst("select name from user where uid = ?", uid);
+            writer.write("\t<team>\n");
+            writer.write(String.format("\t\t<id>%d</id>\n", uid));
+            writer.write("\t\t<group-id>0</group-id>\n");
+            writer.write("\t\t<group></group>\n");
+            writer.write(String.format("\t\t<external-id>%d</external-id>\n", uid + 1000));
+            writer.write(String.format("\t\t<name>%s</name>\n", result.getStr("name")));
+            writer.write(String.format("\t\t<university>%s</university>\n", result.getStr("name")));
+            writer.write("\t\t<university-short-name></university-short-name>\n");
+            writer.write("\t\t<nationality></nationality>\n");
+            writer.write("\t</team>\n");
+        }
+        return teamMap;
+    }
+
+    private List<Run> getRuns(Integer cid, Map<Integer, Team> teamMp) {
+        List<Record> RawRun =
+            Db.find("select sid,uid,pid,result,language,ctime from contest_solution where cid = ?", cid);
+        List<Run> runs = new ArrayList<>();
+        for (Record record : RawRun) {
+            Run run = new Run(record);
+            if (!teamMp.containsKey(run.uid))
+                continue;
+            runs.add(run);
+            int uid = run.uid;
+            int res = run.result;
+            int pid = run.pid;
+            if (res == ResultType.AC)
+                teamMp.get(uid).ac.add(pid);
+        }
+        return runs;
+    }
+
+    private void writeSingleRun(PrintWriter writer, long startTime, Map<Integer, Team> teamMp, Run r) {
+        writer.write("\t<run>\n");
+        writer.write(String.format("\t\t<id>%d</id>\n", r.rid));
+        writer.write(String.format("\t\t<problem>%d</problem>\n", r.pid));
+        writer.write(String.format("\t\t<team>%d</team>\n", r.uid));
+        writer.write(String.format("\t\t<language>%s</language>\n", OjConfig.languageName.get(r.lang)));
+        writer.write(String.format("\t\t<time>%d</time>\n", r.time - startTime));
+        writer.write("\t\t<judged>true</judged>\n");
+        if (teamMp.get(r.uid).aced.contains(r.pid)) {
+            writer.write("\t\t<solved>true</solved>\n");
+            writer.write("\t\t<penalty>false</penalty>\n");
+        } else if (r.result == ResultType.AC) {
+            teamMp.get(r.uid).aced.add(r.pid);
+            writer.write("\t\t<solved>true</solved>\n");
+            writer.write("\t\t<penalty>false</penalty>\n");
+            teamMp.get(r.uid).penalty += r.time - startTime;
+            teamMp.get(r.uid).lastAC = r.time;
+        } else if (isAbnormalResult(r.result)) {
+            writer.write("\t\t<solved>false</solved>\n");
+            writer.write("\t\t<penalty>false</penalty>\n");
+        } else if (teamMp.get(r.uid).ac.contains(r.pid)) {
+            writer.write("\t\t<solved>false</solved>\n");
+            writer.write("\t\t<penalty>true</penalty>\n");
+            teamMp.get(r.uid).penalty += 20 * 60;
+        } else {
+            writer.write("\t\t<solved>false</solved>\n");
+            writer.write("\t\t<penalty>false</penalty>\n");
+        }
+        writer.write(String.format("\t\t<result>%s</result>\n", OjConfig.resultType
+            .get(r.result)
+            .getName()));
+        writer.write("\t\t<status>done</status>\n");
+        writer.write(String.format("\t\t<timestamp>%d</timestamp>\n", r.time));
+        writer.write("\t</run>\n");
+    }
+
+    private void writeAwards(PrintWriter writer, List<Team> teams, ContestInfo info) {
+        int grand = info.grand;
+        int first = info.first;
+        int second = info.second;
+        int third = info.third;
+        int i = 0;
+
+        while (grand-- > 0 && i < teams.size()) {
+            writer.write("\t<award>\n");
+            writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
+            writer.write("\t\t<type>medal</type>\n");
+            writer.write("\t\t<citation>Grand Prize</citation>\n");
+            writer.write("\t</award>\n");
+        }
+
+        while (first-- > 0 && i < teams.size()) {
+            writer.write("\t<award>\n");
+            writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
+            writer.write("\t\t<type>medal</type>\n");
+            writer.write("\t\t<citation>First Prize</citation>\n");
+            writer.write("\t</award>\n");
+        }
+
+        while (second-- > 0 && i < teams.size()) {
+            writer.write("\t<award>\n");
+            writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
+            writer.write("\t\t<type>medal</type>\n");
+            writer.write("\t\t<citation>Second Prize</citation>\n");
+            writer.write("\t</award>\n");
+        }
+
+        while (third-- > 0 && i < teams.size()) {
+            writer.write("\t<award>\n");
+            writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
+            writer.write("\t\t<type>medal</type>\n");
+            writer.write("\t\t<citation>Third Prize</citation>\n");
+            writer.write("\t</award>\n");
+        }
+    }
+
+    private void writeAdditional(PrintWriter writer, ContestInfo info) {
+        int grand = info.grand;
+        int first = info.first;
+        int second = info.second;
+        int third = info.third;
+        writer.write("\t<finalized>\n");
+        writer.write(String.format("\t\t<last-gold>%d</last-gold>\n", grand + first));
+        writer.write(String.format("\t\t<last-silver>%d</last-silver>\n", grand + first + second));
+        writer.write(String.format("\t\t<last-bronze>%d</last-bronze>\n", grand + first + second + third));
+        writer.write("\t\t<comment>w703710691d</comment>\n");
+        writer.write("\t\t<time>0</time>\n");
+        writer.write(String.format("\t\t<timestamp>%d</timestamp>\n", new Date().getTime()));
+        writer.write("\t</finalized>\n");
+    }
+
     public int addProblem(Integer cid, Integer pid, String title) {
         if (isContestFinished(cid)) {
             return -5;
@@ -882,7 +1131,7 @@ public class ContestService {
             return -3;
         }
 
-        long num = 0;
+        long num;
         try {
             num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
         } catch (NullPointerException e) {
@@ -1025,7 +1274,9 @@ public class ContestService {
 
     public boolean checkContestPassword(Integer cid, String password) {
         ContestModel contestModel = getContest(cid);
-        if (contestModel != null && contestModel.getPassword().equals(password)) {
+        if (contestModel != null && contestModel
+            .getPassword()
+            .equals(password)) {
             return true;
         }
         return false;
@@ -1149,7 +1400,8 @@ public class ContestService {
 
     private Long getWrongSubmissions(Integer cid, Integer sid, Integer uid, Integer num) {
         return Db.queryLong("SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=? AND uid=? AND"
-            + " sid<? AND result!=? AND result<? AND status=1", cid, num, uid, sid, ResultType.AC, ResultType.SE);
+                                + " sid<? AND result!=? AND result<? AND status=1", cid, num, uid, sid, ResultType.AC,
+                            ResultType.SE);
     }
 
     private void updateUserSolved(BoardModel board, int acTime, int wrongSubmissions) {
@@ -1307,11 +1559,15 @@ public class ContestService {
     }
 
     public boolean isRejudging(Integer cid) {
-        return JudgeService.me().isRejudging(RejudgeType.CONTEST.getKey(cid));
+        return JudgeService
+            .me()
+            .isRejudging(RejudgeType.CONTEST.getKey(cid));
     }
 
     public boolean isRejudging(Integer cid, Integer pid) {
-        return JudgeService.me().isRejudging(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
+        return JudgeService
+            .me()
+            .isRejudging(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
     }
 
     private class UserInfo {
@@ -1368,4 +1624,70 @@ public class ContestService {
             this.waNum[num] = value;
         }
     }
+
+    private static class ContestInfo {
+        int cid;
+        int grand;
+        int first;
+        int second;
+        int third;
+        long startTime;
+
+        public ContestInfo(int cid, int grand, int first, int second, int third, long startTime) {
+            this.cid = cid;
+            this.grand = grand;
+            this.first = first;
+            this.second = second;
+            this.third = third;
+            this.startTime = startTime;
+        }
+    }
+
+
+    private class Team implements Comparable<Team> {
+        Set<Integer> ac = new HashSet<>();
+        Set<Integer> aced = new HashSet<>();
+        int uid;
+        int penalty;
+        long lastAC;
+
+        Team(int uid) {
+            this.uid = uid;
+        }
+
+        @Override
+        public int compareTo(Team o) {
+            if (this.aced.size() == o.aced.size()) {
+                if (this.penalty == o.penalty) {
+                    if (this.lastAC < o.lastAC)
+                        return -1;
+                    else if (this.lastAC == o.lastAC)
+                        return 0;
+                    else
+                        return 1;
+                } else if (this.penalty < o.penalty)
+                    return -1;
+                else
+                    return 1;
+            } else if (this.aced.size() > o.aced.size())
+                return -1;
+            else
+                return 1;
+        }
+    }
+
+
+    private class Run {
+        int rid, uid, pid, result, lang, time;
+
+        Run(Record record) {
+            rid = record.getInt("sid");
+            uid = record.getInt("uid");
+            pid = record.getInt("pid");
+            result = record.getInt("result");
+            lang = record.getInt("language");
+            time = record.getInt("ctime");
+        }
+    }
+
 }
