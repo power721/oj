@@ -8,6 +8,8 @@ public class ContestProblemModel extends Model<ContestProblemModel> {
     public static final String CID = "cid";
     public static final String PID = "pid";
     public static final String TITLE = "title";
+    public static final String TIME_LIMIT = "timeLimit";
+    public static final String MEMORY_LIMIT = "memoryLimit";
     public static final String NUM = "num";
     public static final String ACCEPTED = "accepted";
     public static final String SUBMISSION = "submission";
@@ -45,6 +47,26 @@ public class ContestProblemModel extends Model<ContestProblemModel> {
 
     public ContestProblemModel setTitle(String value) {
         return set(TITLE, value);
+    }
+
+    public Integer getTimeLimit()
+    {
+        return getInt(TIME_LIMIT);
+    }
+
+    public ContestProblemModel setTimeLimit(Integer value)
+    {
+        return set(TIME_LIMIT, value);
+    }
+
+    public Integer getMemoryLimit()
+    {
+        return getInt(MEMORY_LIMIT);
+    }
+
+    public ContestProblemModel setMemoryLimit(Integer value)
+    {
+        return set(MEMORY_LIMIT, value);
     }
 
     public Integer getNum() {
