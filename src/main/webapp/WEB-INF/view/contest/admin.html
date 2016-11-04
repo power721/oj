@@ -43,16 +43,18 @@
 </div>
 
 <div class="row">
-  <div class="span8 offset2">
+  <div class="span10 offset1">
     <table id="problem-list" class="table table-hover table-condensed">
       <thead>
       <tr>
-        <th>ID</th>
-        <th>Problem</th>
-        <th>Title</th>
-        <th>AC</th>
-        <th>Submit</th>
-        <th>Action</th>
+        <th width="5%">ID</th>
+        <th width="10%">Problem</th>
+        <th width="30%">Title</th>
+        <th width="10%">Time</th>
+        <th width="10%">Memeory</th>
+        <th width="10%">AC</th>
+        <th width="10%">Submit</th>
+        <th width="15%">Action</th>
       </tr>
       </thead>
       <tbody>
@@ -64,6 +66,8 @@
               <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
             </td>
             <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
+            <td class="time">${Problem.timeLimit!} MS</td>
+            <td class="memory">${Problem.memoryLimit!} KB</td>
             <td class="accept"><a
                     href="contest/status/${contest.cid!}?pid=${Problem.id!}&result=0">${Problem.accepted!}</a></td>
             <td class="submit"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}">${Problem.submission!}</a>

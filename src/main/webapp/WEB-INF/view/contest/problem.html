@@ -45,6 +45,7 @@
   <#if adminUser??>
     <a href="contest/editProblem/${cid!}-${problem.id!}?ajax=1" data-toggle="modal" data-target="#editModal"
        class="btn btn-primary">Edit</a>
+    <a class="btn btn-success" href="admin/problem/data/${problem.pid!}" target="_blank">Manage Data</a>
     <a href="contest/rejudgeProblem/${cid!}-${problem.id!}" class="btn btn-danger">Rejudge</a><br>
   </#if>
   Time Limit: <span class="blue">${problem.timeLimit!} MS</span>

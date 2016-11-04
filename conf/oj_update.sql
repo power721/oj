@@ -384,3 +384,10 @@ ALTER TABLE contest_user ADD CONSTRAINT contest_user_cid_uid_pk UNIQUE (cid, uid
 ALTER TABLE board ADD CONSTRAINT board_cid_uid_pk UNIQUE (cid, uid);
 ALTER TABLE freeze_board ADD CONSTRAINT freeze_board_cid_uid_pk UNIQUE (cid, uid);
 ALTER TABLE user_role ADD CONSTRAINT user_role_uid_rid_pk UNIQUE (uid, rid);
+
+#2016-11-4
+ALTER TABLE contest_user ADD `girls` tinyint(1) NOT NULL DEFAULT '0' AFTER `special`;
+ALTER TABLE contest_user ADD `freshman` tinyint(1) NOT NULL DEFAULT '0' AFTER `special`;
+ALTER TABLE contest_problem ADD `memoryLimit` int(5) NOT NULL DEFAULT '65536' AFTER `title`;
+ALTER TABLE contest_problem ADD `timeLimit` int(5) NOT NULL DEFAULT '1000' AFTER `title`;
+UPDATE contest_problem cp SET timeLimit=(SELECT timeLimit FROM problem p WHERE p.pid=cp.pid),memoryLimit=(SELECT memoryLimit FROM problem p WHERE p.pid=cp.pid);

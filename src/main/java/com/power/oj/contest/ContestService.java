@@ -126,7 +126,7 @@ public class ContestService {
         String sql = "SELECT * FROM contest_problem WHERE cid=? ORDER BY num";
         List<Record> contestProblems;
         if (uid != null && uid > 0) {
-            sql = "SELECT cp.pid,num,accepted,submission,title,status FROM contest_problem cp LEFT OUTER JOIN"
+            sql = "SELECT cp.pid,num,accepted,submission,title,status,timeLimit,memoryLimit FROM contest_problem cp LEFT OUTER JOIN"
                 + " (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? "
                 + "AND cid=? AND status=1 GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
             contestProblems = Db.find(sql, uid, cid, cid);
@@ -143,7 +143,7 @@ public class ContestService {
 
     public List<Record> getContestProblems(Integer cid) {
         List<Record> contestProblems = Db.find(
-            "SELECT p.*,cp.title,cp.num FROM contest_problem cp INNER JOIN problem p ON p.pid=cp.pid WHERE cid=? ORDER BY num",
+            "SELECT p.*,cp.title,cp.num,cp.timeLimit,cp.memoryLimit FROM contest_problem cp INNER JOIN problem p ON p.pid=cp.pid WHERE cid=? ORDER BY num",
             cid);
         for (Record problem : contestProblems) {
             problem.set("id", (char) (problem.getInt("num") + 'A'));
@@ -223,7 +223,7 @@ public class ContestService {
 
     public ProblemModel getProblem(Integer cid, Integer num) {
         Record record =
-            Db.findFirst("SELECT pid,title,accepted,submission,view FROM contest_problem WHERE cid=? AND num=? LIMIT 1",
+            Db.findFirst("SELECT pid,title,accepted,submission,view,timeLimit,memoryLimit FROM contest_problem WHERE cid=? AND num=? LIMIT 1",
                          cid, num);
         if (record == null)
             return null;
@@ -246,6 +246,8 @@ public class ContestService {
         problem.setSubmission(record.getInt("submission"));
         problem.setSubmitUser((int) submitUser);
         problem.setSolved((int) solved);
+        problem.setTimeLimit(record.getInt("timeLimit"));
+        problem.setMemoryLimit(record.getInt("memoryLimit"));
         problem.setView(record.getInt("view"));
         problem.put("id", (char) (num + 'A'));
         problem.put("num", num);
@@ -256,7 +258,11 @@ public class ContestService {
     public boolean updateProblem(ProblemModel problemModel, int cid, int num, String title) {
         Record record = Db.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=? LIMIT 1", cid, num);
         record.set("title", title);
+        record.set("timeLimit", problemModel.getTimeLimit());
+        record.set("memoryLimit", problemModel.getMemoryLimit());
         Db.update("contest_problem", record);
+        problemModel.remove("timeLimit");
+        problemModel.remove("memoryLimit");
 
         return problemService.updateProblem(problemModel);
     }
@@ -854,7 +860,7 @@ public class ContestService {
         }
 
         if (contestModel.get("includeProblems") != null) {
-            List<Record> problems = Db.find("SELECT pid,num,title FROM contest_problem WHERE cid=?", cid);
+            List<Record> problems = Db.find("SELECT pid,num,title,timeLimit,memoryLimit FROM contest_problem WHERE cid=?", cid);
             for (Record problem : problems) {
                 problem.set("cid", contestModel.getCid());
                 Db.save("contest_problem", problem);
@@ -1123,7 +1129,8 @@ public class ContestService {
             return -5;
         }
 
-        if (problemService.findProblem(pid) == null) {
+        ProblemModel problemModel = problemService.findProblem(pid);
+        if (problemModel == null) {
             return -4;
         }
 
@@ -1131,9 +1138,9 @@ public class ContestService {
             return -3;
         }
 
-        long num;
+        int num;
         try {
-            num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid);
+            num = Db.queryLong("SELECT MAX(num)+1 FROM contest_problem WHERE cid=?", cid).intValue();
         } catch (NullPointerException e) {
             num = 0;
         }
@@ -1141,14 +1148,16 @@ public class ContestService {
             return -2;
         }
 
-        Record record = new Record();
-        record.set("cid", cid);
-        record.set("pid", pid);
-        record.set("title", title);
-        record.set("num", num);
+        ContestProblemModel contestProblemModel = new ContestProblemModel();
+        contestProblemModel.setCid(cid);
+        contestProblemModel.setPid(pid);
+        contestProblemModel.setTitle(title);
+        contestProblemModel.setNum(num);
+        contestProblemModel.setTimeLimit(problemModel.getTimeLimit());
+        contestProblemModel.setMemoryLimit(problemModel.getMemoryLimit());
 
-        if (Db.save("contest_problem", record)) {
-            return (int) num;
+        if (contestProblemModel.save()) {
+            return num;
         }
         return -1;
     }
