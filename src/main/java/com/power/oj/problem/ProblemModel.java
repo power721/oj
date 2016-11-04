@@ -38,9 +38,16 @@ public class ProblemModel extends Model<ProblemModel> {
      */
     private static final long serialVersionUID = 1943890587086216047L;
 
+    public ProblemModel() {
+    }
+
+    public ProblemModel(ProblemModel original) {
+        merge(original);
+    }
+
     public ProblemModel merge(ProblemModel newProblemModel) {
         for (Map.Entry<String, Object> entry : newProblemModel.getAttrs().entrySet()) {
-            set(entry.getKey(), entry.getValue());
+            put(entry.getKey(), entry.getValue());
         }
         return this;
     }
