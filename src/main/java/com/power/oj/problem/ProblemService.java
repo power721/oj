@@ -112,7 +112,7 @@ public final class ProblemService {
         }
         problemModel.put("sample_output_rows", sampleOutputRows);
 
-        return problemModel;
+        return new ProblemModel(problemModel);
     }
 
     public Long getProblemsNumber() {
