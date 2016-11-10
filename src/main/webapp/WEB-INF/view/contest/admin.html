@@ -61,7 +61,9 @@
         <#if contestProblems??>
           <#list contestProblems as Problem>
           <tr class="problem" pid="${Problem.pid!}">
-            <td><i class="icon-resize-vertical"></i><span class="id"></span></td>
+            <td>
+            <#if serverTime<contest.startTime><i class="icon-resize-vertical"></i></#if>
+            <span class="id"></span></td>
             <td class="pid">
               <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
             </td>
