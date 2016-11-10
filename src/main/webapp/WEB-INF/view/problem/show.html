@@ -130,7 +130,7 @@
 
 <div class="row">
   <section id="s-sampleInput">
-    <div class="tabbable content" id="sampleInput">
+    <div class="tabbable content" id="d-sampleInput">
       <!-- Only required for left/right tabs -->
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
@@ -151,7 +151,7 @@
 
 <div class="row">
   <section id="s-sampleOutput">
-    <div class="tabbable content" id="sampleOutput">
+    <div class="tabbable content" id="d-sampleOutput">
       <!-- Only required for left/right tabs -->
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
@@ -205,7 +205,7 @@
         <a href="problem/search?word=${Tag.name!}&scope=tag" title="${Tag.user!}" data-toggle="tooltip">
         ${Tag.name!}
         </a>
-          <#if adminUser?? || (user?? && user.uid==Tag.uid)>
+          <#if adminUser?? || (user?? && Tag.uid?? && user.uid==Tag.uid)>
             <div data-tid="${Tag.id!}" title="delete the tag" class="delete-tag">&times;</div>
           </#if>
       </span>
