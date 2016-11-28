@@ -440,10 +440,13 @@ public class ContestService {
         String sql = "FROM " + tableName + " b INNER JOIN user u ON u.uid=b.uid "
             + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
             + " WHERE b.cid=? ORDER BY solved DESC,penalty";
-        String select = "SELECT b.*,u.name,u.realName,cu.special,cu.nick";
+        String select = "SELECT b.*,u.name,u.realName,u.nick AS unick,cu.special,cu.nick";
         Page<Record> userRank = Db.paginate(pageNumber, pageSize, select, sql, cid);
         int rank = (pageNumber - 1) * pageSize;
         for (Record record : userRank.getList()) {
+            if (record.getStr("nick") == null) {
+                record.set("nick", record.getStr("unick"));
+            }
             if (record.getBoolean("special") != null && record.getBoolean("special")) {
                 record.set("rank", "*");
                 String nick = record.getStr("nick");
