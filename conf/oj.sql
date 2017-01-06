@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.16, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
 -- ------------------------------------------------------
--- Server version	5.7.16-0ubuntu0.16.04.1
+-- Server version	5.5.49-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -194,9 +194,9 @@ CREATE TABLE `contest_problem` (
   `cid` int(9) NOT NULL DEFAULT '0',
   `pid` int(9) NOT NULL DEFAULT '0',
   `title` char(255) NOT NULL,
+  `timeLimit` int(5) NOT NULL DEFAULT '1000',
+  `memoryLimit` int(5) NOT NULL DEFAULT '65536',
   `num` int(5) NOT NULL DEFAULT '0',
-  `memoryLimit` int(5) NOT NULL DEFAULT '0',
-  `timeLimit` int(5) NOT NULL DEFAULT '0',
   `view` int(5) NOT NULL DEFAULT '0',
   `accepted` int(5) NOT NULL DEFAULT '0',
   `submission` int(5) NOT NULL DEFAULT '0',
@@ -937,7 +937,7 @@ CREATE TABLE `web_login` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-13 11:53:44
+-- Dump completed on 2016-07-24 10:16:44
 
 ALTER TABLE contest AUTO_INCREMENT=1000;
 
@@ -950,11 +950,11 @@ ALTER TABLE problem AUTO_INCREMENT=1000;
 ALTER TABLE solution AUTO_INCREMENT=1000;
 
 ALTER TABLE user AUTO_INCREMENT=1000;
--- MySQL dump 10.13  Distrib 5.7.16, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
 -- ------------------------------------------------------
--- Server version	5.7.16-0ubuntu0.16.04.1
+-- Server version	5.5.49-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -974,7 +974,7 @@ ALTER TABLE user AUTO_INCREMENT=1000;
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1000,0,'root','$2a$10$32c4WA.dm2czb7LFy4TQFumIiYbwm75c7s645cIEUpt1W8ZVEF/lG','root','root','','power721@163.com',0,1,'SWUST',21,59,99,0,0,1410622292,1418132128,'171.217.47.184','',NULL,'','secret','',72670,1,0,1,NULL,NULL,0,0,1,NULL,NULL);
+INSERT INTO `user` VALUES (1000,0,'root','$2a$10$FYhE.LjD7nmGPJRUaIoeVOupJITPSRCjqJkfLZq/ooOEVEoL0Wjea','root','root','','admin@power.oj',0,1,'',0,0,0,0,0,0,0,'127.0.0.1','','','','secret','',0,1,0,1,NULL,NULL,0,0,1,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1009,12 +1009,12 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-13 11:53:44
--- MySQL dump 10.13  Distrib 5.7.16, for Linux (x86_64)
+-- Dump completed on 2016-07-24 10:16:44
+-- MySQL dump 10.13  Distrib 5.5.49, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: oj
 -- ------------------------------------------------------
--- Server version	5.7.16-0ubuntu0.16.04.1
+-- Server version	5.5.49-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -1033,88 +1033,88 @@ UNLOCK TABLES;
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,0,'Graph Theory','??');
+INSERT INTO `category` VALUES (1,0,'Graph Theory','图论');
 INSERT INTO `category` VALUES (2,1,'2-SAT','2-SAT');
-INSERT INTO `category` VALUES (3,1,'Articulation/Bridge/Biconnected Component','???');
-INSERT INTO `category` VALUES (4,1,'Cycles/Topological Sorting/Strongly Connected Component','?/??/???');
-INSERT INTO `category` VALUES (5,1,'Shortest Path','????');
+INSERT INTO `category` VALUES (3,1,'Articulation/Bridge/Biconnected Component','连通性');
+INSERT INTO `category` VALUES (4,1,'Cycles/Topological Sorting/Strongly Connected Component','环/拓扑/强连通');
+INSERT INTO `category` VALUES (5,1,'Shortest Path','最短路径');
 INSERT INTO `category` VALUES (6,5,'Bellman Ford/SPFA','Bellman Ford/SPFA');
 INSERT INTO `category` VALUES (7,5,'Dijkstra/Floyd Warshall','Dijkstra/Floyd Warshall');
-INSERT INTO `category` VALUES (8,1,'Euler Trail/Circuit','????/????');
-INSERT INTO `category` VALUES (9,1,'Heavy-Light Decomposition','???');
-INSERT INTO `category` VALUES (10,1,'Minimum Spanning Tree','?????');
-INSERT INTO `category` VALUES (11,1,'Directed Minimum Spanning Tree','???????');
-INSERT INTO `category` VALUES (12,1,'Stable Marriage Problem','????????');
-INSERT INTO `category` VALUES (13,1,'Trees','?');
-INSERT INTO `category` VALUES (14,1,'Flow/Matching','?/??');
-INSERT INTO `category` VALUES (15,14,'Graph Matching','?????');
-INSERT INTO `category` VALUES (16,15,'Bipartite Matching','2????');
-INSERT INTO `category` VALUES (17,15,'Hopcroft?Karp Bipartite Matching','HK??');
-INSERT INTO `category` VALUES (18,15,'Weighted Bipartite Matching/Hungarian Algorithm','?????/?????');
-INSERT INTO `category` VALUES (19,14,'Flow','?');
-INSERT INTO `category` VALUES (20,19,'Max Flow/Min Cut','???/???');
-INSERT INTO `category` VALUES (21,19,'Min Cost Max Flow','???????');
-INSERT INTO `category` VALUES (22,0,'DFS-like','??');
-INSERT INTO `category` VALUES (23,22,'Backtracking with Pruning/Branch and Bound','????/?????\r\n');
-INSERT INTO `category` VALUES (24,22,'Basic Recursion','??');
-INSERT INTO `category` VALUES (25,22,'IDA* Search','??????');
-INSERT INTO `category` VALUES (26,22,'Parsing/Grammar','????');
-INSERT INTO `category` VALUES (27,22,'Breadth First Search/Depth First Search','??/??????');
-INSERT INTO `category` VALUES (28,22,'Advanced Search Techniques','??????');
-INSERT INTO `category` VALUES (29,28,'Binary Search/Bisection','????');
-INSERT INTO `category` VALUES (30,28,'Ternary Search','?????');
-INSERT INTO `category` VALUES (31,0,'Geometry','??');
-INSERT INTO `category` VALUES (32,32,'Basic Geometry','????');
-INSERT INTO `category` VALUES (33,32,'Computational Geometry','????');
-INSERT INTO `category` VALUES (34,32,'Convex Hull','??');
-INSERT INTO `category` VALUES (35,32,'Pick\'s Theorem','????');
-INSERT INTO `category` VALUES (36,0,'Game Theory','???');
+INSERT INTO `category` VALUES (8,1,'Euler Trail/Circuit','欧拉路径/欧拉回路');
+INSERT INTO `category` VALUES (9,1,'Heavy-Light Decomposition','动态树');
+INSERT INTO `category` VALUES (10,1,'Minimum Spanning Tree','最小生成树');
+INSERT INTO `category` VALUES (11,1,'Directed Minimum Spanning Tree','有向最小生成树');
+INSERT INTO `category` VALUES (12,1,'Stable Marriage Problem','稳定婚姻匹配问题');
+INSERT INTO `category` VALUES (13,1,'Trees','树');
+INSERT INTO `category` VALUES (14,1,'Flow/Matching','流/匹配');
+INSERT INTO `category` VALUES (15,14,'Graph Matching','一般图匹配');
+INSERT INTO `category` VALUES (16,15,'Bipartite Matching','2分图匹配');
+INSERT INTO `category` VALUES (17,15,'Hopcroft–Karp Bipartite Matching','HK匹配');
+INSERT INTO `category` VALUES (18,15,'Weighted Bipartite Matching/Hungarian Algorithm','加权图匹配/匈牙利算法');
+INSERT INTO `category` VALUES (19,14,'Flow','流');
+INSERT INTO `category` VALUES (20,19,'Max Flow/Min Cut','最大流/最小割');
+INSERT INTO `category` VALUES (21,19,'Min Cost Max Flow','最小费用最大流');
+INSERT INTO `category` VALUES (22,0,'DFS-like','搜索');
+INSERT INTO `category` VALUES (23,22,'Backtracking with Pruning/Branch and Bound','回溯剪枝/分枝界限法\r\n');
+INSERT INTO `category` VALUES (24,22,'Basic Recursion','递归');
+INSERT INTO `category` VALUES (25,22,'IDA* Search','迭代加深搜索');
+INSERT INTO `category` VALUES (26,22,'Parsing/Grammar','语法分析');
+INSERT INTO `category` VALUES (27,22,'Breadth First Search/Depth First Search','广度/深度优先搜索');
+INSERT INTO `category` VALUES (28,22,'Advanced Search Techniques','高级搜索技术');
+INSERT INTO `category` VALUES (29,28,'Binary Search/Bisection','二分搜索');
+INSERT INTO `category` VALUES (30,28,'Ternary Search','三叉树搜索');
+INSERT INTO `category` VALUES (31,0,'Geometry','几何');
+INSERT INTO `category` VALUES (32,32,'Basic Geometry','简单几何');
+INSERT INTO `category` VALUES (33,32,'Computational Geometry','计算几何');
+INSERT INTO `category` VALUES (34,32,'Convex Hull','凸包');
+INSERT INTO `category` VALUES (35,32,'Pick\'s Theorem','皮克定理');
+INSERT INTO `category` VALUES (36,0,'Game Theory','博弈论');
 INSERT INTO `category` VALUES (37,36,'Green Hackenbush/Colon Principle/Fusion Principle','Green Hackenbush/Colon Principle/Fusion Principle');
 INSERT INTO `category` VALUES (38,36,'Nim','Nim');
-INSERT INTO `category` VALUES (39,36,'Sprague-Grundy Number','SG?');
-INSERT INTO `category` VALUES (40,0,'Matrix','??');
-INSERT INTO `category` VALUES (41,41,'Gaussian Elimination','????');
-INSERT INTO `category` VALUES (42,41,'Matrix Exponentiation','????');
-INSERT INTO `category` VALUES (43,0,'Data Structures','????');
-INSERT INTO `category` VALUES (44,43,'Basic Data Structures','??????');
-INSERT INTO `category` VALUES (45,43,'Binary Indexed Tree','????');
-INSERT INTO `category` VALUES (46,43,'Binary Search Tree','?????');
-INSERT INTO `category` VALUES (47,43,'Hashing','??');
-INSERT INTO `category` VALUES (48,43,'Orthogonal Range Search','??????');
+INSERT INTO `category` VALUES (39,36,'Sprague-Grundy Number','SG值');
+INSERT INTO `category` VALUES (40,0,'Matrix','矩阵');
+INSERT INTO `category` VALUES (41,41,'Gaussian Elimination','高斯消元');
+INSERT INTO `category` VALUES (42,41,'Matrix Exponentiation','矩阵求幂');
+INSERT INTO `category` VALUES (43,0,'Data Structures','数据结构');
+INSERT INTO `category` VALUES (44,43,'Basic Data Structures','简单数据结构');
+INSERT INTO `category` VALUES (45,43,'Binary Indexed Tree','树状数组');
+INSERT INTO `category` VALUES (46,43,'Binary Search Tree','二叉搜索树');
+INSERT INTO `category` VALUES (47,43,'Hashing','哈希');
+INSERT INTO `category` VALUES (48,43,'Orthogonal Range Search','正交范围搜索');
 INSERT INTO `category` VALUES (49,43,'Range Minimum Query/Lowest Common Ancestor','RMQ/LCA');
-INSERT INTO `category` VALUES (50,43,'Segment Tree/Interval Tree','???/???');
-INSERT INTO `category` VALUES (51,43,'Trie Tree','???');
-INSERT INTO `category` VALUES (52,43,'Sorting','??');
-INSERT INTO `category` VALUES (53,43,'Disjoint Set','???');
-INSERT INTO `category` VALUES (54,0,'String','???');
-INSERT INTO `category` VALUES (55,54,'Aho Corasick','AC???');
-INSERT INTO `category` VALUES (56,54,'Knuth-Morris-Pratt','KMP??');
-INSERT INTO `category` VALUES (57,54,'Suffix Array/Suffix Tree','????/???');
-INSERT INTO `category` VALUES (58,0,'Math','??');
-INSERT INTO `category` VALUES (59,58,'Basic Math','????');
-INSERT INTO `category` VALUES (60,58,'Big Integer Arithmetic','???');
-INSERT INTO `category` VALUES (61,58,'Number Theory','??');
-INSERT INTO `category` VALUES (62,61,'Chinese Remainder Theorem','??????');
-INSERT INTO `category` VALUES (64,61,'Inclusion/Exclusion','??');
-INSERT INTO `category` VALUES (65,61,'Modular Arithmetic','???');
-INSERT INTO `category` VALUES (66,58,'Combinatorics','????');
-INSERT INTO `category` VALUES (67,66,'Group Theory/Burnside\'s lemma','????/??????');
-INSERT INTO `category` VALUES (68,66,'Counting','??');
-INSERT INTO `category` VALUES (69,58,'Probability/Expected Value','??/??');
-INSERT INTO `category` VALUES (70,0,'Others','??');
-INSERT INTO `category` VALUES (71,71,'Tricky','??');
-INSERT INTO `category` VALUES (72,71,'Hardest','??');
-INSERT INTO `category` VALUES (73,71,'Unusual','??');
-INSERT INTO `category` VALUES (74,71,'Brute Force','??');
-INSERT INTO `category` VALUES (75,71,'Implementation','??');
-INSERT INTO `category` VALUES (76,71,'Constructive Algorithms','????');
+INSERT INTO `category` VALUES (50,43,'Segment Tree/Interval Tree','线段树/区间树');
+INSERT INTO `category` VALUES (51,43,'Trie Tree','字典树');
+INSERT INTO `category` VALUES (52,43,'Sorting','排序');
+INSERT INTO `category` VALUES (53,43,'Disjoint Set','并查集');
+INSERT INTO `category` VALUES (54,0,'String','字符串');
+INSERT INTO `category` VALUES (55,54,'Aho Corasick','AC自动机');
+INSERT INTO `category` VALUES (56,54,'Knuth-Morris-Pratt','KMP匹配');
+INSERT INTO `category` VALUES (57,54,'Suffix Array/Suffix Tree','后缀数组/后缀树');
+INSERT INTO `category` VALUES (58,0,'Math','数学');
+INSERT INTO `category` VALUES (59,58,'Basic Math','基础数学');
+INSERT INTO `category` VALUES (60,58,'Big Integer Arithmetic','高精度');
+INSERT INTO `category` VALUES (61,58,'Number Theory','数论');
+INSERT INTO `category` VALUES (62,61,'Chinese Remainder Theorem','中国同余定理');
+INSERT INTO `category` VALUES (64,61,'Inclusion/Exclusion','容斥');
+INSERT INTO `category` VALUES (65,61,'Modular Arithmetic','模运算');
+INSERT INTO `category` VALUES (66,58,'Combinatorics','组合数学');
+INSERT INTO `category` VALUES (67,66,'Group Theory/Burnside\'s lemma','集团理论/伯恩赛德引理');
+INSERT INTO `category` VALUES (68,66,'Counting','计数');
+INSERT INTO `category` VALUES (69,58,'Probability/Expected Value','概率/期望');
+INSERT INTO `category` VALUES (70,0,'Others','其它');
+INSERT INTO `category` VALUES (71,71,'Tricky','技巧');
+INSERT INTO `category` VALUES (72,71,'Hardest','困难');
+INSERT INTO `category` VALUES (73,71,'Unusual','罕见');
+INSERT INTO `category` VALUES (74,71,'Brute Force','暴力');
+INSERT INTO `category` VALUES (75,71,'Implementation','实现');
+INSERT INTO `category` VALUES (76,71,'Constructive Algorithms','构造算法');
 INSERT INTO `category` VALUES (77,71,'Two Pointer','');
-INSERT INTO `category` VALUES (78,71,'Bitmask','???');
-INSERT INTO `category` VALUES (79,71,'Beginner','??');
-INSERT INTO `category` VALUES (80,71,'Discrete Logarithm/Shank\'s Baby-step Giant-step Algorithm','????/');
-INSERT INTO `category` VALUES (81,71,'Greedy','??');
-INSERT INTO `category` VALUES (82,71,'Divide and Conquer','??');
-INSERT INTO `category` VALUES (83,0,'Dynamic Programming','????');
+INSERT INTO `category` VALUES (78,71,'Bitmask','位掩码');
+INSERT INTO `category` VALUES (79,71,'Beginner','入门');
+INSERT INTO `category` VALUES (80,71,'Discrete Logarithm/Shank\'s Baby-step Giant-step Algorithm','离散对数/');
+INSERT INTO `category` VALUES (81,71,'Greedy','贪心');
+INSERT INTO `category` VALUES (82,71,'Divide and Conquer','分治');
+INSERT INTO `category` VALUES (83,0,'Dynamic Programming','动态规划');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1381,20 +1381,20 @@ LOCK TABLES `variable` WRITE;
 /*!40000 ALTER TABLE `variable` DISABLE KEYS */;
 INSERT INTO `variable` VALUES (1,'workPath','/home/judge/temp',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (2,'dataPath','/home/judge/data',NULL,NULL,NULL,'string',NULL);
-INSERT INTO `variable` VALUES (3,'runShell','/usr/local/bin/powerjudge',NULL,NULL,NULL,'string',NULL);
-INSERT INTO `variable` VALUES (4,'compileShell','C:\\JudgeOnline\\bin\\com.exe',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (3,'runShell','C:\\power\\oj\\JudgeOnline\\bin\\run.exe',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (4,'compileShell','C:\\power\\oj\\JudgeOnline\\bin\\com.exe',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (5,'adminName','root',NULL,NULL,NULL,'string',NULL);
-INSERT INTO `variable` VALUES (6,'adminMail','swust_acm@163.com',NULL,NULL,NULL,'string',NULL);
-INSERT INTO `variable` VALUES (7,'debugFile','/tmp/oj/oj.log',NULL,NULL,NULL,'string',NULL);
-INSERT INTO `variable` VALUES (8,'errorFile','/tmp/oj/oj.log',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (6,'adminMail','root@localhost.com',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (7,'debugFile','debug.log',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (8,'errorFile','error.log',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (9,'deleteTmpFile','1',1,NULL,NULL,'boolean',NULL);
 INSERT INTO `variable` VALUES (10,'debug','0',0,NULL,NULL,'boolean',NULL);
 INSERT INTO `variable` VALUES (11,'enableLogin','1',1,NULL,NULL,'boolean',NULL);
 INSERT INTO `variable` VALUES (12,'enableMail','1',1,NULL,NULL,'boolean',NULL);
 INSERT INTO `variable` VALUES (13,'enableSource','1',1,NULL,NULL,'boolean',NULL);
 INSERT INTO `variable` VALUES (14,'enableArchive','1',1,NULL,NULL,'boolean',NULL);
-INSERT INTO `variable` VALUES (15,'openid_qq','101024328',NULL,NULL,'101024328','string',NULL);
-INSERT INTO `variable` VALUES (16,'openkey_qq','aee2cd78bfce872a0a82e1da79110b3a',NULL,NULL,'aee2cd78bfce872a0a82e1da79110b3a','string',NULL);
+INSERT INTO `variable` VALUES (15,'openid_qq','',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (16,'openkey_qq','',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (17,'redirect_qq','http://power-oj.com/api/oauth/qq/callback',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (18,'enable_qq_login','0',0,NULL,NULL,'boolean',NULL);
 INSERT INTO `variable` VALUES (19,'openid_sina','',NULL,NULL,NULL,'string',NULL);
@@ -1406,9 +1406,13 @@ INSERT INTO `variable` VALUES (24,'emailUser','',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (25,'emailPass','',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (26,'version','20140221',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (27,'siteTitle','Power OJ',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (28,'uploadPath','/var/www/upload',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (29,'downloadPath','/var/www/download/',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (30,'userAvatarPath','/var/www/upload/image/user/',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (31,'problemImagePath','/var/www/upload/image/problem/',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (32,'judgeHost','127.0.0.1',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (33,'judgePort','55555',NULL,55555,NULL,'int',NULL);
-INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1.0-Harold',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
 /*!40000 ALTER TABLE `variable` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1421,4 +1425,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-13 11:53:44
+-- Dump completed on 2016-07-24 10:16:44
