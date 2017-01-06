@@ -112,17 +112,18 @@ echo "copy ${ARTIFACT} to $TOMCAT/"
 sudo cp ${ARTIFACT} ${TOMCAT}/
 
 echo "waiting war deploy..."
-sleep 10
+sleep 15
 CNT=0
-while [ ! -d "${TOMCAT}/oj/WEB-INF/" ] || [ ${TOMCAT}/oj/WEB-INF/ -ot ${TOMCAT}/oj.war ]; do
-    echo "Please start the tomcat service!"
-    let CNT+=1
-    sleep 5
-    if [ ${CNT} -eq 5 ]; then
-        sudo touch ${TOMCAT}/oj.war
-        CNT=0
-    fi
-done
+# FOLDER=${TOMCAT}/oj/assets/MathJax/jax/
+# while [ ! -d "${FOLDER}" ] || [ ${FOLDER} -ot ${TOMCAT}/oj.war ]; do
+#     echo "Please start the tomcat service!"
+#     let CNT+=1
+#     sleep 5
+#     if [ ${CNT} -eq 5 ]; then
+#         sudo touch ${TOMCAT}/oj.war
+#         CNT=0
+#     fi
+# done
 
 if grep -q '^\s*devMode=true' ${CONF}; then
   echo "use log4j-dev.xml"
@@ -152,7 +153,7 @@ sudo rm -rf ${TOMCAT}/oj/download
 sudo rm -rf ${TOMCAT}/oj/assets
 
 echo "$TOMCAT/oj/"
-ls -l --color=auto ${TOMCAT}/oj/
+sudo ls -l --color=auto ${TOMCAT}/oj/
 sudo find ${TOMCAT}/oj/WEB-INF/ -type f -exec chmod 600 {} \;
 
 echo "OJ deploy completed."
