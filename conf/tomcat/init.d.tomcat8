@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# /etc/init.d/tomcat8 -- startup script for the Tomcat 6 servlet engine
+# /etc/init.d/tomcat8 -- startup script for the Tomcat 8 servlet engine
 #
 # Written by Miquel van Smoorenburg <miquels@cistron.nl>.
 # Modified for Debian GNU/Linux	by Ian Murdock <imurdock@gnu.ai.mit.edu>.
@@ -49,36 +49,37 @@ fi
 
 # The following variables can be overwritten in $DEFAULT
 
-# Run Tomcat 7 as this user ID and group ID
+# Run Tomcat 8 as this user ID and group ID
 TOMCAT8_USER=tomcat8
 TOMCAT8_GROUP=tomcat8
 
-# this is a work-around until there is a suitable runtime replacement 
+# this is a work-around until there is a suitable runtime replacement
 # for dpkg-architecture for arch:all packages
-# this function sets the variable OPENJDKS
-find_openjdks()
+# this function sets the variable JDK_DIRS
+find_jdks()
 {
-        for jvmdir in /usr/lib/jvm/java-7-openjdk-*
+    for java_version in 9 8 7
+    do
+        for jvmdir in /usr/lib/jvm/java-${java_version}-openjdk-* \
+                      /usr/lib/jvm/jdk-${java_version}-oracle-* \
+                      /usr/lib/jvm/jre-${java_version}-oracle-* \
+                      /usr/lib/jvm/java-${java_version}-oracle
         do
-                if [ -d "${jvmdir}" -a "${jvmdir}" != "/usr/lib/jvm/java-7-openjdk-common" ]
-                then
-                        OPENJDKS=$jvmdir
-                fi
+            if [ -d "${jvmdir}" ]
+            then
+                JDK_DIRS="${JDK_DIRS} ${jvmdir}"
+            fi
         done
-        for jvmdir in /usr/lib/jvm/java-6-openjdk-*
-        do
-                if [ -d "${jvmdir}" -a "${jvmdir}" != "/usr/lib/jvm/java-6-openjdk-common" ]
-                then
-                        OPENJDKS="${OPENJDKS} ${jvmdir}"
-                fi
-        done
+    done
+
+    # Add the paths for the JVMs packaged by the older versions of java-package (<< 0.52 as in Wheezy and Trusty)
+    JDK_DIRS="${JDK_DIRS} /usr/lib/jvm/j2re1.7-oracle /usr/lib/jvm/j2sdk1.7-oracle"
 }
 
-OPENJDKS=""
-find_openjdks
 # The first existing directory is used for JAVA_HOME (if JAVA_HOME is not
 # defined in $DEFAULT)
-JDK_DIRS="/usr/lib/jvm/default-java ${OPENJDKS} /usr/lib/jvm/java-6-openjdk /usr/lib/jvm/java-6-sun /usr/lib/jvm/java-7-oracle"
+JDK_DIRS="/usr/lib/jvm/default-java"
+find_jdks
 
 # Look for the right JVM to use
 for jdir in $JDK_DIRS; do
@@ -88,11 +89,10 @@ for jdir in $JDK_DIRS; do
 done
 export JAVA_HOME
 
-# Directory where the Tomcat 6 binary distribution resides
+# Directory where the Tomcat 8 binary distribution resides
 CATALINA_HOME=/usr/share/$NAME
 
 # Directory for per-instance configuration files and webapps
-#CATALINA_BASE=/var/lib/$NAME
 CATALINA_BASE=/usr/share/$NAME
 
 # Use the Java security manager? (yes/no)
@@ -104,7 +104,7 @@ TOMCAT8_SECURITY=no
 # It also looks like the default heap size of 64M is not enough for most cases
 # so the maximum heap size is set to 128M
 if [ -z "$JAVA_OPTS" ]; then
-	JAVA_OPTS="-Djava.awt.headless=true -Xmx512M"
+	JAVA_OPTS="-Djava.awt.headless=true -Xmx128M"
 fi
 
 # End of variables that can be overwritten in $DEFAULT
@@ -171,8 +171,10 @@ catalina_sh() {
 
 	# Run the catalina.sh script as a daemon
 	set +e
-	touch "$CATALINA_PID" "$CATALINA_BASE"/logs/catalina.out
-	chown $TOMCAT8_USER "$CATALINA_PID" "$CATALINA_BASE"/logs/catalina.out
+	if [ ! -f "$CATALINA_BASE"/logs/catalina.out ]; then
+		install -o $TOMCAT8_USER -g adm -m 644 /dev/null "$CATALINA_BASE"/logs/catalina.out
+	fi
+	install -o $TOMCAT8_USER -g adm -m 644 /dev/null "$CATALINA_PID"
 	start-stop-daemon --start -b -u "$TOMCAT8_USER" -g "$TOMCAT8_GROUP" \
 		-c "$TOMCAT8_USER" -d "$CATALINA_TMPDIR" -p "$CATALINA_PID" \
 		-x /bin/bash -- -c "$AUTHBIND_COMMAND $TOMCAT_SH"
@@ -203,10 +205,8 @@ case "$1" in
 		echo "// AUTO-GENERATED FILE from /etc/tomcat8/policy.d/" \
 			> "$POLICY_CACHE"
 		echo ""  >> "$POLICY_CACHE"
-        if [ -e "$CATALINA_BASE/conf/policy.d/" ]; then
-		    cat $CATALINA_BASE/conf/policy.d/*.policy \
-			    >> "$POLICY_CACHE"
-        fi
+		cat $CATALINA_BASE/conf/policy.d/*.policy \
+			>> "$POLICY_CACHE"
 
 		# Remove / recreate JVM_TMP directory
 		rm -rf "$JVM_TMP"
