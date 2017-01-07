@@ -114,6 +114,7 @@ sudo cp ${ARTIFACT} ${TOMCAT}/
 echo "waiting war deploy..."
 sleep 15
 CNT=0
+
 # FOLDER=${TOMCAT}/oj/assets/MathJax/jax/
 # while [ ! -d "${FOLDER}" ] || [ ${FOLDER} -ot ${TOMCAT}/oj.war ]; do
 #     echo "Please start the tomcat service!"
