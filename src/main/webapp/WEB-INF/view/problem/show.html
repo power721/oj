@@ -26,7 +26,7 @@
     <span class="black pts">${problem.pid!0}:</span>
     <#if problem.status==false>
     <del></#if>
-    <span class="title">${problem.title!}</span>
+    <span class="title" id="title">${problem.title!}</span>
     <#if problem.status==false></del></#if>
     <#if spj?? && spj><span class="badge badge-important">SPJ</span><br></#if>
   </h2>
@@ -38,8 +38,8 @@
       <a href="problem/rejudge/${problem.pid!}" class="btn btn-danger">Rejudge</a>
     </div>
   </#if>
-  Time Limit: <span class="badge badge-info">${problem.timeLimit!} MS</span>
-  Memory Limit: <span class="badge badge-info">${problem.memoryLimit!} KB</span><br>
+  Time Limit: <span class="badge badge-info" id="time">${problem.timeLimit!} MS</span>
+  Memory Limit: <span class="badge badge-info" id="memory">${problem.memoryLimit!} KB</span><br>
   Total Submit: <a href="status?pid=${problem.pid!}">${problem.submission!}</a>
   Accepted: <a href="status?pid=${problem.pid!}&result=0">${problem.accepted!}</a>
   Page View: <span class="blue">${problem.view!}</span><br>
