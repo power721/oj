@@ -1,0 +1,74 @@
+<input type="hidden" name="problem.pid" value="${problem.pid!}">
+<div class="control-group problem <#if titleMsg??>error</#if>">
+  <label class="control-label" for="inputTitle">Title</label>
+  <div class="controls">
+    <textarea id="inputTitle" name="problem.title" rows="1" cols="130" required>${problem.title!}</textarea>
+    <!--<input class="input-xxlarge" type="text" id="inputTitle" name="problem.title" value="${problem.title!}" required>-->
+    <p class="text-error">${titleMsg!}</p>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputTimeLimit">Time Limit</label>
+  <div class="controls input-append">
+    <input class="input-mini" type="number" id="inputTimeLimit" name="problem.timeLimit" value="${problem.timeLimit!}"
+           required>
+    <span class="add-on">MS</span>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputMemoryLimit">Memory Limit</label>
+  <div class="controls input-append">
+    <input class="input-mini" type="number" id="inputMemoryLimit" name="problem.memoryLimit"
+           value="${problem.memoryLimit!}" required>
+    <span class="add-on">KB</span>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputDescription">Description</label>
+  <div class="controls">
+    <textarea id="inputDescription" name="problem.description" rows="13" cols="130">${problem.description!}</textarea>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputInput">Input</label>
+  <div class="controls">
+    <textarea id="inputInput" name="problem.input" rows="9" cols="130">${problem.input!}</textarea>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputOutput">Output</label>
+  <div class="controls">
+    <textarea id="inputOutput" name="problem.output" rows="9" cols="130">${problem.output!}</textarea>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputSampleInput">Sample Input</label>
+  <div class="controls">
+    <textarea id="inputSampleInput" name="problem.sampleInput" rows="9" cols="130">${problem.sampleInput!}</textarea>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputOutput">Sample Output</label>
+  <div class="controls">
+    <textarea id="inputSampleOutput" name="problem.sampleOutput" rows="9" cols="130">${problem.sampleOutput!}</textarea>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputHint">Hint</label>
+  <div class="controls">
+    <textarea id="inputHint" name="problem.hint" rows="5" cols="130">${problem.hint!}</textarea>
+  </div>
+</div>
+<div class="control-group problem">
+  <label class="control-label" for="inputSource">Source</label>
+  <div class="controls">
+    <textarea id="inputSource" name="problem.source" rows="1" cols="130">${problem.source!}</textarea>
+  </div>
+</div>
+<div class="control-group">
+  <div class="controls">
+    <label class="checkbox"> <input type="checkbox" name="problem.status" value="true"
+                                    <#if problem.status==true>checked</#if>>Active
+    </label>
+  </div>
+</div>

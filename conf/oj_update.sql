@@ -311,3 +311,83 @@ CREATE TABLE `honors` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1015 DEFAULT CHARSET=utf8;
+
+#2015-05-02
+INSERT INTO `role_permission` VALUES ('2', '2', '2');
+INSERT INTO `role_permission` VALUES ('3', '3', '77');
+
+ALTER TABLE team CHANGE `stuId1` `stuId1` varchar(16) NOT NULL,
+                 CHANGE `stuId2` `stuId2` varchar(16) NULL DEFAULT '',
+                 CHANGE `stuId3` `stuId3` varchar(16) NULL DEFAULT '';
+
+#2016-6-25
+INSERT INTO `permission` VALUES (174,'user',1,'user:sp:nick','特殊昵称',45,1);
+DELETE FROM `role`;
+INSERT INTO `role` VALUES (1,'root','root',1);
+INSERT INTO `role` VALUES (2,'admin','administrator',1);
+INSERT INTO `role` VALUES (3,'member','team member',1);
+INSERT INTO `role` VALUES (10,'user','user',1);
+
+UPDATE `user_role` SET rid=10 WHERE rid=3;
+DELETE FROM `role_permission`;
+INSERT INTO `role_permission` VALUES (1,1,1);
+INSERT INTO `role_permission` VALUES (2,2,2);
+INSERT INTO `role_permission` VALUES (3,2,31);
+INSERT INTO `role_permission` VALUES (4,3,77);
+INSERT INTO `role_permission` VALUES (5,3,174);
+INSERT INTO `role_permission` VALUES (6,3,84);
+INSERT INTO `role_permission` VALUES (7,10,77);
+
+#2016-6-26
+ALTER TABLE contest ADD `lockReport` tinyint(1) NOT NULL DEFAULT '0',
+                    CHANGE `freeze` `lockBoard`  tinyint(1) NOT NULL DEFAULT '0';
+
+#2016-7-1
+ALTER TABLE contest ADD `lockBoardTime` int(9) NOT NULL DEFAULT '60',
+                    ADD `unlockBoardTime` int(9) NOT NULL DEFAULT '30';
+
+#2016-7-2
+ALTER TABLE user CHANGE `shareCode` `shareCode` tinyint(1) NOT NULL DEFAULT '1';
+
+#2016-7-6
+INSERT INTO `variable` VALUES (32,'judgeHost','127.0.0.1',NULL,NULL,NULL,'string',NULL);
+INSERT INTO `variable` VALUES (33,'judgePort','12345',NULL,'12345',NULL,'int',NULL);
+INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
+
+#2016-7-18
+ALTER TABLE contest_problem ADD `view` int(5) NOT NULL DEFAULT '0' AFTER `num`;
+ALTER TABLE contest ADD `languages` varchar(255) DEFAULT NULL AFTER `password`;
+
+#2016-7-20
+ALTER TABLE contest_user ADD `special` tinyint(1) NOT NULL DEFAULT '0' AFTER `cid`;
+
+#2016-7-21
+CREATE TABLE `resource` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `uid` int(9) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` text,
+  `path` text NOT NULL,
+  `ctime` int(11) NOT NULL,
+  `download` int(9) DEFAULT 0,
+  `access` ENUM('public', 'private', 'security') NOT NULL DEFAULT 'public',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#2016-7-23
+ALTER TABLE `contest_user` ADD nick VARCHAR(55) AFTER `special`;
+UPDATE contest_user,user SET contest_user.nick=user.nick WHERE contest_user.uid=user.uid;
+
+#2016-7-24
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_cid_pid_pk UNIQUE (cid, pid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE board ADD CONSTRAINT board_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE freeze_board ADD CONSTRAINT freeze_board_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE user_role ADD CONSTRAINT user_role_uid_rid_pk UNIQUE (uid, rid);
+
+#2016-11-4
+ALTER TABLE contest_user ADD `girls` tinyint(1) NOT NULL DEFAULT '0' AFTER `special`;
+ALTER TABLE contest_user ADD `freshman` tinyint(1) NOT NULL DEFAULT '0' AFTER `special`;
+ALTER TABLE contest_problem ADD `memoryLimit` int(5) NOT NULL DEFAULT '65536' AFTER `title`;
+ALTER TABLE contest_problem ADD `timeLimit` int(5) NOT NULL DEFAULT '1000' AFTER `title`;
+UPDATE contest_problem cp SET timeLimit=(SELECT timeLimit FROM problem p WHERE p.pid=cp.pid),memoryLimit=(SELECT memoryLimit FROM problem p WHERE p.pid=cp.pid);

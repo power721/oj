@@ -1,0 +1,168 @@
+<@override name="contest_content">
+  <#if serverTime < contest.endTime >
+  <div class="progress" id="contest-progress">
+    <div class="bar" id="contest-bar" style="width:<#if (serverTime > contest.endTime)>100%</#if>"></div>
+  </div>
+  </#if>
+<div id="rejudge" class="hide">
+  <span>Rejudge Progress:</span>
+  <div class="progress progress-danger progress-striped active">
+    <div id="rejudge-progress" class="bar" style="width: 0%;"></div>
+    <span id="rejudge-status"></span>
+  </div>
+</div>
+  <#assign type="Private<sup>${contest.type}</sup>">
+  <#if contest.type==0>
+    <#assign type="Public">
+  </#if>
+<h3 class="text-center">${type} Contest - ${contest.title!}</h3>
+<div class="row text-center">
+  <div class="span6 offset3">
+    <div class="well">
+      <span>Start Time</span>: <span class="time">${contest.startDateTime!}</span>
+      <span>End Time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <#if contest.lockBoard==true>
+      <span>Lock Board Time</span>: <span class="time" id="lockBoardTime">${contest.lockBoardDateTime!}</span>
+      <span>Unlock Board Time</span>: <span class="time" id="unlockBoardTime">${contest.unlockBoardDateTime!}</span><br>
+      </#if>
+      <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span>
+      <span>Contest Status</span>: <span class="status ${status!}">${status!}</span>
+    </div>
+  </div>
+</div>
+<div class="row text-center">
+  <div class="span6 offset3">
+    <p>${contest.description!}</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span8 offset2">
+    <a class="btn btn-info" href="contest/problem/${contest.cid!}">All Problems</a>
+    <table id="problem-list" class="table table-hover table-condensed">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Problem ID</th>
+        <th>Title</th>
+        <th>AC</th>
+        <th>Submit</th>
+      </tr>
+      </thead>
+      <tbody>
+        <#if contestProblems??>
+          <#list contestProblems as Problem>
+          <tr>
+            <td class="result"><#if Problem.status??><i
+                    class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i></#if>
+            </td>
+            <td class="pid">
+              <#if adminUser??><a href="problem/show/${Problem.pid!}" target="_blank">${Problem.pid!}</a></#if>
+              <a href="contest/problem/${contest.cid!}-${Problem.id!}" data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a>
+            </td>
+            <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
+            <td class="accept"><a
+                    href="contest/status/${contest.cid!}?pid=${Problem.id!}&result=0">${Problem.accepted!}</a></td>
+            <td class="submit"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}">${Problem.submission!}</a>
+            </td>
+          </tr>
+          </#list>
+        </#if>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  <#if adminUser??>
+  <div class="modal hide fade contestModal" id="editModal">
+    <form class="" action="contest/update" id="editContestForm" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+        <h3 id="editModalLabel">
+          Edit contest ${contest.cid!}:
+          <a href="contest/edit/${contest.cid!}" title="Edit in another page" data-toggle="tooltip"
+             data-placement="bottom">${contest.title!}</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <a href="contest/edit/${contest.cid!}" class="btn btn-primary">Edit</a>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  </#if>
+</@override>
+
+<@override name="scripts">
+<link href="assets/tablecloth/css/tablecloth.css" type="text/css" rel="stylesheet">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    <#if contest.startTime<=serverTime && serverTime<=contest.endTime>
+      var startTime = ${contest.startTime!0} * 1000;
+      var endTime = ${contest.endTime!0} * 1000;
+      var during_time = endTime - startTime;
+      clock(function (current_time) {
+        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+        if (current_time >= startTime && current_time <= endTime) {
+          var percent = (current_time - startTime) / during_time * 100;
+          $('#contest-bar').css('width', percent + '%');
+        }
+
+        if (current_time > endTime) {
+          $('#contest-progress').remove();
+        } else {
+          if (endTime - current_time < 3600000) {
+            $('#contest-progress').addClass('progress-danger progress-striped active');
+          } else {
+            $('#contest-progress').addClass('progress-success progress-striped active');
+          }
+        }
+      }, 1000);
+    <#else>
+      clock(function (current_time) {
+        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+      }, 1000);
+    </#if>
+
+    <#if oj_style != "slate">
+      $("#problem-list").tablecloth({
+        theme: "stats",
+        condensed: true,
+        sortable: true,
+        striped: true,
+        clean: true
+      });
+    </#if>
+
+    <#if isRejudging?? && isRejudging==true>
+      $('#rejudge').removeClass('hide');
+      var refresh = setInterval(function () {
+        refreshResult();
+      }, 2500);
+
+      function refreshResult() {
+        $.getJSON('/api/contest/rejudgeStatus/' + ${contest.cid}, function (data) {
+          var total = data.total;
+          var count = data.count;
+          if (count < total) {
+            $('#rejudge-progress').css('width', (count / total * 100) + '%');
+            $('#rejudge-status').text(count + '/' + total);
+          } else {
+            clearInterval(refresh);
+            $('#rejudge').addClass('hide');
+            $('div.alert').remove();
+          }
+        });
+      }
+    </#if>
+  });
+</script>
+</@override>
+<@extends name="_layout.html" />

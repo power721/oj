@@ -1,0 +1,216 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">添加比赛</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="admin/contest">比赛管理</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">添加比赛</li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <form class="form-horizontal" id="createContest" action="admin/contest/save" method="post">
+          <div class="control-group contest <#if titleMsg??>error</#if>">
+            <label class="control-label" for="inputTitle">Title</label>
+            <div class="controls">
+              <textarea id="inputTitle" name="contest.title" rows="1" cols="120" required></textarea>
+              <p class="text-error">${titleMsg!}</p>
+            </div>
+          </div>
+          <div class="control-group contest">
+            <label class="control-label" for="inputStartTime">Start Time</label>
+            <div class="controls input-append date form_datetime" id="startTime">
+              <input size="16" type="text" name="startTime" id="inputStartTime" value="${startDateTime!}" readonly
+                     required>
+              <span class="add-on"><i class="icon-th" aria-hidden="true"></i></span>
+            </div>
+          </div>
+          <div class="control-group contest">
+            <label class="control-label" for="inputEndTime">End Time</label>
+            <div class="controls input-append date form_datetime" id="endTime">
+              <input size="16" type="text" name="endTime" id="inputEndTime" value="${endDateTime!}" readonly required>
+              <span class="add-on"><i class="icon-th" aria-hidden="true"></i></span>
+            </div>
+          </div>
+          <div class="control-group contest">
+            <label class="control-label" for="inputDescription">Description</label>
+            <div class="controls">
+              <textarea id="inputDescription" name="contest.description" rows="13" cols="120"></textarea>
+            </div>
+          </div>
+          <div class="control-group contest">
+            <label class="control-label" for="inputReport">Report</label>
+            <div class="controls">
+              <textarea id="inputReport" name="contest.report" rows="13" cols="120"></textarea>
+            </div>
+          </div>
+          <div class="control-group contest">
+            <label class="control-label" for="inputType">Type</label>
+            <div class="controls">
+              <select name="contest.type" id="inputType">
+                <option value="0">Public</option>
+                <option value="1">Password</option>
+                <option value="2">Private</option>
+                <option value="3">Strict Private</option>
+                <option value="4">Test</option>
+              </select>
+            </div>
+          </div>
+          <div class="control-group <#if passMsg??>error</#if>" id="password" style="display: none">
+            <label class="control-label" for="inputPassword"> Password </label>
+            <div class="controls">
+              <div class="input-prepend" id="contest-password"></div>
+              <p class="text-error">${passMsg!}</p>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputLanguages"> Enabled Languages </label>
+            <div class="controls">
+              <#if program_languages??>
+                <#list program_languages.keySet() as key>
+                  <label class="checkbox inline">
+                    <input type="checkbox" name="languages" id="inputLanguages${key!}" value="${key!}"
+                           <#if contest_languages.containsKey(key)>checked</#if>> ${program_languages.get(key)!}
+                  </label>
+                </#list>
+              </#if>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputLockBoard"> Lock Board? </label>
+            <div class="controls">
+              <input class="freeze" id="inputLockBoard" type="checkbox" name="contest.lockBoard" value="1">
+            </div>
+          </div>
+          <div class="control-group lockBoard" style="display: none">
+            <label class="control-label" for="inputLockBoardTime"> Lock Board Time </label>
+            <div class="controls">
+              <div class="input-prepend">
+                <span class="add-on"><i class="fa fa-calendar-minus-o" aria-hidden="true"></i></span>
+                <input class="input-mini" id="inputLockBoardTime" type="number" min="0" name="contest.lockBoardTime"
+                       value="60">
+                minutes
+              </div>
+            </div>
+          </div>
+          <div class="control-group lockBoard" style="display: none">
+            <label class="control-label" for="inputUnlockBoardTime"> Unlock Board Time </label>
+            <div class="controls">
+              <div class="input-prepend">
+                <span class="add-on"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i></span>
+                <input class="input-mini" id="inputUnlockBoardTime" type="number" min="0" name="contest.unlockBoardTime"
+                       value="30"> minutes
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="inputLockReport"> Lock Report? </label>
+            <div class="controls">
+              <input class="lockReport" id="inputLockReport" type="checkbox" name="contest.lockReport" value="1">
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" id="submitContest" class="btn btn-primary">Submit</button>
+              <button type="reset" class="btn btn-info">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+
+<@override name="styles">
+<link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
+</@override>
+
+<@override name="scripts">
+<link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
+<script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"
+        charset="UTF-8"></script>
+<script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#inputTitle').tooltip({'trigger': 'focus', 'title': '比赛标题。', 'placement': 'right'});
+    $('#inputDescription').tooltip({'trigger': 'focus', 'title': '比赛描述。', 'placement': 'right'});
+    $('#inputReport').tooltip({'trigger': 'focus', 'title': '解题报告。', 'placement': 'right'});
+    $('#inputType').tooltip({
+      'title': '比赛类型，Password：密码访问，Private：私有比赛，结束后所有人可见，Strict Private,私有比赛，结束后仅参加者可见，Test：测试数据专用。',
+      'placement': 'right'
+    });
+    $('#inputLockBoard').tooltip({'trigger': 'focus', 'title': '比赛结束前封榜？', 'placement': 'right'});
+    $('#inputLockBoardTime').tooltip({
+      'trigger': 'focus', 'title': '比赛结束前x分钟锁定排名。', 'placement': 'right'
+    });
+    $('#inputUnlockBoardTime').tooltip({
+      'trigger': 'focus', 'title': '比赛结束x分钟后解锁排名。', 'placement': 'right'
+    });
+    $('.lockReport').tooltip({'title': '勾选后，比赛结束后不显示解题报告。', 'placement': 'right'});
+    $("#inputType").change(function () {
+      var val = $(this).val();
+      if (val == 1) {
+        $("div#password").show();
+        $("div#contest-password").html('<span class="add-on"><i class="icon-lock"></i></span><input type="text" id="inputPassword" name="contest.password" placeholder="Password" required>');
+      }
+      else {
+        $("div#contest-password").html('');
+        $("div#password").hide();
+      }
+    });
+    $('#inputLockBoard').change(function () {
+      if (this.checked) {
+        $("div.lockBoard").show();
+      } else {
+        $("div.lockBoard").hide();
+      }
+    });
+  });
+
+  $('#createContest').submit(function (e) {
+    if ($('[name=languages]:checked').size() == 0) {
+      e.preventDefault();
+      $.dialog({
+        content: 'You must select at least one language.',
+        time: 2
+      });
+    }
+  });
+
+  $('#startTime').datetimepicker({
+    format: "yyyy-mm-dd hh:ii",
+    autoclose: true,
+    todayBtn: true,
+    pickerPosition: "bottom-left",
+    //minuteStep: 30
+
+  }).on('changeDate', function (ev) {
+    var time = ev.date.valueOf();
+    var date = formatDate(new Date(time + 3600000));
+    var endDate = formatDate(new Date(time + 18000000));
+
+    $('#inputEndTime').val(endDate);
+    $('#endTime').datetimepicker('setStartDate', date);
+  });
+
+  $("#endTime").datetimepicker({
+    format: "yyyy-mm-dd hh:ii",
+    autoclose: true,
+    todayBtn: true,
+    pickerPosition: "bottom-left",
+    startDate: "${startDateTime!}",
+    //minuteStep: 30
+  });
+</script>
+</@override>
+<@extends name="../_layout.html"></@extends>

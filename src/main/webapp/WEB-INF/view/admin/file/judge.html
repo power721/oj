@@ -1,0 +1,118 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">评测文件</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <#if dir??>
+    <li>
+      <a href="admin/file/judge">文件管理</a>
+      <span class="divider">/</span>
+    </li>
+    <#assign index = dir?index_of("/")>
+    <#if index != -1>
+      <#assign sub = dir[0..<index]>
+      <li>
+        <a href="admin/file/judge/?dir=${sub}">${sub}</a>
+        <span class="divider">/</span>
+      </li>
+    </#if>
+  </#if>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h4>Judge Files: ${dir!}</h4>
+        <div>
+          <#if files??>
+            <table id="data-files" class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>File</th>
+                <th>Type</th>
+                <th>Permissions</th>
+                <th>User</th>
+                <th>Group</th>
+                <th>Size</th>
+                <th>Modified</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+                <#list files as file>
+                <tr>
+                  <td>${file_index+1}</td>
+                  <td class="file">
+                    <#if file.directory==true><a
+                            href="admin/file/judge/?dir=<#if dir?? && dir?has_content>${dir!?url}/</#if>${file.name!?url}">${file.name}</a>
+                    <#else>
+                      <a href="admin/file/view/?dir=${dir!?url}&name=${file.name!?url}">${file.name}</a>
+                    </#if>
+                  </td>
+                  <td class="type">${file.type}</td>
+                  <td class="permissions">${file.perm}</td>
+                  <td class="user">${file.user}</td>
+                  <td class="group">${file.group}</td>
+                  <td class="size" size="${file.size}"></td>
+                  <td class="timestamp" data="${file.modifyTime}"></td>
+                  <td class="action" name="${file.name}">
+                    <#if file.directory==true>
+                      <a class="btn btn-primary view"
+                         href="admin/file/judge/?dir=<#if dir?? && dir?has_content>${dir!?url}/</#if>${file.name!?url}">View</a>
+                    <#else>
+                      <a class="btn btn-primary view" href="admin/file/view/?dir=${dir!?url}&name=${file.name!?url}">View</a>
+                    </#if>
+                    <a class="btn btn-info download"
+                       href="admin/file/download/?dir=${dir!?url}&name=${file.name!?url}">Download</a>
+                  </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+          </#if>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+
+<@override name="styles">
+<link rel="stylesheet" href="assets/bootstrap-modal/bootstrap-modal.css" type="text/css">
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
+<link rel="stylesheet" href="assets/tipsy/css/tipsy.css" type="text/css">
+<link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css" type="text/css">
+</@override>
+
+<@override name="scripts">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modal.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modalmanager.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#data-files").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
+    });
+
+    $('.size').each(function () {
+      $(this).html(num2size($(this).attr('size')));
+    });
+  });
+</script>
+
+<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
+</@override>
+<@extends name="../_layout.html"></@extends>

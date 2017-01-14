@@ -1,0 +1,635 @@
+.oj-icon {
+    display: inline-block;
+    *margin-right: .3em;
+    line-height: 14px;
+    vertical-align: text-top;
+    background: url(images/oj-icons.png) no-repeat 14px 14px;
+}
+
+.oj-icon:last-child {
+    *margin-left: 0;
+}
+
+.oj-icon-accept {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -5px;
+}
+
+.oj-icon-add {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -5px;
+}
+
+.oj-icon-application-view-columns {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -5px;
+}
+
+.oj-icon-application-view-detail {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -5px;
+}
+
+.oj-icon-application-view-gallery {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -5px;
+}
+
+.oj-icon-application-view-icons {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -5px;
+}
+
+.oj-icon-application-view-list {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -5px;
+}
+
+.oj-icon-application-view-tile {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -5px;
+}
+
+.oj-icon-attach {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -5px;
+}
+
+.oj-icon-calendar {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -5px;
+}
+
+.oj-icon-cancel {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -31px;
+}
+
+.oj-icon-chart-bar {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -31px;
+}
+
+.oj-icon-chart-organisation {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -31px;
+}
+
+.oj-icon-clock {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -31px;
+}
+
+.oj-icon-cog {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -31px;
+}
+
+.oj-icon-comment {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -31px;
+}
+
+.oj-icon-comment-add {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -31px;
+}
+
+.oj-icon-comment-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -31px;
+}
+
+.oj-icon-comment-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -31px;
+}
+
+.oj-icon-comments {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -31px;
+}
+
+.oj-icon-comments-add {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -57px;
+}
+
+.oj-icon-comments-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -57px;
+}
+
+.oj-icon-compress {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -57px;
+}
+
+.oj-icon-cut {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -57px;
+}
+
+.oj-icon-cut-red {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -57px;
+}
+
+.oj-icon-date {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -57px;
+}
+
+.oj-icon-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -57px;
+}
+
+.oj-icon-email {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -57px;
+}
+
+.oj-icon-email-add {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -57px;
+}
+
+.oj-icon-email-attach {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -57px;
+}
+
+.oj-icon-email-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -83px;
+}
+
+.oj-icon-email-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -83px;
+}
+
+.oj-icon-email-error {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -83px;
+}
+
+.oj-icon-email-go {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -83px;
+}
+
+.oj-icon-email-link {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -83px;
+}
+
+.oj-icon-email-open {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -83px;
+}
+
+.oj-icon-email-open-image {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -83px;
+}
+
+.oj-icon-error {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -83px;
+}
+
+.oj-icon-folder {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -83px;
+}
+
+.oj-icon-folder-page {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -83px;
+}
+
+.oj-icon-group {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -109px;
+}
+
+.oj-icon-group-add {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -109px;
+}
+
+.oj-icon-group-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -109px;
+}
+
+.oj-icon-group-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -109px;
+}
+
+.oj-icon-group-error {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -109px;
+}
+
+.oj-icon-group-gear {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -109px;
+}
+
+.oj-icon-group-go {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -109px;
+}
+
+.oj-icon-group-key {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -109px;
+}
+
+.oj-icon-group-link {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -109px;
+}
+
+.oj-icon-heart {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -109px;
+}
+
+.oj-icon-heart-add {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -135px;
+}
+
+.oj-icon-heart-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -135px;
+}
+
+.oj-icon-help {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -135px;
+}
+
+.oj-icon-hourglass {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -135px;
+}
+
+.oj-icon-information {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -135px;
+}
+
+.oj-icon-key {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -135px;
+}
+
+.oj-icon-lock {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -135px;
+}
+
+.oj-icon-lock-open {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -135px;
+}
+
+.oj-icon-page {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -135px;
+}
+
+.oj-icon-page-code {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -135px;
+}
+
+.oj-icon-page-white-c {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -161px;
+}
+
+.oj-icon-page-white-code {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -161px;
+}
+
+.oj-icon-page-white-code-red {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -161px;
+}
+
+.oj-icon-page-white-cplusplus {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -161px;
+}
+
+.oj-icon-page-white-text {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -161px;
+}
+
+.oj-icon-rosette {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -161px;
+}
+
+.oj-icon-sitemap {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -161px;
+}
+
+.oj-icon-sitemap-color {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -161px;
+}
+
+.oj-icon-star {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -161px;
+}
+
+.oj-icon-status-away {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -161px;
+}
+
+.oj-icon-status-busy {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -187px;
+}
+
+.oj-icon-status-offline {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -187px;
+}
+
+.oj-icon-status-online {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -187px;
+}
+
+.oj-icon-stop {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -187px;
+}
+
+.oj-icon-table {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -187px;
+}
+
+.oj-icon-tag {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -187px;
+}
+
+.oj-icon-tag-blue {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -187px;
+}
+
+.oj-icon-tag-blue-add {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -187px;
+}
+
+.oj-icon-tag-blue-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -187px;
+}
+
+.oj-icon-tag-blue-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -187px;
+}
+
+.oj-icon-tag-green {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -213px;
+}
+
+.oj-icon-tag-orange {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -213px;
+}
+
+.oj-icon-tag-pink {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -213px;
+}
+
+.oj-icon-tag-purple {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -213px;
+}
+
+.oj-icon-tag-red {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -213px;
+}
+
+.oj-icon-tag-yellow {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -213px;
+}
+
+.oj-icon-thumb-down {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -213px;
+}
+
+.oj-icon-thumb-up {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -213px;
+}
+
+.oj-icon-time {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -213px;
+}
+
+.oj-icon-user {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -213px;
+}
+
+.oj-icon-user-add {
+    width: 16px;
+    height: 16px;
+    background-position: -5px -239px;
+}
+
+.oj-icon-user-comment {
+    width: 16px;
+    height: 16px;
+    background-position: -31px -239px;
+}
+
+.oj-icon-user-delete {
+    width: 16px;
+    height: 16px;
+    background-position: -57px -239px;
+}
+
+.oj-icon-user-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -83px -239px;
+}
+
+.oj-icon-user-female {
+    width: 16px;
+    height: 16px;
+    background-position: -109px -239px;
+}
+
+.oj-icon-user-go {
+    width: 16px;
+    height: 16px;
+    background-position: -135px -239px;
+}
+
+.oj-icon-user-gray {
+    width: 16px;
+    height: 16px;
+    background-position: -161px -239px;
+}
+
+.oj-icon-user-green {
+    width: 16px;
+    height: 16px;
+    background-position: -187px -239px;
+}
+
+.oj-icon-user-orange {
+    width: 16px;
+    height: 16px;
+    background-position: -213px -239px;
+}
+
+.oj-icon-user-red {
+    width: 16px;
+    height: 16px;
+    background-position: -239px -239px;
+}
+
+.oj-icon-user-suit {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -5px;
+}
+
+.oj-icon-vcard {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -31px;
+}
+
+.oj-icon-vcard-edit {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -57px;
+}
+
+.oj-icon-wrench {
+    width: 16px;
+    height: 16px;
+    background-position: -265px -83px;
+}

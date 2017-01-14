@@ -1,0 +1,307 @@
+<@override name="contest_content">
+  <#assign type="Private<sup>${contest.type}</sup>">
+  <#if contest.type==0>
+    <#assign type="Public">
+  </#if>
+<h3 class="text-center">${type} Contest ${contest.cid!}: ${contest.title!}</h3>
+<div class="row text-center">
+  <div class="span6 offset3">
+    <#if status=="Finished">
+      <#if contest.lockBoard==true>
+        <a href="contest/unlockBoard/${contest.cid!}" id="unlock-board" class="btn btn-warning">Unlock Board</a>
+      <#else>
+        <a href="contest/lockBoard/${contest.cid!}" id="lock-board" class="btn btn-warning">Lock Board</a>
+      </#if>
+      <#if contest.report??>
+        <#if contest.lockReport==true>
+          <a href="contest/unlockReport/${contest.cid!}" id="unlock-report" class="btn btn-warning">Unlock Report</a>
+        <#else>
+          <a href="contest/lockReport/${contest.cid!}" id="lock-report" class="btn btn-warning">Lock Report</a>
+        </#if>
+      </#if>
+    </#if>
+    <#if status!="Pending">
+      <a href="contest/rejudge/${contest.cid!}" class="btn btn-danger">Rejudge</a>
+    </#if>
+    <div class="well">
+      <span>Start Time</span>: <span class="time">${contest.startDateTime!}</span>
+      <span>End Time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <#if contest.lockBoard==true>
+        <span>Lock Board Time</span>: <span class="time" id="lockBoardTime">${contest.lockBoardDateTime!}</span>
+        <span>Unlock Board Time</span>: <span class="time"
+                                              id="unlockBoardTime">${contest.unlockBoardDateTime!}</span><br>
+      </#if>
+      <span>Current System Time</span>: <span class="time" id="current">${contest.startDateTime!}</span>
+      <span>Contest Status</span>: <span class="status ${status!}">${status!}</span>
+    </div>
+  </div>
+</div>
+<div class="row text-center">
+  <div class="span4 offset4">
+    <p>${contest.description!}</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span10 offset1">
+    <table id="problem-list" class="table table-hover table-condensed">
+      <thead>
+      <tr>
+        <th width="5%">ID</th>
+        <th width="10%">Problem</th>
+        <th width="30%">Title</th>
+        <th width="10%">Time</th>
+        <th width="10%">Memeory</th>
+        <th width="10%">AC</th>
+        <th width="10%">Submit</th>
+        <th width="15%">Action</th>
+      </tr>
+      </thead>
+      <tbody>
+        <#if contestProblems??>
+          <#list contestProblems as Problem>
+          <tr class="problem" pid="${Problem.pid!}">
+            <td>
+            <#if serverTime<contest.startTime><i class="icon-resize-vertical"></i></#if>
+            <span class="id"></span></td>
+            <td class="pid">
+              <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
+            </td>
+            <td class="title"><a href="contest/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a></td>
+            <td class="time">${Problem.timeLimit!} MS</td>
+            <td class="memory">${Problem.memoryLimit!} KB</td>
+            <td class="accept"><a
+                    href="contest/status/${contest.cid!}?pid=${Problem.id!}&result=0">${Problem.accepted!}</a></td>
+            <td class="submit"><a href="contest/status/${contest.cid!}?pid=${Problem.id!}">${Problem.submission!}</a>
+            <td class="admin">
+            <#if serverTime<contest.startTime>
+              <button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button>
+            </#if>
+              <a href="contest/editProblem/${contest.cid!}-${Problem.id!}" class="btn btn-primary">Edit</a>
+            <#if serverTime &gt; contest.startTime>
+              <a href="contest/rejudgeProblem/${contest.cid!}-${Problem.id!}" class="btn btn-danger">Rejudge</a>
+            </#if>
+            </td>
+          </tr>
+          </#list>
+        </#if>
+      </tbody>
+      <#if serverTime<contest.endTime>
+        <tfoot>
+        <tr>
+          <form class="form-inline" id="addProblem" action="/api/contest/addProblem" method="post">
+            <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
+            <td><input type="number" name="pid" class="input-small" min="1000" placeholder="Problem ID" required></td>
+            <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
+            <td></td>
+            <td></td>
+            <td>
+              <button type="submit" class="btn btn-success">Add</button> <#if serverTime<contest.startTime><a
+                    class="btn btn-info hidden" id="reorder">Save</a></#if></td>
+          </form>
+        </tr>
+        </tfoot>
+      </#if>
+    </table>
+  </div>
+</div>
+
+</@override>
+
+<@override name="styles">
+<link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
+</@override>
+<@override name="scripts">
+  <#if oj_style != "slate">
+  <link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet" type="text/css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+  </#if>
+
+<script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    jQuery.ajaxSetup({
+      cache: true
+    });
+
+    clock(function (current_time) {
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+    }, 1000);
+
+    function getProblemTitle() {
+      var pid = this.value;
+      if (pid >= 1000) {
+        $.get("/api/problem/getField", {name: "title", pid: this.value},
+                function (data) {
+                  if (data.result) {
+                    $("input[name='title']").val(data.result);
+                  }
+                  else {
+                    $("input[name='title']").val('');
+                  }
+                });
+      }
+      else {
+        $("input[name='title']").val('');
+      }
+    }
+
+    $("input[name='pid']").change(getProblemTitle).keyup(getProblemTitle);
+
+    // Return a helper with preserved width of cells
+    var fixHelper = function (e, ui) {
+      ui.children().each(function () {
+        $(this).width($(this).width());
+      });
+      return ui;
+    };
+
+    function updateId() {
+      $("#problem-list tbody tr").each(function (i, e) {
+        var newId = String.fromCharCode(65 + i);
+        $(e).children().children('.id').html(newId);
+      });
+    }
+
+    updateId();
+    <#if serverTime<contest.startTime>
+      $("#problem-list tbody").sortable({
+        helper: fixHelper,
+        connectWith: "tr",
+        stop: function (e, info) {
+          info.item.after(info.item.parents('tr'));
+          $('#reorder').removeClass('hidden');
+          updateId();
+        }
+      }).disableSelection();
+    </#if>
+
+    <#if oj_style != "slate">
+      $("#problem-list").tablecloth({
+        theme: "stats",
+        condensed: true,
+        sortable: false,
+        striped: true,
+        clean: true
+      });
+    </#if>
+
+    $(function () {
+      $('#addProblem').submit(function () {
+        var that = $(this);
+        var cid = $('input[name=cid]').val();
+        var pid = $('input[name=pid]').val();
+        var title = $('input[name=title]').val();
+        $.post($(this).attr("action"), $('#addProblem').serialize(),
+                function (data) {
+                  switch (data.result) {
+                    case -1:
+                      $.dialog({
+                        content: 'Db error.',
+                        time: 1.5
+                      });
+                      break;
+                    case -2:
+                      $.dialog({
+                        content: 'Too many problems in this contest.',
+                        time: 1.5
+                      });
+                      break;
+                    case -3:
+                      $.dialog({
+                        content: 'Duplicate problems for this contest.',
+                        time: 1.5
+                      });
+                      break;
+                    case -4:
+                      $.dialog({
+                        content: 'This problem does not exist.',
+                        time: 1.5
+                      });
+                      break;
+                    case -5:
+                      $.dialog({
+                        content: 'Contest already finished.',
+                        time: 1.5
+                      });
+                      break;
+                    default:
+                      var html = '<tr class="problem" pid="' + pid + '">' +
+                              '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>'
+                              + '<td class="pid"><a href="problem/show/' + pid + '" target="_blank">' + pid + '</a></td>'
+                              + '<td class="title"><a href="contest/problem/' + cid + '-' + String.fromCharCode(65 + data.result) + '">' + title + '</a></td>'
+                              + '<td class="accept"><a href="contest/status/' + cid + '?pid=' + pid + '&result=0"></a></td>'
+                              + '<td class="submit"><a href="contest/status/' + cid + '?pid=' + pid + '"></a></td>'
+                              + '<td class="admin">' +
+                                <#if serverTime<contest.startTime>
+                                '<button class="btn btn-danger remove" pid="' + pid + '">Remove</button>\n' +
+                                '<a href="contest/editProblem/'+ cid+ '-'+ pid+ '" class="btn btn-primary">Edit</a>' +
+                                </#if>
+                              '</td>' +
+                              '</tr>';
+                      $('#problem-list tbody').append(html);
+                      updateId();
+                      break;
+                  }
+                });
+        return false;
+      });
+      $('#reorder').click(function () {
+        var data = {cid:${contest.cid!}, pid: ''};
+        $("#problem-list tbody tr.problem").each(function (i, e) {
+          data.pid += $(e).attr('pid') + ',';
+        });
+        data.pid = data.pid.substring(0, data.pid.length - 1);
+        $.post('/api/contest/reorderProblem', data, function (data) {
+          if (data.success) {
+            $.dialog({
+              content: 'Reorder problem success.',
+              time: 1
+            });
+          }
+          else {
+            $.dialog({
+              content: data.result,
+              time: 1.5
+            });
+          }
+        });
+      });
+      $('table').on('click', '.remove', function () {
+        var that = $(this);
+        $.dialog({
+          title: 'Remove problem from contest',
+          content: 'Are you sure?',
+          cancelVal: 'Cancel',
+          cancel: true,
+          okVal: 'Remove',
+          ok: function () {
+            $.post('/api/contest/removeProblem', {cid:${contest.cid!}, pid: that.attr('pid')}, function (data) {
+              if (data.success) {
+                that.parent().parent().remove();
+                updateId();
+                $.dialog({
+                  content: 'Problem removed.',
+                  time: 1
+                });
+              }
+              else {
+                $.dialog({
+                  content: data.result,
+                  time: 1.5
+                });
+              }
+            });
+            this.close();
+            return false;
+          }
+        });
+      });
+    });
+  });
+</script>
+</@override>
+<@extends name="_layout.html" />

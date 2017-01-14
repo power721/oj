@@ -1,0 +1,72 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title"><#if type?? && type=="resource">资源<#elseif type?? && type=="image">图片<#else>评测</#if>文件</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+<#if type?? && type=="resource">
+    <#assign parent = "resources">
+<#elseif type?? && type=="image">
+  <#assign parent = "images">
+<#else>
+    <#assign parent = "judge">
+</#if>
+
+  <li>
+    <a href="admin/file/${parent!}">文件管理</a>
+    <span class="divider">/</span>
+  </li>
+  <#if dir?? && dir!="">
+    <#assign index = dir?index_of("/")>
+    <#if index != -1>
+      <#assign sub = dir[0..<index]>
+      <#assign end = dir[index+1..]>
+      <li>
+        <a href="admin/file/${parent!}/?dir=${sub}">${sub}</a>
+        <span class="divider">/</span>
+      </li>
+      <li>
+        <a href="admin/file/${parent!}/?dir=${dir}">${end}</a>
+        <span class="divider">/</span>
+      </li>
+    <#else>
+      <li>
+        <a href="admin/file/${parent!}/?dir=${dir}">${dir}</a>
+        <span class="divider">/</span>
+      </li>
+    </#if>
+  </#if>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h4>View File:
+          <a href="admin/file/download/?dir=${dir!}&name=${name!?url}&type=${type!}">
+            <#if dir?? && dir?has_content>${dir!}/</#if>${name!}
+          </a>
+        </h4>
+        <div>
+          <#if path??>
+            <img src="${path!}">
+          <#else>
+            <textarea rows="40" cols="160">${content}</textarea>
+          </#if>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+<@override name="styles">
+<style>
+  textarea {
+    width: auto;
+  }
+</style>
+</@override>
+
+<@extends name="../_layout.html"></@extends>

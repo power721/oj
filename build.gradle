@@ -7,6 +7,12 @@ apply plugin: 'war'
 def webRoot = "WebRoot"
 def webInfPath = webRoot + "/" + "WEB-INF"
 
+allprojects {
+    apply plugin: 'java'
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
+
 // Repositories accessed from local directory
 repositories {
     flatDir { 
