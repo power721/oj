@@ -107,8 +107,11 @@ public final class SessionService {
 
         for (Session session : ShiroKit.getActiveSessions()) {
             SessionView sessionView = new SessionView();
+            
             String id = (String) session.getId();
-
+            if(getUserAgent(id) == null) {
+                continue;
+            }
             sessionView.setId(id);
             sessionView.setName((String) session.getAttribute(OjConstants.USER_NAME));
             sessionView.setUri((String) session.getAttribute(OjConstants.LAST_ACCESS_URL));
