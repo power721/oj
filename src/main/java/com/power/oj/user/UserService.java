@@ -434,12 +434,9 @@ public final class UserService {
             return false;
         }
         userModel.setAccepted(userModel.getAccepted() + 1);
-        Integer lastAccepted =
-            Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1",
-                pid, uid, sid, ResultType.AC);
-        if (lastAccepted == null) {
-            userModel.setSolved(userModel.getSolved() + 1);
-        }
+         userModel.set("solved",
+            Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
+                ResultType.AC));
         updateCache(userModel);
 
         return userModel.update();
@@ -464,12 +461,9 @@ public final class UserService {
             return false;
         }
         userModel.setAccepted(userModel.getAccepted() - 1);
-        Integer lastAccepted =
-            Db.queryInt("SELECT sid FROM solution WHERE pid=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1",
-                pid, uid, sid, ResultType.AC);
-        if (lastAccepted == null) {
-            userModel.setSolved(userModel.getSolved() - 1);
-        }
+        userModel.set("solved",
+            Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
+                ResultType.AC));
         updateCache(userModel);
 
         return userModel.update();
