@@ -1,0 +1,334 @@
+<@override name="content">
+<div id="rejudge" class="hide row">
+  <span>Rejudge Progress:</span>
+  <div class="progress progress-danger progress-striped active">
+    <div id="rejudge-progress" class="bar" style="width: 0%;"></div>
+    <span id="rejudge-status"></span>
+  </div>
+</div>
+<ul class="pager">
+  <li class="previous <#if prevPid==problem.pid>disabled</#if>">
+    <a href="problem/show/${prevPid!}" title="Show previous problem."><i class="icon-arrow-left"></i></a>
+  </li>
+  <li>
+    <a href="problem/random" title="Try another problem."><i class="icon-random"></i></a>
+  </li>
+  <li class="next <#if nextPid==problem.pid>disabled</#if>">
+    <a href="problem/show/${nextPid!}" title="Show next problem."><i class="icon-arrow-right"></i></a>
+  </li>
+</ul>
+
+<div class="row text-center">
+  <h2>
+    <#if userResult??>
+      <i class="oj-icon oj-icon-<#if userResult==0>accept<#else>delete</#if>"></i>
+    </#if>
+    <span class="black pts">${problem.pid!0}:</span>
+    <#if problem.status==false>
+    <del></#if>
+    <span class="title" id="title">${problem.title!}</span>
+    <#if problem.status==false></del></#if>
+    <#if spj?? && spj><span class="badge badge-important">SPJ</span><br></#if>
+  </h2>
+  <#if adminUser??>
+    <div class="problem-admin">
+      <a href="problem/edit/${problem.pid!}?ajax=1" data-toggle="modal" data-target="#editModal"
+         class="btn btn-primary">Edit</a>
+      <a class="btn btn-success" href="admin/problem/data/${problem.pid!}" target="_blank">Manage Data</a>
+      <a href="problem/rejudge/${problem.pid!}" class="btn btn-danger">Rejudge</a>
+    </div>
+  </#if>
+  Time Limit: <span class="badge badge-info" id="time">${problem.timeLimit!} MS</span>
+  Memory Limit: <span class="badge badge-info" id="memory">${problem.memoryLimit!} KB</span><br>
+  Total Submit: <a href="status?pid=${problem.pid!}">${problem.submission!}</a>
+  Accepted: <a href="status?pid=${problem.pid!}&result=0">${problem.accepted!}</a>
+  Page View: <span class="blue">${problem.view!}</span><br>
+  <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
+     data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
+  <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
+  <a href="discuss?pid=${problem.pid!}" class="btn btn-info">Discuss</a>
+</div>
+
+  <#if adminUser??>
+  <div class="modal hide fade problemModal" id="editModal">
+    <form class="" action="problem/update" id="editPorblemForm" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="editModalLabel">
+          Edit Problem ${problem.pid!}:
+          <a href="problem/edit/${problem.pid!}" title="Edit in another page" data-toggle="tooltip"
+             data-placement="bottom">${problem.title!}</a>
+        </h3>
+        <p class="text-info">点击上面链接，使用编辑器</p>
+      </div>
+      <div class="modal-body">
+        <a href="problem/edit/${problem.pid!}" class="btn btn-primary">Edit</a>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-info">Reset</button>
+        <button class="btn" data-dismiss="modal">Cancel</button>
+      </div>
+    </form>
+  </div>
+  </#if>
+  <#if user??>
+  <div class="modal hide fade problemModal" id="submitModal">
+    <form class="" id="submitForm" action="solution/save" method="post">
+      <div class="modal-header">
+        <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <h3 id="submitModalLabel">
+          Submit Problem ${problem.pid!}:<a href="problem/submit/${problem.pid!}"
+                                            title="Submit in another page" data-toggle="tooltip"
+                                            data-placement="bottom">${problem.title!}</a>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <!--<a href="problem/submit/${problem.pid!}" class="btn btn-primary">Submit</a>-->
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          Sorry, youd don't have permission to submit solution.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="pull-left">
+          <p class="text-error" id="error"></p>
+        </div>
+        <button type="submit" id="Submit" class="btn btn-primary" accesskey="s">Submit</button>
+        <button class="btn" data-dismiss="modal" accesskey="x">Cancel</button>
+      </div>
+    </form>
+  </div>
+  </#if>
+
+<div class="row">
+  <section id="s-description">
+    <div class="page-header">
+      <h4>Description <i class="icon-chevron-up"></i></h4>
+    </div>
+    <div class="content pre" id="description">${problem.description!}</div>
+  </section>
+</div>
+
+<div class="row">
+  <section id="s-input">
+    <div class="page-header">
+      <h4>Input <i class="icon-chevron-up"></i></h4>
+    </div>
+    <div class="content pre" id="input">${problem.input!}</div>
+  </section>
+</div>
+
+<div class="row">
+  <section id="s-output">
+    <div class="page-header">
+      <h4>Output <i class="icon-chevron-up"></i></h4>
+    </div>
+    <div class="content pre" id="output">${problem.output!}</div>
+  </section>
+</div>
+
+<div class="row">
+  <section id="s-sampleInput">
+    <div class="tabbable content" id="d-sampleInput">
+      <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
+        <li><a href="#tab2" data-toggle="tab">Raw</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab1">
+          <div class="pre">${problem.sampleInput!}</div>
+        </div>
+        <div class="tab-pane" id="tab2">
+        <textarea id="sampleInput" class="auto-width" rows="${problem.sample_input_rows!12}"
+                  cols="185">${problem.sampleInput!}</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="row">
+  <section id="s-sampleOutput">
+    <div class="tabbable content" id="d-sampleOutput">
+      <!-- Only required for left/right tabs -->
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
+        <li><a href="#tab4" data-toggle="tab">Raw</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab3">
+          <div class="pre">${problem.sampleOutput!}</div>
+        </div>
+        <div class="tab-pane" id="tab4">
+        <textarea id="sampleOutput" class="auto-width" rows="${problem.sample_output_rows!12}"
+                  cols="185">${problem.sampleOutput!}</textarea>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+  <#if problem.hint?? && problem.hint!="">
+  <div class="row">
+    <section id="s-hint">
+      <div class="page-header">
+        <h4>Hint <i class="icon-chevron-up"></i></h4>
+      </div>
+      <div class="content pre" id="hint">${problem.hint!}</div>
+    </section>
+  </div>
+  </#if>
+
+  <#if problem.source?? && problem.source!="">
+  <div class="row">
+    <section id="s-source">
+      <div class="page-header">
+        <h4>Source <i class="icon-chevron-up"></i></h4>
+      </div>
+      <div class="content pre" id="source"><a href="problem/search?word=${problem.source!}&scope=source" data-toggle="tooltip"
+            title="Search other problems">${problem.source!}</a></div>
+    </section>
+  </div>
+  </#if>
+
+<div class="row">
+  <section id="s-tag">
+    <div class="page-header">
+      <h4>Tags<#if (tagList?? && tagList?size>0)>(${tagList?size})</#if> <i class="icon-chevron-down"></i></h4>
+    </div>
+    <div class="content" id="tags" style="display: none;">
+      <#if tagList??>
+      <#list tagList as Tag>
+        <span data-tid="${Tag.id!}" class="tag">
+        <a href="problem/search?word=${Tag.name!}&scope=tag" title="${Tag.user!}" data-toggle="tooltip">
+        ${Tag.name!}
+        </a>
+          <#if adminUser?? || (user?? && Tag.uid?? && user.uid==Tag.uid)>
+            <div data-tid="${Tag.id!}" title="delete the tag" class="delete-tag">&times;</div>
+          </#if>
+      </span>
+      </#list>
+      </#if>
+    </div>
+    <@shiro.hasPermission name="problem:addTag">
+      <input type="text" id="addTag" class="input-small" name="tag" placeholder="Add a tag">
+    </@shiro.hasPermission>
+  </section>
+</div>
+
+<div class="row">
+  <div class="text-center">
+    <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
+       data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
+    <a href="problem/status/${problem.pid!}" class="btn btn-info">Status</a>
+    <a href="discuss?pid=${problem.pid!}" class="btn btn-info">Discuss</a>
+  </div>
+</div>
+</@override>
+
+<@override name="styles">
+<style>
+  h2 .oj-icon {
+    vertical-align: baseline;
+  }
+</style>
+</@override>
+
+<@override name="scripts">
+<script type="text/javascript" async src="/assets/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+  menuSettings: {zoom: "Click"}
+  });
+</script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    <@shiro.hasPermission name="problem:addTag">
+      $('#addTag').keypress(function (e) {
+        if (e.which == 13) {
+          var pid = ${problem.pid!0};
+          var that = $(this);
+          var tag = $(this).val();
+          if (!tag) {
+            return;
+          }
+
+          $.post('/api/problem/addTag', {'pid': pid, 'tag': tag}, function (data) {
+            if (data) {
+              that.val("");
+              if (data.name) {
+                var html = '<span data-tid="' + data.id + '" class="tag"><a href="problem/search?word='
+                        + data.name + '&scope=tag" title="' + data.user + '" data-toggle="tooltip">'
+                        + data.name + ' </a><div data-tid="'
+                        + data.id + '" title="delete the tag" class="delete-tag">&times;</div></span>';
+                $('#tags').append(html);
+              } else if (data.id) {
+                var id = data.id;
+                $('span[data-tid=' + id + ']').fadeOut(200).fadeIn();
+              }
+            }
+          });
+        }
+      });
+
+      $('#tags').delegate('.delete-tag', 'click', function () {
+        var that = $(this).parent();
+        var tid = $(this).data('tid');
+        var pid = ${problem.pid!0};
+        $.post('/api/problem/removeTag', {'pid': pid, 'tid': tid}, function (data) {
+          if (data) {
+            that.remove();
+          }
+        });
+      });
+    </@shiro.hasPermission>
+
+    jQuery.ajaxSetup({
+      cache: true
+    });
+    var prevpage = "/problem/show/${prevPid!}";
+    var nextpage = "/problem/show/${nextPid!}";
+    $(document).keydown(function (event) {
+        <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
+    });
+
+    <#if isRejudging?? && isRejudging==true>
+      $('#rejudge').removeClass('hide');
+      var refresh = setInterval(function () {
+        refreshResult();
+      }, 2500);
+
+      function refreshResult() {
+        $.getJSON('/api/problem/rejudgeStatus/' + ${problem.pid}, function (data) {
+          var total = data.total;
+          var count = data.count;
+          if (count < total) {
+            $('#rejudge-progress').css('width', (count / total * 100) + '%');
+            $('#rejudge-status').text(count + '/' + total);
+          } else {
+            clearInterval(refresh);
+            $('#rejudge').addClass('hide');
+            $('div.alert').remove();
+          }
+        });
+      }
+    </#if>
+    $('.page-header').click(function () {
+      $(this).siblings('.content').fadeToggle();
+      $(this).children().children().toggleClass('icon-chevron-up icon-chevron-down');
+    });
+  });
+</script>
+
+  <#if enableDict??>
+  <script src="http://dict.cn/hc/" type="text/javascript"></script>
+  <script type="text/javascript">
+    dictInit();
+  </script>
+  </#if>
+</@override>
+<@extends name="../common/_layout.html" />

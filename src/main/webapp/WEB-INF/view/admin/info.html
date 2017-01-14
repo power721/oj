@@ -1,0 +1,224 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">OJ详情</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">信息</li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <span>
+          <button id="reload" class="btn btn-info">Reload</button>
+        </span>
+        <table id="oj-info" class="table table-hover table-condensed">
+          <thead>
+          <tr>
+            <th>OJ Information</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Dev Mode</td>
+            <td><#if devMode>True<#else>False</#if></td>
+          </tr>
+          <tr>
+            <td>Sit Title</td>
+            <td><a href="#" id="siteTitle">${siteTitle!}</a></td>
+          </tr>
+          <tr>
+            <td>Web Root</td>
+            <td>${webRootPath!}</td>
+          </tr>
+          <tr>
+            <td>View Path</td>
+            <td>${baseViewPath!}</td>
+          </tr>
+          <tr>
+            <td>Problem Image Path</td>
+            <td><a href="#" id="problemImagePath">${problemImagePath!}</a></td>
+          </tr>
+          <tr>
+            <td>User Avatar Path</td>
+            <td><a href="#" id="userAvatarPath">${userAvatarPath!}</a></td>
+          </tr>
+          <tr>
+            <td>Download Path</td>
+            <td><a href="#" id="downloadPath">${downloadPath!}</a></td>
+          </tr>
+          <tr>
+            <td>Upload Path</td>
+            <td><a href="#" id="uploadPath">${uploadPath!}</a></td>
+          </tr>
+          <tr class="info">
+            <td colspan="2">&nbsp;&nbsp;</td>
+          </tr>
+          <tr>
+            <td>Work Directory</td>
+            <td><a href="#" id="workPath">${workPath!}</a></td>
+          </tr>
+          <tr>
+            <td>Data Directory</td>
+            <td><a href="#" id="dataPath">${dataPath!}</a></td>
+          </tr>
+          <tr>
+            <td>Judge Host</td>
+            <td><a href="#" id="judgeHost">${judgeHost!}</a></td>
+          </tr>
+          <tr>
+            <td>Judge Port</td>
+            <td><a href="#" id="judgePort">${judgePort!}</a></td>
+          </tr>
+          <tr>
+            <td>Judge Security</td>
+            <td><a href="#" id="judgeSecurity">${judgeSecurity!}</a></td>
+          </tr>
+          <#if adminEmail??>
+          <tr>
+            <td>Admin Email</td>
+            <td><a href="#" id="adminEmail">${adminEmail!}</a></td>
+          </tr>
+          </#if>
+          <#if emailServer??>
+          <tr>
+            <td>Email Server</td>
+            <td><a href="#" id="emailServer">${emailServer!}</a></td>
+          </tr>
+          </#if>
+          <#if emailUser??>
+          <tr>
+            <td>Email User</td>
+            <td><a href="#" id="emailUser">${emailUser!}</a></td>
+          </tr>
+          </#if>
+          <#if emailPass??>
+          <tr>
+            <td>Email Password</td>
+            <td><a href="#" id="emailPass">${emailPass!}</a></td>
+          </tr>
+          </#if>
+          <#--<tr>-->
+          <#--<td>Error File</td>-->
+          <#--<td><a href="#" id="errorFile">${errorFile!}</a></td>-->
+          <#--</tr>-->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+<@override name="scripts">
+<link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#reload').click(function () {
+      $.get('/api/admin/reload', function (data) {
+        window.location.reload();
+      });
+    });
+
+    var apiUrl = '/api/admin/updateConfig';
+    $.fn.editable.defaults.mode = 'inline';
+    $.fn.editable.defaults.url = apiUrl;
+    $('#siteTitle').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change site title'
+    });
+    $('#problemImagePath').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change problem image path'
+    });
+    $('#userAvatarPath').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change user avatar path'
+    });
+    $('#downloadPath').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change download path'
+    });
+    $('#uploadPath').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change upload path'
+    });
+    $('#workPath').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change judge work directory'
+    });
+    $('#dataPath').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change judge data path'
+    });
+    $('#judgeHost').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change judge server IP'
+    });
+    $('#judgePort').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'int'},
+      title: 'Change judge server port'
+    });
+    $('#judgeSecurity').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change judge server security password'
+    });
+    $('#adminEmail').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email'
+    });
+    $('#emailServer').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email Server'
+    });
+    $('#emailUser').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email User'
+    });
+    $('#emailPass').editable({
+      type: 'text',
+      pk: 0,
+      params: {type: 'string'},
+      title: 'Change Email Password'
+    });
+//    $('#errorFile').editable({
+//      type: 'text',
+//      pk: 0,
+//      params: {type: 'string'},
+//      title: 'Change POJ judge error file path'
+//    });
+  });
+</script>
+</@override>
+<@extends name="_layout.html"></@extends>

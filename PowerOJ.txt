@@ -1,4 +1,4 @@
-﻿用户注册    OK
+用户注册    OK
 用户登录    OK
 用户退出    OK
 用户信息    -OK
@@ -9,7 +9,7 @@
 在线用户    -OK
 更新用户    OK
 找回密码    OK
-用户比较
+用户比较    OK
 新用户
 用户角色    -OK
 用户群组
@@ -30,15 +30,15 @@ session管理   -OK
 题目统计    OK
 题目测试
 数据管理    -OK
-图片管理
+图片管理    OK
 
 Judge            -OK
-ReJudge          -
+ReJudge          -OK
 Special Judge  -OK
 提交代码        -Ok
 提交状态        -OK
 查看代码        -OK
-AC共享计划      
+AC共享计划      OK
 提交统计        
 最近提交排名
 
@@ -58,10 +58,11 @@ AC共享计划
 添加比赛题目    OK
 添加比赛用户    OK
 其它OJ比赛列表  OK
+星号队         OK
 
 帖子列表   -OK
 查看帖子   -OK
-发布帖子   -
+发布帖子   -OK
 编辑帖子
 删除帖子
 搜索帖子
@@ -93,39 +94,38 @@ AJAX支持
 -------------------------------
 TODO
 
---------------------------------
 美化
 Color of Nick:
 特权用户
-用户头像
+用户头像     OK
 题目搜索title source    
 FAQ完善   
 帖子折叠
 帖子搜索        
 隐藏帖子        
-管理员删除帖子     
+管理员删除帖子
 用户删除自己的帖子
 编辑帖子
 题目字体选择  
 题目分类
 题目级别
-TAG     
+TAG       OK
 problem status 用户合并 
 problem status Statistics   
 用户信息完善
-找回密码
+找回密码       OK
 批量删除mail
 清空mail
 系统mail
 Rejudge选项
-Online Users    
+Online Users    OK
 New Users   
 SourceBrowser       
-modify contest  
-Login Log   
-Archive代码下载     
-提交中文代码      
-private contest 
+modify contest  OK
+Login Log       OK
+Archive代码下载    OK
+提交中文代码        OK
+private contest   OK
 比赛时禁止查看以前代码 
 比赛时不显示代码详情
 允许部分用户登录
@@ -137,7 +137,6 @@ diff文件
 用户权限：
 查看代码、编辑tag、编辑帖子、编辑题目、上传、头像
 
-chenxian test
 --------------------------- return code --------------------
 0  Success
 1  Bad Parameter
@@ -154,3 +153,18 @@ chenxian test
 12 Configuration Error
 13 System Error
 255 Unknown
+
+
+ALTER TABLE contest_clarify ADD CONSTRAINT contest_clarify_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_cid_pid_pk UNIQUE (cid, pid);
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_problem ADD CONSTRAINT contest_problem_problem_pid_fk FOREIGN KEY (pid) REFERENCES problem (pid);
+ALTER TABLE contest_solution ADD CONSTRAINT contest_solution_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_solution ADD CONSTRAINT contest_solution_user_uid_fk FOREIGN KEY (uid) REFERENCES user (uid);
+ALTER TABLE contest_solution ADD CONSTRAINT contest_solution_problem_pid_fk FOREIGN KEY (pid) REFERENCES problem (pid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE contest_user ADD CONSTRAINT contest_user_user_uid_fk FOREIGN KEY (uid) REFERENCES user (uid);
+ALTER TABLE board ADD CONSTRAINT board_cid_uid_pk UNIQUE (cid, uid);
+ALTER TABLE board ADD CONSTRAINT board_contest_cid_fk FOREIGN KEY (cid) REFERENCES contest (cid);
+ALTER TABLE board ADD CONSTRAINT board_user_uid_fk FOREIGN KEY (uid) REFERENCES user (uid);

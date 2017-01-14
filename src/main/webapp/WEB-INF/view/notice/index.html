@@ -1,0 +1,68 @@
+<@override name="content">
+
+<div class="pagination pagination-centered">
+  <#if adminUser??>
+    <div class="pull-left notice-admin">
+      <a href="notice/add" class="btn btn-primary">Add a notice</a>
+    </div>
+  </#if>
+  <#include "../common/_paginate.html" />
+  <@paginate currentPage=noticeList.pageNumber totalPage=noticeList.totalPage actionUrl="notice/" />
+  <div class="pull-right">
+    <span class="badge badge-info">${noticeList.pageNumber}/${noticeList.totalPage} Pages</span>
+    <span class="badge badge-info">${noticeList.totalRow} Records</span>
+  </div>
+</div>
+
+<table id="notice-list" class="table table-hover table-condensed">
+  <thead>
+  <tr>
+    <th width="10%">No.</th>
+    <th width="60%">Title</th>
+    <th width="10%">Publisher</th>
+    <th width="10%">Start Time</th>
+    <th width="10%">End Time</th>
+  </tr>
+  </thead>
+  <tbody>
+    <#if noticeList??>
+      <#list noticeList.list as notice>
+      <tr>
+        <td><a href="notice/show/${notice.id!}">${notice.id!}</a></td>
+        <td class="title"><a href="notice/show/${notice.id!}">${notice.title!}</a></td>
+        <td class="user"><a href="user/profile/${notice.name!}">${notice.name!}</a></td>
+        <td class="timestamp" data="${notice.startTime!}"></td>
+        <td class="timestamp" data="${notice.endTime!}"></td>
+      </tr>
+      </#list>
+    </#if>
+  </tbody>
+</table>
+</@override>
+
+<@override name="scripts">
+
+  <#if oj_style != "slate">
+  <link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
+  <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+  <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('.timestamp').each(function () {
+        var that = $(this);
+        that.html(parseTimestamp(that.attr('data')));
+      });
+
+      $("#notice-list").tablecloth({
+        theme: "stats",
+        condensed: true,
+        sortable: false,
+        striped: true,
+        clean: true
+      });
+    });
+  </script>
+  </#if>
+</@override>
+<@extends name="../common/_layout.html" />

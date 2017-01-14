@@ -1,10 +1,16 @@
 *.class
 *.java~
+oj-data.sql
 
 # Package Files #
 *.war
 *.ear
 *.log
+*.iml
 build/
 .gradle/
-
+.idea/
+.settings/
+target/
+src/main/webapp/WEB-INF/view/common/version.ftl
+src/main/webapp/WEB-INF/view/common/compilers.ftl

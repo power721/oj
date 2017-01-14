@@ -1,0 +1,55 @@
+<@override name="content">
+<ul class="nav nav-tabs" id="contest_nav">
+  <li class="<#if actionKey=="contest/show">active</#if>">
+    <a href="contest/show/${cid}">Information</a>
+  </li>
+  <li class="<#if methodName=="problem">active</#if>">
+    <a href="contest/problem/${cid}-A">Problems</a>
+  </li>
+  <li class="<#if methodName=="rank">active</#if>">
+    <a href="contest/rank/${cid!}">Rank</a>
+  </li>
+  <li class="<#if methodName=="status" || methodName== "problem_status" || controllerKey=="solution">active</#if>">
+    <a href="contest/status/${cid!}">Status</a>
+  </li>
+  <li class="<#if methodName=="statistics">active</#if>">
+    <a href="contest/statistics/${cid!}">Statistics</a>
+  </li>
+  <li class="<#if methodName=="clarify">active</#if>">
+    <a href="contest/clarify/${cid}">
+      Clarifications<#if clarifications?? && (clarifications>0)><span class="badge badge-important">${clarifications}</span></#if>
+    </a>
+  </li>
+  <#if (serverTime > contest.endTime || adminUser??) && contest.report??>
+    <li class="<#if methodName=="report">active</#if>">
+      <a href="contest/report/${cid}">Report</a>
+    </li>
+  </#if>
+  <#if adminUser??>
+    <li class="<#if methodName=="admin">active</#if>">
+      <a href="contest/admin/${cid}">Manage</a>
+    </li>
+    <#if (contest.type > 1)>
+      <li class="<#if methodName=="attendees">active</#if>">
+        <a href="contest/attendees/${cid}">Attendees</a>
+      </li>
+    </#if>
+    <li class="<#if methodName=="edit">active</#if>">
+      <a href="contest/edit/${cid}">Edit</a>
+    </li>
+    <li>
+      <a href="contest/copy/${cid}">Copy</a>
+    </li>
+  </#if>
+  <!--
+  <a class="btn btn-info pull-right" id="cset_a">Settings</a>
+  <a class="btn btn-info pull-right" id="contest-clone">Clone</a>
+  -->
+</ul>
+<div id="contest_content">
+  <@block name="contest_content"></@block>
+</div>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

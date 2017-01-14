@@ -1,0 +1,246 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">创建用户</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">用户管理</li>
+</ul>
+<div class="row">
+  <div class="span4 offset3">
+    <form class="form-horizontal" id="createUserForm" action="/api/admin/addUser" method="post">
+      <fieldset>
+        <legend>Basic Information</legend>
+        <div class="control-group <#if nameMsg??>error</#if>">
+          <label class="control-label" for="inputAccount">Account</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-user"></i></span>
+              <input type="text" minlength="5" maxlength="15" id="inputAccount" name="User.name" value="${(User.name)!}"
+                     placeholder="User name" autofocus required>
+            </div>
+            <p class="text-error" id="name-error">${nameMsg!}</p>
+          </div>
+        </div>
+        <div class="control-group <#if emailMsg??>error</#if>">
+          <label class="control-label" for="inputEmail">Email</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-envelope"></i></span>
+              <input type="email" id="inputEmail" name="User.email" value="${(User.email)!}" required>
+            </div>
+            <p class="text-error">${emailMsg!}</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputNick">Nick</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-user-plus" aria-hidden="true"></i></span>
+              <input type="text" id="inputNick" name="User.nick" value="${(User.nick)!}" required>
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputSchool">School</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-university" aria-hidden="true"></i></span>
+              <input type="text" minlength="3" id="inputSchool" name="User.school" value="${(User.school)!}">
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputLanguage">Language</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-language" aria-hidden="true"></i></span>
+              <select id="inputLanguage" name="User.language">
+                <#if program_languages??>
+                  <#list program_languages.keySet() as key>
+                    <option value="${key!}"
+                            <#if (User.language)?? && User.language==key>selected</#if>>${program_languages.get(key)!}</option>
+                  </#list>
+                </#if>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">Share Code?</label>
+          <div class="controls">
+            <label class="radio inline">
+              <input type="radio" name="User.shareCode" id="shareCode1"
+                     value="true"<#if !(User.shareCode)?? || User.shareCode==true>
+                     checked</#if>>
+              True
+            </label>
+            <label class="radio inline">
+              <input type="radio" name="User.shareCode" id="shareCode2"
+                     value="false"<#if (User.shareCode)?? && User.shareCode==false>
+                     checked</#if>>
+              False
+            </label>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Person Information</legend>
+        <div class="control-group">
+          <label class="control-label" for="inputRealName">Real Name</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-user-secret" aria-hidden="true"></i></span>
+              <input type="text" minlength="2" maxlength="20" id="inputRealName" name="User.realName"
+                     value="${(User.realName)!}">
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputPhone">Phone</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-mobile" aria-hidden="true"></i></span>
+              <input type="tel" minlength="7" maxlength="15" id="inputPhone" name="User.phone" value="${(User.phone)!}">
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputQQ">QQ</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-qq" aria-hidden="true"></i></span>
+              <input type="number" minlength="5" maxlength="12" id="inputQQ" name="User.qq" value="${(User.qq)!}">
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputBlog">Blog</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-link" aria-hidden="true"></i></span>
+              <input type="url" id="inputBlog" name="User.blog" value="${(User.blog)!}">
+            </div>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputGender">Gender</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="fa fa-genderless" aria-hidden="true"></i></span>
+              <select id="inputGender" name="User.gender">
+                <option value="secret"<#if !(User.gender)?? || User.gender=="secret">selected</#if>>Secret</option>
+                <option value="male"<#if (User.gender)?? && User.gender=="male">selected</#if>>Male</option>
+                <option value="female"<#if (User.gender)?? && User.gender=="female">selected</#if>>Female</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Security</legend>
+        <div class="control-group <#if passwordMsg??>error</#if>">
+          <label class="control-label" for="inputPassword">Password</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-lock"></i></span>
+              <input type="password" minlength="6" maxlength="20" id="inputPassword" name="User.password"
+                     placeholder="Password" required>
+            </div>
+            <p class="text-error">${passwordMsg!}</p>
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label" for="inputConfirmPass">Confirm Password</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-lock icon-white"></i></span>
+              <input type="password" minlength="6" maxlength="20" id="inputConfirmPass" name="repass"
+                     placeholder="Confirm your Password" required>
+            </div>
+            <p class="text-error">${confirmMsg!}</p>
+          </div>
+        </div>
+        <fieldset>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn btn-primary"><i class="fa fa-save" aria-hidden="true"></i> Save</button>
+            </div>
+          </div>
+    </form>
+  </div>
+</div>
+</@override>
+
+<@override name="scripts">
+<script src='assets/jquery-validation/dist/jquery.validate.min.js' type='text/javascript'></script>
+<script type="text/javascript">
+  $().ready(function () {
+    $("#createUserForm").validate();
+    $('#inputEmail').tooltip({
+      'trigger': 'focus',
+      'title': 'Your email is required for recovering password.',
+      'placement': 'right'
+    });
+    $('#inputAccount').tooltip({'trigger': 'focus', 'title': 'Create a unique user name.', 'placement': 'right'});
+    $('#inputNick').tooltip({'trigger': 'focus', 'title': 'Normal user cannot use html markup.', 'placement': 'right'});
+    $('#inputLanguage').tooltip({
+      'trigger': 'focus',
+      'title': 'Your favorite programming language.',
+      'placement': 'right'
+    });
+    $('#inputQQ').tooltip({'trigger': 'focus', 'title': 'You can leave it empty.', 'placement': 'right'});
+    $('#inputPhone').tooltip({'trigger': 'focus', 'title': 'You can leave it empty.', 'placement': 'right'});
+    $('#inputBlog').tooltip({'trigger': 'focus', 'title': 'e.g.: http://www.blog.com.', 'placement': 'right'});
+    $('#inputOldPass').tooltip({
+      'trigger': 'focus',
+      'title': 'This is required to update your profile.',
+      'placement': 'right'
+    });
+    $('#inputRealName').tooltip({
+      'trigger': 'focus',
+      'title': 'Only yourself and admin can access this.',
+      'placement': 'right'
+    });
+    $('#inputNewPass').tooltip({
+      'trigger': 'focus',
+      'title': 'Input your new password only if you want to change.',
+      'placement': 'right'
+    });
+    $('#inputConfirmPass').tooltip({'trigger': 'focus', 'title': 'Repeat your new password.', 'placement': 'right'});
+
+    $('#inputAccount').focusout(function () {
+      var name = $('#inputAccount').val();
+      if (name) {
+        $.get('/api/user/isUserNameExist', {'name': name}, function (data) {
+          if (data.result) {
+            $('#name-error').text('This user name already registered!');
+            $('#name-error').parent().parent().addClass('error');
+          } else {
+            $('#name-error').text('');
+            $('#name-error').parent().parent().removeClass('error');
+          }
+        });
+      }
+    });
+    $('#inputEmail').focusout(function () {
+      var email = $('#inputEmail').val();
+      if (email) {
+        $.get('/api/user/isEmailExist', {'email': email}, function (data) {
+          if (data.result) {
+            $('#email-error').text('This Email already registered!');
+          } else {
+            $('#email-error').text('');
+            $('#email-error').parent().parent().removeClass('error');
+            $('#email-error').parent().parent().addClass('error');
+          }
+        });
+      }
+    });
+  });
+</script>
+</@override>
+<@extends name="../_layout.html" />

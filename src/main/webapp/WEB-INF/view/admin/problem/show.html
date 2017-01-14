@@ -1,0 +1,252 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">查看题目</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+  <li>
+    <a href="admin/problem">题目管理</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">查看题目</li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+
+        <ul class="pager">
+          <li class="previous <#if prevPid==problem.pid>disabled</#if>">
+            <a href="admin/problem/show/${prevPid!}" title="Show previous problem.">&lt;&lt;Prev</a>
+          </li>
+          <li class="next <#if nextPid==problem.pid>disabled</#if>">
+            <a href="admin/problem/show/${nextPid!}" title="Show next problem.">Next&gt;&gt;</a>
+          </li>
+        </ul>
+
+        <div class="text-center">
+          <h2>
+            <span class="black pts"><a href="problem/show/${problem.pid!}" target="_blank">${problem.pid!}</a>:</span>
+            <#if problem.status==false>
+            <del></#if>
+            <span class="title"><a href="#" id="title">${problem.title!}</a></span>
+            <#if problem.status==false></del></#if>
+            <#if spj?? && spj><span class="badge badge-important">SPJ</span><br></#if>
+          </h2>
+          <div class="problem-admin">
+            <a href="admin/problem/data/${problem.pid!}" class="btn btn-primary">Data</a>
+            <a href="admin/problem/edit/${problem.pid!}" class="btn btn-danger">Edit</a>
+            <a href="problem/rejudge/${problem.pid!}" class="btn btn-danger">Rejudge</a>
+          </div>
+          <div class="problem-info">
+            <div>
+              Time Limit:<a href="#" id="timeLimit">${problem.timeLimit!}</a> MS
+              Memory Limit:<a href="#" id="memoryLimit">${problem.memoryLimit!}</a> KB
+            </div>
+            <div>
+              Total Submit:<a href="status?pid=${problem.pid!}" target="_blank">${problem.submission!}</a>
+              Accepted:<a href="status?pid=${problem.pid!}&result=0" target="_blank">${problem.accepted!}</a>
+              Page View:<span class="pts">${problem.view!}</span><br>
+            </div>
+          </div>
+          <a href="problem/submit/${problem.pid!}?ajax=1" class="btn btn-info" data-toggle="modal"
+             data-target="#submitModal">Submit</a>
+          <a href="problem/status/${problem.pid!}" class="btn btn-info" target="_blank">Status</a>
+          <a href="discuss/?pid=${problem.pid!}" class="btn btn-info" target="_blank">Discuss</a>
+        </div>
+
+        <div class="modal hide fade problemModal" id="submitModal">
+          <form class="" id="submitForm" action="solution/save" method="post">
+            <div class="modal-header">
+              <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+              <h3 id="submitModalLabel">
+                Submit Problem ${problem.pid!}:<a href="problem/submit/${problem.pid!}"
+                                                  title="Submit in another page" data-toggle="tooltip"
+                                                  data-placement="bottom">${problem.title!}</a>
+              </h3>
+            </div>
+            <div class="modal-body">
+              <!--<a href="problem/submit/${problem.pid!}" class="btn btn-primary">Submit</a>-->
+              <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                Sorry, youd don't have permission to submit solution.
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button type="reset" class="btn btn-info">Reset</button>
+              <button class="btn" data-dismiss="modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+
+        <section id="problem-description">
+          <div class="page-header">
+            <h4>Description</h4>
+          </div>
+          <div class="problem-content" id="problem-description">
+            <pre><a href="#" id="description">${problem.description!}</a></pre>
+          </div>
+        </section>
+
+        <section id="problem-input">
+          <div class="page-header">
+            <h4>Input</h4>
+          </div>
+          <div class="problem-content" id="problem-input">
+            <pre><a href="#" id="input">${problem.input!}</a></pre>
+          </div>
+        </section>
+
+        <section id="problem-output">
+          <div class="page-header">
+            <h4>Output</h4>
+          </div>
+          <div class="problem-content" id="problem-output">
+            <pre><a href="#" id="output">${problem.output!}</a></pre>
+          </div>
+        </section>
+
+        <section id="problem-sampleInput">
+          <div class="page-header">
+            <h4>Sample Input</h4>
+          </div>
+          <div class="problem-content" id="problem-sampleInput">
+            <pre><a href="#" id="sampleInput">${problem.sampleInput!}</a></pre>
+          </div>
+        </section>
+
+        <section id="problem-sampleOutput">
+          <div class="page-header">
+            <h4>Sample Output</h4>
+          </div>
+          <div class="problem-content" id="problem-sampleOutput">
+            <pre><a href="#" id="sampleOutput">${problem.sampleOutput!}</a></pre>
+          </div>
+        </section>
+
+        <#if problem.hint?? && problem.hint!="">
+          <section id="problem-hint">
+            <div class="page-header">
+              <h4>Hint</h4>
+            </div>
+            <div class="problem-content" id="problem-hint">
+              <pre><a href="#" id="hint">${problem.hint!}</a></pre>
+            </div>
+          </section>
+        </#if>
+
+        <#if problem.source?? && problem.source!="">
+          <section id="problem-source">
+            <div class="page-header">
+              <h4>Source</h4>
+            </div>
+            <div class="pre" id="problem-source">
+              <a href="#" id="source">${problem.source!}</a>
+            </div>
+          </section>
+        </#if>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+
+<@override name="scripts">
+<link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
+
+<link href="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.css"
+      rel="stylesheet" type="text/css"></link>
+<script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/wysihtml5-0.3.0.min.js"></script>
+<script src="assets/bootstrap-editable/inputs-ext/wysihtml5/bootstrap-wysihtml5-0.0.2/bootstrap-wysihtml5-0.0.2.min.js"></script>
+<script src="assets/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    var pid = ${problem.pid!};
+    var apiUrl = '/api/admin/updateProblem';
+    $.fn.editable.defaults.mode = 'inline';
+    $.fn.editable.defaults.url = apiUrl;
+    $('#title').editable({
+      type: 'text',
+      pk: pid,
+      title: 'Change problem title'
+    });
+    $('#timeLimit').editable({
+      type: 'number',
+      pk: pid,
+      title: 'Change problem time limit',
+      validate: function (value) {
+        if ($.trim(value) == '') {
+          return 'This field is required';
+        }
+        var pattern = /^[\d]{3,6}$/;
+        if (!pattern.test(value)) {
+          return "The value shoulbe be a number{3,6}";
+        }
+      }
+    });
+    $('#memoryLimit').editable({
+      type: 'number',
+      pk: pid,
+      title: 'Change problem time limit',
+      validate: function (value) {
+        if ($.trim(value) == '') {
+          return 'This field is required';
+        }
+        var pattern = /^[\d]{3,6}$/;
+        if (!pattern.test(value)) {
+          return "The value shoulbe be a number{3,6}";
+        }
+      }
+    });
+    $('#description').editable({
+      type: 'wysihtml5',
+      pk: pid,
+      title: 'Change problem description'
+    });
+    $('#input').editable({
+      type: 'wysihtml5',
+      pk: pid,
+      title: 'Change problem input'
+    });
+    $('#output').editable({
+      type: 'wysihtml5',
+      pk: pid,
+      title: 'Change problem output'
+    });
+    $('#sampleInput').editable({
+      type: 'textarea',
+      pk: pid,
+      title: 'Change problem sample input'
+    });
+    $('#sampleOutput').editable({
+      type: 'textarea',
+      pk: pid,
+      title: 'Change problem sample output'
+    });
+    $('#hint').editable({
+      type: 'wysihtml5',
+      pk: pid,
+      title: 'Change problem hint'
+    });
+    $('#source').editable({
+      type: 'text',
+      pk: pid,
+      title: 'Change problem source'
+    });
+
+    var prevpage = "/admin/problem/show/${prevPid!}";
+    var nextpage = "/admin/problem/show/${nextPid!}";
+    $(document).keydown(function (event) {
+        <#if prevPid!=problem.pid>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if nextPid!=problem.pid>if (event.keyCode == 39)window.location = nextpage;</#if>
+    });
+  });
+</script>
+</@override>
+<@extends name="../_layout.html"></@extends>

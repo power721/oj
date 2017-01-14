@@ -1,0 +1,2 @@
+30 2 * * 1 /opt/certbot-auto renew --no-self-upgrade >> /var/log/le-renew.log
+35 2 * * 1 /etc/init.d/nginx reload

@@ -1,0 +1,260 @@
+<@override name="content">
+<div id="block-title-banner">
+  <p>设置</p>
+
+  <div>
+    <a href="user">PowerOJ</a>
+    <span class="d">Setting</span>
+  </div>
+  <span class="clearfix"></span>
+</div>
+<div id="block-banner-right" class="block banner">
+  <i class="location"></i>
+</div>
+
+<div class="block">
+  <div class="mainer">
+    <p class="alert alert-info">
+      配置信息存储于用户本地，清空浏览器数据将会导致配置信息丢失。
+    </p>
+  </div>
+</div>
+
+<div id="area-first"></div>
+
+<div class="block">
+  <div class="mainer">
+    <p class="alert alert-info">
+      部分选项需重新载入后生效。
+    </p>
+  </div>
+</div>
+
+<div id="temp-unit-setting" class="hidden">
+  <div class="unit" data-title="[title]" data-value="[value]" data-key="[key]">
+    <div class="l">
+      <p class="title">[title]
+      </p>
+      <span class="hint-hover" data-title="[desc]"><i class="icon grey icon-question-sign"></i>详细</span>
+    </div>
+    <div class="r">
+      <div class="switch [active]">
+        <p>是<b></b>否</p>
+
+        <div></div>
+      </div>
+      <span class="clearfix"></span></div>
+    <span class="clearfix"></span>
+  </div>
+</div>
+</@override>
+<@override name="styles">
+<style>
+  #area-first .mainer {
+    padding: 8px;
+  }
+
+  #area-first .unit {
+    border-bottom: 1px solid #f9f9f9;
+    padding-left: 8px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+
+  #area-first .unit:nth-last-of-type(1) {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  #area-first .unit .l {
+    width: 500px;;
+  }
+
+  #area-first .unit .r {
+    width: 120px;;
+  }
+
+  #area-first .unit .r .l, #area-first .unit .r .r {
+    width: auto;
+  }
+
+  #area-first .unit .title {
+    display: inline-block;
+    *display: inline;
+    height: 32px;
+    line-height: 32px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #08c;
+  }
+
+  #area-first .hint-hover {
+    color: #999;
+    margin: 0 0 0 8px;
+    cursor: default;
+  }
+
+  #area-first .hint-hover .icon {
+    margin-right: 2px;
+  }
+</style>
+</@override>
+<@override name="scripts">
+<script>
+  system.tv = function () {
+    //set handle
+    var area = $('#area-first');
+    //vars
+    var d = [
+      /*{
+          title: '播放器',
+          subtitle: 'Player',
+          content: [
+              {
+                  key: 'player.kagamiAllowed',
+                  title: '使用新版播放器',
+                  desc: '使用最新版本播放器(Kagami)播放视频。#默认勾选。'
+              }
+              ,
+              {
+                  key: 'player.autoNextPartAllowed',
+                  title: '自动换P',
+                  desc: '在完成当前P播放后，将自动跳转至下一P(或第一P，若当前P已是最后一P)。#该选项在视频不包含任何Part时不会生效。#默认勾选。'
+              }
+              ,
+              {
+                  key: 'player.autoplayAllowed',
+                  title: '自动开始播放',
+                  desc: '在播放器载入后自动开放播放视频。#默认不勾选。'
+              }
+              ,
+              {
+                  key: 'player.autoWebFullscreenAllowed',
+                  title: '自动网页全屏',
+                  desc: '在播放器载入后自动切换至网页全屏模式。#默认不勾选。'
+              }
+          ]
+      }
+      ,*/
+      {
+        title: '评论',
+        subtitle: 'Comment',
+        content: [
+          {
+            key: 'comment.autoShowCommentAllowed',
+            title: '自动展开评论',
+            desc: '在页面载入后自动加载评论。#默认勾选。'
+          }
+          /*,
+          {
+              key: 'comment.videoViewAllowed',
+              title: '快捷播放视频',
+              desc: '在评论区开启视频快速预览功能。#默认不勾选。'
+          }*/
+        ]
+      }
+      ,
+      {
+        title: '会员中心',
+        subtitle: 'Member Center',
+        content: [
+          {
+            key: 'globe.receivePushAllowed',
+            title: '接收推送信息',
+            desc: '接收服务器的新稿件推送。#默认勾选。'
+          }
+          ,
+          {
+            key: 'globe.receiveStrangersMailAllowed',
+            title: '接收陌生人私信',
+            desc: '接收陌生人发送的私信。#取消勾选后将拒收来自陌生人的私信(对方不会获知)。#取消勾选后将无法使用漂流瓶系统。#默认勾选。'
+          }
+        ]
+      }
+      ,
+      {
+        title: '杂项',
+        subtitle: 'Other',
+        content: [
+          {
+            key: 'globe.guideFloatAllowed',
+            title: '导航栏浮动显示',
+            desc: '导航栏在页面顶端浮动显示。#默认不勾选。'
+          }
+          ,
+          {
+            key: 'globe.debug',
+            title: '启用Debug模式',
+            desc: '开启Debug模式以进行开发及调错。#该选项会大幅度降低页面执行效率与稳定性。#若您并非开发人员，请勿勾选该选项。#默认不勾选。',
+            ensure: true
+          }
+        ]
+      }
+    ];
+    //prepare
+    var html = '';
+    var temp = $('#temp-unit-setting').html();
+    $.each(d, function (a, b) {
+      html += '<div class="block">'
+              + '<div class="banner">'
+              + '<p class="tab fixed">' + b.title + '<span class="hint">' + b.subtitle + '</span></p>'
+              + '</div>'
+              + '<div class="mainer">';
+      $.each(b.content, function (c, d) {
+        var key = d.key.split('.');
+        var val = 0;
+        //check value
+        if (config[key[0]] && config[key[0]][key[1]]) {
+          val = 1;
+        } else {
+          val = 0;
+        }
+        html += temp
+                .replace(/\[value\]/g, val)
+                .replace(/\[key\]/g, d.key)
+                .replace(/\[title\]/g, d.title)
+                .replace(/\[desc\]/g, (d.desc ? d.desc.replace(/\#/g, '<br />') : '未包含任何合法信息'))
+                .replace(/\[active\]/g, (val ? 'active' : ''))
+        ;
+      });
+      html += '</div></div>';
+    });
+    area.html(html);
+    //bind action
+    area
+    //button
+            .delegate('div.switch', 'click', function () {
+              //set handle
+              var elem = $(this);
+              var obj = elem.closest('div.unit');
+              //check value
+              if (elem.hasClass('active')) {
+                //cancel
+                elem.removeClass('active');
+                var val = 0;
+              } else {
+                //ok
+                elem.addClass('active');
+                var val = 1;
+              }
+              obj.data().value = val;
+              //info
+              var text = 'info::' + obj.data().title + '：' + (obj.data().value ? '是' : '否') + '。';
+              $.info(text);
+              //save
+              var key = obj.data().key.split('.');
+              config[key[0]][key[1]] = val;
+              $.save('config');
+            })
+            //hover
+            .find('span.hint-hover')
+            .hoverInfo({
+              type: 'info',
+              fadeout: 0
+            })
+    ;
+  }();
+</script>
+</@override>
+<@extends name="../common/_layout.html" />

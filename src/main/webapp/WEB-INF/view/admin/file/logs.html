@@ -1,0 +1,99 @@
+<@override name="content">
+<div class="header">
+  <h1 class="page-title">日志文件</h1>
+</div>
+<ul class="breadcrumb">
+  <li>
+    <a href="admin">首页</a>
+    <span class="divider">/</span>
+  </li>
+</ul>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="well">
+      <div id="container">
+        <h4>Log Files</h4>
+        <div>
+          <#if logs??>
+            <table id="data-files" class="table table-hover table-condensed table-bordered">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>File</th>
+                <th>Type</th>
+                <th>Permissions</th>
+                <th>User</th>
+                <th>Group</th>
+                <th>Size</th>
+                <th>Modified</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+                <#list logs as file>
+                <tr>
+                  <td>${file_index+1}</td>
+                  <td class="file">
+                    <a href="admin/file/log/?dir=${file.dir!?url}&name=${file.name!?url}" title="${file.path}">
+                      <#if file.dir?? && file.dir?has_content>${file.dir!}/</#if>${file.name}
+                    </a>
+                  </td>
+                  <td class="type">${file.type!}</td>
+                  <td class="permissions">${file.perm!}</td>
+                  <td class="user">${file.user!}</td>
+                  <td class="group">${file.group!}</td>
+                  <td class="size" size="${file.size}"></td>
+                  <td class="timestamp" data="${file.modifyTime}"></td>
+                  <td class="action" name="${file.name}" dir="${file.dir!}">
+                    <a class="btn btn-primary view" href="admin/file/log/?dir=${file.dir!?url}&name=${file.name!?url}">View</a>
+                    <a class="btn btn-info download"
+                       href="admin/file/download/?dir=${file.dir!?url}&name=${file.name!?url}&type=log">
+                      Download
+                    </a>
+                  </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+          </#if>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</@override>
+
+<@override name="styles">
+<link rel="stylesheet" href="assets/bootstrap-modal/bootstrap-modal.css" type="text/css">
+<link rel="stylesheet" href="assets/tablecloth/css/tablecloth.css" type="text/css">
+<link rel="stylesheet" href="assets/tipsy/css/tipsy.css" type="text/css">
+<link rel="stylesheet" href="assets/jquery.artDialog/skins/twitter.css" type="text/css">
+</@override>
+
+<@override name="scripts">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modal.js"></script>
+<script src="assets/bootstrap-modal/bootstrap-modalmanager.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#data-files").tablecloth({
+      theme: "stats",
+      condensed: true,
+      sortable: true,
+      striped: true,
+      clean: true
+    });
+
+    $('.size').each(function () {
+      $(this).html(num2size($(this).attr('size')));
+    });
+  });
+</script>
+
+<script src="assets/tipsy/js/jquery.tipsy.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script type="text/javascript" src="assets/plupload/js/plupload.full.min.js"></script>
+</@override>
+<@extends name="../_layout.html"></@extends>
