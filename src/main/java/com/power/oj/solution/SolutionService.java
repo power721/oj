@@ -415,6 +415,8 @@ public final class SolutionService {
             } else if (result == ResultType.SE || result == ResultType.RF) {
                 solution.setSystemError(error);
             }
+            
+            if(solution.update() == false) return false;
 
             if (result == ResultType.AC) {
                 if (cid == 0) {
@@ -432,7 +434,7 @@ public final class SolutionService {
                 }
             }
             judgeService.cleanRejudge(solution);
-            return solution.update();
+            return true;
         }
 
         return false;
