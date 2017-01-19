@@ -391,3 +391,12 @@ ALTER TABLE contest_user ADD `freshman` tinyint(1) NOT NULL DEFAULT '0' AFTER `s
 ALTER TABLE contest_problem ADD `memoryLimit` int(5) NOT NULL DEFAULT '65536' AFTER `title`;
 ALTER TABLE contest_problem ADD `timeLimit` int(5) NOT NULL DEFAULT '1000' AFTER `title`;
 UPDATE contest_problem cp SET timeLimit=(SELECT timeLimit FROM problem p WHERE p.pid=cp.pid),memoryLimit=(SELECT memoryLimit FROM problem p WHERE p.pid=cp.pid);
+
+#2017-1-18
+INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,56);
+INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,72);
+INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,101);
+INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,132);
+INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,142);
+INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,150);
+INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,162);
