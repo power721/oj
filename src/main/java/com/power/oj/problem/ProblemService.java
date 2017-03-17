@@ -120,7 +120,7 @@ public final class ProblemService {
     	if (OjConfig.isDevMode()) {
             problemModel = dao.findById(pid);
         } else {
-            problemModel = dao.findFirst("SELECT * FROM contest_problem WHERE pid=? AND pid = ?", pid, cid);
+            problemModel = dao.findFirst("SELECT * FROM contest_problem WHERE pid=? AND cid = ?", pid, cid);
         }
     	return problemModel;
     }
