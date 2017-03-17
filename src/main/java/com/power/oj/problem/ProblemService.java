@@ -35,7 +35,7 @@ public final class ProblemService {
     public static ProblemService me() {
         return me;
     }
-
+    
     public boolean isRejudging(Integer pid) {
         return JudgeService.me().isRejudging(RejudgeType.PROBLEM.getKey(pid));
     }
@@ -114,7 +114,17 @@ public final class ProblemService {
 
         return new ProblemModel(problemModel);
     }
-
+    
+    public ProblemModel findProblemForContest(Integer pid, Integer cid) {
+    	ProblemModel problemModel;
+    	if (OjConfig.isDevMode()) {
+            problemModel = dao.findById(pid);
+        } else {
+            problemModel = dao.findFirstByCache("problem", pid, "SELECT * FROM contest_problem WHERE pid=? AND pid = ?", pid, cid);
+        }
+    	return problemModel;
+    }
+    
     public Long getProblemsNumber() {
         return Db.queryLong("SELECT COUNT(*) FROM problem WHERE status=1");
     }
