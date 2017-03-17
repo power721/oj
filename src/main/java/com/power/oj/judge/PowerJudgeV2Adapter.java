@@ -32,8 +32,8 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
         int cid = 0;
 
         if (solution.isContest()) {
-            problemModel = problemService.findProblemForContest(solution.getPid());
-            cid = solution.getCid();
+        	cid = solution.getCid();
+            problemModel = problemService.findProblemForContest(solution.getPid(), cid);
         } else {
             problemModel = problemService.findProblem(solution.getPid());
         }
