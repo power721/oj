@@ -1466,19 +1466,17 @@ public class ContestService {
             freezeBoard.put(board);
             freezeBoard.save();
         } else {
-        	FreezeBoardModel.dao.deleteById(freezeBoard.getId());
-        	freezeBoard = new FreezeBoardModel();
             freezeBoard.put(board);
-            freezeBoard.save();
+            freezeBoard.update();
         }
         */
     	Record rd = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
-    	if(rd == null)
-    	{
+    	if(rd == null) {
+    		rd = board.toRecord();
     		Db.save("freeze_board", rd);
     	}
-    	else
-    	{
+    	else {
+    		rd = board.toRecord();
     		Db.update("freeze_board", rd);
     	}
     }
