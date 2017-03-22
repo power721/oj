@@ -33,7 +33,7 @@
         <#if program_languages??>
           <#list program_languages.keySet() as key>
             <option value="${key!}"<#if (solution.language)??><#if solution.language==key>selected</#if><#else><#if
-            user.language==key>selected</#if></#if>>${program_languages.get(key)!}</option>
+            user.language?? && user.language==key>selected</#if></#if>>${program_languages.get(key)!}</option>
           </#list>
         </#if>
       </select>
