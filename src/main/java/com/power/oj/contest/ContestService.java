@@ -1458,6 +1458,7 @@ public class ContestService {
     }
 
     private void syncFreezeBoard(Integer cid, Integer uid, BoardModel board) {
+    	/*
         FreezeBoardModel freezeBoard =
             FreezeBoardModel.dao.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
         if (freezeBoard == null) {
@@ -1468,6 +1469,16 @@ public class ContestService {
             freezeBoard.put(board);
             freezeBoard.update();
         }
+        */
+    	Record rd = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
+    	if(rd == null) {
+    		rd = board.toRecord();
+    		Db.save("freeze_board", rd);
+    	}
+    	else {
+    		rd = board.toRecord();
+    		Db.update("freeze_board", rd);
+    	}
     }
 
     public boolean build(Integer cid) {
