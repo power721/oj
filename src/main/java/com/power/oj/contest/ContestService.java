@@ -1003,7 +1003,7 @@ public class ContestService {
         for (Record user : teams) {
             int uid = user.getInt("uid");
             teamMap.put(uid, new Team(uid));
-            result = Db.findFirst("select name from user where uid = ?", uid);
+            result = user.get("teamName");//Db.findFirst("select name from user where uid = ?", uid);
             writer.write("\t<team>\n");
             writer.write(String.format("\t\t<id>%d</id>\n", uid));
             writer.write("\t\t<group-id>0</group-id>\n");

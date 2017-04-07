@@ -400,3 +400,8 @@ INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,132);
 INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,142);
 INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,150);
 INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,162);
+
+#2017-4-7
+ALTER TABLE contest_user ADD `teamName` varchar(20) NOT NULL DEFAULT 'NoTeamName';
+ALTER TABLE team ADD `teamNameChinese` varchar(20) NOT NULL DEFAULT 'NoTeamName';
+ALTER TABLE team ADD `teamNameEnglish` varchar(20) NOT NULL DEFAULT 'NoTeamName';
