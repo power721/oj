@@ -761,7 +761,7 @@ CREATE TABLE `team` (
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `history` text,
-  `year` int(4) DEFAULT NULL,
+  `cid` int(4) DEFAULT NULL,
   `isGirlTeam` tinyint(1) NOT NULL DEFAULT '0',
   `isRookieTeam` tinyint(1) NOT NULL DEFAULT '0',
   `isSpecialTeam` tinyint(1) NOT NULL DEFAULT '0',

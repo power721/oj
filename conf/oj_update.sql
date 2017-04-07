@@ -405,3 +405,4 @@ INSERT INTO `role_permission` (`rid`, `pid`) VALUES (2,162);
 ALTER TABLE contest_user ADD `teamName` varchar(20) NOT NULL DEFAULT 'NoTeamName';
 ALTER TABLE team ADD `teamNameChinese` varchar(20) NOT NULL DEFAULT 'NoTeamName';
 ALTER TABLE team ADD `teamNameEnglish` varchar(20) NOT NULL DEFAULT 'NoTeamName';
+ALTER TABLE `team` CHANGE `year` `cid` int(4) DEFAULT NULL;
