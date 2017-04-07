@@ -997,20 +997,19 @@ public class ContestService {
     }
 
     private Map<Integer, Team> writeContestTeams(PrintWriter writer, Integer cid) {
-        Record result;
         List<Record> teams = Db.find("select uid from contest_user where cid = ? and special = 0;", cid);
         Map<Integer, Team> teamMap = new HashMap<>();
         for (Record user : teams) {
             int uid = user.getInt("uid");
             teamMap.put(uid, new Team(uid));
-            result = user.get("teamName");//Db.findFirst("select name from user where uid = ?", uid);
+            String teamName = user.get("teamName"); //Db.findFirst("select name from user where uid = ?", uid);
             writer.write("\t<team>\n");
             writer.write(String.format("\t\t<id>%d</id>\n", uid));
             writer.write("\t\t<group-id>0</group-id>\n");
             writer.write("\t\t<group></group>\n");
             writer.write(String.format("\t\t<external-id>%d</external-id>\n", uid + 1000));
-            writer.write(String.format("\t\t<name>%s</name>\n", result.getStr("name")));
-            writer.write(String.format("\t\t<university>%s</university>\n", result.getStr("name")));
+            writer.write(String.format("\t\t<name>%s</name>\n", teamName));
+            writer.write(String.format("\t\t<university>%s</university>\n", teamName));
             writer.write("\t\t<university-short-name></university-short-name>\n");
             writer.write("\t\t<nationality></nationality>\n");
             writer.write("\t</team>\n");
