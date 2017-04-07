@@ -997,7 +997,7 @@ public class ContestService {
     }
 
     private Map<Integer, Team> writeContestTeams(PrintWriter writer, Integer cid) {
-        List<Record> teams = Db.find("select uid from contest_user where cid = ? and special = 0;", cid);
+        List<Record> teams = Db.find("select * from contest_user where cid = ? and special = 0;", cid);
         Map<Integer, Team> teamMap = new HashMap<>();
         for (Record user : teams) {
             int uid = user.getInt("uid");
