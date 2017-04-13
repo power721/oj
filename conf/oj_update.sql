@@ -406,3 +406,7 @@ ALTER TABLE contest_user ADD `teamName` varchar(20) NOT NULL DEFAULT 'NoTeamName
 ALTER TABLE team ADD `teamNameChinese` varchar(20) NOT NULL DEFAULT 'NoTeamName';
 ALTER TABLE team ADD `teamNameEnglish` varchar(20) NOT NULL DEFAULT 'NoTeamName';
 ALTER TABLE `team` CHANGE `year` `cid` int(4) DEFAULT NULL;
+
+#2017-4-13
+ALTER TABLE `contest_solution` CHANGE `test` `test` int(9) NOT NULL DEFAULT '0';
+ALTER TABLE `solution` CHANGE `test` `test` int(9) NOT NULL DEFAULT '0';
