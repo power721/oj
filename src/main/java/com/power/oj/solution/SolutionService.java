@@ -139,7 +139,7 @@ public final class SolutionService {
     public Page<ContestSolutionModel> getPageForContest(int pageNumber, int pageSize, int result, int language, int cid,
         int num, String userName) {
         String sql =
-            "SELECT sid,s.uid,pid,cid,num,result,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick";
+            "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick";
         StringBuilder sb = new StringBuilder("FROM contest_solution s INNER JOIN user u ON u.uid=s.uid WHERE cid=?");
         List<Object> paras = new ArrayList<Object>();
         paras.add(cid);
