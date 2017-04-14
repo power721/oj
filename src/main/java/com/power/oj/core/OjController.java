@@ -6,6 +6,7 @@ import com.jfinal.i18n.Res;
 import com.jfinal.log.Logger;
 import com.power.oj.contest.ContestService;
 import com.power.oj.core.bean.FlashMessage;
+import com.power.oj.core.interceptor.SessionAttrInterceptor;
 import com.power.oj.core.service.OjService;
 import com.power.oj.core.service.SessionService;
 import com.power.oj.discussion.DiscussionService;
@@ -48,7 +49,7 @@ public class OjController extends Controller {
      *
      * @param url string of destination url.
      * @param msg message with content, type and title.
-     * @see FlashMessageInterceptor
+     * @see SessionAttrInterceptor
      */
     protected void redirect(String url, FlashMessage msg) {
         setFlashMessage(msg);
@@ -61,7 +62,7 @@ public class OjController extends Controller {
      * @param url             string of destination url.
      * @param withQueryString whether contains query string.
      * @param msg             message with content, type and title.
-     * @see FlashMessageInterceptor
+     * @see SessionAttrInterceptor
      */
     protected void redirect(String url, boolean withQueryString, FlashMessage msg) {
         setFlashMessage(msg);
