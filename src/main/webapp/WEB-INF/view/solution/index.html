@@ -67,7 +67,12 @@
               -${solution.alpha!}</a></#if>
           </#if>
         </td>
-        <td class="result" id="${solution.resultName!}" sid="${solution.sid!}">${solution.resultLongName!}</td>
+        <td class="result" id="${solution.resultName!}" sid="${solution.sid!}">
+          ${solution.resultLongName!}
+          <#if solution.test?? && solution.test != 0>
+            on test ${solution.test!}
+          </#if>
+        </td>
         <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
         <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
         <td class="language"><#if solution.accessible==true><a href="code/${solution.sid!}"
