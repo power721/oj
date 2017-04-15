@@ -226,7 +226,7 @@ CREATE TABLE `contest_solution` (
   `language` int(3) NOT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
-  `test` tinyint(3) NOT NULL DEFAULT '0',
+  `test` int(9) NOT NULL DEFAULT '0',
   `error` text,
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
@@ -252,6 +252,7 @@ CREATE TABLE `contest_user` (
   `girls` tinyint(1) NOT NULL DEFAULT '0',
   `nick` varchar(55) DEFAULT NULL,
   `ctime` int(11) NOT NULL,
+  `teamName` varchar(20) NOT NULL DEFAULT 'NoTeamName',
   PRIMARY KEY (`id`),
   UNIQUE KEY `contest_user_cid_uid_pk` (`cid`,`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -697,7 +698,7 @@ CREATE TABLE `solution` (
   `language` int(3) NOT NULL,
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
-  `test` tinyint(3) NOT NULL DEFAULT '0',
+  `test` int(9) NOT NULL DEFAULT '0',
   `error` text,
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
@@ -760,10 +761,12 @@ CREATE TABLE `team` (
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `history` text,
-  `year` int(4) DEFAULT NULL,
+  `cid` int(4) DEFAULT NULL,
   `isGirlTeam` tinyint(1) NOT NULL DEFAULT '0',
   `isRookieTeam` tinyint(1) NOT NULL DEFAULT '0',
   `isSpecialTeam` tinyint(1) NOT NULL DEFAULT '0',
+  `teamNameChinese` varchar(20) NOT NULL DEFAULT 'NoTeamName',
+  `teamNameEnglish` varchar(20) NOT NULL DEFAULT 'NoTeamName',
   PRIMARY KEY (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
