@@ -29,8 +29,9 @@ public class GlobalInterceptor implements Interceptor {
 
         controller.setAttr("notices", NoticeService.me().getNoticeList());
 
+        if(controller.getRequest().getRequestURL().toString().contains("swust.edu"))
+            controller.setAttr("isSwust", true);
+
         ai.invoke();
-
     }
-
 }

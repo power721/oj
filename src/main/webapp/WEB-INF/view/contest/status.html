@@ -70,8 +70,14 @@
              title="${(solution.nick)!?html}">${(solution.name)!}</a>
         </td>
         <td class="problem"><a href="contest/problem/${cid}-${solution.alpha!}">${solution.alpha!}</a></td>
-        <td class="result" id="${solution.resultName!}"><i class="btn"
-                                                           sid="${solution.sid!}">${solution.resultLongName!}</i></td>
+        <td class="result" id="${solution.resultName!}">
+          <i class="btn" sid="${solution.sid!}">
+              ${solution.resultLongName!}
+            <#if solution.test?? && solution.test !=0>
+               on test ${solution.test!}
+            </#if>
+          </i>
+        </td>
         <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
         <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
         <td class="language">

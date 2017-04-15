@@ -67,6 +67,11 @@
           <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
             <a href="downloads"><i class="icon-download-alt"></i>Download</a>
           </li>
+          <#if isSwust?? && isSwust == true>
+            <li>
+              <a href="achievement"><i class="fa fa-trophy"></i>Achievement</a>
+            </li>
+          </#if>
         </ul>
         <ul class="nav pull-right">
         <#if user?? && user.uid??>
