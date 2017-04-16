@@ -359,7 +359,10 @@ public class FpsService {
                 }
             } else {
                 try {
-                    base64 = Base64.encodeBase64String(FileUtils.readFileToByteArray(new File(rootPath + src)));
+                    String path;
+                    if(rootPath.endsWith("/") || src.startsWith("/")) path = rootPath + src;
+                    else path = rootPath + "/" + src;
+                    base64 = Base64.encodeBase64String(FileUtils.readFileToByteArray(new File(path)));
                 } catch (IOException e) {
                     if (OjConfig.isDevMode()) {
                         log.warn("read image file failed!", e);
