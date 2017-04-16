@@ -947,7 +947,8 @@ public class ContestService {
             List<Team> teams = new ArrayList<>(teamMp.values());
             Collections.sort(teams);
             writeAwards(writer, teams, info);
-
+            writeBestGirlTeam(writer, teams);
+            writeBestRookieTeam(writer, teams);
             writer.write("</contest>\n");
         }
 
@@ -1001,7 +1002,9 @@ public class ContestService {
         Map<Integer, Team> teamMap = new HashMap<>();
         for (Record user : teams) {
             int uid = user.getInt("uid");
-            teamMap.put(uid, new Team(uid));
+            boolean isGirlTeam = user.getBoolean("girls");
+            boolean isRookie = user.getBoolean("freshman");
+            teamMap.put(uid, new Team(uid, isGirlTeam, isRookie));
             String teamName = user.get("teamName"); //Db.findFirst("select name from user where uid = ?", uid);
             writer.write("\t<team>\n");
             writer.write(String.format("\t\t<id>%d</id>\n", uid));
@@ -1111,6 +1114,36 @@ public class ContestService {
         }
     }
 
+    private void writeBestGirlTeam(PrintWriter writer, List<Team> teams)
+    {
+        for(Team t : teams)
+        {
+            if(t.isGirlTeam)
+            {
+                writer.write("\t<award>\n");
+                writer.write(String.format("\t\t<team>%d</team>\n", t.uid));
+                writer.write("\t\t<type>medal</type>\n");
+                writer.write("\t\t<citation>Best Girl Team</citation>\n");
+                writer.write("\t</award>\n");
+                return ;
+            }
+        }
+    }
+    private void writeBestRookieTeam(PrintWriter writer, List<Team> teams)
+    {
+        for(Team t : teams)
+        {
+            if(t.isRookieTeam)
+            {
+                writer.write("\t<award>\n");
+                writer.write(String.format("\t\t<team>%d</team>\n", t.uid));
+                writer.write("\t\t<type>medal</type>\n");
+                writer.write("\t\t<citation>Best Rookie Team</citation>\n");
+                writer.write("\t</award>\n");
+                return ;
+            }
+        }
+    }
     private void writeAdditional(PrintWriter writer, ContestInfo info) {
         int grand = info.grand;
         int first = info.first;
@@ -1672,9 +1705,13 @@ public class ContestService {
         int uid;
         int penalty;
         long lastAC;
+        boolean isGirlTeam;
+        boolean isRookieTeam;
 
-        Team(int uid) {
+        Team(int uid ,boolean isGirlTeam , boolean isRookieTeam) {
             this.uid = uid;
+            this.isGirlTeam = isGirlTeam;
+            this.isRookieTeam = isRookieTeam;
         }
 
         @Override
