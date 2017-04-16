@@ -1122,7 +1122,7 @@ public class ContestService {
             {
                 writer.write("\t<award>\n");
                 writer.write(String.format("\t\t<team>%d</team>\n", t.uid));
-                writer.write("\t\t<type>medal</type>\n");
+                writer.write("\t\t<type>first_to_solve</type>\n");
                 writer.write("\t\t<citation>Best Girl Team</citation>\n");
                 writer.write("\t</award>\n");
                 return ;
@@ -1137,7 +1137,7 @@ public class ContestService {
             {
                 writer.write("\t<award>\n");
                 writer.write(String.format("\t\t<team>%d</team>\n", t.uid));
-                writer.write("\t\t<type>medal</type>\n");
+                writer.write("\t\t<type>first_to_solve</type>\n");
                 writer.write("\t\t<citation>Best Rookie Team</citation>\n");
                 writer.write("\t</award>\n");
                 return ;
