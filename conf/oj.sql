@@ -1339,11 +1339,16 @@ UNLOCK TABLES;
 
 LOCK TABLES `program_language` WRITE;
 /*!40000 ALTER TABLE `program_language` DISABLE KEYS */;
-INSERT INTO `program_language` VALUES (1,'GCC','',0,996,1,1,'c','exe',1,'C:\\JudgeOnline\\bin\\gcc\\bin\\gcc.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%','cpp',0,1);
-INSERT INTO `program_language` VALUES (2,'G++','',0,996,1,1,'cc','exe',1,'C:\\JudgeOnline\\bin\\gcc\\bin\\g++.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%','cpp',0,1);
-INSERT INTO `program_language` VALUES (3,'Pascal','',0,1000,1,1,'pas','exe',0,'C:\\JudgeOnline\\bin\\fpc\\fpc.exe -Sg -dONLINE_JUDGE %PATH%%NAME%.%EXT%','pascal',0,1);
-INSERT INTO `program_language` VALUES (4,'Java','',0,8000,3,3,'java','class',2,'C:\\JudgeOnline\\bin\\Java\\Java.bat %PATH%','java',0,1);
-INSERT INTO `program_language` VALUES (5,'Python','',0,7000,4,3,'py','exe',1,'C:\\JudgeOnline\\bin\\Python\\Python.bat %PATH% %NAME% %EXT%','python',0,1);
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('1', 'GCC11', 'C语言推荐', '0', '996', '1', '1', 'c', 'exe', '1', 'C:\\JudgeOnline\\bin\\gcc\\bin\\gcc.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('2', 'G++11', 'C++推荐', '0', '996', '1', '1', 'cc', 'exe', '1', 'C:\\JudgeOnline\\bin\\gcc\\bin\\g++.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('3', 'Pascal', '', '0', '1000', '1', '1', 'pas', 'exe', '0', 'C:\\JudgeOnline\\bin\\fpc\\fpc.exe -Sg -dONLINE_JUDGE %PATH%%NAME%.%EXT%', 'pascal', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('4', 'Java', '', '0', '8000', '3', '3', 'java', 'class', '2', 'C:\\JudgeOnline\\bin\\Java\\Java.bat %PATH%', 'java', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('5', 'Python2.7', '', '0', '7000', '4', '3', 'py', 'exe', '1', 'C:\\JudgeOnline\\bin\\Python\\Python.bat %PATH% %NAME% %EXT%', 'python', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('6', 'GCC99', '', '0', '996', '1', '1', 'c', 'exe', '1', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('7', 'G++98', '', '0', '996', '1', '1', 'cc', 'exe', '0', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('8', 'G++14', ' ', '0', '996', '1', '1', 'cc', 'exe', '1', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('9', 'G++17', ' ', '0', '996', '1', '1', 'cc', 'exe', '0', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('10', 'Python3', ' ', '0', '7000', '4', '3', 'py', 'exe', '1', 'C:\\', 'python', '0', '1');
 /*!40000 ALTER TABLE `program_language` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1436,3 +1441,72 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2016-07-24 10:16:44
+
+-- ----------------------------
+-- Table structure for wxnews
+-- ----------------------------
+DROP TABLE IF EXISTS `wxnews`;
+CREATE TABLE `wxnews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author` varchar(50) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `digest` varchar(255) DEFAULT NULL,
+  `content` text,
+  `cover_pic` varchar(255) DEFAULT NULL,
+  `source_url` varchar(255) DEFAULT NULL,
+  `news_type` int(11) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for wxnews_picture
+-- ----------------------------
+DROP TABLE IF EXISTS `wxnews_picture`;
+CREATE TABLE `wxnews_picture` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) DEFAULT NULL,
+  `pic_name` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for wxquestion
+-- ----------------------------
+DROP TABLE IF EXISTS `wxquestion`;
+CREATE TABLE `wxquestion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(1000) DEFAULT '',
+  `answer` varchar(1000) DEFAULT '',
+  `question_time` varchar(50) DEFAULT '',
+  `answer_time` varchar(50) DEFAULT '',
+  `answer_author` varchar(255) DEFAULT NULL,
+  `respond` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for wxrookie
+-- ---------------------------
+DROP TABLE IF EXISTS `wxrookie`;
+CREATE TABLE `wxrookie` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `StuId` varchar(20) NOT NULL,
+  `academy` varchar(50) DEFAULT NULL,
+  `Class` varchar(50) NOT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `AdmissionYear` int(11) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `qq` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `join` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+/*
+Add For WeiXin
+*/
