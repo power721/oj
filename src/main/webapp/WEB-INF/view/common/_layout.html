@@ -32,84 +32,79 @@
 <body>
 
 <!-- ============================== Navbar ============================== -->
-<div class="navbar navbar-fixed-top" id="oj-navbar">
-  <div class="navbar-inner">
-    <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
-      <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="brand" href="./">PowerOJ</a>
-      <div class="nav-collapse collapse">
-        <ul class="nav">
-          <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>">
-            <a href="problem"><i class="icon-list"></i>Problem</a>
-          </li>
-          <li class="<#if actionKey?? && actionKey=="status">active</#if>">
-            <a href="status"><i class="icon-check"></i>Status</a>
-          </li>
-          <li class="<#if controllerKey?? && controllerKey=="contest">active</#if>">
-            <a href="contest"><i class="icon-fire"></i>Contest</a>
-          </li>
-          <li class="<#if actionKey?? && actionKey=="rank">active</#if>">
-            <a href="rank"><i class="icon-signal"></i>Ranklist</a>
-          </li>
-          <li class="<#if controllerKey?? && controllerKey=="discuss">active</#if>">
-            <a href="discuss"><i class="icon-comment"></i>Discuss</a>
-          </li>
-          <li class="<#if actionKey?? && actionKey=="faq">active</#if>">
-            <a href="faq"><i class="icon-question-sign"></i>F.A.Q</a>
-          </li>
-          <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
-            <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
-          </li>
-          <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
-            <a href="downloads"><i class="icon-download-alt"></i>Download</a>
-          </li>
-          <#if isSwust?? && isSwust == true>
-            <li>
-              <a href="achievement"><i class="fa fa-trophy"></i>Achieve</a>
-            </li>
+<div class="navbar navbar-fixed-top" >
+  <div class="container" id="oj-top-navbar">
+    <a class="brand" href="./" style="margin-left: 20px">PowerOJ</a>
+    <ul class="nav pull-right">
+      <#if user?? && user.uid??>
+        <#--<li>-->
+        <#--<img class="pull-left avatar img-polaroid media-object" alt="user avatar"-->
+        <#--onerror="this.onerror=null;this.src='assets/images/user/default.png'"-->
+          <#--src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>"/>-->
+      <#--</li>-->
+      <li class="dropdown active">
+        <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown">
+          <i class="oj-icon oj-icon-user<#if adminUser??>-suit</#if>"></i>${user.name!"user"}<b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="user/profile">Profile</a></li>
+          <li><a href="user/#area=mail">Mail</a></li>
+          <li><a href="user/loginlog">Login Log</a></li>
+          <li class="divider"></li>
+          <li class="nav-header">Admin</li>
+          <li><a href="user/edit">Edit</a></li>
+          <li><a href=" user/archive">Archive</a></li>
+          <#if adminUser??>
+            <li><a href="news">News</a></li>
+            <li><a href="admin">Admin</a></li>
           </#if>
         </ul>
-        <ul class="nav pull-right">
-        <#if user?? && user.uid??>
-          <#--<li>-->
-            <#--<img class="pull-left avatar img-polaroid media-object" alt="user avatar"-->
-                 <#--onerror="this.onerror=null;this.src='assets/images/user/default.png'"-->
-                 <#--src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>"/>-->
-          <#--</li>-->
-          <li class="dropdown active">
-            <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown">
-              <i class="oj-icon oj-icon-user<#if adminUser??>-suit</#if>"></i>${user.name!"user"}<b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="user/profile">Profile</a></li>
-              <li><a href="user/#area=mail">Mail</a></li>
-              <li><a href="user/loginlog">Login Log</a></li>
-              <li class="divider"></li>
-              <li class="nav-header">Admin</li>
-              <li><a href="user/edit">Edit</a></li>
-              <li><a href=" user/archive">Archive</a></li>
-              <#if adminUser??>
-                <li><a href="news">News</a></li>
-                <li><a href="admin">Admin</a></li>
-              </#if>
-            </ul>
-          </li>
-          <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
-        <#else>
-          <li class="<#if actionKey?? && actionKey=="login">active</#if>">
-            <a href="#" id="login" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
-          </li>
-          <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
-            <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal"><i class="icon-star"></i>Signup</a>
-          </li>
+      </li>
+      <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
+      <#else>
+        <li class="<#if actionKey?? && actionKey=="login">active</#if>">
+        <a href="#" id="login" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+        </li>
+        <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
+        <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal"><i class="icon-star"></i>Signup</a>
+        </li>
         </#if>
-        </ul>
-      </div>
-    </div>
+    </ul>
+  </div>
+</div>
+<div class="navbar" id="oj-navbar">
+  <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
+    <ul class="nav nav-pills nav-stacked">
+      <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>">
+      <a href="problem"><i class="icon-list"></i>Problem</a>
+      </li>
+      <li class="<#if actionKey?? && actionKey=="status">active</#if>">
+      <a href="status"><i class="icon-check"></i>Status</a>
+      </li>
+      <li class="<#if controllerKey?? && controllerKey=="contest">active</#if>">
+      <a href="contest"><i class="icon-fire"></i>Contest</a>
+      </li>
+      <li class="<#if actionKey?? && actionKey=="rank">active</#if>">
+      <a href="rank"><i class="icon-signal"></i>Ranklist</a>
+      </li>
+      <li class="<#if controllerKey?? && controllerKey=="discuss">active</#if>">
+      <a href="discuss"><i class="icon-comment"></i>Discuss</a>
+      </li>
+      <li class="<#if actionKey?? && actionKey=="faq">active</#if>">
+      <a href="faq"><i class="icon-question-sign"></i>F.A.Q</a>
+      </li>
+      <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
+      <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
+      </li>
+      <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
+      <a href="downloads"><i class="icon-download-alt"></i>Download</a>
+      </li>
+      <#if isSwust?? && isSwust == true>
+        <li>
+          <a href="achievement"><i class="fa fa-trophy"></i>Achieve</a>
+        </li>
+      </#if>
+    </ul>
   </div>
 </div>
 
@@ -231,7 +226,7 @@
 
 <!-- ========================= Footer ========================= -->
 <footer class="footer">
-  <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
+  <div class="container-fluid">
     <div class="copyright">
       ©Copyright 2016 <a href="http://git.oschina.net/power/oj/commits/master" target="balnk">PowerOJ Rev.<#include "version.ftl"></a>
     </div>
