@@ -1,8 +1,14 @@
 var lang_map = {
   1: "c_cpp",
   2: "c_cpp",
+  3: "pascal",
   4: "java",
-  5: "python"
+  5: "python",
+  6: "c_cpp",
+  7: "c_cpp",
+  8: "c_cpp",
+  9: "c_cpp",
+  10:"python"
 };
 
 var is_editor_active = false;
