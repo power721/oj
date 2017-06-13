@@ -410,3 +410,70 @@ ALTER TABLE `team` CHANGE `year` `cid` int(4) DEFAULT NULL;
 #2017-4-13
 ALTER TABLE `contest_solution` CHANGE `test` `test` int(9) NOT NULL DEFAULT '0';
 ALTER TABLE `solution` CHANGE `test` `test` int(9) NOT NULL DEFAULT '0';
+
+#2017-6-13 Add for WeiXin
+DROP TABLE IF EXISTS `wxnews`;
+CREATE TABLE `wxnews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author` varchar(50) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `digest` varchar(255) DEFAULT NULL,
+  `content` text,
+  `cover_pic` varchar(255) DEFAULT NULL,
+  `source_url` varchar(255) DEFAULT NULL,
+  `news_type` int(11) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `wxnews_picture`;
+CREATE TABLE `wxnews_picture` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) DEFAULT NULL,
+  `pic_name` varchar(255) DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `wxquestion`;
+CREATE TABLE `wxquestion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(1000) DEFAULT '',
+  `answer` varchar(1000) DEFAULT '',
+  `question_time` varchar(50) DEFAULT '',
+  `answer_time` varchar(50) DEFAULT '',
+  `answer_author` varchar(255) DEFAULT NULL,
+  `respond` int(5) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `wxrookie`;
+CREATE TABLE `wxrookie` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `StuId` varchar(20) NOT NULL,
+  `academy` varchar(50) DEFAULT NULL,
+  `Class` varchar(50) NOT NULL,
+  `gender` varchar(10) DEFAULT NULL,
+  `AdmissionYear` int(11) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `qq` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `join` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+#2017-6-13 add language
+UPDATE `oj`.`program_language` SET `id`='1', `name`='GCC11', `description`='C语言推荐', `extTime`='0', `extMemory`='996', `timeFactor`='1', `memoryFactor`='1', `ext`='c', `exe`='exe', `complieOrder`='1', `compileCmd`='C:\\JudgeOnline\\bin\\gcc\\bin\\gcc.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', `brush`='cpp', `script`='0', `status`='1' WHERE (`id`='1');
+UPDATE `oj`.`program_language` SET `id`='2', `name`='G++11', `description`='C++推荐', `extTime`='0', `extMemory`='996', `timeFactor`='1', `memoryFactor`='1', `ext`='cc', `exe`='exe', `complieOrder`='1', `compileCmd`='C:\\JudgeOnline\\bin\\gcc\\bin\\g++.exe -fno-asm -s -w -O1 -DONLINE_JUDGE -o %PATH%%NAME% %PATH%%NAME%.%EXT%', `brush`='cpp', `script`='0', `status`='1' WHERE (`id`='2');
+UPDATE `oj`.`program_language` SET `id`='3', `name`='Pascal', `description`='', `extTime`='0', `extMemory`='1000', `timeFactor`='1', `memoryFactor`='1', `ext`='pas', `exe`='exe', `complieOrder`='0', `compileCmd`='C:\\JudgeOnline\\bin\\fpc\\fpc.exe -Sg -dONLINE_JUDGE %PATH%%NAME%.%EXT%', `brush`='pascal', `script`='0', `status`='1' WHERE (`id`='3');
+UPDATE `oj`.`program_language` SET `id`='4', `name`='Java', `description`='', `extTime`='0', `extMemory`='8000', `timeFactor`='3', `memoryFactor`='3', `ext`='java', `exe`='class', `complieOrder`='2', `compileCmd`='C:\\JudgeOnline\\bin\\Java\\Java.bat %PATH%', `brush`='java', `script`='0', `status`='1' WHERE (`id`='4');
+UPDATE `oj`.`program_language` SET `id`='5', `name`='Python2.7', `description`='', `extTime`='0', `extMemory`='7000', `timeFactor`='4', `memoryFactor`='3', `ext`='py', `exe`='exe', `complieOrder`='1', `compileCmd`='C:\\JudgeOnline\\bin\\Python\\Python.bat %PATH% %NAME% %EXT%', `brush`='python', `script`='0', `status`='1' WHERE (`id`='5');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('6', 'GCC99', '', '0', '996', '1', '1', 'c', 'exe', '1', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('7', 'G++98', '', '0', '996', '1', '1', 'cc', 'exe', '0', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('8', 'G++14', ' ', '0', '996', '1', '1', 'cc', 'exe', '1', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('9', 'G++17', ' ', '0', '996', '1', '1', 'cc', 'exe', '0', 'C:\\', 'cpp', '0', '1');
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('10', 'Python3', ' ', '0', '7000', '4', '3', 'py', 'exe', '1', 'C:\\', 'python', '0', '1');
+
