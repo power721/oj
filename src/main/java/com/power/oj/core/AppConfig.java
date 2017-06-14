@@ -43,6 +43,7 @@ import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.model.ResourceModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
+import com.power.oj.cprogram.CProgramRoutes;
 import com.power.oj.discussion.CommentModel;
 import com.power.oj.discussion.DiscussionController;
 import com.power.oj.discussion.TopicModel;
@@ -124,6 +125,7 @@ public class AppConfig extends JFinalConfig {
 
         me.add(new AdminRoutes());
         me.add(new ApiRoutes());
+        me.add(new CProgramRoutes());
         me.add("/", MainController.class, "/common/");
         me.add("/contest", ContestController.class);
         me.add("/discuss", DiscussionController.class);
