@@ -1,0 +1,24 @@
+<@override name="content">
+<div class="pagination pagination-centered">
+    <a href= "cprogram/work" class = "btn btn-large btn-success">作业</a>
+    <a href= "cprogram/experiment" class = "btn btn-large btn-info">实验</a>
+    <a href= "cprogram/experiment_exam" class = "btn btn-large btn-warning">实验考试</a>
+    <a href= "cprogram/course_exam" class = "btn btn-large btn-danger">课程考试</a>
+    <#if TeacherUser??><a href="cprogram/admin" class="btn btn-large btn-info">管理</a></#if>
+</div>
+
+
+<span class="time" id="current"></span>
+</@override>
+
+<@override name="scripts">
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    clock(function (current_time) {
+      $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+    }, 1000);
+  });
+</script>
+</@override>
+<@extends name="../common/_layout.html" />
