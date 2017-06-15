@@ -2,14 +2,20 @@ package com.power.oj.cprogram.work;
 
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
+import com.jfinal.plugin.activerecord.CPI;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
+import com.power.oj.core.bean.FlashMessage;
+import com.power.oj.core.bean.MessageType;
 import com.power.oj.cprogram.CProgramConstants;
 import com.power.oj.cprogram.CProgramInterceptor;
 import com.power.oj.cprogram.CProgramService;
+import com.power.oj.problem.ProblemModel;
+import com.power.oj.problem.ProblemService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.text.SimpleDateFormat;
@@ -55,7 +61,8 @@ public class WorkController extends OjController{
         rd.set("endTime", endTime);
         rd.set("type", 1);
         Db.save("cprogram_work", rd);
-        redirect("/cprogram/work");
+        long wid = rd.getLong("id");
+        redirect("/cprogram/work/manager/" + wid);
     }
 
     @RequiresPermissions("teacher")
@@ -91,5 +98,105 @@ public class WorkController extends OjController{
         } else {
             renderJson("{\"success\":false, \"result\":\"Delete problem failed.\"}");
         }
+    }
+
+    @Before(WorkInterceptor.class)
+    public void show() {
+        Integer wid = getParaToInt(0);
+        Record work = CProgramService.GetWork(wid);
+        List<Record> problems = CProgramService.GetProblemList(wid);
+        setAttr("work", work);
+        setAttr("workProblems", problems);
+    }
+
+    @Before(POST.class)
+    @RequiresPermissions("teacher")
+    public void reorderProblem() {
+        Integer wid = getParaToInt("wid");
+        String pid = getPara("pid");
+        if (CProgramService.reorderProblem(wid, pid) > 0) {
+            renderJson("{\"success\":true}");
+        } else {
+            renderJson("{\"success\":false, \"result\":\"Unknown error!\"}");
+        }
+    }
+
+    @Before(WorkInterceptor.class)
+    public void problem() {
+        Integer wid = getParaToInt(0);
+        Integer letter = Integer.valueOf(getPara(1).charAt(0)) - 'A';
+        if (letter == null) {
+            forwardAction("/cprogram/work/show/" + wid);
+            return;
+        }
+        Record problem = CProgramService.GetProblem(wid, letter);
+        if(problem == null) {
+            FlashMessage msg =
+                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+            redirect("/cprogram/work/show/" + wid, msg);
+            return;
+        }
+        Integer uid = CProgramService.GetUid();
+        Integer pid = problem.getInt("pid");
+        if(uid != null) {
+            Boolean result = CProgramService.HaveAccepted(wid, uid, pid);
+            setAttr("userResult", result);
+        }
+
+        List<Record> workProblems = CProgramService.GetProblemList(wid);
+        Integer prevPid = letter;
+        if (letter > 0) {
+            prevPid = letter - 1;
+        }
+        Integer nextPid = letter;
+        if (letter + 1 < workProblems.size()) {
+            nextPid = letter + 1;
+        }
+        setAttr("prevPid", prevPid);
+        setAttr("nextPid", nextPid );
+        setAttr("spj", problemService.checkSpj(pid));
+        setAttr("problem", problem);
+        setAttr("workProblems", workProblems);
+        setAttr("work", CProgramService.GetWork(wid));
+        boolean status = !CProgramService.isWorkFinished(wid) && !CProgramService.isWorkPending(wid);
+        setAttr("cstatus", status);
+    }
+
+    @Before(WorkInterceptor.class)
+    public void submit() {
+        Integer wid = getParaToInt(0);
+        Integer letter = Integer.valueOf(getPara(1).charAt(0)) - 'A';
+        boolean ajax = getParaToBoolean("ajax", false);
+        if(ajax == false) {
+            FlashMessage msg =
+                    new FlashMessage("请不要使用老版本浏览器", MessageType.WARN, getText("message.warn.title"));
+            redirect("/cprogram/work/show/" + wid, msg);
+            return;
+        }
+        Record problem = CProgramService.GetProblem(wid, letter);
+        setAttr("problem", problem);
+        setAttr("wid", wid);
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+        render("ajax/submit.html");
+    }
+
+    @Before(WorkInterceptor.class)
+    @RequiresPermissions("teacher")
+    public void edit() {
+        Integer wid = getParaToInt(0);
+        Record work = CProgramService.GetWork(wid);
+        setAttr("work", work);
+    }
+    @Before({WorkInterceptor.class, POST.class})
+    @RequiresPermissions("teacher")
+    public void update() {
+        Integer wid = getParaToInt(0);
+        Record work = Db.findById("cprogram_work", wid);
+        work.set("title", getPara("title"));
+        work.set("time", getPara("time"));
+        work.set("startTime", getPara("startTime"));
+        work.set("endTime", getPara("endTime"));
+        Db.update("cprogram_work", work);
+        redirect("/cprogram/work/manager/" + wid);
     }
 }
