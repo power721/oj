@@ -1,0 +1,115 @@
+<@override name="contest_content">
+  <#if serverTime*1000 < work.endTime?long >
+  <div class="progress" id="contest-progress">
+    <div class="bar" id="contest-bar" style="width:<#if (serverTime*1000 > work.endTime?long)>100%</#if>"></div>
+  </div>
+  </#if>
+<h3 class="text-center">作业 - ${work.title!}</h3>
+<h3 class="text-center">${work.time!}</h3>
+<div class="row text-center">
+  <div class="span6 offset3">
+    <div class="well">
+      <span>Start Time</span>: <span class="time">${work.startTime!}</span>
+      <span>End Time</span>: <span class="time">${work.endTime!}</span><br>
+      <span>Current System Time</span>: <span class="time" id="current">${work.startTime!}</span>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="span8 offset2">
+    <table id="problem-list" class="table table-hover table-condensed">
+      <thead>
+      <tr>
+        <th></th>
+        <th>Problem ID</th>
+        <th>题目</th>
+        <#if TeacherUser??>
+          <th>AC</th>
+          <th>Submit</th>
+        </#if>
+      </tr>
+      </thead>
+      <tbody>
+        <#if workProblems??>
+          <#list workProblems as Problem>
+          <tr>
+            <td class="result">
+              <#if Problem.status??>
+                <i class="<#if Problem.status==true>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i>
+              </#if>
+            </td>
+            <td class="pid">
+              <#if TeacherUser??>
+                <a href="problem/show/${Problem.pid!}" target="_blank">${Problem.pid!}</a>
+              </#if>
+              <a href="cprogram/work/problem/${work.id!}-${(Problem.letter + 1)?upper_abc}" data-toggle="tooltip" title="${Problem.title!}">Problem ${(Problem.letter + 1)?upper_abc}</a>
+            </td>
+            <td class="title">
+              <a href="cprogram/work/problem/${work.id!}-${(Problem.letter + 1)?upper_abc}">${Problem.title!}</a>
+            </td>
+            <#if TeacherUser??>
+              <td class="accept">
+                <a href="cprogram/work/status/${work.id!}-${(Problem.letter + 1)?upper_abc}?result=0">${Problem.accepted!}</a>
+              </td>
+              <td class="submit">
+                <a href="cprogram/work/status/${work.id!}-${(Problem.letter + 1)?upper_abc}">${Problem.submission!}</a>
+              </td>
+            </#if>
+          </tr>
+          </#list>
+        </#if>
+      </tbody>
+    </table>
+  </div>
+</div>
+</@override>
+
+<@override name="scripts">
+<link href="assets/tablecloth/css/tablecloth.css" type="text/css" rel="stylesheet">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    <#if work.startTime?long<=serverTime*1000 && serverTime*1000<=work.endTime?long>
+      var startTime = ${work.startTime?long};
+      var endTime = ${work.endTime?long} ;
+      var during_time = endTime - startTime;
+      clock(function (current_time) {
+        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+        if (current_time >= startTime && current_time <= endTime) {
+          var percent = (current_time - startTime) / during_time * 100;
+          $('#contest-bar').css('width', percent + '%');
+        }
+
+        if (current_time > endTime) {
+          $('#contest-progress').remove();
+        } else {
+          if (endTime - current_time < 24 * 3600 * 1000) {
+            $('#contest-progress').addClass('progress-danger progress-striped active');
+          } else {
+            $('#contest-progress').addClass('progress-success progress-striped active');
+          }
+        }
+      }, 1000);
+    <#else>
+      clock(function (current_time) {
+        $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+      }, 1000);
+    </#if>
+
+    <#if oj_style != "slate">
+      $("#problem-list").tablecloth({
+        theme: "stats",
+        condensed: true,
+        sortable: true,
+        striped: true,
+        clean: true
+      });
+    </#if>
+  });
+</script>
+</@override>
+<@extends name="_layout.html" />

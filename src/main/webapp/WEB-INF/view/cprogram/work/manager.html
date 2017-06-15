@@ -250,12 +250,12 @@
                 return false;
             });
             $('#reorder').click(function () {
-                var data = {cid:${work.id!}, pid: ''};
+                var data = {wid:${work.id!}, pid: ''};
                 $("#problem-list tbody tr.problem").each(function (i, e) {
                     data.pid += $(e).attr('pid') + ',';
                 });
                 data.pid = data.pid.substring(0, data.pid.length - 1);
-                $.post('/api/contest/reorderProblem', data, function (data) {
+                $.post('/cprogram/work/reorderProblem', data, function (data) {
                     if (data.success) {
                         $.dialog({
                             content: 'Reorder problem success.',
