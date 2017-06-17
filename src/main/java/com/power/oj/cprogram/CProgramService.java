@@ -2,9 +2,11 @@ package com.power.oj.cprogram;
 
 import com.jfinal.plugin.activerecord.CPI;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.shiro.ShiroKit;
@@ -12,6 +14,8 @@ import com.power.oj.user.UserService;
 import com.sun.prism.impl.Disposer;
 import jodd.util.StringUtil;
 
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -166,5 +170,57 @@ public final class CProgramService {
         problem.set("hint", rawProblem.getStr("hint"));
 
         return problem;
+    }
+    static public Page<Record> GetSolutionPage(
+            Integer pageNumber, Integer pageSize, Integer result, Integer language, Integer wid,
+            Integer letter, String userName) {
+        String sql = "Select " +
+                "sid," +
+                "s.uid, " +
+                "pid, " +
+                "wid, " +
+                "letter, " +
+                "result, " +
+                "test, " +
+                "FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') as ctime, " +
+                "memory, " +
+                "s.language, " +
+                "codeLen, " +
+                "u.name, " +
+                "u.nick";
+        StringBuilder sb = new StringBuilder("FROM " +
+                "cprogram_solution s INNER JOIN user u ON u.uid = s.uid WHERE wid=?");
+        List<Object> paras = new ArrayList<Object>();
+        paras.add(wid);
+        if (result > -1) {
+            if (result == ResultType.NOT_AC) {
+                sb.append(" AND result!=?");
+                paras.add(ResultType.AC);
+            } else {
+                sb.append(" AND result=?");
+                paras.add(result);
+            }
+        }
+        if (language > 0) {
+            sb.append(" AND s.language=?");
+            paras.add(language);
+        }
+        if (letter > -1) {
+            sb.append(" AND letter=?");
+            paras.add(letter);
+        }
+        if (!CProgramService.isTeacher()) {
+            sb.append(" AND name=?");
+            paras.add(userName);
+        }
+        sb.append(" ORDER BY sid DESC");
+        Page<Record> page = Db.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+        for(Record solution : page.getList()) {
+            solution.set("languageName", OjConfig.languageName.get(solution.get("language")));
+            ResultType resultType = OjConfig.resultType.get(solution.get("result"));
+            solution.set("resultName", resultType.getName());
+            solution.set("resultLongName", resultType.getLongName());
+        }
+        return page;
     }
 }

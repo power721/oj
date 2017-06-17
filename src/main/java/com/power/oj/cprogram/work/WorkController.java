@@ -16,6 +16,7 @@ import com.power.oj.cprogram.CProgramInterceptor;
 import com.power.oj.cprogram.CProgramService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
+import jodd.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.text.SimpleDateFormat;
@@ -198,5 +199,54 @@ public class WorkController extends OjController{
         work.set("endTime", getPara("endTime"));
         Db.update("cprogram_work", work);
         redirect("/cprogram/work/manager/" + wid);
+    }
+    @Before(WorkInterceptor.class)
+    public void status() {
+        Integer wid = getParaToInt(0);
+        int pageNumber = getParaToInt(1, 1);
+        int pageSize = getParaToInt(2, OjConfig.statusPageSize);
+        Integer result = getParaToInt("result", -1);
+        Integer language = getParaToInt("language", 0);
+        Integer letter = -1;
+        if (StringUtil.isNotBlank(getPara("letter"))) {
+            try {
+                letter = getParaToInt("letter");
+            } catch (Exception e) {
+                letter = getPara("letter").toUpperCase().charAt(0) - 'A';
+            }
+        }
+        String userName = getPara("name");
+
+        if(!CProgramService.isTeacher()) {
+            userName = userService.getCurrentUserName();
+
+        }
+        setAttr("name", userName);
+
+        StringBuilder query = new StringBuilder().append("?");
+        if (result > -1) {
+            query.append("&result=").append(result);
+        }
+        if (language > 0) {
+            query.append("&language=").append(language);
+        }
+        if (letter > -1) {
+            query.append("&letter=").append((char)('A' + letter));
+        }
+        if (StringUtil.isNotBlank(userName)) {
+            query.append("&name=").append(userName);
+        }
+        setAttr("workProblems", CProgramService.GetProblemList(wid));
+        setAttr("solutionList",
+                CProgramService.GetSolutionPage(pageNumber, pageSize, result, language, wid, letter, userName));
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+        setAttr(OjConstants.JUDGE_RESULT, OjConfig.judgeResult);
+        setAttr("result", result);
+        setAttr("language", language);
+        setAttr("letter", letter);
+
+
+        setAttr("query", query.toString());
+        setAttr("work", CProgramService.GetWork(wid));
     }
 }
