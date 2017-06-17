@@ -50,10 +50,10 @@
             </td>
             <#if TeacherUser??>
               <td class="accept">
-                <a href="cprogram/work/status/${work.id!}-${(Problem.letter + 1)?upper_abc}?result=0">${Problem.accepted!}</a>
+                <a href="cprogram/work/status/${work.id!}?letter=${(Problem.letter + 1)?upper_abc}&result=0">${Problem.accepted!}</a>
               </td>
               <td class="submit">
-                <a href="cprogram/work/status/${work.id!}-${(Problem.letter + 1)?upper_abc}">${Problem.submission!}</a>
+                <a href="cprogram/work/status/${work.id!}?letter=${(Problem.letter + 1)?upper_abc}">${Problem.submission!}</a>
               </td>
             </#if>
           </tr>

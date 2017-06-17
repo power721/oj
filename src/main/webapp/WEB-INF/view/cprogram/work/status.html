@@ -3,11 +3,11 @@
   <div class="form-inline">
     <form class="form-search" action="cprogram/work/status/${work.id!}">
       <input type="text" class="input-small" name="name" value="${name!}" placeholder="用户名">
-      <select class="input-medium" id="inputProblem" name="pid">
+      <select class="input-medium" id="inputProblem" name="letter">
         <option value="">题目</option>
-        <#if contestProblems??>
-          <#list contestProblems as Problem>
-            <option value="${Problem.letter!}"<#if pid?? && pid==Problem.id>selected</#if>>${Problem.letter!}
+        <#if workProblems??>
+          <#list workProblems as Problem>
+            <option value="${(Problem.letter+1)?upper_abc}"<#if letter?? && letter==Problem.letter>selected</#if>>${(Problem.letter+1)?upper_abc}
               . ${Problem.title!}</option>
           </#list>
         </#if>
@@ -37,7 +37,7 @@
     </form>
   </div>
 
-  <#include "../common/_paginate2.html" />
+  <#include "../../common/_paginate2.html" />
   <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="cprogram/work/status/${work.id!}" urlParas="${query}" />
   <div class="pull-right">
     <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span
@@ -69,7 +69,7 @@
           <a href="user/profile/${(solution.name)!}" data-toggle="tooltip" target="_blank"
              title="${(solution.nick)!?html}">${(solution.name)!}</a>
         </td>
-        <td class="problem"><a href="cprogram/work/problem/${work.id}-${solution.alpha!}">${solution.alpha!}</a></td>
+        <td class="problem"><a href="cprogram/work/problem/${work.id}-${(solution.letter+1)?upper_abc}">${(solution.letter+1)?upper_abc}</a></td>
         <td class="result" id="${solution.resultName!}">
           <i class="btn" sid="${solution.sid!}">
               ${solution.resultLongName!}
@@ -80,16 +80,16 @@
         </td>
         <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
         <td class="memory"><#if solution.result==0>${solution.memory!0} KB</#if></td>
-        <td class="language">
-          <#if user?? &&(adminUser?? || user.uid==solution.uid)>
-            <a href="cprogram/work/code/${work.id}-${solution.sid!}" target="_blank"
-               title="show source code">${solution.languageName!}</a>
+        <td class="result">
+          <#if user?? &&(TeacherUser?? || user.uid==solution.uid)>
+            <i class="btn btn-tool" sid="${solution.sid!}"
+               title="show source code">${solution.languageName!}</i>
           <#else>
           ${solution.languageName!}
           </#if>
         </td>
         <td class="code_len">${solution.codeLen!} B</td>
-        <td class="ctime">${solution.ctime_t!}</td>
+        <td class="ctime">${solution.ctime}</td>
       </tr>
       </#list>
     </#if>
@@ -98,9 +98,9 @@
 <div class="pagination pagination-centered">
 </div>
 <div class="hide" id="contest_code">
-  <a href="contest/code/[cid]-[sid]" target="_blank" title="show source code">[sid]</a>
+  <a href="cprogram/work/code/[wid]-[sid]" target="_blank" title="show source code">[sid]</a>
 </div>
-<div class="modal hide fade contestModal" id="codeModal" cid="${cid!}">
+<div class="modal hide fade contestModal" id="codeModal" wid="${work.id!}">
   <div class="modal-header">
     <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
     <h3 id="codeModalLabel">
@@ -121,8 +121,8 @@
 <script type="text/javascript" src="assets/prettify/prettify.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "/contest/status/${cid!}-${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
-    var nextpage = "/contest/status/${cid!}-${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+    var prevpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+    var nextpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
 
     $(document).keydown(function (event) {
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
@@ -154,17 +154,17 @@
 
     <#if user??>
       var userId = ${user.uid};
-      var isAdmin = <#if adminUser??>true<#else>false</#if>;
+      var isAdmin = <#if TeacherUser??>true<#else>false</#if>;
       $('.result').delegate("i", "click", function () {
         var sid = $(this).attr('sid');
-        var cid = $('#codeModal').attr('cid');
+        var wid = $('#codeModal').attr('wid');
         var uid = $(this).parent().parent().children('.user').attr('uid');
         if (!isAdmin && uid != userId)
           return false;
         $('#codeModal').modal("show");
-        var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, cid);
+        var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[wid\]/g, wid);
         $('#codeModal #sid').html(tmp);
-        $.get("/api/contest/code", {cid: cid, sid: sid},
+        $.get("/api/contest/code", {wid: wid, sid: sid},
                 function (data) {
                   if (data.success) {
                     var code = "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
@@ -200,7 +200,7 @@
       $('#WAIT, #RUN, #REJUDGE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
-        $.getJSON('/api/contest/getResult', {'cid':${cid!}, 'sid': $this.children('i').attr('sid')}, function (data) {
+        $.getJSON('/api/contest/getResult', {'wid':${work.id!}, 'sid': $this.children('i').attr('sid')}, function (data) {
           var img = '';
           if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';

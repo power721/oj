@@ -38,15 +38,15 @@
   Time Limit: <span class="blue">${problem.timeLimit!} MS</span>
   Memory Limit: <span class="blue">${problem.memoryLimit!} KB</span><br>
   <#if TeacherUser??>
-    Total Submit: <a href="cprogram/work/status/${work.id!}-${(problem.letter + 1)?upper_abc}">${problem.submission!}</a>
-    Accepted: <a href="cprogram/work/status/${work.id!}-${(problem.letter + 1)?upper_abc}?result=0">${problem.accepted!}</a>
+    Total Submit: <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}">${problem.submission!}</a>
+    Accepted: <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}&result=0">${problem.accepted!}</a>
   </#if>
   <br>
     <#if cstatus?? && cstatus==true>
       <a href="<#if user??>cprogram/work/submit/${work.id!}-${(problem.letter + 1)?upper_abc}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
          data-target="<#if user??>#submitModal<#else>#loginModal</#if>">提交</a>
     </#if>
-  <a href="cprogram/work/status/${work.id!}-${(problem.letter + 1)?upper_abc}" class="btn btn-info">状态</a>
+  <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}" class="btn btn-info">状态</a>
 </div>
 
   <#if user??>
@@ -144,7 +144,7 @@
     <a href="<#if user??>cprogram/work/submit/${work.id!}-${(problem.letter + 1)?upper_abc}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
        data-target="<#if user??>#submitModal<#else>#loginModal</#if>">提交</a>
   </#if>
-  <a href="cprogram/work/status/${work.id!}-${(problem.letter + 1)?upper_abc}" class="btn btn-info">状态</a>
+  <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}" class="btn btn-info">状态</a>
 </div>
 
 </@override>
