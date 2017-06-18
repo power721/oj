@@ -98,7 +98,7 @@
 <div class="pagination pagination-centered">
 </div>
 <div class="hide" id="contest_code">
-  <a href="cprogram/work/code/[wid]-[sid]" target="_blank" title="show source code">[sid]</a>
+  <p>[sid]</p>
 </div>
 <div class="modal hide fade contestModal" id="codeModal" wid="${work.id!}">
   <div class="modal-header">
@@ -121,8 +121,8 @@
 <script type="text/javascript" src="assets/prettify/prettify.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber-1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
-    var nextpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber+1}<#if solutionList.pageSize!=20>?s=${solutionList.pageSize}</#if>"
+    var prevpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber-1}${query}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
+    var nextpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber+1}${query}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
 
     $(document).keydown(function (event) {
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
@@ -164,12 +164,12 @@
         $('#codeModal').modal("show");
         var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[wid\]/g, wid);
         $('#codeModal #sid').html(tmp);
-        $.get("/api/contest/code", {wid: wid, sid: sid},
+        $.get("cprogram/work/code", {wid: wid, sid: sid},
                 function (data) {
                   if (data.success) {
                     var code = "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
                     code += "/*\n";
-                    code += " * Problem: " + data.solution.cid + "-" + data.alpha + " (" + data.problemTitle + ")\n";
+                    code += " * Problem: " + data.solution.wid + "-" + data.letter + " (" + data.problemTitle + ")\n";
                     code += " * User: " + (data.solution.name || "Guest") + "\n";
                     code += " * Language: " + data.language + "\n";
                     code += " * Result: " + data.resultLongName + "\n";
@@ -200,7 +200,7 @@
       $('#WAIT, #RUN, #REJUDGE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
-        $.getJSON('/api/contest/getResult', {'wid':${work.id!}, 'sid': $this.children('i').attr('sid')}, function (data) {
+        $.getJSON('cprogram/work/getResult', {'wid':${work.id!}, 'sid': $this.children('i').attr('sid')}, function (data) {
           var img = '';
           if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';
