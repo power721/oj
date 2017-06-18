@@ -6,17 +6,21 @@ import com.jfinal.plugin.activerecord.CPI;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.cprogram.CProgramConstants;
 import com.power.oj.cprogram.CProgramInterceptor;
 import com.power.oj.cprogram.CProgramService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
+import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.text.SimpleDateFormat;
@@ -164,6 +168,7 @@ public class WorkController extends OjController{
     }
 
     @Before(WorkInterceptor.class)
+    @RequiresAuthentication
     public void submit() {
         Integer wid = getParaToInt(0);
         Integer letter = Integer.valueOf(getPara(1).charAt(0)) - 'A';
@@ -248,5 +253,70 @@ public class WorkController extends OjController{
 
         setAttr("query", query.toString());
         setAttr("work", CProgramService.GetWork(wid));
+    }
+    @RequiresAuthentication
+    public void code() {
+        Integer wid = getParaToInt("wid");
+        Integer sid = getParaToInt("sid");
+        Record solution = CProgramService.GetSolution(wid, sid);
+        if(solution == null) {
+            renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
+            return;
+        }
+        ResultType resultType = OjConfig.resultType.get(solution.get("result"));
+        Integer uid = userService.getCurrentUid();
+        if(uid == null || !CProgramService.isTeacher() && !uid.equals(solution.getInt("uid"))) {
+            renderJson("{\"success\":false,\"result\":\"Permission denied.\"}");
+            return;
+        }
+        Integer letter = solution.getInt("letter");
+        solution.set("source", HtmlEncoder.text(solution.get("source")));
+        setAttr("success", true);
+        setAttr("language", OjConfig.languageName.get(solution.get("language")));
+        setAttr("letter", (char)('A' + letter));
+        setAttr("problemTitle", CProgramService.GetProblem(wid, letter).get("title"));
+        setAttr("resultLongName", resultType.getLongName());
+        setAttr("resultName", resultType.getName());
+        setAttr("solution", solution);
+
+        String brush = getAttrForStr("language").toLowerCase();
+        if(StringUtil.isBlank(brush)) brush = "c";
+        if(brush.contains("GCC")) brush = "c";
+        else if(brush.contains("G++")) brush = "cc";
+        else if(brush.contains("Python")) brush = "py";
+        else if(brush.contains("Java")) brush = "java";
+        setAttr("brush", brush);
+        renderJson(
+                new String[] {"success", "letter", "problemTitle", "language", "resultLongName", "resultName", "solution",
+                        "brush"});
+    }
+    public void getResult() {
+        Integer wid = getParaToInt("wid", 0);
+        Integer sid = getParaToInt("sid", 0);
+        renderJson(CProgramService.GetSolutionResult(wid, sid));
+    }
+    @Before(POST.class)
+    @RequiresAuthentication
+    public void submitSolution() {
+        Record solution = new Record();
+        solution.set("wid", getParaToInt("solution.wid"));
+        solution.set("letter", getParaToInt("solution.letter"));
+        solution.set("language", getParaToInt("solution.language"));
+        solution.set("source", getPara("solution.source"));
+
+        int result = CProgramService.submitSolution(solution);
+
+        if (result == -1) {
+            setFlashMessage(
+                    new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));
+        } else if (result == -2) {
+            setFlashMessage(
+                    new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
+        }
+
+        Integer wid = solution.get("wid");
+        String name = userService.getCurrentUserName();
+        String url = "/cprogram/work/status/" + wid + "?name=" + name;
+        redirect(url);
     }
 }

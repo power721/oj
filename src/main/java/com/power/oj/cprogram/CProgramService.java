@@ -4,9 +4,11 @@ import com.jfinal.plugin.activerecord.CPI;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.shiro.ShiroKit;
@@ -14,6 +16,7 @@ import com.power.oj.user.UserService;
 import com.sun.prism.impl.Disposer;
 import jodd.util.StringUtil;
 
+import javax.xml.transform.Result;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -222,5 +225,50 @@ public final class CProgramService {
             solution.set("resultLongName", resultType.getLongName());
         }
         return page;
+    }
+    static public Record GetSolution(Integer wid, Integer sid) {
+        Record rd = Db.findFirst("select " +
+                "cprogram_solution.*, " +
+                "user.name " +
+                "from " +
+                "cprogram_solution inner join user on user.uid = cprogram_solution.uid " +
+                "where wid = ? and sid = ? and cprogram_solution.status = 1",wid, sid);
+        return rd;
+    }
+    static public Record GetSolutionResult(Integer wid, Integer sid) {
+        Record rd = Db.findFirst("select " +
+                "wid, " +
+                "sid," +
+                "time," +
+                "memory," +
+                "result " +
+                "from cprogram_solution " +
+                "where wid = ? and sid = ? and status = 1", wid, sid);
+        rd.set("result", OjConfig.resultType.get(rd.get("result")));
+        return rd;
+    }
+    static public int submitSolution(Record solution) {
+        Integer wid = solution.getInt("wid");
+        Integer uid = UserService.me().getCurrentUid();
+        Record problem = GetProblem(wid, solution.getInt("letter"));
+        if(problem == null) return -1;
+        solution.set("uid", uid);
+        solution.set("pid", problem.get("pid"));
+        solution.set("ctime", OjConfig.timeStamp);
+        solution.set("mtime", OjConfig.timeStamp);
+        solution.set("result", ResultType.WAIT);
+        solution.set("time", 0);
+        solution.set("memory", 0);
+        int len = solution.getStr("source").length();
+        if(len < 10 || len > 30000) return -2;
+        solution.set("codeLen", len);
+        if(Db.save("cprogram_solution", solution)) {
+            Db.update("UPDATE cprogram_problem SET submission=submission+1 WHERE wid=? AND letter=?", wid, solution.getInt("letter"));
+            ContestSolutionModel contestSolution =  new ContestSolutionModel();
+            contestSolution.put(solution);
+            JudgeService.me().judge(contestSolution);
+        }
+        else return -2;
+        return  0;
     }
 }
