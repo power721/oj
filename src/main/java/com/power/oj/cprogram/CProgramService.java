@@ -48,30 +48,4 @@ public final class CProgramService {
         solution.put("alpha", (char)(solution.getNum() + 'A'));
         return solution;
     }
-/*
-    static public int submitSolution(Record solution) {
-        Integer wid = solution.getInt("wid");
-        Integer uid = UserService.me().getCurrentUid();
-        Record problem = GetProblem(wid, solution.getInt("letter"));
-        if(problem == null) return -1;
-        solution.set("uid", uid);
-        solution.set("pid", problem.get("pid"));
-        solution.set("ctime", OjConfig.timeStamp);
-        solution.set("mtime", OjConfig.timeStamp);
-        solution.set("result", ResultType.WAIT);
-        solution.set("time", 0);
-        solution.set("memory", 0);
-        int len = solution.getStr("source").length();
-        if(len < 10 || len > 30000) return -2;
-        solution.set("codeLen", len);
-        if(Db.save("cprogram_solution", solution)) {
-            Db.update("UPDATE cprogram_problem SET submission=submission+1 WHERE wid=? AND letter=?", wid, solution.getInt("letter"));
-            ContestSolutionModel contestSolution =  new ContestSolutionModel();
-            contestSolution.put(solution);
-            JudgeService.me().judge(contestSolution);
-        }
-        else return -2;
-        return  0;
-    }
-    */
 }

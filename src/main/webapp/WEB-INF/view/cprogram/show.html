@@ -51,7 +51,7 @@
           <tr>
             <td class="result">
               <#if Problem.status??>
-                <i class="<#if Problem.status==true>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i>
+                <i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i>
               </#if>
             </td>
             <td class="pid">
@@ -88,9 +88,9 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    <#if contest.startTime=serverTime && serverTime<=contest.endTime>
-      var startTime = ${contest.startTime};
-      var endTime = ${contest.endTime} ;
+    <#if contest.startTime <= serverTime && serverTime <= contest.endTime>
+      var startTime = ${contest.startTime*1000};
+      var endTime = ${contest.endTime*1000} ;
       var during_time = endTime - startTime;
       clock(function (current_time) {
         $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
@@ -101,7 +101,9 @@
 
         if (current_time > endTime) {
           $('#contest-progress').remove();
-        } else {
+        }
+        else
+        {
             <#if contest.type == 5>
               if (endTime - current_time < 24 * 3600 * 1000) {
             <#else>
@@ -111,7 +113,6 @@
             } else {
                 $('#contest-progress').addClass('progress-success progress-striped active');
             }
-        }
         }
       }, 1000);
     <#else>

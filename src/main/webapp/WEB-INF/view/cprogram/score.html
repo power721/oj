@@ -1,0 +1,47 @@
+<@override name="contest_content">
+<h3 class="text-center"> ${contest.title!}</h3>
+<h3 class="text-center"> ${contest.description!}</h3>
+<div class="row">
+    <div class="span10 offset1">
+        <table id="problem-list" class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th width="20%">用户名</th>
+                    <th width="20%">姓名</th>
+                    <th width="10%">通过数</th>
+                    <th width="10%">提交数</th>
+                    <th width="10%">系统成绩</th>
+                    <th width="10%">最终成绩</th>
+                    <#if TeacherUser??>
+                        <th width="10%">操作</th>
+                    </#if>
+                </tr>
+            </thead>
+            <tbody>
+                <#if scoreList??>
+                    <#list scoreList as user>
+
+                    </#list>
+                </#if>
+            </tbody>
+        </table>
+    </div>
+</div>
+</@override>
+
+<@override name="styles">
+<link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
+</@override>
+
+<@override name="scripts">
+<#if oj_style != "slate">
+    <link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet" type="text/css">
+    <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+    <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+</#if>
+
+<script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+</script>
+</@override>
+<@extends name="_layout.html" />

@@ -1,6 +1,7 @@
 package com.power.oj.cprogram;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.POST;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
@@ -33,6 +34,7 @@ public class CProgramMainController extends OjController {
     public void index() {
 
     }
+    @Clear
     public void list() {
         Integer type = getParaToInt("type", ContestModel.TYPE_WORK);
         int pageNumber = getParaToInt(0, 1);
@@ -268,6 +270,11 @@ public class CProgramMainController extends OjController {
         }
         Integer cid = solution.getCid();
         redirect("/cprogram/status/" + cid);
+    }
+
+    @RequiresPermissions("teacher")
+    public void score() {
+
     }
     public void setFlag() {
         renderText("立Flag");
