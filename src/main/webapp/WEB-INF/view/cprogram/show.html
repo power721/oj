@@ -1,17 +1,32 @@
 <@override name="contest_content">
-  <#if serverTime*1000 < work.endTime?long >
+  <#if serverTime < contest.endTime >
   <div class="progress" id="contest-progress">
-    <div class="bar" id="contest-bar" style="width:<#if (serverTime*1000 > work.endTime?long)>100%</#if>"></div>
+    <div class="bar" id="contest-bar" style="width:<#if (serverTime > contest.endTime)>100%</#if>"></div>
   </div>
   </#if>
-<h3 class="text-center">作业 - ${work.title!}</h3>
-<h3 class="text-center">${work.time!}</h3>
+<h3 class="text-center">
+  <#if contest.type == 5>
+    作业
+    <#else>
+      <#if contest.type == 6>
+        实验
+        <#else>
+          <#if contest.type == 7>
+            实验考试
+            <#else>
+              课程考试
+          </#if>
+      </#if>
+  </#if>
+  -${contest.title!}
+</h3>
+<h3 class="text-center">${contest.description!}</h3>
 <div class="row text-center">
   <div class="span6 offset3">
     <div class="well">
-      <span>Start Time</span>: <span class="time">${work.startTime!}</span>
-      <span>End Time</span>: <span class="time">${work.endTime!}</span><br>
-      <span>Current System Time</span>: <span class="time" id="current">${work.startTime!}</span>
+      <span>Start Time</span>: <span class="time">${contest.startDateTime!}</span>
+      <span>End Time</span>: <span class="time">${contest.endDateTime!}</span><br>
+      <span>Current System Time</span>: <span class="time" id="current">${contest.endDateTime!}</span>
     </div>
   </div>
 </div>
@@ -31,8 +46,8 @@
       </tr>
       </thead>
       <tbody>
-        <#if workProblems??>
-          <#list workProblems as Problem>
+        <#if problems??>
+          <#list problems as Problem>
           <tr>
             <td class="result">
               <#if Problem.status??>
@@ -43,17 +58,17 @@
               <#if TeacherUser??>
                 <a href="problem/show/${Problem.pid!}" target="_blank">${Problem.pid!}</a>
               </#if>
-              <a href="cprogram/work/problem/${work.id!}-${(Problem.letter + 1)?upper_abc}" data-toggle="tooltip" title="${Problem.title!}">Problem ${(Problem.letter + 1)?upper_abc}</a>
+              <a href="cprogram/problem/${contest.cid!}-${Problem.id!}" data-toggle="tooltip" title="${Problem.title!}">Problem ${Problem.id!}</a>
             </td>
             <td class="title">
-              <a href="cprogram/work/problem/${work.id!}-${(Problem.letter + 1)?upper_abc}">${Problem.title!}</a>
+              <a href="cprogram/problem/${contest.cid!}-${Problem.id!}">${Problem.title!}</a>
             </td>
             <#if TeacherUser??>
               <td class="accept">
-                <a href="cprogram/work/status/${work.id!}?letter=${(Problem.letter + 1)?upper_abc}&result=0">${Problem.accepted!}</a>
+                <a href="cprogram/status/${contest.cid!}?num=${Problem.id!}&result=0">${Problem.accepted!}</a>
               </td>
               <td class="submit">
-                <a href="cprogram/work/status/${work.id!}?letter=${(Problem.letter + 1)?upper_abc}">${Problem.submission!}</a>
+                <a href="cprogram/status/${contest.cid!}?num=${Problem.id!}">${Problem.submission!}</a>
               </td>
             </#if>
           </tr>
@@ -73,9 +88,9 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    <#if work.startTime?long<=serverTime*1000 && serverTime*1000<=work.endTime?long>
-      var startTime = ${work.startTime?long};
-      var endTime = ${work.endTime?long} ;
+    <#if contest.startTime=serverTime && serverTime<=contest.endTime>
+      var startTime = ${contest.startTime};
+      var endTime = ${contest.endTime} ;
       var during_time = endTime - startTime;
       clock(function (current_time) {
         $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
@@ -87,11 +102,16 @@
         if (current_time > endTime) {
           $('#contest-progress').remove();
         } else {
-          if (endTime - current_time < 24 * 3600 * 1000) {
-            $('#contest-progress').addClass('progress-danger progress-striped active');
-          } else {
-            $('#contest-progress').addClass('progress-success progress-striped active');
-          }
+            <#if contest.type == 5>
+              if (endTime - current_time < 24 * 3600 * 1000) {
+            <#else>
+              if (endTime - current_time < 1800 * 1000) {
+            </#if>
+                $('#contest-progress').addClass('progress-danger progress-striped active');
+            } else {
+                $('#contest-progress').addClass('progress-success progress-striped active');
+            }
+        }
         }
       }, 1000);
     <#else>

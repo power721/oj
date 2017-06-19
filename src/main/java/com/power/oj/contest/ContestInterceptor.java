@@ -28,12 +28,11 @@ public class ContestInterceptor implements Interceptor {
             cid = controller.getParaToInt(0);
 
         ContestModel contestModel = contestService.getContest(cid);
-        if (contestModel == null) {
+        if (contestModel == null || contestModel.getType() > 4) {
             LOGGER.debug("cannot find contest model for cid " + cid);
             controller.renderError(404);
             return;
         }
-
         controller.setAttr("cid", cid);
         controller.setAttr("title", contestModel.getTitle());
         controller.setAttr("contest", contestModel);

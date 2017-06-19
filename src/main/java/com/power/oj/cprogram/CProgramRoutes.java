@@ -14,10 +14,5 @@ public class CProgramRoutes extends Routes {
     @Override
     public void config() {
         add("/cprogram", CProgramMainController.class);
-        add("/cprogram/work", WorkController.class);
-        add("/cprogram/admin", AdminController.class);
-        add("/cprogram/experiment", ExperimentController.class);
-        add("/cprogram/experiment_exam", ExperimentExamController.class);
-        add("/cprogram/course_exam", CourseExameController.class);
     }
 }

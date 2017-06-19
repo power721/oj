@@ -1,24 +1,24 @@
 <@override name="content">
 <ul class="nav nav-tabs" id="contest_nav">
-  <li class="<#if actionKey=="cprogram/work/show">active</#if>">
-    <a href="cprogram/work/show/${work.id}">信息</a>
+  <li class="<#if actionKey=="cprogram/show">active</#if>">
+    <a href="cprogram/show/${contest.cid}">信息</a>
   </li>
   <li class="<#if methodName=="problem">active</#if>">
-    <a href="cprogram/work/problem/${work.id}-A">题目</a>
+    <a href="cprogram/problem/${contest.cid}-A">题目</a>
   </li>
-  <li class="<#if methodName=="status" || methodName== "problem_status" || controllerKey=="solution">active</#if>">
-    <a href="cprogram/work/status/${work.id!}">状态</a>
+  <li class="<#if methodName=="status">active</#if>">
+    <a href="cprogram/status/${contest.cid!}">状态</a>
   </li>
 
   <#if TeacherUser??>
     <li class="<#if methodName=="manager">active</#if>">
-      <a href="cprogram/work/manager/${work.id}">管理</a>
+      <a href="cprogram/manager/${contest.cid}">管理</a>
     </li>
     <li class="<#if methodName=="edit">active</#if>">
-      <a href="cprogram/work/edit/${work.id}">编辑</a>
+      <a href="cprogram/edit/${contest.cid}">编辑</a>
     </li>
     <li class="<#if methodName=="result">active</#if>">
-      <a href="cprogram/work/result/${work.id}">成绩</a>
+      <a href="cprogram/result/${contest.cid}">成绩</a>
     </li>
   </#if>
   <!--
@@ -32,4 +32,4 @@
 </@override>
 <@override name="scripts">
 </@override>
-<@extends name="../../common/_layout.html" />
+<@extends name="../common/_layout.html" />

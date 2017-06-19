@@ -1,12 +1,12 @@
 <@override name="contest_content">
-<h3 class="text-center"> ${work.title!}</h3>
-<h3 class="text-center"> ${work.time!}</h3>
+<h3 class="text-center"> ${contest.title!}</h3>
+<h3 class="text-center"> ${contest.time!}</h3>
 <div class="row text-center">
     <div class="span6 offset3">
         <div class="well">
-            <span>开始时间</span>: <span class="time">${work.startTime!}</span>
-            <span>结束时间</span>: <span class="time">${work.endTime!}</span><br>
-            <span>当前时间</span>: <span class="time" id="current">${work.startTime!}</span>
+            <span>开始时间</span>: <span class="time">${contest.startDateTime!}</span>
+            <span>结束时间</span>: <span class="time">${contest.endDateTime!}</span><br>
+            <span>当前时间</span>: <span class="time" id="current">${contest.startDateTime!}</span>
         </div>
     </div>
 </div>
@@ -27,49 +27,49 @@
             </tr>
             </thead>
             <tbody>
-            <#if workProblems??>
-                <#list workProblems as Problem>
+            <#if problems??>
+                <#list problems as Problem>
                     <tr class="problem" pid="${Problem.pid!}">
                         <td>
-                            <#if serverTime * 1000 <work.startTime?long><i class="icon-resize-vertical"></i></#if>
+                            <#if serverTime < contest.startTime><i class="icon-resize-vertical"></i></#if>
                             <span class="id"></span>
                         </td>
                         <td class="pid">
                             <a href="problem/show/${Problem.pid!}">${Problem.pid!}</a>
                         </td>
                         <td class="title">
-                            <a href="cprogram/work/problem/${work.id!}-${(Problem.letter + 1)?upper_abc}">${Problem.title!}</a>
+                            <a href="cprogram/problem/${contest.cid!}-${Problem.id}">${Problem.title!}</a>
                         </td>
                         <td class="time">${Problem.timeLimit!} MS</td>
                         <td class="memory">${Problem.memoryLimit!} KB</td>
                         <td class="accept">
-                            <a href="cprogram/work/status/${work.id!}?letter=${(Problem.letter + 1)?upper_abc}&result=0">${Problem.accepted!}</a></td>
+                            <a href="cprogram/status/${contest.cid!}?num=${Problem.id!}&result=0">${Problem.accepted!}</a></td>
                         <td class="submit">
-                            <a href="cprogram/work/status/${work.id!}?letter=${(Problem.letter + 1)?upper_abc}">${Problem.submission!}</a>
+                            <a href="cprogram/status/${contest.cid!}?num=${Problem.id!}">${Problem.submission!}</a>
                         <td class="admin">
-                        <#if serverTime *1000 < work.startTime?long>
+                        <#if serverTime  < contest.startTime>
                             <button class="btn btn-danger remove" pid="${Problem.pid!}">Remove</button>
                         </#if>
-                        <#if serverTime *1000 &gt; work.startTime?long>
-                            <a href="cprogram/work/rejudgeProblem/${work.id!}-${(Problem.letter + 1)?upper_abc}" class="btn btn-danger">Rejudge</a>
+                        <#if serverTime  &gt; contest.startTime>
+                            <a href="cprogram/rejudgeProblem/${contest.cid!}-${Problem.id!}" class="btn btn-danger">Rejudge</a>
                         </#if>
                         </td>
                     </tr>
                 </#list>
             </#if>
             </tbody>
-            <#if serverTime *1000 < work.endTime?long>
+            <#if serverTime < contest.endTime>
             <tfoot>
             <tr>
-                <form class="form-inline" id="addProblem" action="cprogram/work/addProblem" method="post">
-                    <td><input type="hidden" name="wid" value="${work.id!}"><span class="id"></span></td>
+                <form class="form-inline" id="addProblem" action="api/contest/addProblem" method="post">
+                    <td><input type="hidden" name="cid" value="${contest.cid!}"><span class="id"></span></td>
                     <td><input type="number" name="pid" class="input-small" min="1000" placeholder="Problem ID" required></td>
                     <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
                     <td></td>
                     <td></td>
                     <td>
                         <button type="submit" class="btn btn-success">添加</button>
-                        <#if serverTime *1000 <work.startTime?long>
+                        <#if serverTime  <contest.startTime>
                             <a class="btn btn-info hidden" id="reorder">保存</a>
                         </#if>
                     </td>
@@ -142,7 +142,7 @@
         }
 
         updateId();
-        <#if serverTime * 1000<work.startTime?long>
+        <#if serverTime < contest.startTime>
         $("#problem-list tbody").sortable({
             helper: fixHelper,
             connectWith: "tr",
@@ -169,7 +169,7 @@
         $(function () {
             $('#addProblem').submit(function () {
                 var that = $(this);
-                var wid = $('input[name=wid]').val();
+                var cid = $('input[name=cid]').val();
                 var pid = $('input[name=pid]').val();
                 var title = $('input[name=title]').val();
                 $.post($(this).attr("action"), $('#addProblem').serialize(),
@@ -183,13 +183,13 @@
                                 break;
                             case -2:
                                 $.dialog({
-                                    content: 'Too many problems in this work.',
+                                    content: 'Too many problems in this contest.',
                                     time: 1.5
                                 });
                                 break;
                             case -3:
                                 $.dialog({
-                                    content: 'Duplicate problems for this work.',
+                                    content: 'Duplicate problems for this contest.',
                                     time: 1.5
                                 });
                                 break;
@@ -208,7 +208,7 @@
                             default:
                                 var timeLimit = 0;
                                 var memoryLimit = 0;
-                                $.get("/api/problem/getField", {name: "timeLimit", pid: pid},
+                                $.get("api/problem/getField", {name: "timeLimit", pid: pid},
                                     function (dataTimeLimit) {
                                         if (dataTimeLimit.result) {
                                             timeLimit = dataTimeLimit.result;
@@ -218,7 +218,7 @@
                                             timeLimit = 0;
                                         }
                                     });
-                                $.get("/api/problem/getField", {name: "memoryLimit", pid: pid},
+                                $.get("api/problem/getField", {name: "memoryLimit", pid: pid},
                                     function (dataMemoryLimit) {
                                         if (dataMemoryLimit.result) {
                                             memoryLimit = dataMemoryLimit.result;
@@ -230,13 +230,13 @@
                                 var html = '<tr class="problem" pid="' + pid + '">' +
                                     '<td><i class="icon-resize-vertical"></i><span class="id"></span></td>'
                                     + '<td class="pid"><a href="problem/show/' + pid + '" target="_blank">' + pid + '</a></td>'
-                                    + '<td class="title"><a href="cprogram/work/problem/' + wid + '-' + String.fromCharCode(65 + data.result) + '">' + title + '</a></td>'
+                                    + '<td class="title"><a href="cprogram/problem/' + cid + '-' + String.fromCharCode(65 + data.result) + '">' + title + '</a></td>'
                                     + '<td class="time">' + timeLimit + 'MS</td>'
                                     + '<td class="memory">' + memoryLimit + 'KB</td>'
-                                    + '<td class="accept"><a href="cprogram/work/status/' + wid + '?letter=' + String.fromCharCode(65 + data.result) + '&result=0">0</a></td>'
-                                    + '<td class="submit"><a href="cprogram/work/status/' + wid + '?letter=' + String.fromCharCode(65 + data.result) + '"></a>0</td>'
+                                    + '<td class="accept"><a href="cprogram/status/' + cid + '?num=' + String.fromCharCode(65 + data.result) + '&result=0">0</a></td>'
+                                    + '<td class="submit"><a href="cprogram/status/' + cid + '?num=' + String.fromCharCode(65 + data.result) + '">0</a></td>'
                                     + '<td class="admin">' +
-                                    <#if serverTime * 1000 <work.startTime?long>
+                                    <#if serverTime  < contest.startTime>
                                         '<button class="btn btn-danger remove" pid="' + pid + '">Remove</button>\n' +
 
                                     </#if>
@@ -250,12 +250,12 @@
                 return false;
             });
             $('#reorder').click(function () {
-                var data = {wid:${work.id!}, pid: ''};
+                var data = {cid:${contest.cid!}, pid: ''};
                 $("#problem-list tbody tr.problem").each(function (i, e) {
                     data.pid += $(e).attr('pid') + ',';
                 });
                 data.pid = data.pid.substring(0, data.pid.length - 1);
-                $.post('/cprogram/work/reorderProblem', data, function (data) {
+                $.post('api/contest/reorderProblem', data, function (data) {
                     if (data.success) {
                         $.dialog({
                             content: 'Reorder problem success.',
@@ -279,7 +279,7 @@
                     cancel: true,
                     okVal: 'Remove',
                     ok: function () {
-                        $.post('/cprogram/work/removeProblem', {wid:${work.id!}, pid: that.attr('pid')}, function (data) {
+                        $.post('api/contest/removeProblem', {cid:${contest.cid!}, pid: that.attr('pid')}, function (data) {
                             if (data.success) {
                                 that.parent().parent().remove();
                                 updateId();

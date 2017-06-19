@@ -1,20 +1,20 @@
 <@override name="contest_content">
 
 <div class="row">
-  <#if workProblems?size < 10>
+  <#if Problems?size < 10>
   <div class="span4 offset5 text-center">
-  <#elseif workProblems?size < 16>
+  <#elseif Problems?size < 16>
   <div class="span6 offset4 text-center">
-  <#elseif workProblems?size < 22>
+  <#elseif Problems?size < 22>
   <div class="span8 offset2 text-center">
   <#else>
   <div class="span10 offset1 text-center">
   </#if>
     <ul class="nav nav-pills">
-      <#list workProblems as Problem>
-        <li class="<#if problem.letter==Problem.letter>active</#if>" style="width: 5%">
-          <a href="cprogram/work/problem/${work.id}-${(Problem.letter+1)?upper_abc}" data-toggle="tooltip" data-placement="bottom"
-             title="${Problem.title}">${(Problem.letter+1)?upper_abc}</a>
+      <#list Problems as Problem>
+        <li class="<#if problem.id==Problem.id>active</#if>" style="width: 5%">
+          <a href="cprogram/problem/${contest.cid}-${Problem.id}" data-toggle="tooltip" data-placement="bottom"
+             title="${Problem.title}">${Problem.id}</a>
         </li>
       </#list>
     </ul>
@@ -26,8 +26,8 @@
     <#if userResult??>
       <i class="oj-icon oj-icon-<#if userResult==true>accept<#else>delete</#if>"></i>
     </#if>
-    <span class="black">${(problem.letter + 1)?upper_abc}:</span>
-    <#if adminUser??>
+    <span class="black">${problem.id}:</span>
+    <#if TeacherUser??>
       <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}"
          target="_blank">${problem.title!}</a>
     <#else>
@@ -38,28 +38,28 @@
   Time Limit: <span class="blue">${problem.timeLimit!} MS</span>
   Memory Limit: <span class="blue">${problem.memoryLimit!} KB</span><br>
   <#if TeacherUser??>
-    Total Submit: <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}">${problem.submission!}</a>
-    Accepted: <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}&result=0">${problem.accepted!}</a>
+    Total Submit: <a href="cprogram/status/${contest.cid!}?num=${problem.id}">${problem.submission!}</a>
+    Accepted: <a href="cprogram/status/${contest.cid!}?num=${problem.id}&result=0">${problem.accepted!}</a>
   </#if>
   <br>
-    <#if cstatus?? && cstatus==true>
-      <a href="<#if user??>cprogram/work/submit/${work.id!}-${(problem.letter + 1)?upper_abc}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
+    <#if cstatus?? && cstatus==0>
+      <a href="<#if user??>cprogram/submit/${contest.cid!}-${problem.id}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
          data-target="<#if user??>#submitModal<#else>#loginModal</#if>">提交</a>
     </#if>
-  <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}" class="btn btn-info">状态</a>
+  <a href="cprogram/status/${contest.cid!}?num=${problem.id}" class="btn btn-info">状态</a>
 </div>
 
   <#if user??>
   <div class="modal hide fade problemModal" id="submitModal">
-    <form class="" id="submitForm" action="cprogram/work/submitSolution" method="post">
+    <form class="" id="submitForm" action="cprogram/submitSolution" method="post">
       <div class="modal-header">
         <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h3 id="submitModalLabel">
-          提交 ${work.title!}-${(problem.letter + 1)?upper_abc}:${problem.title!}
+          提交 ${contest.title!}-${problem.id}:${problem.title!}
         </h3>
       </div>
       <div class="modal-body">
-        <a href="cprogram/work/submit${cid!}-${(problem.letter + 1)?upper_abc}" class="btn btn-primary">Submit</a>
+        <a href="cprogram/submit/${contest.cid!}-${problem.id}" class="btn btn-primary">Submit</a>
       </div>
       <div class="modal-footer">
         <div class="pull-left">
@@ -140,11 +140,11 @@
 
 
 <div class="text-center">
-  <#if cstatus?? && cstatus==true>
-    <a href="<#if user??>cprogram/work/submit/${work.id!}-${(problem.letter + 1)?upper_abc}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
+  <#if cstatus?? && cstatus==0>
+    <a href="<#if user??>cprogram/submit/${contest.cid!}-${problem.id}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
        data-target="<#if user??>#submitModal<#else>#loginModal</#if>">提交</a>
   </#if>
-  <a href="cprogram/work/status/${work.id!}?letter=${(problem.letter + 1)?upper_abc}" class="btn btn-info">状态</a>
+  <a href="cprogram/status/${contest.cid!}?num=${problem.id}" class="btn btn-info">状态</a>
 </div>
 
 </@override>
@@ -171,11 +171,11 @@
       cache: true
     });
 
-    var prevpage = "/cprogram/work/problem/${work.id!}-${(prevPid+1)?upper_abc}";
-    var nextpage = "/cprogram/work/problem/${work.id!}-${(nextPid+1)?upper_abc}";
+    var prevpage = "/cprogram/problem/${contest.cid!}-${prevPid!}";
+    var nextpage = "/cprogram/problem/${contest.cid!}-${nextPid!}";
     $(document).keydown(function (event) {
-        <#if prevPid!=problem.letter>if (event.keyCode == 37)window.location = prevpage;</#if>
-        <#if nextPid!=problem.letter>if (event.keyCode == 39)window.location = nextpage;</#if>
+        <#if prevPid!=problem.id>if (event.keyCode == 37)window.location = prevpage;</#if>
+        <#if nextPid!=problem.id>if (event.keyCode == 39)window.location = nextpage;</#if>
     });
 
     $('.page-header').click(function () {
