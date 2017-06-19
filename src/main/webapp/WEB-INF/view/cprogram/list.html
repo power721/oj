@@ -1,0 +1,112 @@
+<@override name="content">
+<div class="pagination pagination-centered">
+    <div class="pull-left">
+        <#if TeacherUser?? && type ??>
+            <#if type == 5>
+                <a href="cprogram/add?type=5" class="btn btn-info">添加作业</a>
+            <#else>
+                <#if type == 6>
+                    <a href="cprogram/add?type=6" class="btn btn-info">添加实验</a>
+                <#else>
+                    <#if type == 7>
+                        <a href="cprogram/add?type=7" class="btn btn-info">添加实验考试</a>
+                    <#else>
+                        <#if type == 8>
+                            <a href="cprogram/add?type=8" class="btn btn-info">添加课程考试</a>
+                        </#if>
+                    </#if>
+                </#if>
+            </#if>
+        </#if>
+    </div>
+    <#include "../common/_paginate.html" />
+    <@paginate currentPage=contestList.pageNumber totalPage=contestList.totalPage actionUrl="cprogram/list/" urlParas="?type=${type!}"/>
+    <div class="pull-right">
+        <span class="badge badge-info">${contestList.pageNumber}/${contestList.totalPage} Pages</span>
+        <span class="badge badge-info">${contestList.totalRow} works</span>
+    </div>
+</div>
+
+<table id="work-list" class="table table-hover table-condensed">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>
+            <#if type == 5>
+                作业内容
+            <#else>
+               <#if type == 6>
+                  实验内容
+               <#else>
+                  <#if type == 7>
+                     实验考试内容
+                  <#else>
+                     课程考试内容
+                  </#if>
+               </#if>
+            </#if>
+        </th>
+        <th>
+            <#if type <= 6>
+                上课时间
+            <#else>
+                考试时间
+            </#if>
+        </th>
+        <th>教师姓名</th>
+        <th>开始时间</th>
+        <th>结束时间</th>
+    </tr>
+    </thead>
+    <tbody>
+    <#if contestList??>
+        <#list contestList.list as contest>
+            <tr>
+                <td><a href="cprogra/show/${contest.cid!}">${contest.cid!}</a></td>
+                <td><a href="cprogram/show/${contest.cid!}">${contest.title!}</a></td>
+                <td>${contest.description!}</td>
+                <td>${contest.nick!}</td>
+                <td class="time">${contest.startDateTime!}</td>
+                <td class="time">${contest.endDateTime!}</td>
+            </tr>
+        </#list>
+    </#if>
+    </tbody>
+</table>
+<span class="time" id="current"></span>
+</@override>
+
+<@override name="scripts">
+<link href="assets/tablecloth/css/tablecloth.css" type="text/css" rel="stylesheet">
+<script src="assets/tablecloth/js/jquery.metadata.js"></script>
+<script src="assets/tablecloth/js/jquery.tablesorter.min.js"></script>
+<script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        document.onkeydown = nextpage;
+        clock(function (current_time) {
+            $("#current").html(new Date(current_time).format("yyyy-MM-dd hh:mm:ss"));
+        }, 1000);
+
+        var prevpage = "cprogram/list/${contestList.pageNumber-1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>?type=${type!}"
+        var nextpage = "cprogram/list/${contestList.pageNumber+1}<#if contestList.pageSize!=pageSize>-${contestList.pageSize}</#if>?type=${type!}"
+        function nextpage(event) {
+            event = event ? event : (window.event ? window.event : null);
+        <#if (contestList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
+        <#if contestList.pageNumber<contestList.totalPage>if (event.keyCode == 39)location = nextpage;</#if>
+        }
+
+        <#if oj_style != "slate">
+        $("#work-list").tablecloth({
+            theme: "stats",
+            condensed: true,
+            sortable: true,
+            striped: true,
+            clean: true
+        });
+        </#if>
+    });
+</script>
+</@override>
+<@extends name="../common/_layout.html" />

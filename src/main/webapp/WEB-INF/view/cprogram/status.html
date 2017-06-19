@@ -1,13 +1,13 @@
 <@override name="contest_content">
 <div class="pagination pagination-centered">
   <div class="form-inline">
-    <form class="form-search" action="cprogram/work/status/${work.id!}">
+    <form class="form-search" action="cprogram/status/${contest.cid!}">
       <input type="text" class="input-small" name="name" value="${name!}" placeholder="用户名">
-      <select class="input-medium" id="inputProblem" name="letter">
+      <select class="input-medium" id="inputProblem" name="num">
         <option value="">题目</option>
-        <#if workProblems??>
-          <#list workProblems as Problem>
-            <option value="${(Problem.letter+1)?upper_abc}"<#if letter?? && letter==Problem.letter>selected</#if>>${(Problem.letter+1)?upper_abc}
+        <#if Problems??>
+          <#list Problems as Problem>
+            <option value="${Problem.num}"<#if num?? && num==Problem.num>selected</#if>>${Problem.id!}
               . ${Problem.title!}</option>
           </#list>
         </#if>
@@ -37,8 +37,8 @@
     </form>
   </div>
 
-  <#include "../../common/_paginate2.html" />
-  <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="cprogram/work/status/${work.id!}" urlParas="${query}" />
+  <#include "../common/_paginate2.html" />
+  <@paginate2 currentPage=solutionList.pageNumber totalPage=solutionList.totalPage actionUrl="cprogram/status/${contest.cid!}" urlParas="${query}" />
   <div class="pull-right">
     <span class="badge badge-info">${solutionList.pageNumber}/${solutionList.totalPage} Pages</span> <span
           class="badge badge-info">${solutionList.totalRow}
@@ -66,10 +66,10 @@
       <tr>
         <td class="sid">${solution.sid!}</td>
         <td class="user" uid="${solution.uid}">
-          <a href="user/profile/${(solution.name)!}" data-toggle="tooltip" target="_blank"
+          <a href="user/profile/${solution.name!}" data-toggle="tooltip" target="_blank"
              title="${(solution.nick)!?html}">${(solution.name)!}</a>
         </td>
-        <td class="problem"><a href="cprogram/work/problem/${work.id}-${(solution.letter+1)?upper_abc}">${(solution.letter+1)?upper_abc}</a></td>
+        <td class="problem"><a href="cprogram/problem/${contest.cid}-${solution.alpha!}">${solution.alpha!}</a></td>
         <td class="result" id="${solution.resultName!}">
           <i class="btn" sid="${solution.sid!}">
               ${solution.resultLongName!}
@@ -89,7 +89,7 @@
           </#if>
         </td>
         <td class="code_len">${solution.codeLen!} B</td>
-        <td class="ctime">${solution.ctime}</td>
+        <td class="ctime">${solution.ctime_t}</td>
       </tr>
       </#list>
     </#if>
@@ -100,7 +100,7 @@
 <div class="hide" id="contest_code">
   <p>[sid]</p>
 </div>
-<div class="modal hide fade contestModal" id="codeModal" wid="${work.id!}">
+<div class="modal hide fade contestModal" id="codeModal" cid="${contest.cid!}">
   <div class="modal-header">
     <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
     <h3 id="codeModalLabel">
@@ -121,8 +121,8 @@
 <script type="text/javascript" src="assets/prettify/prettify.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    var prevpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber-1}${query}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
-    var nextpage = "cprogram/work/status/${work.id!}-${solutionList.pageNumber+1}${query}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
+    var prevpage = "cprogram/status/${contest.cid!}-${solutionList.pageNumber-1}${query}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
+    var nextpage = "cprogram/status/${contest.cid!}-${solutionList.pageNumber+1}${query}<#if solutionList.pageSize!=20>&s=${solutionList.pageSize}</#if>"
 
     $(document).keydown(function (event) {
         <#if (solutionList.pageNumber>1)>if (event.keyCode == 37)location = prevpage;</#if>
@@ -157,19 +157,19 @@
       var isAdmin = <#if TeacherUser??>true<#else>false</#if>;
       $('.result').delegate("i", "click", function () {
         var sid = $(this).attr('sid');
-        var wid = $('#codeModal').attr('wid');
+        var cid = $('#codeModal').attr('cid');
         var uid = $(this).parent().parent().children('.user').attr('uid');
         if (!isAdmin && uid != userId)
           return false;
         $('#codeModal').modal("show");
-        var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[wid\]/g, wid);
+        var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, cid);
         $('#codeModal #sid').html(tmp);
-        $.get("cprogram/work/code", {wid: wid, sid: sid},
+        $.get("cprogram/code", {cid: cid, sid: sid},
                 function (data) {
                   if (data.success) {
                     var code = "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
                     code += "/*\n";
-                    code += " * Problem: " + data.solution.wid + "-" + data.letter + " (" + data.problemTitle + ")\n";
+                    code += " * Problem: " + data.solution.cid + "-" + data.solution.alpha + " (" + data.problemTitle + ")\n";
                     code += " * User: " + (data.solution.name || "Guest") + "\n";
                     code += " * Language: " + data.language + "\n";
                     code += " * Result: " + data.resultLongName + "\n";
@@ -178,6 +178,18 @@
                     }
                     code += " */\n";
                     code += data.solution.source;
+                    if(data.solution.error) {
+                        code += "\n";
+                        code += "/*\n";
+                        code += data.solution.error;
+                        code += "*/\n";
+                    }
+                    if(data.solution.systemError) {
+                          code += "\n";
+                          code += "/*\n";
+                          code += data.solution.systemError;
+                          code += "\n*/\n";
+                    }
                     code += '</pre>';
                     $('#codeModal #content').html(code).removeClass().addClass('prettyprint');
                     prettyPrint();
@@ -200,7 +212,7 @@
       $('#WAIT, #RUN, #REJUDGE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
-        $.getJSON('cprogram/work/getResult', {'wid':${work.id!}, 'sid': $this.children('i').attr('sid')}, function (data) {
+        $.getJSON('api/contest/getResult', {'cid':${contest.cid!}, 'sid': $this.children('i').attr('sid')}, function (data) {
           var img = '';
           if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';

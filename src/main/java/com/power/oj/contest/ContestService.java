@@ -312,7 +312,7 @@ public class ContestService {
             "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime";
         StringBuilder sb = new StringBuilder("FROM contest WHERE status=1");
         if (type > -1) {
-            sb.append(" AND type=?");
+            sb.append(" AND type < 5");
             paras.add(type);
         }
 
