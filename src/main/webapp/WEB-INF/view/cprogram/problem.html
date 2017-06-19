@@ -24,7 +24,7 @@
 <div class="text-center">
   <h2>
     <#if userResult??>
-      <i class="oj-icon oj-icon-<#if userResult==true>accept<#else>delete</#if>"></i>
+      <i class="oj-icon oj-icon-<#if userResult==0>accept<#else>delete</#if>"></i>
     </#if>
     <span class="black">${problem.id}:</span>
     <#if TeacherUser??>
@@ -42,7 +42,7 @@
     Accepted: <a href="cprogram/status/${contest.cid!}?num=${problem.id}&result=0">${problem.accepted!}</a>
   </#if>
   <br>
-    <#if cstatus?? && cstatus==0>
+    <#if cstatus?? && cstatus==1>
       <a href="<#if user??>cprogram/submit/${contest.cid!}-${problem.id}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
          data-target="<#if user??>#submitModal<#else>#loginModal</#if>">提交</a>
     </#if>
