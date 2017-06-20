@@ -9,6 +9,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.core.service.SessionService;
+import com.power.oj.cprogram.CProgramService;
 import com.power.oj.judge.JudgeResult;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
@@ -415,7 +416,9 @@ public final class SolutionService {
             } else if (result == ResultType.SE || result == ResultType.RF) {
                 solution.setSystemError(error);
             }
-            
+            if(ContestService.me().getContest(cid).getType() >= ContestModel.TYPE_WORK) {
+                CProgramService.UpdateScore(cid, sid, result);
+            }
             boolean updateResult = solution.update();
 
             if (result == ResultType.AC) {
