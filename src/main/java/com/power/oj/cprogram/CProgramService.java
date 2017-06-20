@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
+import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
@@ -70,6 +71,14 @@ public final class CProgramService {
         }
         return Db.find(sql);
     }
+
+    static public int GetSolutionResult(Integer sid) {
+        ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
+        Integer result = Db.queryInt("select MIN(result) from contest_solution where cid = ? and pid = ? and uid = ?", solution.getCid(), solution.getPid(), solution.getUid());
+        if(result == null) return 999;
+        return  result;
+    }
+
     static public void UpdateScore(Integer cid, Integer sid, Integer result) {
         ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
         Integer uid = solution.getUid();
@@ -86,19 +95,23 @@ public final class CProgramService {
                 score.set("score1", preScore);
                 score.set("score2", preScore);
             }
-            Db.save("score", score);
+            Db.save("score","rid", score);
         }
         else {
             score.set("submited", score.getInt("submited") + 1);
-            Integer num = solution.getNum();
-            if(result== ResultType.AC && ContestService.me().getUserResult(cid, num) != ResultType.AC) {
+            if(result== ResultType.AC && GetSolutionResult(sid) != ResultType.AC) {
                 score.set("accepted", score.getInt("accepted") + 1);
                 Integer newScore = score.getInt("score1") + preScore;
                 if(newScore > 100) newScore = 100;
                 score.set("score1", newScore);
                 score.set("score2", newScore);
             }
-            Db.update("score", score);
+            Db.update("score", "rid", score);
         }
+    }
+    static public void updateFinalScore(int cid, int uid ,int score) {
+        Record rd = Db.findFirst("select * from score where cid =? and uid = ?", cid, uid);
+        rd.set("score2", score);
+        Db.update("score", "rid", rd);
     }
 }

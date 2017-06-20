@@ -6,42 +6,48 @@
         <table id="problem-list" class="table table-hover table-condensed">
             <thead>
                 <tr>
-                    <th width="20%">用户名</th>
-                    <th width="20%">姓名</th>
+                    <th width="10%">用户名</th>
+                    <th width="10%">姓名</th>
                     <th width="10%">通过数</th>
                     <th width="10%">提交数</th>
                     <th width="10%">系统成绩</th>
                     <th width="10%">最终成绩</th>
-                    <#if TeacherUser??>
-                        <th width="10%">操作</th>
-                    </#if>
                 </tr>
             </thead>
             <tbody>
                 <#if scoreList??>
-                    <#list scoreList as user>
+                    <#list scoreList as users>
                         <tr>
                             <td>
-                                ${user.name!}
+                                ${users.name!}
                             </td>
                             <td>
-                                ${user.realName!}
+                                ${users.realName!}
                             </td>
                             <td>
-                                ${user.accepted!}
+                                <a href="cprogram/status/${contest.cid}?name=${users.name!}&result=0" target="_blank">
+                                    ${users.accepted!}
+                                </a>
                             </td>
                             <td>
-                                ${user.submited!}
+                                <a href="cprogram/status/${contest.cid}?name=${users.name!}" target="_blank">
+                                    ${users.submited!}
+                                </a>
                             </td>
                             <td>
-                                ${user.score1!}
+                                ${users.score1!}
                             </td>
                             <td>
-                                ${user.score2!}
+                                <#if TeacherUser??>
+                                    <a href="#" id="user${users.uid}">
+                                        ${users.score2!}
+                                    </a>
+                                <#else>
+                                    ${users.score2!}
+                                </#if>
+
                             </td>
-                            <#if TeacherUser??>
-                                <th width="10%">提交</th>
-                            </#if>
+
                         </tr>
                     </#list>
                 </#if>
@@ -52,7 +58,7 @@
 </@override>
 
 <@override name="styles">
-<link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
+
 </@override>
 
 <@override name="scripts">
@@ -61,9 +67,27 @@
     <script src="assets/tablecloth/js/jquery.metadata.js"></script>
     <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
 </#if>
-
+<link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
+<link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
 <script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script>
+  $(document).ready(function () {
+      var apiUrl = '/cprogram/updateFinalScore/${contest.cid!}';
+      $.fn.editable.defaults.mode = 'inline';
+      $.fn.editable.defaults.url = apiUrl;
+      <#if scoreList??>
+          <#list scoreList as users >
+          $('#user${users.uid!}').editable({
+              type: 'text',
+              pk : 0,
+              params: {type: 'string'},
+              title: 'Change Final Score'
+          });
+          </#list>
+      </#if>
+  });
 </script>
 </@override>
 <@extends name="_layout.html" />

@@ -16,7 +16,7 @@ public class CProgramInterceptor implements Interceptor {
             ai.getController().setAttr(CProgramConstants.TeacherUser, true);
         }
         Integer cid = ai.getController().getParaToInt(0);
-        if(cid != null) {
+        if(cid != null && !ai.getActionKey().equals("/cprogram/list")) {
             ContestModel contest = ContestService.me().getContest(cid);
             if(contest == null) {
                 ai.getController().renderError(404);
