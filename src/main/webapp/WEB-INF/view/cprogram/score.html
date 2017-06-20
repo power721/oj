@@ -20,7 +20,29 @@
             <tbody>
                 <#if scoreList??>
                     <#list scoreList as user>
-
+                        <tr>
+                            <td>
+                                ${user.name!}
+                            </td>
+                            <td>
+                                ${user.realName!}
+                            </td>
+                            <td>
+                                ${user.accepted!}
+                            </td>
+                            <td>
+                                ${user.submited!}
+                            </td>
+                            <td>
+                                ${user.score1!}
+                            </td>
+                            <td>
+                                ${user.score2!}
+                            </td>
+                            <#if TeacherUser??>
+                                <th width="10%">提交</th>
+                            </#if>
+                        </tr>
                     </#list>
                 </#if>
             </tbody>

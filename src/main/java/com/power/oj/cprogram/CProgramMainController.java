@@ -21,6 +21,7 @@ import jodd.util.StringUtil;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import sun.rmi.server.InactiveGroupException;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -272,9 +273,10 @@ public class CProgramMainController extends OjController {
         redirect("/cprogram/status/" + cid);
     }
 
-    @RequiresPermissions("teacher")
     public void score() {
-
+        Integer cid = getParaToInt(0);
+        List<Record> user = CProgramService.GetScoreList(cid);
+        setAttr("scoreList", user);
     }
     public void setFlag() {
         renderText("立Flag");
