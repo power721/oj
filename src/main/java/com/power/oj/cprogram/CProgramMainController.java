@@ -35,7 +35,7 @@ public class CProgramMainController extends OjController {
     public void index() {
 
     }
-    @Clear
+
     public void list() {
         Integer type = getParaToInt("type", ContestModel.TYPE_WORK);
         int pageNumber = getParaToInt(0, 1);
@@ -277,6 +277,22 @@ public class CProgramMainController extends OjController {
         Integer cid = getParaToInt(0);
         List<Record> user = CProgramService.GetScoreList(cid);
         setAttr("scoreList", user);
+    }
+
+    @Before(POST.class)
+    @RequiresPermissions("teacher")
+    public void updateFinalScore() {
+        String userid = getPara("name");
+        if(userid.startsWith("user")) {
+            Integer uid = Integer.parseInt(userid.substring(4));
+            Integer score = getParaToInt("value");
+            if(score != null && uid != null && score >=0 && score <=100) {
+                CProgramService.updateFinalScore(getParaToInt(0), uid, score);
+                renderNull();
+                return;
+            }
+        }
+        renderJson("modify fail");;
     }
     public void setFlag() {
         renderText("立Flag");
