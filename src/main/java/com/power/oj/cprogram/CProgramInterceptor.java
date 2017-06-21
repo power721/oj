@@ -6,7 +6,7 @@ import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 
 /**
- * Created by w7037 on 2017/6/14.
+ * Created by w70373710691d on 2017/6/14.
  */
 public class CProgramInterceptor implements Interceptor {
     @Override

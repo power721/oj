@@ -396,6 +396,7 @@ table#contest-rank td.fb {
 
 table.table-stats {
   font-size: 15px;
+  width:98%;
 }
 
 /*************** comment ******************/
@@ -654,6 +655,13 @@ table.table-stats {
   border:1px solid gray;
   background-color:#F5F5FF;
   color:#000000;
+}
+
+.pagination>btn-large{
+  width: 35%;
+  height: 100px;
+  margin: 10px;
+  font-size: 28px;
 }
 
 .progress {
