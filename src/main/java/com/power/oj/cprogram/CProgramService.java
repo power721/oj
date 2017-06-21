@@ -7,6 +7,7 @@ import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.shiro.ShiroKit;
@@ -15,6 +16,8 @@ import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
 
 import javax.mail.search.RecipientStringTerm;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -113,5 +116,36 @@ public final class CProgramService {
         Record rd = Db.findFirst("select * from score where cid =? and uid = ?", cid, uid);
         rd.set("score2", score);
         Db.update("score", "rid", rd);
+    }
+    static public String RandomPassword() {
+        String source = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        String password = "";
+        for(int i = 0; i < 8; i++) {
+            int index = (int)Math.floor(Math.random() * source.length());
+            password += source.charAt(index);
+        }
+        return password;
+    }
+
+    static public File AddPassword(int cid, int number) {
+        File file = new File(OjConfig.downloadPath , "password-" + cid + ".txt");
+        try {
+            file.createNewFile();
+            PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)));
+            List<Record> list = new ArrayList<>();
+            for(int i = 0; i < number; i++) {
+                String password = RandomPassword();
+                Record record = new Record();
+                record.set("cid", cid);
+                record.set("password", password);
+                list.add(record);
+                writer.write(password+"\n\n");
+            }
+            Db.batchSave("cprogram_password", list, list.size());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }

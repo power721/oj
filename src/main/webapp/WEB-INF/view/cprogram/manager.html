@@ -10,9 +10,16 @@
         </div>
     </div>
 </div>
-
+<div class="text-center">
+    <form action="cprogram/generate/${contest.cid}" method="post" target="_blank">
+        <button type="submit" class="btn btn-success">生成</button>
+        <input type='text' name='number' value="${number!}" style="width: 20px" onkeyup="(this.v=function(){this.value=this.value.replace(/[^0-9-]+/,'');}).call(this)" onblur="this.v();" />
+        个密码
+    </form>
+</div>
 <div class="row">
     <div class="span8 offset2">
+
         <table id="problem-list" class="table table-hover table-condensed">
             <thead>
             <tr>
