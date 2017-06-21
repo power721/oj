@@ -16,6 +16,7 @@ import com.power.oj.core.bean.ResultType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserService;
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 import org.apache.shiro.authz.Permission;
@@ -23,6 +24,7 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import sun.rmi.server.InactiveGroupException;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +77,7 @@ public class CProgramMainController extends OjController {
         redirect("/cprogram/manager/" + cid);
     }
 
-    @Before(ExamInterceptor.class)
+    @Before({WaitingInterceptor.class, ExamInterceptor.class})
     public void show() {
         Integer cid = getParaToInt(0);
         List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
@@ -85,9 +87,10 @@ public class CProgramMainController extends OjController {
     @RequiresPermissions("teacher")
     public void manager() {
         show();
+        setAttr("number", 50);
     }
 
-    @Before(ExamInterceptor.class)
+    @Before({WaitingInterceptor.class, ExamInterceptor.class})
     public void problem() {
         Integer cid = getParaToInt(0);
         String problemId = getPara(1);
@@ -128,7 +131,7 @@ public class CProgramMainController extends OjController {
     }
 
     @RequiresAuthentication
-    @Before(ExamInterceptor.class)
+    @Before({WaitingInterceptor.class, ExamInterceptor.class})
     public void submit() {
         Integer cid = getParaToInt(0);
         String problemId = getPara(1, "A");
@@ -161,7 +164,7 @@ public class CProgramMainController extends OjController {
         render("ajax/submit.html");
     }
 
-    @Before(ExamInterceptor.class)
+    @Before({WaitingInterceptor.class, ExamInterceptor.class})
     public void status() {
         Integer cid = getParaToInt(0);
         int pageNumber = getParaToInt(1, 1);
@@ -211,7 +214,7 @@ public class CProgramMainController extends OjController {
     }
 
     @RequiresAuthentication
-    @Before(ExamInterceptor.class)
+    @Before({WaitingInterceptor.class, ExamInterceptor.class})
     public void code() {
         Integer cid = getParaToInt("cid");
         Integer sid = getParaToInt("sid");
@@ -250,8 +253,8 @@ public class CProgramMainController extends OjController {
     public void edit() {
     }
 
-    @Before(POST.class)
     @RequiresPermissions("teacher")
+    @Before(POST.class)
     public void update() {
         Integer cid = getParaToInt(0);
         String startTime = getPara("startTime");
@@ -263,8 +266,8 @@ public class CProgramMainController extends OjController {
         redirect("/cprogram/manager/" + cid);
     }
 
-    @Before({POST.class, ExamInterceptor.class})
     @RequiresAuthentication
+    @Before({WaitingInterceptor.class, POST.class, ExamInterceptor.class})
     public void submitSolution() {
         ContestSolutionModel solution = getModel(ContestSolutionModel.class, "solution");
         int result = contestService.submitSolution(solution);
@@ -279,7 +282,7 @@ public class CProgramMainController extends OjController {
         redirect("/cprogram/status/" + cid);
     }
 
-    @Before(ExamInterceptor.class)
+    @Before({WaitingInterceptor.class, ExamInterceptor.class})
     public void score() {
         Integer cid = getParaToInt(0);
         List<Record> user = CProgramService.GetScoreList(cid);
@@ -299,18 +302,50 @@ public class CProgramMainController extends OjController {
                 return;
             }
         }
-        renderJson("modify fail");;
+        renderJson("modify fail");
     }
 
     @RequiresAuthentication
-    public void register() {
-        renderText("立Flag");
+    public void password() {
+        Integer cid = getParaToInt(0);
+        if(cid == null) redirect("/cprogram");
+        if(ExamInterceptor.CanAccess(cid)) {
+            redirect("/cprogram/show/" + cid);
+        }
     }
 
-
-    public void waiting() {
-        renderText("等待");
+    @RequiresAuthentication
+    @Before(POST.class)
+    public void checkPassword() {
+        Integer cid = getParaToInt(0);
+        if(ExamInterceptor.CanAccess(cid)) {
+            redirect("/cprogram/show" + "cid");
+        }
+        String password = getPara("password");
+        Record record = Db.findFirst("select * from cprogram_password where cid = ? and password = ? and uid = 0", cid, password);
+        Integer uid = UserService.me().getCurrentUid();
+        record.set("uid", uid);
+        Db.update("cprogram_password", record);
+        ContestService.me().addUser(cid, uid);
+        redirect("/cprogram/show/" + cid);
     }
+    @Before(ExamInterceptor.class)
+    public void pending() {
+        Integer cid = getParaToInt(0);
+        if(ContestService.me().getContestStatus(cid) != ContestModel.PENDING) {
+            redirect("/cprogram/show" + cid);
+        }
+    }
+
+    @RequiresPermissions("teacher")
+    @Before(POST.class)
+    public void generate() {
+        Integer cid = getParaToInt(0);
+        Integer number = getParaToInt("number");
+        File file = CProgramService.AddPassword(cid, number);
+        renderFile(file);
+    }
+
     public void setFlag() {
         renderText("立Flag");
     }

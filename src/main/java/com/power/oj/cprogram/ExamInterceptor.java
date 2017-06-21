@@ -15,7 +15,7 @@ import sun.plugin2.gluegen.runtime.CPU;
  */
 public class ExamInterceptor implements Interceptor  {
 
-    public boolean CanAccess(Integer cid) {
+    public static boolean CanAccess(Integer cid) {
         if(CProgramService.isTeacher()) return true;
         ContestModel contest = ContestService.me().getContest(cid);
         if(contest.getType() <= ContestModel.TYPE_EXPERIMENT) {
@@ -36,7 +36,7 @@ public class ExamInterceptor implements Interceptor  {
             invocation.invoke();
         }
         else {
-            con.redirect("/cprogram/register/" + cid);
+            con.redirect("/cprogram/password/" + cid);
         }
     }
 }
