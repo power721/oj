@@ -61,6 +61,7 @@ public class CProgramMainController extends OjController {
             setAttr("endTime", sdf.format(new Date(ctime + 2 * 3600 * 1000)));
         }
     }
+
     @Before(POST.class)
     @RequiresPermissions("teacher")
     public void save() {
@@ -74,6 +75,7 @@ public class CProgramMainController extends OjController {
         redirect("/cprogram/manager/" + cid);
     }
 
+    @Before(ExamInterceptor.class)
     public void show() {
         Integer cid = getParaToInt(0);
         List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
@@ -85,6 +87,7 @@ public class CProgramMainController extends OjController {
         show();
     }
 
+    @Before(ExamInterceptor.class)
     public void problem() {
         Integer cid = getParaToInt(0);
         String problemId = getPara(1);
@@ -125,6 +128,7 @@ public class CProgramMainController extends OjController {
     }
 
     @RequiresAuthentication
+    @Before(ExamInterceptor.class)
     public void submit() {
         Integer cid = getParaToInt(0);
         String problemId = getPara(1, "A");
@@ -157,6 +161,7 @@ public class CProgramMainController extends OjController {
         render("ajax/submit.html");
     }
 
+    @Before(ExamInterceptor.class)
     public void status() {
         Integer cid = getParaToInt(0);
         int pageNumber = getParaToInt(1, 1);
@@ -206,6 +211,7 @@ public class CProgramMainController extends OjController {
     }
 
     @RequiresAuthentication
+    @Before(ExamInterceptor.class)
     public void code() {
         Integer cid = getParaToInt("cid");
         Integer sid = getParaToInt("sid");
@@ -257,7 +263,7 @@ public class CProgramMainController extends OjController {
         redirect("/cprogram/manager/" + cid);
     }
 
-    @Before(POST.class)
+    @Before({POST.class, ExamInterceptor.class})
     @RequiresAuthentication
     public void submitSolution() {
         ContestSolutionModel solution = getModel(ContestSolutionModel.class, "solution");
@@ -273,6 +279,7 @@ public class CProgramMainController extends OjController {
         redirect("/cprogram/status/" + cid);
     }
 
+    @Before(ExamInterceptor.class)
     public void score() {
         Integer cid = getParaToInt(0);
         List<Record> user = CProgramService.GetScoreList(cid);
@@ -293,6 +300,16 @@ public class CProgramMainController extends OjController {
             }
         }
         renderJson("modify fail");;
+    }
+
+    @RequiresAuthentication
+    public void register() {
+        renderText("立Flag");
+    }
+
+
+    public void waiting() {
+        renderText("等待");
     }
     public void setFlag() {
         renderText("立Flag");
