@@ -63,6 +63,7 @@
         <label class="control-label" for="class_week class_lecture">上课时间</label>
         <div class="controls">
           <div class="input-prepend">
+            <span class="add-on"></span>
             <select name = "class_week" id = "class_week">
               <#if weeks??>
                 <#list weeks.keySet() as week>
@@ -70,6 +71,7 @@
                 </#list>
               </#if>
             </select>
+            <span class="add-on"></span>
             <select name = "class_lecture" id = "class_lecture">
               <#if lectures??>
                 <#list lectures.keySet() as lecture>
