@@ -15,6 +15,7 @@ import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.solution.SolutionModel;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import jodd.util.HtmlEncoder;
@@ -355,6 +356,31 @@ public class CProgramMainController extends OjController {
         setAttr("weeks", CProgramConstants.weeks);
         setAttr("lectures", CProgramConstants.lecture);
         setAttr("techerList", CProgramService.GetTeacherList());
+    }
+
+    @Before(POST.class)
+    @Clear(CProgramInterceptor.class)
+    public void signupUser() {
+        if(CProgramService.isRegister()) {
+            redirect("/cprogram");
+            return;
+        }
+        Integer uid = UserService.me().getCurrentUid();
+        UserModel user = UserService.me().getUser(uid);
+        user.setRealName(getPara("realName"));
+        user.setPhone(getPara("phone"));
+        user.update();
+
+        Record userext = new Record();
+        userext.set("uid", uid);
+        userext.set("class", getPara("class"));
+        userext.set("stuid", getPara("stuid"));
+        userext.set("tid", getParaToInt("tid"));
+        userext.set("class_week", getParaToInt("class_week"));
+        userext.set("class_lecture", getParaToInt("class_lecture"));
+        Db.save("cprogram_user_info", "uid", userext);
+
+        redirect("/cprogram");
     }
     public void setFlag() {
         renderText("立Flag");
