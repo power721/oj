@@ -63,16 +63,15 @@
         <label class="control-label" for="class_week class_lecture">上课时间</label>
         <div class="controls">
           <div class="input-prepend">
-            <span class="add-on"></span>
-            <select name = "class_week" id = "class_week">
+
+            <select name = "class_week" id = "class_week" style="width: 124px">
               <#if weeks??>
                 <#list weeks.keySet() as week>
                   <option value="${week!}">${weeks.get(week!)}</option>
                 </#list>
               </#if>
             </select>
-            <span class="add-on"></span>
-            <select name = "class_lecture" id = "class_lecture">
+            <select name = "class_lecture" id = "class_lecture" style="width: 124px">
               <#if lectures??>
                 <#list lectures.keySet() as lecture>
                   <option value="${lecture!}">${lectures.get(lecture!)}</option>
