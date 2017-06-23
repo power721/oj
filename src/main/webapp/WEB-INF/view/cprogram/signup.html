@@ -18,7 +18,7 @@
         <div class="controls">
           <div class="input-prepend">
             <span class="add-on"><i class="icon-user"></i></span>
-            <input type="text" minlength="5" maxlength="15" id="realName" name="realName"
+            <input type="text" minlength="2" maxlength="15" id="realName" name="realName"
                    placeholder="真实姓名" autofocus required>
           </div>
         </div>
@@ -28,7 +28,7 @@
         <div class="controls">
           <div class="input-prepend">
             <span class="add-on"><i class="icon-envelope"></i></span>
-            <input type="text" id="class" name="class"  placeholder="专业班级" required>
+            <input type="text" minlength="6" maxlength="6" id="class" name="class"  placeholder="专业班级" required>
           </div>
         </div>
       </div>
@@ -38,8 +38,8 @@
         <div class="controls">
           <div class="input-prepend">
             <span class="add-on"><i class="icon-lock"></i></span>
-            <input type="text" minlength="8" maxlength="20" id="stuid" name="stuid"
-                   placeholder="Password" required>
+            <input type="text" minlength="8" maxlength="10" id="stuid" name="stuid"
+                   placeholder="学号" required>
           </div>
         </div>
       </div>
@@ -50,9 +50,9 @@
             <span class="add-on"><i class="icon-lock"></i></span>
             <select name = "tid" id = "tid">
               <#if techerList??>
-                <List techerList as teacher>
-                  <option value="${teacher.uid!}">${teacher.realName}</option>
-                </List>
+                <#list techerList as teacher>
+                  <option value="${teacher.uid!}">${teacher.realName!}</option>
+                </#list>
               </#if>
             </select>
           </div>
@@ -63,23 +63,20 @@
         <label class="control-label" for="class_week class_lecture">上课时间</label>
         <div class="controls">
           <div class="input-prepend">
-            <span class="add-on">星期</span>
             <select name = "class_week" id = "class_week">
               <#if weeks??>
-                <List weeks as week>
-                  <option value="${week.id!}">${week.name}</option>
-                </List>
+                <#list weeks.keySet() as week>
+                  <option value="${week!}">${weeks.get(week!)}</option>
+                </#list>
               </#if>
             </select>
-            <span class="add-on">第</span>
             <select name = "class_lecture" id = "class_lecture">
               <#if lectures??>
-                <List lectures as lecture>
-                  <option value="${lecture.id!}">${week.name}</option>
-                </List>
+                <#list lectures.keySet() as lecture>
+                  <option value="${lecture!}">${lectures.get(lecture!)}</option>
+                </#list>
               </#if>
             </select>
-            <span class="add-on">讲</span>
 
           </div>
         </div>

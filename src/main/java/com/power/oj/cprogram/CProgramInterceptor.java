@@ -11,7 +11,10 @@ import com.power.oj.contest.model.ContestModel;
 public class CProgramInterceptor implements Interceptor {
     @Override
     public void intercept(Invocation ai) {
-
+        if(!CProgramService.isRegister() && !ai.getActionKey().equals("/cprogram/signup")) {
+            ai.getController().redirect("/cprogram/signup");
+            return;
+        }
         if(CProgramService.isTeacher()) {
             ai.getController().setAttr(CProgramConstants.TeacherUser, true);
         }
