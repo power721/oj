@@ -148,4 +148,10 @@ public final class CProgramService {
         }
         return file;
     }
+
+    static public boolean isRegister() {
+        if(isTeacher()) return  true;
+        Record record = Db.findById("cprogram_user_info","uid", UserService.me().getCurrentUid());
+        return record != null;
+    }
 }

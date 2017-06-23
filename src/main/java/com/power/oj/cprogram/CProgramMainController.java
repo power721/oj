@@ -32,6 +32,7 @@ import java.util.List;
 /**
  * Created by w703710691d on 2017/6/14.
  */
+@RequiresAuthentication
 @Before(CProgramInterceptor.class)
 public class CProgramMainController extends OjController {
     public void index() {
@@ -346,6 +347,12 @@ public class CProgramMainController extends OjController {
         renderFile(file);
     }
 
+    public void signup() {
+        if(CProgramService.isRegister()) {
+            redirect("/cprogram");
+            return;
+        }
+    }
     public void setFlag() {
         renderText("立Flag");
     }
