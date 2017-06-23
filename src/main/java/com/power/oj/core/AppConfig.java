@@ -43,6 +43,7 @@ import com.power.oj.core.model.ProgramLanguageModel;
 import com.power.oj.core.model.ResourceModel;
 import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
+import com.power.oj.cprogram.CProgramConstants;
 import com.power.oj.cprogram.CProgramRoutes;
 import com.power.oj.discussion.CommentModel;
 import com.power.oj.discussion.DiscussionController;
@@ -248,6 +249,8 @@ public class AppConfig extends JFinalConfig {
 
         log.info(PathKit.getWebRootPath());
         log.debug("afterJFinalStart finished.");
+
+        CProgramConstants.load();
     }
 
     @Override

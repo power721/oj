@@ -14,6 +14,7 @@ import com.power.oj.shiro.ShiroKit;
 import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
+import com.sun.org.apache.bcel.internal.generic.Select;
 
 import javax.mail.search.RecipientStringTerm;
 import java.io.*;
@@ -153,5 +154,9 @@ public final class CProgramService {
         if(isTeacher()) return  true;
         Record record = Db.findById("cprogram_user_info","uid", UserService.me().getCurrentUid());
         return record != null;
+    }
+
+    static public List<Record> GetTeacherList() {
+        return Db.find("select user.realName, user.uid from user inner join user_role on user.uid = user_role.uid where user_role.rid = 4");
     }
 }

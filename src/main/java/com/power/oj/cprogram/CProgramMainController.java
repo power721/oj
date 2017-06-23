@@ -352,6 +352,9 @@ public class CProgramMainController extends OjController {
             redirect("/cprogram");
             return;
         }
+        setAttr("weeks", CProgramConstants.weeks);
+        setAttr("lectures", CProgramConstants.lecture);
+        setAttr("techerList", CProgramService.GetTeacherList());
     }
     public void setFlag() {
         renderText("立Flag");
