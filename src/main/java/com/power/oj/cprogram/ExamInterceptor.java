@@ -7,8 +7,6 @@ import com.jfinal.plugin.activerecord.Db;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.user.UserService;
-import com.sun.org.apache.bcel.internal.generic.Select;
-import sun.plugin2.gluegen.runtime.CPU;
 
 /**
  * Created by w703710691d on 17-6-21.
