@@ -382,6 +382,7 @@ public class CProgramMainController extends OjController {
 
         redirect("/cprogram");
     }
+
     public void setFlag() {
         renderText("立Flag");
     }

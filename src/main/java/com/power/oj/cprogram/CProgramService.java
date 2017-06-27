@@ -19,6 +19,8 @@ import com.sun.org.apache.bcel.internal.generic.Select;
 import javax.mail.search.RecipientStringTerm;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,6 +28,7 @@ import java.util.List;
  * Created by w7037 on 2017/6/14.
  */
 public final class CProgramService {
+
     static Page<ContestModel> GetContestList(int pageNumber, int pageSize, int type) {
         String sql =
                 "SELECT " +
@@ -159,4 +162,19 @@ public final class CProgramService {
     static public List<Record> GetTeacherList() {
         return Db.find("select user.realName, user.uid from user inner join user_role on user.uid = user_role.uid where user_role.rid = 4");
     }
+
+    int getWeek(int unix_time) {
+        Date date = new Date(unix_time * 1000L);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_WEEK) - 1;
+    }
+    int getLecture(int unix_time) {
+        Date date = new Date(unix_time * 1000L);
+        Date startDate = new Date(unix_time * 1000L);
+        Date endDate = new Date(unix_time * 1000L);
+        startDate.setHours(8);
+
+    }
+
 }
