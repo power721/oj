@@ -46,14 +46,19 @@
                </#if>
             </#if>
         </th>
-        <th>
-            <#if type <= 6>
-                上课时间
-            <#else>
-                考试时间
-            </#if>
-        </th>
-        <th>教师姓名</th>
+        <#if type != 6>
+            <th>
+                <#if type == 5>
+                    上课时间
+                </#if>
+                <#if type == 7 || type == 8>
+                    考试时间
+                </#if>
+            </th>
+        </#if>
+        <#if type == 5>
+            <th>教师姓名</th>
+        </#if>
         <th>开始时间</th>
         <th>结束时间</th>
     </tr>
@@ -64,10 +69,14 @@
             <tr>
                 <td><a href="cprogra/show/${contest.cid!}">${contest.cid!}</a></td>
                 <td><a href="cprogram/show/${contest.cid!}">${contest.title!}</a></td>
-                <td>
-                    ${weeks.get(contest.lockBoardTime!)!}${lectures.get(contest.unlockBoardTime!)!}
-                </td>
-                <td>${contest.realName!}</td>
+                <#if type != 6>
+                    <td>
+                        ${weeks.get(contest.lockBoardTime!)!}${lectures.get(contest.unlockBoardTime!)!}
+                    </td>
+                </#if>
+                <#if type == 5>
+                    <td>${contest.realName!}</td>
+                </#if>
                 <td class="time">${contest.startDateTime!}</td>
                 <td class="time">${contest.endDateTime!}</td>
             </tr>

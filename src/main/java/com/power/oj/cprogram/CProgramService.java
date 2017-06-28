@@ -34,39 +34,39 @@ public final class CProgramService {
                 "SELECT " +
                         "contest.cid, " +
                         "contest.title, " +
-                        "contest.lockBoardTime, " +
-                        "contest.unlockBoardTime, " +
                         "contest.startTime, " +
                         "contest.endTime, " +
                         "FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime, "+
-                        "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime, " +
-                        "user.realName";
+                        "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime ";
+        if(type == ContestModel.TYPE_WORK) {
+            sql += ",user.realName ";
+        }
+        if(type != ContestModel.TYPE_EXPERIMENT) {
+            sql += ",contest.lockBoardTime " +
+                    ",contest.unlockBoardTime ";
+        }
         int startTime = getStartUnixTime();
         int endTime = getEndUnixTime();
         List<Object> parase = new ArrayList<>();
-        String sqlExe =
-                "FROM " +
-                        "contest " +
-                        "INNER JOIN user ON " +
-                        "contest.uid = user.uid " +
-                        "WHERE " +
-                        "contest.type = ? " +
-                        "AND (? <= contest.startTime AND contest.startTime <= ?) ";
+        String sqlExe = "FROM contest ";
+        if(type == ContestModel.TYPE_WORK) {
+            sqlExe += "INNER JOIN user ON contest.uid = user.uid ";
+        }
+
+        sqlExe += "WHERE " +
+                "contest.type = ? " +
+                "AND (? <= contest.startTime AND contest.startTime <= ?) ";
         parase.add(type);
         parase.add(startTime);
         parase.add(endTime);
-        if(!isTeacher()) {
+
+        if(!isTeacher() && type == ContestModel.TYPE_WORK) {
             int uid = UserService.me().getCurrentUid();
             Record record = Db.findById("cprogram_user_info","uid", uid);
             sqlExe += "AND contest.uid = ? AND contest.lockBoardTime = ? AND contest.unlockBoardTime = ? ";
             parase.add(record.get("tid"));
             parase.add(record.get("class_week"));
             parase.add(record.get("class_lecture"));
-        }
-        else {
-            int uid = UserService.me().getCurrentUid();
-            sqlExe += "AND contest.uid = ? ";
-            parase.add(uid);
         }
         sqlExe += "ORDER BY contest.startTime DESC ";
         Page<ContestModel> page = ContestModel.dao.paginate(pageNumber, pageSize, sql, sqlExe, parase.toArray());
@@ -88,16 +88,32 @@ public final class CProgramService {
         solution.put("alpha", (char)(solution.getNum() + 'A'));
         return solution;
     }
-    static public List<Record> GetScoreList(Integer cid) {
+    static public List<Record> GetScoreList(Integer cid, Integer type) {
+        List<Object> parase = new ArrayList<>();
         String sql = "select score.*, " +
-                "user.name, user.realName " +
-                "from " +
-                "score inner join user on score.uid = user.uid " +
-                "where cid = " + cid + " ";
+                "cprogram_user_info.stuid, " +
+                "cprogram_user_info.class as Class, " +
+                "user.name, " +
+                "user.realName " +
+                "from score " +
+                "left join user on score.uid = user.uid " +
+                "left join cprogram_user_info on score.uid = cprogram_user_info.uid " +
+                "where cid = ? ";
+        parase.add(cid);
         if(!isTeacher()) {
-            sql += "and score.uid = " + UserService.me().getCurrentUid();
+            sql += "and score.uid = ? ";
+            parase.add(UserService.me().getCurrentUid());
         }
-        return Db.find(sql);
+        else if(type != ContestModel.TYPE_WORK && !ShiroKit.hasPermission("root")) {
+            sql += "and score.week = ? and score.lecture = ? ";
+            int week = CProgramService.getWeek(OjConfig.timeStamp);
+            int lecture = CProgramService.getLecture(OjConfig.timeStamp);
+            if(lecture == 0) lecture = CProgramService.getLecture(OjConfig.timeStamp - 15 * 60);
+            parase.add(week);
+            parase.add(lecture);
+        }
+        sql += " ORDER BY cprogram_user_info.stuid ";
+        return Db.find(sql, parase.toArray());
     }
 
     static public int GetSolutionResult(Integer sid) {
@@ -196,6 +212,8 @@ public final class CProgramService {
         Date date = new Date(unix_time * 1000L);
         Date startDate = new Date(unix_time * 1000L);
         Date endDate = new Date(unix_time * 1000L);
+        startDate.setSeconds(0);
+        endDate.setSeconds(0);
         for(int i = 0; i < CProgramConstants.startTimeHour.length; i++) {
             startDate.setHours(CProgramConstants.startTimeHour[i]);
             startDate.setMinutes(CProgramConstants.startTimeMin[i]);
@@ -203,7 +221,7 @@ public final class CProgramService {
             endDate.setMinutes(CProgramConstants.endTimeMin[i]);
             long startTime = startDate.getTime();
             long endTime = endDate.getTime();
-            if(startTime <= unix_time * 1000 && unix_time * 1000 <= endTime) {
+            if(startTime <= unix_time * 1000L && unix_time * 1000L <= endTime) {
                 return i + 1;
             }
         }
@@ -211,19 +229,19 @@ public final class CProgramService {
     }
     static int getStartUnixTime() {
         Date date = new Date(OjConfig.timeStamp * 1000L);
-        if(3 <= date.getMonth() && date.getMonth() <= 7) {
-            date.setMonth(3);
+        if(2 <= date.getMonth() && date.getMonth() <= 7) {
+            date.setMonth(2);
             date.setDate(1);
         }
         else {
-            date.setMonth(9);
+            date.setMonth(8);
             date.setDate(1);
         }
         return (int)(date.getTime() / 1000);
     }
     static int getEndUnixTime() {
         Date date = new Date(OjConfig.timeStamp * 1000L);
-        if(3 <= date.getMonth() && date.getMonth() <= 7) {
+        if(2 <= date.getMonth() && date.getMonth() <= 7) {
             date.setMonth(7);
             date.setDate(31);
         }

@@ -1,5 +1,4 @@
 package com.power.oj.cprogram;
-
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.POST;
@@ -14,17 +13,12 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.problem.ProblemModel;
-import com.power.oj.solution.SolutionModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
-import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import sun.rmi.server.InactiveGroupException;
-
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -289,7 +283,8 @@ public class CProgramMainController extends OjController {
     @Before({WaitingInterceptor.class, ExamInterceptor.class})
     public void score() {
         Integer cid = getParaToInt(0);
-        List<Record> user = CProgramService.GetScoreList(cid);
+        ContestModel contestModel = ContestService.me().getContest(cid);
+        List<Record> user = CProgramService.GetScoreList(cid, contestModel.getType());;
         setAttr("scoreList", user);
     }
 
@@ -327,6 +322,12 @@ public class CProgramMainController extends OjController {
         }
         String password = getPara("password");
         Record record = Db.findFirst("select * from cprogram_password where cid = ? and password = ? and uid = 0", cid, password);
+        if(record == null) {
+            FlashMessage msg =
+                    new FlashMessage("密码错误", MessageType.ERROR, getText("message.error.title"));
+            redirect("/cprogram/password/" + cid, msg);
+            return;
+        }
         Integer uid = UserService.me().getCurrentUid();
         record.set("uid", uid);
         Db.update("cprogram_password", record);

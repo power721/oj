@@ -23,6 +23,7 @@
       <p class="text-error">${titleMsg!}</p>
     </div>
   </div>
+  <#if contest.type == 5>
     <div class="control-group">
       <label class="control-label" for="uid">任课教师</label>
       <div class="controls">
@@ -37,13 +38,15 @@
         </div>
       </div>
     </div>
+  </#if>
+  <#if contest.type != 6>
     <div class="control-group contest <#if titleMsg??>error</#if>">
       <label class="control-label" for="class_week">
-        <#if contest.type <= 6>
+        <#if contest.type == 5>
         上课时间
         <#else>
           考试时间
-          </#if>
+        </#if>
       </label>
       <div class="controls">
         <div class="input-prepend">
@@ -65,6 +68,7 @@
         </div>
       </div>
     </div>
+  </#if>
   <div class="control-group contest">
     <label class="control-label" for="inputStartTime">开始时间</label>
     <div class="controls input-append date form_datetime" id="startTime">
