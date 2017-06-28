@@ -1,6 +1,8 @@
 <@override name="contest_content">
 <h3 class="text-center"> ${contest.title!}</h3>
-<h3 class="text-center"> ${weeks.get(contest.lockBoardTime!)}${lectures.get(contest.unlockBoardTime!)}</h3>
+<#if contest.type != 6 >
+    <h3 class="text-center"> ${weeks.get(contest.lockBoardTime!)}${lectures.get(contest.unlockBoardTime!)}</h3>
+</#if>
 <div class="row">
     <div class="span10 offset1">
         <table id="problem-list" class="table table-hover table-condensed">
@@ -8,6 +10,8 @@
                 <tr>
                     <th width="10%">用户名</th>
                     <th width="10%">姓名</th>
+                    <th width="10%">学号</th>
+                    <th width="10%">班级</th>
                     <th width="10%">通过数</th>
                     <th width="10%">提交数</th>
                     <th width="10%">系统成绩</th>
@@ -23,6 +27,12 @@
                             </td>
                             <td>
                                 ${users.realName!}
+                            </td>
+                            <td>
+                                ${users.stuid!}
+                            </td>
+                            <td>
+                                ${users.Class!}
                             </td>
                             <td>
                                 <a href="cprogram/status/${contest.cid}?name=${users.name!}&result=0" target="_blank">

@@ -20,7 +20,9 @@
   </#if>
   -${contest.title!}
 </h3>
-<h3 class="text-center">${weeks.get(contest.lockBoardTime!)}${lectures.get(contest.unlockBoardTime!)}</h3>
+<#if contest.type != 6 >
+  <h3 class="text-center">${weeks.get(contest.lockBoardTime!)}${lectures.get(contest.unlockBoardTime!)}</h3>
+</#if>
 <div class="row text-center">
   <div class="span8 offset2">
     <div class="well">
