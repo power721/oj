@@ -34,12 +34,16 @@ public final class CProgramService {
                 "SELECT " +
                         "contest.cid, " +
                         "contest.title, " +
-                        "contest.description, " +
-                        "startTime, " +
-                        "endTime, " +
+                        "contest.lockBoardTime, " +
+                        "contest.unlockBoardTime, " +
+                        "contest.startTime, " +
+                        "contest.endTime, " +
                         "FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime, "+
                         "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime, " +
-                        "user.nick";
+                        "user.realName";
+        int startTime = getStartUnixTime();
+        int endTime = getEndUnixTime();
+        List<Object> parase = new ArrayList<>();
         String sqlExe =
                 "FROM " +
                         "contest " +
@@ -47,8 +51,25 @@ public final class CProgramService {
                         "contest.uid = user.uid " +
                         "WHERE " +
                         "contest.type = ? " +
-                        "ORDER BY contest.startTime DESC";
-        Page<ContestModel> page = ContestModel.dao.paginate(pageNumber, pageSize, sql, sqlExe, type);
+                        "AND (? <= contest.startTime AND contest.startTime <= ?) ";
+        parase.add(type);
+        parase.add(startTime);
+        parase.add(endTime);
+        if(!isTeacher()) {
+            int uid = UserService.me().getCurrentUid();
+            Record record = Db.findById("cprogram_user_info","uid", uid);
+            sqlExe += "AND contest.uid = ? AND contest.lockBoardTime = ? AND contest.unlockBoardTime = ? ";
+            parase.add(record.get("tid"));
+            parase.add(record.get("class_week"));
+            parase.add(record.get("class_lecture"));
+        }
+        else {
+            int uid = UserService.me().getCurrentUid();
+            sqlExe += "AND contest.uid = ? ";
+            parase.add(uid);
+        }
+        sqlExe += "ORDER BY contest.startTime DESC ";
+        Page<ContestModel> page = ContestModel.dao.paginate(pageNumber, pageSize, sql, sqlExe, parase.toArray());
         return page;
     }
     static public boolean isTeacher(){
@@ -101,6 +122,8 @@ public final class CProgramService {
                 score.set("accepted", 1);
                 score.set("score1", preScore);
                 score.set("score2", preScore);
+                score.set("week", getWeek(OjConfig.timeStamp));
+                score.set("lecture", getLecture(OjConfig.timeStamp));
             }
             Db.save("score","rid", score);
         }
@@ -163,18 +186,54 @@ public final class CProgramService {
         return Db.find("select user.realName, user.uid from user inner join user_role on user.uid = user_role.uid where user_role.rid = 4");
     }
 
-    int getWeek(int unix_time) {
+    static int getWeek(int unix_time) {
         Date date = new Date(unix_time * 1000L);
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.DAY_OF_WEEK) - 1;
     }
-    int getLecture(int unix_time) {
+    static int getLecture(int unix_time) {
         Date date = new Date(unix_time * 1000L);
         Date startDate = new Date(unix_time * 1000L);
         Date endDate = new Date(unix_time * 1000L);
-        startDate.setHours(8);
-
+        for(int i = 0; i < CProgramConstants.startTimeHour.length; i++) {
+            startDate.setHours(CProgramConstants.startTimeHour[i]);
+            startDate.setMinutes(CProgramConstants.startTimeMin[i]);
+            endDate.setHours(CProgramConstants.endTimeHour[i]);
+            endDate.setMinutes(CProgramConstants.endTimeMin[i]);
+            long startTime = startDate.getTime();
+            long endTime = endDate.getTime();
+            if(startTime <= unix_time * 1000 && unix_time * 1000 <= endTime) {
+                return i + 1;
+            }
+        }
+        return 0;
     }
-
+    static int getStartUnixTime() {
+        Date date = new Date(OjConfig.timeStamp * 1000L);
+        if(3 <= date.getMonth() && date.getMonth() <= 7) {
+            date.setMonth(3);
+            date.setDate(1);
+        }
+        else {
+            date.setMonth(9);
+            date.setDate(1);
+        }
+        return (int)(date.getTime() / 1000);
+    }
+    static int getEndUnixTime() {
+        Date date = new Date(OjConfig.timeStamp * 1000L);
+        if(3 <= date.getMonth() && date.getMonth() <= 7) {
+            date.setMonth(7);
+            date.setDate(31);
+        }
+        else {
+            if(date.getMonth() <= 12) {
+                date.setYear(date.getYear() + 1);
+            }
+            date.setMonth(1);
+            date.setMinutes(31);
+        }
+        return (int)(date.getTime() / 1000);
+    }
 }

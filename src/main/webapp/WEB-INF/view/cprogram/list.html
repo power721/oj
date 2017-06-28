@@ -64,8 +64,10 @@
             <tr>
                 <td><a href="cprogra/show/${contest.cid!}">${contest.cid!}</a></td>
                 <td><a href="cprogram/show/${contest.cid!}">${contest.title!}</a></td>
-                <td>${contest.description!}</td>
-                <td>${contest.nick!}</td>
+                <td>
+                    ${weeks.get(contest.lockBoardTime!)!}${lectures.get(contest.unlockBoardTime!)!}
+                </td>
+                <td>${contest.realName!}</td>
                 <td class="time">${contest.startDateTime!}</td>
                 <td class="time">${contest.endDateTime!}</td>
             </tr>

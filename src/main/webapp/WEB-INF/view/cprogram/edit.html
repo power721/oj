@@ -23,19 +23,48 @@
       <p class="text-error">${titleMsg!}</p>
     </div>
   </div>
-  <div class="control-group contest <#if titleMsg??>error</#if>">
-    <label class="control-label" for="inputTime">
-      <#if contest.type <= 6>
-      上课时间
-      <#else>
-        考试时间
-        </#if>
-    </label>
-    <div class="controls">
-      <textarea id="inputTime" name="contest.description" rows="1" cols="40" required>${contest.description!}</textarea>
-      <p class="text-error">${titleMsg!}</p>
+    <div class="control-group">
+      <label class="control-label" for="uid">任课教师</label>
+      <div class="controls">
+        <div class="input-prepend">
+          <select name = "contest.uid" id = "uid">
+            <#if techerList??>
+              <#list techerList as teacher>
+                <option value="${teacher.uid!}" <#if teacher.uid == contest.uid>selected = "selected"</#if> > ${teacher.realName!}</option>
+              </#list>
+            </#if>
+          </select>
+        </div>
+      </div>
     </div>
-  </div>
+    <div class="control-group contest <#if titleMsg??>error</#if>">
+      <label class="control-label" for="class_week">
+        <#if contest.type <= 6>
+        上课时间
+        <#else>
+          考试时间
+          </#if>
+      </label>
+      <div class="controls">
+        <div class="input-prepend">
+          <select name = "contest.lockBoardTime" id = "class_week" style="width: 124px">
+            <#if weeks??>
+              <#list weeks.keySet() as week>
+                <option value="${week!}" <#if week == contest.lockBoardTime>selected = "selected"</#if> >${weeks.get(week!)}</option>
+              </#list>
+            </#if>
+          </select>
+          <select name = "contest.unlockBoardTime" id = "class_lecture" style="width: 124px">
+            <#if lectures??>
+              <#list lectures.keySet() as lecture>
+                <option value="${lecture!}" <#if lecture == contest.unlockBoardTime>selected = "selected"</#if> >${lectures.get(lecture!)}</option>
+              </#list>
+            </#if>
+          </select>
+
+        </div>
+      </div>
+    </div>
   <div class="control-group contest">
     <label class="control-label" for="inputStartTime">开始时间</label>
     <div class="controls input-append date form_datetime" id="startTime">

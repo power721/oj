@@ -23,8 +23,22 @@
       <p class="text-error">${titleMsg!}</p>
     </div>
   </div>
+    <div class="control-group">
+      <label class="control-label" for="uid">任课教师</label>
+      <div class="controls">
+        <div class="input-prepend">
+          <select name = "contest.uid" id = "uid">
+            <#if techerList??>
+              <#list techerList as teacher>
+                <option value="${teacher.uid!}" <#if teacher.uid == user.uid>selected = "selected"</#if> > ${teacher.realName!}</option>
+              </#list>
+            </#if>
+          </select>
+        </div>
+      </div>
+    </div>
   <div class="control-group contest <#if titleMsg??>error</#if>">
-    <label class="control-label" for="inputTime">
+    <label class="control-label" for="class_week">
       <#if type <= 6>
         上课时间
       <#else>
@@ -32,8 +46,23 @@
       </#if>
     </label>
     <div class="controls">
-      <textarea id="inputTime" name="contest.description" rows="1" cols="40" required>${description!}</textarea>
-      <p class="text-error">${titleMsg!}</p>
+      <div class="input-prepend">
+        <select name = "contest.lockBoardTime" id = "class_week" style="width: 124px">
+          <#if weeks??>
+            <#list weeks.keySet() as week>
+              <option value="${week!}" >${weeks.get(week!)}</option>
+            </#list>
+          </#if>
+        </select>
+        <select name = "contest.unlockBoardTime" id = "class_lecture" style="width: 124px">
+          <#if lectures??>
+            <#list lectures.keySet() as lecture>
+              <option value="${lecture!}">${lectures.get(lecture!)}</option>
+            </#list>
+          </#if>
+        </select>
+
+      </div>
     </div>
   </div>
   <div class="control-group contest">

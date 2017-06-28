@@ -12,8 +12,10 @@ public interface CProgramConstants {
     final Map<Integer, String> weeks = new HashMap<>();
     final Map<Integer, String> lecture = new HashMap<>();
 
-    final int startTimeHours[] = {1,2,3,4,5,6};
-    final int startTimeMin[] = {};
+    final int startTimeHour[] = {8,9,14,15,18,19};
+    final int startTimeMin[] = {0,55,0,55,0,50};
+    final int endTimeHour[] = {9,12,15,17,19,21};
+    final int endTimeMin[] = {35,20,35,30,35,25};
 
     public static void load() {
         weeks.put(1, "星期一");
