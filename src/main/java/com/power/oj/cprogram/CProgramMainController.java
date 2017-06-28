@@ -64,6 +64,7 @@ public class CProgramMainController extends OjController {
         else {
             setAttr("endTime", sdf.format(new Date(ctime + 2 * 3600 * 1000)));
         }
+        setAttr("techerList", CProgramService.GetTeacherList());
     }
 
     @Before(POST.class)
@@ -253,6 +254,7 @@ public class CProgramMainController extends OjController {
     }
     @RequiresPermissions("teacher")
     public void edit() {
+        setAttr("techerList", CProgramService.GetTeacherList());
     }
 
     @RequiresPermissions("teacher")
@@ -353,8 +355,6 @@ public class CProgramMainController extends OjController {
             redirect("/cprogram");
             return;
         }
-        setAttr("weeks", CProgramConstants.weeks);
-        setAttr("lectures", CProgramConstants.lecture);
         setAttr("techerList", CProgramService.GetTeacherList());
     }
 

@@ -18,6 +18,8 @@ public class CProgramInterceptor implements Interceptor {
         if(CProgramService.isTeacher()) {
             ai.getController().setAttr(CProgramConstants.TeacherUser, true);
         }
+        ai.getController().setAttr("weeks", CProgramConstants.weeks);
+        ai.getController().setAttr("lectures", CProgramConstants.lecture);
         Integer cid = ai.getController().getParaToInt(0);
         if(cid != null && !ai.getActionKey().equals("/cprogram/list")) {
             ContestModel contest = ContestService.me().getContest(cid);

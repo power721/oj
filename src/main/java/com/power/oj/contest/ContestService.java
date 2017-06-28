@@ -837,7 +837,9 @@ public class ContestService {
 
     public boolean addContest(ContestModel contestModel, String startTime, String endTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        contestModel.setUid(userService.getCurrentUid());
+        if(contestModel.getUid() == null) {
+            contestModel.setUid(userService.getCurrentUid());
+        }
         contestModel.setCtime(OjConfig.timeStamp);
         try {
             contestModel.setStartTime((int) (sdf
