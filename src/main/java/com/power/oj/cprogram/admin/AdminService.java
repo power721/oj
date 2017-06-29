@@ -16,7 +16,7 @@ import java.util.List;
 public class AdminService {
     static List<Record> GetContestListForSelect(Integer type) {
         List<Object> parase = new ArrayList<>();
-        String sql = "select cid, title from contest where type = ? ";
+        String sql = "select cid, title, lockBoardTime AS week, unLockBoardTime AS lecture from contest where type = ? ";
         parase.add(type);
         if(type == ContestModel.TYPE_WORK && !ShiroKit.hasPermission("root")) {
             sql += "and uid = ? ";
