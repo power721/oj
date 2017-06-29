@@ -96,8 +96,8 @@ public final class CProgramService {
                 "user.name, " +
                 "user.realName " +
                 "from score " +
-                "left join user on score.uid = user.uid " +
-                "left join cprogram_user_info on score.uid = cprogram_user_info.uid " +
+                "inner join user on score.uid = user.uid " +
+                "inner join cprogram_user_info on score.uid = cprogram_user_info.uid " +
                 "where cid = ? ";
         parase.add(cid);
         if(!isTeacher()) {
