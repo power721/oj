@@ -75,6 +75,9 @@
                 <#list contestList as item>
                   <option value="${item.cid}" <#if contest?? && contest.cid == item.cid>selected</#if> >
                   ${item.title}
+                  <#if type == 5>
+                       ${weeks.get(item.week!)!} ${lectures.get(item.lecture!)!}
+                  </#if>
                   </option>
                 </#list>
               </select>
