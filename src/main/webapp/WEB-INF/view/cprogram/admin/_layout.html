@@ -55,12 +55,12 @@
     <i class="fa fa-cogs"> </i> C程序设计后台管理 <i class="fa fa-chevron-up icon-chevron-up" aria-hidden="true"></i>
   </a>
   <ul id="dashboard-menu" class="nav nav-list collapse in">
-    <li><a href="cprogram/admin"> 首页 </a></li>
-    <li><a href="cprogram/admin/work"> 作业管理 </a></li>
-    <li><a href="cprogram/admin/expriment"> 实验管理 </a></li>
-    <li><a href="cprogram/admin/expriment_exam"> 实验考试管理 </a></li>
-    <li><a href="cprogram/admin/cource_exam"> 课程考试管理 </a></li>
-    <li><a href="cprogram/admin/history"> 历史查询 </a></li>
+    <li><a href="cprogram/admin"  <#if type?? && type == 0> class="x" </#if> > 首页 </a></li>
+    <li><a href="cprogram/admin/?type=5" <#if type?? && type == 5> class="x" </#if> > 作业管理 </a></li>
+    <li><a href="cprogram/admin/?type=6" <#if type?? && type == 6> class="x" </#if> > 实验管理 </a></li>
+    <li><a href="cprogram/admin/?type=7" <#if type?? && type == 7> class="x" </#if> > 实验考试管理 </a></li>
+    <li><a href="cprogram/admin/?type=8" <#if type?? && type == 8> class="x" </#if> > 课程考试管理 </a></li>
+    <li><a href="cprogram/admin/history" <#if actionKey == "cprogram/admin/history"> class="x" </#if > > 历史查询 </a></li>
   </ul>
 </div>
 
@@ -100,14 +100,6 @@
 <![endif]-->
 
 <@block name="scripts"></@block>
-<script type="text/javascript">
-  $(document).ready(function () {
-    $('.nav-list a').each(function () {
-      if ($(this).attr('href') == '${actionKey!}') {
-        $(this).addClass('x');
-      }
-    });
-  });
 </script>
 </body>
 </html>
