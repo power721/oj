@@ -202,13 +202,13 @@ public final class CProgramService {
         return Db.find("select user.realName, user.uid from user inner join user_role on user.uid = user_role.uid where user_role.rid = 4");
     }
 
-    static int getWeek(int unix_time) {
+    public static int getWeek(int unix_time) {
         Date date = new Date(unix_time * 1000L);
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.DAY_OF_WEEK) - 1;
     }
-    static int getLecture(int unix_time) {
+    public static int getLecture(int unix_time) {
         Date date = new Date(unix_time * 1000L);
         Date startDate = new Date(unix_time * 1000L);
         Date endDate = new Date(unix_time * 1000L);
@@ -227,7 +227,7 @@ public final class CProgramService {
         }
         return 0;
     }
-    static int getStartUnixTime() {
+    public static int getStartUnixTime() {
         Date date = new Date(OjConfig.timeStamp * 1000L);
         if(2 <= date.getMonth() && date.getMonth() <= 7) {
             date.setMonth(2);
@@ -239,7 +239,7 @@ public final class CProgramService {
         }
         return (int)(date.getTime() / 1000);
     }
-    static int getEndUnixTime() {
+    public static int getEndUnixTime() {
         Date date = new Date(OjConfig.timeStamp * 1000L);
         if(2 <= date.getMonth() && date.getMonth() <= 7) {
             date.setMonth(7);
