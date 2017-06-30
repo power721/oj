@@ -84,14 +84,14 @@
               <#if type != 5>
                 <select class="input-medium" id="week" name="week">
                   <#list weeks.keySet() as week>
-                    <option value="${week!}" <#if contest?? && contest.week == week>selected</#if> >
+                    <option value="${week!}" <#if WEEK?? && WEEK == week>selected</#if> >
                     ${weeks.get(week!)}
                     </option>
                   </#list>
                 </select>
                 <select class="input-medium" id="lecture" name="lecture">
                   <#list lectures.keySet() as lecture>
-                    <option value="${lecture!}" <#if contest?? && contest.lecture == lecture>selected</#if> >
+                    <option value="${lecture!}" <#if LECTURE?? && LECTURE == lecture>selected</#if> >
                     ${lectures.get(lecture!)}
                     </option>
                   </#list>
@@ -182,15 +182,92 @@
         <#if action?? && (action == "manager" || action == "edit" || action == "score") >
           <ul class="nav nav-tabs" id="contest_nav" style="width:98%">
             <li class="<#if action=="manager">active</#if>">
-              <a href="cprogram/admin/?type=${type}&action=manager&${query!}">管理</a>
+              <a href="cprogram/admin/?type=${type}&action=manager${query!}">管理</a>
             </li>
             <li class="<#if action=="edit">active</#if>">
-              <a href="cprogram/admin/?type=${type}&action=edit&${query!}">编辑</a>
+              <a href="cprogram/admin/?type=${type}&action=edit${query!}">编辑</a>
             </li>
             <li class="<#if action=="score">active</#if>">
-              <a href="cprogram/admin/?type=${type}&action=score&${query!}">成绩</a>
+              <a href="cprogram/admin/?type=${type}&action=score${query!}">成绩</a>
             </li>
           </ul>
+        </#if>
+        <#if action?? && action == "edit">
+          <form class="form-horizontal" id="createContest" action="cprogram/admin/update/?type=${type}${query!}" method="post">
+            <div class="control-group contest">
+              <label class="control-label" for="inputTitle">
+                ${typename}内容
+              </label>
+              <div class="controls">
+                <textarea id="inputTitle" name="contest.title" rows="1" cols="40" required>${contest.title!}</textarea>
+              </div>
+            </div>
+            <#if contest.type == 5>
+              <div class="control-group">
+                <label class="control-label" for="uid">任课教师</label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <select name = "contest.uid" id="uid">
+                        <#list techerList as teacher>
+                          <option value="${teacher.uid!}" <#if teacher.uid == contest.uid>selected</#if> >
+                            ${teacher.realName!}
+                          </option>
+                        </#list>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </#if>
+            <#if contest.type != 6>
+              <div class="control-group contest">
+                <label class="control-label" for="class_week">
+                  <#if contest.type == 5>
+                    上课时间
+                  <#else>
+                    考试时间
+                  </#if>
+                </label>
+                <div class="controls">
+                  <div class="input-prepend">
+                    <select name = "contest.lockBoardTime" id ="class_week" style="width: 124px">
+                        <#list weeks.keySet() as week>
+                          <option value="${week!}" <#if contest?? && week == contest.lockBoardTime >selected</#if> >
+                            ${weeks.get(week!)}
+                          </option>
+                        </#list>
+                    </select>
+                    <select name = "contest.unlockBoardTime" id = "class_lecture" style="width: 124px">
+                        <#list lectures.keySet() as lecture>
+                          <option value="${lecture!}" <#if contest?? && lecture==contest.lockBoardTime >selected</#if> >
+                            ${lectures.get(lecture!)}
+                          </option>
+                        </#list>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </#if>
+            <div class="control-group contest">
+              <label class="control-label" for="inputStartTime">开始时间</label>
+              <div class="controls input-append date form_datetime" id="startTime">
+                <input size="16" type="text" name="startTime" id="inputStartTime" value="${contest.startDateTime!}" readonly required>
+                <span class="add-on"><i class="icon-th" aria-hidden="true"></i></span>
+              </div>
+            </div>
+            <div class="control-group contest">
+              <label class="control-label" for="inputEndTime">结束时间</label>
+              <div class="controls input-append date form_datetime" id="endTime">
+                <input size="16" type="text" name="endTime" id="inputEndTime" value="${contest.endDateTime!}" readonly required>
+                <span class="add-on"><i class="icon-th" aria-hidden="true"></i></span>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <button type="submit" id="submitContest" class="btn btn-primary">提交</button>
+                <button type="reset" class="btn btn-info">重置</button>
+              </div>
+            </div>
+          </form>
         </#if>
       </#if>
     </div>
@@ -198,13 +275,13 @@
 </div>
 </@override>
 <@override name="styles">
-  <#if action?? && action == "add">
+  <#if action?? && (action == "add" || action == "edit")>
     <link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
   </#if>
 </@override>
 
 <@override name="scripts">
-  <#if action?? && action == "add">
+  <#if action?? && (action == "add" || action == "edit")>
     <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
     <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"
             charset="UTF-8"></script>
