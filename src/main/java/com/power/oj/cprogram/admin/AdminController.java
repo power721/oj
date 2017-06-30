@@ -76,12 +76,13 @@ public class AdminController extends OjController{
     private void score() {
         Integer type = getParaToInt("type");
         Integer cid = getParaToInt("cid");
-        if(cid == -1) {
-
-        }
         Integer week = getParaToInt("week");
         Integer lecture = getParaToInt("lecture");
+        if(cid == -1) {
 
+            return;
+        }
+        setAttr("scoreList", AdminService.GetScoreList(type, cid, week, lecture));
     }
     public void index() {
         Integer type = GetType();
