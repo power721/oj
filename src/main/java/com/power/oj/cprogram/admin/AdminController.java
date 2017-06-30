@@ -9,6 +9,7 @@ import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.cprogram.CProgramConstants;
 import com.power.oj.cprogram.CProgramService;
+import com.power.oj.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.text.SimpleDateFormat;
@@ -66,6 +67,22 @@ public class AdminController extends OjController{
     private void edit() {
         setAttr("techerList", CProgramService.GetTeacherList());
     }
+    private void manager() {
+        Integer cid = getParaToInt("cid");
+        List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
+        setAttr("problems", problems);
+        setAttr("number", 50);
+    }
+    private void score() {
+        Integer type = getParaToInt("type");
+        Integer cid = getParaToInt("cid");
+        if(cid == -1) {
+
+        }
+        Integer week = getParaToInt("week");
+        Integer lecture = getParaToInt("lecture");
+
+    }
     public void index() {
         Integer type = GetType();
         String action = getPara("action","");
@@ -85,10 +102,19 @@ public class AdminController extends OjController{
         }
         else {
             Integer cid = getParaToInt("cid");
-            ContestModel contest = ContestService.me().getContest(cid);
-            setAttr("contest", contest);
+            if(cid == null) return;
+            if(cid != -1) {
+                ContestModel contest = ContestService.me().getContest(cid);
+                setAttr("contest", contest);
+            }
             if(action.equals("edit")) {
                 edit();
+            }
+            if(action.equals("manager")) {
+                manager();
+            }
+            if(action.equals("score")) {
+                score();
             }
         }
     }
