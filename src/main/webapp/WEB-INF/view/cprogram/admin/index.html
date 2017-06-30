@@ -80,16 +80,19 @@
                   </#if>
                   </option>
                 </#list>
+                <#if type == 7 || type == 8>
+                  <option value="-1" <#if allList??> select </#if> > 全部</option>
+                </#if>
               </select>
               <#if type != 5>
-                <select class="input-medium" id="week" name="week">
+                <select class="input-medium" id="week_select" name="week">
                   <#list weeks.keySet() as week>
                     <option value="${week!}" <#if WEEK?? && WEEK == week>selected</#if> >
                     ${weeks.get(week!)}
                     </option>
                   </#list>
                 </select>
-                <select class="input-medium" id="lecture" name="lecture">
+                <select class="input-medium" id="lecture_select" name="lecture">
                   <#list lectures.keySet() as lecture>
                     <option value="${lecture!}" <#if LECTURE?? && LECTURE == lecture>selected</#if> >
                     ${lectures.get(lecture!)}
@@ -97,7 +100,7 @@
                   </#list>
                 </select>
               </#if>
-              <button type="submit" class="btn btn-info">提交</button>
+              <button type="submit" class="btn btn-info" id="sendBtn">提交</button>
               <a class="btn btn-success" href="cprogram/admin?type=${type}&action=add">新建${typename}</a>
             </form>
           </div>
@@ -281,6 +284,32 @@
 </@override>
 
 <@override name="scripts">
+
+  <#if type != 0>
+    <script type="text/javascript">
+        if($("#contestID").val()==""){
+            $("#sendBtn").attr("disabled",true);
+        }
+        $("#contestID").click(function () {
+            if($("#contestID").val()==""){
+                $("#sendBtn").attr("disabled",true);
+            }else{
+                $("#sendBtn").attr("disabled",false);
+            }
+
+            <#if type == 7 || type == 8>
+                if($("#contestID").val()=="-1"){
+                    $("#week_select").css("display","none");
+                    $("#lecture_select").css("display","none");
+                }
+            </#if>
+        })
+
+    </script>
+
+
+  </#if>
+
   <#if action?? && (action == "add" || action == "edit")>
     <link href="assets/bootstrap-datetimepicker/css/datetimepicker.css" rel="stylesheet">
     <script type="text/javascript" src="assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"
