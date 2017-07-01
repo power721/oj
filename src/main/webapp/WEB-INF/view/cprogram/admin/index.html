@@ -73,12 +73,12 @@
               <select class="input-medium" id="contestID" name="cid">
                 <option value="">${typename}名称</option>
                 <#list contestList as item>
-                  <option value="${item.cid}" <#if contest?? && contest.cid == item.cid>selected</#if> >
+                  <option value="${item.cid!}" <#if contest?? && contest.cid == item.cid>selected</#if> >
                   ${item.title}
                   </option>
                 </#list>
                 <#if type == 7 || type == 8>
-                  <option value="-1" <#if allList??> select </#if> > 全部</option>
+                  <option value="-1" <#if allList??> selected </#if> > 全部</option>
                 </#if>
               </select>
 
@@ -430,7 +430,68 @@
             </div>
           </#if>
           <#if allList??>
+            <h3 class="text-center"> 总成绩表</h3>
+            <h3 class="text-center"> ${weeks.get(WEEK!)}${lectures.get(LECTURE!)}</h3>
 
+            <div class="row">
+              <div class="span10 offset1">
+                <a href="cprogram/admin/getxls?type=${type}${query}" target="_blank" class="bth btn-success btn-small">导出</a>
+                <table id="score-list" class="table table-hover table-condensed">
+                  <thead>
+                    <tr>
+                      <th width="10%">用户名</th>
+                      <th width="10%">姓名</th>
+                      <th width="10%">学号</th>
+                      <th width="10%">班级</th>
+                      <#assign idx = 1 />
+                      <#list workList as contest>
+                        <th width="8%">
+                          <#if type == 7>实验</#if>
+                          <#if type == 8>作业</#if>
+                          ${idx}
+                          <#assign idx = idx + 1 />
+                        </th>
+                      </#list>
+                      <th width="10%">考试成绩</th>
+                      <th width="10%">总成绩</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <#list allList as user>
+                      <tr>
+                        <td>
+                          ${user.name!}
+                        </td>
+                        <td>
+                          ${user.realName!}
+                        </td>
+                        <td>
+                          ${user.stuid!}
+                        </td>
+                        <td>
+                          ${user.Class!}
+                        </td>
+                        <#list workList as work>
+                          <td>
+                            <#if user.scoreMap.get(work)??>
+                              ${user.scoreMap.get(work)}
+                            <#else>
+                              0
+                            </#if>
+                          </td>
+                        </#list>
+                        <td>
+                          ${user.examScore!}
+                        </td>
+                        <td>
+                          ${user.finalScore!}
+                        </td>
+                      </tr>
+                    </#list>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </#if>
         </#if>
       </#if>
@@ -460,10 +521,22 @@
         }
 
         <#if type != 6>
-          $("#week_select").attr("disabled",true);
-          $("#lecture_select").attr("disabled",true);
-          $("#week_select").val(weekName[$("#contestID").val()]);
-          $("#lecture_select").val(lectureName[$("#contestID").val()]);
+          if($("#contestID").val()!="-1") {
+              $("#week_select").attr("disabled", true);
+              $("#lecture_select").attr("disabled", true);
+              $("#week_select").val(weekName[$("#contestID").val()]);
+              $("#lecture_select").val(lectureName[$("#contestID").val()]);
+          }
+          else {
+              <#if WEEK??>
+                  $("#lecture_select").val("${LECTURE!}");
+                  $("#week_select").val("${WEEK!}");
+              <#else>
+                  $("#lecture_select").val("0");
+                  $("#week_select").val("0");
+              </#if>
+          }
+
         </#if>
         $("#contestID").click(function () {
             if($("#contestID").val()==""){
@@ -476,8 +549,13 @@
                 if($("#contestID").val()=="-1"){
                     $("#week_select").attr("disabled",false);
                     $("#lecture_select").attr("disabled",false);
-                    $("#lecture_select").val("0");
-                    $("#week_select").val("0");
+                    <#if WEEK??>
+                      $("#lecture_select").val("${LECTURE!}");
+                      $("#week_select").val("${WEEK!}");
+                    <#else>
+                      $("#lecture_select").val("0");
+                      $("#week_select").val("0");
+                    </#if>
                 }
                 else {
                     $("#week_select").attr("disabled",true);
@@ -751,7 +829,7 @@
           });
       </script>
     </#if>
-    <#if action == "score" >
+    <#if action == "score" && !(allList??)>
       <link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
       <script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
       <script>
