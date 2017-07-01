@@ -209,18 +209,22 @@ public final class CProgramService {
         return cal.get(Calendar.DAY_OF_WEEK) - 1;
     }
     public static int getLecture(int unix_time) {
-        Date date = new Date(unix_time * 1000L);
-        Date startDate = new Date(unix_time * 1000L);
-        Date endDate = new Date(unix_time * 1000L);
-        startDate.setSeconds(0);
-        endDate.setSeconds(0);
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.setTime(new Date(unix_time * 1000L));
+        endDate.setTime(new Date(unix_time * 1000L));
+        startDate.set(Calendar.SECOND, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        endDate.set(Calendar.SECOND, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
+
         for(int i = 0; i < CProgramConstants.startTimeHour.length; i++) {
-            startDate.setHours(CProgramConstants.startTimeHour[i]);
-            startDate.setMinutes(CProgramConstants.startTimeMin[i]);
-            endDate.setHours(CProgramConstants.endTimeHour[i]);
-            endDate.setMinutes(CProgramConstants.endTimeMin[i]);
-            long startTime = startDate.getTime();
-            long endTime = endDate.getTime();
+            startDate.set(Calendar.HOUR_OF_DAY, CProgramConstants.startTimeHour[i]);
+            startDate.set(Calendar.MINUTE, CProgramConstants.startTimeMin[i]);
+            endDate.set(Calendar.HOUR_OF_DAY, CProgramConstants.endTimeHour[i]);
+            endDate.set(Calendar.MINUTE, CProgramConstants.endTimeMin[i]);
+            long startTime = startDate.getTime().getTime();
+            long endTime = endDate.getTime().getTime();
             if(startTime <= unix_time * 1000L && unix_time * 1000L <= endTime) {
                 return i + 1;
             }
@@ -228,30 +232,42 @@ public final class CProgramService {
         return 0;
     }
     public static int getStartUnixTime() {
-        Date date = new Date(OjConfig.timeStamp * 1000L);
-        if(2 <= date.getMonth() && date.getMonth() <= 7) {
-            date.setMonth(2);
-            date.setDate(1);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(OjConfig.timeStamp * 1000L));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if(2 - 1 <= calendar.get(Calendar.MONTH) && calendar.get(Calendar.MONTH) <= 7 - 1) {
+            calendar.set(Calendar.MONTH, 2 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
         }
         else {
-            date.setMonth(8);
-            date.setDate(1);
+            calendar.set(Calendar.MONTH, 8 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH,1);
         }
-        return (int)(date.getTime() / 1000);
+        return (int)(calendar.getTime().getTime() / 1000);
     }
     public static int getEndUnixTime() {
-        Date date = new Date(OjConfig.timeStamp * 1000L);
-        if(2 <= date.getMonth() && date.getMonth() <= 7) {
-            date.setMonth(7);
-            date.setDate(31);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(OjConfig.timeStamp * 1000L));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if(2 - 1 <= calendar.get(Calendar.MONTH) && calendar.get(Calendar.MONTH) <= 7 - 1) {
+            calendar.set(Calendar.MONTH, 7 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 31 - 1);
         }
         else {
-            if(date.getMonth() <= 12) {
-                date.setYear(date.getYear() + 1);
+            if(calendar.get(Calendar.MONTH ) <= 12 - 1) {
+                calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
             }
-            date.setMonth(1);
-            date.setMinutes(31);
+            calendar.set(Calendar.MONTH, 1 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 31 - 1);
         }
-        return (int)(date.getTime() / 1000);
+        return (int)(calendar.getTime().getTime() / 1000);
     }
 }
