@@ -50,7 +50,7 @@ $(document).ready(function () {
     $(".nav-stacked>li").mouseover(function () {
         $(this).css("background-color","#00cccc");
     }).mouseout(function () {
-        $(this).css("background-color","#ffffff");
+        $(this).css("background-color","rgba(255,255,255,0.0)");
     });
 
     /* login and singup modal */

@@ -35,6 +35,14 @@ a.cureent {
   padding: 5px 0 0 10px;
 }
 
+.row .span6 .nav li{
+  width:5%;
+}
+
+.row .span4 .nav li{
+  width:8%;
+}
+
 .green {
   color: green;
 }
