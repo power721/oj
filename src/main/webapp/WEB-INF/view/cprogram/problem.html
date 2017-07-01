@@ -12,7 +12,7 @@
   </#if>
     <ul class="nav nav-pills">
       <#list Problems as Problem>
-        <li class="<#if problem.id==Problem.id>active</#if>" style="width: 5%">
+        <li class="<#if problem.id==Problem.id>active</#if>">
           <a href="cprogram/problem/${contest.cid}-${Problem.id}" data-toggle="tooltip" data-placement="bottom"
              title="${Problem.title}">${Problem.id}</a>
         </li>
