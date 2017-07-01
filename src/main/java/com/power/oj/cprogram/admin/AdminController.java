@@ -158,7 +158,14 @@ public class AdminController extends OjController{
                     fileName += "课程";
                 }
                 fileName += "成绩表" + fmtDateTime.format(new Date());
-                File file = new File( fileName + ".xls");
+                File file;
+                if(OjConfig.isLinux()) {
+                    file =  new File(OjConfig.downloadPath, fileName + ".xls");
+                }
+                else {
+                    file = new File(fileName + ".xls");
+                }
+
                 WritableWorkbook book =
                         Workbook.createWorkbook(file);
                 WritableSheet sheet = book.createSheet("sheet1",0);
