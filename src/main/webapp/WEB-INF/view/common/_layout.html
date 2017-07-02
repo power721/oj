@@ -34,7 +34,7 @@
 <!-- ============================== Navbar ============================== -->
 <div class="navbar navbar-fixed-top" >
   <div class="container" id="oj-top-navbar">
-    <a class="brand" href="./" style="margin-left: 20px">PowerOJ</a>
+    <a class="brand" href="./" style="margin-left: 20px; color:#fff">PowerOJ</a>
     <ul class="nav pull-right">
       <#if user?? && user.uid??>
         <#--<li>-->
@@ -43,7 +43,7 @@
           <#--src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>"/>-->
       <#--</li>-->
       <li class="dropdown active">
-        <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown">
+        <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown" style="color:#fff; background-color:#0081c2; ">
           <i class="oj-icon oj-icon-user<#if adminUser??>-suit</#if>"></i>${user.name!"user"}<b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
@@ -60,13 +60,13 @@
           </#if>
         </ul>
       </li>
-      <li><a href="logout"><i class="icon-off"></i>Logout</a></li>
+      <li><a href="logout" style="color:#fff;"><i class="icon-off"></i>Logout</a></li>
       <#else>
         <li class="<#if actionKey?? && actionKey=="login">active</#if>">
-        <a href="#" id="login" data-toggle="modal" data-target="#loginModal"><i class="icon-user"></i>Login</a>
+        <a href="#" id="login" data-toggle="modal" data-target="#loginModal" style="color:#fff;"><i class="icon-user"></i>Login</a>
         </li>
         <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
-        <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal"><i class="icon-star"></i>Signup</a>
+        <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal" style="color:#fff;"><i class="icon-star"></i>Signup</a>
         </li>
         </#if>
     </ul>
