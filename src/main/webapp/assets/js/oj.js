@@ -48,9 +48,10 @@ $(document).ready(function () {
 
     // 设置左边导航栏鼠标移上去后变色
     $(".nav-stacked>li").mouseover(function () {
-        $(this).css("background-color","#00cccc");
+        $(this).attr("class","active");
     }).mouseout(function () {
         $(this).css("background-color","rgba(255,255,255,0.0)");
+        $(this).removeAttr("class","active");
     });
 
     /* login and singup modal */
