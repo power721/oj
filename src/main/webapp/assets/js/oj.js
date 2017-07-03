@@ -31,7 +31,34 @@ $(document).ready(function () {
         that.html(parseTimestamp(that.attr('data')));
     });
 
-    $("marquee").css("margin-top", $("#oj-navbar").height() + 5);
+    $("marquee").css("margin-top", $("#oj-top-navbar").height());
+    $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
+    if($("body").width()<1000){
+        $("#oj-navbar").css("width",40);
+        $("#oj-top-navbar").parent().css("position","fixed");
+        $(".main").css({"width":$("body").width()-40,"padding-left":"40px"});
+        $(".nav-pills a").each(function(){
+            var text = $(this).html().split("i>")[0]+"i>";
+            $(this).html(text).parent().css("padding","0");
+        });
+    }else{
+        $(".main").css("width",$("body").width()-165);
+    }
+
+
+    // 设置左边导航栏鼠标移上去后变色
+    var at;
+    $(".nav-stacked>li").mouseover(function () {
+        at=0;
+        if($(this).attr("class")=="active"){
+            at=1;
+        }
+        $(this).attr("class","active");
+    }).mouseout(function () {
+        $(this).css("background-color","rgba(255,255,255,0.0)");
+        if(at==0)
+        $(this).removeAttr("class","active");
+    });
 
     /* login and singup modal */
     $('.toLogin').click(function () {

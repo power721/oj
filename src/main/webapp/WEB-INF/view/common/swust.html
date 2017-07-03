@@ -63,12 +63,11 @@
     </div>
     </#list>
 
-  <div class="pagination pagination-centered" style="position:relative;top:50px;float:left;left:32%">
+  <div class="pagination pagination-centered" style="float:left;margin-left:-36%; margin-top: 170px;">
     <#include "../common/_paginate.html" />
 	<@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
   </div>
   </#if>
-
 
 
 </@override>
