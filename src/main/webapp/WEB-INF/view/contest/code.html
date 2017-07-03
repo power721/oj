@@ -36,7 +36,7 @@
 </div>
 
   <#if solution.error??>
-  <div class="row">
+  <div class="row" style="margin-left:0px">
     <div class="span12">
       <h3><#if resultName=="CE">Compile Error<#else>Runtime Error</#if></h3>
       <pre class="error">${solution.error!}</pre>
@@ -44,7 +44,7 @@
   </div>
   </#if>
   <#if adminUser?? && solution.systemError??>
-  <div class="row">
+  <div class="row" style="margin-left:0px">
     <div class="span12">
       <h3>System Error</h3>
       <pre class="error">${solution.systemError!}</pre>
