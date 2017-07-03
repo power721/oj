@@ -50,7 +50,9 @@ COMPILERS=src/main/webapp/WEB-INF/view/common/compilers.ftl
 echo "<li>GCC/G++ $(g++ --version | head -n1 | awk '{print $4}')</li>" >${COMPILERS}
 echo "<li>$(fpc -v | head -n1)</li>" >>${COMPILERS}
 echo "<li>$(javac -version 2>&1 | head -n1) & $(java -version 2>&1 | head -n1)</li>" >>${COMPILERS}
-echo "<li>$(python --version 2>&1 | head -n1)</li>" >>${COMPILERS}
+echo "<li>$(kotlinc -version 2>&1 | head -n1) & $(kotlin -version 2>&1 | head -n1)</li>" >>${COMPILERS}
+echo "<li>$(python2.7 --version 2>&1 | head -n1)</li>" >>${COMPILERS}
+echo "<li>$(python3 --version 2>&1 | head -n1)</li>" >>${COMPILERS}
 
 if [ ! -d "${TOMCAT}/webapps" ]; then
   TOMCAT=${CATALINA_HOME}/webapps
