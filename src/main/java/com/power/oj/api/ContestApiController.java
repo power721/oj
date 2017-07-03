@@ -195,11 +195,11 @@ public class ContestApiController extends OjController {
         setAttr("solution", solutionModel);
 
         String brush = getAttrForStr("language").toLowerCase();
-        if ("GCC".equalsIgnoreCase(brush))
-            brush = "c";
-        if ("G++".equalsIgnoreCase(brush))
+        if(brush.contains("gcc") || brush.contains("g++"))
             brush = "cc";
-        if ("Python".equalsIgnoreCase(brush))
+        if(brush.contains("java") || brush.contains("kotlin"))
+            brush = "java";
+        if (brush.contains("python"))
             brush = "py";
         setAttr("brush", brush);
 

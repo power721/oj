@@ -1,0 +1,103 @@
+<@override name="contest_content">
+<h3 class="text-center"> ${contest.title!}</h3>
+<#if contest.type != 6 >
+    <h3 class="text-center"> ${weeks.get(contest.lockBoardTime!)}${lectures.get(contest.unlockBoardTime!)}</h3>
+</#if>
+<div class="row">
+    <div class="span10 offset1">
+        <table id="problem-list" class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th width="10%">用户名</th>
+                    <th width="10%">姓名</th>
+                    <th width="10%">学号</th>
+                    <th width="10%">班级</th>
+                    <th width="10%">通过数</th>
+                    <th width="10%">提交数</th>
+                    <th width="10%">系统成绩</th>
+                    <th width="10%">最终成绩</th>
+                </tr>
+            </thead>
+            <tbody>
+                <#if scoreList??>
+                    <#list scoreList as users>
+                        <tr>
+                            <td>
+                                ${users.name!}
+                            </td>
+                            <td>
+                                ${users.realName!}
+                            </td>
+                            <td>
+                                ${users.stuid!}
+                            </td>
+                            <td>
+                                ${users.Class!}
+                            </td>
+                            <td>
+                                <a href="cprogram/status/${contest.cid}?name=${users.name!}&result=0" target="_blank">
+                                    ${users.accepted!}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="cprogram/status/${contest.cid}?name=${users.name!}" target="_blank">
+                                    ${users.submited!}
+                                </a>
+                            </td>
+                            <td>
+                                ${users.score1!}
+                            </td>
+                            <td>
+                                <#if TeacherUser??>
+                                    <a href="#" id="user${users.uid}">
+                                        ${users.score2!}
+                                    </a>
+                                <#else>
+                                    ${users.score2!}
+                                </#if>
+
+                            </td>
+
+                        </tr>
+                    </#list>
+                </#if>
+            </tbody>
+        </table>
+    </div>
+</div>
+</@override>
+
+<@override name="styles">
+
+</@override>
+
+<@override name="scripts">
+<#if oj_style != "slate">
+    <link href="assets/tablecloth/css/tablecloth.css" rel="stylesheet" type="text/css">
+    <script src="assets/tablecloth/js/jquery.metadata.js"></script>
+    <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
+</#if>
+<link href="assets/jquery.artDialog/skins/twitter.css" rel="stylesheet" type="text/css">
+<link href="assets/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
+<script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
+<script>
+  $(document).ready(function () {
+      var apiUrl = '/cprogram/updateFinalScore/${contest.cid!}';
+      $.fn.editable.defaults.mode = 'inline';
+      $.fn.editable.defaults.url = apiUrl;
+      <#if scoreList??>
+          <#list scoreList as users >
+          $('#user${users.uid!}').editable({
+              type: 'text',
+              pk : 0,
+              params: {type: 'string'},
+              title: 'Change Final Score'
+          });
+          </#list>
+      </#if>
+  });
+</script>
+</@override>
+<@extends name="_layout.html" />

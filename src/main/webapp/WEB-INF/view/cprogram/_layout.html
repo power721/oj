@@ -1,0 +1,35 @@
+<@override name="content">
+<ul class="nav nav-tabs" id="contest_nav" style="width:98%">
+  <li class="<#if actionKey=="cprogram/show">active</#if>">
+    <a href="cprogram/show/${contest.cid}">信息</a>
+  </li>
+  <li class="<#if methodName=="problem">active</#if>">
+    <a href="cprogram/problem/${contest.cid}-A">题目</a>
+  </li>
+  <li class="<#if methodName=="status">active</#if>">
+    <a href="cprogram/status/${contest.cid!}">状态</a>
+  </li>
+
+  <#if TeacherUser??>
+    <li class="<#if methodName=="manager">active</#if>">
+      <a href="cprogram/manager/${contest.cid}">管理</a>
+    </li>
+    <li class="<#if methodName=="edit">active</#if>">
+      <a href="cprogram/edit/${contest.cid}">编辑</a>
+    </li>
+  </#if>
+  <li class="<#if methodName=="score">active</#if>">
+  <a href="cprogram/score/${contest.cid}">成绩</a>
+  </li>
+  <!--
+  <a class="btn btn-info pull-right" id="cset_a">Settings</a>
+  <a class="btn btn-info pull-right" id="contest-clone">Clone</a>
+  -->
+</ul>
+<div id="contest_content" style="width:98%">
+  <@block name="contest_content"></@block>
+</div>
+</@override>
+<@override name="scripts">
+</@override>
+<@extends name="../common/_layout.html" />

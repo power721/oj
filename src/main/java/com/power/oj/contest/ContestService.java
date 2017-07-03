@@ -311,8 +311,9 @@ public class ContestService {
         String sql =
             "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime";
         StringBuilder sb = new StringBuilder("FROM contest WHERE status=1");
+        sb.append(" AND type < 5");
         if (type > -1) {
-            sb.append(" AND type=?");
+            sb.append(" AND type = ?");
             paras.add(type);
         }
 
@@ -836,7 +837,9 @@ public class ContestService {
 
     public boolean addContest(ContestModel contestModel, String startTime, String endTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        contestModel.setUid(userService.getCurrentUid());
+        if(contestModel.getUid() == null) {
+            contestModel.setUid(userService.getCurrentUid());
+        }
         contestModel.setCtime(OjConfig.timeStamp);
         try {
             contestModel.setStartTime((int) (sdf

@@ -2,13 +2,45 @@
   overflow-wrap: break-word;
 }
 
+body{
+  padding:0;
+  margin:0;
+}
+
+li{
+  line-height: 30px;
+}
+
 a.cureent {
   color: black;
+}
+
+#oj-navbar{
+  position: fixed;
+  width: 165px;
+}
+
+#oj-top-navbar{
+  width:100%;
+  background-color: #0081c2;
 }
 
 .navbar-inverse .nav li.dropdown.active>.dropdown-toggle.admin {
   color: red;
   font-weight: bold;
+}
+
+.nav-pills>li{
+  width: 100%;
+  padding: 5px 0 0 10px;
+}
+
+.row .span6 .nav li{
+  width:5%;
+}
+
+.row .span4 .nav li{
+  width:8%;
 }
 
 .green {
@@ -77,6 +109,8 @@ a.cureent {
 
 .main {
   min-height: 600px;
+  padding-left: 165px;
+  overflow: hidden;
 }
 
 .copyright {
@@ -370,6 +404,7 @@ table#contest-rank td.fb {
 
 table.table-stats {
   font-size: 15px;
+  width:98%;
 }
 
 /*************** comment ******************/
@@ -499,12 +534,12 @@ table.table-stats {
 }
 .news {
   margin: 0;
-  padding: 0;
-  height: 110px;
-  width: 68%;
+  min-height: 110px;
+  width: 70%;
   position: relative;
-  float: right;
+  float: left;
   border-bottom: dashed thin #999999;
+  border-left: 5px solid #0081c2;
 }
 
 .news .title {
@@ -533,7 +568,7 @@ table.table-stats {
 .news .entry {
   color: black;
   text-align: left;
-  line-height: 0.5;
+  /*line-height: 0.5;*/
   font-weight: 400;
   font-size: 16px;
   text-indent: 1cm;
@@ -559,11 +594,10 @@ table.table-stats {
 .cxboard {
   position: relative;
   background-color: #DCDCDC;
-  margin: 0;
   padding: 0;
-  height: 900px;
-  width: 30%;
-  float:left;
+  min-height: 900px;
+  width: 26%;
+  float:right;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
@@ -584,7 +618,7 @@ table.table-stats {
 .cxboard .entry
 {
   color:#0066FF;
-  padding-left:1cm;
+  padding:0 0.2cm;
   word-wrap: break-word;
   text-transform:capitalize;
   line-height:2;
@@ -592,7 +626,7 @@ table.table-stats {
   list-style-position:out;
   position:relative;
   top:10px;
-  left: -2%;
+  /*left: -2%;*/
 }
 
 .honor .title-2
@@ -629,6 +663,13 @@ table.table-stats {
   border:1px solid gray;
   background-color:#F5F5FF;
   color:#000000;
+}
+
+.pagination>btn-large{
+  width: 35%;
+  height: 100px;
+  margin: 10px;
+  font-size: 28px;
 }
 
 .progress {

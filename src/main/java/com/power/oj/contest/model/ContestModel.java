@@ -28,6 +28,10 @@ public class ContestModel extends Model<ContestModel> {
     public static final int TYPE_PRIVATE = 2;
     public static final int TYPE_STRICT_PRIVATE = 3;
     public static final int TYPE_TEST = 4;
+    public static final int TYPE_WORK = 5;
+    public static final int TYPE_EXPERIMENT = 6;
+    public static final int TYPE_EXPERIMENT_EXAM = 6;
+    public static final int TYPE_COURSE_EXAM = 7;
     public static final int PENDING = 0;
     public static final int RUNNING = 1;
     public static final int FINISHED = 2;
@@ -62,6 +66,21 @@ public class ContestModel extends Model<ContestModel> {
 
     public boolean isTest() {
         return getType() == ContestModel.TYPE_TEST;
+    }
+
+    public boolean isWork() {
+        return getType() == ContestModel.TYPE_WORK;
+    }
+
+    public boolean isExperiment() {
+        return getType() == ContestModel.TYPE_EXPERIMENT;
+    }
+
+    public boolean isExperimnetExam() {
+        return getType() == ContestModel.TYPE_EXPERIMENT_EXAM;
+    }
+    public boolean isCourseExam() {
+        return getType() == ContestModel.TYPE_COURSE_EXAM;
     }
 
     public boolean checkPassword(String password) {

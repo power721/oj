@@ -101,7 +101,7 @@
   </div>
   </#if>
 
-<div class="row">
+<div class="row" style="margin-left: 0px">
   <section id="s-description">
     <div class="page-header">
       <h4>Description <i class="icon-chevron-up"></i></h4>
@@ -110,7 +110,7 @@
   </section>
 </div>
 
-<div class="row">
+<div class="row" style="margin-left: 0px">
   <section id="s-input">
     <div class="page-header">
       <h4>Input <i class="icon-chevron-up"></i></h4>
@@ -119,7 +119,7 @@
   </section>
 </div>
 
-<div class="row">
+<div class="row" style="margin-left: 0px">
   <section id="s-output">
     <div class="page-header">
       <h4>Output <i class="icon-chevron-up"></i></h4>
@@ -128,7 +128,7 @@
   </section>
 </div>
 
-<div class="row">
+<div class="row" style="margin-left: 0px">
   <section id="s-sampleInput">
     <div class="tabbable content" id="d-sampleInput">
       <!-- Only required for left/right tabs -->
@@ -149,7 +149,7 @@
   </section>
 </div>
 
-<div class="row">
+<div class="row" style="margin-left: 0px">
   <section id="s-sampleOutput">
     <div class="tabbable content" id="d-sampleOutput">
       <!-- Only required for left/right tabs -->
@@ -171,7 +171,7 @@
 </div>
 
   <#if problem.hint?? && problem.hint!="">
-  <div class="row">
+  <div class="row" style="margin-left: 0px">
     <section id="s-hint">
       <div class="page-header">
         <h4>Hint <i class="icon-chevron-up"></i></h4>
@@ -182,7 +182,7 @@
   </#if>
 
   <#if problem.source?? && problem.source!="">
-  <div class="row">
+  <div class="row" style="margin-left: 0px">
     <section id="s-source">
       <div class="page-header">
         <h4>Source <i class="icon-chevron-up"></i></h4>
@@ -193,7 +193,7 @@
   </div>
   </#if>
 
-<div class="row">
+<div class="row" style="margin-left: 0px">
   <section id="s-tag">
     <div class="page-header">
       <h4>Tags<#if (tagList?? && tagList?size>0)>(${tagList?size})</#if> <i class="icon-chevron-down"></i></h4>
@@ -218,7 +218,7 @@
   </section>
 </div>
 
-<div class="row">
+<div class="row" style="margin-left: 0px">
   <div class="text-center">
     <a href="<#if user??>problem/submit/${problem.pid!}?ajax=1</#if>" class="btn btn-info" data-toggle="modal"
        data-target="<#if user??>#submitModal<#else>#loginModal</#if>">Submit</a>
