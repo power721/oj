@@ -58,7 +58,7 @@ public class AdminController extends OjController{
         setAttrs(com.power.oj.admin.AdminService.me().getSystemInfo());
     }
     private void add(int type) {
-        setAttr("teacherList", CProgramService.GetTeacherList());
+        setAttr("teacherList", CProgramService.getTeacherList());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         long ctime = OjConfig.startInterceptorTime + 3600000;
         setAttr("startTime", sdf.format(new Date(ctime)));
@@ -70,7 +70,7 @@ public class AdminController extends OjController{
         }
     }
     private void edit() {
-        setAttr("techerList", CProgramService.GetTeacherList());
+        setAttr("techerList", CProgramService.getTeacherList());
     }
     private void manager() {
         Integer cid = getParaToInt("cid");
@@ -85,17 +85,17 @@ public class AdminController extends OjController{
         Integer lecture = getParaToInt("lecture");
         Integer Rate = getParaToInt("rate", 30);
         if(cid == -1) {
-            List<Record> contest = AdminService.GetAllWorkContest(type, week, lecture);
+            List<Record> contest = AdminService.getAllWorkContest(type, week, lecture);
             List<Integer> contestList = new ArrayList<>();
             for(Record c : contest) {
                 contestList.add(c.get("cid"));
             }
-            List<Record> user = AdminService.GetAllScoreList(type, week, lecture, Rate, contest.size());
+            List<Record> user = AdminService.getAllScoreList(type, week, lecture, Rate, contest.size());
             setAttr("workList", contestList);
             setAttr("allList", user);
             return;
         }
-        setAttr("scoreList", AdminService.GetScoreList(type, cid, week, lecture));
+        setAttr("scoreList", AdminService.getScoreList(type, cid, week, lecture));
     }
     public void index() {
         Integer type = GetType();
@@ -104,7 +104,7 @@ public class AdminController extends OjController{
             main();
             return;
         }
-        List<Record> contestList = AdminService.GetContestListForSelect(type);
+        List<Record> contestList = AdminService.getContestListForSelect(type);
         setAttr("contestList", contestList);
         setAttr("weeks", CProgramConstants.weeks);
         setAttr("lectures", CProgramConstants.lecture);
@@ -140,12 +140,12 @@ public class AdminController extends OjController{
         Integer lecture = getParaToInt("lecture");
         Integer Rate = getParaToInt("rate", 30);
         if(cid == -1) {
-            List<Record> contest = AdminService.GetAllWorkContest(type, week, lecture);
+            List<Record> contest = AdminService.getAllWorkContest(type, week, lecture);
             List<Integer> contestList = new ArrayList<>();
             for(Record c : contest) {
                 contestList.add(c.get("cid"));
             }
-            List<Record> user = AdminService.GetAllScoreList(type, week, lecture, Rate, contest.size());
+            List<Record> user = AdminService.getAllScoreList(type, week, lecture, Rate, contest.size());
             try {
                 DateFormat fmtDateTime = new SimpleDateFormat("yyyyMMdd");
                 String fileName = UserService.me().getCurrentUser().getRealName() +

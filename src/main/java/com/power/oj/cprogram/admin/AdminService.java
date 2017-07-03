@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by w703710691d on 2017/6/29.
  */
 public class AdminService {
-    static List<Record> GetContestListForSelect(Integer type) {
+    static List<Record> getContestListForSelect(Integer type) {
         List<Object> parase = new ArrayList<>();
         String sql = "select cid, title, lockBoardTime AS week, unLockBoardTime AS lecture from contest where type = ? ";
         parase.add(type);
@@ -28,7 +28,7 @@ public class AdminService {
         parase.add(CProgramService.getEndUnixTime());
         return Db.find(sql, parase.toArray());
     }
-    static List<Record> GetScoreList(Integer type, Integer cid, Integer week, Integer lecture) {
+    static List<Record> getScoreList(Integer type, Integer cid, Integer week, Integer lecture) {
         List<Object> parase = new ArrayList<>();
         String sql = "select " +
                 "score.uid, " +
@@ -57,7 +57,7 @@ public class AdminService {
         sql += "order by cprogram_user_info.stuid";
         return Db.find(sql, parase.toArray());
     }
-    static List<Record> GetAllWorkContest(Integer type, Integer week, Integer lecture) {
+    static List<Record> getAllWorkContest(Integer type, Integer week, Integer lecture) {
         Integer uid = UserService.me().getCurrentUid();
         Integer startTime = CProgramService.getStartUnixTime();
         Integer endTime = CProgramService.getEndUnixTime();
@@ -89,7 +89,7 @@ public class AdminService {
         List<Record> contest = Db.find(sql, parase.toArray());
         return contest;
     }
-    static List<Record> GetAllScoreList(Integer type, Integer week, Integer lecture,
+    static List<Record> getAllScoreList(Integer type, Integer week, Integer lecture,
                                         Integer Rate, Integer workTime) {
         Integer uid = UserService.me().getCurrentUid();
         Integer startTime = CProgramService.getStartUnixTime();
