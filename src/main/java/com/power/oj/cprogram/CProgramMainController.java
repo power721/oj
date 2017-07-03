@@ -379,8 +379,55 @@ public class CProgramMainController extends OjController {
         userext.set("tid", getParaToInt("tid"));
         userext.set("class_week", getParaToInt("class_week"));
         userext.set("class_lecture", getParaToInt("class_lecture"));
+        userext.set("ctime", OjConfig.timeStamp);
         Db.save("cprogram_user_info", "uid", userext);
 
+        redirect("/cprogram");
+    }
+
+    public void resignup() {
+        if(!CProgramService.needReSignUp()) {
+            redirect("/cprogram");
+            return;
+        }
+        Integer uid = UserService.me().getCurrentUid();
+        Record User = Db.findFirst("select " +
+                "user.uid, " +
+                "user.realName, " +
+                "user.phone, " +
+                "cprogram_user_info.class as Class, " +
+                "cprogram_user_info.class_week, " +
+                "cprogram_user_info.class_lecture, " +
+                "cprogram_user_info.tid, " +
+                "cprogram_user_info.stuid " +
+                "from user " +
+                "inner join cprogram_user_info on user.uid = cprogram_user_info.uid " +
+                "where user.uid = ?", uid);
+        setAttr("techerList", CProgramService.getTeacherList());
+        setAttr("User", User);
+    }
+
+    @Before(POST.class)
+    @Clear(CProgramInterceptor.class)
+    public void reSignupUser() {
+        if(!CProgramService.needReSignUp()) {
+            redirect("/cprogram");
+            return;
+        }
+        Integer uid = UserService.me().getCurrentUid();
+        UserModel user = UserService.me().getUser(uid);
+        user.setRealName(getPara("realName"));
+        user.setPhone(getPara("phone"));
+        user.update();
+
+        Record userext = Db.findById("cprogram_user_info", "uid", uid);
+        userext.set("class", getPara("class"));
+        userext.set("stuid", getPara("stuid"));
+        userext.set("tid", getParaToInt("tid"));
+        userext.set("class_week", getParaToInt("class_week"));
+        userext.set("class_lecture", getParaToInt("class_lecture"));
+        userext.set("ctime", OjConfig.timeStamp);
+        Db.update("cprogram_user_info", "uid", userext);
         redirect("/cprogram");
     }
 }
