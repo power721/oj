@@ -1,35 +1,28 @@
 package com.power.oj.cprogram;
 
+import com.jfinal.log.Logger;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
-import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.bean.Solution;
 import com.power.oj.shiro.ShiroKit;
-import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserService;
-import com.sun.org.apache.bcel.internal.generic.Select;
 
-import javax.mail.search.RecipientStringTerm;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 /**
  * Created by w7037 on 2017/6/14.
  */
 public final class CProgramService {
-
-    static Page<ContestModel> GetContestList(int pageNumber, int pageSize, int type) {
+    private static final Logger LOGGER = Logger.getLogger(CProgramMainController.class);
+    static Page<ContestModel> getContestList(int pageNumber, int pageSize, int type) {
         String sql =
                 "SELECT " +
                         "contest.cid, " +
@@ -75,7 +68,7 @@ public final class CProgramService {
     static public boolean isTeacher(){
         return ShiroKit.hasPermission("teacher");
     }
-    static public ContestSolutionModel GetSolution(Integer cid, Integer sid) {
+    static public ContestSolutionModel getSolution(Integer cid, Integer sid) {
         String sql = "select " +
                 "contest_solution.*, " +
                 "user.name " +
@@ -88,7 +81,7 @@ public final class CProgramService {
         solution.put("alpha", (char)(solution.getNum() + 'A'));
         return solution;
     }
-    static public List<Record> GetScoreList(Integer cid, Integer type) {
+    static public List<Record> getScoreList(Integer cid, Integer type) {
         List<Object> parase = new ArrayList<>();
         String sql = "select score.*, " +
                 "cprogram_user_info.stuid, " +
@@ -116,14 +109,14 @@ public final class CProgramService {
         return Db.find(sql, parase.toArray());
     }
 
-    static public int GetSolutionResult(Integer sid) {
+    static public int getSolutionResult(Integer sid) {
         ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
         Integer result = Db.queryInt("select MIN(result) from contest_solution where cid = ? and pid = ? and uid = ?", solution.getCid(), solution.getPid(), solution.getUid());
         if(result == null) return 999;
         return  result;
     }
 
-    static public void UpdateScore(Integer cid, Integer sid, Integer result) {
+    static public void updateScore(Integer cid, Integer sid, Integer result) {
         ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
         Integer uid = solution.getUid();
         Record score = Db.findFirst("select * from score where cid =? and uid = ?", cid, uid);
@@ -145,7 +138,7 @@ public final class CProgramService {
         }
         else {
             score.set("submited", score.getInt("submited") + 1);
-            if(result== ResultType.AC && GetSolutionResult(sid) != ResultType.AC) {
+            if(result== ResultType.AC && getSolutionResult(sid) != ResultType.AC) {
                 score.set("accepted", score.getInt("accepted") + 1);
                 Integer newScore = score.getInt("score1") + preScore;
                 if(newScore > 100) newScore = 100;
@@ -160,24 +153,25 @@ public final class CProgramService {
         rd.set("score2", score);
         Db.update("score", "rid", rd);
     }
-    static public String RandomPassword() {
+    static public String randomPassword() {
         String source = "QWERTYUIOPASDFGHJKLZXCVBNM";
         String password = "";
+        Random rand = new Random();
         for(int i = 0; i < 8; i++) {
-            int index = (int)Math.floor(Math.random() * source.length());
+            int index = rand.nextInt(source.length());
             password += source.charAt(index);
         }
         return password;
     }
 
-    static public File AddPassword(int cid, int number) {
+    static public File addPassword(int cid, int number) {
         File file = new File(OjConfig.downloadPath , "password-" + cid + ".txt");
         try {
             file.createNewFile();
             PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)));
             List<Record> list = new ArrayList<>();
             for(int i = 0; i < number; i++) {
-                String password = RandomPassword();
+                String password = randomPassword();
                 Record record = new Record();
                 record.set("cid", cid);
                 record.set("password", password);
@@ -188,6 +182,7 @@ public final class CProgramService {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+            LOGGER.error("can't creat the password file");
         }
         return file;
     }
@@ -198,7 +193,7 @@ public final class CProgramService {
         return record != null;
     }
 
-    static public List<Record> GetTeacherList() {
+    static public List<Record> getTeacherList() {
         return Db.find("select user.realName, user.uid from user inner join user_role on user.uid = user_role.uid where user_role.rid = 4");
     }
 

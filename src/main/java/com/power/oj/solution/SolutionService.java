@@ -417,7 +417,7 @@ public final class SolutionService {
                 solution.setSystemError(error);
             }
             if(cid > 0 && ContestService.me().getContest(cid).getType() >= ContestModel.TYPE_WORK) {
-                CProgramService.UpdateScore(cid, sid, result);
+                CProgramService.updateScore(cid, sid, result);
             }
             boolean updateResult = solution.update();
 
