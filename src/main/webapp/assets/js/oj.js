@@ -47,10 +47,16 @@ $(document).ready(function () {
 
 
     // 设置左边导航栏鼠标移上去后变色
+    var at;
     $(".nav-stacked>li").mouseover(function () {
+        at=0;
+        if($(this).attr("class")=="active"){
+            at=1;
+        }
         $(this).attr("class","active");
     }).mouseout(function () {
         $(this).css("background-color","rgba(255,255,255,0.0)");
+        if(at==0)
         $(this).removeAttr("class","active");
     });
 
