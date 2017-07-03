@@ -16,7 +16,7 @@ public class CProgramInterceptor implements Interceptor {
             return;
         }
         if(CProgramService.isTeacher()) {
-            ai.getController().setAttr(CProgramConstants.TeacherUser, true);
+            ai.getController().setAttr(CProgramConstants.teacherUser, true);
         }
         ai.getController().setAttr("weeks", CProgramConstants.weeks);
         ai.getController().setAttr("lectures", CProgramConstants.lecture);

@@ -38,7 +38,7 @@ public class CProgramMainController extends OjController {
         Integer type = getParaToInt("type", ContestModel.TYPE_WORK);
         int pageNumber = getParaToInt(0, 1);
         int pageSize = CProgramConstants.PageSize;
-        Page<ContestModel> page = CProgramService.GetContestList(pageNumber, pageSize, type);
+        Page<ContestModel> page = CProgramService.getContestList(pageNumber, pageSize, type);
         setAttr("contestList", page);
         setAttr("pageSize", CProgramConstants.PageSize);
         setAttr("type", type);
@@ -53,12 +53,12 @@ public class CProgramMainController extends OjController {
         setAttr("type", type);
         setAttr("startTime", sdf.format(new Date(ctime)));
         if(type == ContestModel.TYPE_WORK) {
-            setAttr("endTime", sdf.format(new Date(ctime + 7 * 24 * 3600 * 1000)));
+            setAttr("endTime", sdf.format(new Date(ctime + CProgramConstants.oneWeek)));
         }
         else {
-            setAttr("endTime", sdf.format(new Date(ctime + 2 * 3600 * 1000)));
+            setAttr("endTime", sdf.format(new Date(ctime + CProgramConstants.twoHours)));
         }
-        setAttr("techerList", CProgramService.GetTeacherList());
+        setAttr("techerList", CProgramService.getTeacherList());
     }
 
     @Before(POST.class)
@@ -215,7 +215,7 @@ public class CProgramMainController extends OjController {
     public void code() {
         Integer cid = getParaToInt("cid");
         Integer sid = getParaToInt("sid");
-        ContestSolutionModel solution = CProgramService.GetSolution(cid, sid);
+        ContestSolutionModel solution = CProgramService.getSolution(cid, sid);
         if(solution == null) {
             renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
             return;
@@ -248,7 +248,7 @@ public class CProgramMainController extends OjController {
     }
     @RequiresPermissions("teacher")
     public void edit() {
-        setAttr("techerList", CProgramService.GetTeacherList());
+        setAttr("techerList", CProgramService.getTeacherList());
     }
 
     @RequiresPermissions("teacher")
@@ -284,7 +284,7 @@ public class CProgramMainController extends OjController {
     public void score() {
         Integer cid = getParaToInt(0);
         ContestModel contestModel = ContestService.me().getContest(cid);
-        List<Record> user = CProgramService.GetScoreList(cid, contestModel.getType());;
+        List<Record> user = CProgramService.getScoreList(cid, contestModel.getType());;
         setAttr("scoreList", user);
     }
 
@@ -347,7 +347,7 @@ public class CProgramMainController extends OjController {
     public void generate() {
         Integer cid = getParaToInt(0);
         Integer number = getParaToInt("number");
-        File file = CProgramService.AddPassword(cid, number);
+        File file = CProgramService.addPassword(cid, number);
         renderFile(file);
     }
 
@@ -356,7 +356,7 @@ public class CProgramMainController extends OjController {
             redirect("/cprogram");
             return;
         }
-        setAttr("techerList", CProgramService.GetTeacherList());
+        setAttr("techerList", CProgramService.getTeacherList());
     }
 
     @Before(POST.class)
@@ -382,9 +382,5 @@ public class CProgramMainController extends OjController {
         Db.save("cprogram_user_info", "uid", userext);
 
         redirect("/cprogram");
-    }
-
-    public void setFlag() {
-        renderText("立Flag");
     }
 }
