@@ -107,7 +107,7 @@ public class SolutionController extends OjController {
         String brush = getAttrForStr("language").toLowerCase();
         if(brush.contains("g++") || brush.contains("gcc")) brush = "cpp";
         if(brush.contains("python")) brush = "python";
-
+        if(brush.contains("kotlin") || brush.contains("java")) brush = "java";
         setAttr("brush", brush);
 
         setTitle(getText("solution.show.title"));

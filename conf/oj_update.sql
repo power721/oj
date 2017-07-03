@@ -477,3 +477,49 @@ INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `ex
 INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('9', 'G++17', ' ', '0', '996', '1', '1', 'cc', 'exe', '0', 'C:\\', 'cpp', '0', '1');
 INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('10', 'Python3', ' ', '0', '7000', '4', '3', 'py', 'exe', '1', 'C:\\', 'python', '0', '1');
 
+#2017-7-2 Big UPDATE
+INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('11', 'Kotlin', '', '0', '8000', '3', '3', 'kt', 'class', '0', '', 'java', '0', '1');
+INSERT INTO `oj`.`role` (`id`, `name`, `description`, `status`) VALUES ('4', 'teacher', 'teacher', '1');
+INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('15', '4', '77');
+INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('16', '4', '175');
+-- ----------------------------
+-- Table structure for cprogram_password
+-- ----------------------------
+DROP TABLE IF EXISTS `cprogram_password`;
+CREATE TABLE `cprogram_password` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `uid` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8;
+-- ----------------------------
+-- Table structure for cprogram_user_info
+-- ----------------------------
+DROP TABLE IF EXISTS `cprogram_user_info`;
+CREATE TABLE `cprogram_user_info` (
+  `uid` int(11) NOT NULL,
+  `class` varchar(255) NOT NULL,
+  `stuid` varchar(255) DEFAULT NULL,
+  `tid` int(11) DEFAULT NULL,
+  `class_week` int(11) DEFAULT NULL,
+  `class_lecture` int(11) DEFAULT NULL,
+  PRIMARY KEY (`uid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+-- ----------------------------
+-- Table structure for score
+-- ----------------------------
+DROP TABLE IF EXISTS `score`;
+CREATE TABLE `score` (
+  `rid` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) NOT NULL,
+  `cid` int(11) NOT NULL,
+  `score1` int(11) DEFAULT '0',
+  `score2` int(11) DEFAULT '0',
+  `accepted` int(11) DEFAULT '0',
+  `submited` int(11) DEFAULT '0',
+  `ctime` int(11) NOT NULL DEFAULT '0',
+  `week` int(11) NOT NULL DEFAULT '0',
+  `lecture` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`rid`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
