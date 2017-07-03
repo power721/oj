@@ -62,6 +62,12 @@ public class AdminService {
         Integer startTime = CProgramService.getStartUnixTime();
         Integer endTime = CProgramService.getEndUnixTime();
         Integer workType;
+        if(type == ContestModel.TYPE_WORK) {
+            type = ContestModel.TYPE_COURSE_EXAM;
+        }
+        if(type == ContestModel.TYPE_EXPERIMENT) {
+            type = ContestModel.TYPE_EXPERIMENT_EXAM;
+        }
         if(type == ContestModel.TYPE_EXPERIMENT_EXAM) {
             workType = ContestModel.TYPE_EXPERIMENT;
         }
@@ -80,8 +86,8 @@ public class AdminService {
         parase.add(uid);
         parase.add(startTime);
         parase.add(endTime);
-        if(type == ContestModel.TYPE_EXPERIMENT_EXAM) {
-            sql += "and lockBoardTime=? and unLockBoradTime=? " +
+        if(type == ContestModel.TYPE_COURSE_EXAM) {
+            sql += "and lockBoardTime=? and unLockBoardTime=? ";
             parase.add(week);
             parase.add(lecture);
         }
@@ -95,6 +101,12 @@ public class AdminService {
         Integer startTime = CProgramService.getStartUnixTime();
         Integer endTime = CProgramService.getEndUnixTime();
         Integer workType;
+        if(type == ContestModel.TYPE_WORK) {
+            type = ContestModel.TYPE_COURSE_EXAM;
+        }
+        if(type == ContestModel.TYPE_EXPERIMENT) {
+            type = ContestModel.TYPE_EXPERIMENT_EXAM;
+        }
         if(type == ContestModel.TYPE_EXPERIMENT_EXAM) {
             workType = ContestModel.TYPE_EXPERIMENT;
         }
@@ -156,9 +168,10 @@ public class AdminService {
             }
             u.set("examScore", examScore);
             Integer sum = 0;
-            for(Integer i : userScore.get(UID).keySet()) {
-                sum += userScore.get(UID).get(i);
-            }
+            if(userScore.get(UID) != null)
+                for(Integer i : userScore.get(UID).keySet()) {
+                    sum += userScore.get(UID).get(i);
+                }
             Integer finalScore = (int)Math.round(sum * Rate / 100.0 /workTime +  examScore * (100 - Rate) / 100.0);
             u.set("finalScore", finalScore);
         }

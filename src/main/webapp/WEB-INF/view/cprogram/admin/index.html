@@ -77,9 +77,20 @@
                   ${item.title}
                   </option>
                 </#list>
-                <#if type == 7 || type == 8>
-                  <option value="-1" <#if allList??> selected </#if> > 全部</option>
-                </#if>
+                <option value="-1" <#if allList??> selected </#if> >
+                  <#if type == 5>
+                    全部作业
+                  </#if>
+                  <#if type == 6>
+                    全部实验
+                  </#if>
+                  <#if type == 7>
+                    任课教师学生实验成绩
+                  </#if>
+                  <#if type == 8>
+                    任课教师学生成绩
+                  </#if>
+                </option>
               </select>
 
                 <select class="input-medium" id="week_select" name="week">
@@ -446,14 +457,16 @@
                       <#assign idx = 1 />
                       <#list workList as contest>
                         <th width="8%">
-                          <#if type == 7>实验</#if>
-                          <#if type == 8>作业</#if>
+                          <#if type == 7 || type == 6>实验</#if>
+                          <#if type == 8 || type == 5>作业</#if>
                           ${idx}
                           <#assign idx = idx + 1 />
                         </th>
                       </#list>
-                      <th width="10%">考试成绩</th>
-                      <th width="10%">总成绩</th>
+                      <#if 6 < type >
+                        <th width="10%">考试成绩</th>
+                        <th width="10%">总成绩</th>
+                      </#if>
                     </tr>
                   </thead>
                   <tbody>
@@ -473,19 +486,21 @@
                         </td>
                         <#list workList as work>
                           <td>
-                            <#if user.scoreMap.get(work)??>
+                            <#if user.scoreMap?? && user.scoreMap.get(work)??>
                               ${user.scoreMap.get(work)}
                             <#else>
                               0
                             </#if>
                           </td>
                         </#list>
-                        <td>
-                          ${user.examScore!}
-                        </td>
-                        <td>
-                          ${user.finalScore!}
-                        </td>
+                        <#if 6 < type >
+                          <td>
+                            ${user.examScore!}
+                          </td>
+                          <td>
+                            ${user.finalScore!}
+                          </td>
+                        </#if>
                       </tr>
                     </#list>
                   </tbody>

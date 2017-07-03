@@ -30,8 +30,8 @@ public class ContestModel extends Model<ContestModel> {
     public static final int TYPE_TEST = 4;
     public static final int TYPE_WORK = 5;
     public static final int TYPE_EXPERIMENT = 6;
-    public static final int TYPE_EXPERIMENT_EXAM = 6;
-    public static final int TYPE_COURSE_EXAM = 7;
+    public static final int TYPE_EXPERIMENT_EXAM = 7;
+    public static final int TYPE_COURSE_EXAM = 8;
     public static final int PENDING = 0;
     public static final int RUNNING = 1;
     public static final int FINISHED = 2;

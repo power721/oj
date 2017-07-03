@@ -226,6 +226,24 @@ public final class CProgramService {
         }
         return 0;
     }
+    public static int getStartUnixTime(int ctime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(ctime * 1000L));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if(2 - 1 <= calendar.get(Calendar.MONTH) && calendar.get(Calendar.MONTH) <= 7 - 1) {
+            calendar.set(Calendar.MONTH, 2 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+        }
+        else {
+            calendar.set(Calendar.MONTH, 8 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH,1);
+        }
+        return (int)(calendar.getTime().getTime() / 1000);
+    }
     public static int getStartUnixTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(OjConfig.timeStamp * 1000L));
@@ -264,5 +282,15 @@ public final class CProgramService {
             calendar.set(Calendar.DAY_OF_MONTH, 31 - 1);
         }
         return (int)(calendar.getTime().getTime() / 1000);
+    }
+    public static Boolean needReSignUp() {
+        if(isTeacher()) return false;
+        if(isRegister()) {
+            Integer ctime = Db.queryInt("select ctime from cprogram_user_info where uid=?", UserService.me().getCurrentUid());
+            if(getStartUnixTime() != getStartUnixTime(ctime)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
