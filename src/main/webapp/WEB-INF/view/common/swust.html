@@ -63,7 +63,7 @@
     </div>
     </#list>
 
-  <div class="pagination pagination-centered" style="float:left;margin-left:-36%; margin-top: 170px;">
+  <div class="pagination pagination-centered" style="float:left;margin-left:-36%; margin-top: 170px;" id="paginationBtn">
     <#include "../common/_paginate.html" />
 	<@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
   </div>
