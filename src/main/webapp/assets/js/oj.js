@@ -33,6 +33,21 @@ $(document).ready(function () {
 
     $("marquee").css("margin-top", $("#oj-top-navbar").height());
     $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
+
+    // 屏幕宽度小于768也就是手机上的显示
+    if($("body").width()<768){
+        $(".pull-right a").each(function(){
+            var text = $(this).html().split("i>")[0]+"i>";
+            $(this).html(text);
+        });
+        $(".navbar-fixed-top").css("margin-right","0");
+        $(".flexslider").css("margin-top", $("#oj-top-navbar").height());
+        $("#paginationBtn").css({
+            "margin-left":"0",
+            "margin-top":"60px"
+        });
+    }
+    // 屏幕宽度小于1000时的显示
     if($("body").width()<1000){
         $("#oj-navbar").css("width",40);
         $("#oj-top-navbar").parent().css("position","fixed");
@@ -41,7 +56,8 @@ $(document).ready(function () {
             var text = $(this).html().split("i>")[0]+"i>";
             $(this).html(text).parent().css("padding","0");
         });
-    }else{
+    }
+    else{
         $(".main").css("width",$("body").width()-165);
     }
 
