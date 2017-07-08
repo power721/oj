@@ -9,13 +9,18 @@ body{
 
 /*设置table样式*/
 @media screen and (max-width: 500px){
-  #signup{
+  #signup,.logout{
     margin-right: 10px;
   }
+
 
   code {
     word-break: break-all;
     word-wrap: break-word;
+  }
+
+  #problem-search{
+    transform: scale(0.9);
   }
 
   .container .row-fluid .span12{
@@ -34,33 +39,42 @@ body{
   float: left;
   margin-left: 20%;
   }
-  .container .row-fluid .span12 #problem-list{
+
+  .container .row-fluid .span12 .pagination .pull-left{
+    transform: scale(0.9);
+  }
+
+  .container .row-fluid .span12 .pagination .btn-group{
+    margin-left: -20%;
+  }
+
+  .container .row-fluid .span12 >#problem-list{
     font-size: 12px;
     transform: scale(0.7);
     -webkit-transform: scale(0.7);
-    -webkit-transform-origin-x: 10%;
+    -webkit-transform-origin-x: 6%;
     -webkit-transform-origin-y: 5px;
   }
-  .container .row-fluid .span12 #status{
+  .container .row-fluid .span12 >#status{
     font-size: 12px;
     transform: scale(0.6);
     -webkit-transform: scale(0.6);
     -webkit-transform-origin-x: 3%;
     -webkit-transform-origin-y: 5px;
   }
-  .container .row-fluid .span12 #Contest-list{
-    font-size: 12px;
-    transform: scale(0.9);
-    -webkit-transform: scale(0.9);
+  .container .row-fluid .span12 >#Contest-list{
+    font-size: 13px;
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
     -webkit-transform-origin-x: 10%;
     -webkit-transform-origin-y: 5px;
   }
 
-  .container .row-fluid .span12 #user-rank{
-    font-size: 13px;
-    transform: scale(0.7);
-    -webkit-transform: scale(0.7);
-    -webkit-transform-origin-x: 10%;
+  .container .row-fluid .span12 >#user-rank{
+    font-size: 12px;
+    transform: scale(0.6);
+    -webkit-transform: scale(0.6);
+    -webkit-transform-origin-x: 3%;
     -webkit-transform-origin-y: 5px;
   }
 
@@ -71,28 +85,32 @@ body{
     -webkit-transform-origin-y: 0;
   }
 
-  .container .row-fluid .span12 .honor{
+  .container .row-fluid .span12 >.honor{
     font-size: 12px;
     transform: scale(0.9);
     -webkit-transform: scale(0.9);
     -webkit-transform-origin-x: 25%;
     -webkit-transform-origin-y: 0;
   }
-  .container .row-fluid .span12 .table-striped{
+  .container .row-fluid .span12 .table-striped,a{
     font-size: 12px;
-    transform: scale(0.9);
-    -webkit-transform: scale(0.9);
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
     -webkit-transform-origin-x: 20%;
     -webkit-transform-origin-y: 0;
   }
 
+
+
   /*改动表单大小*/
-  .container .row-fluid .span12 .pagination .form-search>input,select,button{
+  .container .row-fluid .span12 .pagination .form-search>input,select{
     transform:scale(0.8);
+    -webkit-transform:scale(0.8);
   }
   .container .row-fluid .span12 .pagination ul{
     font-size:12px;
     transform:scale(0.9);
+    -webkit-transform:scale(0.9);
   }
 }
 
