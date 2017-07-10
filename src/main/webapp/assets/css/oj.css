@@ -50,22 +50,22 @@ body{
 
   .container .row-fluid .span12 >#problem-list{
     font-size: 12px;
-    transform: scale(0.6);
-    -webkit-transform: scale(0.6);
+    transform: scale(0.7);
+    -webkit-transform: scale(0.7);
     -webkit-transform-origin-x: 2%;
     -webkit-transform-origin-y: 5px;
   }
   .container .row-fluid .span12 >#status{
     font-size: 12px;
-    transform: scale(0.5);
-    -webkit-transform: scale(0.5);
+    transform: scale(0.6);
+    -webkit-transform: scale(0.6);
     -webkit-transform-origin-x: 1%;
     -webkit-transform-origin-y: 5px;
   }
   .container .row-fluid .span12 >#Contest-list{
     font-size: 13px;
-    transform: scale(0.7);
-    -webkit-transform: scale(0.7);
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
     -webkit-transform-origin-x: 10%;
     -webkit-transform-origin-y: 5px;
   }
@@ -94,8 +94,8 @@ body{
   }
   .container .row-fluid .span12 .table-striped,a{
     font-size: 12px;
-    transform: scale(0.8);
-    -webkit-transform: scale(0.8);
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
     -webkit-transform-origin-x: 10%;
     -webkit-transform-origin-y: 0;
   }
