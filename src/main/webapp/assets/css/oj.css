@@ -52,14 +52,14 @@ body{
     font-size: 12px;
     transform: scale(0.7);
     -webkit-transform: scale(0.7);
-    -webkit-transform-origin-x: 6%;
+    -webkit-transform-origin-x: 2%;
     -webkit-transform-origin-y: 5px;
   }
   .container .row-fluid .span12 >#status{
     font-size: 12px;
     transform: scale(0.6);
     -webkit-transform: scale(0.6);
-    -webkit-transform-origin-x: 3%;
+    -webkit-transform-origin-x: 1%;
     -webkit-transform-origin-y: 5px;
   }
   .container .row-fluid .span12 >#Contest-list{
@@ -94,9 +94,9 @@ body{
   }
   .container .row-fluid .span12 .table-striped,a{
     font-size: 12px;
-    transform: scale(0.8);
-    -webkit-transform: scale(0.8);
-    -webkit-transform-origin-x: 20%;
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    -webkit-transform-origin-x: 10%;
     -webkit-transform-origin-y: 0;
   }
 
