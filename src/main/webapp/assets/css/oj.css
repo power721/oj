@@ -94,8 +94,8 @@ body{
   }
   .container .row-fluid .span12 .table-striped,a{
     font-size: 12px;
-    transform: scale(0.9);
-    -webkit-transform: scale(0.9);
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
     -webkit-transform-origin-x: 10%;
     -webkit-transform-origin-y: 0;
   }
