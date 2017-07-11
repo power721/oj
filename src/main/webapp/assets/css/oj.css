@@ -630,9 +630,9 @@ table.table-stats {
 
 .cxImage{
   position:relative;
-  height:350px;
-  width:60%;
-  left:20%;
+  /*height:350px;*/
+  width:80%;
+  left:10%;
 
 }
 
@@ -662,14 +662,14 @@ table.table-stats {
 .news .time {
   color: black;
   line-height: 0.2;
-  font-size: 14;
+  font-size: 14px;
   font-weight: 400;
 }
 
 .news .author {
   color: #993399;
   line-height: 0.2;
-  font-size: 14;
+  font-size: 14px;
   font-weight: 400;
 }
 
