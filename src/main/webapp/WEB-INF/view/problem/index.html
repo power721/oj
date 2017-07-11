@@ -50,7 +50,7 @@
 </table>
 
   <#if (problemList.list.size()>=pageSize/2)>
-  <div class="pagination pagination-centered">
+  <div class="pagination pagination-centered pagination-ul">
     <@paginate currentPage=problemList.pageNumber totalPage=problemList.totalPage actionUrl="problem/" />
   </div>
   </#if>
