@@ -140,8 +140,18 @@ a.cureent {
 
 .nav-pills>li{
   width: 100%;
-  padding: 5px 0 0 10px;
 }
+
+.nav-pills>li>a{
+  padding:13px 25px 13px!important;
+}
+
+@media  (max-width: 1000px) {
+  .nav-pills > li > a {
+    padding: 13px 15px 13px !important;
+  }
+}
+
 
 .row .span6 .nav li{
   width:5%;
