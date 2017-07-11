@@ -21,6 +21,12 @@ var user = {
     lastActiveTime: system.st
 };
 
+//点击图片跳转到对应的新闻中去
+$(".slides li").click(function () {
+    var x=$(".slides li").index(this)
+    window.location.href=$($(".news").get(x-1)).children("a").attr("href")
+})
+
 $(document).ready(function () {
     /* disale link */
     $('li.disabled a').removeAttr('href');
@@ -36,22 +42,20 @@ $(document).ready(function () {
 
     // 屏幕宽度小于768也就是手机上的显示
     if($("body").width()<768){
-        $(".pull-right a").each(function(){
-            var text = $(this).html().split("i>")[0]+"i>";
-            $(this).html(text);
-        });
-        $(".navbar-fixed-top").css("margin-right","0");
-        $(".flexslider").css("margin-top", $("#oj-top-navbar").height());
+        $(".span12").css("margin-top",$("#oj-top-navbar").height());
+        $(".flexslider").css("width", "96%");
+        $(".news").css("width","96%");
+        $(".cxboard").hide();
         $("#paginationBtn").css({
-            "margin-left":"0",
+            "margin-left":"20%",
             "margin-top":"60px"
         });
     }
     // 屏幕宽度小于1000时的显示
     if($("body").width()<1000){
-        $("#oj-navbar").css("width",40);
+        $("#oj-navbar").css("width",44);
         $("#oj-top-navbar").parent().css("position","fixed");
-        $(".main").css({"width":$("body").width()-40,"padding-left":"40px"});
+        $(".main").css({"width":$("body").width()-40,"padding-left":"44px"});
         $(".nav-pills a").each(function(){
             var text = $(this).html().split("i>")[0]+"i>";
             $(this).html(text).parent().css("padding","0");
