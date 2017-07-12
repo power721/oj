@@ -1,5 +1,39 @@
-.cprog_btn{
-    width:30%;
-    height: 80px;
-    margin:2% 5%;
+@media (min-width: 1001px){
+    .cprog_btn{
+        width:30%;
+        height: 80px;
+        margin:2% 5%;
+        padding-top: 40px;
+        font-size: xx-large;
+        text-shadow: black 4px 4px 4px;
+        opacity:0.7;
+        line-height:100%;
+    }
+}
+@media (min-width: 501px) and (max-width: 1000px){
+    .cprog_btn{
+        width:30%;
+        height: 60px;
+        margin:2% 5%;
+        padding-top: 40px;
+        font-size: xx-large;
+        text-shadow: black 4px 4px 4px;
+        opacity:0.7;
+    }
+}
+@media (max-width: 500px){
+    .cprog_btn{
+        width:24%;
+        height: 60px;
+        margin:2% 5%;
+        padding-top: 20px;
+        font-size: xx-large;
+        text-shadow: black 4px 4px 4px;
+        opacity:0.7;
+        line-height:100%;
+    }
+}
+#current{
+    float: right;
+    margin-right: 5%;
 }
