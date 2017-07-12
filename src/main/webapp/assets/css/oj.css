@@ -146,23 +146,23 @@ a.cureent {
   font-weight: bold;
 }
 
-.nav-pills>li{
+#oj-navbar .nav-pills>li{
   width: 100%;
 }
 
-.nav-pills>li>a{
-  padding:13px 25px 13px!important;
+#oj-navbar .nav-pills>li>a{
+  padding:13px 0 13px 30px !important;
 }
 
-@media  (max-width: 1000px) {
-  .nav-pills > li > a {
+@media (max-width: 1000px) {
+  #oj-navbar .nav-pills > li > a {
     padding: 13px 15px 13px !important;
   }
 }
 
 
 .row .span6 .nav li{
-  width:5%;
+  width:8%;
 }
 
 .row .span4 .nav li{
