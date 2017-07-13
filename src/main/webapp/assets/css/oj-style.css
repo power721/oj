@@ -6,3 +6,22 @@
     margin-bottom: 10px;
     list-style-type:none;
 }
+
+@media (max-width: 500px){
+    #tree ul>li{
+        margin: 2% 5% 0 -8%;
+    }
+
+    /*调整编辑讨论的模态框*/
+    .discussModal {
+        width: 350px;
+        margin: 0;
+    }
+
+    /*problem里的适配*/
+    #lang{
+        transform: scale(0.5);
+        -webkit-transform-origin-x: -5%;
+    }
+
+}
