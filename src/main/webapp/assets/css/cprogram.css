@@ -37,3 +37,21 @@
     float: right;
     margin-right: 5%;
 }
+
+.input-append, .input-prepend{
+    width: 260px;
+}
+
+#uid{
+    width:100%;
+    transform: scale(1);
+}
+
+#class_week, #class_lecture{
+    width:50%;
+    transform: scale(1);
+}
+
+#inputEndTime, #inputStartTime{
+    width: 218px;
+}
