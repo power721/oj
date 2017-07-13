@@ -64,7 +64,7 @@
   </tbody>
 </table>
 
-<div class="pagination pagination-centered">
+<div class="pagination pagination-centered" id="contest-pagination">
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
 </div>
