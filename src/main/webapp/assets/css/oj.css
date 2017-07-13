@@ -13,7 +13,6 @@ body{
     margin-right: 10px;
   }
 
-
   code {
     word-break: break-all;
     word-wrap: break-word;
@@ -122,6 +121,9 @@ body{
   }
 }
 
+.pull-right{
+  margin-right:2%;
+}
 
 li{
   line-height: 30px;
