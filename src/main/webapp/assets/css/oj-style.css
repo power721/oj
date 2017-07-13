@@ -87,4 +87,10 @@
         -webkit-transform-origin-x: -10%;
     }
 
+    #user-list{
+        transform: scale(0.65);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
 }
