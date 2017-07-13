@@ -20,8 +20,19 @@
 
     /*problem里的适配*/
     #lang{
-        transform: scale(0.5);
-        -webkit-transform-origin-x: -5%;
+        transform: scale(0.45);
+        -webkit-transform-origin-x: -8%;
+    }
+
+    #problem-status{
+        transform: scale(0.6);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 5%;
+    }
+
+    /*按钮设置为块状*/
+    .btn-group1{
+        display: block;
     }
 
 }
