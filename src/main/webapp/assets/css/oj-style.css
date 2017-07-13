@@ -58,22 +58,17 @@
         -webkit-transform-origin-y: 1%;
     }
 
-    #contest_nav{
-        transform: scale(0.8);
+
+    .contest-statistics1{
+        transform: scale(0.5);
         -webkit-transform-origin-x: 1%;
         -webkit-transform-origin-y: 1%;
     }
 
-    #contest_content{
-        transform: scale(0.43);
+    .container1{
+        transform: scale(0.42);
         -webkit-transform-origin-x: 1%;
-        -webkit-transform-origin-y: 1%;
-    }
-
-    #container{
-        transform: scale(0.85);
-        -webkit-transform-origin-x: 1%;
-        -webkit-transform-origin-y: 1%;
+        -webkit-transform-origin-y: -30%;
     }
 
     #user-log{
