@@ -6,3 +6,91 @@
     margin-bottom: 10px;
     list-style-type:none;
 }
+
+@media (max-width: 500px){
+    #tree ul>li{
+        margin: 2% 1% 0 -1%;
+    }
+
+    /*调整编辑讨论的模态框*/
+    .discussModal {
+        width: 350px;
+        margin: 0;
+    }
+
+    /*problem里的适配*/
+    #lang{
+        transform: scale(0.45);
+        -webkit-transform-origin-x: -8%;
+    }
+
+    #problem-status{
+        transform: scale(0.6);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 5%;
+    }
+
+    /*按钮设置为块状*/
+    .btn-group1{
+        display: block;
+    }
+
+    /*notice表格样式*/
+    #notice-list{
+        transform: scale(0.75);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+    #contest-rank{
+        transform: scale(0.4);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+    #contest-pagination{
+        margin-top: -100%;
+    }
+
+    #status{
+        transform: scale(0.5);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+    #contest_nav{
+        transform: scale(0.8);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+    #contest_content{
+        transform: scale(0.43);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+    #container{
+        transform: scale(0.85);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+    #user-log{
+        transform: scale(0.71);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+    #search-form{
+        transform: scale(0.8);
+        -webkit-transform-origin-x: -10%;
+    }
+
+    #user-list{
+        transform: scale(0.65);
+        -webkit-transform-origin-x: 1%;
+        -webkit-transform-origin-y: 1%;
+    }
+
+}
