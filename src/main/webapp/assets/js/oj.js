@@ -59,9 +59,9 @@ $(document).ready(function () {
     }
     // 屏幕宽度小于1000时的显示
     if($("body").width()<1000){
-        $("#oj-navbar").css("width",44);
+        $("#oj-navbar").css("width",48);
         $("#oj-top-navbar").parent().css("position","fixed");
-        $(".main").css({"width":$("body").width()-45,"padding-left":"45px"});
+        $(".main").css({"width":$("body").width()-48,"padding-left":"49px"});
         $("#oj-navbar .nav-pills a").each(function(){
             var text = $(this).html().split("i>")[0]+"i>";
             $(this).html(text).parent().css("padding","0");
