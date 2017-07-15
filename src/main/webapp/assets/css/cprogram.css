@@ -33,10 +33,6 @@
         line-height:100%;
     }
 }
-#current{
-    float: right;
-    margin-right: 5%;
-}
 
 .input-append, .input-prepend{
     width: 260px;
@@ -54,4 +50,13 @@
 
 #inputEndTime, #inputStartTime{
     width: 218px;
+}
+
+#submitContest{
+    width: 110px;
+    margin-right: 36px;
+}
+
+.span8 > table.table-stats{
+    width:100%;
 }
