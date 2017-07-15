@@ -2,6 +2,9 @@
   overflow-wrap: break-word;
 }
 
+.row{
+  margin-left: 0;
+}
 body{
   padding:0;
   margin:0;
@@ -377,6 +380,10 @@ a.cureent {
   .problemModal textarea {
     height: 50px;
   }
+}
+
+.hero-unit h1{
+  font-size: 42px;
 }
 
 #notice-content {

@@ -42,6 +42,12 @@ $(document).ready(function () {
 
     // 屏幕宽度小于768也就是手机上的显示
     if($("body").width()<768){
+        $("#oj-top-navbar>.nav>li>a").each(function(){
+            var text = $(this).html().split("i>")[0]+"i>";
+            $(this).html(text).parent().css("padding","0");
+        });
+        $("marquee").css("margin-top", $("#oj-top-navbar").height());
+        $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
         $(".span12").css("margin-top",$("#oj-top-navbar").height());
         $(".flexslider").css("width", "96%");
         $(".news").css("width","96%");
