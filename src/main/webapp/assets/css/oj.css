@@ -371,6 +371,11 @@ a.cureent {
 }
 
 @media (max-width: 480px) {
+
+  .hero-unit h1{
+    font-size: 42px;
+  }
+
   .problemModal {
     max-height: 400px;
     max-width: 400px;
@@ -380,10 +385,6 @@ a.cureent {
   .problemModal textarea {
     height: 50px;
   }
-}
-
-.hero-unit h1{
-  font-size: 42px;
 }
 
 #notice-content {
