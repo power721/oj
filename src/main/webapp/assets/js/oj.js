@@ -41,35 +41,35 @@ $(document).ready(function () {
     $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
 
     // 屏幕宽度小于768也就是手机上的显示
-    if($("body").width()<768){
-        $("#oj-top-navbar>.nav>li>a").each(function(){
-            var text = $(this).html().split("i>")[0]+"i>";
-            $(this).html(text).parent().css("padding","0");
-        });
-        $("marquee").css("margin-top", $("#oj-top-navbar").height());
-        $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
-        $(".span12").css("margin-top",$("#oj-top-navbar").height());
-        $(".flexslider").css("width", "96%");
-        $(".news").css("width","96%");
-        $(".cxboard").hide();
-        $("#paginationBtn").css({
-            "margin-left":"20%",
-            "margin-top":"60px"
-        });
-    }
-    // 屏幕宽度小于1000时的显示
-    if($("body").width()<1000){
-        $("#oj-navbar").css("width",48);
-        $("#oj-top-navbar").parent().css("position","fixed");
-        $(".main").css({"width":$("body").width()-48,"padding-left":"49px"});
-        $("#oj-navbar .nav-pills a").each(function(){
-            var text = $(this).html().split("i>")[0]+"i>";
-            $(this).html(text).parent().css("padding","0");
-        });
-    }
-    else{
-        $(".main").css("width",$("body").width()-165);
-    }
+    // if($("body").width()<768){
+    //     $("#oj-top-navbar>.nav>li>a").each(function(){
+    //         var text = $(this).html().split("i>")[0]+"i>";
+    //         $(this).html(text).parent().css("padding","0");
+    //     });
+    //     $("marquee").css("margin-top", $("#oj-top-navbar").height());
+    //     $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
+    //     $(".span12").css("margin-top",$("#oj-top-navbar").height());
+    //     $(".flexslider").css("width", "96%");
+    //     $(".news").css("width","96%");
+    //     $(".cxboard").hide();
+    //     $("#paginationBtn").css({
+    //         "margin-left":"20%",
+    //         "margin-top":"60px"
+    //     });
+    // }
+    // // 屏幕宽度小于1000时的显示
+    // if($("body").width()<1000){
+    //     $("#oj-navbar").css("width",44);
+    //     $("#oj-top-navbar").parent().css("position","fixed");
+    //     $(".main").css({"width":$("body").width()-45,"padding-left":"45px"});
+    //     $("#oj-navbar .nav-pills a").each(function(){
+    //         var text = $(this).html().split("i>")[0]+"i>";
+    //         $(this).html(text).parent().css("padding","0");
+    //     });
+    // }
+    // else{
+    //     $(".main").css("width",$("body").width()-165);
+    // }
 
 
     // 设置左边导航栏鼠标移上去后变色
