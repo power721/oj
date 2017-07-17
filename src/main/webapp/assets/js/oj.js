@@ -37,6 +37,7 @@ $(document).ready(function () {
         that.html(parseTimestamp(that.attr('data')));
     });
 
+    $(".main").css("width",$("body").width()-165);
     $("marquee").css("margin-top", $("#oj-top-navbar").height());
     $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
 
