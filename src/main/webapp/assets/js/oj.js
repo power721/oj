@@ -109,7 +109,7 @@ $(document).ready(function () {
 
     /* switch theme */
     if ($.cookie) {
-        $('#selstyle').val($.cookie("oj_style") == null ? "spruce" : $.cookie("oj_style"));
+        $('#selstyle').val($.cookie("oj_style") == null ? "original" : $.cookie("oj_style"));
         $('#selstyle').change(function () {
             $.cookie("oj_style", $(this).val(), {
                 expires: 7,
