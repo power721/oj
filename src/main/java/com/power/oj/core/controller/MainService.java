@@ -11,6 +11,7 @@ import java.util.List;
 public class MainService {
     static public List<Record> getNewsAndNoticeList(int newsPageNumber, int noticePageNumber) {
         String sql = "select " +
+                "news.id, "+
                 "news.title, " +
                 "news.content, " +
                 "news.time, " +
@@ -20,6 +21,8 @@ public class MainService {
                 "limit 0," + newsPageNumber;
         List<Record> list = Db.find(sql);
         sql = "select " +
+                "notice.id, " +
+                "notice.uid, " +
                 "notice.title, " +
                 "notice.content, " +
                 "startTime as time, " +
