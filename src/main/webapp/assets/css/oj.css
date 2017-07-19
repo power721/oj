@@ -10,6 +10,12 @@ body{
   margin:0;
 }
 
+marquee ul.marquee li a {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+}
+
 /*设置table样式*/
 @media screen and (max-width: 500px){
   #signup,.logout{
@@ -139,11 +145,13 @@ a.cureent {
 #oj-navbar{
   position: fixed;
   width: 165px;
+  z-index: 100;
 }
 
 #oj-top-navbar{
   width:100%;
   background-color: #015b4e;
+  height: 65px;
 }
 
 .navbar-inverse .nav li.dropdown.active>.dropdown-toggle.admin {

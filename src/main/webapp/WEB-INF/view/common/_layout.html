@@ -36,7 +36,7 @@
 <!-- ============================== Navbar ============================== -->
 <div class="navbar navbar-fixed-top" >
   <div class="container" id="oj-top-navbar">
-    <a class="brand" href="./" style="margin-left: 20px; color:#fff">PowerOJ</a>
+    <a class="brand" href="./" style="margin-left: 20px; color:#fff; padding-top: 18px;">PowerOJ</a>
     <ul class="nav pull-right">
       <#if user?? && user.uid??>
         <#--<li>-->
@@ -119,7 +119,7 @@
   </div>
 </div>
 
-<div class="marquee">
+<div class="marquee" style="z-index:1;">
   <marquee class="hidden-phone" direction="left" behavior="scroll" scrollamount="2" style="margin-top: 45px;">
     <#-- this is required: style="margin-top: 45px;" -->
 <#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>

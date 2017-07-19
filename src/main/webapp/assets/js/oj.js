@@ -38,7 +38,7 @@ $(document).ready(function () {
     });
 
     $(".main").css("width",$("body").width()-165);
-    $("marquee").css("margin-top", $("#oj-top-navbar").height());
+    $("marquee").css("margin-top", $("#oj-top-navbar").height()+5);
     $("#oj-navbar").css("margin-top",$("#oj-top-navbar").height());
 
     // 屏幕宽度小于768也就是手机上的显示
