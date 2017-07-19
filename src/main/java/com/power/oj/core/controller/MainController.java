@@ -30,7 +30,7 @@ public class MainController extends OjController {
 
             setAttr("pendingContests", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.PENDING));
             setAttr("contestList", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.RUNNING));
-            
+
             pageSize = OjConfig.newsPageSize;
             setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
 

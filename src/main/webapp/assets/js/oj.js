@@ -20,13 +20,13 @@ var user = {
     group: -1,
     lastActiveTime: system.st
 };
-
+/*
 //点击图片跳转到对应的新闻中去
 $(".slides li").click(function () {
     var x=$(".slides li").index(this)
-    window.location.href=$($(".news").get(x-1)).children("a").attr("href")
+    window.location.href=$($(".news_img").get(x-1)).children("a").attr("href")
 })
-
+*/
 $(document).ready(function () {
     /* disale link */
     $('li.disabled a').removeAttr('href');

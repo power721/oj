@@ -6,8 +6,11 @@
       <#list newsList.list as news>
         <li>
           <div class="titlepimg">${news.title!}</div>
-          <img src="${news.image}"/>
-        </li> </#list>
+          <a href="news/show/${news.id}">
+            <img src="${news.image}" />
+          </a>
+        </li>
+      </#list>
     </ul>
   </div>
   </#if>
