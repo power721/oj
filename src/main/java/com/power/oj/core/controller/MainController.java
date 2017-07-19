@@ -30,10 +30,10 @@ public class MainController extends OjController {
 
             setAttr("pendingContests", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.PENDING));
             setAttr("contestList", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.RUNNING));
-            /*
+            
             pageSize = OjConfig.newsPageSize;
             setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
-            */
+
             setAttr("newsAndNotimeList", MainService.getNewsAndNoticeList(OjConfig.newsPageSize, OjConfig.noticePageSize));
             setAttr("isSwust", true);
             setTitle(getText("page.index.title"));
