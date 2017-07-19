@@ -134,10 +134,6 @@ marquee ul.marquee li a {
   margin-right:1%;
 }
 
-li{
-  line-height: 30px;
-}
-
 a.cureent {
   color: black;
 }
@@ -546,7 +542,8 @@ table.table-stats {
 }
 
 .table thead th{
-  background-color: #333;
+  background-color: #4B4B4B;
+  color: white;
 }
 
 /*************** comment ******************/
