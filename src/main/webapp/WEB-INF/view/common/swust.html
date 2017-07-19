@@ -12,23 +12,28 @@
   </div>
   </#if>
 
-  <#if newsList?? && (newsList.list.size() > 0) >
-    <#list newsList.list as news>
-    <div class="news">
-      <a href="news/show/${news.id}"><h3 class="title">${news.title!}</h3></a>
-      <p style="text-align: right;position:relative;top:-10px">
-        On <span class="timestamp" data="${news.time!}"></span> By <span
-              class="author">${news.author!}</span>
-      </p>
-      <p class="entry"><#if (news.content?length &gt; 34) >${news.content?substring(0,34)}
-        ...<#else>${news.content}</#if></p>
-    </div>
+  <#if newsAndNotimeList??>
+    <#list newsAndNotimeList as news>
+      <div class="news">
+        <#if news.uid??>
+          <a href="notice/show/${news.id}">
+        <#else>
+          <a href="news/show/${news.id}">
+        </#if>
+
+          <h3 class="title">
+            ${news.title!}
+          </h3>
+        </a>
+        <p style="text-align: right;position:relative;top:-10px">
+          On <span class="timestamp" data="${news.time!}"></span> By <span
+                class="author">${news.author!}</span>
+        </p>
+        <p class="entry"><#if (!(news.uid??) && news.content?length &gt; 34) >${news.content?substring(0,34)}
+          ...<#else>${news.content}</#if></p>
+      </div>
     </#list>
 
-  <div class="pagination pagination-centered" style="float:left;margin-left:49%; margin-top: 100px;" id="paginationBtn">
-    <#include "../common/_paginate.html" />
-	<@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
-  </div>
   </#if>
 
 
