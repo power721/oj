@@ -672,9 +672,10 @@ table.table-stats {
   height:100%;
 }
 .news {
-  margin: 0;
+  /*margin: 0;*/
+  margin-left: 10%;
   min-height: 110px;
-  width: 98%;
+  width: 70%;
   position: relative;
   float: left;
   border-bottom: dashed thin #999999;
