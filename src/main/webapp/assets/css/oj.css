@@ -10,6 +10,12 @@ body{
   margin:0;
 }
 
+marquee ul.marquee li a {
+  color: red;
+  font-size: 25px;
+  font-weight: bold;
+}
+
 /*设置table样式*/
 @media screen and (max-width: 500px){
   #signup,.logout{
@@ -128,10 +134,6 @@ body{
   margin-right:1%;
 }
 
-li{
-  line-height: 30px;
-}
-
 a.cureent {
   color: black;
 }
@@ -139,11 +141,13 @@ a.cureent {
 #oj-navbar{
   position: fixed;
   width: 165px;
+  z-index: 100;
 }
 
 #oj-top-navbar{
   width:100%;
   background-color: #015b4e;
+  height: 65px;
 }
 
 .navbar-inverse .nav li.dropdown.active>.dropdown-toggle.admin {
@@ -156,15 +160,9 @@ a.cureent {
 }
 
 #oj-navbar .nav-pills>li>a{
-  padding:13px 0 13px 30px !important;
+  padding:16px 0 13px 30px !important;
+  height: 25px;
 }
-
-@media (max-width: 1000px) {
-  #oj-navbar .nav-pills > li > a {
-    padding: 13px 15px 13px !important;
-  }
-}
-
 
 .row .span6 .nav li{
   width:8%;
@@ -544,7 +542,8 @@ table.table-stats {
 }
 
 .table thead th{
-  background-color: #333;
+  background-color: #4B4B4B;
+  color: white;
 }
 
 /*************** comment ******************/
@@ -675,7 +674,7 @@ table.table-stats {
 .news {
   margin: 0;
   min-height: 110px;
-  width: 70%;
+  width: 98%;
   position: relative;
   float: left;
   border-bottom: dashed thin #999999;
@@ -736,7 +735,7 @@ table.table-stats {
   background-color: #DCDCDC;
   padding: 0;
   min-height: 900px;
-  width: 26%;
+  width: 28%;
   float:right;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;

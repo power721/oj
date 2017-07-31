@@ -3,7 +3,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
   <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
   <meta name="author" content="power721">
 <@block name="meta"></@block>
@@ -12,7 +12,6 @@
 
   <!-- ============================== styles ============================== -->
   <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/bootstrap/theme/bootstrap.spruce.min.css" rel="stylesheet">
   <link href="assets/font-awesome-4.6.3/css/font-awesome.min.css" type="text/css" rel="stylesheet">
   <!--[if lt IE 8]>
   <link href="assets/font-awesome-4.6.3/css/font-awesome-ie7.min.css" type="text/css" rel="stylesheet">
@@ -37,7 +36,7 @@
 <!-- ============================== Navbar ============================== -->
 <div class="navbar navbar-fixed-top" >
   <div class="container" id="oj-top-navbar">
-    <a class="brand" href="./" style="margin-left: 20px; color:#fff">PowerOJ</a>
+    <a class="brand" href="./" style="margin-left: 20px; color:#fff; padding-top: 18px;">PowerOJ</a>
     <ul class="nav pull-right">
       <#if user?? && user.uid??>
         <#--<li>-->
@@ -90,6 +89,12 @@
       <li class="<#if actionKey?? && actionKey=="rank">active</#if>">
       <a href="rank"><i class="icon-signal"></i>Ranklist</a>
       </li>
+      <li class="<#if controllerKey?? && controllerKey=="news">active</#if>">
+      <a href="news"><i class="icon-globe"></i>News</a>
+      </li>
+      <li class="<#if controllerKey?? && controllerKey=="notice">active</#if>">
+      <a href="notice"><i class="icon-exclamation-sign"></i>Notice</a>
+      </li>
       <li class="<#if controllerKey?? && controllerKey=="discuss">active</#if>">
       <a href="discuss"><i class="icon-comment"></i>Discuss</a>
       </li>
@@ -114,7 +119,7 @@
   </div>
 </div>
 
-<div class="marquee">
+<div class="marquee" style="z-index:1;">
   <marquee class="hidden-phone" direction="left" behavior="scroll" scrollamount="2" style="margin-top: 45px;">
     <#-- this is required: style="margin-top: 45px;" -->
 <#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
@@ -249,23 +254,23 @@
   <form class="form-inline">
     <label class="select">
       Select Style: <select class="input-medium" id="selstyle">
-      <!--<option value="original">Original</option>-->
+      <option value="original">Original</option>
       <!--<option value="amelia">Amelia</option>-->
       <!--<option value="cerulean">Cerulean</option>-->
       <!--<option value="cosmo">Cosmo</option>-->
       <!--<option value="cyborg">Cyborg</option>-->
       <!--<option value="darkening">Darkening</option>-->
       <!--<option value="flatly">Flatly</option>-->
-      <!--<option value="journal">Journal</option>-->
-      <!--<option value="metro">Metro</option>-->
-      <!--<option value="readable">Readable</option>-->
-      <!--<option value="simplex">Simplex</option>-->
-      <!--<option value="slate">Slate</option>-->
-      <!--<option value="spacelab">Spacelab</option>-->
+      <option value="journal">Journal</option>
+      <option value="metro">Metro</option>
+      <option value="readable">Readable</option>
+      <option value="simplex">Simplex</option>
+      <!-- <option value="slate">Slate</option> -->
+      <option value="spacelab">Spacelab</option>
       <option value="spruce">Spruce</option>
-      <!--<option value="superhero">Superhero</option>-->
-      <!--<option value="todc">Google</option>-->
-      <!--<option value="united">United</option>-->
+      <!-- <option value="superhero">Superhero</option> -->
+      <option value="todc">Google</option>
+      <option value="united">United</option>
     </select>
     </label>
     <label class="checkbox"> <input type="checkbox" id="selwidth" <#if oj_fluid_width??>checked</#if>>Fluid
