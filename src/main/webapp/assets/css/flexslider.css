@@ -41,10 +41,9 @@
 .flexslider {
 	/*margin: 0;*/
 	padding: 0;
-	max-height: 480px;
-	width: 60%;
+	width: 56%;
 	height: 350px;
-	margin-left: 15%;
+	margin-left: 20%;
 	margin-bottom: 20px;
 }
 
@@ -54,7 +53,7 @@
 } /* Hide the slides before the JS is loaded. Avoids image jumping */
 .flexslider .slides img {
 	width: 100%;
-	max-height: 480px;
+	max-height: 420px;
 	display: block;
 }
 
