@@ -80,6 +80,7 @@ public final class JudgeService {
 
     public String generateToken(Integer sid) {
         String token = UUID.randomUUID().toString() + "-" + sid;
+        log.info("tokens add solution " + sid + " and token is " + token);
         tokens.put(sid, token);
         return token;
     }
