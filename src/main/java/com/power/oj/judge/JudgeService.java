@@ -82,6 +82,7 @@ public final class JudgeService {
         String token = UUID.randomUUID().toString() + "-" + sid;
         log.info("tokens add solution " + sid + " and token is " + token);
         tokens.put(sid, token);
+        log.info("after put in " + sid + " and token is " + tokens.getIfPresent(sid));
         return token;
     }
 
