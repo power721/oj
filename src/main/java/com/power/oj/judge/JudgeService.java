@@ -85,10 +85,12 @@ public final class JudgeService {
     }
 
     public boolean verifyToken(Integer sid, String token) {
-        if (token != null && token.equals(tokens.getIfPresent(sid))) {
+        String serverToken = tokens.getIfPresent(sid);
+        if (token != null && token.equals(serverToken)) {
             tokens.invalidate(sid);
             return true;
         }
+        log.error("server token is" + serverToken + "but judge return token is " + token);
         return false;
     }
 
