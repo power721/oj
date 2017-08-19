@@ -151,10 +151,18 @@
             <artifactId>dom4j</artifactId>
             <version>1.6</version>
         </dependency>
+        <!--
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>19.0</version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>22.0</version>
+            <classifier>sources</classifier>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.jexcelapi</groupId>
