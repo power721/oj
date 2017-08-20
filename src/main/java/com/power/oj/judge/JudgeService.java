@@ -46,13 +46,13 @@ public final class JudgeService {
     private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
     // TODO: store task in redis with expire time
     private static final Cache<String, RejudgeTask> rejudgeTasks =
-        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+        CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
     // TODO: store token in redis with expire time
     private static final Cache<Integer, String> tokens =
-        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+        CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
     // TODO: store originalResult in redis with expire time
     private static final Cache<Integer, Integer> originalResult =
-        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+        CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
 
     static {
         FILE_PERMISSIONS.add(PosixFilePermission.OWNER_READ);
