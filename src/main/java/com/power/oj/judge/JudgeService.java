@@ -93,14 +93,14 @@ public final class JudgeService {
             return true;
         }
         log.error("server token is" + serverToken + "but judge return token is " + token);
+        log.error("------------------");
+        log.error("tokens has this token:");
         for(Integer i : tokens.asMap().keySet())
         {
-            log.error("------------------");
-            log.error("tokens has this token:");
             log.error("key: " + i  + " value " + tokens.getIfPresent(i));
-            log.error("end of token");
-            log.error("------------------");
         }
+        log.error("end of token");
+        log.error("------------------");
         return false;
     }
 
