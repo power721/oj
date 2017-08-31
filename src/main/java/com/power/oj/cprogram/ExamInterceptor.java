@@ -30,6 +30,12 @@ public class ExamInterceptor implements Interceptor  {
     public void intercept(Invocation invocation) {
         Controller con = invocation.getController();
         Integer cid = con.getParaToInt(0);
+        if(cid == null) {
+            cid = con.getParaToInt("cid");
+        }
+        if(cid == null) {
+            cid = con.getParaToInt("solution.cid");
+        }
         if(CanAccess(cid)) {
             invocation.invoke();
         }
