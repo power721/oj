@@ -141,6 +141,9 @@ public final class CProgramService {
             if(result== ResultType.AC && getSolutionResult(sid) != ResultType.AC) {
                 score.set("accepted", score.getInt("accepted") + 1);
                 Integer newScore = score.getInt("score1") + preScore;
+                if(score.getInt("accepted").equals(totProblem)) {
+                    newScore = 100;
+                }
                 if(newScore > 100) newScore = 100;
                 score.set("score1", newScore);
                 score.set("score2", newScore);
