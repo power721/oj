@@ -504,6 +504,7 @@ CREATE TABLE `cprogram_user_info` (
   `tid` int(11) DEFAULT NULL,
   `class_week` int(11) DEFAULT NULL,
   `class_lecture` int(11) DEFAULT NULL,
+  `ctime` int(11) DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- ----------------------------
