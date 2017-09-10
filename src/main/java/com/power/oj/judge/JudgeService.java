@@ -80,9 +80,7 @@ public final class JudgeService {
 
     public String generateToken(Integer sid) {
         String token = UUID.randomUUID().toString() + "-" + sid;
-        log.info("tokens add solution " + sid + " and token is " + token);
         tokens.put(sid, token);
-        log.info("after put in " + sid + " and token is " + tokens.getIfPresent(sid));
         return token;
     }
 
@@ -92,15 +90,6 @@ public final class JudgeService {
             tokens.invalidate(sid);
             return true;
         }
-        log.error("server token is" + serverToken + "but judge return token is " + token);
-        log.error("------------------");
-        log.error("tokens has this token:");
-        for(Integer i : tokens.asMap().keySet())
-        {
-            log.error("key: " + i  + " value " + tokens.getIfPresent(i));
-        }
-        log.error("end of token");
-        log.error("------------------");
         return false;
     }
 
