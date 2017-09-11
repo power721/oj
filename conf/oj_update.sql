@@ -482,6 +482,7 @@ INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `ex
 INSERT INTO `oj`.`role` (`id`, `name`, `description`, `status`) VALUES ('4', 'teacher', 'teacher', '1');
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('15', '4', '77');
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('16', '4', '175');
+INSERT INTO `oj`.`permission` (`id`, `module`, `type`, `name`, `title`, `parentID`, `status`) VALUES ('175', 'user', '1', 'teacher', '教师权限', '0', '1');
 -- ----------------------------
 -- Table structure for cprogram_password
 -- ----------------------------
