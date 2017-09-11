@@ -1330,6 +1330,7 @@ INSERT INTO `permission` VALUES (171,'admin',1,'announcement:delete','删除',16
 INSERT INTO `permission` VALUES (172,'admin',1,'announcement:forbid','禁用',162,1);
 INSERT INTO `permission` VALUES (173,'admin',1,'announcement:resume','启用',162,1);
 INSERT INTO `permission` VALUES (174,'user',1,'user:sp:nick','特殊昵称',45,1);
+INSERT INTO `permission` VALUES (175,'user',1,'teacher','教师权限',0,1);
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
