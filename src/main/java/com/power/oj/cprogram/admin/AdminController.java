@@ -151,7 +151,7 @@ public class AdminController extends OjController{
                 String fileName = UserService.me().getCurrentUser().getRealName() +
                         CProgramConstants.weeks.get(week) +
                         CProgramConstants.lecture.get(lecture);
-                if(type == ContestModel.TYPE_EXPERIMENT_EXAM) {
+                if(type == ContestModel.TYPE_EXPERIMENT_EXAM || type == ContestModel.TYPE_EXPERIMENT) {
                     fileName += "实验";
                 }
                 else {
