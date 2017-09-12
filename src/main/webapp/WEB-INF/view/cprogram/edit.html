@@ -120,7 +120,7 @@
     }).on('changeDate', function (ev) {
         var time = ev.date.valueOf();
         var date = formatDate(new Date(time + 3600000));
-        <#if contest.type?? && contest.type == 5>
+        <#if contest.type?? && contest.type <= 6>
         var endDate = formatDate(new Date(time + 7*24*3600*1000));
         <#else>
         var endDate = formatDate(new Date(time + 2*3600*1000));

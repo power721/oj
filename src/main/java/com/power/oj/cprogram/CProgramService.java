@@ -127,6 +127,7 @@ public final class CProgramService {
             score.set("cid", cid);
             score.set("uid", uid);
             score.set("submited", 1);
+            score.set("ctime", OjConfig.timeStamp);
             if(result == ResultType.AC) {
                 score.set("accepted", 1);
                 score.set("score1", preScore);

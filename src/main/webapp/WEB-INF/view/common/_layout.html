@@ -122,10 +122,10 @@
 <div class="marquee" style="z-index:1;">
   <marquee class="hidden-phone" direction="left" behavior="scroll" scrollamount="2" style="margin-top: 45px;">
     <#-- this is required: style="margin-top: 45px;" -->
-<#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
+<#if controllerKey?? && controllerKey != "notice" && notices??>
   <ul class='marquee'>
     <#list notices as notice>
-      <li><a href="notice/show/${notice.id!}">${notice.title!}</a></li>
+      <li style="margin-top: 5px;"><a href="notice/show/${notice.id!}">${notice.title!}</a></li>
     </#list>
     </ul>
 </#if>

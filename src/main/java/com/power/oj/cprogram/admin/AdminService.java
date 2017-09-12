@@ -47,7 +47,7 @@ public class AdminService {
                 "where cid=? ";
         parase.add(cid);
         if(type == ContestModel.TYPE_EXPERIMENT) {
-            sql += "and score.week=? and score.lectrue=? ";
+            sql += "and score.week=? and score.lecture=? ";
             parase.add(week);
             parase.add(lecture);
         }
@@ -80,12 +80,14 @@ public class AdminService {
                 "contest " +
                 "where " +
                 "type=? " +
-                "and uid=? " +
                 "and ?<=startTime and startTime<=? ";
         parase.add(workType);
-        parase.add(uid);
         parase.add(startTime);
         parase.add(endTime);
+        if(workType == ContestModel.TYPE_WORK) {
+            sql += "and uid=? ";
+            parase.add(uid);
+        }
         if(type == ContestModel.TYPE_COURSE_EXAM) {
             sql += "and lockBoardTime=? and unLockBoardTime=? ";
             parase.add(week);

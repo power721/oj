@@ -483,6 +483,8 @@ INSERT INTO `oj`.`role` (`id`, `name`, `description`, `status`) VALUES ('4', 'te
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('15', '4', '77');
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('16', '4', '175');
 INSERT INTO `oj`.`permission` (`id`, `module`, `type`, `name`, `title`, `parentID`, `status`) VALUES ('175', 'user', '1', 'teacher', '教师权限', '0', '1');
+insert into role_permission values(17,4,119);
+insert into role_permission values(18,4,122);
 -- ----------------------------
 -- Table structure for cprogram_password
 -- ----------------------------
@@ -493,7 +495,7 @@ CREATE TABLE `cprogram_password` (
   `password` varchar(255) DEFAULT NULL,
   `uid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Table structure for cprogram_user_info
 -- ----------------------------
@@ -524,4 +526,4 @@ CREATE TABLE `score` (
   `week` int(11) NOT NULL DEFAULT '0',
   `lecture` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`rid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
