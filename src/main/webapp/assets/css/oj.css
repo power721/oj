@@ -674,7 +674,7 @@ table.table-stats {
 .news {
   /*margin: 0;*/
   /*margin-left: 10%;*/
-  min-height: 110px;
+  min-height: 85px;
   width: 98%;
   position: relative;
   float: left;
@@ -686,7 +686,7 @@ table.table-stats {
   color: #028d79;
   text-align: left;
   text-indent: 0.5cm;
-  line-height: 1.5;
+  line-height: 1.1;
   font-weight: 400;
   font-size: 20px;
 }
