@@ -37,7 +37,6 @@
             <a href= "cprogram/admin/?type=6" class = "cprog_btn btn btn-large btn-info">实验</a>
             <a href= "cprogram/admin/?type=7" class = "cprog_btn btn btn-large btn-warning">实验考试</a>
             <a href= "cprogram/admin/?type=8" class = "cprog_btn btn btn-large btn-danger">课程考试</a>
-            <#if TeacherUser??><a href="cprogram/admin" class="cprog_btn btn btn-large btn-primary">管理</a></#if>
           </div>
         </div>
       <#else>
@@ -167,12 +166,14 @@
         <#if action?? && (action == "manager" || action == "edit" || action == "score") >
           <ul class="nav nav-tabs" id="contest_nav" style="width:98%">
             <#if cid != -1>
-              <li class="<#if action=="manager">active</#if>">
-                <a href="cprogram/admin/?type=${type}&action=manager${query!}">管理</a>
-              </li>
-              <li class="<#if action=="edit">active</#if>">
-                <a href="cprogram/admin/?type=${type}&action=edit${query!}">编辑</a>
-              </li>
+              <#if serverTime < contest.startTime || adminUser?? || type == 5>
+                <li class="<#if action=="manager">active</#if>">
+                  <a href="cprogram/admin/?type=${type}&action=manager${query!}">管理</a>
+                </li>
+                <li class="<#if action=="edit">active</#if>">
+                  <a href="cprogram/admin/?type=${type}&action=edit${query!}">编辑</a>
+                </li>
+              </#if>
             </#if>
             <li class="<#if action=="score">active</#if>">
               <a href="cprogram/admin/?type=${type}&action=score${query!}">成绩</a>
@@ -594,7 +595,7 @@
         }).on('changeDate', function (ev) {
             var time = ev.date.valueOf();
             var date = formatDate(new Date(time + 3600000));
-            <#if type?? && type == 5>
+            <#if type?? && type <= 6>
             var endDate = formatDate(new Date(time + 7*24*3600*1000));
             <#else>
             var endDate = formatDate(new Date(time + 2*3600*1000));

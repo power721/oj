@@ -295,13 +295,17 @@ public class CProgramMainController extends OjController {
         if(userid.startsWith("user")) {
             Integer uid = Integer.parseInt(userid.substring(4));
             Integer score = getParaToInt("value");
+            if(score == null) {
+                renderJson("修改失败");
+                return ;
+            }
             if(score != null && uid != null && score >=0 && score <=100) {
                 CProgramService.updateFinalScore(getParaToInt(0), uid, score);
                 renderNull();
                 return;
             }
         }
-        renderJson("modify fail");
+        renderJson("修改失败");
     }
 
     @RequiresAuthentication

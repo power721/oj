@@ -97,7 +97,7 @@ public final class CProgramService {
             sql += "and score.uid = ? ";
             parase.add(UserService.me().getCurrentUid());
         }
-        else if(type != ContestModel.TYPE_WORK && !ShiroKit.hasPermission("root")) {
+        else if(type == ContestModel.TYPE_EXPERIMENT && !ShiroKit.hasPermission("root")) {
             sql += "and score.week = ? and score.lecture = ? ";
             int week = CProgramService.getWeek(OjConfig.timeStamp);
             int lecture = CProgramService.getLecture(OjConfig.timeStamp);
@@ -128,12 +128,15 @@ public final class CProgramService {
             score.set("uid", uid);
             score.set("submited", 1);
             score.set("ctime", OjConfig.timeStamp);
+            score.set("week", getWeek(OjConfig.timeStamp));
+            score.set("lecture", getLecture(OjConfig.timeStamp));
+            score.set("accepted", 0);
+            score.set("score1", 0);
+            score.set("score2", 0);
             if(result == ResultType.AC) {
                 score.set("accepted", 1);
                 score.set("score1", preScore);
                 score.set("score2", preScore);
-                score.set("week", getWeek(OjConfig.timeStamp));
-                score.set("lecture", getLecture(OjConfig.timeStamp));
             }
             Db.save("score","rid", score);
         }
