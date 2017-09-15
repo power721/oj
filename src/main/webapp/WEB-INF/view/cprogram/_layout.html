@@ -10,13 +10,15 @@
     <a href="cprogram/status/${contest.cid!}">状态</a>
   </li>
 
-  <#if TeacherUser??>
-    <li class="<#if methodName=="manager">active</#if>">
-      <a href="cprogram/manager/${contest.cid}">管理</a>
-    </li>
-    <li class="<#if methodName=="edit">active</#if>">
-      <a href="cprogram/edit/${contest.cid}">编辑</a>
-    </li>
+  <#if TeacherUser?? >
+    <#if serverTime  < contest.startTime || adminUser?? || contest.type == 5>
+      <li class="<#if methodName=="manager">active</#if>">
+        <a href="cprogram/manager/${contest.cid}">管理</a>
+      </li>
+      <li class="<#if methodName=="edit">active</#if>">
+        <a href="cprogram/edit/${contest.cid}">编辑</a>
+      </li>
+    </#if>
   </#if>
   <li class="<#if methodName=="score">active</#if>">
   <a href="cprogram/score/${contest.cid}">成绩</a>
