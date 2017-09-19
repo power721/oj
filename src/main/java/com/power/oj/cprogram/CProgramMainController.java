@@ -294,8 +294,11 @@ public class CProgramMainController extends OjController {
         String userid = getPara("name");
         if(userid.startsWith("user")) {
             Integer uid = Integer.parseInt(userid.substring(4));
-            Integer score = getParaToInt("value");
-            if(score == null) {
+            Integer score;
+            try {
+                score = getParaToInt("value");
+            }
+            catch (Exception ex) {
                 renderJson("修改失败");
                 return ;
             }
