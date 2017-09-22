@@ -101,9 +101,14 @@
       <li class="<#if actionKey?? && actionKey=="faq">active</#if>">
       <a href="faq"><i class="icon-question-sign"></i>F.A.Q</a>
       </li>
-      <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
-      <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
+      <li class="<#if actionKey?? && actionKey=="cprogram">active</#if>">
+        <a href="cprogram"><i class="icon-pencil"></i>C Program</a>
       </li>
+      <#if isSwust?? && isSwust == true>
+        <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
+          <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
+        </li>
+      </#if>
       <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
       <a href="downloads"><i class="icon-download-alt"></i>Download</a>
       </li>
@@ -112,9 +117,6 @@
           <a href="achievement"><i class="fa fa-trophy"></i>Achieve</a>
         </li>
       </#if>
-      <li class="<#if actionKey?? && actionKey=="cprogram">active</#if>">
-        <a href="cprogram"><i class="icon-pencil"></i>C Program</a>
-      </li>
     </ul>
   </div>
 </div>
@@ -239,7 +241,11 @@
 <footer class="footer">
   <div class="container-fluid">
     <div class="copyright">
-      ©Copyright 2017 <a href="http://git.oschina.net/power/oj/commits/master" target="balnk">PowerOJ Rev.<#include "version.ftl"></a>
+      ©Copyright 2017
+      <#if isSwust?? && isSwust == true>
+        西南科技大学信息工程学院ACM实验室<br>
+      </#if>
+      <a href="http://git.oschina.net/power/oj/commits/master" target="balnk">PowerOJ Rev.<#include "version.ftl"></a>
     </div>
     <ul class="footer-links">
       <li><a href="https://github.com/power721/oj" target="balnk">Source</a></li>
