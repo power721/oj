@@ -4,7 +4,10 @@
     <a href= "cprogram/list?type=6" class = "cprog_btn btn btn-large btn-info">实验</a>
     <a href= "cprogram/list?type=7" class = "cprog_btn btn btn-large btn-warning">实验考试</a>
     <a href= "cprogram/list?type=8" class = "cprog_btn btn btn-large btn-danger">课程考试</a>
-    <#if TeacherUser??><a href="cprogram/admin" class="cprog_btn btn btn-large btn-primary">管理</a></#if>
+    <#if TeacherUser??><a href="cprogram/admin" class="cprog_btn btn btn-large btn-primary">管理</a>
+    <#else><a href="cprogram/resignup" class="cprog_btn btn btn-large btn-primary">修改信息</a>
+    </#if>
+
 </div>
 
 

@@ -393,10 +393,12 @@ public class CProgramMainController extends OjController {
     }
 
     public void resignup() {
+        /*
         if(!CProgramService.needReSignUp()) {
             redirect("/cprogram");
             return;
         }
+        */
         Integer uid = UserService.me().getCurrentUid();
         Record User = Db.findFirst("select " +
                 "user.uid, " +
@@ -417,10 +419,11 @@ public class CProgramMainController extends OjController {
     @Before(POST.class)
     @Clear(CProgramInterceptor.class)
     public void reSignupUser() {
+        /*
         if(!CProgramService.needReSignUp()) {
             redirect("/cprogram");
             return;
-        }
+        }*/
         Integer uid = UserService.me().getCurrentUid();
         UserModel user = UserService.me().getUser(uid);
         user.setRealName(getPara("realName"));
