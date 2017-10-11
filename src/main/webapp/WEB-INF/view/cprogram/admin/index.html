@@ -65,7 +65,18 @@
                   </#if>
                 </option>
               </select>
-
+              <#if type == 6>
+                <select class="input-medium" name = "tid" id="teacher_select">
+                    <#list teacherList as teacher>
+                        <option value="${teacher.uid!}" <#if tid?? && teacher.uid == tid>selected</#if> >
+                          ${teacher.realName!}
+                        </option>
+                    </#list>
+                    <option value="-1" <#if tid?? && -1 == tid>selected</#if>>
+                        全部教师，如果指定实验名称，将查询实验课时间
+                    </option>
+                </select>
+              </#if>
                 <select class="input-medium" id="week_select" name="week">
                   <#list weeks.keySet() as week>
                     <option value="${week!}" <#if WEEK?? && WEEK == week>selected</#if> >
@@ -390,12 +401,12 @@
                           ${users.Class!}
                         </td>
                         <td>
-                          <a href="cprogram/status/${contest.cid}?name=${users.name!}&result=0" target="_blank">
+                          <a href="cprogram/status/${contest.cid}?name=${users.stuid!}&result=0" target="_blank">
                             ${users.accepted!}
                           </a>
                         </td>
                         <td>
-                          <a href="cprogram/status/${contest.cid}?name=${users.name!}" target="_blank">
+                          <a href="cprogram/status/${contest.cid}?name=${users.stuid!}" target="_blank">
                             ${users.submited!}
                           </a>
                         </td>
@@ -418,7 +429,7 @@
           </#if>
           <#if allList??>
             <h3 class="text-center"> 总成绩表</h3>
-            <h3 class="text-center"> ${weeks.get(WEEK!)}${lectures.get(LECTURE!)}</h3>
+            <h3 class="text-center"> ${weeks.get(WEEK!)!}${lectures.get(LECTURE!)!}</h3>
 
             <div class="row">
               <div class="span10 offset1">
@@ -462,11 +473,13 @@
                         </td>
                         <#list workList as work>
                           <td>
-                            <#if user.scoreMap?? && user.scoreMap.get(work)??>
-                              ${user.scoreMap.get(work)}
-                            <#else>
-                              0
-                            </#if>
+                            <a href="/cprogram/status/${work}?name=${user.stuid!}" target="_blank">
+                              <#if user.scoreMap?? && user.scoreMap.get(work)??>
+                                  ${user.scoreMap.get(work)}
+                              <#else>
+                                0
+                              </#if>
+                            </a>
                           </td>
                         </#list>
                         <#if 6 < type >
@@ -512,7 +525,32 @@
         if($("#contestID").val()==""){
             $("#sendBtn").attr("disabled",true);
         }
+        if($("#teacher_select").val() != -1) {
+            $("#week_select").attr("disabled", true);
+            $("#lecture_select").attr("disabled", true);
+            $("#week_select").val("");
+            $("#lecture_select").val("");
+        }
+        $("#teacher_select").click( function () {
+            if($("#teacher_select").val() != -1) {
+                $("#week_select").attr("disabled", true);
+                $("#lecture_select").attr("disabled", true);
+                $("#week_select").val("");
+                $("#lecture_select").val("");
 
+            }
+            else {
+                $("#week_select").attr("disabled", false);
+                $("#lecture_select").attr("disabled", false);
+                <#if WEEK??>
+                  $("#lecture_select").val("${LECTURE!}");
+                  $("#week_select").val("${WEEK!}");
+                <#else>
+                $("#lecture_select").val(0);
+                $("#week_select").val(0);
+                </#if>
+            }
+        })
         <#if type != 6>
           if($("#contestID").val()!="-1") {
               $("#week_select").attr("disabled", true);

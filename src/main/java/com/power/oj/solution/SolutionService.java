@@ -141,7 +141,13 @@ public final class SolutionService {
         int num, String userName) {
         String sql =
             "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick";
-        StringBuilder sb = new StringBuilder("FROM contest_solution s INNER JOIN user u ON u.uid=s.uid WHERE cid=?");
+        int ContestType = ContestService.me().getContest(cid).getType();
+        StringBuilder sb = new StringBuilder("FROM contest_solution s INNER JOIN user u ON u.uid=s.uid ");
+        if(ContestType >= ContestModel.TYPE_WORK) {
+            sql += ",stuid, u.realName, class As Class";
+            sb.append(" INNER JOIN cprogram_user_info cp ON u.uid=cp.uid");
+        }
+        sb.append(" WHERE cid=?");
         List<Object> paras = new ArrayList<Object>();
         paras.add(cid);
 
@@ -163,7 +169,11 @@ public final class SolutionService {
             paras.add(num);
         }
         if (StringUtil.isNotBlank(userName)) {
-            sb.append(" AND name=?");
+            if(ContestType >= ContestModel.TYPE_WORK) {
+                sb.append(" AND stuid=?");
+            }
+            else
+               sb.append(" AND name=?");
             paras.add(userName);
         }
 
