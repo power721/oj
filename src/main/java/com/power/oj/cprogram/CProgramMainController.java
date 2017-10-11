@@ -22,6 +22,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -284,7 +285,13 @@ public class CProgramMainController extends OjController {
     public void score() {
         Integer cid = getParaToInt(0);
         ContestModel contestModel = ContestService.me().getContest(cid);
-        List<Record> user = CProgramService.getScoreList(cid, contestModel.getType());;
+        List<Record> user = CProgramService.getScoreList(cid, contestModel.getType());
+        List<Record> teacherList = CProgramService.getTeacherList();
+        HashMap<Integer, String> teacherMap = new HashMap<>();
+        for(Record teacher: teacherList)
+            teacherMap.put(teacher.getInt("uid"), teacher.getStr("realName"));
+        for(Record u : user)
+            u.set("teacher", teacherMap.get(u.getInt("tid")));
         setAttr("scoreList", user);
     }
 

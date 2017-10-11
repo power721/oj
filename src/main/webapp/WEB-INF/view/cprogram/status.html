@@ -2,7 +2,7 @@
 <div class="pagination pagination-centered">
   <div class="form-inline">
     <form class="form-search" action="cprogram/status/${contest.cid!}">
-      <input type="text" class="input-small" name="name" value="${name!}" placeholder="用户名">
+      <input type="text" class="input-small" name="name" value="${name!}" placeholder="学号">
       <select class="input-medium" id="inputProblem" name="num">
         <option value="">题目</option>
         <#if Problems??>
@@ -46,11 +46,13 @@
   </div>
 </div>
 
-<table id="status" class="table table-hover table-condensed">
+<table id="status" class="table table-hover table-condensed" >
   <thead>
   <tr>
     <th>Run ID</th>
-    <th>用户名</th>
+    <th>学号</th>
+    <th>姓名</th>
+    <th>班级</th>
     <th>题目</th>
     <th>结果</th>
     <th>消耗时间</th>
@@ -67,8 +69,15 @@
         <td class="sid">${solution.sid!}</td>
         <td class="user" uid="${solution.uid}">
           <a href="user/profile/${solution.name!}" data-toggle="tooltip" target="_blank"
-             title="${(solution.nick)!?html}">${(solution.name)!}</a>
+             title="${(solution.nick)!?html}">${(solution.stuid)!}</a>
         </td>
+        <td class="user" uid="${solution.uid}">
+          <a href="user/profile/${solution.name!}" data-toggle="tooltip" target="_blank"
+             title="${(solution.name)!?html}">${(solution.realName)!}</a>
+        </td>
+
+        <td class="user" >${solution.Class}</td>
+
         <td class="problem"><a href="cprogram/problem/${contest.cid}-${solution.alpha!}">${solution.alpha!}</a></td>
         <td class="result" id="${solution.resultName!}">
           <i class="btn" sid="${solution.sid!}">

@@ -86,6 +86,7 @@ public final class CProgramService {
         String sql = "select score.*, " +
                 "cprogram_user_info.stuid, " +
                 "cprogram_user_info.class as Class, " +
+                "cprogram_user_info.tid, " +
                 "user.name, " +
                 "user.realName " +
                 "from score " +
@@ -106,6 +107,7 @@ public final class CProgramService {
             parase.add(lecture);
         }
         sql += " ORDER BY cprogram_user_info.stuid ";
+
         return Db.find(sql, parase.toArray());
     }
 

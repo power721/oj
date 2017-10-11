@@ -16,6 +16,7 @@
                     <th width="10%">提交数</th>
                     <th width="10%">系统成绩</th>
                     <th width="10%">最终成绩</th>
+                    <th width="10%">任课教师</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,12 +36,12 @@
                                 ${users.Class!}
                             </td>
                             <td>
-                                <a href="cprogram/status/${contest.cid}?name=${users.name!}&result=0" target="_blank">
+                                <a href="cprogram/status/${contest.cid}?name=${users.stuid!}&result=0" target="_blank">
                                     ${users.accepted!}
                                 </a>
                             </td>
                             <td>
-                                <a href="cprogram/status/${contest.cid}?name=${users.name!}" target="_blank">
+                                <a href="cprogram/status/${contest.cid}?name=${users.stuid!}" target="_blank">
                                     ${users.submited!}
                                 </a>
                             </td>
@@ -57,7 +58,9 @@
                                 </#if>
 
                             </td>
-
+                            <td>
+                                ${users.teacher!}
+                            </td>
                         </tr>
                     </#list>
                 </#if>
