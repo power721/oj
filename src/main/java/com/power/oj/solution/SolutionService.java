@@ -145,7 +145,7 @@ public final class SolutionService {
         StringBuilder sb = new StringBuilder("FROM contest_solution s INNER JOIN user u ON u.uid=s.uid ");
         if(ContestType >= ContestModel.TYPE_WORK) {
             sql += ",stuid, u.realName, class As Class";
-            sb.append(" INNER JOIN cprogram_user_info cp ON u.uid=cp.uid");
+            sb.append(" LEFT JOIN cprogram_user_info cp ON u.uid=cp.uid");
         }
         sb.append(" WHERE cid=?");
         List<Object> paras = new ArrayList<Object>();

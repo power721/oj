@@ -11,13 +11,20 @@ import com.power.oj.contest.model.ContestModel;
 public class WaitingInterceptor implements Interceptor {
     @Override
     public void intercept(Invocation invocation) {
+
         Integer cid = invocation.getController().getParaToInt(0);
         Integer status = ContestService.me().getContestStatus(cid);
+        Integer type = ContestService.me().getContest(cid).getType();
+        if(type == ContestModel.TYPE_EXPERIMENT) {
+            invocation.invoke();
+            return;
+        }
         if(status == ContestModel.PENDING && !CProgramService.isTeacher()) {
             invocation.getController().redirect("/cprogram/pending/" + cid);
         }
         else {
             invocation.invoke();
         }
+
     }
 }
