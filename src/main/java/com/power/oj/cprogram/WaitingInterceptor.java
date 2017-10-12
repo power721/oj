@@ -15,8 +15,7 @@ public class WaitingInterceptor implements Interceptor {
         Integer cid = invocation.getController().getParaToInt(0);
         if(cid == null) cid = invocation.getController().getParaToInt("cid");
         Integer status = ContestService.me().getContestStatus(cid);
-        Integer type = ContestService.me().getContest(cid).getType();
-        if(type == ContestModel.TYPE_EXPERIMENT) {
+        if(cid != null && ContestService.me().getContest(cid).getType() == ContestModel.TYPE_EXPERIMENT) {
             invocation.invoke();
             return;
         }
