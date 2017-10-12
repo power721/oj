@@ -13,6 +13,7 @@ public class WaitingInterceptor implements Interceptor {
     public void intercept(Invocation invocation) {
 
         Integer cid = invocation.getController().getParaToInt(0);
+        if(cid == null) cid = invocation.getController().getParaToInt("cid");
         Integer status = ContestService.me().getContestStatus(cid);
         Integer type = ContestService.me().getContest(cid).getType();
         if(type == ContestModel.TYPE_EXPERIMENT) {
