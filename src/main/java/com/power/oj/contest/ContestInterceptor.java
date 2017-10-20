@@ -97,7 +97,7 @@ public class ContestInterceptor implements Interceptor {
         }
 
         Integer cid = contestModle.getCid();
-        String tokenName = "cid-" + cid;
+        String tokenName = "cid-" + String.format("%04d", cid);
         String token = controller.getSessionAttr(tokenName);
         if (token != null) {
             try {
