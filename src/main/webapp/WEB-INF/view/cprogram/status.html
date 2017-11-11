@@ -50,6 +50,7 @@
   <thead>
   <tr>
     <th>Run ID</th>
+    <th>账号</th>
     <th>学号</th>
     <th>姓名</th>
     <th>班级</th>
@@ -67,6 +68,7 @@
       <#list solutionList.list as solution>
       <tr>
         <td class="sid">${solution.sid!}</td>
+        <td class="sid">${solution.name!}</td>
         <td class="user" uid="${solution.uid}">
           <a href="user/profile/${solution.name!}" data-toggle="tooltip" target="_blank"
              title="${(solution.nick)!?html}">${(solution.stuid)!}</a>

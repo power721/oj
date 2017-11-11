@@ -179,7 +179,7 @@ public class CProgramMainController extends OjController {
         }
         String userName = getPara("name");
         if(!CProgramService.isTeacher()) {
-            userName = userService.getCurrentUserName();
+            userName = CProgramService.getStuID();
         }
         setAttr("name", userName);
 
