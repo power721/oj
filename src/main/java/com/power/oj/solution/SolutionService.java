@@ -170,11 +170,15 @@ public final class SolutionService {
         }
         if (StringUtil.isNotBlank(userName)) {
             if(ContestType >= ContestModel.TYPE_WORK) {
-                sb.append(" AND stuid=?");
+                sb.append(" AND (stuid=? OR name=?)");
+                paras.add(userName);
+                paras.add(userName);
             }
             else
-               sb.append(" AND name=?");
-            paras.add(userName);
+            {
+                sb.append(" AND name=?");
+                paras.add(userName);
+            }
         }
 
         if (userService.isAdmin()) {

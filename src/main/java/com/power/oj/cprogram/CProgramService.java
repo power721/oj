@@ -302,4 +302,9 @@ public final class CProgramService {
         }
         return false;
     }
+    public static String getStuID() {
+        Integer uid = UserService.me().getCurrentUid();
+        String stdID = Db.queryStr("select stuid from cprogram_user_info where uid=?", uid);
+        return stdID;
+    }
 }
