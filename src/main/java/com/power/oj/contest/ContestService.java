@@ -1518,6 +1518,7 @@ public class ContestService {
 
     public boolean build(Integer cid) {
         Db.update("DELETE FROM freeze_board WHERE cid=?", cid);
+        Db.update("DELETE FROM board WHERE cid=?", cid);
         ContestModel contestModel = getContest(cid);
         int contestStartTime = contestModel.getStartTime();
         int problemNum = Db.queryInt("SELECT MAX(num) FROM contest_problem WHERE cid=?", cid) + 1;
