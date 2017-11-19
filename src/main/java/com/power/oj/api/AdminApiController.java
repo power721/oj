@@ -95,9 +95,28 @@ public class AdminApiController extends OjController {
     }
 
     public void changeUserRole() {
-        int uid = getParaToInt("pk");
+        int urid = getParaToInt("pk");
         int rid = getParaToInt("value");
-        userService.changeUserRole(uid, rid);
+        userService.changeUserRole(urid, rid);
+    }
+
+    public void addUserRole() {
+        String name = getPara("name");
+        int rid = getParaToInt("role");
+        int result = UserService.me().addUserRole(name, rid);
+        if (result == 0) {
+            renderJson("{\"success\":true, \"result\":\"Add success.\"}");
+        }
+        if (result == -1) {
+            renderJson("{\"success\":false, \"result\":\"No permission to add.\"}");
+        }
+        if (result == 1) {
+            renderJson("{\"success\":false, \"result\":\"No this user.\"}");
+        }
+        if (result == 2) {
+            renderJson("{\"success\":false, \"result\":\"This user already has this role.\"}");
+        }
+
     }
 
     public void contestList() {

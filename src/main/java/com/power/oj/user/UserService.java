@@ -866,7 +866,7 @@ public final class UserService {
     public Page<UserModel> getUserRoleListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
                                                      String sSearch) {
         List<Object> param = new ArrayList<Object>();
-        String sql = "SELECT u.uid,u.name,u.realName,u.nick,r.name AS role,u.ctime,r.id";
+        String sql = "SELECT ur.id AS urid,u.uid,u.name,u.realName,u.nick,r.name AS role,u.ctime,r.id";
         StringBuilder sb = new StringBuilder()
                 .append("FROM user_role ur INNER JOIN user u ON u.uid=ur.uid INNER JOIN role r ON r.id=ur.rid WHERE 1=1");
 
@@ -881,18 +881,22 @@ public final class UserService {
         return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
     }
 
-    public void changeUserRole(int uid, int rid) {
+    public void changeUserRole(int urid, int rid) {
         if (rid == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
             return;
         }
-        Integer id = Db.queryInt("SELECT rid FROM user_role WHERE uid=?", uid);
+        Integer id = Db.queryInt("SELECT rid FROM user_role WHERE id=?", urid);
         if (id == rid) {
             return;
         }
         if (id == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
             return;
         }
-        Db.update("UPDATE user_role SET rid=? WHERE uid=?", rid, uid);
+        Integer uid = Db.queryInt("SELECT uid FROM user_role WHERE id=?", urid);
+        if(Db.findFirst("select id from user_role where uid=? and rid=?",uid, rid) != null) {
+            return;
+        }
+        Db.update("UPDATE user_role SET rid=? WHERE id=?", rid, urid);
     }
 
     public int addMember(int uid) {
@@ -924,6 +928,27 @@ public final class UserService {
         if (Db.update("UPDATE user_role SET rid=? WHERE uid=?", UserService.USER_ROLE_ID, uid) != 1) {
             return 3;
         }
+        return 0;
+    }
+
+    static public int addUserRole(String name, int rid) {
+        if(!ShiroKit.hasPermission(ROOT_ROLE_NAME)) {
+            return -1;
+        }
+        UserModel user = UserService.me().getUserByName(name);
+        if (user == null) {
+            return 1;
+        }
+        int uid = user.getUid();
+        Record record = Db.findFirst("select rid from user_role where uid=? and rid=?", uid, rid);
+        if(record != null) {
+            return 2;
+        }
+        record = new Record();
+        record.set("uid", uid);
+        record.set("rid", rid);
+        record.set("status", 1);
+        Db.save("user_role", record);
         return 0;
     }
 
