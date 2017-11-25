@@ -16,3 +16,4 @@ src/main/webapp/WEB-INF/view/common/version.ftl
 src/main/webapp/WEB-INF/view/common/compilers.ftl
 src/main/resources/oj.properties
 
+src/main/webapp/upload/
