@@ -1,7 +1,9 @@
 <@override name="contest_content">
 <#if adminUser??>
   <a href="/contest/build/${cid!}" class="btn btn-info">Rebuild Board</a>
-  <a href="#" id="info" class="btn btn-info" data-toggle="modal" data-target="#infoModal">Reslover</a>
+  <#if contest.type==2 || contest.type==3 || contest.type==4>
+    <a href="#" id="info" class="btn btn-info" data-toggle="modal" data-target="#infoModal">Reslover</a>
+  </#if>
 </#if>
 <div class="pagination pagination-centered">
   <#include "../common/_paginate2.html" />
