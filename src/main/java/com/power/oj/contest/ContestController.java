@@ -728,4 +728,28 @@ public class ContestController extends OjController {
         }
     }
 
+    @RequiresAuthentication
+    @RequiresPermissions("contest:edit")
+    public void balloon() {
+        Integer cid = getParaToInt(0);
+        List<ContestSolutionModel> list = contestService.getBallonSendList(cid);
+        setAttr("solutionList", list);
+    }
+
+    @RequiresAuthentication
+    @RequiresPermissions("contest:edit")
+    public void sendBalloon() {
+        Integer cid = getParaToInt(0);
+        Integer sid = getParaToInt(1);
+        ContestSolutionModel solution = solutionService.findContestSolution(sid);
+        if (solution.getBalloon()) {
+            setFlashMessage(new FlashMessage("Have Sent " + sid + "!", MessageType.ERROR, "No"));
+        } else {
+            solution.setBalloon(Boolean.TRUE);
+            solution.update();
+            setFlashMessage(new FlashMessage("Send " + sid + " OK", MessageType.SUCCESS, "Suceess"));
+        }
+        redirect("/contest/balloon/" + cid);
+    }
+
 }

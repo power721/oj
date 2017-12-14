@@ -79,6 +79,7 @@ public class ContestModel extends Model<ContestModel> {
     public boolean isExperimnetExam() {
         return getType() == ContestModel.TYPE_EXPERIMENT_EXAM;
     }
+
     public boolean isCourseExam() {
         return getType() == ContestModel.TYPE_COURSE_EXAM;
     }

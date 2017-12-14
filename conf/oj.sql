@@ -231,6 +231,7 @@ CREATE TABLE `contest_solution` (
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
   `systemError` text,
+  `balloon` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`sid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

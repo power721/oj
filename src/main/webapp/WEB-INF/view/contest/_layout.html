@@ -26,9 +26,14 @@
     </li>
   </#if>
   <#if adminUser??>
-    <li class="<#if methodName=="admin">active</#if>">
-      <a href="contest/admin/${cid}">Manage</a>
-    </li>
+      <li class="<#if methodName=="admin">active</#if>">
+        <a href="contest/admin/${cid}">Manage</a>
+      </li>
+      <#if contest.type==1 || contest.type==2 || contest.type==3 >
+          <li class="<#if methodName=="balloon">active</#if>">
+            <a href="contest/balloon/${cid}">Balloon</a>
+          </li>
+      </#if>
     <#if (contest.type > 1)>
       <li class="<#if methodName=="attendees">active</#if>">
         <a href="contest/attendees/${cid}">Attendees</a>
