@@ -24,6 +24,7 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
     public static final String SOURCE = "source";
     public static final String CODE_LEN = "codeLen";
     public static final String SYSTEM_ERROR = "systemError";
+    public static final String BALLOON = "balloon";
     public static final String STATUS = "status";
     private static final long serialVersionUID = 1L;
 
@@ -170,6 +171,15 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
         return set(SYSTEM_ERROR, value);
     }
 
+    public Boolean getBalloon() {
+        return get(BALLOON);
+    }
+
+    public ContestSolutionModel setBalloon(Boolean val) {
+        return set(BALLOON, val);
+    }
+
+
     public Boolean getStatus() {
         return getBoolean(STATUS);
     }
@@ -177,6 +187,7 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
     public ContestSolutionModel setStatus(Boolean value) {
         return set(STATUS, value);
     }
+
 
     @Override
     public boolean isContest() {

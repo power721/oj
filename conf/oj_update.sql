@@ -527,3 +527,7 @@ CREATE TABLE `score` (
   `lecture` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+#2017-12-14
+ALTER TABLE `contest_solution`
+  ADD COLUMN `balloon`  tinyint(1) NOT NULL DEFAULT 0 AFTER `systemError`;
