@@ -1,4 +1,8 @@
 <@override name="contest_content">
+<#if adminUser??>
+  <a href="/contest/build/${cid!}" class="btn btn-info">Rebuild Board</a>
+  <a href="#" id="info" class="btn btn-info" data-toggle="modal" data-target="#infoModal">Reslover</a>
+</#if>
 <div class="pagination pagination-centered">
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
@@ -68,6 +72,61 @@
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
 </div>
+
+<div class="modal hide fade infoModal" id="infoModal">
+  <form class="form-horizontal" action="contest/info/1201" id="signupForm" method="post">
+    <div class="modal-header">
+      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+      <h3 id="signupModalLabel">
+        Download Resolver XML File
+      </h3>
+    </div>
+    <div class="modal-body">
+      <div class="control-group">
+        <label class="control-label" for="inputGrand"> Grand Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputGrand" name="grand" placeholder="Grand Medal" required value="1">
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputFirst"> First Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputFirst" name="first" placeholder="First Medal" required value="2">
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputSecond"> Second Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputSecond" name="second" placeholder="Second Medal" required value="5">
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputThird"> Third Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputThird" name="third" placeholder="Third Medal" required value="10">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span id="infoMsg"></span>
+      <button type="submit" class="btn btn-primary">Download</button>
+      <button class="btn" data-dismiss="modal">Cancel</button>
+    </div>
+  </form>
+</div>
+
 </@override>
 
 <@override name="styles">

@@ -215,6 +215,8 @@ public class ContestController extends OjController {
         setTitle(getText("contest.rank.title") + cid);
     }
 
+    @Before(POST.class)
+    @RequiresPermissions("contest:edit")
     public void info() {
         Integer cid = getParaToInt(0);
         int grand = getParaToInt("grand", 1);
