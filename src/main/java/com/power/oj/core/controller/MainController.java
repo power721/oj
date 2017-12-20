@@ -47,7 +47,7 @@ public class MainController extends OjController {
     }
 
     private boolean isSwust() {
-        return getPara("swust") != null || getRequest().getRequestURL().toString().contains("swust");
+        return getPara("swust") != null || getRequest().getRequestURL().toString().contains("swust.edu");
     }
 
     public void about() {
