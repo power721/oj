@@ -119,12 +119,15 @@ public final class JudgeService {
         File astyle = new File(cmd);
         if (astyle.exists() && astyle.canExecute()) {
             String language = OjConfig.languageName.get(solution.getLanguage()).toLowerCase();
-            cmd += " -p -xe -j -U -f -n -k1 -W3 ";
-            if (language.contains("java") || language.contains("kotlin"))
+            if(!language.contains("gcc") && !language.contains("g++") && !language.contains("java")) {
+                return ;
+            }
+            cmd += " -p -xe -U -f -n -k1 -W3 -xb ";
+            if (language.contains("java"))
                 cmd += "-A2 ";
             else
                 cmd += "-A1 ";
-            String filename = OjConfig.uploadPath + "/" + "main";
+            String filename = OjConfig.uploadPath + "/" + UUID.randomUUID().toString();
 
             if (language.contains("gcc"))
                 filename += ".c";
@@ -132,10 +135,6 @@ public final class JudgeService {
                 filename += ".cpp";
             else if (language.contains("java"))
                 filename += ".java";
-            else if (language.contains("python"))
-                filename += ".py";
-            else if (language.contains("kotlin"))
-                filename += ".kt";
             try {
                 File code = new File(filename);
                 code.createNewFile();
@@ -172,10 +171,17 @@ public final class JudgeService {
                 }
                 solution.setSource(sb.toString());
                 solution.setCodeLen(sb.length());
+                reader.close();
             } catch (FileNotFoundException e) {
                 log.error(e.toString());
             } catch (IOException e) {
                 log.error(e.toString());
+            }
+            try {
+                File code = new File(filename);
+                code.delete();
+            } catch (Exception ex) {
+                log.error("can't delete source code file");
             }
         } else {
             log.warn("can't exec astyle");
