@@ -763,12 +763,11 @@ public class ContestService {
         return ContestSolutionModel.dao.find(sql, cid, pid);
     }
 
-    public int submitSolution(ContestSolutionModel contestSolution) {
+    public int submitSolution(ContestSolutionModel contestSolution, boolean style) {
         Integer cid = contestSolution.getCid();
         Integer uid = userService.getCurrentUid();
         Integer pid = getPid(contestSolution.getCid(), contestSolution.getNum());
         ProblemModel problemModel = problemService.findProblemForContest(pid, cid);
-
         if (problemModel == null) {
             return -1;
         }
@@ -780,7 +779,7 @@ public class ContestService {
             Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
 
             contestSolution = ContestSolutionModel.dao.findById(contestSolution.getSid());
-            judgeService.judge(contestSolution);
+            judgeService.judge(contestSolution, style);
         } else {
             return -2;
         }

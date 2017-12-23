@@ -29,6 +29,7 @@ public class OjConfig {
     public static String downloadPath = null;
     public static String webRootPath = null;
     public static String judgeVersion = "v1.0";
+    public static String astylePath = "/usr/local/bin/astyle";
 
     public static int contestPageSize = 20;
     public static int contestRankPageSize = 50;
@@ -93,12 +94,14 @@ public class OjConfig {
         LOGGER.info("userAvatarPath: " + userAvatarPath);
         problemImagePath = FileKit.parsePath(webRootPath + "/upload/image/problem/", true);
         LOGGER.info("problemImagePath: " + problemImagePath);
-
         contestPageSize = getInt("contestPageSize", 20);
         contestRankPageSize = getInt("contestRankPageSize", 50);
         problemPageSize = getInt("problemPageSize", 50);
         userPageSize = getInt("userPageSize", 20);
         statusPageSize = getInt("statusPageSize", 20);
+
+        astylePath = variable.get("astylePath").getStringValue();
+
         variableChanged = false;
     }
 
