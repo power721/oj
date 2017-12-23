@@ -173,6 +173,7 @@ public class ContestController extends OjController {
     @Before(POST.class)
     public void submitSolution() {
         ContestSolutionModel contestSolution = getModel(ContestSolutionModel.class, "solution");
+        Boolean style = getParaToBoolean("style", false);
         Integer cid = contestSolution.getCid();
         String name = userService.getCurrentUserName();
         String url = "/contest/status/" + cid + "?name=" + name;
@@ -187,7 +188,7 @@ public class ContestController extends OjController {
             }
         }
 
-        int result = contestService.submitSolution(contestSolution);
+        int result = contestService.submitSolution(contestSolution, style);
 
         if (result == -1) {
             setFlashMessage(

@@ -136,7 +136,7 @@ public class CProgramMainController extends OjController {
         char id = problemId.toUpperCase().charAt(0);
         Integer num = id - 'A';
 
-        if (contestService.isContestFinished(cid)) {
+        if (!UserService.me().isAdmin() && contestService.isContestFinished(cid)) {
             FlashMessage msg =
                     new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
             redirect("/cprogram/show/" + cid, msg);
@@ -269,7 +269,8 @@ public class CProgramMainController extends OjController {
     @Before({WaitingInterceptor.class, POST.class, ExamInterceptor.class})
     public void submitSolution() {
         ContestSolutionModel solution = getModel(ContestSolutionModel.class, "solution");
-        int result = contestService.submitSolution(solution);
+        Boolean style = getParaToBoolean("style", false);
+        int result = contestService.submitSolution(solution, style);
         if (result == -1) {
             setFlashMessage(
                     new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));

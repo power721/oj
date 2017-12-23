@@ -337,7 +337,7 @@ public final class SolutionService {
         return solutionList;
     }
 
-    public int submitSolution(SolutionModel solutionModel) {
+    public int submitSolution(SolutionModel solutionModel, boolean style) {
         Integer uid = userService.getCurrentUid();
         Integer pid = solutionModel.getPid();
         ProblemModel problemModel = problemService.findProblem(pid);
@@ -349,7 +349,7 @@ public final class SolutionService {
         solutionModel.setUid(uid);
 
         if (solutionModel.addSolution()) {
-            judgeService.judge(solutionModel);
+            judgeService.judge(solutionModel, style);
         } else {
             return -2;
         }

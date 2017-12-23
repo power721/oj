@@ -1436,6 +1436,7 @@ INSERT INTO `variable` VALUES (31,'problemImagePath','/var/www/upload/image/prob
 INSERT INTO `variable` VALUES (32,'judgeHost','127.0.0.1',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (33,'judgePort','55555',NULL,55555,NULL,'int',NULL);
 INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
+insert into variable (name,stringValue) values('astylePath','/usr/local/bin/astyle');
 /*!40000 ALTER TABLE `variable` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

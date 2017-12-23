@@ -140,6 +140,7 @@ public class SolutionController extends OjController {
         solutionModel.set("uid", userService.getCurrentUid());
         Integer cid = solutionModel.getInt("cid");
         Integer pid = solutionModel.getInt("pid");
+        Boolean style = getParaToBoolean("style", false);
         String name = userService.getCurrentUserName();
         String url;
 
@@ -149,7 +150,7 @@ public class SolutionController extends OjController {
             url = "/status?name=" + name + "&pid=" + pid;
         }
 
-        if (solutionService.submitSolution(solutionModel) != 0) {
+        if (solutionService.submitSolution(solutionModel, style) != 0) {
             setFlashMessage(
                 new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
         }

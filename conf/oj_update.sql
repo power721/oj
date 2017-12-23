@@ -531,3 +531,6 @@ CREATE TABLE `score` (
 #2017-12-14
 ALTER TABLE `contest_solution`
   ADD COLUMN `balloon`  tinyint(1) NOT NULL DEFAULT 0 AFTER `systemError`;
+
+#2017-12-23
+insert into variable (name,stringValue) values('astylePath','/usr/local/bin/astyle');
