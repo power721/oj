@@ -43,6 +43,22 @@
     </div>
   </div>
   </#if>
+
+  <#if adminUser?? && (resultName=="PE" || resultName=="WA" || resultName=="RE" || resultName=="RF" || resultName=="TLE" || resultName=="OLE" || resultName=="MLE") >
+  <div class="row" style="margin-left:0px">
+    <div class="span12">
+      <h3>Input</h3>
+      <pre class="info">${inputData!}</pre>
+    </div>
+  </div>
+  <div class="row" style="margin-left:0px">
+    <div class="span12">
+      <h3>Output</h3>
+      <pre class="info">${solution.wrong!}</pre>
+    </div>
+  </div>
+  </#if>
+
   <#if adminUser?? && solution.systemError??>
   <div class="row" style="margin-left:0px">
     <div class="span12">
