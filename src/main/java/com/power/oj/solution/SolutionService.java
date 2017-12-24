@@ -6,6 +6,7 @@ import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.bean.DataFile;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
 import com.power.oj.core.service.SessionService;
@@ -17,7 +18,9 @@ import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 import jodd.util.StringUtil;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class SolutionService {
@@ -429,6 +432,8 @@ public final class SolutionService {
                 solution.setError(error);
             } else if (result == ResultType.SE || result == ResultType.RF) {
                 solution.setSystemError(error);
+            } else if (result == ResultType.WA || result == ResultType.PE) {
+                solution.setWrong(error);
             }
             if(cid > 0 && ContestService.me().getContest(cid).getType() >= ContestModel.TYPE_WORK) {
                 CProgramService.updateScore(cid, sid, result);
@@ -479,4 +484,57 @@ public final class SolutionService {
         return ProblemService.me().isUserSolvedProblem(uid, pid);
     }
 
+    public String getInput(int pid, int test) {
+        List<DataFile> dataFiles = new ArrayList<>();
+        File dataDir = new File(OjConfig.getString("dataPath") + File.separator + pid);
+        if (!dataDir.isDirectory()) {
+            return null;
+        }
+        File[] arrayOfFile = dataDir.listFiles();
+        if (arrayOfFile == null) {
+            return null;
+        }
+        Arrays.sort(arrayOfFile);
+        boolean isSPJ = problemService.checkSpj(pid);
+        int num = 0;
+        for (File file : arrayOfFile) {
+            if(file.getName().endsWith(".in")) {
+                if(isSPJ) {
+                    num++;
+                } else {
+                    String path = file.getAbsolutePath();
+                    path = path.substring(0, path.length() - 2) + "out";
+                    File outputFile = new File(path);
+                    if(outputFile.isFile()) {
+                        num++;
+                    }
+                }
+            }
+            if(num == test) {
+                String data = new String();
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = reader.readLine()) != null ) {
+                        if((data + line).length() > 1024) {
+                            data += line;
+                            data = data.substring(0, 1024);
+                            data += "......";
+                            break;
+                        }
+                        else
+                            data += line + "\n";
+                    }
+                } catch (FileNotFoundException e) {
+                    LOGGER.error("Can't read file " + file.getAbsolutePath());
+                    return null;
+                } catch (IOException e) {
+                    LOGGER.error("Read file " + file.getAbsolutePath() + " error");
+                    return null;
+                }
+                return data;
+            }
+        }
+        return null;
+    }
 }

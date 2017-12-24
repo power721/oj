@@ -229,13 +229,30 @@ public class CProgramMainController extends OjController {
         Integer num = solution.getNum();
         ResultType resultType = OjConfig.resultType.get(solution.getResult());
         solution.setSource(HtmlEncoder.text(solution.getSource()));
+        solution.setError(HtmlEncoder.text(solution.getError()));
+        solution.setSystemError(HtmlEncoder.text(solution.getSystemError()));
+        solution.setWrong(HtmlEncoder.text(solution.getWrong()));
+
         setAttr("success", true);
         setAttr("language", OjConfig.languageName.get(solution.getLanguage()));
         setAttr("id", (char)('A' + num));
         setAttr("problemTitle", contestService.getProblemTitle(cid, num));
         setAttr("resultLongName", resultType.getLongName());
-        setAttr("resultName", resultType.getName());
+        String resultName = resultType.getName();
+        setAttr("resultName", resultName);
         setAttr("solution", solution);
+
+        if(resultName.equals("WA") ||
+                resultName.equals("PE") ||
+                resultName.equals("TLE") ||
+                resultName.equals("MLE") ||
+                resultName.equals("RE") ||
+                resultName.equals("OLE") ||
+                resultName.equals("RF")) {
+            setAttr("inputData",
+                    HtmlEncoder.text(solutionService.getInput(solution.getPid(), solution.getTest())));
+        }
+
         String brush = getAttrForStr("language").toLowerCase();
         if(StringUtil.isBlank(brush)) brush = "c";
         if(brush.contains("GCC")) brush = "c";
@@ -245,7 +262,7 @@ public class CProgramMainController extends OjController {
         setAttr("brush", brush);
         renderJson(
                 new String[] {"success", "letter", "problemTitle", "language", "resultLongName", "resultName", "solution",
-                        "brush"});
+                        "brush", "inputData"});
     }
     @RequiresPermissions("teacher")
     public void edit() {

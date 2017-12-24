@@ -189,19 +189,28 @@
                     }
                     code += " */\n";
                     code += data.solution.source;
+                    code += '</pre>';
                     if(data.solution.error) {
-                        code += "\n";
-                        code += "/*\n";
-                        code += data.solution.error;
-                        code += "*/\n";
+                        if(data.resultName == 'RE') {
+                          code += '<h3>Runtime Error</h3>';
+                        }
+                        else if(data.resultName == 'CE') {
+                            code += '<h3>Compile Error</h3>';
+                        }
+                        code += '<pre>' + data.solution.error + '</pre>';
                     }
                     if(data.solution.systemError) {
-                          code += "\n";
-                          code += "/*\n";
-                          code += data.solution.systemError;
-                          code += "\n*/\n";
+                        code += '<h3>System Error</h3>';
+                        code += '<pre>' + data.solution.systemError + '</pre>';
                     }
-                    code += '</pre>';
+
+                    if(data.inputData) {
+                        code += '<h3>Input</h3>';
+                        code += '<pre>' + data.inputData + '</pre>';
+                        code += '<h3>Output</h3>';
+                        code += '<pre>' + data.solution.wrong + '</pre>';
+                    }
+
                     $('#codeModal #content').html(code).removeClass().addClass('prettyprint');
                     prettyPrint();
                   }

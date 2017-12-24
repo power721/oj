@@ -20,6 +20,7 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
     public static final String CTIME = "ctime";
     public static final String MTIME = "mtime";
     public static final String TEST = "test";
+    public static final String WRONG = "wrong";
     public static final String ERROR = "error";
     public static final String SOURCE = "source";
     public static final String CODE_LEN = "codeLen";
@@ -161,6 +162,16 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
 
     public ContestSolutionModel setCodeLen(Integer value) {
         return set(CODE_LEN, value);
+    }
+
+    @Override
+    public Solution setWrong(String value) {
+        return set(WRONG, value);
+    }
+
+    @Override
+    public String getWrong() {
+        return getStr(WRONG);
     }
 
     public String getSystemError() {
