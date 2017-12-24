@@ -534,3 +534,9 @@ ALTER TABLE `contest_solution`
 
 #2017-12-23
 insert into variable (name,stringValue) values('astylePath','/usr/local/bin/astyle');
+
+#2017-12-24
+ALTER TABLE `oj`.`solution`
+ADD COLUMN `wrong` text NULL AFTER `test`;
+ALTER TABLE `oj`.`contest_solution`
+ADD COLUMN `wrong` text NULL AFTER `test`;

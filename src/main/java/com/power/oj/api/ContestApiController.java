@@ -192,7 +192,13 @@ public class ContestApiController extends OjController {
         setAttr("problemTitle", contestService.getProblemTitle(cid, num));
         setAttr("resultLongName", resultType.getLongName());
         setAttr("resultName", resultType.getName());
+        if(!isAdmin) {
+            solutionModel.remove("Wrong");
+        }
         setAttr("solution", solutionModel);
+        if(isAdmin) {
+            setAttr("intputData", solutionService.getInput(solutionModel.getPid(), solutionModel.getTest()));
+        }
 
         String brush = getAttrForStr("language").toLowerCase();
         if(brush.contains("gcc") || brush.contains("g++"))
@@ -205,7 +211,7 @@ public class ContestApiController extends OjController {
 
         renderJson(
             new String[] {"success", "alpha", "problemTitle", "language", "resultLongName", "resultName", "solution",
-                "brush"});
+                "brush", "inputData"});
     }
 
     @Clear

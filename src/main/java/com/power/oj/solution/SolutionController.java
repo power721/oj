@@ -102,7 +102,7 @@ public class SolutionController extends OjController {
         setAttr("resultLongName", resultType.getLongName());
         setAttr("resultName", resultType.getName());
         setAttr("solution", solutionModel);
-
+        setAttr("inputData", solutionService.getInput(solutionModel.getPid(), solutionModel.getTest()));
 
         String brush = getAttrForStr("language").toLowerCase();
         if(brush.contains("g++") || brush.contains("gcc")) brush = "cpp";
