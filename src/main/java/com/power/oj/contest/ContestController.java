@@ -348,6 +348,9 @@ public class ContestController extends OjController {
         setAttr("resultName", resultType.getName());
         setAttr("solution", solutionModel);
 
+        if (isAdmin) {
+            setAttr("inputData", solutionService.getInput(solutionModel.getPid(), solutionModel.getTest()));
+        }
         String brush = getAttrForStr("language").toLowerCase();
         if (brush.contains("g++") || brush.contains("gcc")) brush = "cpp";
         if (brush.contains("python")) brush = "python";
