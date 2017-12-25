@@ -138,7 +138,7 @@
 
     var refresh = setInterval(function () {
       refreshResult();
-    }, 1500);
+    }, 250);
     setTimeout(function () {
       clearInterval(refresh);
     }, 25050);
@@ -150,7 +150,11 @@
         $.getJSON('/api/problem/getResult', {'sid': ${solution.sid!}}, function (data) {
           if (data.result.name != id) {
             $this.attr('id', data.result.name);
-            $this.html(data.result.longName);
+            if(data.test == 0) {
+                $this.html(data.result.longName);
+            } else {
+                $this.html(data.result.longName + ' on test ' + data.test);
+            }
             if (data.result.name == 'AC') {
               $('.time').html(data.time);
               $('.memory').html(data.memory);
