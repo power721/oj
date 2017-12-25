@@ -115,7 +115,7 @@ public final class SolutionService {
 
     public SolutionModel getSolutionResult(Integer sid) {
         SolutionModel solutionModel =
-            dao.findFirst("SELECT sid,time,memory,result FROM solution WHERE sid=? AND status=1 LIMIT 1", sid);
+            dao.findFirst("SELECT sid,time,memory,result,test FROM solution WHERE sid=? AND status=1 LIMIT 1", sid);
         solutionModel.set("result", OjConfig.resultType.get(solutionModel.getResult()));
         return solutionModel;
     }
@@ -134,7 +134,7 @@ public final class SolutionService {
     public ContestSolutionModel getContestSolutionResult(Integer cid, Integer sid) {
         // TODO check permission
         ContestSolutionModel solutionModel = ContestSolutionModel.dao.findFirst(
-            "SELECT cid,sid,time,memory,result FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1", cid,
+            "SELECT cid,sid,time,memory,result,test FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1", cid,
             sid);
         solutionModel.set("result", OjConfig.resultType.get(solutionModel.getResult()));
         return solutionModel;
