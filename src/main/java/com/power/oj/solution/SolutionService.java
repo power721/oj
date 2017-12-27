@@ -1,9 +1,11 @@
 package com.power.oj.solution;
 
 import com.jfinal.log.Logger;
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
+import com.power.oj.contest.model.ContestProblemModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.DataFile;
@@ -16,6 +18,7 @@ import com.power.oj.judge.JudgeService;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
+import com.power.oj.util.FileKit;
 import jodd.util.StringUtil;
 
 import java.io.*;
@@ -43,7 +46,7 @@ public final class SolutionService {
     public static void checkCompileError(Solution solution, String error) {
         if (error.contains(OjConfig.getString("dataPath")) || error.contains(OjConfig.getString("workPath"))) {
             String message =
-                "User id " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!";
+                    "User id " + solution.getUid() + " from " + SessionService.me().getHost() + " try to hack system!";
             LOGGER.warn(message);
             solution.setSystemError(message + "\n" + error);
         } else {
@@ -52,9 +55,9 @@ public final class SolutionService {
     }
 
     public Page<SolutionModel> getPage(int pageNumber, int pageSize, int result, int language, int pid,
-        String userName) {
+                                       String userName) {
         String sql =
-            "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name";
+                "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name";
         StringBuilder sb = new StringBuilder("FROM solution s INNER JOIN user u ON u.uid=s.uid WHERE s.status=1 ");
 
         List<Object> paras = new ArrayList<Object>();
@@ -115,38 +118,38 @@ public final class SolutionService {
 
     public SolutionModel getSolutionResult(Integer sid) {
         SolutionModel solutionModel =
-            dao.findFirst("SELECT sid,time,memory,result,test FROM solution WHERE sid=? AND status=1 LIMIT 1", sid);
+                dao.findFirst("SELECT sid,time,memory,result,test FROM solution WHERE sid=? AND status=1 LIMIT 1", sid);
         solutionModel.set("result", OjConfig.resultType.get(solutionModel.getResult()));
         return solutionModel;
     }
 
     public ContestSolutionModel findContestSolution(Integer sid) {
         return ContestSolutionModel.dao
-            .findFirst("SELECT * FROM contest_solution WHERE sid=? AND status=1 LIMIT 1", sid);
+                .findFirst("SELECT * FROM contest_solution WHERE sid=? AND status=1 LIMIT 1", sid);
     }
 
     public ContestSolutionModel findContestSolution4Json(Integer sid) {
         return ContestSolutionModel.dao.findFirst(
-            "SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s INNER JOIN user u ON u.uid=s.uid WHERE sid=? AND s.status=1 LIMIT 1",
-            sid);
+                "SELECT cid,codeLen,s.language,time,memory,num,result,source,s.uid,u.name FROM contest_solution s INNER JOIN user u ON u.uid=s.uid WHERE sid=? AND s.status=1 LIMIT 1",
+                sid);
     }
 
     public ContestSolutionModel getContestSolutionResult(Integer cid, Integer sid) {
         // TODO check permission
         ContestSolutionModel solutionModel = ContestSolutionModel.dao.findFirst(
-            "SELECT cid,sid,time,memory,result,test FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1", cid,
-            sid);
+                "SELECT cid,sid,time,memory,result,test,sim,sim_id FROM contest_solution WHERE cid=? AND sid=? AND status=1 LIMIT 1", cid,
+                sid);
         solutionModel.set("result", OjConfig.resultType.get(solutionModel.getResult()));
         return solutionModel;
     }
 
     public Page<ContestSolutionModel> getPageForContest(int pageNumber, int pageSize, int result, int language, int cid,
-        int num, String userName) {
+                                                        int num, String userName) {
         String sql =
-            "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick";
+                "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick, s.sim,s.sim_id";
         int ContestType = ContestService.me().getContest(cid).getType();
         StringBuilder sb = new StringBuilder("FROM contest_solution s INNER JOIN user u ON u.uid=s.uid ");
-        if(ContestType >= ContestModel.TYPE_WORK) {
+        if (ContestType >= ContestModel.TYPE_WORK) {
             sql += ",stuid, u.realName, class As Class";
             sb.append(" LEFT JOIN cprogram_user_info cp ON u.uid=cp.uid");
         }
@@ -172,13 +175,11 @@ public final class SolutionService {
             paras.add(num);
         }
         if (StringUtil.isNotBlank(userName)) {
-            if(ContestType >= ContestModel.TYPE_WORK) {
+            if (ContestType >= ContestModel.TYPE_WORK) {
                 sb.append(" AND (stuid=? OR name=?)");
                 paras.add(userName);
                 paras.add(userName);
-            }
-            else
-            {
+            } else {
                 sb.append(" AND name=?");
                 paras.add(userName);
             }
@@ -189,7 +190,7 @@ public final class SolutionService {
         }
         sb.append(" ORDER BY sid DESC");
         Page<ContestSolutionModel> solutionList =
-            ContestSolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+                ContestSolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
         for (ContestSolutionModel solution : solutionList.getList()) {
             solution.put("languageName", OjConfig.languageName.get(solution.getLanguage()));
@@ -242,7 +243,7 @@ public final class SolutionService {
         // TODO check user permission for view source code
         String sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
         StringBuilder sb = new StringBuilder(
-            "FROM solution s INNER JOIN user u ON u.uid=s.uid INNER JOIN program_language l ON l.id=s.language WHERE result=?");
+                "FROM solution s INNER JOIN user u ON u.uid=s.uid INNER JOIN program_language l ON l.id=s.language WHERE result=?");
 
         List<Object> paras = new ArrayList<Object>();
         paras.add(ResultType.AC);
@@ -262,17 +263,17 @@ public final class SolutionService {
     }
 
     public Page<ContestSolutionModel> getProblemStatusPageForContest(int pageNumber, int pageSize, int language,
-        int cid, int num) {
+                                                                     int cid, int num) {
         String sql = null;
         ContestModel contestModel = ContestService.me().getContest(cid);
         if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD
-            && contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
+                && contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
             sql = "SELECT sid,s.uid,u.name,pid,result,s.language,s.ctime,l.name AS language";
         } else {
             sql = "SELECT sid,s.uid,u.name,pid,result,time,memory,s.language,codeLen,s.ctime,l.name AS language";
         }
         StringBuilder sb = new StringBuilder(
-            "FROM contest_solution s INNER JOIN user u ON u.uid=s.uid INNER JOIN program_language l ON l.id=s.language WHERE result=?");
+                "FROM contest_solution s INNER JOIN user u ON u.uid=s.uid INNER JOIN program_language l ON l.id=s.language WHERE result=?");
 
         List<Object> paras = new ArrayList<Object>();
         paras.add(ResultType.AC);
@@ -290,15 +291,15 @@ public final class SolutionService {
 
         sb.append(" AND s.status=1 ORDER BY time,memory,codeLen,sid");
         Page<ContestSolutionModel> solutionList =
-            ContestSolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
+                ContestSolutionModel.dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
         return solutionList;
     }
 
     public List<ContestSolutionModel> getProblemStatusForContest(Integer cid, Integer num) {
         List<ContestSolutionModel> resultList = ContestSolutionModel.dao.find(
-            "SELECT result,COUNT(*) AS count FROM contest_solution WHERE cid=? AND num=? AND status=1 GROUP BY result",
-            cid, num);
+                "SELECT result,COUNT(*) AS count FROM contest_solution WHERE cid=? AND num=? AND status=1 GROUP BY result",
+                cid, num);
 
         for (ContestSolutionModel record : resultList) {
             ResultType resultType = OjConfig.resultType.get(record.getResult());
@@ -311,32 +312,32 @@ public final class SolutionService {
 
     public List<SolutionModel> getSolutionListForProblemRejudge(Integer pid) {
         List<SolutionModel> solutionList =
-            dao.find("SELECT * FROM solution WHERE pid=? AND status=1 ORDER BY sid", pid);
+                dao.find("SELECT * FROM solution WHERE pid=? AND status=1 ORDER BY sid", pid);
         return solutionList;
     }
 
     public List<SolutionModel> getSolutionListForProblem(Integer pid) {
         List<SolutionModel> solutionList =
-            dao.find("SELECT * FROM solution WHERE pid=? AND status=1 ORDER BY sid DESC", pid);
+                dao.find("SELECT * FROM solution WHERE pid=? AND status=1 ORDER BY sid DESC", pid);
         return solutionList;
     }
 
     public List<SolutionModel> getWaitSolutionListForProblem(Integer pid) {
         List<SolutionModel> solutionList =
-            dao.find("SELECT * FROM solution WHERE pid=? AND result=? AND status=1 ORDER BY sid DESC", pid,
-                ResultType.WAIT);
+                dao.find("SELECT * FROM solution WHERE pid=? AND result=? AND status=1 ORDER BY sid DESC", pid,
+                        ResultType.WAIT);
         return solutionList;
     }
 
     public List<ContestSolutionModel> getSolutionListForContest(Integer cid) {
         List<ContestSolutionModel> solutionList = ContestSolutionModel.dao
-            .find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid ASC", cid);
+                .find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid ASC", cid);
         return solutionList;
     }
 
     public List<ContestSolutionModel> getSolutionListForContestProblem(Integer cid, Integer num) {
         List<ContestSolutionModel> solutionList = ContestSolutionModel.dao
-            .find("SELECT * FROM contest_solution WHERE cid=? AND num=? AND status=1 ORDER BY sid", cid, num);
+                .find("SELECT * FROM contest_solution WHERE cid=? AND num=? AND status=1 ORDER BY sid", cid, num);
         return solutionList;
     }
 
@@ -375,7 +376,7 @@ public final class SolutionService {
 
         int result = solutionModel.getResult();
         return result == ResultType.AC && isUserShareCode(uid) && isUserShareCode(loginUid) && isUserSolvedProblem(
-            loginUid, solutionModel.getPid());
+                loginUid, solutionModel.getPid());
     }
 
     public boolean canAccessSolution(SolutionModel solutionModel) {
@@ -392,7 +393,7 @@ public final class SolutionService {
 
         int result = solutionModel.getResult();
         return result == ResultType.AC && isUserShareCode(uid) && isUserShareCode(loginUid) && isUserSolvedProblem(
-            loginUid, solutionModel.getPid());
+                loginUid, solutionModel.getPid());
     }
 
     private boolean isUserShareCode(Integer uid) {
@@ -412,6 +413,12 @@ public final class SolutionService {
         if (!judgeService.verifyToken(sid, token)) {
             LOGGER.error("verify token for " + (cid > 0 ? cid + "-" : "") + sid + " failed.(" + token + ")");
             return false;
+        }
+
+        if(cid != 0 && result == ResultType.AC) {
+            if(SolutionService.checkSim(sid, cid)) {
+                return true;
+            }
         }
 
         Solution solution;
@@ -435,7 +442,7 @@ public final class SolutionService {
             } else if (result == ResultType.WA || result == ResultType.PE) {
                 solution.setWrong(error);
             }
-            if(cid > 0 && ContestService.me().getContest(cid).getType() >= ContestModel.TYPE_WORK) {
+            if (cid > 0 && ContestService.me().getContest(cid).getType() >= ContestModel.TYPE_WORK) {
                 CProgramService.updateScore(cid, sid, result);
             }
             boolean updateResult = solution.update();
@@ -498,31 +505,30 @@ public final class SolutionService {
         boolean isSPJ = problemService.checkSpj(pid);
         int num = 0;
         for (File file : arrayOfFile) {
-            if(file.getName().endsWith(".in")) {
-                if(isSPJ) {
+            if (file.getName().endsWith(".in")) {
+                if (isSPJ) {
                     num++;
                 } else {
                     String path = file.getAbsolutePath();
                     path = path.substring(0, path.length() - 2) + "out";
                     File outputFile = new File(path);
-                    if(outputFile.isFile()) {
+                    if (outputFile.isFile()) {
                         num++;
                     }
                 }
             }
-            if(num == test) {
+            if (num == test) {
                 String data = new String();
                 try {
                     BufferedReader reader = new BufferedReader(new FileReader(file));
                     String line;
-                    while ((line = reader.readLine()) != null ) {
-                        if((data + line).length() > 1024) {
+                    while ((line = reader.readLine()) != null) {
+                        if ((data + line).length() > 1024) {
                             data += line;
                             data = data.substring(0, 1024);
                             data += "......";
                             break;
-                        }
-                        else
+                        } else
                             data += line + "\n";
                     }
                 } catch (FileNotFoundException e) {
@@ -536,5 +542,130 @@ public final class SolutionService {
             }
         }
         return null;
+    }
+
+    synchronized static public boolean checkSim(Integer sid, Integer cid) {
+        ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
+        int pid = solution.getPid();
+        ProblemModel problem = ProblemService.me().findProblemForContest(pid, cid);
+        int maxSim = problem.getMaxSim();
+        if (maxSim == 100) return false;
+        String language = OjConfig.languageName.get(solution.getLanguage()).toLowerCase();
+        if (language.contains("gcc") || language.contains("g++"))
+            language = ".cpp";
+        else if (language.contains("java"))
+            language = ".java";
+        else if (language.contains("pas"))
+            language = ".pas";
+        else
+            return false;
+        int num = Db.queryInt("select num from contest_problem where cid = ? and pid = ?", cid, pid);
+        String workPath = judgeService.getWorkPath(cid) + "sim" + File.separator + (char) (num + 'A');
+        String sourcePath = workPath + File.separator + "source";
+        File sourcePathFile = new File(sourcePath);
+        File judgeFile = new File(workPath + File.separator + sid + language);
+        if (!sourcePathFile.exists()) {
+            sourcePathFile.mkdirs();
+        }
+        if (sourcePathFile.listFiles().length == 0) {
+            try {
+                FileKit.moveFile(judgeFile, new File(sourcePath + File.separator + sid + language));
+            } catch (IOException e) {
+                LOGGER.error("Move judgeFile to source fail");
+            }
+        }
+        if (new File(sourcePath + File.separator + sid + language).exists()) {
+            return false;
+        }
+        try {
+            judgeFile.createNewFile();
+            PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(judgeFile)));
+            writer.print(solution.getSource());
+            writer.close();
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Can't create source file to sim");
+            return false;
+        } catch (IOException e) {
+            LOGGER.error("Can't create source file to sim");
+            return false;
+        }
+        String cmd = "/usr/local/bin/";
+        if (language.equals(".cpp"))
+            cmd += "sim_c++.exe";
+        else if (language.equals(".java"))
+            cmd += "sim_java.exe";
+        else
+            cmd += "sim_pasc.exe ";
+        cmd += " -peu -S ";
+        cmd += judgeFile.getAbsolutePath();
+        cmd += " \"|\" ";
+        cmd += sourcePathFile.getAbsolutePath() + File.separator + "*" + language;
+        cmd += " | grep \"%\" > " + workPath + File.separator + "result-" + sid + ".txt";
+        LOGGER.debug("Will be exec: " + cmd);
+        try {
+            Process process = Runtime.getRuntime().exec(new String[]{"bash", "-c", cmd});
+            process.waitFor();
+        } catch (IOException e) {
+            LOGGER.error("Can't exec sim");
+            return false;
+        } catch (InterruptedException e) {
+            LOGGER.error("Exec sim fail");
+            return false;
+        }
+        String resultFileName = workPath + File.separator + "result-" + sid + ".txt";
+        File result = new File(resultFileName);
+        int nowMaxSim = 0, nowMaxSimID = 0;
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(result));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.replace(judgeFile.getAbsolutePath(), "");
+                line = line.replace(" consists", "");
+                line = line.replace(" for", "");
+                line = line.replace(" material", "");
+                line = line.replace(" of", "");
+                line = line.trim();
+                Integer pre;
+                try {
+                    pre = Integer.parseInt(line.substring(0, line.indexOf('%')).trim());
+                } catch (Exception ex) {
+                    continue;
+                }
+                if (pre > nowMaxSim) {
+                    line = line.substring(line.indexOf('%') + 1);
+                    line = line.replace(sourcePath + File.separator, "");
+                    line = line.replace(language, "");
+                    line = line.trim();
+                    try {
+                        int simid = Integer.parseInt(line);
+                        ContestSolutionModel simSolution = ContestSolutionModel.dao.findById(simid);
+                        if(simSolution.getUid().equals(solution.getUid())) {
+                            continue;
+                        }
+                        nowMaxSimID = simid;
+                        nowMaxSim = pre;
+                    } catch (Exception ex) {
+                        continue;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            LOGGER.error("Can't open result file");
+        } catch (IOException e) {
+            LOGGER.error("Read result file error");
+        }
+        try {
+            FileKit.moveFile(judgeFile, new File(sourcePath + File.separator + sid + language));
+        } catch (IOException e) {
+            LOGGER.error("Move judgeFile to source fail");
+        }
+        if (nowMaxSim > maxSim) {
+            solution.setSim(nowMaxSim);
+            solution.setSimID(nowMaxSimID);
+            solution.setResult(ResultType.SIM);
+            solution.update();
+            return true;
+        }
+        return false;
     }
 }

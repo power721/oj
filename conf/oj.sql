@@ -202,6 +202,7 @@ CREATE TABLE `contest_problem` (
   `submission` int(5) NOT NULL DEFAULT '0',
   `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
   `firstBloodTime` int(9) NOT NULL DEFAULT '-1' COMMENT 'first time(minutes) solved this problem',
+  `maxSim` int(3) NOT NULL DEFAULT 100,
   PRIMARY KEY (`id`),
   UNIQUE KEY `contest_problem_cid_pid_pk` (`cid`,`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -232,6 +233,8 @@ CREATE TABLE `contest_solution` (
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
   `systemError` text,
+  `sim` int(3) NOT NULL DEFAULT 0,
+  `sim_id` int(9) NOT NULL DEFAULT 0,
   `balloon` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`sid`)

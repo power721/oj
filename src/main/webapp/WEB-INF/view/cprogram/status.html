@@ -25,7 +25,7 @@
         <option value="-1">结果</option>
         <#if judge_result??>
           <#list judge_result as Result>
-            <#if Result.id<=9>
+            <#if Result.id<=9 || Result.id==14>
               <option value="${Result.id!}"
                       <#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option>
             </#if>
@@ -82,11 +82,14 @@
 
         <td class="problem"><a href="cprogram/problem/${contest.cid}-${solution.alpha!}">${solution.alpha!}</a></td>
         <td class="result" id="${solution.resultName!}">
-          <i class="btn" sid="${solution.sid!}">
+          <i class="btn" sid="${solution.sid!}" sim_id="${solution.sim_id!}" sim="${solution.sim!}">
               ${solution.resultLongName!}
-            <#if solution.test?? && solution.test !=0>
-               on test ${solution.test!}
-            </#if>
+              <#if solution.test?? && solution.test !=0>
+                 on test ${solution.test!}
+              </#if>
+              <#if solution.sim_id !=0>
+                for ${solution.sim!}% with ${solution.sim_id!}
+              </#if>
           </i>
         </td>
         <td class="time"><#if solution.result==0>${solution.time!0} MS</#if></td>
@@ -165,20 +168,31 @@
 
     <#if user??>
       var userId = ${user.uid};
-      var isAdmin = <#if TeacherUser??>true<#else>false</#if>;
-      $('.result').delegate("i", "click", function () {
+       var isAdmin = <#if TeacherUser??>true<#else>false</#if>;
+        $('.result').delegate("i", "click", function () {
         var sid = $(this).attr('sid');
+        var sim_id = $(this).attr('sim_id');
+        var sim = $(this).attr('sim');
         var cid = $('#codeModal').attr('cid');
         var uid = $(this).parent().parent().children('.user').attr('uid');
         if (!isAdmin && uid != userId)
           return false;
         $('#codeModal').modal("show");
-        var tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, cid);
+        var tmp;
+        if(sim_id != null && sim_id != 0) {
+            tmp = $('#contest_code').html().replace(/\[sid\]/g, sim_id).replace(/\[cid\]/g, cid);
+        } else {
+            tmp = $('#contest_code').html().replace(/\[sid\]/g, sid).replace(/\[cid\]/g, cid);
+        }
         $('#codeModal #sid').html(tmp);
-        $.get("cprogram/code", {cid: cid, sid: sid},
+        $.get("cprogram/code", {cid: cid, sid: sid, sim_id: sim_id},
                 function (data) {
                   if (data.success) {
-                    var code = "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
+                    var code ="";
+                    if(sim_id != null && sim_id != 0) {
+                      code += '<div class="alert alert-error"> 你的代码和此代码相似度高达' + sim + '%</div>';
+                    }
+                    code += "<pre class=\"prettyprint lang-" + data.brush + "\">\n";
                     code += "/*\n";
                     code += " * Problem: " + data.solution.cid + "-" + data.solution.alpha + " (" + data.problemTitle + ")\n";
                     code += " * User: " + (data.solution.name || "Guest") + "\n";
@@ -237,19 +251,24 @@
           if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';
           }
-          if (data.result.name != id) {
-            $this.attr('id', data.result.name);
-              if(data.test == 0) {
-                  $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
-                      + data.sid + '">' + data.result.longName + img + '</i>');
-              } else {
-                  $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
-                      + data.sid + '">' + data.result.longName + ' on test ' + data.test + img + '</i>');
+          if (data.result.name != id || data.test > 0) {
+              $this.attr('id', data.result.name);
+              var html = '<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
+                  + data.sid + '" sim="' + data.sim + '" sim_id="' + data.sim_id + '">';
+              html += data.result.longName ;
+              if(data.result.name == 'SIM') {
+                  html += ' for ' + data.sim + ' % with ' + data.sim_id;
               }
-            if (data.result.name == 'AC') {
-              $this.siblings('.time').html(data.time + ' MS');
-              $this.siblings('.memory').html(data.memory + ' KB');
-            }
+
+              if(data.test > 0) {
+                  html += ' on test ' + data.test;
+              }
+              html += img + '</i>';
+              $this.html(html);
+              if (data.result.name == 'AC') {
+                $this.siblings('.time').html(data.time + ' MS');
+                $this.siblings('.memory').html(data.memory + ' KB');
+              }
           }
         });
       });

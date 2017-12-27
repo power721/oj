@@ -33,6 +33,8 @@ public class ProblemModel extends Model<ProblemModel> {
     public static final String DIFFICULTY = "difficulty";
     public static final String VIEW = "view";
     public static final String STATUS = "status";
+
+    public static final String MAXSIM = "maxSim";
     /**
      *
      */
@@ -260,6 +262,14 @@ public class ProblemModel extends Model<ProblemModel> {
 
     public ProblemModel setStatus(Boolean value) {
         return set(STATUS, value);
+    }
+
+    public Integer getMaxSim() {
+        return get(MAXSIM);
+    }
+
+    public ProblemModel setMaxSim(Integer val) {
+        return set(MAXSIM, val);
     }
 
 }

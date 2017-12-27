@@ -47,7 +47,10 @@ public class ContestApiController extends OjController {
         Integer cid = getParaToInt("cid");
         Integer pid = getParaToInt("pid");
         String title = getPara("title");
-        int result = contestService.addProblem(cid, pid, title);
+        Integer maxSim = getParaToInt("maxSim", 100);
+        maxSim = Integer.max(0, maxSim);
+        maxSim = Integer.min(100, maxSim);
+        int result = contestService.addProblem(cid, pid, title, maxSim);
 
         renderJson("result", result);
     }

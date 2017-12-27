@@ -32,6 +32,7 @@
                 <th width="30%">标题</th>
                 <th width="10%">时间限制</th>
                 <th width="10%">内存限制</th>
+                <th width="10%">允许最大相似度</th>
                 <th width="10%">通过数</th>
                 <th width="10%">提交数</th>
                 <#if serverTime  < contest.startTime>
@@ -55,6 +56,7 @@
                         </td>
                         <td class="time">${Problem.timeLimit!} MS</td>
                         <td class="memory">${Problem.memoryLimit!} KB</td>
+                        <td class="maxSim" style="text-align: center">${Problem.maxSim!}%</td>
                         <td class="accept">
                             <a href="cprogram/status/${contest.cid!}?num=${Problem.id!}&result=0">${Problem.accepted!}</a></td>
                         <td class="submit">
@@ -80,6 +82,9 @@
                     <td><input type="text" name="title" class="input-xlarge" placeholder="Title" required></td>
                     <td></td>
                     <td></td>
+                    <td>
+                        <input type="number" name="maxSim" class="input-small" min="0" max="100" required value="90">%
+                    </td>
                     <td>
                         <button type="submit" class="btn btn-success">添加</button>
                         <#if serverTime  <contest.startTime>
@@ -185,6 +190,7 @@
                 var cid = $('input[name=cid]').val();
                 var pid = $('input[name=pid]').val();
                 var title = $('input[name=title]').val();
+                var maxSim = $('input[name=maxSim]').val();
                 $.post($(this).attr("action"), $('#addProblem').serialize(),
                     function (data) {
                         switch (data.result) {
@@ -246,6 +252,7 @@
                                     + '<td class="title"><a href="cprogram/problem/' + cid + '-' + String.fromCharCode(65 + data.result) + '">' + title + '</a></td>'
                                     + '<td class="time">' + timeLimit + 'MS</td>'
                                     + '<td class="memory">' + memoryLimit + 'KB</td>'
+                                    + '<td class="maxSim">' + maxSim + '%</td>'
                                     + '<td class="accept"><a href="cprogram/status/' + cid + '?num=' + String.fromCharCode(65 + data.result) + '&result=0">0</a></td>'
                                     + '<td class="submit"><a href="cprogram/status/' + cid + '?num=' + String.fromCharCode(65 + data.result) + '">0</a></td>'
 
