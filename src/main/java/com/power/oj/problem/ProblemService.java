@@ -118,11 +118,15 @@ public final class ProblemService {
     
     public ProblemModel findProblemForContest(Integer pid, Integer cid) {
     	ProblemModel problemModel;
+    	/*
     	if (OjConfig.isDevMode()) {
             problemModel = dao.findById(pid);
         } else {
-            problemModel = dao.findFirst("SELECT * FROM contest_problem WHERE pid=? AND cid = ?", pid, cid);
+        */
+    	problemModel = dao.findFirst("SELECT * FROM contest_problem WHERE pid=? AND cid = ?", pid, cid);
+        /*
         }
+        */
     	return problemModel;
     }
     

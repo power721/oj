@@ -78,6 +78,8 @@ public final class CProgramService {
                 " and sid = " + sid +
                 " and contest_solution.status = 1";
         ContestSolutionModel solution = ContestSolutionModel.dao.findFirst(sql);
+        if(solution == null)
+            return null;
         solution.put("alpha", (char)(solution.getNum() + 'A'));
         return solution;
     }

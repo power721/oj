@@ -540,3 +540,11 @@ ALTER TABLE `oj`.`solution`
 ADD COLUMN `wrong` text NULL AFTER `test`;
 ALTER TABLE `oj`.`contest_solution`
 ADD COLUMN `wrong` text NULL AFTER `test`;
+
+#2017-12-27
+ALTER TABLE `oj`.`contest_problem`
+  ADD COLUMN `maxSim` int(3) NOT NULL DEFAULT 100 AFTER `firstBloodTime`;
+
+ALTER TABLE `oj`.`contest_solution`
+  ADD COLUMN `sim` int(3) NOT NULL DEFAULT 0 AFTER `systemError`,
+  ADD COLUMN `sim_id` int(9) NOT NULL DEFAULT 0 AFTER `sim`;

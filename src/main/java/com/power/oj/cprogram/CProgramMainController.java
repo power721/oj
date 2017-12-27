@@ -216,16 +216,21 @@ public class CProgramMainController extends OjController {
     public void code() {
         Integer cid = getParaToInt("cid");
         Integer sid = getParaToInt("sid");
+        Integer sim_id = getParaToInt("sim_id", 0);
         ContestSolutionModel solution = CProgramService.getSolution(cid, sid);
-        if(solution == null) {
+        ContestSolutionModel simSolution = CProgramService.getSolution(cid, sim_id);
+        Integer uid = userService.getCurrentUid();
+        Boolean isAdmin = UserService.me().isAdmin();
+        if(solution == null || !isAdmin && !uid.equals(solution.getUid())) {
             renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
             return;
         }
-        Integer uid = userService.getCurrentUid();
-        if(uid == null || !CProgramService.isTeacher() && !uid.equals(solution.getUid())) {
-            renderJson("{\"success\":false,\"result\":\"Permission denied.\"}");
+        if(simSolution != null && !solution.getSimID().equals(sim_id) && !isAdmin) {
+            renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
             return;
         }
+        if(simSolution != null)
+            solution = simSolution;
         Integer num = solution.getNum();
         ResultType resultType = OjConfig.resultType.get(solution.getResult());
         solution.setSource(HtmlEncoder.text(solution.getSource()));

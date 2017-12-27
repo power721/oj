@@ -25,6 +25,8 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
     public static final String SOURCE = "source";
     public static final String CODE_LEN = "codeLen";
     public static final String SYSTEM_ERROR = "systemError";
+    public static final String SIM = "sim";
+    public static final String SIM_ID = "sim_id";
     public static final String BALLOON = "balloon";
     public static final String STATUS = "status";
     private static final long serialVersionUID = 1L;
@@ -199,6 +201,21 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
         return set(STATUS, value);
     }
 
+    public Integer getSim() {
+        return get(SIM);
+    }
+
+    public ContestSolutionModel setSim(Integer val) {
+        return set(SIM, val);
+    }
+
+    public Integer getSimID() {
+        return get(SIM_ID);
+    }
+
+    public ContestSolutionModel setSimID(Integer val) {
+        return set(SIM_ID, val);
+    }
 
     @Override
     public boolean isContest() {
