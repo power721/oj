@@ -3,11 +3,12 @@
 oj-data.sql
 
 # Package Files #
+*.o
 *.war
 *.ear
 *.log
 *.iml
-build/
+#build/
 .gradle/
 .idea/
 .settings/
