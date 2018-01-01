@@ -13,6 +13,7 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import jodd.util.HtmlEncoder;
@@ -220,7 +221,7 @@ public class CProgramMainController extends OjController {
         ContestSolutionModel solution = CProgramService.getSolution(cid, sid);
         ContestSolutionModel simSolution = CProgramService.getSolution(cid, sim_id);
         Integer uid = userService.getCurrentUid();
-        Boolean isAdmin = UserService.me().isAdmin();
+        Boolean isAdmin = CProgramService.isTeacher();
         if(solution == null || !isAdmin && !uid.equals(solution.getUid())) {
             renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
             return;

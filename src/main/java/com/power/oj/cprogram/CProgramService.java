@@ -250,6 +250,11 @@ public final class CProgramService {
             calendar.set(Calendar.DAY_OF_MONTH, 1);
         }
         else {
+            if(calendar.get(Calendar.MONTH) < 2 - 1) {
+                int year = calendar.get(Calendar.YEAR);
+                year--;
+                calendar.set(Calendar.YEAR, year);
+            }
             calendar.set(Calendar.MONTH, 8 - 1);
             calendar.set(Calendar.DAY_OF_MONTH,1);
         }
@@ -268,6 +273,11 @@ public final class CProgramService {
             calendar.set(Calendar.DAY_OF_MONTH, 1);
         }
         else {
+            if(calendar.get(Calendar.MONTH) < 2 - 1) {
+                int year = calendar.get(Calendar.YEAR);
+                year--;
+                calendar.set(Calendar.YEAR, year);
+            }
             calendar.set(Calendar.MONTH, 8 - 1);
             calendar.set(Calendar.DAY_OF_MONTH,1);
         }
