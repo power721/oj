@@ -90,9 +90,11 @@ public class AdminController extends OjController{
         Integer week = getParaToInt("week");
         Integer lecture = getParaToInt("lecture");
         Integer tid = getParaToInt("tid");
+        if(tid == null)
+            tid = UserService.me().getCurrentUid();
         Integer Rate = getParaToInt("rate", 30);
         if(cid == -1) {
-            List<Record> contest = AdminService.getAllWorkContest(type, week, lecture);
+            List<Record> contest = AdminService.getAllWorkContest(type, week, lecture, tid);
             List<Integer> contestList = new ArrayList<>();
             for(Record c : contest) {
                 contestList.add(c.get("cid"));
@@ -149,8 +151,10 @@ public class AdminController extends OjController{
         Integer lecture = getParaToInt("lecture");
         Integer Rate = getParaToInt("rate", 30);
         Integer tid = getParaToInt("tid");
+        if(tid == null)
+            tid = UserService.me().getCurrentUid();
         if(cid == -1) {
-            List<Record> contest = AdminService.getAllWorkContest(type, week, lecture);
+            List<Record> contest = AdminService.getAllWorkContest(type, week, lecture, tid);
             List<Integer> contestList = new ArrayList<>();
             for(Record c : contest) {
                 contestList.add(c.get("cid"));
@@ -158,14 +162,19 @@ public class AdminController extends OjController{
             List<Record> user = AdminService.getAllScoreList(type, week, lecture, Rate, contest.size(), tid);
             try {
                 DateFormat fmtDateTime = new SimpleDateFormat("yyyyMMdd");
-                String fileName = UserService.me().getCurrentUser().getRealName() +
-                        CProgramConstants.weeks.get(week) +
-                        CProgramConstants.lecture.get(lecture);
+                String fileName = UserService.me().getUser(tid).getRealName();
+                if(week != null && lecture != null) {
+                    fileName += CProgramConstants.weeks.get(week);
+                    fileName += CProgramConstants.lecture.get(lecture);
+                }
+
                 if(type == ContestModel.TYPE_EXPERIMENT_EXAM || type == ContestModel.TYPE_EXPERIMENT) {
                     fileName += "实验";
+                    type = ContestModel.TYPE_EXPERIMENT_EXAM;
                 }
                 else {
                     fileName += "课程";
+                    type = ContestModel.TYPE_COURSE_EXAM;
                 }
                 fileName += "成绩表" + fmtDateTime.format(new Date());
                 File file;
@@ -210,10 +219,14 @@ public class AdminController extends OjController{
                     Integer row = 4;
                     for(Integer c : contestList) {
                         Map<Integer, Integer> scoreMap = u.get("scoreMap");
-                        Integer sc = scoreMap.get(c);
-                        if(sc == null) {
+                        Integer sc;
+                        try {
+                            sc = scoreMap.get(c);
+                        }catch (Exception ex) {
                             sc = 0;
                         }
+                        if(sc == null)
+                            sc = 0;
                         sheet.addCell(new Label(row++, idx,  sc.toString()));
                     }
                     sheet.addCell(new Label(row++, idx,  u.getInt("examScore").toString()));

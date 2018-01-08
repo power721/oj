@@ -63,8 +63,8 @@ public class AdminService {
         sql += "order by cprogram_user_info.stuid";
         return Db.find(sql, parase.toArray());
     }
-    static List<Record> getAllWorkContest(Integer type, Integer week, Integer lecture) {
-        Integer uid = UserService.me().getCurrentUid();
+    static List<Record> getAllWorkContest(Integer type, Integer week, Integer lecture, Integer tid) {
+        Integer uid = tid;
         Integer startTime = CProgramService.getStartUnixTime();
         Integer endTime = CProgramService.getEndUnixTime();
         Integer workType;
