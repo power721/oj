@@ -13,6 +13,8 @@ public class ResourceModel extends Model<ResourceModel> {
     public static final String UID = "uid";
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
+    public static final String OS = "os";
+    public static final String ARCH = "arch";
     public static final String PATH = "path";
     public static final String CTIME = "ctime";
     public static final String DOWNLOAD = "download";
@@ -53,6 +55,19 @@ public class ResourceModel extends Model<ResourceModel> {
         return set(DESCRIPTION, value);
     }
 
+    public String getOS() {
+        return get(OS);
+    }
+    public ResourceModel setOS(String value) {
+        return set(OS, value);
+    }
+
+    public String getArch() {
+        return get(ARCH);
+    }
+    public  ResourceModel setArch(String value) {
+        return set(ARCH, value);
+    }
     public String getPath() {
         return getStr(PATH);
     }

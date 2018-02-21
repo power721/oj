@@ -548,3 +548,9 @@ ALTER TABLE `oj`.`contest_problem`
 ALTER TABLE `oj`.`contest_solution`
   ADD COLUMN `sim` int(3) NOT NULL DEFAULT 0 AFTER `systemError`,
   ADD COLUMN `sim_id` int(9) NOT NULL DEFAULT 0 AFTER `sim`;
+
+#2017-02-21
+ALTER TABLE `resource`
+  ADD COLUMN `os`  varchar(255) NULL DEFAULT 'Windows' AFTER `description`,
+  ADD COLUMN `arch`  varchar(255) NULL DEFAULT 'x64' AFTER `os`;
+
