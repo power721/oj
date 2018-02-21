@@ -622,6 +622,8 @@ CREATE TABLE `resource` (
   `uid` int(9) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `os`  varchar(255) NULL DEFAULT 'Windows',
+  `arch`  varchar(255) NULL DEFAULT 'x64',
   `path` text NOT NULL,
   `ctime` int(11) NOT NULL,
   `download` int(9) DEFAULT '0',
