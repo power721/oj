@@ -6,9 +6,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.*;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.contest.model.BoardModel;
 import com.power.oj.contest.model.ContestClarifyModel;
@@ -39,6 +37,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1151,7 +1150,7 @@ public class ContestService {
         writer.write(String.format("\t\t<last-gold>%d</last-gold>\n", grand + first));
         writer.write(String.format("\t\t<last-silver>%d</last-silver>\n", grand + first + second));
         writer.write(String.format("\t\t<last-bronze>%d</last-bronze>\n", grand + first + second + third));
-        writer.write("\t\t<comment>w703710691d</comment>\n");
+        writer.write("\t\t<comment>" + userService.getCurrentUserName() + "</comment>\n");
         writer.write("\t\t<time>0</time>\n");
         writer.write(String.format("\t\t<timestamp>%d</timestamp>\n", new Date().getTime()));
         writer.write("\t</finalized>\n");
@@ -1511,8 +1510,23 @@ public class ContestService {
     }
 
     public boolean build(Integer cid) {
-        Db.update("DELETE FROM freeze_board WHERE cid=?", cid);
-        Db.update("DELETE FROM board WHERE cid=?", cid);
+        Db.tx(new IAtom() {
+            @Override
+            public boolean run() throws SQLException {
+                Db.update("DELETE FROM board WHERE cid=?", cid);
+                Db.update("DELETE FROM freeze_board WHERE cid=?", cid);
+
+                List<ContestSolutionModel> solutions =
+                        ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
+                for (ContestSolutionModel solutionModel : solutions) {
+                    updateBoard(solutionModel);
+                }
+                return true;
+            }
+        });
+
+
+        /*
         ContestModel contestModel = getContest(cid);
         int contestStartTime = contestModel.getStartTime();
         int problemNum = Db.queryInt("SELECT MAX(num) FROM contest_problem WHERE cid=?", cid) + 1;
@@ -1572,7 +1586,7 @@ public class ContestService {
             }
         }
 
-        boolean needFreezeBoard = checkFreezeBoard4Build(cid);
+        boolean needFreezeBoard = checkFreezeBoard4Rank(cid);
         for (Map.Entry<Integer, UserInfo> entry : userRank.entrySet()) {
             userInfo = entry.getValue();
             BoardModel board = new BoardModel();
@@ -1603,7 +1617,7 @@ public class ContestService {
                     "UPDATE contest_problem SET firstBloodUid=?,firstBloodTime=?,accepted=?,submission=? WHERE cid=? AND num=?",
                     firstBloodUid[i], firstBloodTime[i], accepted[i], submission[i], cid, i);
         }
-
+        */
         return true;
     }
 
