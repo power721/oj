@@ -22,13 +22,19 @@ public class MainController extends OjController {
     public void index() {
         if (isSwust()) {
             int pageNumber = 1;
+            /*
             int pageSize = OjConfig.noticePageSize;
             setAttr("noticeList", noticeService.getNoticePage(pageNumber, pageSize));
-            pageSize = OjConfig.contestPageSize;
+            */
+            int pageSize = OjConfig.contestPageSize;
+
             setAttr("pendingContests", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.PENDING));
             setAttr("contestList", contestService.getContestList(pageNumber, pageSize, -1, ContestModel.RUNNING));
+
             pageSize = OjConfig.newsPageSize;
             setAttr("newsList", newsService.getNewsListPage(pageNumber, pageSize));
+
+            setAttr("newsAndNotimeList", MainService.getNewsAndNoticeList(OjConfig.newsPageSize, OjConfig.noticePageSize));
             setAttr("isSwust", true);
             setTitle(getText("page.index.title"));
 
@@ -41,7 +47,7 @@ public class MainController extends OjController {
     }
 
     private boolean isSwust() {
-        return getPara("swust") != null || getRequest().getRequestURL().toString().contains("swust");
+        return getPara("swust") != null || getRequest().getRequestURL().toString().contains("swust.edu");
     }
 
     public void about() {

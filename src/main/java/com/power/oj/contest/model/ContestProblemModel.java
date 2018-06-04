@@ -15,6 +15,7 @@ public class ContestProblemModel extends Model<ContestProblemModel> {
     public static final String SUBMISSION = "submission";
     public static final String FIRST_BLOOD_UID = "firstBloodUid";
     public static final String FIRST_BLOOD_TIME = "firstBloodTime";
+    public static final String MAXSIM = "maxSim";
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -107,6 +108,13 @@ public class ContestProblemModel extends Model<ContestProblemModel> {
 
     public ContestProblemModel setFirstBloodTime(Integer value) {
         return set(FIRST_BLOOD_TIME, value);
+    }
+
+    public ContestProblemModel setMaxSim(Integer value) {
+        return set(MAXSIM, value);
+    }
+    public Integer getMaxSim() {
+        return get(MAXSIM);
     }
 
 }

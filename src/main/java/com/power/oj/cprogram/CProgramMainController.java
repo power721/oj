@@ -13,6 +13,7 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.problem.ProblemModel;
+import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import jodd.util.HtmlEncoder;
@@ -22,6 +23,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -135,7 +137,7 @@ public class CProgramMainController extends OjController {
         char id = problemId.toUpperCase().charAt(0);
         Integer num = id - 'A';
 
-        if (contestService.isContestFinished(cid)) {
+        if (!UserService.me().isAdmin() && contestService.isContestFinished(cid)) {
             FlashMessage msg =
                     new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
             redirect("/cprogram/show/" + cid, msg);
@@ -178,7 +180,7 @@ public class CProgramMainController extends OjController {
         }
         String userName = getPara("name");
         if(!CProgramService.isTeacher()) {
-            userName = userService.getCurrentUserName();
+            userName = CProgramService.getStuID();
         }
         setAttr("name", userName);
 
@@ -215,26 +217,48 @@ public class CProgramMainController extends OjController {
     public void code() {
         Integer cid = getParaToInt("cid");
         Integer sid = getParaToInt("sid");
+        Integer sim_id = getParaToInt("sim_id", 0);
         ContestSolutionModel solution = CProgramService.getSolution(cid, sid);
-        if(solution == null) {
+        ContestSolutionModel simSolution = CProgramService.getSolution(cid, sim_id);
+        Integer uid = userService.getCurrentUid();
+        Boolean isAdmin = CProgramService.isTeacher();
+        if(solution == null || !isAdmin && !uid.equals(solution.getUid())) {
             renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
             return;
         }
-        Integer uid = userService.getCurrentUid();
-        if(uid == null || !CProgramService.isTeacher() && !uid.equals(solution.getUid())) {
-            renderJson("{\"success\":false,\"result\":\"Permission denied.\"}");
+        if(simSolution != null && !solution.getSimID().equals(sim_id) && !isAdmin) {
+            renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
             return;
         }
+        if(simSolution != null)
+            solution = simSolution;
         Integer num = solution.getNum();
         ResultType resultType = OjConfig.resultType.get(solution.getResult());
         solution.setSource(HtmlEncoder.text(solution.getSource()));
+        solution.setError(HtmlEncoder.text(solution.getError()));
+        solution.setSystemError(HtmlEncoder.text(solution.getSystemError()));
+        solution.setWrong(HtmlEncoder.text(solution.getWrong()));
+
         setAttr("success", true);
         setAttr("language", OjConfig.languageName.get(solution.getLanguage()));
         setAttr("id", (char)('A' + num));
         setAttr("problemTitle", contestService.getProblemTitle(cid, num));
         setAttr("resultLongName", resultType.getLongName());
-        setAttr("resultName", resultType.getName());
+        String resultName = resultType.getName();
+        setAttr("resultName", resultName);
         setAttr("solution", solution);
+
+        if(resultName.equals("WA") ||
+                resultName.equals("PE") ||
+                resultName.equals("TLE") ||
+                resultName.equals("MLE") ||
+                resultName.equals("RE") ||
+                resultName.equals("OLE") ||
+                resultName.equals("RF")) {
+            setAttr("inputData",
+                    HtmlEncoder.text(solutionService.getInput(solution.getPid(), solution.getTest())));
+        }
+
         String brush = getAttrForStr("language").toLowerCase();
         if(StringUtil.isBlank(brush)) brush = "c";
         if(brush.contains("GCC")) brush = "c";
@@ -244,7 +268,7 @@ public class CProgramMainController extends OjController {
         setAttr("brush", brush);
         renderJson(
                 new String[] {"success", "letter", "problemTitle", "language", "resultLongName", "resultName", "solution",
-                        "brush"});
+                        "brush", "inputData"});
     }
     @RequiresPermissions("teacher")
     public void edit() {
@@ -268,7 +292,8 @@ public class CProgramMainController extends OjController {
     @Before({WaitingInterceptor.class, POST.class, ExamInterceptor.class})
     public void submitSolution() {
         ContestSolutionModel solution = getModel(ContestSolutionModel.class, "solution");
-        int result = contestService.submitSolution(solution);
+        Boolean style = getParaToBoolean("style", false);
+        int result = contestService.submitSolution(solution, style);
         if (result == -1) {
             setFlashMessage(
                     new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));
@@ -284,7 +309,13 @@ public class CProgramMainController extends OjController {
     public void score() {
         Integer cid = getParaToInt(0);
         ContestModel contestModel = ContestService.me().getContest(cid);
-        List<Record> user = CProgramService.getScoreList(cid, contestModel.getType());;
+        List<Record> user = CProgramService.getScoreList(cid, contestModel.getType());
+        List<Record> teacherList = CProgramService.getTeacherList();
+        HashMap<Integer, String> teacherMap = new HashMap<>();
+        for(Record teacher: teacherList)
+            teacherMap.put(teacher.getInt("uid"), teacher.getStr("realName"));
+        for(Record u : user)
+            u.set("teacher", teacherMap.get(u.getInt("tid")));
         setAttr("scoreList", user);
     }
 
@@ -294,14 +325,21 @@ public class CProgramMainController extends OjController {
         String userid = getPara("name");
         if(userid.startsWith("user")) {
             Integer uid = Integer.parseInt(userid.substring(4));
-            Integer score = getParaToInt("value");
+            Integer score;
+            try {
+                score = getParaToInt("value");
+            }
+            catch (Exception ex) {
+                renderJson("修改失败");
+                return ;
+            }
             if(score != null && uid != null && score >=0 && score <=100) {
                 CProgramService.updateFinalScore(getParaToInt(0), uid, score);
                 renderNull();
                 return;
             }
         }
-        renderJson("modify fail");
+        renderJson("修改失败");
     }
 
     @RequiresAuthentication
@@ -379,8 +417,58 @@ public class CProgramMainController extends OjController {
         userext.set("tid", getParaToInt("tid"));
         userext.set("class_week", getParaToInt("class_week"));
         userext.set("class_lecture", getParaToInt("class_lecture"));
+        userext.set("ctime", OjConfig.timeStamp);
         Db.save("cprogram_user_info", "uid", userext);
 
+        redirect("/cprogram");
+    }
+
+    public void resignup() {
+        /*
+        if(!CProgramService.needReSignUp()) {
+            redirect("/cprogram");
+            return;
+        }
+        */
+        Integer uid = UserService.me().getCurrentUid();
+        Record User = Db.findFirst("select " +
+                "user.uid, " +
+                "user.realName, " +
+                "user.phone, " +
+                "cprogram_user_info.class as Class, " +
+                "cprogram_user_info.class_week, " +
+                "cprogram_user_info.class_lecture, " +
+                "cprogram_user_info.tid, " +
+                "cprogram_user_info.stuid " +
+                "from user " +
+                "inner join cprogram_user_info on user.uid = cprogram_user_info.uid " +
+                "where user.uid = ?", uid);
+        setAttr("techerList", CProgramService.getTeacherList());
+        setAttr("User", User);
+    }
+
+    @Before(POST.class)
+    @Clear(CProgramInterceptor.class)
+    public void reSignupUser() {
+        /*
+        if(!CProgramService.needReSignUp()) {
+            redirect("/cprogram");
+            return;
+        }*/
+        Integer uid = UserService.me().getCurrentUid();
+        UserModel user = UserService.me().getUser(uid);
+        user.setRealName(getPara("realName"));
+        user.setPhone(getPara("phone"));
+        user.update();
+
+        Record userext = Db.findById("cprogram_user_info", "uid", uid);
+        userext.set("class", getPara("class"));
+        userext.set("stuid", getPara("stuid"));
+        userext.set("tid", getParaToInt("tid"));
+        userext.set("class_week", getParaToInt("class_week"));
+        userext.set("class_lecture", getParaToInt("class_lecture"));
+        userext.set("ctime", OjConfig.timeStamp);
+        Db.update("cprogram_user_info", "uid", userext);
         redirect("/cprogram");
     }
 }

@@ -1,0 +1,62 @@
+@media (min-width: 1001px){
+    .cprog_btn{
+        width:30%;
+        height: 100px;
+        margin:2% 5%;
+        padding-top: 60px;
+        font-size: xx-large;
+        text-shadow: black 4px 4px 4px;
+        opacity:0.7;
+        line-height:100%;
+    }
+}
+@media (min-width: 501px) and (max-width: 1000px){
+    .cprog_btn{
+        width:30%;
+        height: 60px;
+        margin:2% 5%;
+        padding-top: 40px;
+        font-size: xx-large;
+        text-shadow: black 4px 4px 4px;
+        opacity:0.7;
+    }
+}
+@media (max-width: 500px){
+    .cprog_btn{
+        width:24%;
+        height: 60px;
+        margin:2% 5%;
+        padding-top: 20px;
+        font-size: xx-large;
+        text-shadow: black 4px 4px 4px;
+        opacity:0.7;
+        line-height:100%;
+    }
+}
+
+.input-append, .input-prepend{
+    width: 260px;
+}
+
+#uid{
+    width:100%;
+    transform: scale(1);
+}
+
+#class_week, #class_lecture{
+    width:50%;
+    transform: scale(1);
+}
+
+#inputEndTime, #inputStartTime{
+    width: 218px;
+}
+
+#submitContest{
+    width: 110px;
+    margin-right: 36px;
+}
+
+.span8 > table.table-stats{
+    width:100%;
+}

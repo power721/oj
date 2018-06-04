@@ -6,9 +6,7 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.log.Logger;
-import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.*;
 import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.contest.model.BoardModel;
 import com.power.oj.contest.model.ContestClarifyModel;
@@ -39,6 +37,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -79,10 +78,10 @@ public class ContestService {
     public ContestModel getContest(Integer cid) {
         ContestModel contestModel;
         String sql = "SELECT *," + "FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime, "
-            + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime, "
-            + "FROM_UNIXTIME(endTime - lockBoardTime*60, '%Y-%m-%d %H:%i:%s') AS lockBoardDateTime, "
-            + "FROM_UNIXTIME(endTime + unlockBoardTime*60, '%Y-%m-%d %H:%i:%s') AS unlockBoardDateTime "
-            + "FROM contest WHERE cid=?";
+                + "FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime, "
+                + "FROM_UNIXTIME(endTime - lockBoardTime*60, '%Y-%m-%d %H:%i:%s') AS lockBoardDateTime, "
+                + "FROM_UNIXTIME(endTime + unlockBoardTime*60, '%Y-%m-%d %H:%i:%s') AS unlockBoardDateTime "
+                + "FROM contest WHERE cid=?";
         contestModel = dao.findFirst(sql, cid);
         return contestModel;
     }
@@ -126,9 +125,9 @@ public class ContestService {
         String sql = "SELECT * FROM contest_problem WHERE cid=? ORDER BY num";
         List<Record> contestProblems;
         if (uid != null && uid > 0) {
-            sql = "SELECT cp.pid,num,accepted,submission,title,status,timeLimit,memoryLimit FROM contest_problem cp LEFT OUTER JOIN"
-                + " (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? "
-                + "AND cid=? AND status=1 GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
+            sql = "SELECT cp.pid,num,accepted,submission,title,status,timeLimit,memoryLimit,maxSim FROM contest_problem cp LEFT OUTER JOIN"
+                    + " (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? "
+                    + "AND cid=? AND status=1 GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
             contestProblems = Db.find(sql, uid, cid, cid);
         } else {
             contestProblems = Db.find(sql, cid);
@@ -143,8 +142,8 @@ public class ContestService {
 
     public List<Record> getContestProblems(Integer cid) {
         List<Record> contestProblems = Db.find(
-            "SELECT p.*,cp.title,cp.num,cp.timeLimit,cp.memoryLimit FROM contest_problem cp INNER JOIN problem p ON p.pid=cp.pid WHERE cid=? ORDER BY num",
-            cid);
+                "SELECT p.*,cp.title,cp.num,cp.timeLimit,cp.memoryLimit FROM contest_problem cp INNER JOIN problem p ON p.pid=cp.pid WHERE cid=? ORDER BY num",
+                cid);
         for (Record problem : contestProblems) {
             problem.set("id", (char) (problem.getInt("num") + 'A'));
         }
@@ -223,8 +222,8 @@ public class ContestService {
 
     public ProblemModel getProblem(Integer cid, Integer num) {
         Record record =
-            Db.findFirst("SELECT pid,title,accepted,submission,view,timeLimit,memoryLimit FROM contest_problem WHERE cid=? AND num=? LIMIT 1",
-                         cid, num);
+                Db.findFirst("SELECT pid,title,accepted,submission,view,timeLimit,memoryLimit FROM contest_problem WHERE cid=? AND num=? LIMIT 1",
+                        cid, num);
         if (record == null)
             return null;
 
@@ -238,10 +237,10 @@ public class ContestService {
             problem.setTitle(title);
 
         long submitUser =
-            Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND status=1", cid, num);
+                Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND status=1", cid, num);
         long solved =
-            Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND result=? AND status=1", cid,
-                         num, ResultType.AC);
+                Db.queryLong("SELECT COUNT(uid) FROM contest_solution WHERE cid=? AND num=? AND result=? AND status=1", cid,
+                        num, ResultType.AC);
         problem.setAccepted(record.getInt("accepted"));
         problem.setSubmission(record.getInt("submission"));
         problem.setSubmitUser((int) submitUser);
@@ -277,12 +276,12 @@ public class ContestService {
 
     public List<Record> getContestUsers(Integer cid) {
         return Db.find("SELECT c.*,u.name,u.realName FROM contest_user c INNER JOIN user u ON u.uid=c.uid WHERE cid=?",
-                       cid);
+                cid);
     }
 
     public List<Record> getAttendedContests(Integer uid) {
         List<Record> contests = Db.find("SELECT DISTINCT(c.cid),c.title,c.type FROM contest_solution s"
-                                            + " INNER JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
+                + " INNER JOIN contest c ON s.cid=c.cid WHERE s.uid=? ORDER BY cid", uid);
         for (Iterator<Record> it = contests.iterator(); it.hasNext(); ) {
             Record record = it.next();
             if (record.getInt("type") == ContestModel.TYPE_TEST && !canAccessTestContest(record.getInt("cid"))) {
@@ -302,14 +301,14 @@ public class ContestService {
             return null;
 
         return Db.queryInt(
-            "SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? AND status=1 LIMIT 1",
-            cid, uid, num);
+                "SELECT MIN(result) AS result FROM contest_solution WHERE cid=? AND uid=? AND num=? AND status=1 LIMIT 1",
+                cid, uid, num);
     }
 
     public Page<ContestModel> getContestList(int pageNumber, int pageSize, Integer type, Integer status) {
         List<Object> paras = new ArrayList<>();
         String sql =
-            "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime";
+                "SELECT *,FROM_UNIXTIME(startTime, '%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime, '%Y-%m-%d %H:%i:%s') AS endDateTime";
         StringBuilder sb = new StringBuilder("FROM contest WHERE status=1");
         sb.append(" AND type < 5");
         if (type > -1) {
@@ -330,8 +329,8 @@ public class ContestService {
         Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
         for (Iterator<ContestModel> it = ContestList
-            .getList()
-            .iterator(); it.hasNext(); ) {
+                .getList()
+                .iterator(); it.hasNext(); ) {
             ContestModel contest = it.next();
             int ctime = OjConfig.timeStamp;
             int startTime = contest.getStartTime();
@@ -376,7 +375,7 @@ public class ContestService {
     }
 
     public Page<ContestModel> getContestListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
-        String sSearch) {
+                                                       String sSearch) {
         List<Object> paras = new ArrayList<>();
         String sql = "SELECT *";
         StringBuilder sb = new StringBuilder("FROM contest WHERE 1=1");
@@ -393,11 +392,11 @@ public class ContestService {
         }
 
         sb
-            .append(" ORDER BY ")
-            .append(sSortName)
-            .append(" ")
-            .append(sSortDir)
-            .append(", cid DESC");
+                .append(" ORDER BY ")
+                .append(sSortName)
+                .append(" ")
+                .append(sSortDir)
+                .append(", cid DESC");
 
         Page<ContestModel> ContestList = dao.paginate(pageNumber, pageSize, sql, sb.toString(), paras.toArray());
 
@@ -439,8 +438,8 @@ public class ContestService {
             tableName = "board";
         }
         String sql = "FROM " + tableName + " b INNER JOIN user u ON u.uid=b.uid "
-            + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
-            + " WHERE b.cid=? ORDER BY solved DESC,penalty";
+                + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
+                + " WHERE b.cid=? ORDER BY solved DESC,penalty";
         String select = "SELECT b.*,u.name,u.realName,u.nick AS unick,cu.special,cu.nick";
         Page<Record> userRank = Db.paginate(pageNumber, pageSize, select, sql, cid);
         int rank = (pageNumber - 1) * pageSize;
@@ -512,12 +511,12 @@ public class ContestService {
     public List<Record> getClarifyList(Integer cid, Integer num) {
         if (num != null && num > -1) {
             return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid "
-                               + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.num=? ORDER BY c.id DESC",
-                           cid, num);
+                            + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.num=? ORDER BY c.id DESC",
+                    cid, num);
         } else {
             return Db.find("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid "
-                               + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? ORDER BY c.id DESC",
-                           cid);
+                            + "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? ORDER BY c.id DESC",
+                    cid);
         }
     }
 
@@ -525,7 +524,7 @@ public class ContestService {
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT c.*,u.name,p.title FROM contest_clarify c INNER JOIN user u ON u.uid=c.uid ");
         sb.append(
-            "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.uid=? AND c.public=0 ");
+                "LEFT JOIN contest_problem p ON p.num=c.num AND p.cid=c.cid WHERE c.cid=? AND c.uid=? AND c.public=0 ");
         if (num != null && num > -1) {
             sb.append(" AND c.num=? ");
         }
@@ -553,19 +552,19 @@ public class ContestService {
     public int getUnreadClarifications(Integer cid, Long timestamp) {
         if (userService.isAdmin()) {
             return Db
-                .queryLong("SELECT COUNT(*) FROM contest_clarify WHERE cid=? AND mtime IS NULL", cid)
-                .intValue();
+                    .queryLong("SELECT COUNT(*) FROM contest_clarify WHERE cid=? AND mtime IS NULL", cid)
+                    .intValue();
         }
 
         Integer uid = userService.getCurrentUid();
         int count = Db
-            .queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND mtime>? AND public=1", cid, timestamp)
-            .intValue();
+                .queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND mtime>? AND public=1", cid, timestamp)
+                .intValue();
         if (uid != null) {
             count += Db
-                .queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND uid=? AND mtime>? AND public=0",
-                           cid, uid, timestamp)
-                .intValue();
+                    .queryLong("SELECT COUNT(*) FROM contest_clarify " + "WHERE cid=? AND uid=? AND mtime>? AND public=0",
+                            cid, uid, timestamp)
+                    .intValue();
         }
         return count;
     }
@@ -660,8 +659,8 @@ public class ContestService {
                 ContestkendoSchedulerTask contest = new ContestkendoSchedulerTask();
                 try {
                     timeStamp = sdf
-                        .parse(data.getString("start_time"))
-                        .getTime();
+                            .parse(data.getString("start_time"))
+                            .getTime();
                 } catch (ParseException e) {
                     timeStamp = 0;
                     log.warn(e.getLocalizedMessage());
@@ -716,24 +715,24 @@ public class ContestService {
         StringBuilder sb = new StringBuilder("SELECT ");
         for (ProgramLanguageModel language : OjConfig.programLanguages) {
             sb
-                .append("COUNT(IF(language=")
-                .append(language.getId())
-                .append(",1,NULL)) AS ")
-                .append(language.getExt())
-                .append(",");
+                    .append("COUNT(IF(language=")
+                    .append(language.getId())
+                    .append(",1,NULL)) AS ")
+                    .append(language.getExt())
+                    .append(",");
         }
         for (ResultType resultType : OjConfig.judgeResult) {
             if (resultType.getId() > ResultType.RF)
                 break;
             sb
-                .append("COUNT(IF(result=")
-                .append(resultType.getId())
-                .append(",1,NULL)) AS ")
-                .append(resultType.getName())
-                .append(",");
+                    .append("COUNT(IF(result=")
+                    .append(resultType.getId())
+                    .append(",1,NULL)) AS ")
+                    .append(resultType.getName())
+                    .append(",");
         }
         sb.append(
-            "pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? AND status=1 GROUP BY num,pid ORDER BY num");
+                "pid,num,COUNT(IF(result>?,1,NULL)) AS Others,COUNT(*) AS total FROM contest_solution WHERE cid=? AND status=1 GROUP BY num,pid ORDER BY num");
         log.info(sb.toString());
         List<Record> statistics = Db.find(sb.toString(), ResultType.RF, cid);
         for (Record record : statistics) {
@@ -746,12 +745,12 @@ public class ContestService {
     public ContestSolutionModel getContestSolution(Integer cid, Integer sid) {
         Integer uid = userService.getCurrentUid();
         StringBuilder sb = new StringBuilder(
-            "SELECT pid,uid,language,source FROM contest_solution WHERE sid=? AND cid=? AND status=1");
+                "SELECT pid,uid,language,source FROM contest_solution WHERE sid=? AND cid=? AND status=1");
 
         if (!userService.isAdmin())
             sb
-                .append(" AND uid=")
-                .append(uid);
+                    .append(" AND uid=")
+                    .append(uid);
         sb.append(" LIMIT 1");
 
         return ContestSolutionModel.dao.findFirst(sb.toString(), sid, cid);
@@ -763,12 +762,11 @@ public class ContestService {
         return ContestSolutionModel.dao.find(sql, cid, pid);
     }
 
-    public int submitSolution(ContestSolutionModel contestSolution) {
+    public int submitSolution(ContestSolutionModel contestSolution, boolean style) {
         Integer cid = contestSolution.getCid();
         Integer uid = userService.getCurrentUid();
         Integer pid = getPid(contestSolution.getCid(), contestSolution.getNum());
         ProblemModel problemModel = problemService.findProblemForContest(pid, cid);
-
         if (problemModel == null) {
             return -1;
         }
@@ -780,7 +778,7 @@ public class ContestService {
             Db.update("UPDATE contest_problem SET submission=submission+1 WHERE cid=? AND pid=?", cid, pid);
 
             contestSolution = ContestSolutionModel.dao.findById(contestSolution.getSid());
-            judgeService.judge(contestSolution);
+            judgeService.judge(contestSolution, style);
         } else {
             return -2;
         }
@@ -799,7 +797,7 @@ public class ContestService {
             boolean isFreeze = (timeDiff <= lockTime);
 
             log.info("contest-" + contestModel.getCid() + " submitTime: " + submitTime + " timeDiff: " + timeDiff
-                         + " isFreeze: " + isFreeze);
+                    + " isFreeze: " + isFreeze);
             return isFreeze;
         }
         return false;
@@ -815,8 +813,8 @@ public class ContestService {
             boolean isFreeze = (timeDiff >= -unlockTime && timeDiff <= lockTime);
 
             log.info(
-                "contest-" + cid + " timeDiff: " + timeDiff + " lockTime: " + lockTime + " unlockTime: " + unlockTime
-                    + " isFreeze: " + isFreeze);
+                    "contest-" + cid + " timeDiff: " + timeDiff + " lockTime: " + lockTime + " unlockTime: " + unlockTime
+                            + " isFreeze: " + isFreeze);
             return isFreeze;
         }
         return false;
@@ -837,20 +835,20 @@ public class ContestService {
 
     public boolean addContest(ContestModel contestModel, String startTime, String endTime) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        if(contestModel.getUid() == null) {
+        if (contestModel.getUid() == null) {
             contestModel.setUid(userService.getCurrentUid());
         }
         contestModel.setCtime(OjConfig.timeStamp);
         try {
             contestModel.setStartTime((int) (sdf
-                .parse(startTime)
-                .getTime() / 1000));
+                    .parse(startTime)
+                    .getTime() / 1000));
             contestModel.setEndTime((int) (sdf
-                .parse(endTime)
-                .getTime() / 1000));
+                    .parse(endTime)
+                    .getTime() / 1000));
             log.info(contestModel
-                         .getEndTime()
-                         .toString());
+                    .getEndTime()
+                    .toString());
         } catch (ParseException e) {
             log.error("add contest failed!", e);
         }
@@ -891,11 +889,11 @@ public class ContestService {
 
         try {
             contestModel.setStartTime((int) (sdf
-                .parse(startTime)
-                .getTime() / 1000));
+                    .parse(startTime)
+                    .getTime() / 1000));
             contestModel.setEndTime((int) (sdf
-                .parse(endTime)
-                .getTime() / 1000));
+                    .parse(endTime)
+                    .getTime() / 1000));
         } catch (ParseException e) {
             log.warn("update contest failed!", e);
         }
@@ -968,10 +966,10 @@ public class ContestService {
         int lockTime = contest.getLockBoardTime();
         writer.write((String.format("\t\t<starttime>%d</starttime>\n", startTime)));
         writer.write(String.format("\t\t<length>%02d:%02d:%02d</length>\n", (end_time - startTime) / 3600,
-                                   (end_time - startTime) / 60 % 60, (end_time - startTime) % 60));
+                (end_time - startTime) / 60 % 60, (end_time - startTime) % 60));
         writer.write(
-            String.format("\t\t<scoreboard-freeze-length>%02d:%02d:00</scoreboard-freeze-length>\n", lockTime / 60,
-                          lockTime % 60));
+                String.format("\t\t<scoreboard-freeze-length>%02d:%02d:00</scoreboard-freeze-length>\n", lockTime / 60,
+                        lockTime % 60));
         writer.write("\t\t<penalty>20</penalty>\n");
         writer.write("\t\t<started>true</started>\n");
         writer.write((String.format("\t\t<short-title>%s</short-title>\n", contest.getTitle())));
@@ -1025,7 +1023,7 @@ public class ContestService {
 
     private List<Run> getRuns(Integer cid, Map<Integer, Team> teamMp) {
         List<Record> RawRun =
-            Db.find("select sid,uid,pid,result,language,ctime from contest_solution where cid = ?", cid);
+                Db.find("select sid,uid,pid,result,language,ctime from contest_solution where cid = ?", cid);
         List<Run> runs = new ArrayList<>();
         for (Record record : RawRun) {
             Run run = new Run(record);
@@ -1070,8 +1068,8 @@ public class ContestService {
             writer.write("\t\t<penalty>false</penalty>\n");
         }
         writer.write(String.format("\t\t<result>%s</result>\n", OjConfig.resultType
-            .get(r.result)
-            .getName()));
+                .get(r.result)
+                .getName()));
         writer.write("\t\t<status>done</status>\n");
         writer.write(String.format("\t\t<timestamp>%d</timestamp>\n", r.time));
         writer.write("\t</run>\n");
@@ -1117,36 +1115,32 @@ public class ContestService {
         }
     }
 
-    private void writeBestGirlTeam(PrintWriter writer, List<Team> teams)
-    {
-        for(Team t : teams)
-        {
-            if(t.isGirlTeam)
-            {
+    private void writeBestGirlTeam(PrintWriter writer, List<Team> teams) {
+        for (Team t : teams) {
+            if (t.isGirlTeam) {
                 writer.write("\t<award>\n");
                 writer.write(String.format("\t\t<team>%d</team>\n", t.uid));
                 writer.write("\t\t<type>first_to_solve</type>\n");
                 writer.write("\t\t<citation>Best Girl Team</citation>\n");
                 writer.write("\t</award>\n");
-                return ;
+                return;
             }
         }
     }
-    private void writeBestRookieTeam(PrintWriter writer, List<Team> teams)
-    {
-        for(Team t : teams)
-        {
-            if(t.isRookieTeam)
-            {
+
+    private void writeBestRookieTeam(PrintWriter writer, List<Team> teams) {
+        for (Team t : teams) {
+            if (t.isRookieTeam) {
                 writer.write("\t<award>\n");
                 writer.write(String.format("\t\t<team>%d</team>\n", t.uid));
                 writer.write("\t\t<type>first_to_solve</type>\n");
                 writer.write("\t\t<citation>Best Rookie Team</citation>\n");
                 writer.write("\t</award>\n");
-                return ;
+                return;
             }
         }
     }
+
     private void writeAdditional(PrintWriter writer, ContestInfo info) {
         int grand = info.grand;
         int first = info.first;
@@ -1156,13 +1150,13 @@ public class ContestService {
         writer.write(String.format("\t\t<last-gold>%d</last-gold>\n", grand + first));
         writer.write(String.format("\t\t<last-silver>%d</last-silver>\n", grand + first + second));
         writer.write(String.format("\t\t<last-bronze>%d</last-bronze>\n", grand + first + second + third));
-        writer.write("\t\t<comment>w703710691d</comment>\n");
+        writer.write("\t\t<comment>" + userService.getCurrentUserName() + "</comment>\n");
         writer.write("\t\t<time>0</time>\n");
         writer.write(String.format("\t\t<timestamp>%d</timestamp>\n", new Date().getTime()));
         writer.write("\t</finalized>\n");
     }
 
-    public int addProblem(Integer cid, Integer pid, String title) {
+    public int addProblem(Integer cid, Integer pid, String title, Integer maxSim) {
         if (isContestFinished(cid)) {
             return -5;
         }
@@ -1193,7 +1187,7 @@ public class ContestService {
         contestProblemModel.setNum(num);
         contestProblemModel.setTimeLimit(problemModel.getTimeLimit());
         contestProblemModel.setMemoryLimit(problemModel.getMemoryLimit());
-
+        contestProblemModel.setMaxSim(maxSim);
         if (contestProblemModel.save()) {
             return num;
         }
@@ -1297,7 +1291,7 @@ public class ContestService {
     public boolean isContestRunning(Integer cid) {
         ContestModel contestModel = getContest(cid);
         if (contestModel != null && contestModel.getStartTime() <= OjConfig.timeStamp
-            && contestModel.getEndTime() >= OjConfig.timeStamp) {
+                && contestModel.getEndTime() >= OjConfig.timeStamp) {
             return true;
         }
         return false;
@@ -1322,8 +1316,8 @@ public class ContestService {
     public boolean checkContestPassword(Integer cid, String password) {
         ContestModel contestModel = getContest(cid);
         if (contestModel != null && contestModel
-            .getPassword()
-            .equals(password)) {
+                .getPassword()
+                .equals(password)) {
             return true;
         }
         return false;
@@ -1345,7 +1339,7 @@ public class ContestService {
 
         if (solutionModel.getResult() == ResultType.AC) {
             ContestProblemModel contestProblem =
-                ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
+                    ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
             Integer contestStartTime = contestModel.getStartTime();
             int solvedTime = submitTime - contestStartTime;
 
@@ -1413,7 +1407,7 @@ public class ContestService {
         }
 
         ContestProblemModel contestProblem =
-            ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
+                ContestProblemModel.dao.findFirst("SELECT * FROM contest_problem WHERE cid=? AND num=?", cid, num);
         if (originalSolvedTime > acTime) {
             if (isAccepted) {
                 // AC after this submission
@@ -1447,8 +1441,8 @@ public class ContestService {
 
     private Long getWrongSubmissions(Integer cid, Integer sid, Integer uid, Integer num) {
         return Db.queryLong("SELECT COUNT(*) FROM contest_solution WHERE cid=? AND num=? AND uid=? AND"
-                                + " sid<? AND result!=? AND result<? AND status=1", cid, num, uid, sid, ResultType.AC,
-                            ResultType.SE);
+                        + " sid<? AND result!=? AND result<? AND status=1", cid, num, uid, sid, ResultType.AC,
+                ResultType.SE);
     }
 
     private void updateUserSolved(BoardModel board, int acTime, int wrongSubmissions) {
@@ -1467,8 +1461,8 @@ public class ContestService {
 
     private boolean alreadyAccepted(Integer cid, Integer sid, Integer uid, Integer num) {
         return Db.queryLong(
-            "SELECT 1 FROM contest_solution WHERE cid=? AND num=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1",
-            cid, num, uid, sid, ResultType.AC) != null;
+                "SELECT 1 FROM contest_solution WHERE cid=? AND num=? AND uid=? AND sid<? AND result=? AND status=1 LIMIT 1",
+                cid, num, uid, sid, ResultType.AC) != null;
     }
 
     private boolean isNotAccepted(Solution solutionModel) {
@@ -1505,24 +1499,39 @@ public class ContestService {
             freezeBoard.update();
         }
         */
-    	Record rd = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
-    	if(rd == null) {
-    		rd = board.toRecord();
-    		Db.save("freeze_board", rd);
-    	}
-    	else {
-    		rd = board.toRecord();
-    		Db.update("freeze_board", rd);
-    	}
+        Record rd = Db.findFirst("SELECT * FROM freeze_board WHERE cid=? AND uid=? LIMIT 1", cid, uid);
+        if (rd == null) {
+            rd = board.toRecord();
+            Db.save("freeze_board", rd);
+        } else {
+            rd = board.toRecord();
+            Db.update("freeze_board", rd);
+        }
     }
 
     public boolean build(Integer cid) {
-        Db.update("DELETE FROM freeze_board WHERE cid=?", cid);
+        Db.tx(new IAtom() {
+            @Override
+            public boolean run() throws SQLException {
+                Db.update("DELETE FROM board WHERE cid=?", cid);
+                Db.update("DELETE FROM freeze_board WHERE cid=?", cid);
+
+                List<ContestSolutionModel> solutions =
+                        ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
+                for (ContestSolutionModel solutionModel : solutions) {
+                    updateBoard(solutionModel);
+                }
+                return true;
+            }
+        });
+
+
+        /*
         ContestModel contestModel = getContest(cid);
         int contestStartTime = contestModel.getStartTime();
         int problemNum = Db.queryInt("SELECT MAX(num) FROM contest_problem WHERE cid=?", cid) + 1;
         List<ContestSolutionModel> solutions =
-            ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
+                ContestSolutionModel.dao.find("SELECT * FROM contest_solution WHERE cid=? AND status=1 ORDER BY sid", cid);
         HashMap<Integer, UserInfo> userRank = new HashMap<>();
         UserInfo userInfo;
         int uid;
@@ -1577,7 +1586,7 @@ public class ContestService {
             }
         }
 
-        boolean needFreezeBoard = checkFreezeBoard4Build(cid);
+        boolean needFreezeBoard = checkFreezeBoard4Rank(cid);
         for (Map.Entry<Integer, UserInfo> entry : userRank.entrySet()) {
             userInfo = entry.getValue();
             BoardModel board = new BoardModel();
@@ -1605,10 +1614,10 @@ public class ContestService {
 
         for (int i = 0; i < problemNum; ++i) {
             Db.update(
-                "UPDATE contest_problem SET firstBloodUid=?,firstBloodTime=?,accepted=?,submission=? WHERE cid=? AND num=?",
-                firstBloodUid[i], firstBloodTime[i], accepted[i], submission[i], cid, i);
+                    "UPDATE contest_problem SET firstBloodUid=?,firstBloodTime=?,accepted=?,submission=? WHERE cid=? AND num=?",
+                    firstBloodUid[i], firstBloodTime[i], accepted[i], submission[i], cid, i);
         }
-
+        */
         return true;
     }
 
@@ -1618,14 +1627,22 @@ public class ContestService {
 
     public boolean isRejudging(Integer cid) {
         return JudgeService
-            .me()
-            .isRejudging(RejudgeType.CONTEST.getKey(cid));
+                .me()
+                .isRejudging(RejudgeType.CONTEST.getKey(cid));
     }
 
     public boolean isRejudging(Integer cid, Integer pid) {
         return JudgeService
-            .me()
-            .isRejudging(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
+                .me()
+                .isRejudging(RejudgeType.CONTEST_PROBLEM.getKey(cid, pid));
+    }
+
+    public List<ContestSolutionModel> getBallonSendList(Integer cid) {
+        List<ContestSolutionModel> list = ContestSolutionModel.dao.find("Select cs.sid,u.name,u.uid,u.nick,cs.num,FROM_UNIXTIME(cs.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t FROM contest_solution cs INNER JOIN user u ON cs.uid=u.uid WHERE cs.cid=? AND cs.result=0 AND cs.balloon=0", cid);
+        for (ContestSolutionModel solution : list) {
+            solution.put("alpha", (char) (solution.getNum() + 'A'));
+        }
+        return list;
     }
 
     private class UserInfo {
@@ -1711,7 +1728,7 @@ public class ContestService {
         boolean isGirlTeam;
         boolean isRookieTeam;
 
-        Team(int uid ,boolean isGirlTeam , boolean isRookieTeam) {
+        Team(int uid, boolean isGirlTeam, boolean isRookieTeam) {
             this.uid = uid;
             this.isGirlTeam = isGirlTeam;
             this.isRookieTeam = isRookieTeam;

@@ -4,6 +4,8 @@ import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.log.Logger;
 import com.jfinal.upload.UploadFile;
+import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.judge.JudgeResult;

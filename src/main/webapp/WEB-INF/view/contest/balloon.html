@@ -1,0 +1,39 @@
+<@override name="meta">
+  <meta http-equiv="refresh" content="5">
+</@override>
+<@override name="contest_content">
+<table id="status" class="table table-stats table-hover table-condensed">
+  <thead>
+  <tr>
+    <th>Run ID</th>
+    <th>User</th>
+    <th>Problem</th>
+    <th>Submit Time</th>
+    <th>Send</th>
+  </tr>
+  </thead>
+  <tbody>
+    <#list solutionList as solution>
+      <tr>
+        <td class="sid">${solution.sid!}</td>
+        <td class="user" uid="${solution.uid}">
+          <a href="user/profile/${(solution.name)!}" data-toggle="tooltip" target="_blank"
+             title="${(solution.nick)!?html}">${(solution.name)!}</a>
+        </td>
+        <td class="problem"><a href="contest/problem/${cid}-${solution.alpha!}">${solution.alpha!}</a></td>
+        <td class="ctime">${solution.ctime_t!}</td>
+        <td>
+          <a href="contest/sendBalloon/${cid!}-${solution.sid!}" class="btn btn-success">Send</a>
+        </td>
+      </tr>
+    </#list>
+  </tbody>
+</table>
+</@override>
+<@override name="styles">
+<link rel="stylesheet" type="text/css" href="assets/prettify/prettify.css"/>
+</@override>
+<@override name="scripts">
+<script type="text/javascript" src="assets/prettify/prettify.js"></script>
+</@override>
+<@extends name="_layout.html" />

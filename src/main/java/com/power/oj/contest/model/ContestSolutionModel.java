@@ -20,10 +20,14 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
     public static final String CTIME = "ctime";
     public static final String MTIME = "mtime";
     public static final String TEST = "test";
+    public static final String WRONG = "wrong";
     public static final String ERROR = "error";
     public static final String SOURCE = "source";
     public static final String CODE_LEN = "codeLen";
     public static final String SYSTEM_ERROR = "systemError";
+    public static final String SIM = "sim";
+    public static final String SIM_ID = "sim_id";
+    public static final String BALLOON = "balloon";
     public static final String STATUS = "status";
     private static final long serialVersionUID = 1L;
 
@@ -162,6 +166,16 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
         return set(CODE_LEN, value);
     }
 
+    @Override
+    public Solution setWrong(String value) {
+        return set(WRONG, value);
+    }
+
+    @Override
+    public String getWrong() {
+        return getStr(WRONG);
+    }
+
     public String getSystemError() {
         return getStr(SYSTEM_ERROR);
     }
@@ -170,12 +184,37 @@ public class ContestSolutionModel extends Model<ContestSolutionModel> implements
         return set(SYSTEM_ERROR, value);
     }
 
+    public Boolean getBalloon() {
+        return get(BALLOON);
+    }
+
+    public ContestSolutionModel setBalloon(Boolean val) {
+        return set(BALLOON, val);
+    }
+
+
     public Boolean getStatus() {
         return getBoolean(STATUS);
     }
 
     public ContestSolutionModel setStatus(Boolean value) {
         return set(STATUS, value);
+    }
+
+    public Integer getSim() {
+        return get(SIM);
+    }
+
+    public ContestSolutionModel setSim(Integer val) {
+        return set(SIM, val);
+    }
+
+    public Integer getSimID() {
+        return get(SIM_ID);
+    }
+
+    public ContestSolutionModel setSimID(Integer val) {
+        return set(SIM_ID, val);
     }
 
     @Override

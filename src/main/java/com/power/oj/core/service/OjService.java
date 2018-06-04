@@ -191,6 +191,8 @@ public final class OjService {
         newResource.setDescription(resourceModel.getDescription());
         newResource.setName(resourceModel.getName());
         newResource.setPath(resourceModel.getPath());
+        newResource.setOS(resourceModel.getOS());
+        newResource.setArch(resourceModel.getArch());
         return newResource.update();
     }
 

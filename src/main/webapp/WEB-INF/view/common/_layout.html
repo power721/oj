@@ -3,7 +3,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
   <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
   <meta name="author" content="power721">
 <@block name="meta"></@block>
@@ -22,6 +22,8 @@
   <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
   <link href="assets/css/oj.css" type="text/css" rel="stylesheet">
   <link href="assets/css/oj-icons.css" type="text/css" rel="stylesheet">
+  <link href="assets/css/cprogram.css" type="text/css" rel="stylesheet">
+  <link href="assets/css/oj-style.css" type="text/css" rel="stylesheet">
 
 <@block name="styles"></@block>
   <script type="text/javascript">
@@ -34,7 +36,7 @@
 <!-- ============================== Navbar ============================== -->
 <div class="navbar navbar-fixed-top" >
   <div class="container" id="oj-top-navbar">
-    <a class="brand" href="./" style="margin-left: 20px; color:#fff">PowerOJ</a>
+    <a class="brand" href="./" style="margin-left: 20px; color:#fff; padding-top: 18px;">PowerOJ</a>
     <ul class="nav pull-right">
       <#if user?? && user.uid??>
         <#--<li>-->
@@ -43,7 +45,7 @@
           <#--src="<#if user.avatar??>${user.avatar}<#else>assets/images/user/default.png</#if>"/>-->
       <#--</li>-->
       <li class="dropdown active">
-        <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown" style="color:#fff; background-color:#0081c2; ">
+        <a href="#" class="dropdown-toggle <#if adminUser??>admin</#if>" data-toggle="dropdown" style="color:#fff; background-color:#015b4e; ">
           <i class="oj-icon oj-icon-user<#if adminUser??>-suit</#if>"></i>${user.name!"user"}<b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
@@ -60,7 +62,7 @@
           </#if>
         </ul>
       </li>
-      <li><a href="logout" style="color:#fff;"><i class="icon-off"></i>Logout</a></li>
+      <li><a href="logout" class="logout" style="color:#fff;"><i class="icon-off"></i>Logout</a></li>
       <#else>
         <li class="<#if actionKey?? && actionKey=="login">active</#if>">
         <a href="#" id="login" data-toggle="modal" data-target="#loginModal" style="color:#fff;"><i class="icon-user"></i>Login</a>
@@ -72,8 +74,8 @@
     </ul>
   </div>
 </div>
-<div class="navbar" id="oj-navbar">
-  <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>">
+<div class="navbar" id="oj-navbar" style="height: 100%; background: #fff;">
+  <div class="<#if oj_fluid_width??>container-fluid<#else>container</#if>" style="background-color:#fff">
     <ul class="nav nav-pills nav-stacked">
       <li class="<#if controllerKey?? && controllerKey=="problem">active</#if>">
       <a href="problem"><i class="icon-list"></i>Problem</a>
@@ -87,15 +89,26 @@
       <li class="<#if actionKey?? && actionKey=="rank">active</#if>">
       <a href="rank"><i class="icon-signal"></i>Ranklist</a>
       </li>
+      <li class="<#if controllerKey?? && controllerKey=="news">active</#if>">
+      <a href="news"><i class="icon-globe"></i>News</a>
+      </li>
+      <li class="<#if controllerKey?? && controllerKey=="notice">active</#if>">
+      <a href="notice"><i class="icon-exclamation-sign"></i>Notice</a>
+      </li>
       <li class="<#if controllerKey?? && controllerKey=="discuss">active</#if>">
       <a href="discuss"><i class="icon-comment"></i>Discuss</a>
       </li>
       <li class="<#if actionKey?? && actionKey=="faq">active</#if>">
       <a href="faq"><i class="icon-question-sign"></i>F.A.Q</a>
       </li>
-      <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
-      <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
+      <li class="<#if actionKey?? && actionKey=="cprogram">active</#if>">
+        <a href="cprogram"><i class="icon-pencil"></i>C Program</a>
       </li>
+      <#if isSwust?? && isSwust == true>
+        <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
+          <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
+        </li>
+      </#if>
       <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
       <a href="downloads"><i class="icon-download-alt"></i>Download</a>
       </li>
@@ -103,21 +116,22 @@
         <li>
           <a href="achievement"><i class="fa fa-trophy"></i>Achieve</a>
         </li>
+        <li style="text-align: center">
+          <img src="assets/images/infoacm.jpg" width="80px">
+          <p>信息ACM微信公众号</p>
+        </li>
       </#if>
-      <li class="<#if actionKey?? && actionKey=="cprogram">active</#if>">
-        <a href="cprogram"><i class="icon-pencil"></i>C Program</a>
-      </li>
     </ul>
   </div>
 </div>
 
-<div class="marquee">
+<div class="marquee" style="z-index:1;">
   <marquee class="hidden-phone" direction="left" behavior="scroll" scrollamount="2" style="margin-top: 45px;">
     <#-- this is required: style="margin-top: 45px;" -->
-<#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
+<#if controllerKey?? && controllerKey != "notice" && notices??>
   <ul class='marquee'>
     <#list notices as notice>
-      <li><a href="notice/show/${notice.id!}">${notice.title!}</a></li>
+      <li style="margin-top: 5px;"><a href="notice/show/${notice.id!}">${notice.title!}</a></li>
     </#list>
     </ul>
 </#if>
@@ -231,7 +245,11 @@
 <footer class="footer">
   <div class="container-fluid">
     <div class="copyright">
-      ©Copyright 2017 <a href="http://git.oschina.net/power/oj/commits/master" target="balnk">PowerOJ Rev.<#include "version.ftl"></a>
+      ©Copyright 2018
+      <#if isSwust?? && isSwust == true>
+        西南科技大学信息工程学院ACM实验室<br>
+      </#if>
+      <a href="http://git.oschina.net/power/oj/commits/master" target="balnk">PowerOJ Rev.<#include "version.ftl"></a>
     </div>
     <ul class="footer-links">
       <li><a href="https://github.com/power721/oj" target="balnk">Source</a></li>
@@ -247,20 +265,20 @@
     <label class="select">
       Select Style: <select class="input-medium" id="selstyle">
       <option value="original">Original</option>
-      <option value="amelia">Amelia</option>
-      <option value="cerulean">Cerulean</option>
-      <option value="cosmo">Cosmo</option>
-      <option value="cyborg">Cyborg</option>
-      <option value="darkening">Darkening</option>
-      <option value="flatly">Flatly</option>
+      <!--<option value="amelia">Amelia</option>-->
+      <!--<option value="cerulean">Cerulean</option>-->
+      <!--<option value="cosmo">Cosmo</option>-->
+      <!--<option value="cyborg">Cyborg</option>-->
+      <!--<option value="darkening">Darkening</option>-->
+      <!--<option value="flatly">Flatly</option>-->
       <option value="journal">Journal</option>
       <option value="metro">Metro</option>
       <option value="readable">Readable</option>
       <option value="simplex">Simplex</option>
-      <option value="slate">Slate</option>
+      <!-- <option value="slate">Slate</option> -->
       <option value="spacelab">Spacelab</option>
       <option value="spruce">Spruce</option>
-      <option value="superhero">Superhero</option>
+      <!-- <option value="superhero">Superhero</option> -->
       <option value="todc">Google</option>
       <option value="united">United</option>
     </select>

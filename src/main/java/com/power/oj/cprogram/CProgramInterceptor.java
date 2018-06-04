@@ -15,6 +15,10 @@ public class CProgramInterceptor implements Interceptor {
             ai.getController().redirect("/cprogram/signup");
             return;
         }
+        if(CProgramService.needReSignUp() && !ai.getActionKey().equals("/cprogram/resignup")) {
+            ai.getController().redirect("/cprogram/resignup");
+            return;
+        }
         if(CProgramService.isTeacher()) {
             ai.getController().setAttr(CProgramConstants.teacherUser, true);
         }

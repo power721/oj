@@ -28,7 +28,7 @@ public class AdminService {
         parase.add(CProgramService.getEndUnixTime());
         return Db.find(sql, parase.toArray());
     }
-    static List<Record> getScoreList(Integer type, Integer cid, Integer week, Integer lecture) {
+    static List<Record> getScoreList(Integer type, Integer cid, Integer week, Integer lecture, Integer tid) {
         List<Object> parase = new ArrayList<>();
         String sql = "select " +
                 "score.uid, " +
@@ -47,9 +47,15 @@ public class AdminService {
                 "where cid=? ";
         parase.add(cid);
         if(type == ContestModel.TYPE_EXPERIMENT) {
-            sql += "and score.week=? and score.lectrue=? ";
-            parase.add(week);
-            parase.add(lecture);
+            if(week != null && lecture != null) {
+                sql += "and score.week=? and score.lecture=? ";
+                parase.add(week);
+                parase.add(lecture);
+            }
+            else if(tid != -1 && tid != null){
+                sql += "and cprogram_user_info.tid=? ";
+                parase.add(tid);
+            }
         }
         sql += "and ? <= score.ctime and score.ctime <= ? ";
         parase.add(CProgramService.getStartUnixTime());
@@ -57,11 +63,17 @@ public class AdminService {
         sql += "order by cprogram_user_info.stuid";
         return Db.find(sql, parase.toArray());
     }
-    static List<Record> getAllWorkContest(Integer type, Integer week, Integer lecture) {
-        Integer uid = UserService.me().getCurrentUid();
+    static List<Record> getAllWorkContest(Integer type, Integer week, Integer lecture, Integer tid) {
+        Integer uid = tid;
         Integer startTime = CProgramService.getStartUnixTime();
         Integer endTime = CProgramService.getEndUnixTime();
         Integer workType;
+        if(type == ContestModel.TYPE_WORK) {
+            type = ContestModel.TYPE_COURSE_EXAM;
+        }
+        if(type == ContestModel.TYPE_EXPERIMENT) {
+            type = ContestModel.TYPE_EXPERIMENT_EXAM;
+        }
         if(type == ContestModel.TYPE_EXPERIMENT_EXAM) {
             workType = ContestModel.TYPE_EXPERIMENT;
         }
@@ -74,14 +86,16 @@ public class AdminService {
                 "contest " +
                 "where " +
                 "type=? " +
-                "and uid=? " +
                 "and ?<=startTime and startTime<=? ";
         parase.add(workType);
-        parase.add(uid);
         parase.add(startTime);
         parase.add(endTime);
-        if(type == ContestModel.TYPE_EXPERIMENT_EXAM) {
-            sql += "and lockBoardTime=? and unLockBoradTime=? " +
+        if(workType == ContestModel.TYPE_WORK) {
+            sql += "and uid=? ";
+            parase.add(uid);
+        }
+        if(type == ContestModel.TYPE_COURSE_EXAM) {
+            sql += "and lockBoardTime=? and unLockBoardTime=? ";
             parase.add(week);
             parase.add(lecture);
         }
@@ -90,11 +104,17 @@ public class AdminService {
         return contest;
     }
     static List<Record> getAllScoreList(Integer type, Integer week, Integer lecture,
-                                        Integer Rate, Integer workTime) {
+                                        Integer Rate, Integer workTime, Integer tid) {
         Integer uid = UserService.me().getCurrentUid();
         Integer startTime = CProgramService.getStartUnixTime();
         Integer endTime = CProgramService.getEndUnixTime();
         Integer workType;
+        if(type == ContestModel.TYPE_WORK) {
+            type = ContestModel.TYPE_COURSE_EXAM;
+        }
+        if(type == ContestModel.TYPE_EXPERIMENT) {
+            type = ContestModel.TYPE_EXPERIMENT_EXAM;
+        }
         if(type == ContestModel.TYPE_EXPERIMENT_EXAM) {
             workType = ContestModel.TYPE_EXPERIMENT;
         }
@@ -103,7 +123,9 @@ public class AdminService {
         }
         Map<Integer, Map<Integer,Integer> > userScore = new HashMap<>();
         Map<Integer, Integer> userExamScore = new HashMap<>();
-        List<Record> scoreTable = Db.find("select " +
+        String sql;
+        List<Object> parase = new ArrayList<>();
+        sql = "select " +
                 "score.uid, " +
                 "score.cid, " +
                 "score.score2, " +
@@ -111,15 +133,29 @@ public class AdminService {
                 "from score " +
                 "inner join cprogram_user_info on score.uid=cprogram_user_info.uid " +
                 "inner join contest on score.cid=contest.cid " +
-                "where cprogram_user_info.tid = ? " +
-                "and ? <= score.ctime " +
+                "where " +
+                "? <= score.ctime " +
                 "and score.ctime <= ? " +
-                "and cprogram_user_info.class_week=? " +
-                "and cprogram_user_info.class_lecture=? " +
-                "and (contest.type=? or contest.type=?) " +
-                "order by score.ctime ",
-                uid, startTime, endTime, week, lecture, type, workType);
-        List<Record> user = Db.find("select " +
+                "and (contest.type=? or contest.type=?) ";
+        parase.add(startTime);
+        parase.add(endTime);
+        parase.add(type);
+        parase.add(workType);
+
+        if(week != null && lecture != null) {
+            sql += "and cprogram_user_info.class_week=? " +
+                    "and cprogram_user_info.class_lecture=? ";
+            parase.add(week);
+            parase.add(lecture);
+        }
+        if(tid != null && tid != -1) {
+            sql += "and cprogram_user_info.tid=? ";
+            parase.add(tid);
+        }
+        List<Record> scoreTable = Db.find(sql, parase.toArray());
+
+        parase.clear();
+        sql = "select " +
                 "user.name, " +
                 "user.realName, " +
                 "user.uid, " +
@@ -128,11 +164,21 @@ public class AdminService {
                 "from user " +
                 "inner join cprogram_user_info on user.uid=cprogram_user_info.uid " +
                 "inner join score on user.uid=score.uid and ?<=score.ctime and score.ctime<=? " +
-                "where " +
-                "cprogram_user_info.tid = ? " +
-                "and cprogram_user_info.class_week = ? and cprogram_user_info.class_lecture=? " +
-                "order by cprogram_user_info.stuid ",
-                startTime, endTime, uid, week, lecture);
+                "where 1=1 ";
+        parase.add(startTime);
+        parase.add(endTime);
+        if(week != null && lecture != null) {
+            sql += "and cprogram_user_info.class_week=? " +
+                    "and cprogram_user_info.class_lecture=? ";
+            parase.add(week);
+            parase.add(lecture);
+        }
+        if(tid != null && tid != -1) {
+            sql += "and cprogram_user_info.tid=? ";
+            parase.add(tid);
+        }
+        sql += "group by user.uid order by cprogram_user_info.stuid ";
+        List<Record> user = Db.find(sql, parase.toArray());
         for(Record score: scoreTable) {
             Integer UID = score.getInt("uid");
             Integer CID = score.getInt("cid");
@@ -156,9 +202,10 @@ public class AdminService {
             }
             u.set("examScore", examScore);
             Integer sum = 0;
-            for(Integer i : userScore.get(UID).keySet()) {
-                sum += userScore.get(UID).get(i);
-            }
+            if(userScore.get(UID) != null)
+                for(Integer i : userScore.get(UID).keySet()) {
+                    sum += userScore.get(UID).get(i);
+                }
             Integer finalScore = (int)Math.round(sum * Rate / 100.0 /workTime +  examScore * (100 - Rate) / 100.0);
             u.set("finalScore", finalScore);
         }

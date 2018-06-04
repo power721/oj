@@ -1,4 +1,10 @@
 <@override name="contest_content">
+<#if adminUser??>
+  <a href="/contest/build/${cid!}" class="btn btn-info">Rebuild Board</a>
+  <#if contest.type==2 || contest.type==3 || contest.type==4>
+    <a href="#" id="info" class="btn btn-info" data-toggle="modal" data-target="#infoModal">Reslover</a>
+  </#if>
+</#if>
 <div class="pagination pagination-centered">
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
@@ -47,14 +53,15 @@
         <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
         <td data="${User.penalty!}" class="penalty"><span>${(User.penalty/60)?int!}</span></td>
         <#list contestProblems as Problem>
+          <#assign acSec=User["${Problem.id}_SolvedTime"]>
           <#assign ac=(User["${Problem.id}_SolvedTime"]/60)?int>
           <#assign wa=User["${Problem.id}_WrongNum"]>
           <#assign class="">
-          <#if ac==0 && wa!=0><#assign class="wa wa${(wa/5)?int}"></#if>
-          <#if ac!=0 && wa==0><#assign class="ac"></#if>
-          <#if ac!=0 && wa!=0><#assign class="ac ac1"></#if>
-          <#if ac!=0 && Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
-          <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (ac>0)><span>${ac}</span><#if (wa>0)>
+          <#if acSec==0 && wa!=0><#assign class="wa wa${(wa/5)?int}"></#if>
+          <#if acSec!=0 && wa==0><#assign class="ac"></#if>
+          <#if acSec!=0 && wa!=0><#assign class="ac ac1"></#if>
+          <#if acSec!=0 && Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
+          <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (acSec>0)><span>${ac}</span><#if (wa>0)>
             <br></#if></#if><#if (wa>0)>(-${wa})</#if>
           </td>
         </#list>
@@ -64,10 +71,65 @@
   </tbody>
 </table>
 
-<div class="pagination pagination-centered">
+<div class="pagination pagination-centered" id="contest-pagination">
   <#include "../common/_paginate2.html" />
   <@paginate2 currentPage=contestRank.pageNumber totalPage=contestRank.totalPage actionUrl="contest/rank/${cid!}" />
 </div>
+
+<div class="modal hide fade infoModal" id="infoModal">
+  <form class="form-horizontal" action="contest/info/${cid!}" id="signupForm" method="post">
+    <div class="modal-header">
+      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+      <h3 id="signupModalLabel">
+        Download Resolver XML File
+      </h3>
+    </div>
+    <div class="modal-body">
+      <div class="control-group">
+        <label class="control-label" for="inputGrand"> Grand Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputGrand" name="grand" placeholder="Grand Medal" required value="1">
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputFirst"> First Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputFirst" name="first" placeholder="First Medal" required value="2">
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputSecond"> Second Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputSecond" name="second" placeholder="Second Medal" required value="5">
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputThird"> Third Medal </label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="fa fa-trophy"></i> </span>
+            <input type="number" id="inputThird" name="third" placeholder="Third Medal" required value="10">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span id="infoMsg"></span>
+      <button type="submit" class="btn btn-primary">Download</button>
+      <button class="btn" data-dismiss="modal">Cancel</button>
+    </div>
+  </form>
+</div>
+
 </@override>
 
 <@override name="styles">

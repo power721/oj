@@ -8,6 +8,7 @@ import com.jfinal.plugin.ehcache.CacheKit;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.core.bean.Solution;
+import com.power.oj.cprogram.CProgramService;
 import com.power.oj.judge.JudgeService;
 import com.power.oj.judge.RejudgeType;
 import com.power.oj.solution.SolutionModel;
@@ -49,7 +50,7 @@ public final class ProblemService {
             problemModel = dao.findFirstByCache("problem", pid, "SELECT * FROM problem WHERE pid=?", pid);
         }
 
-        if (userService.isAdmin()) {
+        if (userService.isAdmin() || CProgramService.isTeacher()) {
             return problemModel;
         } else if (problemModel != null && problemModel.getStatus()) {
             return problemModel;
@@ -117,11 +118,15 @@ public final class ProblemService {
     
     public ProblemModel findProblemForContest(Integer pid, Integer cid) {
     	ProblemModel problemModel;
+    	/*
     	if (OjConfig.isDevMode()) {
             problemModel = dao.findById(pid);
         } else {
-            problemModel = dao.findFirst("SELECT * FROM contest_problem WHERE pid=? AND cid = ?", pid, cid);
+        */
+    	problemModel = dao.findFirst("SELECT * FROM contest_problem WHERE pid=? AND cid = ?", pid, cid);
+        /*
         }
+        */
     	return problemModel;
     }
     
@@ -259,7 +264,7 @@ public final class ProblemService {
         String sql =
             "SELECT pid,title,source,accepted,submission,FROM_UNIXTIME(ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,status";
         StringBuilder sb = new StringBuilder().append("FROM problem");
-        if (!userService.isAdmin())
+        if (!userService.isAdmin() && !CProgramService.isTeacher())
             sb.append(" WHERE status=1");
         sb.append(" ORDER BY pid");
 

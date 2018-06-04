@@ -1,42 +1,4 @@
 <@override name="content">
-<div class="cxboard">
-  <a href="notice"><h3 class="title">Notice公告</h3></a>
-  <ul class="entry">
-    <#if noticeList?? && (noticeList.list.size()>0) >
-      <#list noticeList.list as notice>
-        <li>
-          <a href="notice/show/${notice.id!}">${notice.title!}</a>
-        </li>
-        <#if (notice_index > 3)><#break></#if>
-      </#list>
-    </#if>
-  </ul>
-
-  <#if pendingContests?? && (pendingContests.list.size()>0) >
-    <a href="contest?status=0"><h3 class="title">Contest比賽預告</h3></a>
-  <ul class="entry">
-      <#list pendingContests.list as Contest>
-        <li>
-          <a href="contest/show/${Contest.cid!}">${Contest.title!} -- ${Contest.startDateTime!}</a>
-        </li>
-        <#if (Contest_index > 3)><#break></#if>
-      </#list>
-  </ul>
-  </#if>
-
-  <#if contestList?? && (contestList.list.size()>0) >
-    <a href="contest?status=1"><h3 class="title">Current Contests</h3></a>
-  <ul class="entry">
-      <#list contestList.list as Contest>
-        <li>
-          <a href="contest/show/${Contest.cid!}" class="red">${Contest.title!}</a>
-        </li>
-        <#if (Contest_index > 3)><#break></#if>
-      </#list>
-  </ul>
-  </#if>
-
-</div>
 
   <#if newsList?? && (newsList.list.size() > 0) >
   <div class="flexslider">
@@ -44,29 +6,37 @@
       <#list newsList.list as news>
         <li>
           <div class="titlepimg">${news.title!}</div>
-          <img src="${news.image}"/>
-        </li> </#list>
+          <a href="news/show/${news.id}">
+            <img src="${news.image}" />
+          </a>
+        </li>
+      </#list>
     </ul>
   </div>
   </#if>
 
-  <#if newsList?? && (newsList.list.size() > 0) >
-    <#list newsList.list as news>
-    <div class="news">
-      <a href="news/show/${news.id}"><h3 class="title">${news.title!}</h3></a>
-      <p style="text-align: right;position:relative;top:-10px">
-        On <span class="timestamp" data="${news.time!}"></span> By <span
-              class="author">${news.author!}</span>
-      </p>
-      <p class="entry"><#if (news.content?length &gt; 34) >${news.content?substring(0,34)}
-        ...<#else>${news.content}</#if></p>
-    </div>
+  <#if newsAndNotimeList??>
+    <#list newsAndNotimeList as news>
+      <div class="news">
+        <#if news.uid??>
+          <a href="notice/show/${news.id}">
+        <#else>
+          <a href="news/show/${news.id}">
+        </#if>
+
+          <h3 class="title">
+            ${news.title!}
+          </h3>
+        </a>
+        <p style="text-align: right;position:relative;top:-10px">
+          On <span class="timestamp" data="${news.time!}"></span> By <span
+                class="author">${news.author!}</span>
+        </p>
+        <p class="entry"><#if (!(news.uid??) && news.content?length &gt; 34) >${news.content?substring(0,34)}
+          ...<#else>${news.content}</#if></p>
+      </div>
     </#list>
 
-  <div class="pagination pagination-centered" style="float:left;margin-left:-36%; margin-top: 170px;">
-    <#include "../common/_paginate.html" />
-	<@paginate currentPage=newsList.pageNumber totalPage=newsList.totalPage actionUrl="news/" />
-  </div>
   </#if>
 
 
