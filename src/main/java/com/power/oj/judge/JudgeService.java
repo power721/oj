@@ -18,16 +18,10 @@ import jodd.io.FileNameUtil;
 import jodd.io.FileUtil;
 import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFilePermission;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -46,13 +40,13 @@ public final class JudgeService {
     private static final ExecutorService rejudgeExecutor = Executors.newSingleThreadExecutor();
     // TODO: store task in redis with expire time
     private static final Cache<String, RejudgeTask> rejudgeTasks =
-        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+            CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
     // TODO: store token in redis with expire time
     private static final Cache<Integer, String> tokens =
-        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+            CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
     // TODO: store originalResult in redis with expire time
     private static final Cache<Integer, Integer> originalResult =
-        CacheBuilder.newBuilder().expireAfterWrite(3, TimeUnit.MINUTES).build();
+            CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
 
     static {
         FILE_PERMISSIONS.add(PosixFilePermission.OWNER_READ);
@@ -85,7 +79,8 @@ public final class JudgeService {
     }
 
     public boolean verifyToken(Integer sid, String token) {
-        if (token != null && token.equals(tokens.getIfPresent(sid))) {
+        String serverToken = tokens.getIfPresent(sid);
+        if (token != null && token.equals(serverToken)) {
             tokens.invalidate(sid);
             return true;
         }
@@ -98,13 +93,13 @@ public final class JudgeService {
         return value;
     }
 
-    public void judge(Solution solution) {
+    public void judge(Solution solution, boolean style) {
         if (solution instanceof SolutionModel) {
             problemService.incSubmission(solution.getPid());
             userService.incSubmission(solution.getUid());
         }
 
-        startJudgeThread(solution, false);
+        startJudgeThread(solution, false, style);
     }
 
     public void rejudge(Solution solution, boolean deleteTempDir) {
@@ -116,21 +111,99 @@ public final class JudgeService {
         solution.setMemory(0).setTime(0).setError(null).setSystemError(null);
         solution.update();
 
-        startJudgeThread(solution, deleteTempDir);
+        startJudgeThread(solution, deleteTempDir, false);
     }
 
-    private void startJudgeThread(Solution solution, boolean deleteTempDir) {
-        synchronized (JudgeAdapter.class) {
-            JudgeAdapter judgeThread;
-            if (OjConfig.isLinux()) {
-                if (OjConfig.judgeVersion != null && OjConfig.judgeVersion.startsWith("v2.")) {
-                    judgeThread = new PowerJudgeV2Adapter(solution);
-                } else {
-                    judgeThread = new PowerJudgeAdapter(solution);
-                }
-            } else {
-                judgeThread = new PojJudgeAdapter(solution);
+    private void formatCode(Solution solution) {
+        String cmd = OjConfig.astylePath;
+        File astyle = new File(cmd);
+        if (astyle.exists() && astyle.canExecute()) {
+            String language = OjConfig.languageName.get(solution.getLanguage()).toLowerCase();
+            if(!language.contains("gcc") && !language.contains("g++") && !language.contains("java")) {
+                return ;
             }
+            cmd += " -p -xe -U -f -n -k1 -W3 -xb ";
+            if (language.contains("java"))
+                cmd += "-A2 ";
+            else
+                cmd += "-A1 ";
+            String filename = OjConfig.uploadPath + "/" + UUID.randomUUID().toString();
+
+            if (language.contains("gcc"))
+                filename += ".c";
+            else if (language.contains("g++"))
+                filename += ".cpp";
+            else if (language.contains("java"))
+                filename += ".java";
+            try {
+                File code = new File(filename);
+                code.createNewFile();
+                PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(code)));
+                writer.print(solution.getSource());
+                writer.close();
+            } catch (FileNotFoundException e) {
+                log.error(e.toString());
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            cmd += filename;
+
+            try {
+                Process process = Runtime.getRuntime().exec(cmd);
+                Integer exitValue = process.waitFor();
+                if (exitValue != 0) {
+                    log.error("exec astyle fail");
+                    return;
+                }
+            } catch (InterruptedException e) {
+                log.error(e.toString());
+            } catch (IOException e) {
+                log.error(e.toString());
+            }
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(filename));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                solution.setSource(sb.toString());
+                solution.setCodeLen(sb.length());
+                reader.close();
+            } catch (FileNotFoundException e) {
+                log.error(e.toString());
+            } catch (IOException e) {
+                log.error(e.toString());
+            }
+            try {
+                File code = new File(filename);
+                code.delete();
+            } catch (Exception ex) {
+                log.error("can't delete source code file");
+            }
+        } else {
+            log.warn("can't exec astyle");
+        }
+    }
+
+    private void startJudgeThread(Solution solution, boolean deleteTempDir, boolean style) {
+        synchronized (JudgeAdapter.class) {
+            if (style) {
+                formatCode(solution);
+            }
+            JudgeAdapter judgeThread;
+            if (OjConfig.judgeVersion != null && OjConfig.judgeVersion.startsWith("v2.")) {
+                judgeThread = new PowerJudgeV2Adapter(solution);
+            } else {
+                if (OjConfig.isLinux()) {
+                    judgeThread = new PowerJudgeAdapter(solution);
+                } else {
+                    judgeThread = new PojJudgeAdapter(solution);
+                }
+            }
+
             RejudgeTask task;
             if (solution.isContest()) {
                 task = new RejudgeTask(solution.getCid(), solution.getSid(), RejudgeType.SOLUTION);
@@ -230,7 +303,7 @@ public final class JudgeService {
                 rejudgeTasks.invalidate(task.getKey());
             }
             log.info("Rejudge problem " + pid + " finished, total judge: " + task.getTotal() + " total time: " + (
-                System.currentTimeMillis() - startTime) + " ms");
+                    System.currentTimeMillis() - startTime) + " ms");
         });
         rejudgeExecutor.execute(rejudgeThread);
         return true;
@@ -285,7 +358,7 @@ public final class JudgeService {
             }
             try {
                 List<ContestSolutionModel> solutions =
-                    Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
+                        Collections.synchronizedList(solutionService.getSolutionListForContest(cid));
                 task.setTotal(solutions.size());
                 synchronized (solutions) {
                     for (ContestSolutionModel solution : solutions) {
@@ -299,8 +372,8 @@ public final class JudgeService {
                 rejudgeTasks.invalidate(task.getKey());
             }
             log.info(
-                "Rejudge contest contest " + cid + " finished, total judge: " + task.getTotal() + " total time: " + (
-                    System.currentTimeMillis() - startTime) + " ms");
+                    "Rejudge contest contest " + cid + " finished, total judge: " + task.getTotal() + " total time: " + (
+                            System.currentTimeMillis() - startTime) + " ms");
         });
         rejudgeExecutor.execute(rejudgeThread);
         return true;
@@ -336,7 +409,7 @@ public final class JudgeService {
                 rejudgeTasks.invalidate(task.getKey());
             }
             log.info("Rejudge contest problem " + cid + "-" + pid + " finished, total judge: " + task.getTotal()
-                + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
+                    + " total time: " + (System.currentTimeMillis() - startTime) + " ms");
         });
 
         rejudgeExecutor.execute(rejudgeThread);
@@ -363,7 +436,7 @@ public final class JudgeService {
                 continue;
             }
             File outFile = new File(dataDir.getAbsolutePath() + File.separator + inFile.getName()
-                .substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length()) + OjConstants.DATA_EXT_OUT);
+                    .substring(0, inFile.getName().length() - OjConstants.DATA_EXT_IN.length()) + OjConstants.DATA_EXT_OUT);
             if (!outFile.isFile()) {
                 log.warn(Printf.str("Output file for input file does not exist: %s", inFile.getAbsolutePath()));
                 continue;
@@ -377,7 +450,7 @@ public final class JudgeService {
 
     public String getWorkPath(Integer cid) {
         return FileNameUtil.normalizeNoEndSeparator(OjConfig.getString("workPath")) + File.separator + "c" + cid
-            + File.separator;
+                + File.separator;
     }
 
     public String getWorkPath(Solution solution) {

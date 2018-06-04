@@ -12,10 +12,10 @@ public interface CProgramConstants {
     final Map<Integer, String> weeks = new HashMap<>();
     final Map<Integer, String> lecture = new HashMap<>();
 
-    final int startTimeHour[] = {8,9,14,15,18,19};
-    final int startTimeMin[] = {0,55,0,55,0,50};
-    final int endTimeHour[] = {9,12,15,17,19,21};
-    final int endTimeMin[] = {35,20,35,30,35,25};
+    final int startTimeHour[] = {8, 10,14,16,19};
+    final int startTimeMin[] =  {0,  0, 0, 0, 0};
+    final int endTimeHour[] =   {9, 11,15,17,20};
+    final int endTimeMin[] =    {40,40,40,40,40};
 
     final int oneWeek = 7 * 24 * 3600 * 1000;
     final int twoHours = 2 * 3600 * 1000;

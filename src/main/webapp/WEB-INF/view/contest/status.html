@@ -46,7 +46,7 @@
   </div>
 </div>
 
-<table id="status" class="table table-hover table-condensed">
+<table id="status" class="table table-stats table-hover table-condensed">
   <thead>
   <tr>
     <th>Run ID</th>
@@ -191,7 +191,7 @@
 
     var refresh = setInterval(function () {
       refreshResult();
-    }, 1500);
+    }, 250);
     setTimeout(function () {
       clearInterval(refresh);
     }, 20010);
@@ -207,8 +207,14 @@
           }
           if (data.result.name != id) {
             $this.attr('id', data.result.name);
-            $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
+            if(data.test == 0) {
+                $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
                     + data.sid + '">' + data.result.longName + img + '</i>');
+            } else {
+                $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
+                    + data.sid + '">' + data.result.longName + ' on test ' + data.test + img + '</i>');
+            }
+
             if (data.result.name == 'AC') {
               $this.siblings('.time').html(data.time + ' MS');
               $this.siblings('.memory').html(data.memory + ' KB');

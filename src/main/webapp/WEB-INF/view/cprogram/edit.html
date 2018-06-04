@@ -19,7 +19,7 @@
       </#if>
     </label>
     <div class="controls">
-      <textarea id="inputTitle" name="contest.title" rows="1" cols="40" required>${contest.title!}</textarea>
+      <textarea id="inputTitle" name="contest.title" rows="1" required style="width: 246px">${contest.title!}</textarea>
       <p class="text-error">${titleMsg!}</p>
     </div>
   </div>
@@ -50,14 +50,14 @@
       </label>
       <div class="controls">
         <div class="input-prepend">
-          <select name = "contest.lockBoardTime" id = "class_week" style="width: 124px">
+          <select name = "contest.lockBoardTime" id = "class_week">
             <#if weeks??>
               <#list weeks.keySet() as week>
                 <option value="${week!}" <#if week == contest.lockBoardTime>selected = "selected"</#if> >${weeks.get(week!)}</option>
               </#list>
             </#if>
           </select>
-          <select name = "contest.unlockBoardTime" id = "class_lecture" style="width: 124px">
+          <select name = "contest.unlockBoardTime" id = "class_lecture">
             <#if lectures??>
               <#list lectures.keySet() as lecture>
                 <option value="${lecture!}" <#if lecture == contest.unlockBoardTime>selected = "selected"</#if> >${lectures.get(lecture!)}</option>
@@ -86,7 +86,7 @@
   <div class="control-group">
     <div class="controls">
       <button type="submit" id="submitContest" class="btn btn-primary">提交</button>
-      <button type="reset" class="btn btn-info">重置</button>
+      <button type="reset" class="btn btn-info" style="width: 110px;">重置</button>
     </div>
   </div>
 </form>
@@ -120,7 +120,7 @@
     }).on('changeDate', function (ev) {
         var time = ev.date.valueOf();
         var date = formatDate(new Date(time + 3600000));
-        <#if contest.type?? && contest.type == 5>
+        <#if contest.type?? && contest.type <= 6>
         var endDate = formatDate(new Date(time + 7*24*3600*1000));
         <#else>
         var endDate = formatDate(new Date(time + 2*3600*1000));

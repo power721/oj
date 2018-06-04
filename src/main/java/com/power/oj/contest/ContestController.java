@@ -89,7 +89,7 @@ public class ContestController extends OjController {
         ProblemModel problemModel = contestService.getProblem4Show(cid, num, status);
         if (problemModel == null) {
             FlashMessage msg =
-                new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
             redirect("/contest/show/" + cid, msg);
             return;
         }
@@ -142,7 +142,7 @@ public class ContestController extends OjController {
 
         if (contestService.isContestFinished(cid)) {
             FlashMessage msg =
-                new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
+                    new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
             redirect("/contest/show/" + cid, msg);
             return;
         }
@@ -150,7 +150,7 @@ public class ContestController extends OjController {
         ProblemModel problemModel = contestService.getProblem(cid, num);
         if (problemModel == null) {
             FlashMessage msg =
-                new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
             redirect("/contest/show/" + cid, msg);
             return;
         }
@@ -173,6 +173,7 @@ public class ContestController extends OjController {
     @Before(POST.class)
     public void submitSolution() {
         ContestSolutionModel contestSolution = getModel(ContestSolutionModel.class, "solution");
+        Boolean style = getParaToBoolean("style", false);
         Integer cid = contestSolution.getCid();
         String name = userService.getCurrentUserName();
         String url = "/contest/status/" + cid + "?name=" + name;
@@ -181,20 +182,20 @@ public class ContestController extends OjController {
             String[] languages = StringUtils.split(contestModle.getLanguages(), ",");
             if (!ArraysUtil.contains(languages, String.valueOf(contestSolution.getLanguage()))) {
                 setFlashMessage(
-                    new FlashMessage("invalid language", MessageType.ERROR, getText("message.error.title")));
+                        new FlashMessage("invalid language", MessageType.ERROR, getText("message.error.title")));
                 redirect(url);
                 return;
             }
         }
 
-        int result = contestService.submitSolution(contestSolution);
+        int result = contestService.submitSolution(contestSolution, style);
 
         if (result == -1) {
             setFlashMessage(
-                new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));
+                    new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));
         } else if (result == -2) {
             setFlashMessage(
-                new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
+                    new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
         }
 
         redirect(url);
@@ -215,6 +216,8 @@ public class ContestController extends OjController {
         setTitle(getText("contest.rank.title") + cid);
     }
 
+    @Before(POST.class)
+    @RequiresPermissions("contest:edit")
     public void info() {
         Integer cid = getParaToInt(0);
         int grand = getParaToInt("grand", 1);
@@ -249,7 +252,7 @@ public class ContestController extends OjController {
         String userName = getPara("name");
         ContestModel contestModel = contestService.getContest(cid);
         if (!userService.isAdmin() && contestModel.getType() > ContestModel.TYPE_PASSWORD
-            && contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
+                && contestModel.getStartTime() <= OjConfig.timeStamp && contestModel.getEndTime() >= OjConfig.timeStamp) {
             userName = userService.getCurrentUserName();
         }
         StringBuilder query = new StringBuilder().append("?cid=").append(cid);
@@ -270,7 +273,7 @@ public class ContestController extends OjController {
         // setAttr("contest", contestService.getContestById(cid));
         setAttr("contestProblems", contestService.getContestProblems(cid, 0));
         setAttr("solutionList",
-            solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
+                solutionService.getPageForContest(pageNumber, pageSize, result, language, cid, num, userName));
         setAttr(OjConstants.PROGRAM_LANGUAGES, contestService.getLanguages(cid));
         setAttr(OjConstants.JUDGE_RESULT, OjConfig.judgeResult);
         setAttr("result", result);
@@ -291,7 +294,7 @@ public class ContestController extends OjController {
 
         if (problemModel == null) {
             FlashMessage msg =
-                new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
             redirect("/contest/show/" + cid, msg);
             return;
         }
@@ -319,7 +322,7 @@ public class ContestController extends OjController {
             String error = solutionModel.getError();
             if (error != null) {
                 solutionModel
-                    .set("error", error.replace(StringUtil.replace(OjConfig.getString("workPath"), "\\", "\\\\"), ""));
+                        .set("error", error.replace(StringUtil.replace(OjConfig.getString("workPath"), "\\", "\\\\"), ""));
                 // TODO replace "/"
             }
         }
@@ -345,10 +348,13 @@ public class ContestController extends OjController {
         setAttr("resultName", resultType.getName());
         setAttr("solution", solutionModel);
 
+        if (isAdmin) {
+            setAttr("inputData", solutionService.getInput(solutionModel.getPid(), solutionModel.getTest()));
+        }
         String brush = getAttrForStr("language").toLowerCase();
-        if(brush.contains("g++") || brush.contains("gcc")) brush = "cpp";
-        if(brush.contains("python")) brush = "python";
-        if(brush.contains("kotlin") || brush.contains("java")) brush = "java";
+        if (brush.contains("g++") || brush.contains("gcc")) brush = "cpp";
+        if (brush.contains("python")) brush = "python";
+        if (brush.contains("kotlin") || brush.contains("java")) brush = "java";
         setAttr("brush", brush);
 
         setTitle(getText("solution.show.title"));
@@ -418,7 +424,7 @@ public class ContestController extends OjController {
         String password = getPara("password");
 
         if (contestService.checkContestPassword(cid, password)) {
-            String tokenName = "cid-" + cid;
+            String tokenName = "cid-" + String.format("%04d", cid);
             String tokenToken = CryptUtils.encrypt(password, tokenName);
             setSessionAttr(tokenName, tokenToken);
             redirect(SessionService.me().getLastAccessURL());
@@ -429,7 +435,7 @@ public class ContestController extends OjController {
         keepPara("title");
 
         FlashMessage msg =
-            new FlashMessage(getText("contest.password.error"), MessageType.ERROR, getText("message.error.title"));
+                new FlashMessage(getText("contest.password.error"), MessageType.ERROR, getText("message.error.title"));
         redirect(SessionService.me().getLastAccessURL(), msg);
     }
 
@@ -612,7 +618,7 @@ public class ContestController extends OjController {
         Integer cid = getParaToInt(0);
         if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
             redirect("/contest/show/" + cid,
-                new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
+                    new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
             return;
         }
 
@@ -622,8 +628,8 @@ public class ContestController extends OjController {
             msg = new FlashMessage("Server accept your request.");
         } else {
             msg =
-                new FlashMessage("Server reject your request since rejudge this contest is ongoing.", MessageType.ERROR,
-                    "Rejudge Error");
+                    new FlashMessage("Server reject your request since rejudge this contest is ongoing.", MessageType.ERROR,
+                            "Rejudge Error");
         }
 
         redirect("/contest/show/" + cid, msg);
@@ -636,7 +642,7 @@ public class ContestController extends OjController {
         char id = getPara(1, "A").toUpperCase().charAt(0);
         if (contestService.getContestStatus(cid) == ContestModel.PENDING) {
             redirect("/contest/problem/" + cid + "-" + id,
-                new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
+                    new FlashMessage("This contest not start yet!", MessageType.ERROR, "Rejudge Contest Error"));
             return;
         }
 
@@ -645,7 +651,7 @@ public class ContestController extends OjController {
 
         if (problemModel == null) {
             FlashMessage msg =
-                new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
             redirect("/contest/show/" + cid, msg);
             return;
         }
@@ -656,7 +662,7 @@ public class ContestController extends OjController {
             msg = new FlashMessage("Server accept your request.");
         } else {
             msg = new FlashMessage("Server reject your request since rejudge this contest or problem is ongoing.",
-                MessageType.ERROR, "Rejudge Error");
+                    MessageType.ERROR, "Rejudge Error");
         }
 
         redirect("/contest/problem/" + cid + "-" + id, msg);
@@ -699,8 +705,8 @@ public class ContestController extends OjController {
             redirect("/contest/admin/" + cid);
         } else {
             redirect("/contest/admin/" + cid,
-                new FlashMessage("Cannot unlock board before contest finished!", MessageType.ERROR,
-                    "Unlock Board Error"));
+                    new FlashMessage("Cannot unlock board before contest finished!", MessageType.ERROR,
+                            "Unlock Board Error"));
         }
     }
 
@@ -721,9 +727,33 @@ public class ContestController extends OjController {
             redirect("/contest/admin/" + cid);
         } else {
             redirect("/contest/admin/" + cid,
-                new FlashMessage("Cannot unlock report before contest finished!", MessageType.ERROR,
-                    "Unlock Report Error"));
+                    new FlashMessage("Cannot unlock report before contest finished!", MessageType.ERROR,
+                            "Unlock Report Error"));
         }
+    }
+
+    @RequiresAuthentication
+    @RequiresPermissions("contest:edit")
+    public void balloon() {
+        Integer cid = getParaToInt(0);
+        List<ContestSolutionModel> list = contestService.getBallonSendList(cid);
+        setAttr("solutionList", list);
+    }
+
+    @RequiresAuthentication
+    @RequiresPermissions("contest:edit")
+    public void sendBalloon() {
+        Integer cid = getParaToInt(0);
+        Integer sid = getParaToInt(1);
+        ContestSolutionModel solution = solutionService.findContestSolution(sid);
+        if (solution.getBalloon()) {
+            setFlashMessage(new FlashMessage("Have Sent " + sid + "!", MessageType.ERROR, "No"));
+        } else {
+            solution.setBalloon(Boolean.TRUE);
+            solution.update();
+            setFlashMessage(new FlashMessage("Send " + sid + " OK", MessageType.SUCCESS, "Suceess"));
+        }
+        redirect("/contest/balloon/" + cid);
     }
 
 }

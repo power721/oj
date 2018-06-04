@@ -482,6 +482,9 @@ INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `ex
 INSERT INTO `oj`.`role` (`id`, `name`, `description`, `status`) VALUES ('4', 'teacher', 'teacher', '1');
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('15', '4', '77');
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('16', '4', '175');
+INSERT INTO `oj`.`permission` (`id`, `module`, `type`, `name`, `title`, `parentID`, `status`) VALUES ('175', 'user', '1', 'teacher', '教师权限', '0', '1');
+insert into role_permission values(17,4,119);
+insert into role_permission values(18,4,122);
 -- ----------------------------
 -- Table structure for cprogram_password
 -- ----------------------------
@@ -492,7 +495,7 @@ CREATE TABLE `cprogram_password` (
   `password` varchar(255) DEFAULT NULL,
   `uid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=153 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Table structure for cprogram_user_info
 -- ----------------------------
@@ -504,6 +507,7 @@ CREATE TABLE `cprogram_user_info` (
   `tid` int(11) DEFAULT NULL,
   `class_week` int(11) DEFAULT NULL,
   `class_lecture` int(11) DEFAULT NULL,
+  `ctime` int(11) DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- ----------------------------
@@ -522,4 +526,31 @@ CREATE TABLE `score` (
   `week` int(11) NOT NULL DEFAULT '0',
   `lecture` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`rid`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+#2017-12-14
+ALTER TABLE `contest_solution`
+  ADD COLUMN `balloon`  tinyint(1) NOT NULL DEFAULT 0 AFTER `systemError`;
+
+#2017-12-23
+insert into variable (name,stringValue) values('astylePath','/usr/local/bin/astyle');
+
+#2017-12-24
+ALTER TABLE `oj`.`solution`
+ADD COLUMN `wrong` text NULL AFTER `test`;
+ALTER TABLE `oj`.`contest_solution`
+ADD COLUMN `wrong` text NULL AFTER `test`;
+
+#2017-12-27
+ALTER TABLE `oj`.`contest_problem`
+  ADD COLUMN `maxSim` int(3) NOT NULL DEFAULT 100 AFTER `firstBloodTime`;
+
+ALTER TABLE `oj`.`contest_solution`
+  ADD COLUMN `sim` int(3) NOT NULL DEFAULT 0 AFTER `systemError`,
+  ADD COLUMN `sim_id` int(9) NOT NULL DEFAULT 0 AFTER `sim`;
+
+#2017-02-21
+ALTER TABLE `resource`
+  ADD COLUMN `os`  varchar(255) NULL DEFAULT 'Windows' AFTER `description`,
+  ADD COLUMN `arch`  varchar(255) NULL DEFAULT 'x64' AFTER `os`;
+

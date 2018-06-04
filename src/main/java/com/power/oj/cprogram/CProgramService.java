@@ -78,6 +78,8 @@ public final class CProgramService {
                 " and sid = " + sid +
                 " and contest_solution.status = 1";
         ContestSolutionModel solution = ContestSolutionModel.dao.findFirst(sql);
+        if(solution == null)
+            return null;
         solution.put("alpha", (char)(solution.getNum() + 'A'));
         return solution;
     }
@@ -86,6 +88,7 @@ public final class CProgramService {
         String sql = "select score.*, " +
                 "cprogram_user_info.stuid, " +
                 "cprogram_user_info.class as Class, " +
+                "cprogram_user_info.tid, " +
                 "user.name, " +
                 "user.realName " +
                 "from score " +
@@ -97,7 +100,7 @@ public final class CProgramService {
             sql += "and score.uid = ? ";
             parase.add(UserService.me().getCurrentUid());
         }
-        else if(type != ContestModel.TYPE_WORK && !ShiroKit.hasPermission("root")) {
+        else if(type == ContestModel.TYPE_EXPERIMENT && !ShiroKit.hasPermission("root")) {
             sql += "and score.week = ? and score.lecture = ? ";
             int week = CProgramService.getWeek(OjConfig.timeStamp);
             int lecture = CProgramService.getLecture(OjConfig.timeStamp);
@@ -106,6 +109,7 @@ public final class CProgramService {
             parase.add(lecture);
         }
         sql += " ORDER BY cprogram_user_info.stuid ";
+
         return Db.find(sql, parase.toArray());
     }
 
@@ -127,12 +131,16 @@ public final class CProgramService {
             score.set("cid", cid);
             score.set("uid", uid);
             score.set("submited", 1);
+            score.set("ctime", OjConfig.timeStamp);
+            score.set("week", getWeek(OjConfig.timeStamp));
+            score.set("lecture", getLecture(OjConfig.timeStamp));
+            score.set("accepted", 0);
+            score.set("score1", 0);
+            score.set("score2", 0);
             if(result == ResultType.AC) {
                 score.set("accepted", 1);
                 score.set("score1", preScore);
                 score.set("score2", preScore);
-                score.set("week", getWeek(OjConfig.timeStamp));
-                score.set("lecture", getLecture(OjConfig.timeStamp));
             }
             Db.save("score","rid", score);
         }
@@ -141,6 +149,9 @@ public final class CProgramService {
             if(result== ResultType.AC && getSolutionResult(sid) != ResultType.AC) {
                 score.set("accepted", score.getInt("accepted") + 1);
                 Integer newScore = score.getInt("score1") + preScore;
+                if(score.getInt("accepted").equals(totProblem)) {
+                    newScore = 100;
+                }
                 if(newScore > 100) newScore = 100;
                 score.set("score1", newScore);
                 score.set("score2", newScore);
@@ -226,6 +237,29 @@ public final class CProgramService {
         }
         return 0;
     }
+    public static int getStartUnixTime(int ctime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date(ctime * 1000L));
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if(2 - 1 <= calendar.get(Calendar.MONTH) && calendar.get(Calendar.MONTH) <= 7 - 1) {
+            calendar.set(Calendar.MONTH, 2 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, 1);
+        }
+        else {
+            if(calendar.get(Calendar.MONTH) < 2 - 1) {
+                int year = calendar.get(Calendar.YEAR);
+                year--;
+                calendar.set(Calendar.YEAR, year);
+            }
+            calendar.set(Calendar.MONTH, 8 - 1);
+            calendar.set(Calendar.DAY_OF_MONTH,1);
+        }
+        return (int)(calendar.getTime().getTime() / 1000);
+    }
     public static int getStartUnixTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(OjConfig.timeStamp * 1000L));
@@ -239,6 +273,11 @@ public final class CProgramService {
             calendar.set(Calendar.DAY_OF_MONTH, 1);
         }
         else {
+            if(calendar.get(Calendar.MONTH) < 2 - 1) {
+                int year = calendar.get(Calendar.YEAR);
+                year--;
+                calendar.set(Calendar.YEAR, year);
+            }
             calendar.set(Calendar.MONTH, 8 - 1);
             calendar.set(Calendar.DAY_OF_MONTH,1);
         }
@@ -264,5 +303,20 @@ public final class CProgramService {
             calendar.set(Calendar.DAY_OF_MONTH, 31 - 1);
         }
         return (int)(calendar.getTime().getTime() / 1000);
+    }
+    public static Boolean needReSignUp() {
+        if(isTeacher()) return false;
+        if(isRegister()) {
+            Integer ctime = Db.queryInt("select ctime from cprogram_user_info where uid=?", UserService.me().getCurrentUid());
+            if(getStartUnixTime() != getStartUnixTime(ctime)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static String getStuID() {
+        Integer uid = UserService.me().getCurrentUid();
+        String stdID = Db.queryStr("select stuid from cprogram_user_info where uid=?", uid);
+        return stdID;
     }
 }

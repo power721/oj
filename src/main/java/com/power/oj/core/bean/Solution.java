@@ -47,6 +47,10 @@ public interface Solution {
 
     public Solution setCodeLen(Integer value);
 
+    public Solution setWrong(String value);
+
+    public String getWrong();
+
     public String getError();
 
     public Solution setError(String value);

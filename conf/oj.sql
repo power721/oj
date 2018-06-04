@@ -202,6 +202,7 @@ CREATE TABLE `contest_problem` (
   `submission` int(5) NOT NULL DEFAULT '0',
   `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
   `firstBloodTime` int(9) NOT NULL DEFAULT '-1' COMMENT 'first time(minutes) solved this problem',
+  `maxSim` int(3) NOT NULL DEFAULT 100,
   PRIMARY KEY (`id`),
   UNIQUE KEY `contest_problem_cid_pid_pk` (`cid`,`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -227,10 +228,14 @@ CREATE TABLE `contest_solution` (
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `test` int(9) NOT NULL DEFAULT '0',
+  `wrong` text,
   `error` text,
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
   `systemError` text,
+  `sim` int(3) NOT NULL DEFAULT 0,
+  `sim_id` int(9) NOT NULL DEFAULT 0,
+  `balloon` tinyint(1) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`sid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -617,6 +622,8 @@ CREATE TABLE `resource` (
   `uid` int(9) NOT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
+  `os`  varchar(255) NULL DEFAULT 'Windows',
+  `arch`  varchar(255) NULL DEFAULT 'x64',
   `path` text NOT NULL,
   `ctime` int(11) NOT NULL,
   `download` int(9) DEFAULT '0',
@@ -699,6 +706,7 @@ CREATE TABLE `solution` (
   `ctime` int(11) NOT NULL,
   `mtime` int(11) NOT NULL,
   `test` int(9) NOT NULL DEFAULT '0',
+  `wrong` text,
   `error` text,
   `source` text NOT NULL,
   `codeLen` int(9) NOT NULL DEFAULT '0',
@@ -1070,7 +1078,7 @@ INSERT INTO `category` VALUES (31,0,'Geometry','几何');
 INSERT INTO `category` VALUES (32,32,'Basic Geometry','简单几何');
 INSERT INTO `category` VALUES (33,32,'Computational Geometry','计算几何');
 INSERT INTO `category` VALUES (34,32,'Convex Hull','凸包');
-INSERT INTO `category` VALUES (35,32,'Pick\'s Theorem','皮克定理');
+INSERT INTO `category` VALUES (35,32,'Pick Theorem','皮克定理');
 INSERT INTO `category` VALUES (36,0,'Game Theory','博弈论');
 INSERT INTO `category` VALUES (37,36,'Green Hackenbush/Colon Principle/Fusion Principle','Green Hackenbush/Colon Principle/Fusion Principle');
 INSERT INTO `category` VALUES (38,36,'Nim','Nim');
@@ -1101,7 +1109,7 @@ INSERT INTO `category` VALUES (62,61,'Chinese Remainder Theorem','中国同余�
 INSERT INTO `category` VALUES (64,61,'Inclusion/Exclusion','容斥');
 INSERT INTO `category` VALUES (65,61,'Modular Arithmetic','模运算');
 INSERT INTO `category` VALUES (66,58,'Combinatorics','组合数学');
-INSERT INTO `category` VALUES (67,66,'Group Theory/Burnside\'s lemma','集团理论/伯恩赛德引理');
+INSERT INTO `category` VALUES (67,66,'Group Theory/Burnside lemma','集团理论/伯恩赛德引理');
 INSERT INTO `category` VALUES (68,66,'Counting','计数');
 INSERT INTO `category` VALUES (69,58,'Probability/Expected Value','概率/期望');
 INSERT INTO `category` VALUES (70,0,'Others','其它');
@@ -1114,7 +1122,7 @@ INSERT INTO `category` VALUES (76,71,'Constructive Algorithms','构造算法');
 INSERT INTO `category` VALUES (77,71,'Two Pointer','');
 INSERT INTO `category` VALUES (78,71,'Bitmask','位掩码');
 INSERT INTO `category` VALUES (79,71,'Beginner','入门');
-INSERT INTO `category` VALUES (80,71,'Discrete Logarithm/Shank\'s Baby-step Giant-step Algorithm','离散对数/');
+INSERT INTO `category` VALUES (80,71,'Discrete Logarithm/Shank Baby-step Giant-step Algorithm','离散对数/');
 INSERT INTO `category` VALUES (81,71,'Greedy','贪心');
 INSERT INTO `category` VALUES (82,71,'Divide and Conquer','分治');
 INSERT INTO `category` VALUES (83,0,'Dynamic Programming','动态规划');
@@ -1330,6 +1338,7 @@ INSERT INTO `permission` VALUES (171,'admin',1,'announcement:delete','删除',16
 INSERT INTO `permission` VALUES (172,'admin',1,'announcement:forbid','禁用',162,1);
 INSERT INTO `permission` VALUES (173,'admin',1,'announcement:resume','启用',162,1);
 INSERT INTO `permission` VALUES (174,'user',1,'user:sp:nick','特殊昵称',45,1);
+INSERT INTO `permission` VALUES (175,'user',1,'teacher','教师权限',0,1);
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1389,6 +1398,8 @@ INSERT INTO `role_permission` VALUES (13,3,84);
 INSERT INTO `role_permission` VALUES (14,10,77);
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('15', '4', '77');
 INSERT INTO `oj`.`role_permission` (`id`, `rid`, `pid`) VALUES ('16', '4', '175');
+insert into role_permission values(17,4,119);
+insert into role_permission values(18,4,122);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1432,6 +1443,7 @@ INSERT INTO `variable` VALUES (31,'problemImagePath','/var/www/upload/image/prob
 INSERT INTO `variable` VALUES (32,'judgeHost','127.0.0.1',NULL,NULL,NULL,'string',NULL);
 INSERT INTO `variable` VALUES (33,'judgePort','55555',NULL,55555,NULL,'int',NULL);
 INSERT INTO `variable` VALUES (34,'judgeSecurity','PowerJudgeV1.1',NULL,NULL,NULL,'string',NULL);
+insert into variable (name,stringValue) values('astylePath','/usr/local/bin/astyle');
 /*!40000 ALTER TABLE `variable` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -1536,6 +1548,7 @@ CREATE TABLE `cprogram_user_info` (
   `tid` int(11) DEFAULT NULL,
   `class_week` int(11) DEFAULT NULL,
   `class_lecture` int(11) DEFAULT NULL,
+  `ctime` int(11) DEFAULT NULL,
   PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- ----------------------------

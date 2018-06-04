@@ -4,6 +4,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.ext.interceptor.POST;
 import com.jfinal.upload.UploadFile;
+import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
@@ -163,6 +164,24 @@ public class ProblemAdminController extends OjController {
         File file = uploadFile.getFile();
         Integer pid = getParaToInt("pid");
         String filename = getPara("name");
+
+        if(file.getName().endsWith(".in") || file.getName().endsWith(".out")) {
+            String cmd;
+            if(OjConfig.isLinux()) {
+                cmd = "dos2unix ";
+            } else {
+                cmd = "unix2dos ";
+            }
+            cmd += file.getAbsolutePath();
+            try {
+                Process process = Runtime.getRuntime().exec(cmd);
+                process.waitFor();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             filename = adminService.uploadData(pid, filename, file);

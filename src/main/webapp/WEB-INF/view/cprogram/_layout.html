@@ -1,5 +1,5 @@
 <@override name="content">
-<ul class="nav nav-tabs" id="contest_nav" style="width:98%">
+<ul class="nav nav-tabs" id="contest_nav">
   <li class="<#if actionKey=="cprogram/show">active</#if>">
     <a href="cprogram/show/${contest.cid}">信息</a>
   </li>
@@ -10,13 +10,15 @@
     <a href="cprogram/status/${contest.cid!}">状态</a>
   </li>
 
-  <#if TeacherUser??>
-    <li class="<#if methodName=="manager">active</#if>">
-      <a href="cprogram/manager/${contest.cid}">管理</a>
-    </li>
-    <li class="<#if methodName=="edit">active</#if>">
-      <a href="cprogram/edit/${contest.cid}">编辑</a>
-    </li>
+  <#if TeacherUser?? >
+    <#if serverTime  < contest.startTime || adminUser?? || contest.type == 5>
+      <li class="<#if methodName=="manager">active</#if>">
+        <a href="cprogram/manager/${contest.cid}">管理</a>
+      </li>
+      <li class="<#if methodName=="edit">active</#if>">
+        <a href="cprogram/edit/${contest.cid}">编辑</a>
+      </li>
+    </#if>
   </#if>
   <li class="<#if methodName=="score">active</#if>">
   <a href="cprogram/score/${contest.cid}">成绩</a>
@@ -26,7 +28,7 @@
   <a class="btn btn-info pull-right" id="contest-clone">Clone</a>
   -->
 </ul>
-<div id="contest_content" style="width:98%">
+<div id="contest_content">
   <@block name="contest_content"></@block>
 </div>
 </@override>

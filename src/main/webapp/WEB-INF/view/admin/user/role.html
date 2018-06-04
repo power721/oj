@@ -10,6 +10,9 @@
   <li class="active">用户管理</li>
 </ul>
 <div class="container-fluid">
+    <a href="#" id="addUserRole" data-toggle="modal" data-target="#addUserRoleModal" class="btn btn-info">
+        添加用户角色
+    </a>
   <div class="row-fluid">
     <div class="well">
       <div id="container">
@@ -17,7 +20,8 @@
                cellspacing="0" border="0" width="100%">
           <thead>
           <tr>
-            <th width="5%">Id</th>
+            <th width="5%">ID</th>
+            <th width="5%">UID</th>
             <th width="15%">User</th>
             <th width="30%">Nick Name</th>
             <th width="15%">Real Name</th>
@@ -32,6 +36,50 @@
     </div>
   </div>
 </div>
+
+<div class="modal hide fade userRoleModal" id="addUserRoleModal">
+    <form class="form-horizontal" action="/api/admin/addUserRole" id="addUserRoleForm" method="post">
+        <div class="modal-header">
+            <button class="close" aria-hidden="true" data-dismiss="modal" type="button">x</button>
+            <h3 id="addUserRoleModalLabel">
+                添加用户角色:
+            </h3>
+        </div>
+        <div class="modal-body">
+            <div class="control-group
+                <#if nameMsg??>error</#if>">
+                <label class="control-label" for="inputName">用户名</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-user"></i></span>
+                        <input type="text" id="inputName" name="name" value="${name!}" placeholder="User name" autofocus
+                               required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="role">角色</label>
+                <div class="controls">
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon-lock"></i> </span>
+                        <select name="role" id="role">
+                            <#list roleList as role>
+                                <option value="${role.id!}">${role.name!}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span id="addUserRoleMsg"></span>
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button class="btn" data-dismiss="modal">Cancel</button>
+        </div>
+    </form>
+</div>
+
 </@override>
 
 <@override name="scripts">
@@ -40,6 +88,7 @@
 <script type="text/javascript" src="assets/DataTables-1.9.4/media/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="assets/js/dataTables.bootstrap.js"></script>
 <script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
+<script type="text/javascript" src="assets/js/jquery.form.js"></script>
 
 <script type="text/javascript">
   $(document).ready(function () {
@@ -49,11 +98,41 @@
       $(this).editable();
       $(this).editable('show');
     });
+
+      if ($.fn.ajaxForm) {
+          $('#addUserRoleForm').ajaxForm({
+              beforeSubmit: function (formData, addUserRoleForm, options) {
+                  $("#addUserRoleMsg").removeClass().addClass('alert').html('<img style="height:20px" src="assets/images/ajax-loader.gif" /> Validating....').fadeIn(300);
+                  $("input:submit,button:submit,.btn", addUserRoleForm).attr("disabled", "disabled").addClass("disabled");
+              },
+              success: function (data, statusText, xhr, addUserRoleForm) {
+                  if (data.success) {
+                      $("#addUserRoleMsg", addUserRoleForm).fadeTo(100, 0.1, function () {
+                          $(this).removeClass().addClass('alert alert-success').html('Add success.').fadeTo(100, 1, function () {
+                              if (system.callback) {
+                                  system.callback();
+                                  system.callback = void 0;
+                              } else {
+                                  window.location.reload();
+                              }
+                          });
+                      });
+                  } else {
+                      $("#addUserRoleMsg", addUserRoleForm).fadeTo(100, 0.1, function () {
+                          $(this).removeClass().addClass('alert alert-error').html(data.result).fadeTo(300, 1);
+                      });
+                      $("input:submit,button:submit,.btn", addUserRoleForm).removeAttr("disabled", "disabled").removeClass("disabled");
+                  }
+              }
+          });
+      }
+
   });
 
   var oTable = $('#user-list').jfinalDataTable({
     "sAjaxSource": "/api/admin/userRoleList",
     "aoColumns": [
+      {"mData": "urid"},
       {"mData": "uid"},
       {
         "mData": "name",
@@ -80,7 +159,7 @@
       {
         "mData": "role",
         "mRender": function (data, type, full) {
-          return '<button class="role btn btn-link" data-type="select" data-name="role" data-pk="' + full.uid + '" data-value="' + full.id
+          return '<button class="role btn btn-link" data-type="select" data-name="role" data-pk="' + full.urid + '" data-value="' + full.id
                   + '" data-source="/api/admin/roleList" data-original-title="Select Role">' + data + '</button>';
         }
       },
@@ -92,6 +171,8 @@
       }
     ]
   });
+
+
 </script>
 </@override>
 <@extends name="../_layout.html"></@extends>

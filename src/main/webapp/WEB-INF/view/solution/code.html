@@ -1,5 +1,5 @@
 <@override name="content">
-<div class="row">
+<div class="row" style="margin-left:0px">
   <div class="span4 offset4" id="source-code">
     <span class="green">Problem<#if alpha?? && adminUser??>(<a href="problem/show/${solution.pid!}">${solution.pid!}</a>)</#if>
     </span>:
@@ -19,7 +19,7 @@
   </div>
 </div>
 
-<div class="row">
+<div class="row" style="margin-left:0px">
   <div class="span12">
     <h2>Source Code</h2>
     <#if adminUser?? || user.uid==solution.uid>
@@ -43,15 +43,31 @@
 </div>
 
   <#if solution.error?has_content>
-  <div class="row">
+  <div class="row" style="margin-left:0px">
     <div class="span12">
       <h3><#if resultName=="CE">Compile Error<#else>Runtime Error</#if></h3>
       <pre class="error">${solution.error!}</pre>
     </div>
   </div>
   </#if>
+
+  <#if resultName=="PE" || resultName=="WA" || resultName=="RE" || resultName=="RF" || resultName=="TLE" || resultName=="OLE" || resultName=="MLE" >
+    <div class="row" style="margin-left:0px">
+      <div class="span12">
+        <h3>Input</h3>
+        <pre class="info">${inputData!}</pre>
+      </div>
+    </div>
+    <div class="row" style="margin-left:0px">
+      <div class="span12">
+        <h3>Output</h3>
+        <pre class="info">${solution.wrong!}</pre>
+      </div>
+    </div>
+  </#if>
+
   <#if adminUser?? && solution.systemError??>
-  <div class="row">
+  <div class="row" style="margin-left:0px">
     <div class="span12">
       <h3>System Error</h3>
       <pre class="error">${solution.systemError!}</pre>
@@ -122,7 +138,7 @@
 
     var refresh = setInterval(function () {
       refreshResult();
-    }, 1500);
+    }, 250);
     setTimeout(function () {
       clearInterval(refresh);
     }, 25050);
@@ -134,7 +150,11 @@
         $.getJSON('/api/problem/getResult', {'sid': ${solution.sid!}}, function (data) {
           if (data.result.name != id) {
             $this.attr('id', data.result.name);
-            $this.html(data.result.longName);
+            if(data.test == 0) {
+                $this.html(data.result.longName);
+            } else {
+                $this.html(data.result.longName + ' on test ' + data.test);
+            }
             if (data.result.name == 'AC') {
               $('.time').html(data.time);
               $('.memory').html(data.memory);

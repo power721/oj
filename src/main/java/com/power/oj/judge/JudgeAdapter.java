@@ -102,7 +102,9 @@ public abstract class JudgeAdapter implements Runnable {
             FileUtil.mkdirs(workDir);
             log.debug("Make directory: " + workDir);
         }
-        java.nio.file.Files.setPosixFilePermissions(workDir.toPath(), JudgeService.FILE_PERMISSIONS);
+        if(OjConfig.isLinux()) {
+            java.nio.file.Files.setPosixFilePermissions(workDir.toPath(), JudgeService.FILE_PERMISSIONS);
+        }
 
         String workDirPath = workDir.getAbsolutePath();
 

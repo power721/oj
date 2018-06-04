@@ -1,6 +1,7 @@
 package com.power.oj.core.bean;
 
 import com.jfinal.log.Logger;
+import com.power.oj.core.OjConfig;
 import com.power.oj.util.FileKit;
 import jodd.io.FileNameUtil;
 import jodd.util.StringUtil;
@@ -50,19 +51,33 @@ public class OJFile {
     private void init() {
         if (file.exists()) {
             try {
-                PosixFileAttributes attr =
-                    Files.readAttributes(file.toPath(), PosixFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
-                user = attr.owner().getName();
-                group = attr.group().getName();
-                perm = PosixFilePermissions.toString(attr.permissions());
-                if (attr.isSymbolicLink()) {
-                    type = "Link";
-                } else if (attr.isDirectory()) {
-                    type = "Directory";
-                } else if (attr.isRegularFile()) {
-                    type = "File";
+                if (OjConfig.isLinux()) {
+                    PosixFileAttributes attr =
+                            Files.readAttributes(file.toPath(), PosixFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+                    user = attr.owner().getName();
+                    group = attr.group().getName();
+                    perm = PosixFilePermissions.toString(attr.permissions());
+                    if (attr.isSymbolicLink()) {
+                        type = "Link";
+                    } else if (attr.isDirectory()) {
+                        type = "Directory";
+                    } else if (attr.isRegularFile()) {
+                        type = "File";
+                    } else {
+                        type = "Other";
+                    }
                 } else {
-                    type = "Other";
+                    if (file.isDirectory())
+                        type = "Link";
+                    else if (file.isFile()) {
+                        type = "File";
+                    } else {
+                        type = "Other";
+                    }
+                    user = "";
+                    group = "";
+                    perm = "rwxrwxrwx";
+
                 }
             } catch (IOException e) {
                 LOGGER.warn("get file attributes failed!", e);

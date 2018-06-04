@@ -101,7 +101,7 @@
 
     var refresh = setInterval(function () {
       refreshResult();
-    }, 1500);
+    }, 250);
     setTimeout(function () {
       clearInterval(refresh);
     }, 20010);
@@ -113,7 +113,12 @@
         $.getJSON('/api/problem/getResult', {'sid': $this.attr('sid')}, function (data) {
           if (data.result.name != id) {
             $this.attr('id', data.result.name);
-            $this.html(data.result.longName);
+            if(data.test == 0) {
+                $this.html(data.result.longName);
+            } else {
+                $this.html(data.result.longName + ' on test ' + data.test);
+            }
+
             if (data.result.name == 'AC') {
               $this.siblings('.time').html(data.time + ' MS');
               $this.siblings('.memory').html(data.memory + ' KB');

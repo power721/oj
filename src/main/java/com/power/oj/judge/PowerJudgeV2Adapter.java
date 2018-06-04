@@ -73,6 +73,7 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
             }
 
             String token = judgeService.generateToken(solution.getSid());
+            LOGGER.info("judge " + solution.getSid() + "and token is" + token);
             out.write(
                 solution.getSid() + " " + cid + " " + solution.getPid() + " " + solution.getLanguage() + " " + timeLimit
                     + " " + memoryLimit + " " + token);

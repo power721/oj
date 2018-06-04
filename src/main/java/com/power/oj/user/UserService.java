@@ -357,7 +357,7 @@ public final class UserService {
 
             addExp(userExtModel, incExp);
             userExtModel.setCheckin(OjConfig.timeStamp).setCheckinTimes(checkinTimes).setTotalCheckin(totalCheckin)
-                .update();
+                    .update();
             return incExp;
         }
 
@@ -434,9 +434,9 @@ public final class UserService {
             return false;
         }
         userModel.setAccepted(userModel.getAccepted() + 1);
-         userModel.set("solved",
-            Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
-                ResultType.AC));
+        userModel.set("solved",
+                Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
+                        ResultType.AC));
         updateCache(userModel);
 
         return userModel.update();
@@ -462,8 +462,8 @@ public final class UserService {
         }
         userModel.setAccepted(userModel.getAccepted() - 1);
         userModel.set("solved",
-            Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
-                ResultType.AC));
+                Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
+                        ResultType.AC));
         updateCache(userModel);
 
         return userModel.update();
@@ -479,13 +479,13 @@ public final class UserService {
         Integer uid = userModel.getUid();
 
         userModel
-            .set("submission", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND status=1 LIMIT 1", uid));
+                .set("submission", Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND status=1 LIMIT 1", uid));
         userModel.set("accepted",
-            Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
-                ResultType.AC));
+                Db.queryLong("SELECT COUNT(*) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
+                        ResultType.AC));
         userModel.set("solved",
-            Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
-                ResultType.AC));
+                Db.queryLong("SELECT COUNT(DISTINCT pid) FROM solution WHERE uid=? AND result=? AND status=1 LIMIT 1", uid,
+                        ResultType.AC));
         updateCache(userModel);
 
         return userModel.update();
@@ -655,8 +655,8 @@ public final class UserService {
         String name = userModel.getName();
 
         Page<Record> logs =
-            Db.paginate(pageNumber, pageSize, "SELECT *", "FROM loginlog WHERE uid=? OR name=? ORDER BY ctime DESC",
-                uid, name);
+                Db.paginate(pageNumber, pageSize, "SELECT *", "FROM loginlog WHERE uid=? OR name=? ORDER BY ctime DESC",
+                        uid, name);
         return logs;
     }
 
@@ -681,7 +681,7 @@ public final class UserService {
             StringBuilder sb = new StringBuilder(10);
             sb.append(problemDir.getAbsolutePath()).append(File.separator).append(code.getInt("sid")).append("_");
             sb.append(code.getInt("time")).append("MS_").append(code.getInt("memory")).append("KB").append(".")
-                .append(ext);
+                    .append(ext);
 
             File file = new File(sb.toString());
             if (!file.createNewFile()) {
@@ -846,7 +846,7 @@ public final class UserService {
     }
 
     public Page<UserModel> getUserListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
-        String sSearch) {
+                                                 String sSearch) {
         List<Object> param = new ArrayList<Object>();
         String sql = "SELECT *";
         StringBuilder sb = new StringBuilder().append("FROM user WHERE 1=1");
@@ -864,11 +864,11 @@ public final class UserService {
     }
 
     public Page<UserModel> getUserRoleListDataTables(int pageNumber, int pageSize, String sSortName, String sSortDir,
-        String sSearch) {
+                                                     String sSearch) {
         List<Object> param = new ArrayList<Object>();
-        String sql = "SELECT u.uid,u.name,u.realName,u.nick,r.name AS role,u.ctime,r.id";
+        String sql = "SELECT ur.id AS urid,u.uid,u.name,u.realName,u.nick,r.name AS role,u.ctime,r.id";
         StringBuilder sb = new StringBuilder()
-            .append("FROM user_role ur INNER JOIN user u ON u.uid=ur.uid INNER JOIN role r ON r.id=ur.rid WHERE 1=1");
+                .append("FROM user_role ur INNER JOIN user u ON u.uid=ur.uid INNER JOIN role r ON r.id=ur.rid WHERE 1=1");
 
         if (StringUtil.isNotEmpty(sSearch)) {
             sb.append(" AND (u.name LIKE ? OR u.realName LIKE ? OR u.uid LIKE ?)");
@@ -881,18 +881,22 @@ public final class UserService {
         return dao.paginate(pageNumber, pageSize, sql, sb.toString(), param.toArray());
     }
 
-    public void changeUserRole(int uid, int rid) {
+    public void changeUserRole(int urid, int rid) {
         if (rid == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
             return;
         }
-        Integer id = Db.queryInt("SELECT rid FROM user_role WHERE uid=?", uid);
+        Integer id = Db.queryInt("SELECT rid FROM user_role WHERE id=?", urid);
         if (id == rid) {
             return;
         }
         if (id == ROOT_ROLE_ID && !ShiroKit.hasRole(ROOT_ROLE_NAME)) {
             return;
         }
-        Db.update("UPDATE user_role SET rid=? WHERE uid=?", rid, uid);
+        Integer uid = Db.queryInt("SELECT uid FROM user_role WHERE id=?", urid);
+        if(Db.findFirst("select id from user_role where uid=? and rid=?",uid, rid) != null) {
+            return;
+        }
+        Db.update("UPDATE user_role SET rid=? WHERE id=?", rid, urid);
     }
 
     public int addMember(int uid) {
@@ -927,10 +931,31 @@ public final class UserService {
         return 0;
     }
 
+    static public int addUserRole(String name, int rid) {
+        if(!ShiroKit.hasPermission(ROOT_ROLE_NAME)) {
+            return -1;
+        }
+        UserModel user = UserService.me().getUserByName(name);
+        if (user == null) {
+            return 1;
+        }
+        int uid = user.getUid();
+        Record record = Db.findFirst("select rid from user_role where uid=? and rid=?", uid, rid);
+        if(record != null) {
+            return 2;
+        }
+        record = new Record();
+        record.set("uid", uid);
+        record.set("rid", rid);
+        record.set("status", 1);
+        Db.save("user_role", record);
+        return 0;
+    }
+
     public List<Record> getSubmittedProblems(Integer uid) {
         return Db.find(
-            "SELECT p.title, p.pid, MIN(result) AS result FROM solution s INNER JOIN problem p ON p.pid=s.pid"
-                + " WHERE s.uid=? AND s.status=1 GROUP BY s.pid", uid);
+                "SELECT p.title, p.pid, MIN(result) AS result FROM solution s INNER JOIN problem p ON p.pid=s.pid"
+                        + " WHERE s.uid=? AND s.status=1 GROUP BY s.pid", uid);
     }
 
     public List<Record> getSolvedProblems(Integer uid) {
