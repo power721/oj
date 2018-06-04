@@ -53,14 +53,15 @@
         <td><a href="contest/status/${cid!}?name=${User.name!}&result=0">${User.solved!}</a></td>
         <td data="${User.penalty!}" class="penalty"><span>${(User.penalty/60)?int!}</span></td>
         <#list contestProblems as Problem>
+          <#assign acSec=User["${Problem.id}_SolvedTime"]>
           <#assign ac=(User["${Problem.id}_SolvedTime"]/60)?int>
           <#assign wa=User["${Problem.id}_WrongNum"]>
           <#assign class="">
-          <#if ac==0 && wa!=0><#assign class="wa wa${(wa/5)?int}"></#if>
-          <#if ac!=0 && wa==0><#assign class="ac"></#if>
-          <#if ac!=0 && wa!=0><#assign class="ac ac1"></#if>
-          <#if ac!=0 && Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
-          <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (ac>0)><span>${ac}</span><#if (wa>0)>
+          <#if acSec==0 && wa!=0><#assign class="wa wa${(wa/5)?int}"></#if>
+          <#if acSec!=0 && wa==0><#assign class="ac"></#if>
+          <#if acSec!=0 && wa!=0><#assign class="ac ac1"></#if>
+          <#if acSec!=0 && Problem.firstBloodUid == User.uid><#assign class="${class} fb"></#if>
+          <td data="${User["${Problem.id}_SolvedTime"]}" class="${class}"><#if (acSec>0)><span>${ac}</span><#if (wa>0)>
             <br></#if></#if><#if (wa>0)>(-${wa})</#if>
           </td>
         </#list>
