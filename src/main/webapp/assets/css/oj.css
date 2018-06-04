@@ -418,6 +418,9 @@ table#status td.time,td.memory {
 #TLE {
   color: #ff9900;
 }
+#file_div{
+  height: 300px !important;
+}
 
 #MLE {
   color: #0692ff;
