@@ -97,7 +97,7 @@ public class UserModel extends Model<UserModel> {
 
     public Page<UserModel> getUserRankList(int pageNumber, int pageSize) {
         Page<UserModel> userList =
-            paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rank,uid,name,nick,realName,solved,submission",
+            paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rk,uid,name,nick,realName,solved,submission",
                 "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submission,uid",
                 (pageNumber - 1) * pageSize);
 
