@@ -80,8 +80,8 @@ public class UserModel extends Model<UserModel> {
     public int getUserRank(Integer uid) {
         int userRank = 0;
         Object object = findFirst(
-            "SELECT rank FROM (SELECT @rank:=@rank+1 AS rank,uid FROM user,(SELECT @rank:=0)r ORDER BY solved desc,submission)t_rank WHERE uid=? LIMIT 1",
-            uid).get("rank");
+            "SELECT rk FROM (SELECT @rank:=@rank+1 AS rk,uid FROM user,(SELECT @rank:=0)r ORDER BY solved desc,submission)t_rank WHERE uid=? LIMIT 1",
+            uid).get("rk");
 
         if (object instanceof Double) {
             double d = (Double) object;
