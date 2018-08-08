@@ -205,7 +205,7 @@
           if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';
           }
-          if (data.result.name != id) {
+          if (data.result.name != id || data.result.name == 'RUN') {
             $this.attr('id', data.result.name);
             if(data.test == 0) {
                 $this.html('<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
