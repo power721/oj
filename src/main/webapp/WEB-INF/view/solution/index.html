@@ -111,7 +111,7 @@
         var $this = $(this);
         var id = $this.attr('id');
         $.getJSON('/api/problem/getResult', {'sid': $this.attr('sid')}, function (data) {
-          if (data.result.name != id) {
+          if (data.result.name != id || data.result.name == 'RUN') {
             $this.attr('id', data.result.name);
             if(data.test == 0) {
                 $this.html(data.result.longName);

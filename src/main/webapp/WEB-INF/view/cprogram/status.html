@@ -251,7 +251,7 @@
           if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';
           }
-          if (data.result.name != id || data.test > 0) {
+          if (data.result.name != id || data.test > 0 || data.result.name == 'RUN') {
               $this.attr('id', data.result.name);
               var html = '<i class="btn ' + getBtnClass(data.result.name) + '" sid="'
                   + data.sid + '" sim="' + data.sim + '" sim_id="' + data.sim_id + '">';
