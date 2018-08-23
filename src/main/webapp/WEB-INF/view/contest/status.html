@@ -192,9 +192,7 @@
     var refresh = setInterval(function () {
       refreshResult();
     }, 250);
-    setTimeout(function () {
-      clearInterval(refresh);
-    }, 20010);
+
 
     function refreshResult() {
       $('#WAIT, #RUN, #REJUDGE').each(function () {
