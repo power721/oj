@@ -84,7 +84,7 @@
         <td class="result" id="${solution.resultName!}">
           <i class="btn" sid="${solution.sid!}" sim_id="${solution.sim_id!}" sim="${solution.sim!}">
               ${solution.resultLongName!}
-              <#if solution.test?? && solution.test !=0>
+              <#if solution.test?? && solution.test !=0 && solution.sim_id == 0>
                  on test ${solution.test!}
               </#if>
               <#if solution.sim_id !=0>
@@ -258,7 +258,7 @@
                   html += ' for ' + data.sim + ' % with ' + data.sim_id;
               }
 
-              if(data.test > 0) {
+              if(data.test > 0 && data.result.name != 'SIM') {
                   html += ' on test ' + data.test;
               }
               html += img + '</i>';
