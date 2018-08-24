@@ -18,6 +18,8 @@ public class ResultType {
     public static final int RUN = 12;
     public static final int REJUDGE = 13;
     public static final int SIM = 14;
+    public static final int COM = 15;
+    public static final int QUE = 16;
     public static final int NOT_AC = 999;
 
     private int id;

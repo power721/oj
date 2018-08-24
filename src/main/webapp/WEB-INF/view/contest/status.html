@@ -25,7 +25,7 @@
         <option value="-1">Result</option>
         <#if judge_result??>
           <#list judge_result as Result>
-            <#if Result.id<=9>
+            <#if Result.id<=16>
               <option value="${Result.id!}"
                       <#if result?? && result?eval==Result.id>selected</#if>>${Result.name!}</option>
             </#if>
@@ -131,7 +131,7 @@
 
     $('.result i').each(function () {
       var resultName = $(this).parent().attr('id');
-      if (resultName == 'WAIT' || resultName == 'RUN' || resultName == 'REJUDGE') {
+      if (resultName == 'WAIT' || resultName == 'RUN' || resultName == 'REJUDGE' || resultName == 'COM' || resultName == 'QUE') {
         $(this).append(' <img src="assets/images/' + (resultName == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>');
       }
       $(this).addClass(getBtnClass(resultName));
@@ -147,7 +147,7 @@
         btnClass = 'btn-danger';
       else if (resultName == 'VE' || resultName == 'SE')
         btnClass = 'btn-inverse';
-      else if (resultName == 'WAIT' || resultName == 'RUN' || resultName == 'REJUDGE')
+      else if (resultName == 'WAIT' || resultName == 'RUN' || resultName == 'REJUDGE' || resultName == 'COM' || resultName == 'QUE')
         btnClass = '';
       return btnClass;
     }
@@ -195,12 +195,16 @@
 
 
     function refreshResult() {
-      $('#WAIT, #RUN, #REJUDGE').each(function () {
+      $('#WAIT, #RUN, #REJUDGE, #COM, #QUE').each(function () {
         var $this = $(this);
         var id = $this.attr('id');
         $.getJSON('/api/contest/getResult', {'cid':${cid!}, 'sid': $this.children('i').attr('sid')}, function (data) {
           var img = '';
-          if (data.result.name == 'WAIT' || data.result.name == 'RUN' || data.result.name == 'REJUDGE') {
+          if (data.result.name == 'WAIT' ||
+              data.result.name == 'RUN' ||
+              data.result.name == 'REJUDGE' ||
+              data.result.name == 'COM' ||
+              data.result.name == 'QUE') {
             img = ' <img src="assets/images/' + (data.result.name == 'RUN' ? '' : 'ajax-') + 'loader.gif" alert="Running" width="18"/>';
           }
           if (data.result.name != id || data.result.name == 'RUN') {
