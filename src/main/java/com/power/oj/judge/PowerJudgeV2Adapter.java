@@ -91,7 +91,7 @@ public class PowerJudgeV2Adapter extends PowerJudgeAdapter {
                     throw new JudgeConfigurationException(reply);
                 }
             }
-            setResult(ResultType.RUN, 0, 0);
+            setResult(ResultType.QUE, 0, 0);
             return true;
         } catch (JudgeConfigurationException e) {
             LOGGER.error("judge configuration error", e);

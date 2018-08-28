@@ -47,11 +47,11 @@ public final class CProgramService {
         }
 
         sqlExe += "WHERE " +
-                "contest.type = ? " +
-                "AND (? <= contest.startTime AND contest.startTime <= ?) ";
+                "contest.type = ? ";// +
+               // "AND (? <= contest.startTime AND contest.startTime <= ?) ";
         parase.add(type);
-        parase.add(startTime);
-        parase.add(endTime);
+       // parase.add(startTime);
+       // parase.add(endTime);
 
         if(!isTeacher() && type == ContestModel.TYPE_WORK) {
             int uid = UserService.me().getCurrentUid();

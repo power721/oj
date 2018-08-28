@@ -80,8 +80,8 @@ public class UserModel extends Model<UserModel> {
     public int getUserRank(Integer uid) {
         int userRank = 0;
         Object object = findFirst(
-            "SELECT rank FROM (SELECT @rank:=@rank+1 AS rank,uid FROM user,(SELECT @rank:=0)r ORDER BY solved desc,submission)t_rank WHERE uid=? LIMIT 1",
-            uid).get("rank");
+            "SELECT rk FROM (SELECT @rank:=@rank+1 AS rk,uid FROM user,(SELECT @rank:=0)r ORDER BY solved desc,submission)t_rank WHERE uid=? LIMIT 1",
+            uid).get("rk");
 
         if (object instanceof Double) {
             double d = (Double) object;
@@ -97,12 +97,13 @@ public class UserModel extends Model<UserModel> {
 
     public Page<UserModel> getUserRankList(int pageNumber, int pageSize) {
         Page<UserModel> userList =
-            paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rank,uid,name,nick,realName,solved,submission",
+            paginate(pageNumber, pageSize, "SELECT @rank:=@rank+1 AS rk,uid,name,nick,realName,solved,submission",
                 "FROM user,(SELECT @rank:=?)r WHERE status=1 ORDER BY solved DESC,submission,uid",
                 (pageNumber - 1) * pageSize);
 
         return userList;
     }
+
 
     /*
      * public List<Record> getUnsolvedProblems(Integer uid) { return Db.find(

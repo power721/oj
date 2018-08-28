@@ -142,6 +142,8 @@ public class OjConfig {
         judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
         judgeResult.add(new ResultType(ResultType.REJUDGE, "REJUDGE", "Rejudging"));
         judgeResult.add(new ResultType(ResultType.SIM, "SIM", "Similar"));
+        judgeResult.add(new ResultType(ResultType.COM, "COM", "Compiling"));
+        judgeResult.add(new ResultType(ResultType.QUE, "QUE", "Queuing"));
         resultType = new HashMap<>();
         for (ResultType result : judgeResult) {
             resultType.put(result.getId(), result);
