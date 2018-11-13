@@ -27,7 +27,9 @@
     <#if adminUser??>
       <th>UID</th>
     </#if>
-    <th>User</th>
+    <#if !isSwust?? || adminUser??>
+      <th>User</th>
+    </#if>
     <th>Nick Name</th>
     <#if adminUser??>
       <th>Real Name</th>
@@ -44,9 +46,12 @@
       <#if adminUser??>
       <td>${User.uid!}</td>
       </#if>
-      <td class="user"><a href="user/profile/${User.name!}" class="user"
-                          <#if adminUser?? && User.realName??>data-toggle="tooltip"
-                          title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+      <#if !isSwust?? || adminUser??>
+        <td class="user"><a href="user/profile/${User.name!}" class="user"
+              <#if adminUser?? && User.realName??>data-toggle="tooltip"
+              title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+      </#if>
+
       <td>${User.nick!}</td>
       <#if adminUser??>
         <td>${User.realName!}</td>

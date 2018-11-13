@@ -9,6 +9,10 @@ public class OjVariableInterceptor implements Interceptor {
 
     @Override
     public void intercept(Invocation ai) {
+        if(isSwust(ai.getController())) {
+            ai.getController().setAttr("isSwust", true);
+        }
+
         ai.invoke();
 
         Controller controller = ai.getController();
@@ -23,4 +27,7 @@ public class OjVariableInterceptor implements Interceptor {
         controller.setAttr("oj_fluid_width", controller.getCookie("oj_fluid_width"));
     }
 
+    private boolean isSwust(Controller con) {
+        return con.getPara("swust") != null || con.getRequest().getRequestURL().toString().contains("swust.edu");
+    }
 }
