@@ -64,10 +64,10 @@
       </li>
       <li><a href="logout" class="logout" style="color:#fff;"><i class="icon-off"></i>Logout</a></li>
       <#else>
-        <li class="<#if actionKey?? && actionKey=="login">active</#if>">
+        <li>
         <a href="#" id="login" data-toggle="modal" data-target="#loginModal" style="color:#fff;"><i class="icon-user"></i>Login</a>
         </li>
-        <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
+        <li>
         <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal" style="color:#fff;"><i class="icon-star"></i>Signup</a>
         </li>
         </#if>
@@ -229,7 +229,7 @@
           account</a>
       </h3>
     </div>
-    <div class="modal-body">
+    <div class="modal-body signup-modal-body">
       <a href="signup" class="btn btn-primary">Signup</a>
     </div>
     <div class="modal-footer">
