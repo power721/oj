@@ -1,20 +1,12 @@
 <div class="control-group <#if nameMsg??>error</#if>">
   <label class="control-label" for="inputAccount">
-    <#if isSwust??>
-      用户名
-    <#else>
       UserName
-    </#if>
   </label>
   <div class="controls">
     <div class="input-prepend">
       <span class="add-on"><i class="icon-user"></i></span>
       <input type="text" minlength="5" maxlength="15" id="inputAccount" name="User.name" value="${(User.name)!}"
-             <#if isSwust??>
-                placeholder="本校学生请使用学号注册"
-             <#else>
                 placeholder="UserName"
-              </#if>
              autofocus required>
     </div>
     <p class="text-error" id="name-error">${nameMsg!}</p>
@@ -22,21 +14,13 @@
 </div>
 <div class="control-group <#if nickMsg??>error</#if>">
   <label class="control-label" for="inputNick">
-    <#if isSwust??>
-    昵称
-    <#else>
-    Nick
-  </#if>
+    NickName
   </label>
   <div class="controls">
     <div class="input-prepend">
       <span class="add-on"><i class="oj-icon oj-icon-user-suit"></i></span>
       <input type="text" minlength="1" maxlength="255" id="inputNick" name="User.nick" value="${(User.nick)!}"
-      <#if isSwust??>
-      placeholder="请输入合法昵称"
-      <#else>
-      placeholder="Nick"
-    </#if>
+      placeholder="NickName"
     autofocus required>
   </div>
   <p class="text-error" id="nick-error">${nickMsg!}</p>
@@ -44,11 +28,7 @@
 </div>
 <div class="control-group <#if emailMsg??>error</#if>">
   <label class="control-label" for="inputEmail">
-    <#if isSwust??>
-      电子邮箱
-    <#else>
       Email
-    </#if>
   </label>
   <div class="controls">
     <div class="input-prepend">
@@ -60,11 +40,7 @@
 </div>
 <div class="control-group <#if passwordMsg??>error</#if>">
   <label class="control-label" for="inputPassword">
-    <#if isSwust??>
-      密码
-    <#else>
       Password
-    </#if>
   </label>
   <div class="controls">
     <div class="input-prepend">
@@ -77,11 +53,7 @@
 </div>
 <div class="control-group">
   <label class="control-label" for="inputConfirmPass">
-    <#if isSwust??>
-      确认密码
-    <#else>
       Confirm Password
-    </#if>
   </label>
   <div class="controls">
     <div class="input-prepend">
@@ -94,11 +66,7 @@
 </div>
 <div class="control-group <#if captchaMsg??>error</#if>">
   <label class="control-label" for="inputCaptcha">
-    <#if isSwust??>
-      验证码
-    <#else>
       Captcha
-    </#if>
   </label>
   <div class="controls">
     <div class="input-prepend">
