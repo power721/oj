@@ -1,16 +1,34 @@
 <div class="control-group <#if nameMsg??>error</#if>">
-  <label class="control-label" for="inputAccount">用户名</label>
+  <label class="control-label" for="inputAccount">
+      UserName
+  </label>
   <div class="controls">
     <div class="input-prepend">
       <span class="add-on"><i class="icon-user"></i></span>
       <input type="text" minlength="5" maxlength="15" id="inputAccount" name="User.name" value="${(User.name)!}"
-             placeholder="本校学生请使用学号注册" autofocus required>
+             placeholder="UserName" autofocus required>
     </div>
     <p class="text-error" id="name-error">${nameMsg!}</p>
   </div>
 </div>
+<div class="control-group <#if nickMsg??>error</#if>">
+  <label class="control-label" for="inputNick">
+    NickName
+  </label>
+  <div class="controls">
+    <div class="input-prepend">
+      <span class="add-on"><i class="oj-icon oj-icon-user-suit"></i></span>
+      <input type="text" minlength="1" maxlength="255" id="inputNick" name="User.nick" value="${(User.nick)!}"
+      placeholder="NickName"
+    autofocus required>
+  </div>
+  <p class="text-error" id="nick-error">${nickMsg!}</p>
+</div>
+</div>
 <div class="control-group <#if emailMsg??>error</#if>">
-  <label class="control-label" for="inputEmai">电子邮件</label>
+  <label class="control-label" for="inputEmail">
+      Email
+  </label>
   <div class="controls">
     <div class="input-prepend">
       <span class="add-on"><i class="icon-envelope"></i></span>
@@ -20,7 +38,9 @@
   </div>
 </div>
 <div class="control-group <#if passwordMsg??>error</#if>">
-  <label class="control-label" for="inputPassword">密码</label>
+  <label class="control-label" for="inputPassword">
+      Password
+  </label>
   <div class="controls">
     <div class="input-prepend">
       <span class="add-on"><i class="icon-lock"></i></span>
@@ -31,7 +51,9 @@
   </div>
 </div>
 <div class="control-group">
-  <label class="control-label" for="inputConfirmPass">确认密码</label>
+  <label class="control-label" for="inputConfirmPass">
+      Confirm Password
+  </label>
   <div class="controls">
     <div class="input-prepend">
       <span class="add-on"><i class="icon-lock icon-white"></i></span>
@@ -42,15 +64,17 @@
   </div>
 </div>
 <div class="control-group <#if captchaMsg??>error</#if>">
-  <label class="control-label" for="inputCaptcha">验证码</label>
+  <label class="control-label" for="inputCaptcha">
+      Captcha
+  </label>
   <div class="controls">
     <div class="input-prepend">
       <span class="add-on"><i class="icon-check"></i></span>
       <input type="text" minlength="4" maxlength="4" id="inputCaptcha" class="input-small" name="captcha" required>
     </div>
-    <span id="captcha">
-      <a id="captcha" onclick="getCaptcha();" href="javascript:;" title="click to change another one">
-        <img id="captcha" src="captcha"/>
+    <span id="captcha_span">
+      <a id="captcha_a" onclick="getCaptcha();" href="javascript:;" title="click to change another one">
+        <img id="captcha_img" src="captcha"/>
       </a>
     </span>
     <p class="text-error">${captchaMsg!}</p>

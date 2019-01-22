@@ -44,9 +44,10 @@
       <#if adminUser??>
       <td>${User.uid!}</td>
       </#if>
-      <td class="user"><a href="user/profile/${User.name!}" class="user"
-                          <#if adminUser?? && User.realName??>data-toggle="tooltip"
-                          title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+        <td class="user"><a href="user/profile/${User.name!}" class="user"
+              <#if adminUser?? && User.realName??>data-toggle="tooltip"
+              title="${(User.realName)!}"</#if>>${User.name!}</a></td>
+
       <td>${User.nick!}</td>
       <#if adminUser??>
         <td>${User.realName!}</td>

@@ -55,7 +55,6 @@
   <tbody>
     <#if solutionList??>
       <#list solutionList.list as solution>
-      <tr>
         <td class="sid">${solution.sid!}</td>
         <td class="user"><a href="user/profile/${(solution.name)!}" class="name">${(solution.name)!}</a></td>
         <td class="problem">

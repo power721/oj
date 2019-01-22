@@ -139,13 +139,14 @@ public final class UserService {
      */
     public boolean signup(UserModel userModel) {
         String name = HtmlEncoder.text(userModel.getName());
+        String nick = userModel.getNick();
         String password = BCrypt.hashpw(userModel.getPassword(), BCrypt.gensalt());
         String email = userModel.getEmail();
         String verifyEmailToken = UUID.randomUUID().toString();
 
         int ctime = OjConfig.timeStamp;
         UserModel newUser = new UserModel();
-        newUser.setName(name).setPassword(password).setEmail(email).setRegEmail(email);
+        newUser.setName(name).setNick(nick).setPassword(password).setEmail(email).setRegEmail(email);
         newUser.setToken(verifyEmailToken).setCtime(ctime).setMtime(ctime);
 
         if (newUser.save()) {

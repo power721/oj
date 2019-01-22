@@ -64,10 +64,10 @@
       </li>
       <li><a href="logout" class="logout" style="color:#fff;"><i class="icon-off"></i>Logout</a></li>
       <#else>
-        <li class="<#if actionKey?? && actionKey=="login">active</#if>">
+        <li>
         <a href="#" id="login" data-toggle="modal" data-target="#loginModal" style="color:#fff;"><i class="icon-user"></i>Login</a>
         </li>
-        <li class="<#if actionKey?? && actionKey=="signup">active</#if>">
+        <li>
         <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal" style="color:#fff;"><i class="icon-star"></i>Signup</a>
         </li>
         </#if>
@@ -104,23 +104,9 @@
       <li class="<#if actionKey?? && actionKey=="cprogram">active</#if>">
         <a href="cprogram"><i class="icon-pencil"></i>C Program</a>
       </li>
-      <#if isSwust?? && isSwust == true>
-        <li class="<#if controllerKey?? && controllerKey=="honor">active</#if>">
-          <a href="honor"><i class="icon-star" aria-hidden="true"></i>Honor</a>
-        </li>
-      </#if>
       <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
       <a href="downloads"><i class="icon-download-alt"></i>Download</a>
       </li>
-      <#if isSwust?? && isSwust == true>
-        <li>
-          <a href="achievement"><i class="fa fa-trophy"></i>Achieve</a>
-        </li>
-        <li style="text-align: center">
-          <img src="assets/images/infoacm.jpg" width="80px">
-          <p>信息ACM微信公众号</p>
-        </li>
-      </#if>
     </ul>
   </div>
 </div>
@@ -229,7 +215,9 @@
           account</a>
       </h3>
     </div>
-    <div class="modal-body">
+
+    <div class="modal-body signup-modal-body">
+
       <a href="signup" class="btn btn-primary">Signup</a>
     </div>
     <div class="modal-footer">
@@ -245,10 +233,7 @@
 <footer class="footer">
   <div class="container-fluid">
     <div class="copyright">
-      ©Copyright 2018
-      <#if isSwust?? && isSwust == true>
-        西南科技大学信息工程学院ACM实验室<br>
-      </#if>
+      ©Copyright 2019 西南科技大学信息工程学院ACM实验室<br>
       <a href="http://git.oschina.net/power/oj/commits/master" target="balnk">PowerOJ Rev.<#include "version.ftl"></a>
     </div>
     <ul class="footer-links">
@@ -304,7 +289,9 @@
 
 <@block name="scripts"></@block>
 
-<#if controllerKey?? && controllerKey != "notice" && !isSwust?? && notices??>
+
+<#if controllerKey?? && controllerKey != "notice" && notices??>
+
 <script type="text/javascript">
   $(document).ready(function () {
     $('ul.marquee li').css('padding-right', $(window).width());
