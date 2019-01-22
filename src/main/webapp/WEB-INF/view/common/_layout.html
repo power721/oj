@@ -64,12 +64,10 @@
       </li>
       <li><a href="logout" class="logout" style="color:#fff;"><i class="icon-off"></i>Logout</a></li>
       <#else>
-
         <li>
         <a href="#" id="login" data-toggle="modal" data-target="#loginModal" style="color:#fff;"><i class="icon-user"></i>Login</a>
         </li>
         <li>
-
         <a href="signup?ajax=1" id="signup" data-toggle="modal" data-target="#signupModal" style="color:#fff;"><i class="icon-star"></i>Signup</a>
         </li>
         </#if>
@@ -106,12 +104,9 @@
       <li class="<#if actionKey?? && actionKey=="cprogram">active</#if>">
         <a href="cprogram"><i class="icon-pencil"></i>C Program</a>
       </li>
-
-
       <li class="<#if actionKey?? && actionKey=="downloads">active</#if>">
       <a href="downloads"><i class="icon-download-alt"></i>Download</a>
       </li>
-
     </ul>
   </div>
 </div>
@@ -238,9 +233,7 @@
 <footer class="footer">
   <div class="container-fluid">
     <div class="copyright">
-
       ©Copyright 2019 西南科技大学信息工程学院ACM实验室<br>
-
       <a href="http://git.oschina.net/power/oj/commits/master" target="balnk">PowerOJ Rev.<#include "version.ftl"></a>
     </div>
     <ul class="footer-links">
