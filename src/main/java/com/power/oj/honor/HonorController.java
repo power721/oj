@@ -15,6 +15,7 @@ public class HonorController extends OjController {
         setTitle("Honor Lists");
         setAttr("proList", dao.find("SELECT * FROM honors WHERE LEVEL=? ORDER BY id DESC", "四川省大学生程序设计竞赛"));
         setAttr("asiaList", dao.find("SELECT * FROM honors WHERE LEVEL=? ORDER BY id DESC", "ACM-ICPC亚洲区预选赛"));
+
     }
 
     public void add() {

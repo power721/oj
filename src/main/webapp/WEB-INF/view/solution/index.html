@@ -56,9 +56,7 @@
     <#if solutionList??>
       <#list solutionList.list as solution>
         <td class="sid">${solution.sid!}</td>
-
         <td class="user"><a href="user/profile/${(solution.name)!}" class="name">${(solution.name)!}</a></td>
-
         <td class="problem">
           <#if !adminUser?? && solution.alpha??>
             <a href="contest/problem/${solution.cid}-${solution.alpha!}">${solution.cid}-${solution.alpha!}</a>
