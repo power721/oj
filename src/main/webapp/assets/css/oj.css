@@ -9,9 +9,11 @@ body{
   padding:0;
   margin:0;
 }
+
 .signup-modal-body{
     max-height: 500px; !important;
 }
+
 marquee ul.marquee li a {
   color: red;
   font-size: 25px;

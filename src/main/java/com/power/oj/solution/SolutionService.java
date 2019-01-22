@@ -58,6 +58,7 @@ public final class SolutionService {
                                        String userName) {
         String sql =
                 "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick";
+
         StringBuilder sb = new StringBuilder("FROM solution s INNER JOIN user u ON u.uid=s.uid WHERE s.status=1 ");
 
         List<Object> paras = new ArrayList<Object>();

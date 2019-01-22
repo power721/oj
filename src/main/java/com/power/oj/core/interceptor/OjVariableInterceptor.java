@@ -12,7 +12,6 @@ public class OjVariableInterceptor implements Interceptor {
         if(isSwust(ai.getController())) {
             ai.getController().setAttr("isSwust", true);
         }
-
         ai.invoke();
 
         Controller controller = ai.getController();
