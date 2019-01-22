@@ -416,8 +416,8 @@ public final class SolutionService {
             return false;
         }
 
-        if(cid != 0 && result == ResultType.AC) {
-            if(SolutionService.checkSim(sid, cid)) {
+        if (cid != 0 && result == ResultType.AC) {
+            if (SolutionService.checkSim(sid, cid)) {
                 return true;
             }
         }
@@ -640,7 +640,7 @@ public final class SolutionService {
                     try {
                         int simid = Integer.parseInt(line);
                         ContestSolutionModel simSolution = ContestSolutionModel.dao.findById(simid);
-                        if(simSolution.getUid().equals(solution.getUid())) {
+                        if (simSolution.getUid().equals(solution.getUid())) {
                             continue;
                         }
                         nowMaxSimID = simid;

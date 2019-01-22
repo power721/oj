@@ -9,7 +9,7 @@ public class OjVariableInterceptor implements Interceptor {
 
     @Override
     public void intercept(Invocation ai) {
-        if(isSwust(ai.getController())) {
+        if (isSwust(ai.getController())) {
             ai.getController().setAttr("isSwust", true);
         }
         ai.invoke();
