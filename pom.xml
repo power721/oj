@@ -17,7 +17,7 @@
         <jfinal.version>2.2</jfinal.version>
         <jfinal.ext.version>2.0.8</jfinal.ext.version>
         <servlet.api.version>2.5</servlet.api.version>
-        <shiro.version>1.2.4</shiro.version>
+        <shiro.version>1.4.0</shiro.version>
         <httpcomponents.version>4.2.5</httpcomponents.version>
         <jodd.version>3.5.1</jodd.version>
         <powermock.version>1.6.4</powermock.version>
