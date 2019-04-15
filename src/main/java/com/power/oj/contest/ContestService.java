@@ -442,7 +442,15 @@ public class ContestService {
                 + " WHERE b.cid=? ORDER BY solved DESC,penalty";
         String select = "SELECT b.*,u.name,u.realName,u.nick AS unick,cu.special,cu.nick";
         Page<Record> userRank = Db.paginate(pageNumber, pageSize, select, sql, cid);
-        int rank = (pageNumber - 1) * pageSize;
+
+        int firstSolve = userRank.getList().get(0).getInt("solved");
+        int firstPenalty = userRank.getList().get(0).getInt("penalty");
+        int preSpecial = Db.queryLong("SELECT COUNT(1) FROM " + tableName + " b INNER JOIN user u ON u.uid=b.uid "
+                        + "LEFT JOIN contest_user cu ON b.uid=cu.uid AND b.cid=cu.cid"
+                        + " WHERE b.cid=? AND cu.special AND (b.solved > ? OR (b.solved = ? AND penalty < ?)) ORDER BY b.solved DESC,penalty",
+                cid, firstSolve, firstSolve, firstPenalty).intValue();
+        int rank = (pageNumber - 1) * pageSize - preSpecial;
+
         for (Record record : userRank.getList()) {
             if (record.getStr("nick") == null) {
                 record.set("nick", record.getStr("unick"));
@@ -924,8 +932,7 @@ public class ContestService {
     }
 
     public File getContextXML(Integer cid, int grand, int first, int second, int third) throws IOException {
-        File file = new File(OjConfig.downloadPath, "context-" + cid + ".xml");
-
+        File file = new File(OjConfig.downloadPath, "contest-" + cid + ".xml");
         try (PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)))) {
             writer.write("<contest>\n");
 
@@ -988,7 +995,7 @@ public class ContestService {
     }
 
     private void writeContestProblems(PrintWriter writer, Integer cid) {
-        List<Record> problems = Db.find("select pid,title,num from contest_problem where cid = ?", cid);
+        List<Record> problems = Db.find("select pid,title,num from contest_problem where cid = ? ORDER BY num", cid);
         for (Record problem : problems) {
             writer.write("\t<problem>\n");
             writer.write(String.format("\t\t<id>%s</id>\n", problem.getInt("pid")));
@@ -999,14 +1006,18 @@ public class ContestService {
     }
 
     private Map<Integer, Team> writeContestTeams(PrintWriter writer, Integer cid) {
-        List<Record> teams = Db.find("select * from contest_user where cid = ? and special = 0;", cid);
+        List<Record> teams = Db.find("select * from contest_user where cid = ?;", cid);
         Map<Integer, Team> teamMap = new HashMap<>();
         for (Record user : teams) {
             int uid = user.getInt("uid");
             boolean isGirlTeam = user.getBoolean("girls");
             boolean isRookie = user.getBoolean("freshman");
-            teamMap.put(uid, new Team(uid, isGirlTeam, isRookie));
+            boolean isSpecialTeam = user.getBoolean("special");
+            teamMap.put(uid, new Team(uid, isGirlTeam, isRookie, isSpecialTeam));
             String teamName = user.get("teamName"); //Db.findFirst("select name from user where uid = ?", uid);
+            if(isSpecialTeam) {
+                teamName = "*" + teamName;
+            }
             writer.write("\t<team>\n");
             writer.write(String.format("\t\t<id>%d</id>\n", uid));
             writer.write("\t\t<group-id>0</group-id>\n");
@@ -1056,7 +1067,7 @@ public class ContestService {
             writer.write("\t\t<penalty>false</penalty>\n");
             teamMp.get(r.uid).penalty += r.time - startTime;
             teamMp.get(r.uid).lastAC = r.time;
-        } else if (isAbnormalResult(r.result)) {
+        } else if (r.result == ResultType.CE || isAbnormalResult(r.result)) {
             writer.write("\t\t<solved>false</solved>\n");
             writer.write("\t\t<penalty>false</penalty>\n");
         } else if (teamMp.get(r.uid).ac.contains(r.pid)) {
@@ -1081,36 +1092,27 @@ public class ContestService {
         int second = info.second;
         int third = info.third;
         int i = 0;
-
-        while (grand-- > 0 && i < teams.size()) {
+        while (i < teams.size() && grand + first + second + third > 0) {
+            if (teams.get(i).isSpecialTeam) {
+                i++;
+                continue;
+            }
             writer.write("\t<award>\n");
             writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
             writer.write("\t\t<type>medal</type>\n");
-            writer.write("\t\t<citation>Grand Prize</citation>\n");
-            writer.write("\t</award>\n");
-        }
-
-        while (first-- > 0 && i < teams.size()) {
-            writer.write("\t<award>\n");
-            writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
-            writer.write("\t\t<type>medal</type>\n");
-            writer.write("\t\t<citation>First Prize</citation>\n");
-            writer.write("\t</award>\n");
-        }
-
-        while (second-- > 0 && i < teams.size()) {
-            writer.write("\t<award>\n");
-            writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
-            writer.write("\t\t<type>medal</type>\n");
-            writer.write("\t\t<citation>Second Prize</citation>\n");
-            writer.write("\t</award>\n");
-        }
-
-        while (third-- > 0 && i < teams.size()) {
-            writer.write("\t<award>\n");
-            writer.write(String.format("\t\t<team>%d</team>\n", teams.get(i++).uid));
-            writer.write("\t\t<type>medal</type>\n");
-            writer.write("\t\t<citation>Third Prize</citation>\n");
+            if (grand > 0) {
+                grand--;
+                writer.write("\t\t<citation>Grand Prize</citation>\n");
+            } else if (first > 0) {
+                first--;
+                writer.write("\t\t<citation>First Prize</citation>\n");
+            } else if (second > 0) {
+                second--;
+                writer.write("\t\t<citation>Second Prize</citation>\n");
+            } else if (third > 0) {
+                third--;
+                writer.write("\t\t<citation>Third Prize</citation>\n");
+            }
             writer.write("\t</award>\n");
         }
     }
@@ -1349,7 +1351,7 @@ public class ContestService {
                 board.setSolvedTime(num, solvedTime);
                 updateUserSolved(board, solvedTime, wrongSubmissions);
             }
-        } else if ((acTime == null || acTime == 0) && isNormalResult(solutionModel)) {
+        } else if ((acTime == null || acTime == 0) && isNormalResult(solutionModel) && solutionModel.getResult() != ResultType.CE) {
             board.setWrongNum(num, wrongSubmissions + 1);
         }
 
@@ -1727,11 +1729,13 @@ public class ContestService {
         long lastAC;
         boolean isGirlTeam;
         boolean isRookieTeam;
+        boolean isSpecialTeam;
 
-        Team(int uid, boolean isGirlTeam, boolean isRookieTeam) {
+        Team(int uid, boolean isGirlTeam, boolean isRookieTeam, boolean isSpecialTeam) {
             this.uid = uid;
             this.isGirlTeam = isGirlTeam;
             this.isRookieTeam = isRookieTeam;
+            this.isSpecialTeam = isSpecialTeam;
         }
 
         @Override

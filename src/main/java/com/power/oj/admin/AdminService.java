@@ -648,8 +648,11 @@ public final class AdminService {
         Element rootElement = XmlUtil.createXmlRootElement(document);
         FpsService fpsService = new FpsService();
 
-        List<ProblemModel> problemList = ProblemModel.dao
-            .find("SELECT * FROM problem WHERE pid>=? AND pid<=? AND status=?", start, end, status ? 1 : 0);
+        String sql = "SELECT * FROM problem WHERE pid>=? AND pid<=? ";
+        if(!status) {
+            sql += "AND status = 1";
+        }
+        List<ProblemModel> problemList = ProblemModel.dao.find(sql ,start, end);
         for (ProblemModel problemModel : problemList) {
             Element item = rootElement.addElement("item");
             item.addAttribute("pid", String.valueOf(problemModel.getPid()));

@@ -28,7 +28,7 @@ public abstract class XmlUtil {
     }
 
     public static Element createXmlRootElement(Document document) {
-        document.addDocType("fps", "-//FreeProblemSet//EN", DTD_FILE);
+        //document.addDocType("fps", "-//FreeProblemSet//EN", DTD_FILE); ///出现验证错误，暂时注释
         Element rootElement = document.addElement("fps");
         rootElement.addAttribute("version", "1.1");
         rootElement.addAttribute("url", "http://code.google.com/p/freeproblemset/");
