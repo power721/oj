@@ -45,6 +45,7 @@ import com.power.oj.core.model.SessionModel;
 import com.power.oj.core.model.VariableModel;
 import com.power.oj.cprogram.CProgramConstants;
 import com.power.oj.cprogram.CProgramRoutes;
+import com.power.oj.cprogram.model.*;
 import com.power.oj.discussion.CommentModel;
 import com.power.oj.discussion.DiscussionController;
 import com.power.oj.discussion.TopicModel;
@@ -149,10 +150,10 @@ public class AppConfig extends JFinalConfig {
         DruidPlugin druidPlugin;
         if (isAceMode()) {
             druidPlugin = new DruidPlugin(PropKit.get("ace.jdbcUrl"), PropKit.get("ace.user"),
-                PropKit.get("ace.password").trim());
+                    PropKit.get("ace.password").trim());
         } else {
             druidPlugin = new DruidPlugin(PropKit.get("dev.jdbcUrl"), PropKit.get("dev.user"),
-                PropKit.get("dev.password").trim());
+                    PropKit.get("dev.password").trim());
         }
 
         if (OjConfig.isDevMode()) {
@@ -191,6 +192,11 @@ public class AppConfig extends JFinalConfig {
         arp.addMapping("user_ext", "uid", UserExtModel.class);
         arp.addMapping("variable", VariableModel.class);
         arp.addMapping("web_login", WebLoginModel.class);
+        arp.addMapping(CprogramUserInfoModel.TABLE_NAME, "uid", CprogramUserInfoModel.class);
+        arp.addMapping(CprogramExperimentReportModel.TABLE_NAME, CprogramExperimentReportModel.class);
+        arp.addMapping(CprogramCommitModel.TABLE_NAME, CprogramCommitModel.class);
+        arp.addMapping(CprogramPasswordModel.TABLE_NAME, CprogramPasswordModel.class);
+        arp.addMapping(CprogramInfoModel.TABLE_NAME, "cid", CprogramInfoModel.class);
         me.add(arp);
 
         me.add(new EhCachePlugin());
@@ -223,7 +229,7 @@ public class AppConfig extends JFinalConfig {
         me.add(new UrlFilterHandler());
         if (OjConfig.isDevMode()) {
             me.add(
-                new DruidStatViewHandler("/admin/druid", request -> SecurityUtils.getSubject().isPermitted("system")));
+                    new DruidStatViewHandler("/admin/druid", request -> SecurityUtils.getSubject().isPermitted("system")));
         }
 
         log.debug("configHandler finished.");

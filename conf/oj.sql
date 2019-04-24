@@ -1569,3 +1569,13 @@ CREATE TABLE `score` (
   PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `cprogram_commit`;
+CREATE TABLE `cprogram_commit` (
+  `id` int(11) NOT NULL,
+  `cid` int(11) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `num` int(11) DEFAULT NULL,
+  `commit` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`cid`,`uid`,`num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

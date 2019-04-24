@@ -19,11 +19,6 @@ public class CProgramInterceptor implements Interceptor {
             ai.getController().redirect("/cprogram/resignup");
             return;
         }
-        if(CProgramService.isTeacher()) {
-            ai.getController().setAttr(CProgramConstants.teacherUser, true);
-        }
-        ai.getController().setAttr("weeks", CProgramConstants.weeks);
-        ai.getController().setAttr("lectures", CProgramConstants.lecture);
         Integer cid = ai.getController().getParaToInt(0);
         if(cid != null && !ai.getActionKey().equals("/cprogram/list")) {
             ContestModel contest = ContestService.me().getContest(cid);

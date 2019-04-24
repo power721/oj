@@ -14,17 +14,18 @@ import com.power.oj.user.UserService;
 public class ExamInterceptor implements Interceptor  {
 
     public static boolean CanAccess(Integer cid) {
-        if(CProgramService.isTeacher()) return true;
-        ContestModel contest = ContestService.me().getContest(cid);
-        if(contest.getType() <= ContestModel.TYPE_EXPERIMENT) {
-            return true;
-        }
-        else {
-            Integer uid = UserService.me().getCurrentUid();
-            if(uid == null) return false;
-            Integer id = Db.queryInt("select id from contest_user where uid = ? and cid = ?", uid, cid);
-            return  id != null;
-        }
+//        if(CProgramService.isTeacher()) return true;
+//        ContestModel contest = ContestService.me().getContest(cid);
+//        if(contest.getType() <= ContestModel.TYPE_EXPERIMENT) {
+//            return true;
+//        }
+//        else {
+//            Integer uid = UserService.me().getCurrentUid();
+//            if(uid == null) return false;
+//            Integer id = Db.queryInt("select id from contest_user where uid = ? and cid = ?", uid, cid);
+//            return  id != null;
+//        }
+        return true;
     }
     @Override
     public void intercept(Invocation invocation) {

@@ -10,7 +10,7 @@ import com.power.oj.cprogram.admin.AdminController;
 public class CProgramRoutes extends Routes {
     @Override
     public void config() {
-        add("/cprogram", CProgramMainController.class);
+        add("/cprogram", CProgramController.class);
         add("/cprogram/admin", AdminController.class);
     }
 }
