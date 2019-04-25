@@ -8,13 +8,16 @@ import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.cprogram.model.CprogramInfoModel;
+import com.power.oj.cprogram.model.CprogramPasswordModel;
 import com.power.oj.cprogram.model.CprogramUserInfoModel;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 
 import java.io.*;
 import java.sql.Time;
@@ -84,8 +87,20 @@ public final class CProgramService {
         return contestModel.getCid();
     }
 
+    static public void updateContest(Integer cid, String title, Integer uid, String startTime, String endTime, Integer week, Integer lecture, String commit) {
+        ContestModel contestModel = ContestService.me().getContest(cid);
+        contestModel.setTitle(title);
+        if (uid != null && uid != 0) {
+            contestModel.setUid(uid);
+        }
+        ContestService.me().updateContest(contestModel, startTime, endTime);
+        CprogramInfoModel cprogramInfoModel = CprogramInfoModel.dao.findById(cid);
+        cprogramInfoModel.setCommit(commit).setWeek(week).setLecture(lecture);
+        cprogramInfoModel.update();
+    }
+
     static public CprogramInfoModel getContest(Integer cid) {
-        return CprogramInfoModel.dao.findFirst("SELECT contest.cid,title,startTime,endTime,FROM_UNIXTIME(startTime,'%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime,'%Y-%m-%d %H:%i:%s') AS endDateTime,`commit`,lecture,`week`,cprogram_info.type FROM contest INNER JOIN cprogram_info ON contest.cid = cprogram_info.cid WHERE contest.cid = ?", cid);
+        return CprogramInfoModel.dao.findFirst("SELECT contest.cid,title,contest.uid,startTime,endTime,FROM_UNIXTIME(startTime,'%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime,'%Y-%m-%d %H:%i:%s') AS endDateTime,`commit`,lecture,`week`,cprogram_info.type,commit FROM contest INNER JOIN cprogram_info ON contest.cid = cprogram_info.cid WHERE contest.cid = ?", cid);
     }
 
     public static boolean checkAccessContest(Integer cid) {
@@ -99,6 +114,64 @@ public final class CProgramService {
             if (uid == null) return false;
             return Db.queryInt("select id from contest_user where uid = ? and cid = ?", uid, cid) != null;
         }
+    }
+
+    public static boolean checkContestPassword(Integer cid, String password) {
+        CprogramPasswordModel passwordModel = CprogramPasswordModel.dao.findFirst("select * from cprogram_password where cid = ? and password = ? and uid = 0", cid, password);
+        if (passwordModel == null) {
+            return false;
+        }
+        Integer uid = UserService.me().getCurrentUid();
+        passwordModel.setUid(uid);
+        passwordModel.update();
+        ContestService.me().addUser(cid, uid);
+        return true;
+    }
+
+    public static void saveUser(String realName, String phone, String classes, Integer week, Integer lecture, Integer tid, String stuId) {
+        UserModel user = UserService.me().getCurrentUser();
+        user.setRealName(realName).setPhone(phone);
+        user.update();
+        CprogramUserInfoModel infoModel = new CprogramUserInfoModel();
+        infoModel.setUid(user.getUid());
+        infoModel.setClasses(classes);
+        infoModel.setClass_week(week);
+        infoModel.setClass_lecture(lecture);
+        infoModel.setTid(tid);
+        infoModel.setStuid(stuId);
+        infoModel.setCtime(OjConfig.timeStamp);
+        infoModel.save();
+    }
+
+    public static void updateUser(String realName, String phone, String classes, Integer week, Integer lecture, Integer tid, String stuId) {
+        UserModel user = UserService.me().getCurrentUser();
+        user.setRealName(realName).setPhone(phone);
+        user.update();
+        CprogramUserInfoModel infoModel = CprogramUserInfoModel.dao.findById(user.getUid());
+        infoModel.setUid(user.getUid());
+        infoModel.setClasses(classes);
+        infoModel.setClass_week(week);
+        infoModel.setClass_lecture(lecture);
+        infoModel.setTid(tid);
+        infoModel.setStuid(stuId);
+        infoModel.setCtime(OjConfig.timeStamp);
+        infoModel.update();
+    }
+
+    public static UserModel getUserInfo() {
+        Integer uid = UserService.me().getCurrentUid();
+        return UserModel.dao.findFirst("select " +
+                "user.uid, " +
+                "user.realName, " +
+                "user.phone, " +
+                "cprogram_user_info.classes, " +
+                "cprogram_user_info.class_week, " +
+                "cprogram_user_info.class_lecture, " +
+                "cprogram_user_info.tid, " +
+                "cprogram_user_info.stuid " +
+                "from user " +
+                "inner join cprogram_user_info on user.uid = cprogram_user_info.uid " +
+                "where user.uid = ?", uid);
     }
 
     //    static public ContestSolutionModel getSolution(Integer cid, Integer sid) {
@@ -237,7 +310,7 @@ public final class CProgramService {
         return record != null;
     }
 
-    //
+
     static public List<UserModel> getTeacherList() {
         return UserModel.dao.find("select user.realName,user.uid from user inner join user_role on user.uid=user_role.uid where user_role.rid = 4");
     }
@@ -342,15 +415,13 @@ public final class CProgramService {
         if (isTeacher()) return false;
         if (isRegister()) {
             Integer ctime = Db.queryInt("select ctime from cprogram_user_info where uid=?", UserService.me().getCurrentUid());
-            if (getStartUnixTime() != getStartUnixTime(ctime)) {
-                return true;
-            }
+            return getStartUnixTime() != getStartUnixTime(ctime);
         }
         return false;
     }
-//    public static String getStuID() {
-//        Integer uid = UserService.me().getCurrentUid();
-//        String stdID = Db.queryStr("select stuid from cprogram_user_info where uid=?", uid);
-//        return stdID;
-//    }
+
+    public static String getStuID() {
+        Integer uid = UserService.me().getCurrentUid();
+        return CprogramUserInfoModel.dao.findFirst("select stuid from cprogram_user_info where uid=?", uid).getStuid();
+    }
 }
