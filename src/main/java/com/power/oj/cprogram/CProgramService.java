@@ -84,6 +84,23 @@ public final class CProgramService {
         return contestModel.getCid();
     }
 
+    static public CprogramInfoModel getContest(Integer cid) {
+        return CprogramInfoModel.dao.findFirst("SELECT contest.cid,title,startTime,endTime,FROM_UNIXTIME(startTime,'%Y-%m-%d %H:%i:%s') AS startDateTime,FROM_UNIXTIME(endTime,'%Y-%m-%d %H:%i:%s') AS endDateTime,`commit`,lecture,`week`,cprogram_info.type FROM contest INNER JOIN cprogram_info ON contest.cid = cprogram_info.cid WHERE contest.cid = ?", cid);
+    }
+
+    public static boolean checkAccessContest(Integer cid) {
+        if (CProgramService.isTeacher()) return true;
+        CprogramInfoModel contest = CProgramService.getContest(cid);
+        if (CprogramInfoModel.TYPE_HOMEWORK.equals(contest.getType()) ||
+                CprogramInfoModel.TYPE_EXPERIMENT.equals(contest.getType())) {
+            return true;
+        } else {
+            Integer uid = UserService.me().getCurrentUid();
+            if (uid == null) return false;
+            return Db.queryInt("select id from contest_user where uid = ? and cid = ?", uid, cid) != null;
+        }
+    }
+
     //    static public ContestSolutionModel getSolution(Integer cid, Integer sid) {
 //        String sql = "select " +
 //                "contest_solution.*, " +

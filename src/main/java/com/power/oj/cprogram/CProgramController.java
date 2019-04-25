@@ -2,18 +2,28 @@ package com.power.oj.cprogram;
 
 import com.jfinal.aop.Before;
 import com.jfinal.ext.interceptor.POST;
+import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
+import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.jfinal.plugin.activerecord.*;
+import com.power.oj.core.bean.FlashMessage;
+import com.power.oj.core.bean.MessageType;
+import com.power.oj.cprogram.interceptor.CProgramContestInterceptor;
+import com.power.oj.cprogram.interceptor.ExamInterceptor;
 import com.power.oj.cprogram.interceptor.VarInterceptor;
+import com.power.oj.cprogram.interceptor.WaitingInterceptor;
 import com.power.oj.cprogram.model.CprogramInfoModel;
+import com.power.oj.problem.ProblemModel;
+import com.power.oj.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by w703710691d on 2017/6/14.
@@ -62,94 +72,97 @@ public class CProgramController extends OjController {
         Integer cid = CProgramService.saveContest(title, uid, startTime, endTime, contestType, week, lecture, commit);
         redirect("/cprogram/manager/" + cid);
     }
-//
-//    @Before({WaitingInterceptor.class, ExamInterceptor.class})
-//    public void show() {
-//        Integer cid = getParaToInt(0);
-//        List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
-//        setAttr("problems", problems);
-//    }
-//
-//    @RequiresPermissions("teacher")
-//    public void manager() {
-//        show();
-//        setAttr("number", 50);
-//    }
-//
-//    @Before({WaitingInterceptor.class, ExamInterceptor.class})
-//    public void problem() {
-//        Integer cid = getParaToInt(0);
-//        String problemId = getPara(1);
-//        if(problemId == null) {
-//            redirect("/cprogram/show/" + cid);
-//            return;
-//        }
-//
-//        char id = problemId.toUpperCase().charAt(0);
-//        Integer num = id - 'A';
-//        int status = contestService.getContestStatus(cid);
-//        setAttr("cstatus", status);
-//        ProblemModel problemModel = contestService.getProblem4Show(cid, num, status);
-//        if (problemModel == null) {
-//            FlashMessage msg =
-//                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-//            redirect("/cprogram/show/" + cid, msg);
-//            return;
-//        }
-//
-//        List<Record> contestProblems = contestService.getContestProblems(cid, null);
-//        Integer prevPid = num;
-//        if (num > 0) {
-//            prevPid = num - 1;
-//        }
-//        Integer nextPid = num;
-//        if (num + 1 < contestProblems.size()) {
-//            nextPid = num + 1;
-//        }
-//
-//        setAttr("id", num);
-//        setAttr("prevPid", (char) (prevPid + 'A'));
-//        setAttr("nextPid", (char) (nextPid + 'A'));
-//        setAttr("spj", problemService.checkSpj(problemModel.getPid()));
-//        setAttr("userResult", contestService.getUserResult(cid, num));
-//        setAttr("Problems", contestProblems);
-//        setAttr("problem", problemModel);
-//    }
-//
-//    @RequiresAuthentication
-//    @Before({WaitingInterceptor.class, ExamInterceptor.class})
-//    public void submit() {
-//        Integer cid = getParaToInt(0);
-//        String problemId = getPara(1, "A");
-//        char id = problemId.toUpperCase().charAt(0);
-//        Integer num = id - 'A';
-//
-//        if (!UserService.me().isAdmin() && contestService.isContestFinished(cid)) {
-//            FlashMessage msg =
-//                    new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
-//            redirect("/cprogram/show/" + cid, msg);
-//            return;
-//        }
-//
-//        ProblemModel problemModel = contestService.getProblem(cid, num);
-//        if (problemModel == null) {
-//            FlashMessage msg =
-//                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
-//            redirect("/cprogram/show/" + cid, msg);
-//            return;
-//        }
-//
-//        if (isParaExists("s")) {
-//            setAttr("solution", contestService.getContestSolution(cid, getParaToInt("s", 0)));
-//        }
-//
-//        setAttr("problem", problemModel);
-//        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
-//
-//        setTitle(getText("contest.problem.title") + cid + "-" + id + ": " + problemModel.getTitle());
-//        render("ajax/submit.html");
-//    }
-//
+
+    @Before({CProgramContestInterceptor.class, WaitingInterceptor.class, ExamInterceptor.class})
+    public void show() {
+        Integer cid = getParaToInt(0);
+        List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
+        setAttr("problems", problems);
+        render("show.ftl");
+    }
+
+    @RequiresPermissions("teacher")
+    @Before(CProgramContestInterceptor.class)
+    public void manager() {
+        Integer cid = getParaToInt(0);
+        List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
+        setAttr("number", 50);
+        setAttr("problems", problems);
+        render("manager.ftl");
+    }
+
+    @Before({CProgramContestInterceptor.class, WaitingInterceptor.class, ExamInterceptor.class})
+    public void problem() {
+        Integer cid = getParaToInt(0);
+        String problemId = getPara(1);
+        if(problemId == null) {
+            renderError(404);
+            return;
+        }
+        char id = problemId.toUpperCase().charAt(0);
+        Integer num = id - 'A';
+        int status = contestService.getContestStatus(cid);
+        setAttr("cstatus", status);
+        ProblemModel problemModel = contestService.getProblem4Show(cid, num, status);
+        if (problemModel == null) {
+            renderError(404);
+            return;
+        }
+
+        List<Record> contestProblems = contestService.getContestProblems(cid, null);
+        Integer prevPid = num;
+        if (num > 0) {
+            prevPid = num - 1;
+        }
+        Integer nextPid = num;
+        if (num + 1 < contestProblems.size()) {
+            nextPid = num + 1;
+        }
+
+        setAttr("id", num);
+        setAttr("prevPid", (char) (prevPid + 'A'));
+        setAttr("nextPid", (char) (nextPid + 'A'));
+        setAttr("spj", problemService.checkSpj(problemModel.getPid()));
+        setAttr("userResult", contestService.getUserResult(cid, num));
+        setAttr("Problems", contestProblems);
+        setAttr("problem", problemModel);
+        render("problem.ftl");
+    }
+
+    @RequiresAuthentication
+    @Before({CProgramContestInterceptor.class, WaitingInterceptor.class, ExamInterceptor.class})
+    public void submit() {
+        Integer cid = getParaToInt(0);
+        String problemId = getPara(1, "A");
+        char id = problemId.toUpperCase().charAt(0);
+        Integer num = id - 'A';
+
+        if (!UserService.me().isAdmin() && contestService.isContestFinished(cid)) {
+            FlashMessage msg =
+                    new FlashMessage(getText("contest.submit.finished"), MessageType.WARN, getText("message.warn.title"));
+            redirect("/cprogram/show/" + cid, msg);
+            return;
+        }
+
+        ProblemModel problemModel = contestService.getProblem(cid, num);
+        if (problemModel == null) {
+            FlashMessage msg =
+                    new FlashMessage(getText("contest.problem.null"), MessageType.ERROR, getText("message.error.title"));
+            redirect("/cprogram/show/" + cid, msg);
+            return;
+        }
+
+        if (isParaExists("s")) {
+            setAttr("solution", contestService.getContestSolution(cid, getParaToInt("s", 0)));
+        }
+
+        setAttr("problem", problemModel);
+        setAttr(OjConstants.PROGRAM_LANGUAGES, OjConfig.languageName);
+
+        setTitle(getText("contest.problem.title") + cid + "-" + id + ": " + problemModel.getTitle());
+        render("ajax/submit.ftl");
+    }
+
 //    @Before({WaitingInterceptor.class, ExamInterceptor.class})
 //    public void status() {
 //        Integer cid = getParaToInt(0);
@@ -359,13 +372,13 @@ public class CProgramController extends OjController {
 //        ContestService.me().addUser(cid, uid);
 //        redirect("/cprogram/show/" + cid);
 //    }
-//    @Before(ExamInterceptor.class)
-//    public void pending() {
-//        Integer cid = getParaToInt(0);
-//        if(ContestService.me().getContestStatus(cid) != ContestModel.PENDING) {
-//            redirect("/cprogram/show" + cid);
-//        }
-//    }
+    @Before(ExamInterceptor.class)
+    public void pending() {
+        Integer cid = getParaToInt(0);
+        if(ContestService.me().getContestStatus(cid) != ContestModel.PENDING) {
+            redirect("/cprogram/show" + cid);
+        }
+    }
 //
 //    @RequiresPermissions("teacher")
 //    @Before(POST.class)
