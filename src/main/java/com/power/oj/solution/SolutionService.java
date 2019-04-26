@@ -19,6 +19,7 @@ import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.FileKit;
+import com.sun.xml.internal.bind.v2.TODO;
 import jodd.util.StringUtil;
 
 import java.io.*;
@@ -443,8 +444,7 @@ public final class SolutionService {
                 solution.setWrong(error);
             }
             if (cid > 0 && ContestService.me().getContest(cid).getType() == ContestModel.TYPE_ELSE) {
-                //CProgramService.updateScore(cid, sid, result);
-                //TODO
+                CProgramService.updateScore(cid, sid, result);
             }
             boolean updateResult = solution.update();
 

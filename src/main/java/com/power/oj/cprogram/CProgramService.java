@@ -174,136 +174,134 @@ public final class CProgramService {
                 "where user.uid = ?", uid);
     }
 
-    //    static public ContestSolutionModel getSolution(Integer cid, Integer sid) {
-//        String sql = "select " +
-//                "contest_solution.*, " +
-//                "user.name " +
-//                "from " +
-//                "contest_solution inner join user on user.uid = contest_solution.uid " +
-//                "where cid = " + cid +
-//                " and sid = " + sid +
-//                " and contest_solution.status = 1";
-//        ContestSolutionModel solution = ContestSolutionModel.dao.findFirst(sql);
-//        if(solution == null)
-//            return null;
-//        solution.put("alpha", (char)(solution.getNum() + 'A'));
-//        return solution;
-//    }
-//    static public List<Record> getScoreList(Integer cid, Integer type) {
-//        List<Object> parase = new ArrayList<>();
-//        String sql = "select score.*, " +
-//                "cprogram_user_info.stuid, " +
-//                "cprogram_user_info.class as Class, " +
-//                "cprogram_user_info.tid, " +
-//                "user.name, " +
-//                "user.realName " +
-//                "from score " +
-//                "inner join user on score.uid = user.uid " +
-//                "inner join cprogram_user_info on score.uid = cprogram_user_info.uid " +
-//                "where cid = ? ";
-//        parase.add(cid);
-//        if(!isTeacher()) {
-//            sql += "and score.uid = ? ";
-//            parase.add(UserService.me().getCurrentUid());
-//        }
-//        else if(type == ContestModel.TYPE_EXPERIMENT && !ShiroKit.hasPermission("root")) {
-//            sql += "and score.week = ? and score.lecture = ? ";
-//            int week = CProgramService.getWeek(OjConfig.timeStamp);
-//            int lecture = CProgramService.getLecture(OjConfig.timeStamp);
-//            if(lecture == 0) lecture = CProgramService.getLecture(OjConfig.timeStamp - 15 * 60);
-//            parase.add(week);
-//            parase.add(lecture);
-//        }
-//        sql += " ORDER BY cprogram_user_info.stuid ";
-//
-//        return Db.find(sql, parase.toArray());
-//    }
-//
-//    static public int getSolutionResult(Integer sid) {
-//        ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
-//        Integer result = Db.queryInt("select MIN(result) from contest_solution where cid = ? and pid = ? and uid = ?", solution.getCid(), solution.getPid(), solution.getUid());
-//        if(result == null) return 999;
-//        return  result;
-//    }
-//
-//    static public void updateScore(Integer cid, Integer sid, Integer result) {
-//        ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
-//        Integer uid = solution.getUid();
-//        Record score = Db.findFirst("select * from score where cid =? and uid = ?", cid, uid);
-//        Integer totProblem = ContestService.me().getContestProblems(cid, null).size();
-//        Integer preScore = (int)Math.round(100.0 / totProblem);
-//        if(score == null) {
-//            score = new Record();
-//            score.set("cid", cid);
-//            score.set("uid", uid);
-//            score.set("submited", 1);
-//            score.set("ctime", OjConfig.timeStamp);
-//            score.set("week", getWeek(OjConfig.timeStamp));
-//            score.set("lecture", getLecture(OjConfig.timeStamp));
-//            score.set("accepted", 0);
-//            score.set("score1", 0);
-//            score.set("score2", 0);
-//            if(result == ResultType.AC) {
-//                score.set("accepted", 1);
-//                score.set("score1", preScore);
-//                score.set("score2", preScore);
-//            }
-//            Db.save("score","rid", score);
-//        }
-//        else {
-//            score.set("submited", score.getInt("submited") + 1);
-//            if(result== ResultType.AC && getSolutionResult(sid) != ResultType.AC) {
-//                score.set("accepted", score.getInt("accepted") + 1);
-//                Integer newScore = score.getInt("score1") + preScore;
-//                if(score.getInt("accepted").equals(totProblem)) {
-//                    newScore = 100;
-//                }
-//                if(newScore > 100) newScore = 100;
-//                score.set("score1", newScore);
-//                score.set("score2", newScore);
-//            }
-//            Db.update("score", "rid", score);
-//        }
-//    }
-//    static public void updateFinalScore(int cid, int uid ,int score) {
-//        Record rd = Db.findFirst("select * from score where cid =? and uid = ?", cid, uid);
-//        rd.set("score2", score);
-//        Db.update("score", "rid", rd);
-//    }
-//    static public String randomPassword() {
-//        String source = "QWERTYUIOPASDFGHJKLZXCVBNM";
-//        String password = "";
-//        Random rand = new Random();
-//        for(int i = 0; i < 8; i++) {
-//            int index = rand.nextInt(source.length());
-//            password += source.charAt(index);
-//        }
-//        return password;
-//    }
-//
-//    static public File addPassword(int cid, int number) {
-//        File file = new File(OjConfig.downloadPath , "password-" + cid + ".txt");
-//        try {
-//            file.createNewFile();
-//            PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)));
-//            List<Record> list = new ArrayList<>();
-//            for(int i = 0; i < number; i++) {
-//                String password = randomPassword();
-//                Record record = new Record();
-//                record.set("cid", cid);
-//                record.set("password", password);
-//                list.add(record);
-//                writer.write(password+"\n\n");
-//            }
-//            Db.batchSave("cprogram_password", list, list.size());
-//            writer.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            LOGGER.error("can't creat the password file");
-//        }
-//        return file;
-//    }
-//
+    static public ContestSolutionModel getSolution(Integer cid, Integer sid) {
+        String sql = "select " +
+                "contest_solution.*, " +
+                "user.name " +
+                "from " +
+                "contest_solution inner join user on user.uid = contest_solution.uid " +
+                "where cid = ? and sid = ? and contest_solution.status = 1";
+        ContestSolutionModel solution = ContestSolutionModel.dao.findFirst(sql, cid, sid);
+        if (solution == null)
+            return null;
+        solution.put("alpha", (char) (solution.getNum() + 'A'));
+        return solution;
+    }
+
+    static public String getContestType(Integer cid) {
+        return CprogramInfoModel.dao.findById(cid).getType();
+    }
+
+    static public List<Record> getScoreList(Integer cid) {
+        List<Object> parase = new ArrayList<>();
+        String sql = "SELECT s.*,stuid,classes,t.realName AS teacher,u.`name`,u.realName " +
+                "FROM score s " +
+                "INNER JOIN `user` u ON s.uid = u.uid " +
+                "INNER JOIN cprogram_user_info cu ON s.uid = cu.uid " +
+                "INNER JOIN `user` t ON cu.tid = t.uid " +
+                "WHERE cid = ? ";
+        parase.add(cid);
+        if (!isTeacher()) {
+            sql += "and s.uid = ? ";
+            parase.add(UserService.me().getCurrentUid());
+        } else if (CprogramInfoModel.TYPE_EXPERIMENT.equals(getContestType(cid)) && !ShiroKit.hasPermission("root")) {
+            sql += "and s.week = ? and s.lecture = ? ";
+            int week = CProgramService.getWeek(OjConfig.timeStamp);
+            int lecture = CProgramService.getLecture(OjConfig.timeStamp);
+            if (lecture == 0) lecture = CProgramService.getLecture(OjConfig.timeStamp - 15 * 60);
+            parase.add(week);
+            parase.add(lecture);
+        }
+        sql += " ORDER BY cu.stuid ";
+
+        return Db.find(sql, parase.toArray());
+    }
+
+
+    static public int getSolutionResult(Integer sid) {
+        ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
+        Integer result = Db.queryInt("select MIN(result) from contest_solution where cid = ? and pid = ? and uid = ?", solution.getCid(), solution.getPid(), solution.getUid());
+        if (result == null) return 999;
+        return result;
+    }
+
+    static public void updateScore(Integer cid, Integer sid, Integer result) {
+        ContestSolutionModel solution = SolutionService.me().findContestSolution(sid);
+        Integer uid = solution.getUid();
+        Record score = Db.findFirst("select * from score where cid =? and uid = ?", cid, uid);
+        Integer totProblem = ContestService.me().getContestProblems(cid, null).size();
+        Integer preScore = (int) Math.round(100.0 / totProblem);
+        if (score == null) {
+            score = new Record();
+            score.set("cid", cid);
+            score.set("uid", uid);
+            score.set("submited", 1);
+            score.set("ctime", OjConfig.timeStamp);
+            score.set("week", getWeek(OjConfig.timeStamp));
+            score.set("lecture", getLecture(OjConfig.timeStamp));
+            score.set("accepted", 0);
+            score.set("score1", 0);
+            score.set("score2", 0);
+            if (result == ResultType.AC) {
+                score.set("accepted", 1);
+                score.set("score1", preScore);
+                score.set("score2", preScore);
+            }
+            Db.save("score", "rid", score);
+        } else {
+            score.set("submited", score.getInt("submited") + 1);
+            if (result == ResultType.AC && getSolutionResult(sid) != ResultType.AC) {
+                score.set("accepted", score.getInt("accepted") + 1);
+                Integer newScore = score.getInt("score1") + preScore;
+                if (score.getInt("accepted").equals(totProblem)) {
+                    newScore = 100;
+                }
+                if (newScore > 100) newScore = 100;
+                score.set("score1", newScore);
+                score.set("score2", newScore);
+            }
+            Db.update("score", "rid", score);
+        }
+    }
+
+    static public void updateFinalScore(int cid, int uid, int score) {
+        Db.update("update score set score2=? where cid=? and uid=?", score, cid, uid);
+    }
+
+    static public String randomPassword() {
+        String source = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        StringBuilder password = new StringBuilder();
+        Random rand = new Random();
+        for (int i = 0; i < 8; i++) {
+            int index = rand.nextInt(source.length());
+            password.append(source.charAt(index));
+        }
+        return password.toString();
+    }
+
+    static public File addPassword(int cid, int number) {
+        File file = new File(OjConfig.downloadPath, "password-" + cid + ".txt");
+        try {
+            file.createNewFile();
+            PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(file)));
+            List<Record> list = new ArrayList<>();
+            for (int i = 0; i < number; i++) {
+                String password = randomPassword();
+                Record record = new Record();
+                record.set("cid", cid);
+                record.set("password", password);
+                list.add(record);
+                writer.write(password + "\n\n");
+            }
+            Db.batchSave("cprogram_password", list, list.size());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.error("can't creat the password file");
+        }
+        return file;
+    }
+
     static public boolean isRegister() {
         if (isTeacher()) return true;
         Record record = Db.findById("cprogram_user_info", "uid", UserService.me().getCurrentUid());
@@ -315,35 +313,37 @@ public final class CProgramService {
         return UserModel.dao.find("select user.realName,user.uid from user inner join user_role on user.uid=user_role.uid where user_role.rid = 4");
     }
 
-    //    public static int getWeek(int unix_time) {
-//        Date date = new Date(unix_time * 1000L);
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(date);
-//        return cal.get(Calendar.DAY_OF_WEEK) - 1;
-//    }
-//    public static int getLecture(int unix_time) {
-//        Calendar startDate = Calendar.getInstance();
-//        Calendar endDate = Calendar.getInstance();
-//        startDate.setTime(new Date(unix_time * 1000L));
-//        endDate.setTime(new Date(unix_time * 1000L));
-//        startDate.set(Calendar.SECOND, 0);
-//        startDate.set(Calendar.MILLISECOND, 0);
-//        endDate.set(Calendar.SECOND, 0);
-//        endDate.set(Calendar.MILLISECOND, 0);
-//
-//        for(int i = 0; i < CProgramConstants.startTimeHour.length; i++) {
-//            startDate.set(Calendar.HOUR_OF_DAY, CProgramConstants.startTimeHour[i]);
-//            startDate.set(Calendar.MINUTE, CProgramConstants.startTimeMin[i]);
-//            endDate.set(Calendar.HOUR_OF_DAY, CProgramConstants.endTimeHour[i]);
-//            endDate.set(Calendar.MINUTE, CProgramConstants.endTimeMin[i]);
-//            long startTime = startDate.getTime().getTime();
-//            long endTime = endDate.getTime().getTime();
-//            if(startTime <= unix_time * 1000L && unix_time * 1000L <= endTime) {
-//                return i + 1;
-//            }
-//        }
-//        return 0;
-//    }
+    public static int getWeek(int unix_time) {
+        Date date = new Date(unix_time * 1000L);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_WEEK) - 1;
+    }
+
+    public static int getLecture(int unix_time) {
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
+        startDate.setTime(new Date(unix_time * 1000L));
+        endDate.setTime(new Date(unix_time * 1000L));
+        startDate.set(Calendar.SECOND, 0);
+        startDate.set(Calendar.MILLISECOND, 0);
+        endDate.set(Calendar.SECOND, 0);
+        endDate.set(Calendar.MILLISECOND, 0);
+
+        for (int i = 0; i < CProgramConstants.startTimeHour.length; i++) {
+            startDate.set(Calendar.HOUR_OF_DAY, CProgramConstants.startTimeHour[i]);
+            startDate.set(Calendar.MINUTE, CProgramConstants.startTimeMin[i]);
+            endDate.set(Calendar.HOUR_OF_DAY, CProgramConstants.endTimeHour[i]);
+            endDate.set(Calendar.MINUTE, CProgramConstants.endTimeMin[i]);
+            long startTime = startDate.getTime().getTime();
+            long endTime = endDate.getTime().getTime();
+            if (startTime <= unix_time * 1000L && unix_time * 1000L <= endTime) {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+
     public static int getStartUnixTime(int ctime) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date(ctime * 1000L));

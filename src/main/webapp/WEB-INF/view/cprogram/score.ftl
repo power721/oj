@@ -1,7 +1,7 @@
 <@override name="contest_content">
 <h3 class="text-center"> ${contest.title!}</h3>
-<#if contest.type != 6 >
-    <h3 class="text-center"> ${weeks.get(contest.lockBoardTime!)}${lectures.get(contest.unlockBoardTime!)}</h3>
+<#if contest.type != "EXPERIMENT" >
+    <h3 class="text-center"> ${weeksMap.get(contest.week!)}${lecturesMap.get(contest.lecture!)}</h3>
 </#if>
 <div class="row">
     <div class="span10 offset1">
@@ -33,7 +33,7 @@
                                 ${users.stuid!}
                             </td>
                             <td>
-                                ${users.Class!}
+                                ${users.classes!}
                             </td>
                             <td>
                                 <a href="cprogram/status/${contest.cid}?name=${users.stuid!}&result=0" target="_blank">

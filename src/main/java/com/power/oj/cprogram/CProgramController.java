@@ -5,24 +5,29 @@ import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.POST;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
+import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjConstants;
 import com.power.oj.core.OjController;
 import com.jfinal.plugin.activerecord.*;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
+import com.power.oj.core.bean.ResultType;
 import com.power.oj.cprogram.interceptor.*;
 import com.power.oj.cprogram.model.CprogramInfoModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
+import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -212,63 +217,64 @@ public class CProgramController extends OjController {
         render("status.ftl");
     }
 
-    //    @Before({WaitingInterceptor.class, ExamInterceptor.class})
-//    public void code() {
-//        Integer cid = getParaToInt("cid");
-//        Integer sid = getParaToInt("sid");
-//        Integer sim_id = getParaToInt("sim_id", 0);
-//        ContestSolutionModel solution = CProgramService.getSolution(cid, sid);
-//        ContestSolutionModel simSolution = CProgramService.getSolution(cid, sim_id);
-//        Integer uid = userService.getCurrentUid();
-//        Boolean isAdmin = CProgramService.isTeacher();
-//        if(solution == null || !isAdmin && !uid.equals(solution.getUid())) {
-//            renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
-//            return;
-//        }
-//        if(simSolution != null && !solution.getSimID().equals(sim_id) && !isAdmin) {
-//            renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
-//            return;
-//        }
-//        if(simSolution != null)
-//            solution = simSolution;
-//        Integer num = solution.getNum();
-//        ResultType resultType = OjConfig.resultType.get(solution.getResult());
-//        solution.setSource(HtmlEncoder.text(solution.getSource()));
-//        solution.setError(HtmlEncoder.text(solution.getError()));
-//        solution.setSystemError(HtmlEncoder.text(solution.getSystemError()));
-//        solution.setWrong(HtmlEncoder.text(solution.getWrong()));
-//
-//        setAttr("success", true);
-//        setAttr("language", OjConfig.languageName.get(solution.getLanguage()));
-//        setAttr("id", (char)('A' + num));
-//        setAttr("problemTitle", contestService.getProblemTitle(cid, num));
-//        setAttr("resultLongName", resultType.getLongName());
-//        String resultName = resultType.getName();
-//        setAttr("resultName", resultName);
-//        setAttr("solution", solution);
-//
-//        if(resultName.equals("WA") ||
-//                resultName.equals("PE") ||
-//                resultName.equals("TLE") ||
-//                resultName.equals("MLE") ||
-//                resultName.equals("RE") ||
-//                resultName.equals("OLE") ||
-//                resultName.equals("RF")) {
-//            setAttr("inputData",
-//                    HtmlEncoder.text(solutionService.getInput(solution.getPid(), solution.getTest())));
-//        }
-//
-//        String brush = getAttrForStr("language").toLowerCase();
-//        if(StringUtil.isBlank(brush)) brush = "c";
-//        if(brush.contains("GCC")) brush = "c";
-//        else if(brush.contains("G++")) brush = "cc";
-//        else if(brush.contains("Python")) brush = "py";
-//        else if(brush.contains("Java")) brush = "java";
-//        setAttr("brush", brush);
-//        renderJson(
-//                new String[] {"success", "letter", "problemTitle", "language", "resultLongName", "resultName", "solution",
-//                        "brush", "inputData"});
-//    }
+    @Before({WaitingInterceptor.class, ExamInterceptor.class})
+    public void code() {
+        Integer cid = getParaToInt("cid");
+        Integer sid = getParaToInt("sid");
+        Integer sim_id = getParaToInt("sim_id", 0);
+        ContestSolutionModel solution = CProgramService.getSolution(cid, sid);
+        ContestSolutionModel simSolution = CProgramService.getSolution(cid, sim_id);
+        Integer uid = userService.getCurrentUid();
+        Boolean isAdmin = CProgramService.isTeacher();
+        if (solution == null || !isAdmin && !uid.equals(solution.getUid())) {
+            renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
+            return;
+        }
+        if (simSolution != null && !solution.getSimID().equals(sim_id) && !isAdmin) {
+            renderJson("{\"success\":false,\"result\":\"Cannot find code.\"}");
+            return;
+        }
+        if (simSolution != null)
+            solution = simSolution;
+        Integer num = solution.getNum();
+        ResultType resultType = OjConfig.resultType.get(solution.getResult());
+        solution.setSource(HtmlEncoder.text(solution.getSource()));
+        solution.setError(HtmlEncoder.text(solution.getError()));
+        solution.setSystemError(HtmlEncoder.text(solution.getSystemError()));
+        solution.setWrong(HtmlEncoder.text(solution.getWrong()));
+
+        setAttr("success", true);
+        setAttr("language", OjConfig.languageName.get(solution.getLanguage()));
+        setAttr("id", (char) ('A' + num));
+        setAttr("problemTitle", contestService.getProblemTitle(cid, num));
+        setAttr("resultLongName", resultType.getLongName());
+        String resultName = resultType.getName();
+        setAttr("resultName", resultName);
+        setAttr("solution", solution);
+
+        if (resultName.equals("WA") ||
+                resultName.equals("PE") ||
+                resultName.equals("TLE") ||
+                resultName.equals("MLE") ||
+                resultName.equals("RE") ||
+                resultName.equals("OLE") ||
+                resultName.equals("RF")) {
+            setAttr("inputData",
+                    HtmlEncoder.text(solutionService.getInput(solution.getPid(), solution.getTest())));
+        }
+
+        String brush = getAttrForStr("language").toLowerCase();
+        if (StringUtil.isBlank(brush)) brush = "c";
+        if (brush.contains("GCC")) brush = "c";
+        else if (brush.contains("G++")) brush = "cc";
+        else if (brush.contains("Python")) brush = "py";
+        else if (brush.contains("Java")) brush = "java";
+        setAttr("brush", brush);
+        renderJson(
+                new String[]{"success", "letter", "problemTitle", "language", "resultLongName", "resultName", "solution",
+                        "brush", "inputData"});
+    }
+
     @RequiresPermissions("teacher")
     @Before({CProgramContestInterceptor.class})
     public void edit() {
@@ -291,61 +297,54 @@ public class CProgramController extends OjController {
         redirect("/cprogram/manager/" + cid);
     }
 
-    //
-//    @RequiresAuthentication
-//    @Before({WaitingInterceptor.class, POST.class, ExamInterceptor.class})
-//    public void submitSolution() {
-//        ContestSolutionModel solution = getModel(ContestSolutionModel.class, "solution");
-//        Boolean style = getParaToBoolean("style", false);
-//        int result = contestService.submitSolution(solution, style);
-//        if (result == -1) {
-//            setFlashMessage(
-//                    new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));
-//        } else if (result == -2) {
-//            setFlashMessage(
-//                    new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
-//        }
-//        Integer cid = solution.getCid();
-//        redirect("/cprogram/status/" + cid);
-//    }
-//
-//    @Before({WaitingInterceptor.class, ExamInterceptor.class})
-//    public void score() {
-//        Integer cid = getParaToInt(0);
-//        ContestModel contestModel = ContestService.me().getContest(cid);
-//        List<Record> user = CProgramService.getScoreList(cid, contestModel.getType());
-//        List<Record> teacherList = CProgramService.getTeacherList();
-//        HashMap<Integer, String> teacherMap = new HashMap<>();
-//        for(Record teacher: teacherList)
-//            teacherMap.put(teacher.getInt("uid"), teacher.getStr("realName"));
-//        for(Record u : user)
-//            u.set("teacher", teacherMap.get(u.getInt("tid")));
-//        setAttr("scoreList", user);
-//    }
-//
-//    @Before(POST.class)
-//    @RequiresPermissions("teacher")
-//    public void updateFinalScore() {
-//        String userid = getPara("name");
-//        if(userid.startsWith("user")) {
-//            Integer uid = Integer.parseInt(userid.substring(4));
-//            Integer score;
-//            try {
-//                score = getParaToInt("value");
-//            }
-//            catch (Exception ex) {
-//                renderJson("修改失败");
-//                return ;
-//            }
-//            if(score != null && uid != null && score >=0 && score <=100) {
-//                CProgramService.updateFinalScore(getParaToInt(0), uid, score);
-//                renderNull();
-//                return;
-//            }
-//        }
-//        renderJson("修改失败");
-//    }
-//
+    @Before({WaitingInterceptor.class, POST.class, ExamInterceptor.class})
+    public void submitSolution() {
+        ContestSolutionModel solution = getModel(ContestSolutionModel.class, "solution");
+        Boolean style = getParaToBoolean("style", false);
+        int result = contestService.submitSolution(solution, style);
+        if (result == -1) {
+            setFlashMessage(
+                    new FlashMessage(getText("solution.save.null"), MessageType.ERROR, getText("message.error.title")));
+        } else if (result == -2) {
+            setFlashMessage(
+                    new FlashMessage(getText("solution.save.error"), MessageType.ERROR, getText("message.error.title")));
+        }
+        Integer cid = solution.getCid();
+        redirect("/cprogram/status/" + cid);
+    }
+
+
+    @Before({WaitingInterceptor.class, ExamInterceptor.class, CProgramContestInterceptor.class})
+    public void score() {
+        Integer cid = getParaToInt(0);
+        List<Record> scoreList = CProgramService.getScoreList(cid);
+        setAttr("scoreList", scoreList);
+        render("score.ftl");
+    }
+
+    @Before(POST.class)
+    @RequiresPermissions("teacher")
+    public void updateFinalScore() {
+        String userid = getPara("name");
+        if(userid.startsWith("user")) {
+            Integer uid = Integer.parseInt(userid.substring(4));
+            Integer score;
+            try {
+                score = getParaToInt("value");
+            }
+            catch (Exception ex) {
+                renderJson("修改失败");
+                return ;
+            }
+            if(score != null && score >=0 && score <=100) {
+                CProgramService.updateFinalScore(getParaToInt(0), uid, score);
+                renderNull();
+                return;
+            }
+        }
+        renderJson("修改失败");
+    }
+
     @Before(CProgramContestInterceptor.class)
     public void password() {
         Integer cid = getParaToInt(0);
@@ -380,16 +379,16 @@ public class CProgramController extends OjController {
         render("pending.ftl");
     }
 
-    //
-//    @RequiresPermissions("teacher")
-//    @Before(POST.class)
-//    public void generate() {
-//        Integer cid = getParaToInt(0);
-//        Integer number = getParaToInt("number");
-//        File file = CProgramService.addPassword(cid, number);
-//        renderFile(file);
-//    }
-//
+
+    @RequiresPermissions("teacher")
+    @Before(POST.class)
+    public void generate() {
+        Integer cid = getParaToInt(0);
+        Integer number = getParaToInt("number");
+        File file = CProgramService.addPassword(cid, number);
+        renderFile(file);
+    }
+
     public void signup() {
         if (CProgramService.isRegister()) {
             redirect("/cprogram");
