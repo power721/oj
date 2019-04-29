@@ -29,7 +29,10 @@ import java.util.*;
  */
 @RequiresPermissions("teacher")
 public class AdminController extends OjController {
-//    private Integer GetType() {
+    public void index() {
+        render("index.ftl");
+    }
+    //    private Integer GetType() {
 //        Integer type = getParaToInt("type");
 //        if (type == null) {
 //            type = 0;

@@ -5,12 +5,13 @@ package com.power.oj.cprogram;
  */
 import com.jfinal.config.Routes;
 import com.power.oj.cprogram.admin.AdminController;
+import com.power.oj.cprogram.admin.AdminRoutes;
 
 
 public class CProgramRoutes extends Routes {
     @Override
     public void config() {
         add("/cprogram", CProgramController.class);
-        add("/cprogram/admin", AdminController.class);
+        add(new AdminRoutes());
     }
 }

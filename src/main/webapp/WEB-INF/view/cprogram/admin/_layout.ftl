@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Power OJ is a powerful online judge for ACM-ICPC contest.">
+    <meta name="author" content="power721">
+    <@block name="meta"></@block>
+    <base href="${baseUrl!}/"/>
+    <title><#if pageTitle??>${pageTitle!} -- </#if>${siteTitle!} Admin</title>
+
+    <!-- ============================== styles ============================== -->
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="assets/css/admin.css" type="text/css" rel="stylesheet">
+    <link href="assets/font-awesome-4.6.3/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+    <#--<!--[if lt IE 8]> &ndash;&gt;-->
+    <#--<link href="assets/font-awesome-4.6.3/css/font-awesome-ie7.min.css" type="text/css" rel="stylesheet">-->
+    <#--<![endif]&ndash;&gt;-->
+
+    <@block name="styles"></@block>
+
+    <script type="text/javascript">
+        var baseUrl = '${baseUrl!}/';
+    </script>
+</head>
+<body>
+<!-- ============================== Navbar ============================== -->
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul class="nav pull-right">
+            <li id="fat-menu" class="dropdown">
+                <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user"> </i> ${user.name} <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a tabindex="-1" href="user" target="_blank"> 用户中心 </a></li>
+                    <li class="divider"></li>
+                    <li class="divider visible-phone"></li>
+                    <li><a tabindex="-1" href="logout"> 退出 </a></li>
+                </ul>
+            </li>
+        </ul>
+        <a class="brand" href="./">
+        <span class="first"> 
+          <span class="x">Power</span>OJ 
+        </span>
+        </a>
+    </div>
+</div>
+<div class="sidebar-nav">
+    <a class="nav-header" data-toggle="collapse" href="#dashboard-menu">
+        <i class="fa fa-cogs"> </i> C程序设计后台管理 <i class="fa fa-chevron-up icon-chevron-up" aria-hidden="true"></i>
+    </a>
+    <ul id="dashboard-menu" class="nav nav-list collapse in">
+        <li><a href="cprogram/admin" <#if actionKey == "cprogram/admin"> class="x" </#if> > 首页 </a></li>
+        <li><a href="cprogram/admin/homework" <#if actionKey == "cprogram/admin/homework"> class="x" </#if> > 作业管理 </a>
+        </li>
+        <li><a href="cprogram/admin/experiment" <#if actionKey =="cprogram/admin/experiment"> class="x" </#if> >
+                实验管理 </a></li>
+        <li>
+            <a href="cprogram/admin/experiment_exam"<#if actionKey =="cprogram/admin/experiment_exam"> class="x" </#if> >
+                实验考试管理 </a></li>
+        <li><a href="cprogram/admin/course_exam" <#if actionKey =="cprogram/admin/course_exam" > class="x" </#if> >
+                课程考试管理 </a></li>
+        <li><a href="cprogram/admin/history" <#if actionKey == "cprogram/admin/history"> class="x" </#if > > 历史查询 </a>
+        </li>
+        <li><a href="cprogram"> 返回 </a></li>
+    </ul>
+</div>
+
+<!-- ======================= main content ======================= -->
+<div class="content">
+    <div class="header">
+        <h1 class="page-title">C程序设计后台管理</h1>
+    </div>
+    <@block name="content"></@block>
+</div>
+
+<!-- ========================= Footer ========================= -->
+<footer class="footer">
+    <div class="container">
+        <div class="#copyright">
+            ©Copyright 2017 <a href="http://git.oschina.net/power/oj" target="_balnk">PowerOJ
+                Rev.<#include "../../common/version.ftl"></a>
+        </div>
+        <ul class="footer-links">
+            <li><a href="https://github.com/power721/oj" target="_balnk">Source</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href="contact">Contact</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href="changelog">Changelog</a></li>
+            <li class="muted">&middot;</li>
+            <li><a href="faq">F.A.Q</a></li>
+        </ul>
+    </div>
+</footer>
+
+<!-- ======================= javascript ======================= -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+<script type="text/javascript" src="assets/js/oj.js"></script>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+<script src="assets/js/html5shiv.js"></script>
+<![endif]-->
+<@block name="scripts"></@block>
+</body>
+</html>
