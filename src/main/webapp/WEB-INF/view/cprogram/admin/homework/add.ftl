@@ -26,7 +26,7 @@
                             <label class="control-label" for="uid">任课教师</label>
                             <div class="controls">
                                 <div class="input-prepend">
-                                    <select name="contest.uid" id="uid">
+                                    <select name="uid" id="uid">
                                         <#list teacherList as teacher>
                                             <option value="${teacher.uid!}"
                                                     <#if teacher.uid == user.uid>selected</#if> >

@@ -55,7 +55,7 @@
     </a>
     <ul id="dashboard-menu" class="nav nav-list collapse in">
         <li><a href="cprogram/admin" <#if actionKey == "cprogram/admin"> class="x" </#if> > 首页 </a></li>
-        <li><a href="cprogram/admin/homework" <#if actionKey == "cprogram/admin/homework"> class="x" </#if> > 作业管理 </a>
+        <li><a href="cprogram/admin/homewok" <#if actionKey == "cprogram/admin/homework"> class="x" </#if> > 作业管理 </a>
         </li>
         <li><a href="cprogram/admin/experiment" <#if actionKey =="cprogram/admin/experiment"> class="x" </#if> >
                 实验管理 </a></li>
@@ -82,7 +82,7 @@
 <footer class="footer">
     <div class="container">
         <div class="#copyright">
-            ©Copyright 2017 <a href="http://git.oschina.net/power/oj" target="_balnk">PowerOJ
+            ©Copyright 2018 <a href="http://git.oschina.net/power/oj" target="_balnk">PowerOJ
                 Rev.<#include "../../common/version.ftl"></a>
         </div>
         <ul class="footer-links">

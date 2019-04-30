@@ -1,12 +1,18 @@
 package com.power.oj.cprogram.admin.homework;
 
 import com.jfinal.aop.Before;
+import com.jfinal.ext.interceptor.POST;
+import com.jfinal.plugin.activerecord.Record;
+import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.OjController;
 import com.power.oj.cprogram.CProgramService;
 import com.power.oj.cprogram.admin.AdminService;
+import com.power.oj.cprogram.interceptor.CProgramContestInterceptor;
 import com.power.oj.cprogram.interceptor.VarInterceptor;
+import com.power.oj.cprogram.model.ScoreModel;
+import com.power.oj.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
 import java.text.SimpleDateFormat;
@@ -31,4 +37,56 @@ public class HomeworkController extends OjController {
         render("add.ftl");
     }
 
+    @Before(POST.class)
+    public void save() {
+        String title = getPara("title");
+        Integer uid = getParaToInt("uid");
+        Integer week = getParaToInt("week");
+        Integer lecture = getParaToInt("lecture");
+        String startTime = getPara("startTime");
+        String endTime = getPara("endTime");
+        Integer cid = CProgramService.saveContest(title, uid, startTime, endTime, "HOMEWORK", week, lecture, null);
+        redirect("/cprogram/admin/homework/manager/" + cid);
+    }
+
+    @Before(CProgramContestInterceptor.class)
+    public void manager() {
+        Integer cid = getParaToInt(0);
+        List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
+        setAttr("problems", problems);
+        List<ContestModel> contestList = AdminService.getContestListForSelect("HOMEWORK");
+        setAttr("contestList", contestList);
+        render("manager.ftl");
+    }
+
+    @Before({CProgramContestInterceptor.class})
+    public void edit() {
+        setAttr("techerList", CProgramService.getTeacherList());
+        List<ContestModel> contestList = AdminService.getContestListForSelect("HOMEWORK");
+        setAttr("contestList", contestList);
+        render("edit.ftl");
+    }
+
+    @Before(POST.class)
+    public void update() {
+        Integer cid = getParaToInt(0);
+        String title = getPara("title");
+        Integer uid = getParaToInt("uid");
+        Integer week = getParaToInt("week");
+        Integer lecture = getParaToInt("lecture");
+        String startTime = getPara("startTime");
+        String endTime = getPara("endTime");
+        CProgramService.updateContest(cid, title, uid, startTime, endTime, week, lecture, null);
+        redirect("/cprogram/admin/homework/manager/" + cid);
+    }
+
+    @Before({CProgramContestInterceptor.class})
+    public void score() {
+        Integer cid = getParaToInt(0);
+        List<Record> scoreList = AdminService.getContestScoreList(cid);
+        setAttr("scoreList", scoreList);
+        List<ContestModel> contestList = AdminService.getContestListForSelect("HOMEWORK");
+        setAttr("contestList", contestList);
+        render("score.ftl");
+    }
 }

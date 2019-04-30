@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.cprogram.CProgramService;
 import com.power.oj.cprogram.model.CprogramInfoModel;
+import com.power.oj.cprogram.model.ScoreModel;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserService;
 
@@ -29,6 +30,10 @@ public class AdminService {
         parase.add(CProgramService.getStartUnixTime());
         parase.add(CProgramService.getEndUnixTime());
         return ContestModel.dao.find(sql, parase.toArray());
+    }
+
+    public static List<Record> getContestScoreList(Integer cid) {
+        return Db.find("SELECT u.uid,u.name,u.realName,cu.stuid,cu.classes,score1,score2,s.accepted,s.submited from score s INNER JOIN cprogram_user_info cu on s.uid = cu.uid INNER JOIN `user` u on s.uid = u.uid WHERE cid=? ORDER BY stuid", cid);
     }
 //    static List<Record> getScoreList(Integer type, Integer cid, Integer week, Integer lecture, Integer tid) {
 //        List<Object> parase = new ArrayList<>();
