@@ -11,7 +11,8 @@ import com.power.oj.cprogram.CProgramService;
 import com.power.oj.cprogram.admin.AdminService;
 import com.power.oj.cprogram.interceptor.CProgramContestInterceptor;
 import com.power.oj.cprogram.interceptor.VarInterceptor;
-import com.power.oj.cprogram.model.ScoreModel;
+import com.power.oj.shiro.ShiroKit;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
@@ -88,5 +89,12 @@ public class HomeworkController extends OjController {
         List<ContestModel> contestList = AdminService.getContestListForSelect("HOMEWORK");
         setAttr("contestList", contestList);
         render("score.ftl");
+    }
+
+    public void all() {
+        Integer tid = getParaToInt(0);
+        if(!ShiroKit.hasPermission("root")) {
+            tid = UserService.me().getCurrentUid();
+        }
     }
 }

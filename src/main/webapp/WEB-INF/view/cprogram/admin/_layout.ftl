@@ -55,16 +55,20 @@
     </a>
     <ul id="dashboard-menu" class="nav nav-list collapse in">
         <li><a href="cprogram/admin" <#if actionKey == "cprogram/admin"> class="x" </#if> > 首页 </a></li>
-        <li><a href="cprogram/admin/homewok" <#if actionKey == "cprogram/admin/homework"> class="x" </#if> > 作业管理 </a>
+        <li><a href="cprogram/admin/homework" <#if actionKey?starts_with("cprogram/admin/homework")> class="x" </#if> >
+                作业管理 </a>
         </li>
-        <li><a href="cprogram/admin/experiment" <#if actionKey =="cprogram/admin/experiment"> class="x" </#if> >
+        <li>
+            <a href="cprogram/admin/experiment" <#if actionKey?starts_with("cprogram/admin/experiment")> class="x" </#if> >
                 实验管理 </a></li>
         <li>
-            <a href="cprogram/admin/experiment_exam"<#if actionKey =="cprogram/admin/experiment_exam"> class="x" </#if> >
+            <a href="cprogram/admin/experiment_exam"<#if actionKey?starts_with("cprogram/admin/experiment_exam")> class="x" </#if> >
                 实验考试管理 </a></li>
-        <li><a href="cprogram/admin/course_exam" <#if actionKey =="cprogram/admin/course_exam" > class="x" </#if> >
+        <li>
+            <a href="cprogram/admin/course_exam" <#if actionKey?starts_with("cprogram/admin/course_exam") > class="x" </#if> >
                 课程考试管理 </a></li>
-        <li><a href="cprogram/admin/history" <#if actionKey == "cprogram/admin/history"> class="x" </#if > > 历史查询 </a>
+        <li><a href="cprogram/admin/history" <#if actionKey?starts_with("cprogram/admin/history")> class="x" </#if > >
+                历史查询 </a>
         </li>
         <li><a href="cprogram"> 返回 </a></li>
     </ul>
