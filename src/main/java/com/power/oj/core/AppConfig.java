@@ -197,6 +197,7 @@ public class AppConfig extends JFinalConfig {
         arp.addMapping(CprogramCommitModel.TABLE_NAME, CprogramCommitModel.class);
         arp.addMapping(CprogramPasswordModel.TABLE_NAME, CprogramPasswordModel.class);
         arp.addMapping(CprogramInfoModel.TABLE_NAME, "cid", CprogramInfoModel.class);
+        arp.addMapping(ScoreModel.TABLE_NAME, "rid", ScoreModel.class);
         me.add(arp);
 
         me.add(new EhCachePlugin());

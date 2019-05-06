@@ -92,7 +92,7 @@
                 if (current_time > endTime) {
                     $('#contest-progress').remove();
                 } else {
-                    <#if contest.type == 5>
+                    <#if contest.type == "HOMEWORK">
                     if (endTime - current_time < 24 * 3600 * 1000) {
                         <#else>
                         if (endTime - current_time < 1800 * 1000) {

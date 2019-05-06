@@ -22,6 +22,7 @@ import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 
 import java.io.File;
@@ -33,7 +34,7 @@ import java.util.List;
 /**
  * Created by w703710691d on 2017/6/14.
  */
-@RequiresAuthentication
+@RequiresUser
 @Before({VarInterceptor.class, SignUpInterceptor.class})
 public class CProgramController extends OjController {
     public void index() {

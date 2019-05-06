@@ -12,13 +12,16 @@ import com.power.oj.cprogram.admin.AdminService;
 import com.power.oj.cprogram.interceptor.CProgramContestInterceptor;
 import com.power.oj.cprogram.interceptor.VarInterceptor;
 import com.power.oj.shiro.ShiroKit;
-import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
+import jxl.write.WriteException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RequiresPermissions("teacher")
 @Before(VarInterceptor.class)
@@ -95,8 +98,33 @@ public class HomeworkController extends OjController {
         Integer tid = getParaToInt("tid");
         Integer week = getParaToInt("week");
         Integer lecture = getParaToInt("lecture");
-        if(!ShiroKit.hasPermission("root")) {
+        if (!ShiroKit.hasPermission("root")) {
             tid = UserService.me().getCurrentUid();
+        }
+        List<Map<String, Object>> result = HomeworkService.getAllScore(tid, week, lecture);
+        setAttr("allScore", result);
+        setAttr("week", week);
+        setAttr("lecture", lecture);
+        setAttr("tid", tid);
+        setAttr("homeworkList", HomeworkService.getHomeWorkList(tid, week, lecture));
+        List<ContestModel> contestList = AdminService.getContestListForSelect("HOMEWORK");
+        setAttr("contestList", contestList);
+        render("all.ftl");
+    }
+
+    public void getxls() {
+        Integer tid = getParaToInt("tid");
+        Integer week = getParaToInt("week");
+        Integer lecture = getParaToInt("lecture");
+        if (!ShiroKit.hasPermission("root")) {
+            tid = UserService.me().getCurrentUid();
+        }
+        try {
+            File xls = HomeworkService.getHomeworkXls(tid, week, lecture);
+            renderFile(xls);
+        } catch (IOException | WriteException e) {
+            e.printStackTrace();
+            renderNull();
         }
     }
 }

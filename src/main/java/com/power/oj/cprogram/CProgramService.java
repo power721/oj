@@ -61,6 +61,13 @@ public final class CProgramService {
             parase.add(CUser.getClass_week());
             parase.add(CUser.getClass_lecture());
         }
+        if (!isTeacher()) {
+            int startTime = getStartUnixTime();
+            int endTime = getEndUnixTime();
+            sqlExcSb.append("AND contest.startTime BETWEEN ? AND ? ");
+            parase.add(startTime);
+            parase.add(endTime);
+        }
         sqlExcSb.append("ORDER BY contest.startTime DESC ");
         Page<ContestModel> page = ContestModel.dao.paginate(pageNumber, pageSize, sqlSb.toString(), sqlExcSb.toString(), parase.toArray());
         return page;

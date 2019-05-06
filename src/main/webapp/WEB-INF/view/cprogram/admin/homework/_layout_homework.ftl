@@ -19,7 +19,7 @@
                                 <option value="${item.cid!}"
                                         <#if contest?? && contest.cid == item.cid>selected</#if>>${item.title}</option>
                             </#list>
-                            <option value="-1" <#if allList??>selected</#if>>全部作业</option>
+                            <option value="-1" <#if allScore??>selected</#if>>全部作业</option>
                         </select>
                         <select class="input-medium" id="week_select" name="week">
                             <#list weeksMap.keySet() as week>
@@ -34,7 +34,7 @@
 
                         <select class="input-medium" id="teacher_select" name="tid">
                             <#list teacherList as teacher>
-                                <option value="${teacher.tid!}">${teacher.realName}</option>
+                                <option value="${teacher.uid!}">${teacher.realName}</option>
                             </#list>
                         </select>
 
@@ -67,7 +67,7 @@
             if (contestID.val() === '-1') {
                 week_select.attr("disabled", false);
                 lecture_select.attr("disabled", false);
-                searchForm.action = "cprogram/admin/homework/search";
+                searchForm.action = "cprogram/admin/homework/all";
                 teacher_select.show();
             } else {
                 week_select.attr("disabled", true);
@@ -77,6 +77,9 @@
                 searchForm.action = "cprogram/admin/homework/score/" + contestID.val();
                 teacher_select.hide();
             }
+            <#if !adminUser??>
+            teacher_select.hide();
+            </#if>
         }
 
         updateSelecter();
