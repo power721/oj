@@ -61,8 +61,8 @@
                         <div class="input-prepend">
                             <span class="add-on"><i class="oj-icon oj-icon-user"></i></span>
                             <select name="tid" id="tid">
-                                <#if techerList??>
-                                    <#list techerList as teacher>
+                                <#if teacherList??>
+                                    <#list teacherList as teacher>
                                         <option value="${teacher.uid!}" <#if User.tid == teacher.uid> selected </#if> >
                                             ${teacher.realName!}
                                         </option>

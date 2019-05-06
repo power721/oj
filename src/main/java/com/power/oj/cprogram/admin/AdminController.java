@@ -83,7 +83,7 @@ public class AdminController extends OjController {
 //    }
 //
 //    private void edit() {
-//        setAttr("techerList", CProgramService.getTeacherList());
+//        setAttr("teacherList", CProgramService.getTeacherList());
 //    }
 //
 //    private void manager() {

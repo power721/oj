@@ -59,7 +59,7 @@ public class CProgramController extends OjController {
         } else {
             setAttr("endTime", sdf.format(new Date(ctime + CProgramConstants.twoHours)));
         }
-        setAttr("techerList", CProgramService.getTeacherList());
+
         render("add.ftl");
     }
 
@@ -278,7 +278,6 @@ public class CProgramController extends OjController {
     @RequiresPermissions("teacher")
     @Before({CProgramContestInterceptor.class})
     public void edit() {
-        setAttr("techerList", CProgramService.getTeacherList());
         render("edit.ftl");
     }
 
@@ -394,7 +393,6 @@ public class CProgramController extends OjController {
             redirect("/cprogram");
             return;
         }
-        setAttr("techerList", CProgramService.getTeacherList());
         render("signup.ftl");
     }
 
@@ -417,7 +415,6 @@ public class CProgramController extends OjController {
     }
 
     public void resignup() {
-        setAttr("techerList", CProgramService.getTeacherList());
         UserModel user = CProgramService.getUserInfo();
         setAttr("User", user);
         render("resignup.ftl");

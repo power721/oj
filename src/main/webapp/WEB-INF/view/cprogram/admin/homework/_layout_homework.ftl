@@ -14,28 +14,27 @@
                 <div class="form-inline">
                     <form class="form-search" action="cprogram/admin/homework/search" method="post" id="searchForm">
                         <select class="input-medium" id="contestID" name="cid">
-                            <option value="">作业名称</option>
+                            <#--                            <option value="">作业名称</option>-->
                             <#list contestList as item>
-                                <option value="${item.cid!}" <#if contest?? && contest.cid == item.cid>selected</#if> >
-                                    ${item.title}
-                                </option>
+                                <option value="${item.cid!}"
+                                        <#if contest?? && contest.cid == item.cid>selected</#if>>${item.title}</option>
                             </#list>
-                            <option value="-1" <#if allList??> selected </#if> >
-                                全部作业
-                            </option>
+                            <option value="-1" <#if allList??>selected</#if>>全部作业</option>
                         </select>
                         <select class="input-medium" id="week_select" name="week">
                             <#list weeksMap.keySet() as week>
-                                <option value="${week!}" <#if WEEK?? && WEEK == week>selected</#if> >
-                                    ${weeksMap.get(week!)}
-                                </option>
+                                <option value="${week!}">${weeksMap.get(week!)}</option>
                             </#list>
                         </select>
                         <select class="input-medium" id="lecture_select" name="lecture">
                             <#list lecturesMap.keySet() as lecture>
-                                <option value="${lecture!}" <#if LECTURE?? && LECTURE == lecture>selected</#if> >
-                                    ${lecturesMap.get(lecture!)}
-                                </option>
+                                <option value="${lecture!}">${lecturesMap.get(lecture!)}</option>
+                            </#list>
+                        </select>
+
+                        <select class="input-medium" id="teacher_select" name="tid">
+                            <#list teacherList as teacher>
+                                <option value="${teacher.tid!}">${teacher.realName}</option>
                             </#list>
                         </select>
 
@@ -63,63 +62,25 @@
         var lecture_select = $("#lecture_select");
         var sendBtn = $("#sendBtn");
         var searchForm = document.getElementById("searchForm");
-        if (contestID.val() === "") {
-            sendBtn.attr("disabled", true);
-        }
-        if (teacher_select.val() !== -1) {
-            week_select.attr("disabled", true);
-            lecture_select.attr("disabled", true);
-            week_select.val("");
-            lecture_select.val("");
-        }
-        teacher_select.click(function () {
-            if (teacher_select.val() !== -1) {
-                week_select.attr("disabled", true);
-                lecture_select.attr("disabled", true);
-                week_select.val("");
-                lecture_select.val("");
 
-            } else {
+        function updateSelecter() {
+            if (contestID.val() === '-1') {
                 week_select.attr("disabled", false);
                 lecture_select.attr("disabled", false);
-                lecture_select.val(0);
-                week_select.val(0);
-            }
-        });
-        if (contestID.val() !== "-1") {
-            week_select.attr("disabled", true);
-            lecture_select.attr("disabled", true);
-            week_select.val(weekName[contestID.val()]);
-            lecture_select.val(lectureName[contestID.val()]);
-            searchForm.action = "cprogram/admin/homework/search";
-        } else {
-            lecture_select.val("0");
-            week_select.val("0");
-            searchForm.action = "cprogram/admin/homework/score/" + contestID.val();
-        }
-
-        contestID.click(function () {
-            if (contestID.val() === "") {
-                sendBtn.attr("disabled", true);
-            } else {
-                sendBtn.attr("disabled", false);
-            }
-
-            if (contestID.val() === "-1") {
-                week_select.attr("disabled", false);
-                lecture_select.attr("disabled", false);
-                lecture_select.val("0");
-                week_select.val("0");
                 searchForm.action = "cprogram/admin/homework/search";
-
+                teacher_select.show();
             } else {
                 week_select.attr("disabled", true);
                 lecture_select.attr("disabled", true);
                 week_select.val(weekName[contestID.val()]);
                 lecture_select.val(lectureName[contestID.val()]);
                 searchForm.action = "cprogram/admin/homework/score/" + contestID.val();
+                teacher_select.hide();
             }
-        })
+        }
+
+        updateSelecter();
+        contestID.click(updateSelecter);
     </script>
     <script src="assets/tablecloth/js/jquery.metadata.js"></script>
     <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>

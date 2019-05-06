@@ -27,7 +27,7 @@
             <div class="controls">
                 <div class="input-prepend">
                     <select name="uid" id="uid">
-                        <#list techerList as teacher>
+                        <#list teacherList as teacher>
                             <option value="${teacher.uid!}" <#if teacher.uid == contest.uid>selected</#if> >
                                 ${teacher.realName!}
                             </option>

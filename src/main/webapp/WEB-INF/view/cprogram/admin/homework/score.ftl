@@ -33,37 +33,19 @@
                 <#if scoreList??>
                     <#list scoreList as users>
                         <tr>
-                            <td>
-                                ${users.name!}
+                            <td>${users.name!}</td>
+                            <td>${users.realName!}</td>
+                            <td>${users.stuid!}</td>
+                            <td>${users.classes!}</td>
+                            <td><a href="cprogram/status/${contest.cid}?name=${users.stuid!}&result=0"
+                                   target="_blank">${users.accepted!}</a>
                             </td>
-                            <td>
-                                ${users.realName!}
+                            <td><a href="cprogram/status/${contest.cid}?name=${users.stuid!}"
+                                   target="_blank">${users.submited!}</a>
                             </td>
-                            <td>
-                                ${users.stuid!}
+                            <td>${users.score1!}</td>
+                            <td><a id="user${users.uid}" onclick="updateFinalScore('${users.uid}')">${users.score2!}</a>
                             </td>
-                            <td>
-                                ${users.classes!}
-                            </td>
-                            <td>
-                                <a href="cprogram/status/${contest.cid}?name=${users.stuid!}&result=0" target="_blank">
-                                    ${users.accepted!}
-                                </a>
-                            </td>
-                            <td>
-                                <a href="cprogram/status/${contest.cid}?name=${users.stuid!}" target="_blank">
-                                    ${users.submited!}
-                                </a>
-                            </td>
-                            <td>
-                                ${users.score1!}
-                            </td>
-                            <td>
-                                <a href="#" id="user${users.uid}">
-                                    ${users.score2!}
-                                </a>
-                            </td>
-
                         </tr>
                     </#list>
                 </#if>
@@ -77,20 +59,19 @@
     <script src="assets/bootstrap-editable/js/bootstrap-editable.js"></script>
     <script>
         $(document).ready(function () {
-            var apiUrl = '/cprogram/updateFinalScore/${contest.cid!}';
+            var apiUrl = 'cprogram/updateFinalScore/${contest.cid!}';
             $.fn.editable.defaults.mode = 'inline';
             $.fn.editable.defaults.url = apiUrl;
-            <#if scoreList??>
-            <#list scoreList as users >
-            $('#user${users.uid!}').editable({
+        });
+
+        function updateFinalScore(uid) {
+            $('#user' + uid).editable({
                 type: 'text',
                 pk: 0,
                 params: {type: 'string'},
                 title: 'Change Final Score'
             });
-            </#list>
-            </#if>
-        });
+        }
     </script>
 </@override>
 <@extends name="_layout_homework.ftl"></@extends>

@@ -62,7 +62,7 @@ public class HomeworkController extends OjController {
 
     @Before({CProgramContestInterceptor.class})
     public void edit() {
-        setAttr("techerList", CProgramService.getTeacherList());
+        setAttr("teacherList", CProgramService.getTeacherList());
         List<ContestModel> contestList = AdminService.getContestListForSelect("HOMEWORK");
         setAttr("contestList", contestList);
         render("edit.ftl");
@@ -92,7 +92,9 @@ public class HomeworkController extends OjController {
     }
 
     public void all() {
-        Integer tid = getParaToInt(0);
+        Integer tid = getParaToInt("tid");
+        Integer week = getParaToInt("week");
+        Integer lecture = getParaToInt("lecture");
         if(!ShiroKit.hasPermission("root")) {
             tid = UserService.me().getCurrentUid();
         }
