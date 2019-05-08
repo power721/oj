@@ -162,7 +162,7 @@
             </@override>
 
             <@override name="scripts">
-                <script type="text/javascript" async src="/assets/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+                <script type="text/javascript" async src="assets/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
                 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
     tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},

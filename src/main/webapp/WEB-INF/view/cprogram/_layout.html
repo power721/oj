@@ -20,6 +20,11 @@
       </li>
     </#if>
   </#if>
+  <#if !TeacherUser?? && contest.type=="EXPERIMENT">
+  <li class="<#if methodName=="report">active</#if>">
+  <a href="cprogram/report/${contest.cid}-${user.uid}">实验报告</a>
+  </li>
+  </#if>
   <li class="<#if methodName=="score">active</#if>">
   <a href="cprogram/score/${contest.cid}">成绩</a>
   </li>

@@ -10,6 +10,7 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.ResultType;
+import com.power.oj.cprogram.model.CprogramExperimentReportModel;
 import com.power.oj.cprogram.model.CprogramInfoModel;
 import com.power.oj.cprogram.model.CprogramPasswordModel;
 import com.power.oj.cprogram.model.CprogramUserInfoModel;
@@ -430,5 +431,82 @@ public final class CProgramService {
     public static String getStuID() {
         Integer uid = UserService.me().getCurrentUid();
         return CprogramUserInfoModel.dao.findFirst("select stuid from cprogram_user_info where uid=?", uid).getStuid();
+    }
+
+    public static CprogramExperimentReportModel getReportInfo(Integer cid, Integer uid) {
+        String sql = "SELECT\n" +
+                "\tu.realName,\n" +
+                "\tcu.stuid,\n" +
+                "\tce.position,\n" +
+                "\tce.machine,\n" +
+                "\tt.realName AS teacher,\n" +
+                "\tsc.score2 AS score,\n" +
+                "\tce.times,\n" +
+                "\tce.`week`,\n" +
+                "\tce.lecture,\n" +
+                "\tce.`commit`,\n" +
+                "\tci.`commit` AS aim\n" +
+                "FROM\n" +
+                "\tcprogram_experiment_report ce\n" +
+                "INNER JOIN `user` u ON ce.uid = u.uid\n" +
+                "INNER JOIN cprogram_user_info cu ON ce.uid = cu.uid\n" +
+                "INNER JOIN `user` t ON cu.tid = t.uid\n" +
+                "INNER JOIN score sc ON ce.cid = sc.cid\n" +
+                "AND ce.uid = sc.uid\n" +
+                "INNER JOIN cprogram_info ci ON ce.cid = ci.cid\n" +
+                "WHERE\n" +
+                "\tce.cid = ?\n" +
+                "AND ce.uid = ?";
+        return CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
+    }
+
+    public static CprogramExperimentReportModel findReportInfoByContestAndUser(Integer cid, Integer uid) {
+        return CprogramExperimentReportModel.dao.findFirst(
+                "SELECT\n" +
+                        "\t*\n" +
+                        "FROM\n" +
+                        "\tcprogram_experiment_report\n" +
+                        "WHERE\n" +
+                        "\tcid = ?\n" +
+                        "AND uid = ?", cid, uid);
+    }
+
+    public static CprogramExperimentReportModel findReportInfoByTimesAndPostion(
+            String position, Integer machine, Integer times, Integer week, Integer lecture) {
+        return CprogramExperimentReportModel.dao.findFirst(
+                "SELECT\n" +
+                        "\t*\n" +
+                        "FROM\n" +
+                        "\tcprogram_experiment_report\n" +
+                        "WHERE\n" +
+                        "\tposition = ?\n" +
+                        "AND machine = ?\n" +
+                        "AND times = ?\n" +
+                        "AND `week` = ?\n" +
+                        "AND lecture = ?",
+                position, machine, times, week, lecture);
+    }
+
+    public static Integer updateReportInfo(Integer cid, Integer uid, String position, Integer machine,
+                                           Integer times, Integer week, Integer lecture) {
+        CprogramExperimentReportModel pos = findReportInfoByTimesAndPostion(position, machine, times, week, lecture);
+        if (pos == null) {
+            CprogramExperimentReportModel info = findReportInfoByContestAndUser(cid, uid);
+            if (info == null) {  //new Record
+                CprogramExperimentReportModel report = new CprogramExperimentReportModel();
+                report.setCid(cid).setUid(uid).setPosition(position).setMachine(machine);
+                report.setTimes(times).setWeek(week).setLecture(lecture);
+                report.save();
+            } else {    //update Record
+                info.setPosition(position).setMachine(machine);
+                info.setTimes(times).setWeek(week).setLecture(lecture);
+                info.update();
+            }
+            return 0;
+        } else if (pos.getUid().equals(uid)) { //no Modify
+            return 0;
+        } else {    // this position have been ocu;
+            return -1;
+        }
     }
 }

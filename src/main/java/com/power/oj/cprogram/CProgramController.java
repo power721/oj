@@ -326,17 +326,16 @@ public class CProgramController extends OjController {
     @RequiresPermissions("teacher")
     public void updateFinalScore() {
         String userid = getPara("name");
-        if(userid.startsWith("user")) {
+        if (userid.startsWith("user")) {
             Integer uid = Integer.parseInt(userid.substring(4));
             Integer score;
             try {
                 score = getParaToInt("value");
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 renderJson("修改失败");
-                return ;
+                return;
             }
-            if(score != null && score >=0 && score <=100) {
+            if (score != null && score >= 0 && score <= 100) {
                 CProgramService.updateFinalScore(getParaToInt(0), uid, score);
                 renderNull();
                 return;
@@ -434,9 +433,34 @@ public class CProgramController extends OjController {
         CProgramService.updateUser(userName, phone, classes, week, lecture, tid, stuId);
         redirect("/cprogram");
     }
-//
-//    public void getReport() {
-//        Integer cid = getParaToInt("cid");
-//        Integer uid = getParaToInt("uid");
-//    }
+
+    @Before({CProgramContestInterceptor.class})
+    public void report() {
+        Integer cid = getParaToInt(0);
+        Integer uid = getParaToInt(1);
+        if (!CProgramService.isTeacher()) {
+            uid = UserService.me().getCurrentUid();
+        }
+        List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
+        setAttr("problems", problems);
+        setAttr("report", CProgramService.getReportInfo(cid, uid));
+        render("report.ftl");
+    }
+
+    public void updateReportInfo() {
+        Integer cid = getParaToInt(0);
+        Integer uid = UserService.me().getCurrentUid();
+        String position = getPara("position");
+        Integer machine = getParaToInt("machine");
+        Integer times = getParaToInt("times");
+        Integer week = getParaToInt("week");
+        Integer lecture = getParaToInt("lecture");
+        Integer res = CProgramService.updateReportInfo(cid, uid, position, machine, times, week, lecture);
+        if (res == 0) {
+            setAttr("success", true);
+        } else {
+            setAttr("success", false);
+        }
+        renderJson(new String[]{"success"});
+    }
 }

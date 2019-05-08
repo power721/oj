@@ -15,6 +15,8 @@ public class CprogramExperimentReportModel extends Model<CprogramExperimentRepor
     public static final String WEEK = "week";
     public static final String LECTURE = "lecture";
     public static final String COMMIT = "commit";
+    public static final String MACHINE = "machine";
+    public static final String POSITION = "position";
 
     /*
      * auto generated getter and setter
@@ -73,6 +75,22 @@ public class CprogramExperimentReportModel extends Model<CprogramExperimentRepor
 
     public CprogramExperimentReportModel setCommit(String value) {
         return set(COMMIT, value);
+    }
+
+    public Integer getMachine() {
+        return getInt(MACHINE);
+    }
+
+    public CprogramExperimentReportModel setMachine(Integer value) {
+        return set(MACHINE, value);
+    }
+
+    public String getPosition() {
+        return getStr(POSITION);
+    }
+
+    public CprogramExperimentReportModel setPosition(String value) {
+        return set(POSITION, value);
     }
 
 }

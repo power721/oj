@@ -132,7 +132,7 @@
             function getProblemTitle() {
                 var pid = this.value;
                 if (pid >= 1000) {
-                    $.get("/api/problem/getField", {name: "title", pid: this.value},
+                    $.get("api/problem/getField", {name: "title", pid: this.value},
                         function (data) {
                             if (data.result) {
                                 $("input[name='title']").val(data.result);
