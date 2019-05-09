@@ -17,6 +17,7 @@
                     <th width="10%">系统成绩</th>
                     <th width="10%">最终成绩</th>
                     <th width="10%">任课教师</th>
+                    <th width="2%"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -60,6 +61,9 @@
                             </td>
                             <td>
                                 ${users.teacher!}
+                            </td>
+                            <td>
+                                <a href="cprogram/report/${contest.cid}-${users.uid!}" target="_blank"><i class="icon icon-tasks"></i> </a>
                             </td>
                         </tr>
                     </#list>

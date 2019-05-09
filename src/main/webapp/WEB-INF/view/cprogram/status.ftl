@@ -78,7 +78,7 @@
              title="${(solution.name)!?html}">${(solution.realName)!}</a>
         </td>
 
-        <td class="user" >${solution.Class!}</td>
+        <td class="user" >${solution.classes!}</td>
 
         <td class="problem"><a href="cprogram/problem/${contest.cid}-${solution.alpha!}">${solution.alpha!}</a></td>
         <td class="result" id="${solution.resultName!}">

@@ -149,6 +149,89 @@
                 </tbody>
             </table>
         </div>
+        <#list problems as problem>
+            <div style="width: 80%;margin: 0 10%;" class="text-left">
+                <h5>
+                    ${problem.id}.${problem.title}
+                </h5>
+                <h6>
+                    题目描述
+                </h6>
+                <p>
+                    ${problem.description}
+                </p>
+                <h6>
+                    输入
+                </h6>
+                <p>
+                    ${problem.input}
+                </p>
+                <h6>
+                    输出
+                </h6>
+                <p>
+                    ${problem.output}
+                </p>
+                <h6>
+                    统计
+                </h6>
+                <table class="table table-hover table-condensed" style="min-width: 300px; width: 30%">
+                    <thead>
+                    <tr>
+                        <#list problem.statistics.keySet() as result>
+                            <th>${result}</th>
+                        </#list>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <#list problem.statistics.keySet() as result>
+                        <td>${problem.statistics.get(result)}</td>
+                    </#list>
+                    </tbody>
+                </table>
+                <h6>
+                    代码
+                </h6>
+                <pre>${problem.code!}</pre>
+                <h6>
+                    小结
+                </h6>
+                <form id='commit-${problem.num}' action="cprogram/updateCommit/${contest.cid}-${problem.num}">
+                    <textarea rows="5" name="commit" style="width: 100%">${problem.commit!}</textarea>
+                    <button class="btn btn-info cp_sub" onclick="return saveCommit(this)">保存</button>
+                </form>
+
+            </div>
+        </#list>
+    </div>
+    <div style="width: 80%;margin: 0 10%;" class="text-left">
+        <h4>
+            实验总结
+        </h4>
+        <h5>
+            总统统计表
+        </h5>
+        <table class="table table-hover table-condensed" style="min-width: 300px; width: 30%">
+            <thead>
+            <tr>
+                <#list report.tot.keySet() as result>
+                    <th>${result}</th>
+                </#list>
+            </tr>
+            </thead>
+            <tbody>
+            <#list report.tot.keySet() as result>
+                <td>${report.tot.get(result)}</td>
+            </#list>
+            </tbody>
+        </table>
+        <h5>
+            实验体会
+        </h5>
+        <form id='commit-final' action="cprogram/updateFinalCommit/${contest.cid}">
+            <textarea rows="5" name="commit" style="width: 100%">${report.commit!}</textarea>
+            <button class="btn btn-info cp_sub" onclick="return saveCommit(this)">保存</button>
+        </form>
     </div>
 </@override>
 <@override name="scripts">
@@ -186,6 +269,10 @@
         for (i = 0; i < buttonArray.length; i++) {
             buttonArray[i].style.display = "none";
         }
+        var textareas = document.getElementsByTagName('textarea');
+        for (i = 0; i < textareas.length; i++) {
+            textareas[i].disabled = true;
+        }
         position.disabled = true;
         machine.disabled = true;
         times.disabled = true;
@@ -211,6 +298,36 @@
                     alert("error:" + data.responseText);
                 }
             })
+        }
+
+        function saveCommit(obj) {
+            var text = obj.parentElement.children[0];
+            var bth = obj.parentElement.children[1];
+            bth.disabled = true;
+            var xhr;
+            if (window.XMLHttpRequest) {
+                xhr = new XMLHttpRequest();
+            } else {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var status = JSON.parse(xhr.responseText);
+                        if (status.status === 200) {
+                            alert('保存成功');
+                            bth.disabled = false;
+                        } else {
+                            alert('保存失败');
+                            bth.disabled = false;
+                        }
+                    }
+                }
+            };
+            xhr.open('POST', obj.parentElement.action, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.send('commit=' + text.value);
+            return false;
         }
     </script>
 </@override >

@@ -442,6 +442,7 @@ public class CProgramController extends OjController {
             uid = UserService.me().getCurrentUid();
         }
         List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
+        CProgramService.appendStatisticsAndCommit(uid, cid, problems);
         setAttr("problems", problems);
         setAttr("report", CProgramService.getReportInfo(cid, uid));
         render("report.ftl");
@@ -462,5 +463,24 @@ public class CProgramController extends OjController {
             setAttr("success", false);
         }
         renderJson(new String[]{"success"});
+    }
+
+    public void updateCommit() {
+        Integer cid = getParaToInt(0);
+        Integer num = getParaToInt(1);
+        Integer uid = UserService.me().getCurrentUid();
+        String commit = getPara("commit");
+        CProgramService.updateCommit(uid, cid, num, commit);
+        setAttr("status", 200);
+        renderJson(new String[]{"status"});
+    }
+
+    public void updateFinalCommit() {
+        Integer cid = getParaToInt(0);
+        Integer uid = UserService.me().getCurrentUid();
+        String commit = getPara("commit");
+        Integer res = CProgramService.updateFinalCommit(uid, cid, commit);
+        setAttr("status", 200 + res);
+        renderJson(new String[]{"status"});
     }
 }

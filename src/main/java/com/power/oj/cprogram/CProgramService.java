@@ -10,15 +10,17 @@ import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
 import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.cprogram.model.CprogramExperimentReportModel;
-import com.power.oj.cprogram.model.CprogramInfoModel;
-import com.power.oj.cprogram.model.CprogramPasswordModel;
-import com.power.oj.cprogram.model.CprogramUserInfoModel;
+import com.power.oj.core.bean.Solution;
+import com.power.oj.cprogram.model.*;
+import com.power.oj.problem.ProblemModel;
+import com.power.oj.problem.ProblemService;
 import com.power.oj.shiro.ShiroKit;
+import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import com.sun.xml.internal.bind.v2.model.core.ID;
+import sun.reflect.generics.tree.Tree;
 
 import java.io.*;
 import java.sql.Time;
@@ -457,7 +459,9 @@ public final class CProgramService {
                 "WHERE\n" +
                 "\tce.cid = ?\n" +
                 "AND ce.uid = ?";
-        return CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
+        CprogramExperimentReportModel model =  CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
+        model.put("tot", getSolutuonStatistics(uid, cid, -1));
+        return model;
     }
 
     public static CprogramExperimentReportModel findReportInfoByContestAndUser(Integer cid, Integer uid) {
@@ -507,6 +511,68 @@ public final class CProgramService {
             return 0;
         } else {    // this position have been ocu;
             return -1;
+        }
+    }
+
+    public static LinkedHashMap<String, Integer> getSolutuonStatistics(Integer uid, Integer cid, Integer num) {
+        List<SolutionModel> solutions;
+        if(num != -1) {
+             solutions = SolutionModel.dao.find("select result from contest_solution where uid=? AND cid=? AND num=?",
+                    uid, cid, num);
+        } else {
+            solutions = SolutionModel.dao.find("select result from contest_solution where uid=? AND cid=?", uid, cid);
+        }
+
+        Map<Integer, Integer> buffer = new TreeMap<>();
+        for (SolutionModel solution : solutions) {
+            Integer result = solution.getResult();
+            buffer.merge(result, 1, Integer::sum);
+        }
+        LinkedHashMap<String, Integer> res = new LinkedHashMap<>();
+        res.put("TOT", solutions.size());
+        for (Map.Entry<Integer, Integer> e : buffer.entrySet()) {
+            res.put(OjConfig.resultType.get(e.getKey()).getName(), e.getValue());
+        }
+        return res;
+    }
+
+    public static void appendStatisticsAndCommit(Integer uid, int cid, List<Record> problems) {
+        for (Record problem : problems) {
+            int num = problem.getInt("num");
+            LinkedHashMap<String, Integer> statistics = getSolutuonStatistics(uid, cid, num);
+            problem.set("statistics", statistics);
+            problem.set("commit", Db.queryStr("select commit from cprogram_commit where uid=? AND cid=? AND num=?", uid, cid, num));
+            problem.set("code", ContestSolutionModel.dao.findFirst(
+                    "SELECT  MIN(result) as result,any_value(source) as source from contest_solution where uid=? AND cid=? AND num=?", uid, cid, num).getSource());
+            ProblemModel p = ProblemService.me().findProblem(problem.getInt("pid"));
+            problem.set("description", p.getDescription());
+            problem.set("input", p.getInput());
+            problem.set("output", p.getOutput());
+        }
+    }
+
+    public static void updateCommit(Integer uid, Integer cid, Integer num, String commit) {
+        CprogramCommitModel commitModel = CprogramCommitModel.dao.findFirst("select * from cprogram_commit where uid=? and cid=? and num=?",
+                uid, cid, num);
+        if(commitModel == null) {
+            commitModel = new CprogramCommitModel();
+            commitModel.setCid(cid).setUid(uid).setNum(num).setCommit(commit);
+            commitModel.save();
+        }else{
+            commitModel.setCommit(commit);
+            commitModel.update();
+        }
+    }
+
+    public static Integer updateFinalCommit(Integer uid, Integer cid, String commit) {
+        CprogramExperimentReportModel reportModel = CprogramExperimentReportModel.dao.findFirst(
+                "select * from cprogram_experiment_report where uid=? and cid=?", uid, cid);
+        if(reportModel == null) {
+            return -1;
+        } else {
+            reportModel.setCommit(commit);
+            reportModel.update();
+            return 0;
         }
     }
 }
