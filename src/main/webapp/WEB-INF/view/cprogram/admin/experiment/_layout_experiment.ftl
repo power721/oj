@@ -12,7 +12,7 @@
         <div class="row-fluid">
             <div class="well">
                 <div class="form-inline">
-                    <form class="form-search" action="cprogram/admin/homework/search" method="post" id="searchForm">
+                    <form class="form-search" action="cprogram/admin/experiment/search" method="post" id="searchForm">
                         <select class="input-medium" id="contestID" name="cid">
                             <#--                            <option value="">作业名称</option>-->
                             <#list contestList as item>
@@ -39,10 +39,10 @@
                         </select>
 
                         <button type="submit" class="btn btn-info" id="sendBtn">提交</button>
-                        <a class="btn btn-success" href="cprogram/admin/homework/add">新建作业</a>
+                        <a class="btn btn-success" href="cprogram/admin/experiment/add">新建实验</a>
                     </form>
                 </div>
-                <@block name="homework_content"></@block>
+                <@block name="experiment_content"></@block>
             </div>
         </div>
     </div>
@@ -67,14 +67,14 @@
             if (contestID.val() === '-1') {
                 week_select.attr("disabled", false);
                 lecture_select.attr("disabled", false);
-                searchForm.action = "cprogram/admin/homework/all";
+                searchForm.action = "cprogram/admin/experiment/all";
                 teacher_select.show();
             } else {
                 week_select.attr("disabled", true);
                 lecture_select.attr("disabled", true);
                 week_select.val(weekName[contestID.val()]);
                 lecture_select.val(lectureName[contestID.val()]);
-                searchForm.action = "cprogram/admin/homework/score/" + contestID.val();
+                searchForm.action = "cprogram/admin/experiment/score/" + contestID.val();
                 teacher_select.hide();
             }
             <#if !adminUser??>
@@ -89,6 +89,6 @@
     <script src="assets/tablecloth/js/jquery.tablecloth.js"></script>
     <script src="assets/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
     <script src="assets/jquery.artDialog/jquery.artDialog.js"></script>
-    <@block name="homework_scripts"></@block>
+    <@block name="experiment_scripts"></@block>
 </@override>
 <@extends name="../_layout.ftl"></@extends>

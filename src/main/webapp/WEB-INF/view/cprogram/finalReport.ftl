@@ -4,7 +4,9 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <link href="https://cdn.bootcss.com/twitter-bootstrap/2.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <base href="${baseUrl!}/"/>
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+
     <title>实验报告</title>
     <style>
         .report {
@@ -253,6 +255,6 @@
         </div>
     </div>
 </section>
-<script src="https://cdn.bootcss.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
