@@ -241,6 +241,7 @@ public final class CProgramService {
         Record score = Db.findFirst("select * from score where cid =? and uid = ?", cid, uid);
         Integer totProblem = ContestService.me().getContestProblems(cid, null).size();
         Integer preScore = (int) Math.round(100.0 / totProblem);
+        String contestType = getContestType(cid);
         if (score == null) {
             score = new Record();
             score.set("cid", cid);
@@ -255,7 +256,9 @@ public final class CProgramService {
             if (result == ResultType.AC) {
                 score.set("accepted", 1);
                 score.set("score1", preScore);
-                score.set("score2", preScore);
+                if (!contestType.equals(CprogramInfoModel.TYPE_EXPERIMENT)) {
+                    score.set("score2", preScore);
+                }
             }
             Db.save("score", "rid", score);
         } else {
@@ -268,7 +271,9 @@ public final class CProgramService {
                 }
                 if (newScore > 100) newScore = 100;
                 score.set("score1", newScore);
-                score.set("score2", newScore);
+                if (!contestType.equals(CprogramInfoModel.TYPE_EXPERIMENT)) {
+                    score.set("score2", newScore);
+                }
             }
             Db.update("score", "rid", score);
         }
@@ -439,6 +444,7 @@ public final class CProgramService {
         String sql = "SELECT\n" +
                 "\tu.realName,\n" +
                 "\tcu.stuid,\n" +
+                "\tcu.classes,\n" +
                 "\tce.position,\n" +
                 "\tce.machine,\n" +
                 "\tt.realName AS teacher,\n" +
@@ -447,6 +453,7 @@ public final class CProgramService {
                 "\tce.`week`,\n" +
                 "\tce.lecture,\n" +
                 "\tce.`commit`,\n" +
+                "\tce.status,\n" +
                 "\tci.`commit` AS aim\n" +
                 "FROM\n" +
                 "\tcprogram_experiment_report ce\n" +
@@ -459,7 +466,7 @@ public final class CProgramService {
                 "WHERE\n" +
                 "\tce.cid = ?\n" +
                 "AND ce.uid = ?";
-        CprogramExperimentReportModel model =  CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
+        CprogramExperimentReportModel model = CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
         model.put("tot", getSolutuonStatistics(uid, cid, -1));
         return model;
     }
@@ -516,8 +523,8 @@ public final class CProgramService {
 
     public static LinkedHashMap<String, Integer> getSolutuonStatistics(Integer uid, Integer cid, Integer num) {
         List<SolutionModel> solutions;
-        if(num != -1) {
-             solutions = SolutionModel.dao.find("select result from contest_solution where uid=? AND cid=? AND num=?",
+        if (num != -1) {
+            solutions = SolutionModel.dao.find("select result from contest_solution where uid=? AND cid=? AND num=?",
                     uid, cid, num);
         } else {
             solutions = SolutionModel.dao.find("select result from contest_solution where uid=? AND cid=?", uid, cid);
@@ -529,9 +536,9 @@ public final class CProgramService {
             buffer.merge(result, 1, Integer::sum);
         }
         LinkedHashMap<String, Integer> res = new LinkedHashMap<>();
-        res.put("TOT", solutions.size());
+        res.put("总计", solutions.size());
         for (Map.Entry<Integer, Integer> e : buffer.entrySet()) {
-            res.put(OjConfig.resultType.get(e.getKey()).getName(), e.getValue());
+            res.put(OjConfig.resultType.get(e.getKey()).getChineseName(), e.getValue());
         }
         return res;
     }
@@ -554,11 +561,11 @@ public final class CProgramService {
     public static void updateCommit(Integer uid, Integer cid, Integer num, String commit) {
         CprogramCommitModel commitModel = CprogramCommitModel.dao.findFirst("select * from cprogram_commit where uid=? and cid=? and num=?",
                 uid, cid, num);
-        if(commitModel == null) {
+        if (commitModel == null) {
             commitModel = new CprogramCommitModel();
             commitModel.setCid(cid).setUid(uid).setNum(num).setCommit(commit);
             commitModel.save();
-        }else{
+        } else {
             commitModel.setCommit(commit);
             commitModel.update();
         }
@@ -567,11 +574,24 @@ public final class CProgramService {
     public static Integer updateFinalCommit(Integer uid, Integer cid, String commit) {
         CprogramExperimentReportModel reportModel = CprogramExperimentReportModel.dao.findFirst(
                 "select * from cprogram_experiment_report where uid=? and cid=?", uid, cid);
-        if(reportModel == null) {
+        if (reportModel == null) {
             return -1;
         } else {
             reportModel.setCommit(commit);
             reportModel.update();
+            return 0;
+        }
+    }
+
+    public static Integer submitReport(Integer uid, Integer cid) {
+        CprogramExperimentReportModel reportModel = CprogramExperimentReportModel.dao.findFirst(
+                "select * from cprogram_experiment_report where uid=? and cid=?", uid, cid);
+        if (reportModel == null) {
+            return -1;
+        } else {
+            reportModel.setStatus(true);
+            reportModel.update();
+            Db.update("update score set score2=score1 where uid=? and cid=?", uid, cid);
             return 0;
         }
     }

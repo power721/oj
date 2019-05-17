@@ -25,15 +25,25 @@ public class ResultType {
     private int id;
     private String name;
     private String longName;
+    private String ChineseName;
+
+    public String getChineseName() {
+        return ChineseName;
+    }
+
+    public void setChineseName(String chineseName) {
+        ChineseName = chineseName;
+    }
 
     public ResultType() {
 
     }
 
-    public ResultType(int id, String name, String longName) {
+    public ResultType(int id, String name, String longName, String chineseName) {
         this.id = id;
         this.name = name;
         this.longName = longName;
+        this.ChineseName = chineseName;
     }
 
     public int getId() {

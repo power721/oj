@@ -4,9 +4,7 @@
             西南科技大学信息工程学院<br>
             计算机程序设计（C）实验报告
         </h3>
-        <form class="form-horizontal" id="reportInfoForm" action="cprogram/updateReportInfo/${contest.cid}"
-              method="post"
-              style="text-align: center;">
+        <div class="form-horizontal" style="text-align: center;">
             <div class="control-group">
                 <label class="text-right"
                        style="display:inline-block;width:100px;" for="contestName">实验名称</label>
@@ -21,7 +19,7 @@
                        style="display:inline-block;width:100px;" for="position">实验地点</label>
                 <div style="display: inline-block">
                     <div class="input-prepend">
-                        <select name="position" id="position" style="width:210px;">
+                        <select name="position" id="position" style="width:210px;" class="edit">
                             <option value="东9A322">东9A322</option>
                             <option value="东9A340">东9A340</option>
                             <option value="东9A348">东9A348</option>
@@ -35,7 +33,7 @@
                        style="display:inline-block;width:100px;" for="machine">机号</label>
                 <div style="display: inline-block">
                     <div class="input-prepend">
-                        <select name="machine" id="machine" style="width:210px;">
+                        <select name="machine" id="machine" style="width:210px;" class="edit">
                         </select>
                     </div>
                 </div>
@@ -55,6 +53,15 @@
                 <div style="display: inline-block">
                     <div class="input-prepend">
                         <input id="realName" value="${report.realName}" disabled>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="text-right"
+                       style="display:inline-block;width:100px;" for="classes">班级</label>
+                <div style="display: inline-block">
+                    <div class="input-prepend">
+                        <input id="classes" value="${report.classes}" disabled>
                     </div>
                 </div>
             </div>
@@ -81,15 +88,15 @@
                        style="display:inline-block;width:100px;" for="times">实验时间</label>
                 <div style="display: inline-block;position: relative;left: 24px;">
                     <div class="input-prepend">
-                        <select name="times" id="times" style="width: 100px">
+                        <select name="times" id="times" style="width: 100px" class="edit">
                         </select>
-                        <select name="week" id="week" style="width: 100px">
+                        <select name="week" id="week" style="width: 100px" class="edit">
                             <#list weeksMap.keySet() as week>
                                 <option value="${week!}">${weeksMap.get(week!)}
                                 </option>
                             </#list>
                         </select>
-                        <select name="lecture" id="lecture" style="width: 100px">
+                        <select name="lecture" id="lecture" style="width: 100px" class="edit">
                             <#list lecturesMap.keySet() as lecture>
                                 <option value="${lecture!}">
                                     ${lecturesMap.get(lecture!)}
@@ -99,12 +106,7 @@
                     </div>
                 </div>
             </div>
-            <div class="control-group">
-                <div style="display: inline-block">
-                    <button type="submit" id="submitReportInfoBtn" class="btn btn-primary cp_sub">保存信息</button>
-                </div>
-            </div>
-        </form>
+        </div>
         <div style="width: 80%;margin: 0 10%;">
             <h4 class="text-left">
                 实验目的
@@ -196,10 +198,7 @@
                 <h6>
                     小结
                 </h6>
-                <form id='commit-${problem.num}' action="cprogram/updateCommit/${contest.cid}-${problem.num}">
-                    <textarea rows="5" name="commit" style="width: 100%">${problem.commit!}</textarea>
-                    <button class="btn btn-info cp_sub" onclick="return saveCommit(this)">保存</button>
-                </form>
+                <textarea rows="5" class="problem-commit edit" style="width: 100%">${problem.commit!}</textarea>
 
             </div>
         </#list>
@@ -209,7 +208,7 @@
             实验总结
         </h4>
         <h5>
-            总统统计表
+            实验过程记录
         </h5>
         <table class="table table-hover table-condensed" style="min-width: 300px; width: 30%">
             <thead>
@@ -228,14 +227,15 @@
         <h5>
             实验体会
         </h5>
-        <form id='commit-final' action="cprogram/updateFinalCommit/${contest.cid}">
-            <textarea rows="5" name="commit" style="width: 100%">${report.commit!}</textarea>
-            <button class="btn btn-info cp_sub" onclick="return saveCommit(this)">保存</button>
-        </form>
+        <textarea rows="5" id="finalCommit" style="width: 100%" class="edit">${report.commit!}</textarea>
+        <button id="saveBtn" class="btn btn-info" onclick="saveReport()">保存</button>
+        <button id="submitBtn" class="btn btn-warning" onclick="submitReport()">提交</button>
     </div>
+
 </@override>
 <@override name="scripts">
     <script>
+        var changed = false;
         var machine = document.getElementById('machine');
         var times = document.getElementById('times');
         var position = document.getElementById('position');
@@ -264,46 +264,32 @@
             }
         }
         </#if>
-        <#if contest.endTime < serverTime || TeacherUser??>
-        var buttonArray = document.getElementsByClassName('cp_sub');
-        for (i = 0; i < buttonArray.length; i++) {
-            buttonArray[i].style.display = "none";
-        }
-        var textareas = document.getElementsByTagName('textarea');
-        for (i = 0; i < textareas.length; i++) {
-            textareas[i].disabled = true;
-        }
-        position.disabled = true;
-        machine.disabled = true;
-        times.disabled = true;
-        week.disabled = true;
-        lecture.disabled = true;
-        </#if>
 
-        //reportInfoForm
-        if ($.fn.ajaxForm) {
-            $('#reportInfoForm').ajaxForm({
-                beforeSubmit: function (formData, loginForm, options) {
-                    document.getElementById('submitReportInfoBtn').disabled = true;
-                },
-                success: function (data, statusText, xhr, loginForm) {
-                    if (data.success) {
-                        alert("保存成功")
-                    } else {
-                        alert("该位置已经有人了");
-                    }
-                    document.getElementById('submitReportInfoBtn').disabled = false;
-                },
-                error: function (data) {
-                    alert("error:" + data.responseText);
-                }
-            })
+        var editArray = document.getElementsByClassName('edit');
+        for (i = 0; i < editArray.length; i++) {
+            editArray[i].onchange = function () {
+                changed = true;
+            };
+            editArray[i].oninput = function () {
+                changed = true;
+            };
         }
 
-        function saveCommit(obj) {
-            var text = obj.parentElement.children[0];
-            var bth = obj.parentElement.children[1];
-            bth.disabled = true;
+        function saveReport() {
+            var btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            var jsonObj = {};
+            jsonObj.machine = machine.value;
+            jsonObj.times = times.value;
+            jsonObj.position = position.value;
+            jsonObj.week = week.value;
+            jsonObj.lecture = lecture.value;
+            jsonObj.finalCommit = document.getElementById('finalCommit').value;
+            var commit = document.getElementsByClassName('problem-commit');
+            jsonObj.problem_commit = [];
+            for (i = 0; i < commit.length; i++) {
+                jsonObj.problem_commit.push(commit[i].value);
+            }
             var xhr;
             if (window.XMLHttpRequest) {
                 xhr = new XMLHttpRequest();
@@ -314,20 +300,65 @@
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         var status = JSON.parse(xhr.responseText);
-                        if (status.status === 200) {
+                        if (status.success) {
                             alert('保存成功');
-                            bth.disabled = false;
+                            changed = false;
                         } else {
-                            alert('保存失败');
-                            bth.disabled = false;
+                            alert('保存失败,' + status.messages);
                         }
+
+                    } else {
+                        alert('保存失败');
                     }
+                    btn.disabled = false;
                 }
             };
-            xhr.open('POST', obj.parentElement.action, true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xhr.send('commit=' + text.value);
-            return false;
+            var url = 'cprogram/saveReport/${contest.cid}';
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader("Content-type", "false");
+            xhr.send(JSON.stringify(jsonObj));
+        }
+
+        window.onbeforeunload = function () {
+            if (changed) {
+                return false
+            }
+        };
+
+        function submitReport() {
+            if (changed) {
+                alert('请先保存');
+            } else {
+                var save = confirm('提交后无法再次修改，是否要提交报告?');
+                if (save) {
+                    var xhr;
+                    if (window.XMLHttpRequest) {
+                        xhr = new XMLHttpRequest();
+                    } else {
+                        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                    }
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status === 200) {
+                                var status = JSON.parse(xhr.responseText);
+                                if (status.success) {
+                                    alert('提交成功');
+                                    window.location.reload();
+                                } else {
+                                    alert('提交失败,' + status.messages);
+                                }
+
+                            } else {
+                                alert('提交失败');
+                            }
+                        }
+                    };
+                    var url = 'cprogram/submitReport/${contest.cid}';
+                    xhr.open('POST', url, true);
+                    xhr.setRequestHeader("Content-type", "false");
+                    xhr.send('');
+                }
+            }
         }
     </script>
 </@override >

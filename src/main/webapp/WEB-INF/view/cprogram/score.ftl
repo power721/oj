@@ -15,9 +15,13 @@
                     <th width="10%">通过数</th>
                     <th width="10%">提交数</th>
                     <th width="10%">系统成绩</th>
-                    <th width="10%">最终成绩</th>
+                    <#if contest.type != "EXPERIMENT">
+                        <th width="10%">最终成绩</th>
+                    </#if>
                     <th width="10%">任课教师</th>
-                    <th width="2%"></th>
+                    <#if contest.type=="EXPERIMENT">
+                        <th width="2%"></th>
+                    </#if>
                 </tr>
                 </thead>
                 <tbody>
@@ -49,22 +53,26 @@
                             <td>
                                 ${users.score1!}
                             </td>
-                            <td>
-                                <#if TeacherUser??>
-                                    <a id="user${users.uid}" onclick="updateFinalScore('${users.uid}')">
+                            <#if contest.type != "EXPERIMENT">
+                                <td>
+                                    <#if TeacherUser??>
+                                        <a id="user${users.uid}" onclick="updateFinalScore('${users.uid}')">
+                                            ${users.score2!}
+                                        </a>
+                                    <#else>
                                         ${users.score2!}
-                                    </a>
-                                <#else>
-                                    ${users.score2!}
-                                </#if>
-
-                            </td>
+                                    </#if>
+                                </td>
+                            </#if>
                             <td>
                                 ${users.teacher!}
                             </td>
-                            <td>
-                                <a href="cprogram/report/${contest.cid}-${users.uid!}" target="_blank"><i class="icon icon-tasks"></i> </a>
-                            </td>
+                            <#if contest.type=="EXPERIMENT">
+                                <td>
+                                    <a href="cprogram/report/${contest.cid}-${users.uid!}" target="_blank"><i
+                                                class="icon icon-tasks"></i> </a>
+                                </td>
+                            </#if>
                         </tr>
                     </#list>
                 </#if>

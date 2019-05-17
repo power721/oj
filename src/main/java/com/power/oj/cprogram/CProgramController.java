@@ -1,8 +1,13 @@
 package com.power.oj.cprogram;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.ext.interceptor.POST;
+import com.jfinal.json.FastJson;
+import com.jfinal.kit.HttpKit;
 import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
@@ -14,17 +19,21 @@ import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.MessageType;
 import com.power.oj.core.bean.ResultType;
 import com.power.oj.cprogram.interceptor.*;
+import com.power.oj.cprogram.model.CprogramExperimentReportModel;
 import com.power.oj.cprogram.model.CprogramInfoModel;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import jodd.util.HtmlEncoder;
 import jodd.util.StringUtil;
+import org.apache.http.HttpRequest;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -444,43 +453,56 @@ public class CProgramController extends OjController {
         List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
         CProgramService.appendStatisticsAndCommit(uid, cid, problems);
         setAttr("problems", problems);
-        setAttr("report", CProgramService.getReportInfo(cid, uid));
-        render("report.ftl");
+
+        CprogramExperimentReportModel reportModel = CProgramService.getReportInfo(cid, uid);
+        setAttr("report", reportModel);
+        if (reportModel.getStatus() || ContestService.me().isContestFinished(cid) || CProgramService.isTeacher()) {
+            render("finalReport.ftl");
+        } else {
+            render("report.ftl");
+        }
     }
 
-    public void updateReportInfo() {
+    @Before({POST.class, CProgramContestInterceptor.class})
+    public void saveReport() {
         Integer cid = getParaToInt(0);
         Integer uid = UserService.me().getCurrentUid();
-        String position = getPara("position");
-        Integer machine = getParaToInt("machine");
-        Integer times = getParaToInt("times");
-        Integer week = getParaToInt("week");
-        Integer lecture = getParaToInt("lecture");
+        String json = HttpKit.readData(getRequest());
+        JSONObject obj = (JSONObject) JSONObject.parse(json);
+        String position = obj.getString("position");
+        Integer machine = obj.getInteger("machine");
+        Integer times = obj.getInteger("times");
+        Integer week = obj.getInteger("week");
+        Integer lecture = obj.getInteger("lecture");
         Integer res = CProgramService.updateReportInfo(cid, uid, position, machine, times, week, lecture);
         if (res == 0) {
             setAttr("success", true);
+            String finalCommit = obj.getString("finalCommit");
+            CProgramService.updateFinalCommit(uid, cid, finalCommit);
+            JSONArray arr = obj.getJSONArray("problem_commit");
+            for (int num = 0; num < arr.size(); num++) {
+                String commit = arr.get(num).toString();
+                CProgramService.updateCommit(uid, cid, num, commit);
+            }
+            setAttr("message", "保存成功");
         } else {
             setAttr("success", false);
+            setAttr("message", "该位置已经被占用");
+        }
+        renderJson(new String[]{"success", "message"});
+    }
+
+    @Before({POST.class, CProgramContestInterceptor.class})
+    public void submitReport() {
+        Integer cid = getParaToInt(0);
+        Integer res = CProgramService.submitReport(UserService.me().getCurrentUid(), cid);
+        if (res == 0) {
+            setAttr("success", true);
+            setAttr("message", "保存成功");
+        } else {
+            setAttr("success", false);
+            setAttr("message", "请先保存报告");
         }
         renderJson(new String[]{"success"});
-    }
-
-    public void updateCommit() {
-        Integer cid = getParaToInt(0);
-        Integer num = getParaToInt(1);
-        Integer uid = UserService.me().getCurrentUid();
-        String commit = getPara("commit");
-        CProgramService.updateCommit(uid, cid, num, commit);
-        setAttr("status", 200);
-        renderJson(new String[]{"status"});
-    }
-
-    public void updateFinalCommit() {
-        Integer cid = getParaToInt(0);
-        Integer uid = UserService.me().getCurrentUid();
-        String commit = getPara("commit");
-        Integer res = CProgramService.updateFinalCommit(uid, cid, commit);
-        setAttr("status", 200 + res);
-        renderJson(new String[]{"status"});
     }
 }

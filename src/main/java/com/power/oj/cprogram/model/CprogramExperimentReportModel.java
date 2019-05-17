@@ -17,6 +17,7 @@ public class CprogramExperimentReportModel extends Model<CprogramExperimentRepor
     public static final String COMMIT = "commit";
     public static final String MACHINE = "machine";
     public static final String POSITION = "position";
+    public static final String STATUS = "status";
 
     /*
      * auto generated getter and setter
@@ -91,6 +92,14 @@ public class CprogramExperimentReportModel extends Model<CprogramExperimentRepor
 
     public CprogramExperimentReportModel setPosition(String value) {
         return set(POSITION, value);
+    }
+
+    public Boolean getStatus() {
+        return getBoolean(STATUS);
+    }
+
+    public CprogramExperimentReportModel setStatus(Boolean value) {
+        return set(STATUS, value);
     }
 
 }
