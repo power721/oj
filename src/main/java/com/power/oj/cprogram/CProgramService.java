@@ -460,16 +460,22 @@ public final class CProgramService {
                 "INNER JOIN `user` u ON ce.uid = u.uid\n" +
                 "INNER JOIN cprogram_user_info cu ON ce.uid = cu.uid\n" +
                 "INNER JOIN `user` t ON cu.tid = t.uid\n" +
-                "INNER JOIN score sc ON ce.cid = sc.cid\n" +
+                "LEFT JOIN score sc ON ce.cid = sc.cid\n" +
                 "AND ce.uid = sc.uid\n" +
                 "INNER JOIN cprogram_info ci ON ce.cid = ci.cid\n" +
                 "WHERE\n" +
                 "\tce.cid = ?\n" +
                 "AND ce.uid = ?";
         CprogramExperimentReportModel model = CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
+        if(model == null) {
+            model = new CprogramExperimentReportModel();
+            model.setUid(uid).setCid(cid).setStatus(false);
+            model.save();
+        }
         model.put("tot", getSolutuonStatistics(uid, cid, -1));
         return model;
     }
+
 
     public static CprogramExperimentReportModel findReportInfoByContestAndUser(Integer cid, Integer uid) {
         return CprogramExperimentReportModel.dao.findFirst(
@@ -480,6 +486,20 @@ public final class CProgramService {
                         "WHERE\n" +
                         "\tcid = ?\n" +
                         "AND uid = ?", cid, uid);
+    }
+
+    public static void updateReportInfo(Integer cid, Integer uid, String position, Integer machine,
+                                        Integer times, Integer week, Integer lecture) {
+        CprogramExperimentReportModel report = findReportInfoByContestAndUser(cid, uid);
+        if (report == null) {
+            report = new CprogramExperimentReportModel();
+            report.setCid(cid).setUid(uid).setPosition(position).setMachine(machine).setTimes(times).setWeek(week).setLecture(lecture);
+            report.setStatus(false);
+            report.save();
+        } else {
+            report.setPosition(position).setMachine(machine).setTimes(times).setWeek(week).setLecture(lecture);
+            report.update();
+        }
     }
 
     public static CprogramExperimentReportModel findReportInfoByTimesAndPostion(
@@ -494,10 +514,10 @@ public final class CProgramService {
                         "AND machine = ?\n" +
                         "AND times = ?\n" +
                         "AND `week` = ?\n" +
-                        "AND lecture = ?",
+                        "AND lecture = ?\n",
                 position, machine, times, week, lecture);
     }
-
+/*
     public static Integer updateReportInfo(Integer cid, Integer uid, String position, Integer machine,
                                            Integer times, Integer week, Integer lecture) {
         CprogramExperimentReportModel pos = findReportInfoByTimesAndPostion(position, machine, times, week, lecture);
@@ -520,6 +540,12 @@ public final class CProgramService {
             return -1;
         }
     }
+    */
+//
+//    public Boolean submitPositionAndTime(Integer cid, Integer uid) {
+//
+//
+//    }
 
     public static LinkedHashMap<String, Integer> getSolutuonStatistics(Integer uid, Integer cid, Integer num) {
         List<SolutionModel> solutions;
@@ -584,15 +610,28 @@ public final class CProgramService {
     }
 
     public static Integer submitReport(Integer uid, Integer cid) {
-        CprogramExperimentReportModel reportModel = CprogramExperimentReportModel.dao.findFirst(
-                "select * from cprogram_experiment_report where uid=? and cid=?", uid, cid);
-        if (reportModel == null) {
-            return -1;
-        } else {
-            reportModel.setStatus(true);
-            reportModel.update();
-            Db.update("update score set score2=score1 where uid=? and cid=?", uid, cid);
-            return 0;
+        CprogramExperimentReportModel myReport = findReportInfoByContestAndUser(cid, uid);
+        if (myReport == null) {
+            return -2;
         }
+        CprogramExperimentReportModel otherReport = CprogramExperimentReportModel.dao.findFirst(
+                "SELECT\n" +
+                        "\t*\n" +
+                        "FROM\n" +
+                        "\tcprogram_experiment_report\n" +
+                        "WHERE\n" +
+                        "\tposition = ?\n" +
+                        "AND machine = ?\n" +
+                        "AND times = ?\n" +
+                        "AND `week` = ?\n" +
+                        "AND lecture = ?\n AND uid!=? AND status=1",
+                myReport.getPosition(), myReport.getMachine(), myReport.getTimes(), myReport.getWeek(), myReport.getLecture(), uid);
+        if (otherReport != null) {
+            return -1;
+        }
+        myReport.setStatus(true);
+        myReport.update();
+        Db.update("update score set score2=score1 where uid=? and cid=?", uid, cid);
+        return 0;
     }
 }

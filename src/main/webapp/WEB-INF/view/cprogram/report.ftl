@@ -76,15 +76,6 @@
             </div>
             <div class="control-group">
                 <label class="text-right"
-                       style="display:inline-block;width:100px;" for="score">成绩</label>
-                <div style="display: inline-block">
-                    <div class="input-prepend">
-                        <input id="score" value="${report.score}" disabled>
-                    </div>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="text-right"
                        style="display:inline-block;width:100px;" for="times">实验时间</label>
                 <div style="display: inline-block;position: relative;left: 24px;">
                     <div class="input-prepend">
@@ -325,39 +316,78 @@
             }
         };
 
-        function submitReport() {
-            if (changed) {
-                alert('请先保存');
+        function realSubmit() {
+            var xhr;
+            if (window.XMLHttpRequest) {
+                xhr = new XMLHttpRequest();
             } else {
-                var save = confirm('提交后无法再次修改，是否要提交报告?');
-                if (save) {
-                    var xhr;
-                    if (window.XMLHttpRequest) {
-                        xhr = new XMLHttpRequest();
-                    } else {
-                        xhr = new ActiveXObject("Microsoft.XMLHTTP");
-                    }
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === 4) {
-                            if (xhr.status === 200) {
-                                var status = JSON.parse(xhr.responseText);
-                                if (status.success) {
-                                    alert('提交成功');
-                                    window.location.reload();
-                                } else {
-                                    alert('提交失败,' + status.messages);
-                                }
-
-                            } else {
-                                alert('提交失败');
-                            }
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var status = JSON.parse(xhr.responseText);
+                        if (status.success) {
+                            alert('提交成功');
+                            window.location.reload();
+                        } else {
+                            alert('提交失败，' + status.message);
                         }
-                    };
-                    var url = 'cprogram/submitReport/${contest.cid}';
-                    xhr.open('POST', url, true);
-                    xhr.setRequestHeader("Content-type", "false");
-                    xhr.send('');
+
+                    } else {
+                        alert('提交失败');
+                    }
                 }
+            };
+            var url = 'cprogram/submitReport/${contest.cid}';
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader("Content-type", "false");
+            xhr.send('');
+        }
+
+        function submitReport() {
+            var save = confirm('提交后无法再次修改，是否要提交报告?');
+            if (save) {
+                var btn = document.getElementById('saveBtn');
+                btn.disabled = true;
+                var jsonObj = {};
+                jsonObj.machine = machine.value;
+                jsonObj.times = times.value;
+                jsonObj.position = position.value;
+                jsonObj.week = week.value;
+                jsonObj.lecture = lecture.value;
+                jsonObj.finalCommit = document.getElementById('finalCommit').value;
+                var commit = document.getElementsByClassName('problem-commit');
+                jsonObj.problem_commit = [];
+                for (i = 0; i < commit.length; i++) {
+                    jsonObj.problem_commit.push(commit[i].value);
+                }
+                var xhr;
+                if (window.XMLHttpRequest) {
+                    xhr = new XMLHttpRequest();
+                } else {
+                    xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            var status = JSON.parse(xhr.responseText);
+                            if (status.success) {
+                                realSubmit();
+                            } else {
+                                alert('保存失败,' + status.messages);
+                            }
+
+                        } else {
+                            alert('保存失败');
+                        }
+                        btn.disabled = false;
+                    }
+                };
+                var url = 'cprogram/saveReport/${contest.cid}';
+                xhr.open('POST', url, true);
+                xhr.setRequestHeader("Content-type", "false");
+                xhr.send(JSON.stringify(jsonObj));
             }
         }
     </script>

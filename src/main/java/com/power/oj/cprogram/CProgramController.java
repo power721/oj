@@ -474,21 +474,16 @@ public class CProgramController extends OjController {
         Integer times = obj.getInteger("times");
         Integer week = obj.getInteger("week");
         Integer lecture = obj.getInteger("lecture");
-        Integer res = CProgramService.updateReportInfo(cid, uid, position, machine, times, week, lecture);
-        if (res == 0) {
-            setAttr("success", true);
-            String finalCommit = obj.getString("finalCommit");
-            CProgramService.updateFinalCommit(uid, cid, finalCommit);
-            JSONArray arr = obj.getJSONArray("problem_commit");
-            for (int num = 0; num < arr.size(); num++) {
-                String commit = arr.get(num).toString();
-                CProgramService.updateCommit(uid, cid, num, commit);
-            }
-            setAttr("message", "保存成功");
-        } else {
-            setAttr("success", false);
-            setAttr("message", "该位置已经被占用");
+        CProgramService.updateReportInfo(cid, uid, position, machine, times, week, lecture);
+        String finalCommit = obj.getString("finalCommit");
+        CProgramService.updateFinalCommit(uid, cid, finalCommit);
+        JSONArray arr = obj.getJSONArray("problem_commit");
+        for (int num = 0; num < arr.size(); num++) {
+            String commit = arr.get(num).toString();
+            CProgramService.updateCommit(uid, cid, num, commit);
         }
+        setAttr("success", true);
+        setAttr("message", "保存成功");
         renderJson(new String[]{"success", "message"});
     }
 
@@ -501,8 +496,12 @@ public class CProgramController extends OjController {
             setAttr("message", "保存成功");
         } else {
             setAttr("success", false);
-            setAttr("message", "请先保存报告");
+            if (res == -2) {
+                setAttr("message", "请先保存报告");
+            } else {
+                setAttr("message", "该位置已被占用");
+            }
         }
-        renderJson(new String[]{"success"});
+        renderJson(new String[]{"success", "message"});
     }
 }

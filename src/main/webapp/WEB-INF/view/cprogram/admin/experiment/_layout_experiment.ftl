@@ -14,7 +14,6 @@
                 <div class="form-inline">
                     <form class="form-search" action="cprogram/admin/experiment/search" method="post" id="searchForm">
                         <select class="input-medium" id="contestID" name="cid">
-                            <#--                            <option value="">作业名称</option>-->
                             <#list contestList as item>
                                 <option value="${item.cid!}"
                                         <#if contest?? && contest.cid == item.cid>selected</#if>>${item.title}</option>
@@ -65,17 +64,10 @@
 
         function updateSelecter() {
             if (contestID.val() === '-1') {
-                week_select.attr("disabled", false);
-                lecture_select.attr("disabled", false);
                 searchForm.action = "cprogram/admin/experiment/all";
                 teacher_select.show();
             } else {
-                week_select.attr("disabled", true);
-                lecture_select.attr("disabled", true);
-                week_select.val(weekName[contestID.val()]);
-                lecture_select.val(lectureName[contestID.val()]);
                 searchForm.action = "cprogram/admin/experiment/score/" + contestID.val();
-                teacher_select.hide();
             }
             <#if !adminUser??>
             teacher_select.hide();

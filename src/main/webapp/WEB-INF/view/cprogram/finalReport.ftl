@@ -112,35 +112,35 @@
                     <tbody>
                     <tr>
                         <td><b>实验名称:</b></td>
-                        <td>${contest.title}</td>
+                        <td>${contest.title!}</td>
                         <td><b>实验地点:</b></td>
-                        <td>${report.position}</td>
+                        <td>${report.position!}</td>
                     </tr>
                     <tr>
                         <td><b>机号:</b></td>
-                        <td>${report.machine}</td>
+                        <td>${report.machine!}</td>
                         <td><b>学号:</b></td>
-                        <td>${report.stuid}</td>
+                        <td>${report.stuid!}</td>
                     </tr>
                     <tr></tr>
                     <tr>
                         <td><b>姓名:</b></td>
-                        <td>${report.realName}</td>
+                        <td>${report.realName!}</td>
                         <td><b>教师姓名:</b></td>
-                        <td>${report.teacher}</td>
+                        <td>${report.teacher!}</td>
                     </tr>
                     <tr>
                         <td><b>班级:</b></td>
-                        <td>${report.classes}</td>
+                        <td>${report.classes!}</td>
                         <td><b>实验时间:</b></td>
-                        <td>第${report.times}周 ${weeksMap.get(report.week)} ${lecturesMap.get(report.lecture)}</td>
+                        <td>第${report.times!0}周 ${weeksMap.get(report.week!)!} ${lecturesMap.get(report.lecture!)!}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
             <div class="grade">
                 <span>分数:</span>
-                <div>${report.score}</div>
+                <div>${report.score!0}</div>
             </div>
         </div>
     </div>
@@ -148,7 +148,7 @@
     <div class="card">
         <div class="card-title">实验目的</div>
         <div class="card-content">
-            <span>${report.aim}</span>
+            <span>${report.aim!}</span>
         </div>
     </div>
     <div class="card">
@@ -157,7 +157,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>完成(Y/N)</th>
+                    <th>完成</th>
                     <th>题目ID</th>
                     <th>题目名称</th>
                 </tr>
@@ -167,7 +167,7 @@
                     <#list problems as Problem>
                         <tr>
                             <td class="result">
-                                <#if Problem.status??>
+                                <#if Problem.statusx??>
                                     <i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i>
                                 </#if>
                             </td>
@@ -224,6 +224,10 @@
                     <div class="item-title">代码</div>
                     <pre>${problem.code!}</pre>
                 </div>
+                <div>
+                    <div class="item-title">小结</div>
+                    ${problem.commit!}
+                </div>
             </div>
         </div>
     </#list>
@@ -256,5 +260,12 @@
     </div>
 </section>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" async src="assets/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+    menuSettings: {zoom: "Click"}
+    });
+</script>
 </body>
 </html>
