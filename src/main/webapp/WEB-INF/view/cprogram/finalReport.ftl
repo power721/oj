@@ -167,7 +167,7 @@
                     <#list problems as Problem>
                         <tr>
                             <td class="result">
-                                <#if Problem.statusx??>
+                                <#if Problem.status??>
                                     <i class="<#if Problem.status==0>oj-tick icon-ok<#else>oj-delete icon-remove</#if>"></i>
                                 </#if>
                             </td>

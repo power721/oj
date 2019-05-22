@@ -450,7 +450,7 @@ public class CProgramController extends OjController {
         if (!CProgramService.isTeacher()) {
             uid = UserService.me().getCurrentUid();
         }
-        List<Record> problems = ContestService.me().getContestProblems(cid, UserService.me().getCurrentUid());
+        List<Record> problems = ContestService.me().getContestProblems(cid, uid);
         CProgramService.appendStatisticsAndCommit(uid, cid, problems);
         setAttr("problems", problems);
 
