@@ -226,7 +226,7 @@
                 </div>
                 <div>
                     <div class="item-title">小结</div>
-                    ${problem.commit!}
+                    <pre>${problem.commit!}</pre>
                 </div>
             </div>
         </div>

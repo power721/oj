@@ -35,6 +35,31 @@ public class AdminService {
     public static List<Record> getContestScoreList(Integer cid) {
         return Db.find("SELECT u.uid,u.name,u.realName,cu.stuid,cu.classes,score1,score2,s.accepted,s.submited from score s INNER JOIN cprogram_user_info cu on s.uid = cu.uid INNER JOIN `user` u on s.uid = u.uid WHERE cid=? ORDER BY stuid", cid);
     }
+
+    public static List<ScoreModel> getExprimentScoreList(Integer cid, Integer tid, Integer week, Integer lecture) {
+        return ScoreModel.dao.find(
+                "SELECT\n" +
+                        "\tu.uid,\n" +
+                        "\tu.`name`,\n" +
+                        "\tu.realName,\n" +
+                        "\tcu.stuid,\n" +
+                        "\tcu.classes,\n" +
+                        "\ts.accepted,\n" +
+                        "\ts.submited,\n" +
+                        "\ts.score1,\n" +
+                        "\ts.score2\n" +
+                        "FROM\n" +
+                        "\tscore s\n" +
+                        "INNER JOIN cprogram_user_info cu ON s.uid = cu.uid\n" +
+                        "INNER JOIN `user` u ON s.uid = u.uid\n" +
+                        "WHERE\n" +
+                        "\tcid = ?\n" +
+                        "AND cu.tid = ?\n" +
+                        "AND cu.class_week = ?\n" +
+                        "AND cu.class_lecture = ?;",
+                cid, tid, week, lecture
+        );
+    }
 //    static List<Record> getScoreList(Integer type, Integer cid, Integer week, Integer lecture, Integer tid) {
 //        List<Object> parase = new ArrayList<>();
 //        String sql = "select " +
