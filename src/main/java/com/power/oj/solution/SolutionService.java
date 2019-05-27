@@ -19,7 +19,6 @@ import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
 import com.power.oj.user.UserService;
 import com.power.oj.util.FileKit;
-import com.sun.xml.internal.bind.v2.TODO;
 import jodd.util.StringUtil;
 
 import java.io.*;

@@ -8,9 +8,7 @@ import com.power.oj.contest.ContestService;
 import com.power.oj.contest.model.ContestModel;
 import com.power.oj.contest.model.ContestSolutionModel;
 import com.power.oj.core.OjConfig;
-import com.power.oj.core.bean.FlashMessage;
 import com.power.oj.core.bean.ResultType;
-import com.power.oj.core.bean.Solution;
 import com.power.oj.cprogram.model.*;
 import com.power.oj.problem.ProblemModel;
 import com.power.oj.problem.ProblemService;
@@ -19,11 +17,8 @@ import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
-import com.sun.xml.internal.bind.v2.model.core.ID;
-import sun.reflect.generics.tree.Tree;
 
 import java.io.*;
-import java.sql.Time;
 import java.util.*;
 
 
