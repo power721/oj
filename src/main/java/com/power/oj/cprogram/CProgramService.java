@@ -466,6 +466,7 @@ public final class CProgramService {
             model = new CprogramExperimentReportModel();
             model.setUid(uid).setCid(cid).setStatus(false);
             model.save();
+            model = CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
         }
         model.put("tot", getSolutuonStatistics(uid, cid, -1));
         return model;
