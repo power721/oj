@@ -556,6 +556,16 @@ ALTER TABLE `resource`
 
 #2019-04-22
 
+DROP TABLE IF EXISTS `cprogram_info`;
+CREATE TABLE `cprogram_info` (
+  `cid` int(11) NOT NULL,
+  `type` enum('HOMEWORK','EXPERIMENT','EXPERIMENT_EXAM','COURSE_EXAM') DEFAULT NULL,
+  `commit` text,
+  `week` int(11) DEFAULT NULL,
+  `lecture` int(11) DEFAULT NULL,
+  PRIMARY KEY (`cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO cprogram_info (cid,type,`week`,lecture) (SELECT cid,"HOMEWORK",lockBoardTime,unlockBoardTime from contest where type=5);
 INSERT INTO cprogram_info (cid,type) (SELECT cid,"EXPERIMENT" from contest where type=6);
 INSERT INTO cprogram_info (cid,type,`week`,lecture) (SELECT cid,"EXPERIMENT_EXAM",lockBoardTime,unlockBoardTime from contest where type=7);
@@ -573,3 +583,25 @@ CREATE TABLE `cprogram_commit` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique` (`cid`,`uid`,`num`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `cprogram_experiment_report`;
+CREATE TABLE `cprogram_experiment_report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `times` int(11) DEFAULT NULL,
+  `week` int(11) DEFAULT NULL,
+  `lecture` int(11) DEFAULT NULL,
+  `commit` text,
+  `machine` int(11) DEFAULT NULL,
+  `position` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`cid`,`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `cprogram_user_info`
+CHANGE COLUMN `class` `classes`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `uid`;
+
+
+
