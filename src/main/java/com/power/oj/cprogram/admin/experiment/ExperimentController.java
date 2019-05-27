@@ -12,8 +12,10 @@ import com.power.oj.cprogram.admin.AdminService;
 import com.power.oj.cprogram.admin.homework.HomeworkService;
 import com.power.oj.cprogram.interceptor.CProgramContestInterceptor;
 import com.power.oj.cprogram.interceptor.VarInterceptor;
+import com.power.oj.cprogram.model.CprogramUserInfoModel;
 import com.power.oj.cprogram.model.ScoreModel;
 import com.power.oj.shiro.ShiroKit;
+import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
 import jxl.write.WriteException;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -132,5 +134,20 @@ public class ExperimentController extends OjController {
             e.printStackTrace();
             renderNull();
         }
+    }
+
+    public void search() {
+        String stuid = getPara("stuid");
+        setAttr("stuid", stuid);
+        Integer uid = AdminService.getUidByStuId(stuid);
+        List<ScoreModel> scoreModelList = ExperimentService.getScoreByUid(uid);
+        UserModel user = UserService.me().getUserByUid(uid);
+        CprogramUserInfoModel info = CprogramUserInfoModel.dao.findById(uid);
+        setAttr("realName", user.getRealName());
+        setAttr("stuid", info.getStuid());
+        setAttr("scoreList", scoreModelList);
+        List<ContestModel> contestList = AdminService.getContestListForSelect("EXPERIMENT");
+        setAttr("contestList", contestList);
+        render("search.ftl");
     }
 }

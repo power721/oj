@@ -112,4 +112,15 @@ public class ExperimentService {
         book.close();
         return file;
     }
+
+    static public List<ScoreModel> getScoreByUid(Integer uid) {
+        int startTime = CProgramService.getStartUnixTime();
+        int endTime = CProgramService.getEndUnixTime();
+        List<ScoreModel> scoreModelList = ScoreModel.dao.find(
+                "SELECT s.cid,s.score2,c.title,s.submited,s.accepted,s.uid from score s INNER JOIN contest c ON s.cid=c.cid WHERE s.cid in " +
+                        "(SELECT c.cid FROM contest c INNER JOIN cprogram_info ci ON c.cid=ci.cid WHERE c.type=999 AND ci.type=? AND startTime BETWEEN ? AND ?) " +
+                        "AND s.uid=? order by c.startTime",
+                "EXPERIMENT", startTime, endTime,uid);
+        return scoreModelList;
+    }
 }

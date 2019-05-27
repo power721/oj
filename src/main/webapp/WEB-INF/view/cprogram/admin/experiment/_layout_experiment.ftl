@@ -48,7 +48,7 @@
                         <form action="cprogram/admin/experiment/search" method="post" id="searchForm">
                             <div class="input-group">
                                 <span type="submit" class="input-group-addon"><i class="icon icon-search"></i></span>
-                                <input class="input-medium form-control" id="stuID" placeholder="请输入学号进行搜索">
+                                <input class="input-medium form-control" id="stuID" name="stuid" placeholder="请输入学号进行搜索" value="${stuid!}">
                                 <button class="btn btn-success" type="submit">搜索</button>
                             </div>
                         </form>

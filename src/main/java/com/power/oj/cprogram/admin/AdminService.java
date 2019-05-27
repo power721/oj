@@ -56,9 +56,13 @@ public class AdminService {
                         "\tcid = ?\n" +
                         "AND cu.tid = ?\n" +
                         "AND cu.class_week = ?\n" +
-                        "AND cu.class_lecture = ?;",
+                        "AND cu.class_lecture = ? order by cu.stuid;",
                 cid, tid, week, lecture
         );
+    }
+
+    public static Integer getUidByStuId(String stuid) {
+        return Db.queryInt("select uid from cprogram_user_info where stuid=? limit 1", stuid);
     }
 //    static List<Record> getScoreList(Integer type, Integer cid, Integer week, Integer lecture, Integer tid) {
 //        List<Object> parase = new ArrayList<>();

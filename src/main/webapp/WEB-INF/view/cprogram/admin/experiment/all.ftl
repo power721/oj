@@ -45,6 +45,7 @@
                                 <a href="cprogram/status/${experiment.cid}?name=${user.stuid!}" target="_blank">
                                     <#if user.score?? && user.score.get(experiment.cid)??>
                                         ${user.score.get(experiment.cid)}
+                                        <a href="cprogram/report/${experiment.cid}-${user.uid}" target="_blank"><i class="icon icon-tasks"></i> </a>
                                     <#else>
                                         0
                                     </#if>
