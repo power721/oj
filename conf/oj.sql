@@ -1543,7 +1543,7 @@ CREATE TABLE `cprogram_password` (
 DROP TABLE IF EXISTS `cprogram_user_info`;
 CREATE TABLE `cprogram_user_info` (
   `uid` int(11) NOT NULL,
-  `class` varchar(255) NOT NULL,
+  `classes` varchar(255) NOT NULL,
   `stuid` varchar(255) DEFAULT NULL,
   `tid` int(11) DEFAULT NULL,
   `class_week` int(11) DEFAULT NULL,
@@ -1569,3 +1569,50 @@ CREATE TABLE `score` (
   PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `cprogram_commit`;
+CREATE TABLE `cprogram_commit` (
+  `id` int(11) NOT NULL,
+  `cid` int(11) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `num` int(11) DEFAULT NULL,
+  `commit` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`cid`,`uid`,`num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `cprogram_commit`;
+CREATE TABLE `cprogram_commit` (
+  `id` int(11) NOT NULL,
+  `cid` int(11) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `num` int(11) DEFAULT NULL,
+  `commit` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`cid`,`uid`,`num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `cprogram_experiment_report`;
+CREATE TABLE `cprogram_experiment_report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `times` int(11) DEFAULT NULL,
+  `week` int(11) DEFAULT NULL,
+  `lecture` int(11) DEFAULT NULL,
+  `commit` text,
+  `machine` int(11) DEFAULT NULL,
+  `position` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`cid`,`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `cprogram_info`;
+CREATE TABLE `cprogram_info` (
+  `cid` int(11) NOT NULL,
+  `type` enum('HOMEWORK','EXPERIMENT','EXPERIMENT_EXAM','COURSE_EXAM') DEFAULT NULL,
+  `commit` text,
+  `week` int(11) DEFAULT NULL,
+  `lecture` int(11) DEFAULT NULL,
+  PRIMARY KEY (`cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

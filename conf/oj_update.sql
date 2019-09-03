@@ -4,7 +4,7 @@ ALTER TABLE contest CHANGE `start_time` `startTime` int(11) DEFAULT '0',
                     CHANGE `freeze` `freeze` tinyint(1) NOT NULL DEFAULT '0';
 
 ALTER TABLE contest_clarify ADD `num` tinyint(5) DEFAULT NULL AFTER `cid`;
-                    
+
 ALTER TABLE contest_problem CHANGE `accept` `accepted` int(5) NOT NULL DEFAULT '0',
                             CHANGE `submit` `submission` int(5) NOT NULL DEFAULT '0',
                             CHANGE `first_blood` `firstBloodUid` int(9) NOT NULL DEFAULT '0' COMMENT 'first user(uid) solved this problem',
@@ -197,7 +197,7 @@ ALTER TABLE user_ext CHANGE `exp` `experience` int(9) NOT NULL DEFAULT '0',
 
 ALTER TABLE web_login CHANGE `open_id` `openId` varchar(64) NOT NULL;
 
-ALTER TABLE variable 
+ALTER TABLE variable
                      CHANGE `booleanValue` `booleanValue` tinyint(1) DEFAULT NULL,
                      CHANGE `intValue` `intValue` int(11) DEFAULT NULL,
                      CHANGE `textValue` `textValue` text DEFAULT NULL;
@@ -241,7 +241,7 @@ ALTER TABLE board CHANGE `A_WrongNum` `A_WrongNum` tinyint(5) DEFAULT '0',
                   CHANGE `X_WrongNum` `X_WrongNum` tinyint(5) DEFAULT '0',
                   CHANGE `Y_WrongNum` `Y_WrongNum` tinyint(5) DEFAULT '0',
                   CHANGE `Z_WrongNum` `Z_WrongNum` tinyint(5) DEFAULT '0';
-                         
+
 ALTER TABLE freeze_board CHANGE `A_WrongNum` `A_WrongNum` tinyint(5) DEFAULT '0',
                   CHANGE `B_WrongNum` `B_WrongNum` tinyint(5) DEFAULT '0',
                   CHANGE `C_WrongNum` `C_WrongNum` tinyint(5) DEFAULT '0',
@@ -553,4 +553,55 @@ ALTER TABLE `oj`.`contest_solution`
 ALTER TABLE `resource`
   ADD COLUMN `os`  varchar(255) NULL DEFAULT 'Windows' AFTER `description`,
   ADD COLUMN `arch`  varchar(255) NULL DEFAULT 'x64' AFTER `os`;
+
+#2019-04-22
+
+DROP TABLE IF EXISTS `cprogram_info`;
+CREATE TABLE `cprogram_info` (
+  `cid` int(11) NOT NULL,
+  `type` enum('HOMEWORK','EXPERIMENT','EXPERIMENT_EXAM','COURSE_EXAM') DEFAULT NULL,
+  `commit` text,
+  `week` int(11) DEFAULT NULL,
+  `lecture` int(11) DEFAULT NULL,
+  PRIMARY KEY (`cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO cprogram_info (cid,type,`week`,lecture) (SELECT cid,"HOMEWORK",lockBoardTime,unlockBoardTime from contest where type=5);
+INSERT INTO cprogram_info (cid,type) (SELECT cid,"EXPERIMENT" from contest where type=6);
+INSERT INTO cprogram_info (cid,type,`week`,lecture) (SELECT cid,"EXPERIMENT_EXAM",lockBoardTime,unlockBoardTime from contest where type=7);
+INSERT INTO cprogram_info (cid,type,`week`,lecture) (SELECT cid,"COURSE_EXAM",lockBoardTime,unlockBoardTime from contest where type=8);
+UPDATE contest SET type=999 WHERE type >= 5;
+
+
+DROP TABLE IF EXISTS `cprogram_commit`;
+CREATE TABLE `cprogram_commit` (
+  `id` int(11) NOT NULL,
+  `cid` int(11) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `num` int(11) DEFAULT NULL,
+  `commit` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`cid`,`uid`,`num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `cprogram_experiment_report`;
+CREATE TABLE `cprogram_experiment_report` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cid` int(11) DEFAULT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `times` int(11) DEFAULT NULL,
+  `week` int(11) DEFAULT NULL,
+  `lecture` int(11) DEFAULT NULL,
+  `commit` text,
+  `machine` int(11) DEFAULT NULL,
+  `position` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique` (`cid`,`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `cprogram_user_info`
+CHANGE COLUMN `class` `classes`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL AFTER `uid`;
+
+
 

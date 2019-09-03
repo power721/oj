@@ -149,8 +149,8 @@ public final class SolutionService {
                 "SELECT sid,s.uid,pid,cid,num,result,test,time,memory,s.language,codeLen,FROM_UNIXTIME(s.ctime, '%Y-%m-%d %H:%i:%s') AS ctime_t,u.name,u.nick, s.sim,s.sim_id";
         int ContestType = ContestService.me().getContest(cid).getType();
         StringBuilder sb = new StringBuilder("FROM contest_solution s INNER JOIN user u ON u.uid=s.uid ");
-        if (ContestType >= ContestModel.TYPE_WORK) {
-            sql += ",stuid, u.realName, class As Class";
+        if (ContestType == ContestModel.TYPE_ELSE) {
+            sql += ",stuid, u.realName, classes ";
             sb.append(" LEFT JOIN cprogram_user_info cp ON u.uid=cp.uid");
         }
         sb.append(" WHERE cid=?");
@@ -175,7 +175,7 @@ public final class SolutionService {
             paras.add(num);
         }
         if (StringUtil.isNotBlank(userName)) {
-            if (ContestType >= ContestModel.TYPE_WORK) {
+            if (ContestType == ContestModel.TYPE_ELSE) {
                 sb.append(" AND (stuid=? OR name=?)");
                 paras.add(userName);
                 paras.add(userName);
@@ -442,7 +442,7 @@ public final class SolutionService {
             } else if (result == ResultType.WA || result == ResultType.PE) {
                 solution.setWrong(error);
             }
-            if (cid > 0 && ContestService.me().getContest(cid).getType() >= ContestModel.TYPE_WORK) {
+            if (cid > 0 && ContestService.me().getContest(cid).getType() == ContestModel.TYPE_ELSE) {
                 CProgramService.updateScore(cid, sid, result);
             }
             boolean updateResult = solution.update();

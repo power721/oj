@@ -127,23 +127,23 @@ public class OjConfig {
 
     public static void initJudgeResult() {
         judgeResult = new ArrayList<>();
-        judgeResult.add(new ResultType(ResultType.AC, "AC", "Accepted"));
-        judgeResult.add(new ResultType(ResultType.PE, "PE", "Presentation Error"));
-        judgeResult.add(new ResultType(ResultType.WA, "WA", "Wrong Answer"));
-        judgeResult.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed"));
-        judgeResult.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed"));
-        judgeResult.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed"));
-        judgeResult.add(new ResultType(ResultType.CE, "CE", "Compile Error"));
-        judgeResult.add(new ResultType(ResultType.RF, "RF", "Restricted Function"));
-        judgeResult.add(new ResultType(ResultType.RE, "RE", "Runtime Error"));
-        judgeResult.add(new ResultType(ResultType.SE, "SE", "System Error"));
-        judgeResult.add(new ResultType(ResultType.VE, "VE", "Validate Error"));
-        judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Running"));
-        judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting"));
-        judgeResult.add(new ResultType(ResultType.REJUDGE, "REJUDGE", "Rejudging"));
-        judgeResult.add(new ResultType(ResultType.SIM, "SIM", "Similar"));
-        judgeResult.add(new ResultType(ResultType.COM, "COM", "Compiling"));
-        judgeResult.add(new ResultType(ResultType.QUE, "QUE", "Queuing"));
+        judgeResult.add(new ResultType(ResultType.AC, "AC", "Accepted", "通过"));
+        judgeResult.add(new ResultType(ResultType.PE, "PE", "Presentation Error", "格式错误"));
+        judgeResult.add(new ResultType(ResultType.WA, "WA", "Wrong Answer", "答案错误"));
+        judgeResult.add(new ResultType(ResultType.TLE, "TLE", "Time Limit Exceed", "运行超时"));
+        judgeResult.add(new ResultType(ResultType.MLE, "MLE", "Memory Limit Exceed", "内存超限"));
+        judgeResult.add(new ResultType(ResultType.OLE, "OLE", "Output Limit Exceed", "输出超限"));
+        judgeResult.add(new ResultType(ResultType.CE, "CE", "Compile Error", "编译错误"));
+        judgeResult.add(new ResultType(ResultType.RF, "RF", "Restricted Function", "非法调用"));
+        judgeResult.add(new ResultType(ResultType.RE, "RE", "Runtime Error", "运行错误"));
+        judgeResult.add(new ResultType(ResultType.SE, "SE", "System Error", "系统错误"));
+        judgeResult.add(new ResultType(ResultType.VE, "VE", "Validate Error", "校验错误"));
+        judgeResult.add(new ResultType(ResultType.RUN, "RUN", "Running", "正在运行"));
+        judgeResult.add(new ResultType(ResultType.WAIT, "WAIT", "Waiting", "正在等待"));
+        judgeResult.add(new ResultType(ResultType.REJUDGE, "REJUDGE", "Rejudging", "正在重测"));
+        judgeResult.add(new ResultType(ResultType.SIM, "SIM", "Similar", "代码相似"));
+        judgeResult.add(new ResultType(ResultType.COM, "COM", "Compiling", "正在编译"));
+        judgeResult.add(new ResultType(ResultType.QUE, "QUE", "Queuing", "测评队列中"));
         resultType = new HashMap<>();
         for (ResultType result : judgeResult) {
             resultType.put(result.getId(), result);

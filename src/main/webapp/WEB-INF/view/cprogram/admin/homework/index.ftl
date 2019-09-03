@@ -1,0 +1,1 @@
+<@extends name="_layout_homework.ftl"></@extends>

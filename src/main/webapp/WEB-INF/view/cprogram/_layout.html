@@ -11,7 +11,7 @@
   </li>
 
   <#if TeacherUser?? >
-    <#if serverTime  < contest.startTime || adminUser?? || contest.type == 5>
+    <#if serverTime  < contest.startTime || adminUser?? || contest.type == "HOMEWORK">
       <li class="<#if methodName=="manager">active</#if>">
         <a href="cprogram/manager/${contest.cid}">管理</a>
       </li>
@@ -19,6 +19,11 @@
         <a href="cprogram/edit/${contest.cid}">编辑</a>
       </li>
     </#if>
+  </#if>
+  <#if !TeacherUser?? && contest.type=="EXPERIMENT">
+  <li class="<#if methodName=="report">active</#if>">
+  <a href="cprogram/report/${contest.cid}-${user.uid}">实验报告</a>
+  </li>
   </#if>
   <li class="<#if methodName=="score">active</#if>">
   <a href="cprogram/score/${contest.cid}">成绩</a>

@@ -1,0 +1,194 @@
+<@override name="contest_content">
+
+<div class="row">
+    <#if Problems?size < 10>
+    <div class="span4 offset5 text-center">
+        <#elseif Problems?size < 16>
+        <div class="span6 offset4 text-center">
+            <#elseif Problems?size < 22>
+            <div class="span8 offset2 text-center">
+                <#else>
+                <div class="span10 offset1 text-center">
+                    </#if>
+                    <ul class="nav nav-pills">
+                        <#list Problems as Problem>
+                            <li class="<#if problem.id==Problem.id>active</#if>">
+                                <a href="cprogram/problem/${contest.cid}-${Problem.id}" data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   title="${Problem.title}">${Problem.id}</a>
+                            </li>
+                        </#list>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h2>
+                    <#if userResult??>
+                        <i class="oj-icon oj-icon-<#if userResult==0>accept<#else>delete</#if>"></i>
+                    </#if>
+                    <span class="black">${problem.id}:</span>
+                    <#if TeacherUser??>
+                        <a href="problem/show/${problem.pid!}" data-toggle="tooltip" title="Problem ${problem.pid!}"
+                           target="_blank">${problem.title!}</a>
+                    <#else>
+                        ${problem.title!}
+                    </#if>
+                    <#if spj?? && spj><span class="badge badge-important">SPJ</span><br></#if>
+                </h2>
+                Time Limit: <span class="blue">${problem.timeLimit!} MS</span>
+                Memory Limit: <span class="blue">${problem.memoryLimit!} KB</span><br>
+                <#if TeacherUser??>
+                    Total Submit: <a href="cprogram/status/${contest.cid!}?num=${problem.id}">${problem.submission!}</a>
+                    Accepted: <a
+                        href="cprogram/status/${contest.cid!}?num=${problem.id}&result=0">${problem.accepted!}</a>
+                </#if>
+                <br>
+                <#if (cstatus?? && cstatus==1) ||  TeacherUser??>
+                    <a href="<#if user??>cprogram/submit/${contest.cid!}-${problem.id}?ajax=1</#if>"
+                       class="btn btn-info" data-toggle="modal"
+                       data-target="<#if user??>#submitModal<#else>#loginModal</#if>">提交</a>
+                </#if>
+                <a href="cprogram/status/${contest.cid!}?num=${problem.id}" class="btn btn-info">状态</a>
+            </div>
+
+            <#if user??>
+                <div class="modal hide fade problemModal" id="submitModal">
+                    <form class="" id="submitForm" action="cprogram/submitSolution" method="post">
+                        <div class="modal-header">
+                            <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+                            <h3 id="submitModalLabel">
+                                提交 ${contest.title!}-${problem.id}:${problem.title!}
+                            </h3>
+                        </div>
+                        <div class="modal-body">
+                            <a href="cprogram/submit/${contest.cid!}-${problem.id}" class="btn btn-primary">Submit</a>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="pull-left">
+                                <p class="text-error" id="error"></p>
+                            </div>
+                            <button type="submit" id="Submit" class="btn btn-primary" accesskey="s">提交</button>
+                            <button class="btn" data-dismiss="modal" accesskey="x">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </#if>
+
+            <section id="s-description">
+                <div class="page-header">
+                    <h4>Description <i class="icon-chevron-up"></i></h4>
+                </div>
+                <div class="content pre" id="description">${problem.description!}</div>
+            </section>
+
+            <section id="s-input">
+                <div class="page-header">
+                    <h4>Input <i class="icon-chevron-up"></i></h4>
+                </div>
+                <div class="content pre" id="input">${problem.input!}</div>
+            </section>
+
+            <section id="s-output">
+                <div class="page-header">
+                    <h4>Output <i class="icon-chevron-up"></i></h4>
+                </div>
+                <div class="content pre" id="output">${problem.output!}</div>
+            </section>
+
+            <section id="s-sampleInput">
+                <div class="tabbable content" id="sampleInput">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab1" data-toggle="tab"><strong>Sample Input</strong></a></li>
+                        <li><a href="#tab2" data-toggle="tab">Raw</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab1">
+                            <div class="pre">${problem.sampleInput!}</div>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+        <textarea id="sampleInput" class="auto-width" rows="${problem.sample_input_rows!12}"
+                  cols="185">${problem.sampleInput!}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="s-sampleOutput">
+                <div class="tabbable content" id="sampleOutput">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab3" data-toggle="tab"><strong>Sample Output</strong></a></li>
+                        <li><a href="#tab4" data-toggle="tab">Raw</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab3">
+                            <div class="pre">${problem.sampleOutput!}</div>
+                        </div>
+                        <div class="tab-pane" id="tab4">
+        <textarea id="sampleOutput" class="auto-width" rows="${problem.sample_output_rows!12}"
+                  cols="185">${problem.sampleOutput!}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <#if problem.hint?? && problem.hint!="">
+                <section id="s-hint">
+                    <div class="page-header">
+                        <h4>Hint <i class="icon-chevron-up"></i></h4>
+                    </div>
+                    <div class="content pre" id="hint">${problem.hint!}</div>
+                </section>
+            </#if>
+
+
+            <div class="text-center">
+                <#if (cstatus?? && cstatus==1) || TeacherUser??>
+                    <a href="<#if user??>cprogram/submit/${contest.cid!}-${problem.id}?ajax=1</#if>"
+                       class="btn btn-info" data-toggle="modal"
+                       data-target="<#if user??>#submitModal<#else>#loginModal</#if>">提交</a>
+                </#if>
+                <a href="cprogram/status/${contest.cid!}?num=${problem.id}" class="btn btn-info">状态</a>
+            </div>
+
+            </@override>
+
+            <@override name="styles">
+                <style>
+                    h2 .oj-icon {
+                        vertical-align: baseline;
+                    }
+                </style>
+            </@override>
+
+            <@override name="scripts">
+                <script type="text/javascript" async src="assets/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+                <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+    menuSettings: {zoom: "Click"}
+    });
+                </script>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        jQuery.ajaxSetup({
+                            cache: true
+                        });
+
+                        var prevpage = "/cprogram/problem/${contest.cid!}-${prevPid!}";
+                        var nextpage = "/cprogram/problem/${contest.cid!}-${nextPid!}";
+                        $(document).keydown(function (event) {
+                            <#if prevPid!=problem.id>if (event.keyCode == 37) window.location = prevpage;
+                            </#if>
+                            <#if nextPid!=problem.id>if (event.keyCode == 39) window.location = nextpage;
+                            </#if>
+                        });
+
+                        $('.page-header').click(function () {
+                            $(this).siblings('.content').fadeToggle();
+                            $(this).children().children().toggleClass('icon-chevron-up icon-chevron-down');
+                        });
+                    });
+                </script>
+            </@override>
+            <@extends name="_layout.html" />
