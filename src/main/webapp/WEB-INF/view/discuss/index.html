@@ -203,7 +203,7 @@
       var target = $('#topicModal');
 
       target.modal("show");
-      $.get("/api/discuss", {id: id},
+      $.get("api/discuss", {id: id},
               function (data) {
                 if (data.topic.success) {
                   var html = parseTimestamp(data.topic.ctime)

@@ -125,8 +125,8 @@ public class ContestService {
         String sql = "SELECT * FROM contest_problem WHERE cid=? ORDER BY num";
         List<Record> contestProblems;
         if (uid != null && uid > 0) {
-            sql = "SELECT cp.pid,num,accepted,submission,title,status,timeLimit,memoryLimit,maxSim FROM contest_problem cp LEFT OUTER JOIN"
-                    + " (SELECT pid,MIN(result) AS status FROM contest_solution WHERE uid=? "
+            sql = "SELECT cp.pid,num,accepted,submission,title,`status`,timeLimit,memoryLimit,maxSim FROM contest_problem cp LEFT OUTER JOIN"
+                    + " (SELECT pid,MIN(result) AS `status` FROM contest_solution WHERE uid=? "
                     + "AND cid=? AND status=1 GROUP BY pid)AS temp ON cp.pid=temp.pid WHERE cp.cid=? ORDER BY num";
             contestProblems = Db.find(sql, uid, cid, cid);
         } else {
