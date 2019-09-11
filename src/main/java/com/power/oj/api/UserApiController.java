@@ -12,6 +12,7 @@ import com.power.oj.core.OjController;
 import com.power.oj.shiro.ShiroKit;
 import com.power.oj.user.UserExtModel;
 import com.power.oj.user.UserModel;
+import com.power.oj.user.UserService;
 import jodd.mail.MailException;
 import jodd.util.BCrypt;
 import jodd.util.HtmlEncoder;
@@ -120,7 +121,7 @@ public class UserApiController extends OjController {
             userModel = userService.getUserInfoByName(getPara("name"));
         }
 
-        if (userModel == null) {
+        if (userModel == null || (!userService.isAdmin() && !userModel.getUid().equals(UserService.me().getCurrentUid()))) {
             renderJson("success", false);
         } else {
             userModel.put("success", true);
