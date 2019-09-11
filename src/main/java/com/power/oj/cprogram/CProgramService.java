@@ -565,6 +565,18 @@ public final class CProgramService {
         return res;
     }
 
+    static public ProblemModel findProblem(Integer pid) {
+        ProblemModel problemModel;
+
+        if (OjConfig.isDevMode()) {
+            problemModel = ProblemModel.dao.findById(pid);
+        } else {
+            problemModel = ProblemModel.dao.findFirstByCache("problem", pid, "SELECT * FROM problem WHERE pid=?", pid);
+        }
+
+        return problemModel;
+    }
+
     public static void appendStatisticsAndCommit(Integer uid, int cid, List<Record> problems) {
         for (Record problem : problems) {
             int num = problem.getInt("num");
@@ -573,7 +585,7 @@ public final class CProgramService {
             problem.set("commit", Db.queryStr("select commit from cprogram_commit where uid=? AND cid=? AND num=?", uid, cid, num));
             problem.set("code", ContestSolutionModel.dao.findFirst(
                     "SELECT  MIN(result) as result,any_value(source) as source from contest_solution where uid=? AND cid=? AND num=?", uid, cid, num).getSource());
-            ProblemModel p = ProblemService.me().findProblem(problem.getInt("pid"));
+            ProblemModel p = findProblem(problem.getInt("pid"));
             problem.set("description", p.getDescription());
             problem.set("input", p.getInput());
             problem.set("output", p.getOutput());
