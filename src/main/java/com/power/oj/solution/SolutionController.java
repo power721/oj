@@ -135,7 +135,7 @@ public class SolutionController extends OjController {
 
     @Before(POST.class)
     @RequiresPermissions("problem:submit") // code:add
-    public void save() {
+    public void get404Page() {
         SolutionModel solutionModel = getModel(SolutionModel.class, "solution");
         solutionModel.set("uid", userService.getCurrentUid());
         Integer cid = solutionModel.getInt("cid");
