@@ -5,6 +5,11 @@
     </#if>
     <div class="row">
         <div class="span10 offset1">
+            <div class="form-search" style="float:right;margin:0 0 20px">
+                <input id="search_value" type="text" class="input-medium search-query" placeholder="请输入搜索值">
+                <button type="submit" class="btn btn-search" onclick="handleSearch()">搜索</button>
+                <button type="submit" class="btn btn-warning" onclick="handleReset()">重置</button>
+            </div>
             <table id="problem-list" class="table table-hover table-condensed">
                 <thead>
                 <tr>
@@ -111,6 +116,31 @@
                 params: {type: 'string'},
                 title: 'Change Final Score'
             });
+        }
+
+        function handleSearch() {
+            var keyword = $('#search_value').val();
+            var rows = document.getElementById("problem-list").rows;
+
+            for (var i = 1; i < rows.length; i++) {
+                var isKey = 0;
+                $("#problem-list").find("tr:eq(" + i + ")").css('display', 'table-row');
+                for (var j = 0; j < rows[i].cells.length; j++) {
+                    var val = $("#problem-list").find("tr:eq(" + i + ")").find("td:eq(" + j + ")").text();
+                    if (val.indexOf(keyword) !== -1) {
+                        isKey = 1;
+                    }
+                }
+                if (isKey == 0) {
+                    $("#problem-list").find("tr:eq(" + i + ")").css('display', 'none');
+                }
+
+            }
+        }
+
+        function handleReset() {
+            $('#search_value').val('')
+            handleSearch();
         }
     </script>
 </@override>
