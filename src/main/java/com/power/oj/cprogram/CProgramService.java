@@ -584,7 +584,7 @@ public final class CProgramService {
             problem.set("statistics", statistics);
             problem.set("commit", Db.queryStr("select commit from cprogram_commit where uid=? AND cid=? AND num=?", uid, cid, num));
             problem.set("code", ContestSolutionModel.dao.findFirst(
-                    "SELECT  MIN(result) as result,any_value(source) as source from contest_solution where uid=? AND cid=? AND num=?", uid, cid, num).getSource());
+                    "SELECT result,source from contest_solution where uid=? AND cid=? AND num=? ORDER BY result LIMIT 1", uid, cid, num).getSource());
             ProblemModel p = findProblem(problem.getInt("pid"));
             problem.set("description", p.getDescription());
             problem.set("input", p.getInput());
