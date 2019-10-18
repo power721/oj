@@ -462,7 +462,7 @@ public final class CProgramService {
                 "\tce.cid = ?\n" +
                 "AND ce.uid = ?";
         CprogramExperimentReportModel model = CprogramExperimentReportModel.dao.findFirst(sql, cid, uid);
-        if(model == null) {
+        if (model == null) {
             model = new CprogramExperimentReportModel();
             model.setUid(uid).setCid(cid).setStatus(false);
             model.save();
@@ -583,8 +583,11 @@ public final class CProgramService {
             LinkedHashMap<String, Integer> statistics = getSolutuonStatistics(uid, cid, num);
             problem.set("statistics", statistics);
             problem.set("commit", Db.queryStr("select commit from cprogram_commit where uid=? AND cid=? AND num=?", uid, cid, num));
-            problem.set("code", ContestSolutionModel.dao.findFirst(
-                    "SELECT result,source from contest_solution where uid=? AND cid=? AND num=? ORDER BY result LIMIT 1", uid, cid, num).getSource());
+            ContestSolutionModel solutionModel = ContestSolutionModel.dao.findFirst(
+                    "SELECT result,source from contest_solution where uid=? AND cid=? AND num=? ORDER BY result LIMIT 1", uid, cid, num);
+            if (solutionModel != null) {
+                problem.set("code", solutionModel.getSource());
+            }
             ProblemModel p = findProblem(problem.getInt("pid"));
             problem.set("description", p.getDescription());
             problem.set("input", p.getInput());
