@@ -17,6 +17,7 @@ import com.power.oj.solution.SolutionModel;
 import com.power.oj.solution.SolutionService;
 import com.power.oj.user.UserModel;
 import com.power.oj.user.UserService;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.*;
 import java.util.*;
@@ -586,7 +587,7 @@ public final class CProgramService {
             ContestSolutionModel solutionModel = ContestSolutionModel.dao.findFirst(
                     "SELECT result,source from contest_solution where uid=? AND cid=? AND num=? ORDER BY result LIMIT 1", uid, cid, num);
             if (solutionModel != null) {
-                problem.set("code", solutionModel.getSource());
+                problem.set("code", StringEscapeUtils.escapeHtml4(solutionModel.getSource()));
             }
             ProblemModel p = findProblem(problem.getInt("pid"));
             problem.set("description", p.getDescription());
