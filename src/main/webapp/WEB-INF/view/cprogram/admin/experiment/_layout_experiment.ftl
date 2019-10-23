@@ -36,7 +36,7 @@
 
                             <select class="input-medium" id="teacher_select" name="tid">
                                 <#list teacherList as teacher>
-                                    <option value="${teacher.uid!}">${teacher.realName}</option>
+                                    <option value="${teacher.uid!}">${teacher.realName!}</option>
                                 </#list>
                             </select>
 

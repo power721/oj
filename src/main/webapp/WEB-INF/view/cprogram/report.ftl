@@ -357,6 +357,11 @@
                 jsonObj.week = week.value;
                 jsonObj.lecture = lecture.value;
                 jsonObj.finalCommit = document.getElementById('finalCommit').value;
+                if(jsonObj.finalCommit.length  === 0) {
+                    alert('未填写总结，无法提交');
+                    btn.disabled = false;
+                    return;
+                }
                 var commit = document.getElementsByClassName('problem-commit');
                 jsonObj.problem_commit = [];
                 for (i = 0; i < commit.length; i++) {
