@@ -23,7 +23,7 @@
                             <option value="东9A322">东9A322</option>
                             <option value="东9A340">东9A340</option>
                             <option value="东9A348">东9A348</option>
-                            <option value="东9A348">东9A346</option>
+                            <option value="东9A346">东9A346</option>
                             <option value="东9A343">东9A343</option>
                         </select>
                     </div>
