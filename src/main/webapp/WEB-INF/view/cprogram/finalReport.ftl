@@ -258,6 +258,9 @@
             ${report.commit!}
         </div>
     </div>
+    <#if TeacherUser??>
+        <a href="cprogram/teacherModify/${contest.cid}-${report.uid}" class="btn btn-primary">修改</a>
+    </#if>
 </section>
 <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" async src="assets/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>

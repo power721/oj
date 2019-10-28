@@ -221,7 +221,9 @@
         </h5>
         <textarea rows="5" id="finalCommit" style="width: 100%" class="edit">${report.commit!}</textarea>
         <button id="saveBtn" class="btn btn-info" onclick="saveReport()">保存</button>
-        <button id="submitBtn" class="btn btn-warning" onclick="submitReport()">提交</button>
+        <#if !TeacherUser??>
+            <button id="submitBtn" class="btn btn-warning" onclick="submitReport()">提交</button>
+        </#if>
     </div>
 
 </@override>
@@ -295,6 +297,9 @@
                         if (status.success) {
                             alert('保存成功');
                             changed = false;
+                            <#if TeacherUser??>
+                                window.location.href="cprogram/report/${contest.cid}-${report.uid}";
+                            </#if>
                         } else {
                             alert('保存失败,' + status.messages);
                         }
@@ -305,7 +310,7 @@
                     btn.disabled = false;
                 }
             };
-            var url = 'cprogram/saveReport/${contest.cid}';
+            var url = 'cprogram/saveReport/${contest.cid}-${report.uid}';
             xhr.open('POST', url, true);
             xhr.setRequestHeader("Content-type", "false");
             xhr.send(JSON.stringify(jsonObj));
@@ -390,7 +395,7 @@
                         btn.disabled = false;
                     }
                 };
-                var url = 'cprogram/saveReport/${contest.cid}';
+                var url = 'cprogram/saveReport/${contest.cid}-${report.uid}';
                 xhr.open('POST', url, true);
                 xhr.setRequestHeader("Content-type", "false");
                 xhr.send(JSON.stringify(jsonObj));

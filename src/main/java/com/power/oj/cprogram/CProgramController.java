@@ -466,7 +466,12 @@ public class CProgramController extends OjController {
     @Before({POST.class, CProgramContestInterceptor.class})
     public void saveReport() {
         Integer cid = getParaToInt(0);
-        Integer uid = UserService.me().getCurrentUid();
+        Integer uid;
+        if (CProgramService.isTeacher()) {
+            uid = getParaToInt(1);
+        } else {
+            uid = UserService.me().getCurrentUid();
+        }
         String json = HttpKit.readData(getRequest());
         JSONObject obj = (JSONObject) JSONObject.parse(json);
         String position = obj.getString("position");
@@ -503,5 +508,18 @@ public class CProgramController extends OjController {
             }
         }
         renderJson(new String[]{"success", "message"});
+    }
+
+    @RequiresPermissions("teacher")
+    @Before({CProgramContestInterceptor.class})
+    public void teacherModify() {
+        Integer cid = getParaToInt(0);
+        Integer uid = getParaToInt(1);
+        List<Record> problems = ContestService.me().getContestProblems(cid, uid);
+        CProgramService.appendStatisticsAndCommit(uid, cid, problems);
+        setAttr("problems", problems);
+        CprogramExperimentReportModel reportModel = CProgramService.getReportInfo(cid, uid);
+        setAttr("report", reportModel);
+        render("report.ftl");
     }
 }

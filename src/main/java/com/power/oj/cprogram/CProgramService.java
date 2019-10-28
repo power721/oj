@@ -438,6 +438,7 @@ public final class CProgramService {
 
     public static CprogramExperimentReportModel getReportInfo(Integer cid, Integer uid) {
         String sql = "SELECT\n" +
+                "\tu.uid,\n" +
                 "\tu.realName,\n" +
                 "\tcu.stuid,\n" +
                 "\tcu.classes,\n" +
