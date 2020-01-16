@@ -18,7 +18,7 @@
                                 作业内容
                             </label>
                             <div class="controls">
-                                <textarea id="inputTitle" name="contest.title" rows="1" cols="40"
+                                <textarea id="inputTitle" name="title" rows="1" cols="40"
                                           required>${title!}</textarea>
                             </div>
                         </div>
