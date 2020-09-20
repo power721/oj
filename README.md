@@ -5,7 +5,7 @@ Online Judge is a web service which can compile user's source code and run in li
 
 Judge use predefined data files as stdin and get user's stdout as files, compare with the standard output data to judge the user's solution.
 
-Online Demo: https://www.oj.swust.edu.cn/
+Online Demo: http://www.oj.swust.edu.cn/
 
 <table>
   <tbody>
