@@ -1359,6 +1359,8 @@ INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `ex
 INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('9', 'G++17', ' ', '0', '996', '1', '1', 'cc', 'exe', '0', 'C:\\', 'cpp', '0', '1');
 INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('10', 'Python3', ' ', '0', '7000', '4', '3', 'py', 'exe', '1', 'C:\\', 'python', '0', '1');
 INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('11', 'Kotlin', '', '0', '8000', '3', '3', 'kt', 'class', '0', '', 'java', '0', '1');
+insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (12,"G++20","",0,996,1,1,"cc","exe",1,"","cpp",0,1);
+insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (13,"GCC18","",0,996,1,1,"c","exe",1,"","c",0,1);
 /*!40000 ALTER TABLE `program_language` ENABLE KEYS */;
 UNLOCK TABLES;
 
