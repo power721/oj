@@ -554,3 +554,6 @@ ALTER TABLE `resource`
   ADD COLUMN `os`  varchar(255) NULL DEFAULT 'Windows' AFTER `description`,
   ADD COLUMN `arch`  varchar(255) NULL DEFAULT 'x64' AFTER `os`;
 
+#2020-10-08
+insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (12,"G++20","",0,996,1,1,"cc","exe",1,"","cpp",0,1);
+insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (13,"GCC18","",0,996,1,1,"c","exe",1,"","c",0,1);

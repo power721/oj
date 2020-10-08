@@ -9,7 +9,9 @@ var lang_map = {
   8: "c_cpp",
   9: "c_cpp",
   10:"python",
-  11:"java"
+  11:"java",
+  12:"c_cpp",
+  13:"c_cpp",
 };
 
 var is_editor_active = false;
