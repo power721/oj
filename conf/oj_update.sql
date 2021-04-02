@@ -605,3 +605,4 @@ CHANGE COLUMN `class` `classes`  varchar(255) CHARACTER SET utf8 COLLATE utf8_ge
 #2020-10-08
 insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (12,"G++20","",0,996,1,1,"cc","exe",1,"","cpp",0,1);
 insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (13,"GCC18","",0,996,1,1,"c","exe",1,"","c",0,1);
+insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (14,"Golang","",0,996,1,1,"go","exe",1,"","c",0,1);

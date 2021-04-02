@@ -12,6 +12,7 @@ var lang_map = {
   11:"java",
   12:"c_cpp",
   13:"c_cpp",
+  14:"c_cpp",
 };
 
 var is_editor_active = false;

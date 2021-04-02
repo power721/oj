@@ -108,7 +108,8 @@ public class SolutionController extends OjController {
         if(brush.contains("g++") || brush.contains("gcc")) brush = "cpp";
         if(brush.contains("python")) brush = "python";
         if(brush.contains("kotlin") || brush.contains("java")) brush = "java";
-        setAttr("brush", brush);
+        if(brush.contains("go")) brush = "cpp";
+	setAttr("brush", brush);
 
         setTitle(getText("solution.show.title"));
         render("code.html");

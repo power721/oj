@@ -1361,6 +1361,7 @@ INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `ex
 INSERT INTO `oj`.`program_language` (`id`, `name`, `description`, `extTime`, `extMemory`, `timeFactor`, `memoryFactor`, `ext`, `exe`, `complieOrder`, `compileCmd`, `brush`, `script`, `status`) VALUES ('11', 'Kotlin', '', '0', '8000', '3', '3', 'kt', 'class', '0', '', 'java', '0', '1');
 insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (12,"G++20","",0,996,1,1,"cc","exe",1,"","cpp",0,1);
 insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (13,"GCC18","",0,996,1,1,"c","exe",1,"","c",0,1);
+insert into program_language (id,name,description,extTime,extMemory,timeFactor,memoryFactor,ext,exe,complieOrder,compileCmd,brush,script,status) values (14,"Golang","",0,996,1,1,"go","exe",1,"","c",0,1);
 /*!40000 ALTER TABLE `program_language` ENABLE KEYS */;
 UNLOCK TABLES;
 
